@@ -29,7 +29,7 @@ const schema = a.schema({
     .model({
       id: a.id().required(),
       requesterId: a.string().required(), // User who wants to start chatting
-      receiverId: a.string().required(),  // Professional being requested
+      receiverId: a.string().required(), // Professional being requested
       status: a.enum(['PENDING', 'ACCEPTED', 'REJECTED', 'EXPIRED']),
       requestedAt: a.datetime(),
       respondedAt: a.datetime(),
@@ -37,9 +37,7 @@ const schema = a.schema({
       expiresAt: a.datetime(), // TTL field for DynamoDB
       // TODO: Later add requestMessage field for custom chat request message
     })
-    .authorization(allow => [
-      allow.authenticated(),
-    ])
+    .authorization(allow => [allow.authenticated()])
     .secondaryIndexes(index => [
       // Find all chat requests for a user (both sent and received)
       index('requesterId').sortKeys(['requestedAt']),
@@ -51,17 +49,15 @@ const schema = a.schema({
     .model({
       id: a.id().required(),
       requesterId: a.string().required(), // User who wants to connect
-      receiverId: a.string().required(),  // User who received connection request
-      conversationId: a.id().required(),  // Which conversation this connection is for
+      receiverId: a.string().required(), // User who received connection request
+      conversationId: a.id().required(), // Which conversation this connection is for
       status: a.enum(['PENDING', 'ACCEPTED', 'REJECTED']),
       requestedAt: a.datetime(),
       respondedAt: a.datetime(),
       // Connection requests are tied to the conversation's 7-day period
       expiresAt: a.datetime(), // TTL field - expires with the conversation
     })
-    .authorization(allow => [
-      allow.authenticated(),
-    ])
+    .authorization(allow => [allow.authenticated()])
     .secondaryIndexes(index => [
       index('requesterId').sortKeys(['requestedAt']),
       index('receiverId').sortKeys(['requestedAt']),
@@ -92,9 +88,7 @@ const schema = a.schema({
       endedByUserId: a.string(), // Optional: who clicked "End chat now"
       endedAt: a.datetime(), // When chat was manually ended
     })
-    .authorization(allow => [
-      allow.authenticated(),
-    ])
+    .authorization(allow => [allow.authenticated()])
     .secondaryIndexes(index => [
       // Find conversations for a specific user, sorted by last activity
       index('participant1Id').sortKeys(['lastMessageAt']),
@@ -126,9 +120,7 @@ const schema = a.schema({
       // TTL field - inherits from conversation's TTL if unconnected
       expiresAt: a.datetime(),
     })
-    .authorization(allow => [
-      allow.authenticated(),
-    ])
+    .authorization(allow => [allow.authenticated()])
     .secondaryIndexes(index => [
       // Get messages for a conversation, ordered by time
       index('conversationId').sortKeys(['sortKey']),
@@ -148,13 +140,11 @@ const schema = a.schema({
       lastHeartbeat: a.datetime(),
       // TODO: Later add fields for AI matching:
       // - jobTitle: a.string()
-      // - field: a.string() 
+      // - field: a.string()
       // - aiGeneratedDescription: a.string()
       // - isAvailableForChat: a.boolean()
     })
-    .authorization(allow => [
-      allow.authenticated(),
-    ])
+    .authorization(allow => [allow.authenticated()])
     .secondaryIndexes(index => [
       index('userId'),
       // TODO: Later add index for AI matching:
