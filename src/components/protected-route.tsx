@@ -8,7 +8,7 @@ interface ProtectedRouteProps {
 }
 
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const { user, authStatus } = useAuthenticator((context) => [
+  const { user, authStatus } = useAuthenticator(context => [
     context.user,
     context.authStatus,
   ]);
@@ -35,4 +35,4 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   }
 
   return null;
-} 
+}

@@ -18,9 +18,7 @@ export default function AmplifyProvider({
 }) {
   return (
     <ThemeProvider theme={amplifyTheme}>
-      <Authenticator.Provider>
-        {children}
-      </Authenticator.Provider>
+      <Authenticator.Provider>{children}</Authenticator.Provider>
     </ThemeProvider>
   );
 }
