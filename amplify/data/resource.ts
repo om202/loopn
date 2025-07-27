@@ -31,7 +31,7 @@ const schema = a.schema({
       requesterId: a.string().required(), // User who wants to start chatting
       receiverId: a.string().required(),  // Professional being requested
       status: a.enum(['PENDING', 'ACCEPTED', 'REJECTED', 'EXPIRED']),
-      requestedAt: a.datetime().default(() => new Date().toISOString()),
+      requestedAt: a.datetime(),
       respondedAt: a.datetime(),
       // Chat requests expire after 24 hours if no response
       expiresAt: a.datetime(), // TTL field for DynamoDB
@@ -54,7 +54,7 @@ const schema = a.schema({
       receiverId: a.string().required(),  // User who received connection request
       conversationId: a.id().required(),  // Which conversation this connection is for
       status: a.enum(['PENDING', 'ACCEPTED', 'REJECTED']),
-      requestedAt: a.datetime().default(() => new Date().toISOString()),
+      requestedAt: a.datetime(),
       respondedAt: a.datetime(),
       // Connection requests are tied to the conversation's 7-day period
       expiresAt: a.datetime(), // TTL field - expires with the conversation
@@ -81,7 +81,7 @@ const schema = a.schema({
       lastMessageAt: a.datetime(),
       lastMessageContent: a.string(), // Preview of last message
       lastMessageSenderId: a.string(), // Who sent the last message
-      createdAt: a.datetime().default(() => new Date().toISOString()),
+      createdAt: a.datetime(),
       updatedAt: a.datetime(),
       // TTL field - delete unconnected conversations after 7 days
       expiresAt: a.datetime(), // Only set if isConnected = false
@@ -110,7 +110,7 @@ const schema = a.schema({
       receiverId: a.string().required(),
       content: a.string().required(),
       messageType: a.enum(['TEXT', 'SYSTEM']), // SYSTEM for "User A wants to connect" notifications
-      timestamp: a.datetime().default(() => new Date().toISOString()),
+      timestamp: a.datetime(),
       // For message ordering (timestamp + random suffix for uniqueness)
       sortKey: a.string().required(),
       // Message status
