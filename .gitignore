@@ -39,3 +39,25 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Amplify Gen 2 - Generated files only
+# Keep amplify/ source code tracked, ignore generated artifacts
+.amplify/
+amplify_outputs*
+amplifyconfiguration*
+
+# Amplify build artifacts
+amplify/node_modules/
+amplify/.amplify/
+amplify/dist/
+amplify/build/
+
+# CDK generated files (if using CDK)
+amplify/cdk.out/
+amplify/*.js.map
+amplify/*.d.ts.map
+
+# Environment specific files
+.env.amplify*
+.amplify-hosting/
+.amplifyrc
