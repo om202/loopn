@@ -26,9 +26,9 @@ export default function AuthPage() {
           }}
         >
           {({ user }) => {
-            // Redirect to home if authenticated
+            // Redirect to dashboard if authenticated
             if (user) {
-              window.location.href = '/';
+              window.location.href = '/dashboard';
             }
             return <div />;
           }}
