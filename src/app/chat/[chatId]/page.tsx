@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useState, useEffect, use, useCallback } from 'react';
 
 import type { Schema } from '../../../../amplify/data/resource';
-import ChatWindow from '../../../components/ChatWindow';
+import ChatWindow from '../../../components/chat/ChatWindow';
 import ProtectedRoute from '../../../components/protected-route';
 import { chatService } from '../../../services/chat.service';
 
