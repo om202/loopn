@@ -72,19 +72,6 @@ export default function ChatPage({ params }: ChatPageProps) {
     router.push('/dashboard');
   };
 
-  if (loading) {
-    return (
-      <ProtectedRoute>
-        <div className='min-h-screen bg-white flex items-center justify-center'>
-          <div className='text-center'>
-            <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mx-auto mb-4' />
-            <p className='text-gray-600'>Loading chat...</p>
-          </div>
-        </div>
-      </ProtectedRoute>
-    );
-  }
-
   if (error) {
     return (
       <ProtectedRoute>
@@ -106,55 +93,24 @@ export default function ChatPage({ params }: ChatPageProps) {
     );
   }
 
-  if (!conversation) {
-    return (
-      <ProtectedRoute>
-        <div />
-      </ProtectedRoute>
-    );
-  }
-
   return (
     <ProtectedRoute>
-      <div className='h-screen flex bg-white'>
-        {/* Left Sidebar */}
-        <div className='w-80 bg-gray-50 border-r border-gray-200 flex flex-col'>
-          {/* Sidebar Header */}
-          <div className='p-4 border-b border-gray-200 bg-white'>
-            <div className='flex items-center gap-4'>
-              <button
-                onClick={() => router.push('/dashboard')}
-                className='text-gray-500 hover:text-gray-700'
-              >
-                <svg
-                  className='w-6 h-6'
-                  fill='none'
-                  stroke='currentColor'
-                  viewBox='0 0 24 24'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M15 19l-7-7 7-7'
-                  />
-                </svg>
-              </button>
-              <h1 className='text-xl font-semibold text-gray-900'>Chat</h1>
-            </div>
-          </div>
-
-          {/* Chat Info - This will be populated by ChatWindow */}
-          <div id='chat-sidebar-content' className='flex-1 p-4'>
-            {/* Content will be injected here by ChatWindow component */}
-          </div>
-        </div>
-
-        {/* Main Chat Area */}
-        <div className='flex-1 flex flex-col min-h-0'>
+      <div className='h-screen bg-white'>
+        {/* Main Chat Area - Full Width */}
+        <div className='h-full flex flex-col'>
           <ChatWindow
-            conversation={conversation}
+            conversation={conversation || {
+              id: resolvedParams.chatId,
+              participant1Id: '',
+              participant2Id: '',
+              isConnected: false,
+              probationEndsAt: null,
+              createdAt: '',
+              updatedAt: ''
+            }}
             onChatEnded={handleChatEnded}
+            isLoading={loading}
+            error={error}
           />
         </div>
       </div>

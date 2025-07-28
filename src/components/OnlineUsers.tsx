@@ -9,6 +9,7 @@ import { chatService } from '../services/chat.service';
 import { userService } from '../services/user.service';
 
 import CircularIcon from './CircularIcon';
+import LoadingContainer from './LoadingContainer';
 import UserAvatar from './UserAvatar';
 
 type UserPresence = Schema['UserPresence']['type'];
@@ -219,11 +220,8 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
 
   if (initialLoading) {
     return (
-      <div className='bg-white rounded-xl shadow-sm border border-gray-100 p-8'>
-        <div className='text-center text-gray-500'>
-          <div className='w-6 h-6 border-2 border-gray-300 border-t-indigo-600 rounded-full animate-spin mx-auto mb-3' />
-          <p>Finding professionals...</p>
-        </div>
+      <div className='bg-white rounded-xl shadow-sm border border-gray-100 h-64'>
+        <LoadingContainer />
       </div>
     );
   }
