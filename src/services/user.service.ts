@@ -28,7 +28,6 @@ export class UserService {
           status,
           isOnline: status === 'ONLINE',
           lastSeen: new Date().toISOString(),
-          lastHeartbeat: new Date().toISOString(),
         });
 
         return {
@@ -44,7 +43,6 @@ export class UserService {
         status,
         isOnline: status === 'ONLINE',
         lastSeen: new Date().toISOString(),
-        lastHeartbeat: new Date().toISOString(),
       });
 
       return {
@@ -104,15 +102,24 @@ export class UserService {
     }
   }
 
-  async setUserOffline(userId: string, email: string): Promise<DataResult<UserPresence>> {
+  async setUserOffline(
+    userId: string,
+    email: string
+  ): Promise<DataResult<UserPresence>> {
     return this.updateUserPresence(userId, email, 'OFFLINE');
   }
 
-  async setUserOnline(userId: string, email: string): Promise<DataResult<UserPresence>> {
+  async setUserOnline(
+    userId: string,
+    email: string
+  ): Promise<DataResult<UserPresence>> {
     return this.updateUserPresence(userId, email, 'ONLINE');
   }
 
-  async setUserBusy(userId: string, email: string): Promise<DataResult<UserPresence>> {
+  async setUserBusy(
+    userId: string,
+    email: string
+  ): Promise<DataResult<UserPresence>> {
     return this.updateUserPresence(userId, email, 'BUSY');
   }
 
@@ -122,12 +129,13 @@ export class UserService {
     onError?: (error: Error) => void
   ) {
     return client.models.UserPresence.observeQuery({
-      filter: {
-        status: { eq: 'ONLINE' },
-        isOnline: { eq: true },
-      },
+      // No filter - listen to ALL presence changes, then filter in UI
     }).subscribe({
-      next: data => callback(data.items),
+      next: data => {
+        // Filter online users in the callback instead
+        const onlineUsers = data.items.filter(user => user.isOnline === true);
+        callback(onlineUsers);
+      },
       error: error => {
         if (onError) {
           onError(error);
@@ -158,6 +166,8 @@ export class UserService {
       },
     });
   }
+
+
 }
 
 export const userService = new UserService();

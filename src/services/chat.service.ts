@@ -282,10 +282,13 @@ export class ChatService {
     return client.models.ChatRequest.observeQuery({
       filter: {
         receiverId: { eq: userId },
-        status: { eq: 'PENDING' },
       },
     }).subscribe({
-      next: data => callback(data.items),
+      next: data => {
+        // Filter pending requests in JavaScript instead
+        const pendingRequests = data.items.filter(request => request.status === 'PENDING');
+        callback(pendingRequests);
+      },
       error: error => {
         if (onError) {
           onError(error);

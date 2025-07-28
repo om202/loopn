@@ -4,6 +4,8 @@ import { useAuthenticator } from '@aws-amplify/ui-react';
 import Image from 'next/image';
 import { useState } from 'react';
 
+import { userService } from '../services/user.service';
+
 export default function Navbar() {
   const { signOut, user } = useAuthenticator(context => [
     context.signOut,
@@ -17,6 +19,14 @@ export default function Navbar() {
 
   const getUserEmail = () => {
     return user?.signInDetails?.loginId || '';
+  };
+
+  const handleSignOut = async () => {
+    if (user) {
+      // Set user offline immediately before signing out
+      await userService.setUserOffline(user.userId, user.signInDetails?.loginId || '');
+    }
+    signOut();
   };
 
   return (
@@ -63,7 +73,7 @@ export default function Navbar() {
                   </div>
                 </div>
                 <div
-                  onClick={signOut}
+                  onClick={handleSignOut}
                   className='w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer'
                 >
                   Sign Out

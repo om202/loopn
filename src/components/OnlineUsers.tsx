@@ -24,19 +24,14 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
       return;
     }
 
-    // Set current user as online when component mounts
-    userService.setUserOnline(user.userId, user.signInDetails?.loginId || '');
-
     // Subscribe to online users updates
     const subscription = userService.observeOnlineUsers(
       users => {
-        // Filter out current user from the list and remove duplicates by userId
+        // Filter out current user and remove duplicates
         const otherUsers = users
-          .filter(u => u && u.userId && u.userId !== user.userId)
-          .filter(
-            (user, index, self) =>
-              // Remove duplicates by userId - keep only the first occurrence
-              index === self.findIndex(u => u && u.userId === user.userId)
+          .filter(u => u?.userId && u.userId !== user.userId)
+          .filter((user, index, self) => 
+            index === self.findIndex(u => u.userId === user.userId)
           );
 
         setOnlineUsers(otherUsers);
@@ -49,8 +44,6 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
 
     return () => {
       subscription.unsubscribe();
-      // Set user offline when component unmounts
-      userService.setUserOffline(user.userId, user.signInDetails?.loginId || '');
     };
   }, [user]);
 
@@ -91,10 +84,12 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
       <h2 className='text-xl font-semibold text-gray-900 mb-4'>
         Online Professionals
       </h2>
-      
+
       {/* Current user info */}
       <div className='mb-4 p-3 bg-indigo-50 rounded-lg border border-indigo-200'>
-        <div className='text-sm font-medium text-indigo-900'>You are online as:</div>
+        <div className='text-sm font-medium text-indigo-900'>
+          You are online as:
+        </div>
         <div className='text-sm text-indigo-700'>
           Email: {user?.signInDetails?.loginId || 'Unknown'}
         </div>
@@ -125,13 +120,17 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
                 </div>
                 <div>
                   <div className='font-medium text-gray-900'>
-                    {userPresence.email || `Professional ${userPresence.userId.slice(-4)}`}
+                    {userPresence.email ||
+                      `Professional ${userPresence.userId.slice(-4)}`}
                   </div>
                   <div className='text-sm text-gray-500'>
                     UserID: {userPresence.userId.slice(-8)}
                   </div>
                   <div className='text-xs text-gray-400'>
-                    Last seen: {userPresence.lastSeen ? new Date(userPresence.lastSeen).toLocaleTimeString() : 'Unknown'}
+                    Last seen:{' '}
+                    {userPresence.lastSeen
+                      ? new Date(userPresence.lastSeen).toLocaleTimeString()
+                      : 'Unknown'}
                   </div>
                 </div>
               </div>
