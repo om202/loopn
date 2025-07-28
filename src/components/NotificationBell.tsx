@@ -1,19 +1,33 @@
 'use client';
 
 import { useAuthenticator } from '@aws-amplify/ui-react';
-import { useState, useEffect, useRef } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 import type { Schema } from '../../amplify/data/resource';
+import {
+  createShortChatUrl,
+  getConversationIdFromParam,
+} from '../lib/url-utils';
 import { chatService } from '../services/chat.service';
+import { messageService } from '../services/message.service';
 import { userService } from '../services/user.service';
 
 import ChatRequestDialog from './ChatRequestDialog';
 import UserAvatar from './UserAvatar';
 
 type ChatRequest = Schema['ChatRequest']['type'];
+type Message = Schema['Message']['type'];
 
 interface ChatRequestWithUser extends ChatRequest {
   requesterEmail?: string;
+}
+
+interface MessageNotificationData {
+  conversationId: string;
+  message: Message;
+  senderEmail?: string;
+  messageCount: number; // Add this field to track total unread messages
 }
 
 interface Notification {
@@ -23,7 +37,7 @@ interface Notification {
   content: string;
   timestamp: string;
   isRead: boolean;
-  data?: ChatRequestWithUser; // Additional data specific to notification type
+  data?: ChatRequestWithUser | MessageNotificationData; // Additional data specific to notification type
 }
 
 type NotificationFilter =
@@ -48,9 +62,21 @@ export default function NotificationBell() {
     string | null
   >(null);
   const { user } = useAuthenticator();
+  const router = useRouter();
+  const pathname = usePathname();
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  // Get current conversation ID if user is in a chat page
+  const getCurrentConversationId = useCallback(() => {
+    if (pathname?.startsWith('/chat/')) {
+      const chatId = pathname.split('/chat/')[1];
+      return getConversationIdFromParam(chatId);
+    }
+    return null;
+  }, [pathname]);
+
+  // Subscribe to chat requests (separate from message subscription)
   useEffect(() => {
     if (!user) {
       return;
@@ -100,7 +126,13 @@ export default function NotificationBell() {
           })
         );
 
-        setNotifications(chatNotifications);
+        // Update notifications but preserve message notifications
+        setNotifications(prevNotifications => {
+          const messageNotifications = prevNotifications.filter(
+            notif => notif.type === 'message'
+          );
+          return [...messageNotifications, ...chatNotifications];
+        });
       },
       () => {
         setError('Failed to load notifications');
@@ -111,6 +143,95 @@ export default function NotificationBell() {
       subscription.unsubscribe();
     };
   }, [user, chatRequests, showDialog]);
+
+  // Subscribe to messages (separate from chat requests)
+  useEffect(() => {
+    if (!user) {
+      return;
+    }
+
+    const messageSubscription = messageService.subscribeToNewMessages(
+      user.userId,
+      async (message: Message) => {
+        const currentConversationId = getCurrentConversationId();
+
+        // Only show notification if user is not currently viewing this conversation
+        if (currentConversationId !== message.conversationId) {
+          // Get sender details
+          const senderResult = await userService.getUserPresence(
+            message.senderId
+          );
+          const senderEmail = senderResult.data?.email;
+
+          setNotifications(prevNotifications => {
+            // Find existing message notifications for this conversation
+            const existingConversationNotifications = prevNotifications.filter(
+              notif =>
+                notif.type === 'message' &&
+                notif.data &&
+                'conversationId' in notif.data &&
+                notif.data.conversationId === message.conversationId
+            );
+
+            // Remove all existing notifications for this conversation
+            const otherNotifications = prevNotifications.filter(
+              notif =>
+                !(
+                  notif.type === 'message' &&
+                  notif.data &&
+                  'conversationId' in notif.data &&
+                  notif.data.conversationId === message.conversationId
+                )
+            );
+
+            // Calculate new count (existing count + 1)
+            const currentCount =
+              existingConversationNotifications.length > 0
+                ? (
+                    existingConversationNotifications[0]
+                      .data as MessageNotificationData
+                  ).messageCount
+                : 0;
+            const newCount = currentCount + 1;
+
+            // Create new notification with updated count
+            const messageNotification: Notification = {
+              id: `message-${message.conversationId}`, // Use conversation ID so we replace per conversation
+              type: 'message',
+              title: senderEmail || `User ${message.senderId.slice(-4)}`,
+              content:
+                newCount > 1
+                  ? `${newCount} new messages: ${
+                      message.content.length > 30
+                        ? `${message.content.substring(0, 30)}...`
+                        : message.content
+                    }`
+                  : message.content.length > 50
+                    ? `${message.content.substring(0, 50)}...`
+                    : message.content,
+              timestamp: message.timestamp || message.createdAt,
+              isRead: false,
+              data: {
+                conversationId: message.conversationId,
+                message,
+                senderEmail: senderEmail || undefined,
+                messageCount: newCount,
+              },
+            };
+
+            return [messageNotification, ...otherNotifications];
+          });
+        }
+      },
+      error => {
+        console.error('Error subscribing to messages:', error);
+      }
+    );
+
+    return () => {
+      messageSubscription.unsubscribe();
+    };
+  }, [user, getCurrentConversationId]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -126,6 +247,24 @@ export default function NotificationBell() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  const handleNotificationClick = (notification: Notification) => {
+    if (
+      notification.type === 'message' &&
+      notification.data &&
+      'conversationId' in notification.data
+    ) {
+      // Navigate to the conversation
+      router.push(createShortChatUrl(notification.data.conversationId));
+
+      // Remove the notification since user is now viewing the conversation
+      setNotifications(prevNotifications =>
+        prevNotifications.filter(notif => notif.id !== notification.id)
+      );
+
+      setIsOpen(false);
+    }
+  };
 
   const handleRespondToRequest = async (
     chatRequestId: string,
@@ -369,10 +508,39 @@ export default function NotificationBell() {
           </div>
 
           {/* Notification Badge */}
-          {notifications.length > 0 && (
+          {(() => {
+            const totalCount = notifications.reduce((sum, notif) => {
+              if (
+                notif.type === 'message' &&
+                notif.data &&
+                'messageCount' in notif.data
+              ) {
+                return (
+                  sum + (notif.data as MessageNotificationData).messageCount
+                );
+              }
+              return sum + 1; // For chat requests and other notifications
+            }, 0);
+            return totalCount > 0;
+          })() && (
             <div className='absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center'>
               <span className='text-xs text-white font-medium'>
-                {notifications.length > 9 ? '9+' : notifications.length}
+                {(() => {
+                  const totalCount = notifications.reduce((sum, notif) => {
+                    if (
+                      notif.type === 'message' &&
+                      notif.data &&
+                      'messageCount' in notif.data
+                    ) {
+                      return (
+                        sum +
+                        (notif.data as MessageNotificationData).messageCount
+                      );
+                    }
+                    return sum + 1; // For chat requests and other notifications
+                  }, 0);
+                  return totalCount > 9 ? '9+' : totalCount;
+                })()}
               </span>
             </div>
           )}
@@ -468,8 +636,14 @@ export default function NotificationBell() {
                       <div className='flex items-start gap-3'>
                         {notification.type === 'chat_request' ? (
                           <UserAvatar
-                            email={notification.data?.requesterEmail}
-                            userId={notification.data?.requesterId}
+                            email={
+                              (notification.data as ChatRequestWithUser)
+                                ?.requesterEmail
+                            }
+                            userId={
+                              (notification.data as ChatRequestWithUser)
+                                ?.requesterId
+                            }
                             size='sm'
                           />
                         ) : (
@@ -490,45 +664,58 @@ export default function NotificationBell() {
                             {notification.content}
                           </p>
 
-                          {/* Action buttons only for chat requests */}
+                          {/* Action buttons for different notification types */}
                           {notification.type === 'chat_request' &&
-                          notification.data
-                            ? (() => {
-                                const chatRequestData = notification.data;
-                                return (
-                                  <div className='flex gap-2 mt-1'>
-                                    <button
-                                      onClick={() =>
-                                        handleRespondToRequest(
-                                          notification.id,
-                                          'REJECTED',
-                                          chatRequestData
-                                        )
-                                      }
-                                      disabled={decliningId === notification.id}
-                                      className='px-4 py-1.5 bg-gray-100 text-gray-700 text-sm font-medium rounded-full hover:bg-gray-200 disabled:opacity-50 transition-colors'
-                                    >
-                                      {decliningId === notification.id
-                                        ? 'Declining...'
-                                        : 'Delete'}
-                                    </button>
-                                    <button
-                                      onClick={() =>
-                                        handleRespondToRequest(
-                                          notification.id,
-                                          'ACCEPTED',
-                                          chatRequestData
-                                        )
-                                      }
-                                      disabled={decliningId === notification.id}
-                                      className='px-4 py-1.5 bg-indigo-600 text-white text-sm font-medium rounded-full hover:bg-indigo-700 disabled:opacity-50 transition-colors'
-                                    >
-                                      Confirm
-                                    </button>
-                                  </div>
-                                );
-                              })()
-                            : null}
+                          notification.data &&
+                          'requesterId' in notification.data ? (
+                            (() => {
+                              const chatRequestData =
+                                notification.data as ChatRequestWithUser;
+                              return (
+                                <div className='flex gap-2 mt-1'>
+                                  <button
+                                    onClick={() =>
+                                      handleRespondToRequest(
+                                        notification.id,
+                                        'REJECTED',
+                                        chatRequestData
+                                      )
+                                    }
+                                    disabled={decliningId === notification.id}
+                                    className='px-4 py-1.5 bg-gray-100 text-gray-700 text-sm font-medium rounded-full hover:bg-gray-200 disabled:opacity-50 transition-colors'
+                                  >
+                                    {decliningId === notification.id
+                                      ? 'Declining...'
+                                      : 'Delete'}
+                                  </button>
+                                  <button
+                                    onClick={() =>
+                                      handleRespondToRequest(
+                                        notification.id,
+                                        'ACCEPTED',
+                                        chatRequestData
+                                      )
+                                    }
+                                    disabled={decliningId === notification.id}
+                                    className='px-4 py-1.5 bg-indigo-600 text-white text-sm font-medium rounded-full hover:bg-indigo-700 disabled:opacity-50 transition-colors'
+                                  >
+                                    Confirm
+                                  </button>
+                                </div>
+                              );
+                            })()
+                          ) : notification.type === 'message' ? (
+                            <div className='flex gap-2 mt-1'>
+                              <button
+                                onClick={() =>
+                                  handleNotificationClick(notification)
+                                }
+                                className='px-4 py-1.5 bg-indigo-600 text-white text-sm font-medium rounded-full hover:bg-indigo-700 transition-colors'
+                              >
+                                Open Chat
+                              </button>
+                            </div>
+                          ) : null}
                         </div>
                       </div>
                     </div>
