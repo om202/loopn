@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "npm run lint:fix && npm run format && next dev --turbopack",
+    "dev": "npm run lint:fix && npm run format && next dev",
     "build": "npm run lint:fix && npm run format && next build",
     "start": "next start",
     "lint": "next lint",

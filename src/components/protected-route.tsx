@@ -3,6 +3,8 @@
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { useEffect } from 'react';
 
+import { userService } from '../services/user.service';
+
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }

@@ -132,6 +132,7 @@ const schema = a.schema({
   UserPresence: a
     .model({
       userId: a.string().required(),
+      email: a.string(), // Made nullable to handle existing records
       isOnline: a.boolean().default(false),
       lastSeen: a.datetime(),
       status: a.enum(['ONLINE', 'OFFLINE', 'BUSY']),

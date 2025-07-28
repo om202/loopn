@@ -11,6 +11,7 @@ type ListResult<T> = { data: T[]; error: string | null };
 export class UserService {
   async updateUserPresence(
     userId: string,
+    email: string,
     status: 'ONLINE' | 'OFFLINE' | 'BUSY'
   ): Promise<DataResult<UserPresence>> {
     try {
@@ -23,6 +24,7 @@ export class UserService {
         // Update existing presence
         const result = await client.models.UserPresence.update({
           userId,
+          email,
           status,
           isOnline: status === 'ONLINE',
           lastSeen: new Date().toISOString(),
@@ -38,6 +40,7 @@ export class UserService {
       // Create new presence record only if none exists
       const result = await client.models.UserPresence.create({
         userId,
+        email,
         status,
         isOnline: status === 'ONLINE',
         lastSeen: new Date().toISOString(),
@@ -101,16 +104,16 @@ export class UserService {
     }
   }
 
-  async setUserOffline(userId: string): Promise<DataResult<UserPresence>> {
-    return this.updateUserPresence(userId, 'OFFLINE');
+  async setUserOffline(userId: string, email: string): Promise<DataResult<UserPresence>> {
+    return this.updateUserPresence(userId, email, 'OFFLINE');
   }
 
-  async setUserOnline(userId: string): Promise<DataResult<UserPresence>> {
-    return this.updateUserPresence(userId, 'ONLINE');
+  async setUserOnline(userId: string, email: string): Promise<DataResult<UserPresence>> {
+    return this.updateUserPresence(userId, email, 'ONLINE');
   }
 
-  async setUserBusy(userId: string): Promise<DataResult<UserPresence>> {
-    return this.updateUserPresence(userId, 'BUSY');
+  async setUserBusy(userId: string, email: string): Promise<DataResult<UserPresence>> {
+    return this.updateUserPresence(userId, email, 'BUSY');
   }
 
   // Real-time subscription to presence changes
