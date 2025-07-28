@@ -38,6 +38,7 @@ export default function NotificationBell() {
   const [error, setError] = useState<string | null>(null);
   const [showDialog, setShowDialog] = useState(false);
   const [dialogRequest, setDialogRequest] = useState<ChatRequestWithUser | null>(null);
+  const [showDialogConnected, setShowDialogConnected] = useState(false);
   const { user } = useAuthenticator();
   
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -114,15 +115,33 @@ export default function NotificationBell() {
     status: 'ACCEPTED' | 'REJECTED',
     chatRequest: ChatRequest
   ) => {
+    // If accepting, show the dialog confirmation instead of immediate processing
+    if (status === 'ACCEPTED') {
+      setDialogRequest(chatRequest);
+      setShowDialog(true);
+      setShowDialogConnected(true);
+      setIsOpen(false); // Close the notification dropdown
+      
+      // Immediately call the accept handler and perform API call
+      setChatRequests(prev => prev.filter(req => req.id !== chatRequestId));
+      setNotifications(prev => prev.filter(notif => notif.id !== chatRequestId));
+      
+      // Perform the API call in the background
+      try {
+        await chatService.respondToChatRequest(chatRequestId, status);
+      } catch (error) {
+        console.error('Error responding to chat request:', error);
+      }
+      
+      return;
+    }
+    
+    // For rejection, proceed with normal flow
     // Optimistic update - immediately remove from both states
     setChatRequests(prev => prev.filter(req => req.id !== chatRequestId));
     setNotifications(prev => prev.filter(notif => notif.id !== chatRequestId));
     
-    if (status === 'ACCEPTED') {
-      setAcceptingId(chatRequestId);
-    } else {
-      setDecliningId(chatRequestId);
-    }
+    setDecliningId(chatRequestId);
 
     try {
       const result = await chatService.respondToChatRequest(
@@ -162,7 +181,6 @@ export default function NotificationBell() {
       setError('Failed to respond to chat request');
     }
 
-    setAcceptingId(null);
     setDecliningId(null);
   };
 
@@ -258,6 +276,7 @@ export default function NotificationBell() {
   const handleDialogClose = () => {
     setShowDialog(false);
     setDialogRequest(null);
+    setShowDialogConnected(false);
   };
 
   return (
@@ -268,6 +287,7 @@ export default function NotificationBell() {
         onClose={handleDialogClose}
         onAccept={handleDialogAccept}
         onReject={handleDialogReject}
+        showConnectedState={showDialogConnected}
       />
     <div className='relative' ref={dropdownRef}>
       {/* Notification Bell Button */}

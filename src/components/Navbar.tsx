@@ -7,6 +7,7 @@ import { useState, useEffect, useRef } from 'react';
 import { userService } from '../services/user.service';
 import UserAvatar from './UserAvatar';
 import NotificationBell from './NotificationBell';
+import CircularIcon from './CircularIcon';
 
 export default function Navbar() {
   const { signOut, user } = useAuthenticator(context => [
@@ -78,20 +79,17 @@ export default function Navbar() {
 
             {/* Dropdown Menu */}
             {isDropdownOpen ? (
-              <div className='absolute right-0 top-full w-72 max-w-sm bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-10'>
+              <div className='absolute right-0 top-full w-80 max-w-md bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-10'>
                 <div className='px-4 py-3 border-b border-gray-100'>
                   <div className='flex items-center space-x-3'>
                     <UserAvatar 
                       email={getUserEmail()} 
-                      size="md"
+                      size="sm"
                       className="flex-shrink-0"
                     />
                     <div className='min-w-0 flex-1'>
-                      <p className='text-sm font-medium text-gray-900'>
-                        Professional
-                      </p>
                       <p
-                        className='text-sm text-gray-600 truncate'
+                        className='text-base font-medium text-gray-900 truncate text-left'
                         title={getUserEmail()}
                       >
                         {getUserEmail()}
@@ -101,8 +99,16 @@ export default function Navbar() {
                 </div>
                 <div
                   onClick={handleSignOut}
-                  className='w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer'
+                  className='w-full text-left px-4 py-3 text-base text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer flex items-center gap-3'
                 >
+                  <CircularIcon
+                    size="md"
+                    icon={
+                      <svg className='text-gray-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                        <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1' />
+                      </svg>
+                    }
+                  />
                   Sign Out
                 </div>
               </div>

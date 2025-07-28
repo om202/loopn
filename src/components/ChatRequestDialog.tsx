@@ -19,19 +19,100 @@ interface ChatRequestDialogProps {
   onClose: () => void;
   onAccept: () => void;
   onReject: () => void;
+  showConnectedState?: boolean;
 }
 
-export default function ChatRequestDialog({
-  isOpen,
-  chatRequest,
-  onClose,
-  onAccept,
-  onReject,
-}: ChatRequestDialogProps) {
+interface ConnectedDialogProps {
+  isOpen: boolean;
+  chatRequest: ChatRequestWithUser | null;
+  onClose: () => void;
+}
+
+interface NewRequestDialogProps {
+  isOpen: boolean;
+  chatRequest: ChatRequestWithUser | null;
+  onClose: () => void;
+  onAccept: () => void;
+  onReject: () => void;
+}
+
+// Connected state dialog component
+function ConnectedDialog({ isOpen, chatRequest, onClose }: ConnectedDialogProps) {
+  const [dontShowAgain, setDontShowAgain] = useState(false);
+
+  if (!isOpen || !chatRequest) {
+    return null;
+  }
+
+  const handleOk = () => {
+    // TODO: Handle "don't show again" preference if checked
+    if (dontShowAgain) {
+      // Could save preference to localStorage or user settings
+      console.log('User chose not to show this confirmation again');
+    }
+    onClose();
+  };
+
+  return (
+    <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/5'>
+      <div className='bg-white rounded-lg shadow-xl border border-gray-200 max-w-md w-full mx-4 p-6'>
+        <div className='text-center py-6'>
+          <div className='mb-6'>
+            <div className='flex justify-center mb-3'>
+              <div className='w-12 h-12 bg-green-100 rounded-full flex items-center justify-center'>
+                <svg className='w-6 h-6 text-green-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M5 13l4 4L19 7' />
+                </svg>
+              </div>
+            </div>
+            <h3 className='text-xl font-medium text-green-600 mb-4'>
+              Connected!
+            </h3>
+            
+            <div className='text-lg font-medium text-gray-900 mb-3'>
+              {chatRequest.requesterEmail || `User ${chatRequest.requesterId.slice(-4)}`}
+            </div>
+            
+            <p className='text-base text-gray-700'>
+              You are now connected to chat for 7 days.
+            </p>
+          </div>
+        </div>
+
+        {/* Don't show again checkbox */}
+        <div className='flex items-center gap-2 mb-4'>
+          <input
+            type='checkbox'
+            id='dontShowAgain'
+            checked={dontShowAgain}
+            onChange={(e) => setDontShowAgain(e.target.checked)}
+            className='w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500'
+          />
+          <label htmlFor='dontShowAgain' className='text-sm text-gray-600'>
+            Don&apos;t show this confirmation again
+          </label>
+        </div>
+
+        {/* OK Button */}
+        <button
+          onClick={handleOk}
+          className='w-full px-4 py-2 bg-white text-gray-700 text-sm font-medium rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors'
+        >
+          OK
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// New request dialog component
+function NewRequestDialog({ isOpen, chatRequest, onClose, onAccept, onReject }: NewRequestDialogProps) {
   const [justAccepted, setJustAccepted] = useState(false);
   const [dontShowAgain, setDontShowAgain] = useState(false);
 
-  if (!isOpen || !chatRequest) {return null;}
+  if (!isOpen || !chatRequest) {
+    return null;
+  }
 
   const handleResponse = async (status: 'ACCEPTED' | 'REJECTED') => {
     // Optimistic UI: immediately trigger callbacks
@@ -173,5 +254,35 @@ export default function ChatRequestDialog({
         )}
       </div>
     </div>
+  );
+}
+
+export default function ChatRequestDialog({
+  isOpen,
+  chatRequest,
+  onClose,
+  onAccept,
+  onReject,
+  showConnectedState = false,
+}: ChatRequestDialogProps) {
+  // Route to the appropriate dialog based on state
+  if (showConnectedState) {
+    return (
+      <ConnectedDialog
+        isOpen={isOpen}
+        chatRequest={chatRequest}
+        onClose={onClose}
+      />
+    );
+  }
+
+  return (
+    <NewRequestDialog
+      isOpen={isOpen}
+      chatRequest={chatRequest}
+      onClose={onClose}
+      onAccept={onAccept}
+      onReject={onReject}
+    />
   );
 } 

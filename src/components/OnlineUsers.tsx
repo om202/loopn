@@ -8,6 +8,7 @@ import { chatService } from '../services/chat.service';
 import { userService } from '../services/user.service';
 
 import UserAvatar from './UserAvatar';
+import CircularIcon from './CircularIcon';
 
 type UserPresence = Schema['UserPresence']['type'];
 
@@ -191,7 +192,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
                 status={userPresence.status}
               />
               <div>
-                <div className='font-medium text-gray-900 text-sm'>
+                <div className='font-medium text-gray-900 text-base'>
                   {getDisplayName(userPresence)}
                 </div>
                 <div className='text-sm text-gray-500'>
@@ -208,14 +209,25 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
             <button
               onClick={() => handleSendChatRequest(userPresence.userId)}
               disabled={pendingRequests.has(userPresence.userId)}
-              className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
-                pendingRequests.has(userPresence.userId)
-                  ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
-                  : 'bg-indigo-600 text-white hover:bg-indigo-700'
-              }`}
-              title={pendingRequests.has(userPresence.userId) ? 'Chat request pending' : 'Start chat'}
+              className='transition-colors'
+              title={pendingRequests.has(userPresence.userId) ? 'Chat request pending' : 'Send chat request'}
             >
-              {pendingRequests.has(userPresence.userId) ? 'Pending' : 'Chat'}
+              <CircularIcon
+                size="lg"
+                bgColor={pendingRequests.has(userPresence.userId) ? 'bg-gray-200' : 'bg-indigo-600'}
+                icon={
+                  pendingRequests.has(userPresence.userId) ? (
+                    <svg className='text-gray-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                      <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' />
+                    </svg>
+                  ) : (
+                    <svg className='text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                      <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z' />
+                    </svg>
+                  )
+                }
+                className={pendingRequests.has(userPresence.userId) ? 'cursor-not-allowed' : 'hover:bg-indigo-700 cursor-pointer'}
+              />
             </button>
           </div>
         ))}
