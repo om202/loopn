@@ -184,7 +184,7 @@ const schema = a.schema({
     })
     .authorization(allow => [
       // All authenticated users can access - we handle filtering in the service layer
-      allow.authenticated()
+      allow.authenticated(),
     ])
     .secondaryIndexes(index => [
       // Get all notifications for a user, sorted by time (newest first)
