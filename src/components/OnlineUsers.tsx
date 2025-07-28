@@ -30,8 +30,9 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
         // Filter out current user and remove duplicates
         const otherUsers = users
           .filter(u => u?.userId && u.userId !== user.userId)
-          .filter((user, index, self) => 
-            index === self.findIndex(u => u.userId === user.userId)
+          .filter(
+            (user, index, self) =>
+              index === self.findIndex(u => u.userId === user.userId)
           );
 
         setOnlineUsers(otherUsers);

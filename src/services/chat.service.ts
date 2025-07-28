@@ -286,7 +286,9 @@ export class ChatService {
     }).subscribe({
       next: data => {
         // Filter pending requests in JavaScript instead
-        const pendingRequests = data.items.filter(request => request.status === 'PENDING');
+        const pendingRequests = data.items.filter(
+          request => request.status === 'PENDING'
+        );
         callback(pendingRequests);
       },
       error: error => {

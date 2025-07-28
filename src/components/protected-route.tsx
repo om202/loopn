@@ -15,15 +15,15 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
     context.authStatus,
   ]);
 
-    useEffect(() => {
+  useEffect(() => {
     if (authStatus === 'unauthenticated') {
       window.location.href = '/auth';
     }
-    
+
     if (authStatus === 'authenticated' && user) {
       // Set user online
       userService.setUserOnline(user.userId, user.signInDetails?.loginId || '');
-      
+
       // Set offline on page unload
       const handleUnload = () => {
         userService.setUserOffline(
@@ -32,7 +32,7 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
         );
       };
       window.addEventListener('beforeunload', handleUnload);
-      
+
       return () => {
         window.removeEventListener('beforeunload', handleUnload);
         userService.setUserOffline(
@@ -42,8 +42,6 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
       };
     }
   }, [authStatus, user]);
-
-
 
   if (authStatus === 'configuring' || authStatus === 'unauthenticated') {
     return (

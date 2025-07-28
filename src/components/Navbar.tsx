@@ -24,7 +24,10 @@ export default function Navbar() {
   const handleSignOut = async () => {
     if (user) {
       // Set user offline immediately before signing out
-      await userService.setUserOffline(user.userId, user.signInDetails?.loginId || '');
+      await userService.setUserOffline(
+        user.userId,
+        user.signInDetails?.loginId || ''
+      );
     }
     signOut();
   };
