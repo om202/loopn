@@ -3,3 +3,11 @@
 body {
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
 }
+
+/* Ensure all interactive elements show pointer cursor on hover */
+button:hover,
+a:hover,
+[role="button"]:hover,
+.cursor-pointer:hover {
+  cursor: pointer;
+}

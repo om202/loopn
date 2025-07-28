@@ -17,8 +17,8 @@ interface OnlineUsersProps {
 
 export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   const [onlineUsers, setOnlineUsers] = useState<UserPresence[]>([]);
-  const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
+  const [pendingRequests, setPendingRequests] = useState<Set<string>>(new Set());
   const [error, setError] = useState<string | null>(null);
   const { user } = useAuthenticator();
 
@@ -30,8 +30,20 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
     // Reset loading state for new user
     setInitialLoading(true);
 
+    // Subscribe to sent chat requests for real-time updates
+    const sentRequestsSubscription = chatService.observeSentChatRequests(
+      user.userId,
+      requests => {
+        const receiverIds = requests.map(req => req.receiverId);
+        setPendingRequests(new Set(receiverIds));
+      },
+      error => {
+        console.error('Error observing sent chat requests:', error);
+      }
+    );
+
     // Subscribe to online users updates
-    const subscription = userService.observeOnlineUsers(
+    const onlineUsersSubscription = userService.observeOnlineUsers(
       users => {
         // Filter out current user and remove duplicates
         const otherUsers = users
@@ -52,7 +64,8 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
     );
 
     return () => {
-      subscription.unsubscribe();
+      sentRequestsSubscription.unsubscribe();
+      onlineUsersSubscription.unsubscribe();
     };
   }, [user]);
 
@@ -61,16 +74,56 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
       return;
     }
 
-    setLoading(true);
-    const result = await chatService.sendChatRequest(receiverId, user.userId);
+    // Optimistic update - immediately show pending state
+    setPendingRequests(prev => new Set([...prev, receiverId]));
+    
+    // Do the API calls in the background without blocking UI
+    (async () => {
+      try {
+        // Check if there's already a pending request
+        const existingRequest = await chatService.hasPendingChatRequest(user.userId, receiverId);
+        
+        if (existingRequest.error) {
+          // Revert optimistic update
+          setPendingRequests(prev => {
+            const newSet = new Set(prev);
+            newSet.delete(receiverId);
+            return newSet;
+          });
+          setError(existingRequest.error);
+          return;
+        }
+        
+        if (existingRequest.data) {
+          // Don't revert - they already have a pending request
+          setError('You already have a pending chat request with this user');
+          return;
+        }
 
-    if (result.error) {
-      setError(result.error);
-    } else {
-      onChatRequestSent();
-    }
+        const result = await chatService.sendChatRequest(receiverId, user.userId);
 
-    setLoading(false);
+        if (result.error) {
+          // Revert optimistic update on error
+          setPendingRequests(prev => {
+            const newSet = new Set(prev);
+            newSet.delete(receiverId);
+            return newSet;
+          });
+          setError(result.error);
+        } else {
+          onChatRequestSent();
+          // Keep optimistic update - subscription will sync
+        }
+      } catch (error) {
+        // Revert optimistic update on any error
+        setPendingRequests(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(receiverId);
+          return newSet;
+        });
+        setError('Failed to send chat request');
+      }
+    })();
   };
 
 
@@ -154,15 +207,15 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
 
             <button
               onClick={() => handleSendChatRequest(userPresence.userId)}
-              disabled={loading}
-              className='px-3 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm font-medium'
-              title='Start chat'
+              disabled={pendingRequests.has(userPresence.userId)}
+              className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                pendingRequests.has(userPresence.userId)
+                  ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
+                  : 'bg-indigo-600 text-white hover:bg-indigo-700'
+              }`}
+              title={pendingRequests.has(userPresence.userId) ? 'Chat request pending' : 'Start chat'}
             >
-              {loading ? (
-                <div className='w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin' />
-              ) : (
-                'Chat'
-              )}
+              {pendingRequests.has(userPresence.userId) ? 'Pending' : 'Chat'}
             </button>
           </div>
         ))}

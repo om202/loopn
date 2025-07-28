@@ -102,6 +102,60 @@ export class ChatService {
     }
   }
 
+  async getSentChatRequests(
+    userId: string
+  ): Promise<ListResult<ChatRequest>> {
+    try {
+      const result = await client.models.ChatRequest.list({
+        filter: {
+          requesterId: { eq: userId },
+          status: { eq: 'PENDING' },
+        },
+      });
+
+      return {
+        data: result.data || [],
+        error: null,
+      };
+    } catch (error) {
+      return {
+        data: [],
+        error:
+          error instanceof Error
+            ? error.message
+            : 'Failed to fetch sent chat requests',
+      };
+    }
+  }
+
+  async hasPendingChatRequest(
+    requesterId: string,
+    receiverId: string
+  ): Promise<DataResult<boolean>> {
+    try {
+      const result = await client.models.ChatRequest.list({
+        filter: {
+          requesterId: { eq: requesterId },
+          receiverId: { eq: receiverId },
+          status: { eq: 'PENDING' },
+        },
+      });
+
+      return {
+        data: (result.data || []).length > 0,
+        error: null,
+      };
+    } catch (error) {
+      return {
+        data: false,
+        error:
+          error instanceof Error
+            ? error.message
+            : 'Failed to check existing chat requests',
+      };
+    }
+  }
+
   // ===== CONVERSATIONS =====
 
   async createConversation(
@@ -282,6 +336,31 @@ export class ChatService {
     return client.models.ChatRequest.observeQuery({
       filter: {
         receiverId: { eq: userId },
+      },
+    }).subscribe({
+      next: data => {
+        // Filter pending requests in JavaScript instead
+        const pendingRequests = data.items.filter(
+          request => request.status === 'PENDING'
+        );
+        callback(pendingRequests);
+      },
+      error: error => {
+        if (onError) {
+          onError(error);
+        }
+      },
+    });
+  }
+
+  observeSentChatRequests(
+    userId: string,
+    callback: (requests: ChatRequest[]) => void,
+    onError?: (error: Error) => void
+  ) {
+    return client.models.ChatRequest.observeQuery({
+      filter: {
+        requesterId: { eq: userId },
       },
     }).subscribe({
       next: data => {

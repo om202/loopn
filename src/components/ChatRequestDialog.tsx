@@ -1,0 +1,177 @@
+'use client';
+
+import { useState } from 'react';
+
+import type { Schema } from '../../amplify/data/resource';
+import { chatService } from '../services/chat.service';
+
+import UserAvatar from './UserAvatar';
+
+type ChatRequest = Schema['ChatRequest']['type'];
+
+interface ChatRequestWithUser extends ChatRequest {
+  requesterEmail?: string;
+}
+
+interface ChatRequestDialogProps {
+  isOpen: boolean;
+  chatRequest: ChatRequestWithUser | null;
+  onClose: () => void;
+  onAccept: () => void;
+  onReject: () => void;
+}
+
+export default function ChatRequestDialog({
+  isOpen,
+  chatRequest,
+  onClose,
+  onAccept,
+  onReject,
+}: ChatRequestDialogProps) {
+  const [justAccepted, setJustAccepted] = useState(false);
+  const [dontShowAgain, setDontShowAgain] = useState(false);
+
+  if (!isOpen || !chatRequest) {return null;}
+
+  const handleResponse = async (status: 'ACCEPTED' | 'REJECTED') => {
+    // Optimistic UI: immediately trigger callbacks
+    if (status === 'ACCEPTED') {
+      setJustAccepted(true);
+      onAccept();
+    } else {
+      onReject();
+      onClose();
+    }
+    
+    // Then perform the actual API call in the background
+    try {
+      const result = await chatService.respondToChatRequest(chatRequest.id, status);
+      
+      if (result.error) {
+        console.error('Failed to respond to chat request:', result.error);
+        // Could show a toast notification here if needed
+      }
+    } catch (error) {
+      console.error('Error responding to chat request:', error);
+      // Could show a toast notification here if needed
+    }
+  };
+
+  const handleMaybeLater = () => {
+    // Just close the dialog, leaving the request in notifications
+    onClose();
+  };
+
+  const handleOk = () => {
+    // TODO: Handle "don't show again" preference if checked
+    if (dontShowAgain) {
+      // Could save preference to localStorage or user settings
+      console.log('User chose not to show this confirmation again');
+    }
+    onClose();
+    setJustAccepted(false);
+  };
+
+  return (
+    <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/5'>
+      <div className='bg-white rounded-lg shadow-xl border border-gray-200 max-w-md w-full mx-4 p-6'>
+        {justAccepted ? (
+          /* Connected Message */
+          <>
+            <div className='text-center py-6'>
+              <div className='mb-6'>
+                <div className='flex justify-center mb-3'>
+                  <div className='w-12 h-12 bg-green-100 rounded-full flex items-center justify-center'>
+                    <svg className='w-6 h-6 text-green-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                      <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M5 13l4 4L19 7' />
+                    </svg>
+                  </div>
+                </div>
+                <h3 className='text-xl font-medium text-green-600 mb-2'>
+                  Connected!
+                </h3>
+                <p className='text-base text-gray-700'>
+                  You are connected to chat for 7 days
+                </p>
+              </div>
+            </div>
+
+            {/* Don't show again checkbox */}
+            <div className='flex items-center gap-2 mb-4'>
+              <input
+                type='checkbox'
+                id='dontShowAgain'
+                checked={dontShowAgain}
+                onChange={(e) => setDontShowAgain(e.target.checked)}
+                className='w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500'
+              />
+              <label htmlFor='dontShowAgain' className='text-sm text-gray-600'>
+                Don&apos;t show this confirmation again
+              </label>
+            </div>
+
+            {/* OK Button */}
+            <button
+              onClick={handleOk}
+              className='w-full px-4 py-2 bg-white text-gray-700 text-sm font-medium rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors'
+            >
+              OK
+            </button>
+          </>
+        ) : (
+          /* Normal Chat Request */
+          <>
+            <div className='text-center mb-6'>
+              <h3 className='text-lg font-medium text-gray-900 mb-2'>
+                New Chat Request
+              </h3>
+            </div>
+
+            <div className='flex items-center gap-4 mb-6'>
+              <UserAvatar 
+                email={chatRequest.requesterEmail}
+                userId={chatRequest.requesterId}
+                size="md"
+              />
+              <div className='flex-1 min-w-0'>
+                <div className='text-base font-medium text-gray-900 truncate'>
+                  {chatRequest.requesterEmail || `User ${chatRequest.requesterId.slice(-4)}`}
+                </div>
+                <div className='text-sm text-gray-600 mt-1'>
+                  wants to chat with you
+                </div>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className='flex gap-3 mb-4'>
+              {/* Accept Button */}
+              <button
+                onClick={() => handleResponse('ACCEPTED')}
+                className='flex-1 px-4 py-3 bg-indigo-600 text-white text-base font-medium rounded-lg hover:bg-indigo-700 transition-colors'
+              >
+                Accept
+              </button>
+
+              {/* Reject Button */}
+              <button
+                onClick={() => handleResponse('REJECTED')}
+                className='flex-1 px-4 py-3 bg-gray-100 text-gray-700 text-base font-medium rounded-lg hover:bg-gray-200 transition-colors'
+              >
+                Reject
+              </button>
+            </div>
+
+            {/* Maybe Later Button */}
+            <button
+              onClick={handleMaybeLater}
+              className='w-full px-4 py-3 text-sm text-gray-500 hover:text-gray-700 transition-colors'
+            >
+              Maybe Later
+            </button>
+          </>
+        )}
+      </div>
+    </div>
+  );
+} 
