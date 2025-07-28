@@ -92,7 +92,7 @@ export default function MessageBubble({
             className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg border ${
               isOwnMessage
                 ? 'bg-indigo-600 text-white border-indigo-600'
-                : 'bg-white text-gray-900 border-gray-200'
+                : 'bg-gray-100 text-gray-900 border-gray-200'
             }`}
           >
             <p className='text-sm leading-relaxed'>

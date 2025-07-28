@@ -11,6 +11,7 @@ import {
 } from '../lib/url-utils';
 import { chatService } from '../services/chat.service';
 import { messageService } from '../services/message.service';
+import { notificationService } from '../services/notification.service';
 import { userService } from '../services/user.service';
 
 import ChatRequestDialog from './ChatRequestDialog';
@@ -32,11 +33,11 @@ interface MessageNotificationData {
 
 interface Notification {
   id: string;
-  type: 'chat_request' | 'message' | 'connection' | 'system';
+  type: 'chat_request' | 'message' | 'connection' | 'system' | null;
   title: string;
   content: string;
   timestamp: string;
-  isRead: boolean;
+  isRead: boolean | null;
   data?: ChatRequestWithUser | MessageNotificationData; // Additional data specific to notification type
 }
 
@@ -76,6 +77,24 @@ export default function NotificationBell() {
     }
     return null;
   }, [pathname]);
+
+  // Load existing notifications from database on mount
+  useEffect(() => {
+    if (!user) {
+      return;
+    }
+
+    const loadNotifications = async () => {
+      const result = await notificationService.getUserNotifications(user.userId);
+      if (result.data) {
+        setNotifications(result.data);
+      } else if (result.error) {
+        setError(result.error);
+      }
+    };
+
+    loadNotifications();
+  }, [user]);
 
   // Subscribe to chat requests (separate from message subscription)
   useEffect(() => {
@@ -127,19 +146,44 @@ export default function NotificationBell() {
 
         setChatRequests(requestsWithUsers);
 
-        // Convert chat requests to notifications
-        const chatNotifications: Notification[] = requestsWithUsers.map(
-          request => ({
+        // Convert chat requests to notifications and save to database
+        const chatNotifications: Notification[] = [];
+        
+        // Handle database operations for new requests
+        if (!isInitialLoad.current) {
+          const savePromises = requestsWithUsers.map(request => {
+            const title = request.requesterEmail || `User ${request.requesterId.slice(-4)}`;
+            const content = 'wants to chat with you';
+            
+            return notificationService.createNotification(
+              user.userId,
+              'chat_request',
+              title,
+              content,
+              request,
+              { chatRequestId: request.id }
+            );
+          });
+          
+          // Wait for all database operations to complete
+          await Promise.all(savePromises);
+        }
+        
+        // Create notifications for local state
+        for (const request of requestsWithUsers) {
+          const title = request.requesterEmail || `User ${request.requesterId.slice(-4)}`;
+          const content = 'wants to chat with you';
+          
+          chatNotifications.push({
             id: request.id,
             type: 'chat_request' as const,
-            title:
-              request.requesterEmail || `User ${request.requesterId.slice(-4)}`,
-            content: 'wants to chat with you',
+            title,
+            content,
             timestamp: request.createdAt,
             isRead: false,
             data: request,
-          })
-        );
+          });
+        }
 
         // Update notifications but preserve message notifications
         setNotifications(prevNotifications => {
@@ -178,25 +222,15 @@ export default function NotificationBell() {
           );
           const senderEmail = senderResult.data?.email;
 
-          setNotifications(prevNotifications => {
+          // Handle database operations outside of state setter
+          const updateNotifications = async () => {
             // Find existing message notifications for this conversation
-            const existingConversationNotifications = prevNotifications.filter(
+            const existingConversationNotifications = notifications.filter(
               notif =>
                 notif.type === 'message' &&
                 notif.data &&
                 'conversationId' in notif.data &&
                 notif.data.conversationId === message.conversationId
-            );
-
-            // Remove all existing notifications for this conversation
-            const otherNotifications = prevNotifications.filter(
-              notif =>
-                !(
-                  notif.type === 'message' &&
-                  notif.data &&
-                  'conversationId' in notif.data &&
-                  notif.data.conversationId === message.conversationId
-                )
             );
 
             // Calculate new count (existing count + 1)
@@ -209,33 +243,69 @@ export default function NotificationBell() {
                 : 0;
             const newCount = currentCount + 1;
 
-            // Create new notification with updated count
-            const messageNotification: Notification = {
-              id: `message-${message.conversationId}`, // Use conversation ID so we replace per conversation
-              type: 'message',
-              title: senderEmail || `User ${message.senderId.slice(-4)}`,
-              content:
-                newCount > 1
-                  ? `${newCount} new messages: ${
-                      message.content.length > 30
-                        ? `${message.content.substring(0, 30)}...`
-                        : message.content
-                    }`
-                  : message.content.length > 50
-                    ? `${message.content.substring(0, 50)}...`
-                    : message.content,
-              timestamp: message.timestamp || message.createdAt,
-              isRead: false,
-              data: {
-                conversationId: message.conversationId,
-                message,
-                senderEmail: senderEmail || undefined,
-                messageCount: newCount,
-              },
+            // Create notification data
+            const title = senderEmail || `User ${message.senderId.slice(-4)}`;
+            const content = newCount > 1
+              ? `${newCount} new messages: ${
+                  message.content.length > 30
+                    ? `${message.content.substring(0, 30)}...`
+                    : message.content
+                }`
+              : message.content.length > 50
+                ? `${message.content.substring(0, 50)}...`
+                : message.content;
+
+            const notificationData = {
+              conversationId: message.conversationId,
+              message,
+              senderEmail: senderEmail || undefined,
+              messageCount: newCount,
             };
 
-            return [messageNotification, ...otherNotifications];
-          });
+            // Save to database (delete old ones first, then create new)
+            await notificationService.deleteNotificationsForConversation(
+              user.userId,
+              message.conversationId
+            );
+            
+            await notificationService.createNotification(
+              user.userId,
+              'message',
+              title,
+              content,
+              notificationData,
+              { conversationId: message.conversationId }
+            );
+
+            // Update local state
+            setNotifications(prevNotifications => {
+              // Remove all existing notifications for this conversation
+              const otherNotifications = prevNotifications.filter(
+                notif =>
+                  !(
+                    notif.type === 'message' &&
+                    notif.data &&
+                    'conversationId' in notif.data &&
+                    notif.data.conversationId === message.conversationId
+                  )
+              );
+
+              // Create new notification for local state
+              const messageNotification: Notification = {
+                id: `message-${message.conversationId}`, // Use conversation ID so we replace per conversation
+                type: 'message',
+                title,
+                content,
+                timestamp: message.timestamp || message.createdAt,
+                isRead: false,
+                data: notificationData,
+              };
+
+              return [messageNotification, ...otherNotifications];
+            });
+          };
+
+          updateNotifications();
         }
       },
       error => {
@@ -263,7 +333,7 @@ export default function NotificationBell() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleNotificationClick = (notification: Notification) => {
+  const handleNotificationClick = async (notification: Notification) => {
     if (
       notification.type === 'message' &&
       notification.data &&
@@ -271,6 +341,14 @@ export default function NotificationBell() {
     ) {
       // Navigate to the conversation
       router.push(createShortChatUrl(notification.data.conversationId));
+
+      // Delete notification from database
+      if (user) {
+        await notificationService.deleteNotificationsForConversation(
+          user.userId,
+          notification.data.conversationId
+        );
+      }
 
       // Remove the notification since user is now viewing the conversation
       setNotifications(prevNotifications =>
@@ -293,7 +371,14 @@ export default function NotificationBell() {
       setShowDialogConnected(true);
       setIsOpen(false); // Close the notification dropdown
 
-      // Immediately call the accept handler and perform API call
+      // Delete notification from database and update state
+      if (user) {
+        await notificationService.deleteNotificationsForChatRequest(
+          user.userId,
+          chatRequestId
+        );
+      }
+      
       setChatRequests(prev => prev.filter(req => req.id !== chatRequestId));
       setNotifications(prev =>
         prev.filter(notif => notif.id !== chatRequestId)
@@ -318,6 +403,14 @@ export default function NotificationBell() {
     }
 
     // For rejection, proceed with normal flow
+    // Delete notification from database and update state
+    if (user) {
+      await notificationService.deleteNotificationsForChatRequest(
+        user.userId,
+        chatRequestId
+      );
+    }
+    
     // Optimistic update - immediately remove from both states
     setChatRequests(prev => prev.filter(req => req.id !== chatRequestId));
     setNotifications(prev => prev.filter(notif => notif.id !== chatRequestId));
@@ -387,7 +480,8 @@ export default function NotificationBell() {
     return counts;
   };
 
-  const getNotificationIcon = (type: string) => {
+  const getNotificationIcon = (type: string | null) => {
+    if (!type) {return null;}
     switch (type) {
       case 'chat_request':
         return (
@@ -406,12 +500,15 @@ export default function NotificationBell() {
       case 'message':
         return (
           <svg
-            className='w-4 h-4 text-green-500'
+            className='w-4 h-4 text-gray-500'
             fill='currentColor'
             viewBox='0 0 20 20'
           >
-            <path d='M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z' />
-            <path d='M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z' />
+            <path
+              fillRule='evenodd'
+              d='M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z'
+              clipRule='evenodd'
+            />
           </svg>
         );
       case 'connection':
@@ -538,7 +635,7 @@ export default function NotificationBell() {
             }, 0);
             return totalCount > 0;
           })() && (
-            <div className='absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center'>
+            <div className='absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center'>
               <span className='text-xs text-white font-medium'>
                 {(() => {
                   const totalCount = notifications.reduce((sum, notif) => {
@@ -565,9 +662,9 @@ export default function NotificationBell() {
         {isOpen ? (
           <div className='absolute right-0 top-full mt-2 w-96 bg-white border border-gray-200 rounded-xl shadow-lg z-20'>
             {/* Header */}
-            <div className='p-4 border-b border-gray-100'>
+            <div className='p-3 border-b border-gray-100'>
               <div className='flex items-center justify-between'>
-                <h3 className='font-semibold text-gray-900'>Notifications</h3>
+                <h3 className='text-sm font-medium text-gray-900'>Notifications</h3>
 
                 {/* Subtle Filter Dropdown - Only show if there are multiple types */}
                 {(() => {
@@ -583,7 +680,7 @@ export default function NotificationBell() {
                         onChange={e =>
                           setActiveFilter(e.target.value as NotificationFilter)
                         }
-                        className='text-sm text-gray-600 bg-transparent border-none outline-none cursor-pointer hover:text-gray-900 focus:text-gray-900'
+                        className='text-xs text-gray-500 bg-transparent border-none outline-none cursor-pointer hover:text-gray-700 focus:text-gray-700'
                       >
                         <option value='all'>
                           {counts.all > 0 ? `All (${counts.all})` : 'All'}
@@ -646,7 +743,7 @@ export default function NotificationBell() {
                   {getFilteredNotifications().map(notification => (
                     <div
                       key={notification.id}
-                      className='px-4 py-3 hover:bg-gray-50 border-b border-gray-50 last:border-b-0'
+                      className='px-3 py-2 hover:bg-gray-50 border-b border-gray-50 last:border-b-0'
                     >
                       <div className='flex items-start gap-3'>
                         {notification.type === 'chat_request' ? (
@@ -662,7 +759,7 @@ export default function NotificationBell() {
                             size='sm'
                           />
                         ) : (
-                          <div className='w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-sm'>
+                          <div className='w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center text-sm'>
                             {getNotificationIcon(notification.type)}
                           </div>
                         )}
@@ -697,7 +794,7 @@ export default function NotificationBell() {
                                       )
                                     }
                                     disabled={decliningId === notification.id}
-                                    className='px-4 py-1.5 bg-gray-100 text-gray-700 text-sm font-medium rounded-full hover:bg-gray-200 disabled:opacity-50 transition-colors'
+                                    className='px-3 py-1 bg-gray-100 text-gray-600 text-xs font-medium rounded-full hover:bg-gray-200 disabled:opacity-50 transition-colors'
                                   >
                                     {decliningId === notification.id
                                       ? 'Declining...'
@@ -712,7 +809,7 @@ export default function NotificationBell() {
                                       )
                                     }
                                     disabled={decliningId === notification.id}
-                                    className='px-4 py-1.5 bg-indigo-600 text-white text-sm font-medium rounded-full hover:bg-indigo-700 disabled:opacity-50 transition-colors'
+                                    className='px-3 py-1 bg-indigo-600 text-white text-xs font-medium rounded-full hover:bg-indigo-700 disabled:opacity-50 transition-colors'
                                   >
                                     Confirm
                                   </button>
@@ -725,7 +822,7 @@ export default function NotificationBell() {
                                 onClick={() =>
                                   handleNotificationClick(notification)
                                 }
-                                className='px-4 py-1.5 bg-indigo-600 text-white text-sm font-medium rounded-full hover:bg-indigo-700 transition-colors'
+                                className='px-2 py-0.5 border border-indigo-600 text-indigo-600 text-xs font-light rounded-full hover:bg-indigo-50 transition-colors'
                               >
                                 Open Chat
                               </button>
