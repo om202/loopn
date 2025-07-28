@@ -1,7 +1,6 @@
 'use client';
 
 import type { Schema } from '../../../amplify/data/resource';
-import UserAvatar from '../UserAvatar';
 
 type Message = Schema['Message']['type'];
 type UserPresence = Schema['UserPresence']['type'];
@@ -19,9 +18,6 @@ interface MessageBubbleProps {
 export default function MessageBubble({
   message,
   isOwnMessage,
-  showAvatar,
-  otherUserPresence,
-  otherParticipantId,
   marginTop,
   marginBottom,
 }: MessageBubbleProps) {

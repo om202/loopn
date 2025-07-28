@@ -32,7 +32,6 @@ export default function ChatWindow({
 }: ChatWindowProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [timeLeft, setTimeLeft] = useState<string>('');
   const [otherUserPresence, setOtherUserPresence] =
@@ -228,7 +227,6 @@ export default function ChatWindow({
     // Immediately add to UI (optimistic update)
     setMessages(prev => [...prev, optimisticMessage]);
     setNewMessage('');
-    setLoading(true);
 
     // Send to server
     messageService
@@ -240,16 +238,12 @@ export default function ChatWindow({
           setNewMessage(messageContent); // Restore message text
           setError(result.error);
         }
-        // Note: We don't need to add the message again on success because
-        // the real-time subscription will handle adding the actual message
-        setLoading(false);
       })
       .catch(() => {
         // Rollback on network error
         setMessages(prev => prev.filter(msg => msg.id !== tempId));
         setNewMessage(messageContent); // Restore message text
         setError('Failed to send message. Please try again.');
-        setLoading(false);
       });
   };
 

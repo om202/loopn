@@ -64,7 +64,7 @@ export default function MessageInput({
     }
     // Always call onSendMessage - let the parent handle empty message logic
     onSendMessage();
-    
+
     // Auto-focus input after sending message for continuous typing
     setTimeout(() => {
       inputRef.current?.focus();
