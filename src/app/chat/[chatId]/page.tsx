@@ -109,7 +109,7 @@ export default function ChatPage({ params }: ChatPageProps) {
   if (!conversation) {
     return (
       <ProtectedRoute>
-        <div></div>
+        <div />
       </ProtectedRoute>
     );
   }
@@ -146,7 +146,10 @@ export default function ChatPage({ params }: ChatPageProps) {
 
         {/* Chat Interface */}
         <div className='max-w-4xl mx-auto'>
-          <ChatWindow conversation={conversation} onChatEnded={handleChatEnded} />
+          <ChatWindow
+            conversation={conversation}
+            onChatEnded={handleChatEnded}
+          />
         </div>
       </div>
     </ProtectedRoute>

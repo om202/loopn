@@ -87,8 +87,13 @@ const schema = a.schema({
       // Track who ended the chat (for different UI behavior)
       endedByUserId: a.string(), // Optional: who clicked "End chat now"
       endedAt: a.datetime(), // When chat was manually ended
+      // Multi-user authorization: both participants can access
+      participants: a.string().array(),
     })
-    .authorization(allow => [allow.authenticated()])
+    .authorization(allow => [
+      // Allow both participants to access the conversation
+      allow.ownersDefinedIn('participants'),
+    ])
     .secondaryIndexes(index => [
       // Find conversations for a specific user, sorted by last activity
       index('participant1Id').sortKeys(['lastMessageAt']),
@@ -119,8 +124,13 @@ const schema = a.schema({
       replyToMessageId: a.id(),
       // TTL field - inherits from conversation's TTL if unconnected
       expiresAt: a.datetime(),
+      // Multi-user authorization: both sender and receiver can access
+      participants: a.string().array(),
     })
-    .authorization(allow => [allow.authenticated()])
+    .authorization(allow => [
+      // Allow both participants (sender and receiver) to access the message
+      allow.ownersDefinedIn('participants'),
+    ])
     .secondaryIndexes(index => [
       // Get messages for a conversation, ordered by time
       index('conversationId').sortKeys(['sortKey']),

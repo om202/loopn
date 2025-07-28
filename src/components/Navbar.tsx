@@ -61,7 +61,8 @@ export default function Navbar() {
           <div className='flex items-center gap-2'>
             <NotificationBell />
             <div className='relative' ref={dropdownRef}>
-              <button onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+              {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
+              <div onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
                 <div className='relative p-2 rounded-lg hover:bg-gray-50 transition-colors'>
                   <UserAvatar email={getUserEmail()} size='md' />
                   {/* Dropdown Arrow - Bottom Right Corner */}
@@ -128,7 +129,7 @@ export default function Navbar() {
                     </button>
                   </div>
                 ) : null}
-              </button>
+              </div>
             </div>
           </div>
         </div>

@@ -39,6 +39,7 @@ export class MessageService {
       const timestamp = new Date();
       const sortKey = `${timestamp.toISOString()}_${crypto.randomUUID()}`;
 
+      // Create the message with proper authorization
       const result = await client.models.Message.create({
         conversationId,
         senderId,
@@ -48,6 +49,8 @@ export class MessageService {
         timestamp: timestamp.toISOString(),
         sortKey,
         replyToMessageId,
+        // Set participants to include both sender and receiver for authorization
+        participants: [senderId, receiverId],
       });
 
       return {
@@ -147,7 +150,8 @@ export class MessageService {
     }).subscribe({
       next: data => {
         // Sort messages by timestamp (oldest first for chat display)
-        const sortedMessages = data.items.sort((a, b) => {
+        // Create a new array to avoid mutating the original and ensure React detects changes
+        const sortedMessages = [...data.items].sort((a, b) => {
           const timestampA = a.timestamp ? new Date(a.timestamp).getTime() : 0;
           const timestampB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
           return timestampA - timestampB;

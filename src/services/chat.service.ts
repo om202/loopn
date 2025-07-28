@@ -215,6 +215,8 @@ export class ChatService {
         probationEndsAt: probationEndsAt.toISOString(),
         expiresAt: probationEndsAt.toISOString(), // TTL
         createdAt: now.toISOString(),
+        // Set participants for multi-user authorization
+        participants: [participant1Id, participant2Id],
       });
 
       return {
