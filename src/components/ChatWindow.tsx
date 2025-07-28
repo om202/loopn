@@ -1,6 +1,7 @@
 'use client';
 
 import { useAuthenticator } from '@aws-amplify/ui-react';
+import { Send } from 'lucide-react';
 import Image from 'next/image';
 import { useState, useEffect, useRef, useCallback } from 'react';
 
@@ -40,6 +41,7 @@ export default function ChatWindow({
   const [sendingConnectionRequest, setSendingConnectionRequest] =
     useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const { user } = useAuthenticator();
 
   // Get the other participant's ID
@@ -232,19 +234,57 @@ export default function ChatWindow({
   }, [externalLoading, conversation.id]);
 
   const handleSendMessage = () => {
+    // Programmatically check conditions instead of disabling button
     if (!newMessage.trim() || !user || loading) {
       return;
     }
 
+    const messageContent = newMessage.trim();
+    const tempId = `temp-${Date.now()}-${Math.random()}`;
+    const now = new Date().toISOString();
+    
+    // Create optimistic message
+    const optimisticMessage: Message = {
+      id: tempId,
+      conversationId: conversation.id,
+      senderId: user.userId,
+      receiverId: otherParticipantId,
+      content: messageContent,
+      sortKey: `${now}-${tempId}`,
+      messageType: 'TEXT',
+      timestamp: now,
+      isRead: false,
+      isEdited: false,
+      isDeleted: false,
+      participants: [user.userId, otherParticipantId],
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    // Immediately add to UI (optimistic update)
+    setMessages(prev => [...prev, optimisticMessage]);
+    setNewMessage('');
     setLoading(true);
+
+    // Send to server
     messageService
-      .sendMessage(conversation.id, user.userId, newMessage.trim())
+      .sendMessage(conversation.id, user.userId, messageContent)
       .then(result => {
         if (result.error) {
+          // Rollback optimistic update on error
+          setMessages(prev => prev.filter(msg => msg.id !== tempId));
+          setNewMessage(messageContent); // Restore message text
           setError(result.error);
-        } else {
-          setNewMessage('');
         }
+        // Note: We don't need to add the message again on success because
+        // the real-time subscription will handle adding the actual message
+        setLoading(false);
+      })
+      .catch(() => {
+        // Rollback on network error
+        setMessages(prev => prev.filter(msg => msg.id !== tempId));
+        setNewMessage(messageContent); // Restore message text
+        setError('Failed to send message. Please try again.');
         setLoading(false);
       });
   };
@@ -262,6 +302,13 @@ export default function ChatWindow({
   const getUserDisplayName = () => {
     return otherUserPresence?.email || `User ${otherParticipantId.slice(-4)}`;
   };
+
+  // Auto-focus input when component is ready
+  useEffect(() => {
+    if (!isInitializing && !externalLoading && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isInitializing, externalLoading]);
 
   // Show loading state while initializing or external loading
   if (isInitializing || externalLoading) {
@@ -443,31 +490,27 @@ export default function ChatWindow({
           <div className='flex gap-3 items-end'>
             <div className='flex-1'>
               <input
+                ref={inputRef}
                 type='text'
                 placeholder='Type your message...'
                 value={newMessage}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setNewMessage(e.target.value)
                 }
-                disabled={loading}
                 onKeyPress={(e: React.KeyboardEvent) => {
                   if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
                     handleSendMessage();
                   }
                 }}
-                className='w-full px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm bg-gray-50 disabled:opacity-50'
+                className='w-full px-4 py-3 border border-gray-200 rounded-full focus:outline-none text-sm bg-gray-100'
               />
             </div>
             <button
               onClick={handleSendMessage}
-              disabled={loading || !newMessage.trim()}
-              className='px-6 py-3 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed'
-              style={{
-                minWidth: '80px',
-              }}
+              className='flex items-center justify-center w-12 h-12 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors'
             >
-              {loading ? 'Sending...' : 'Send'}
+              <Send className='w-5 h-5 rotate-45 -translate-x-0.5' />
             </button>
           </div>
         </div>
