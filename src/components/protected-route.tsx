@@ -24,7 +24,7 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
       // Set user online
       userService.setUserOnline(user.userId, user.signInDetails?.loginId || '');
 
-      // Set offline on page unload
+      // Set offline only on page unload (browser close/refresh)
       const handleUnload = () => {
         userService.setUserOffline(
           user.userId,
@@ -35,10 +35,7 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
 
       return () => {
         window.removeEventListener('beforeunload', handleUnload);
-        userService.setUserOffline(
-          user.userId,
-          user.signInDetails?.loginId || ''
-        );
+        // Removed setUserOffline from cleanup - only set offline on browser close
       };
     }
   }, [authStatus, user]);
