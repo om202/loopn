@@ -34,63 +34,65 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   const { user } = useAuthenticator();
   const router = useRouter();
 
-  const loadConversations = useCallback(
-    async () => {
-      if (!user) {
+  const loadConversations = useCallback(async () => {
+    if (!user) {
+      setConversationsLoaded(true);
+      return;
+    }
+
+    try {
+      // Get all conversations for the user
+      const conversationsResult = await chatService.getUserConversations(
+        user.userId
+      );
+      if (conversationsResult.error) {
+        setError(conversationsResult.error);
         setConversationsLoaded(true);
         return;
       }
 
-      try {
-        // Get all conversations for the user
-        const conversationsResult = await chatService.getUserConversations(user.userId);
-        if (conversationsResult.error) {
-          setError(conversationsResult.error);
-          setConversationsLoaded(true);
-          return;
-        }
+      const conversations = conversationsResult.data || [];
+      const conversationMap = new Map<string, string>();
+      const userIds = new Set<string>();
 
-        const conversations = conversationsResult.data || [];
-        const conversationMap = new Map<string, string>();
-        const userIds = new Set<string>();
-
-        // Extract participant IDs and conversation mappings
-        conversations.forEach(conv => {
-          const otherUserId = conv.participant1Id === user.userId 
-            ? conv.participant2Id 
+      // Extract participant IDs and conversation mappings
+      conversations.forEach(conv => {
+        const otherUserId =
+          conv.participant1Id === user.userId
+            ? conv.participant2Id
             : conv.participant1Id;
-          if (otherUserId) {
-            conversationMap.set(otherUserId, conv.id);
-            userIds.add(otherUserId);
-          }
-        });
+        if (otherUserId) {
+          conversationMap.set(otherUserId, conv.id);
+          userIds.add(otherUserId);
+        }
+      });
 
-        // Get user presence data for all conversation participants
-        const userPresencePromises = Array.from(userIds).map(async userId => {
-          try {
-            const result = await userService.getUserPresence(userId);
-            return result.data;
-          } catch {
-            console.error('Error getting user presence for:', userId);
-            return null;
-          }
-        });
+      // Get user presence data for all conversation participants
+      const userPresencePromises = Array.from(userIds).map(async userId => {
+        try {
+          const result = await userService.getUserPresence(userId);
+          return result.data;
+        } catch {
+          console.error('Error getting user presence for:', userId);
+          return null;
+        }
+      });
 
-        const userPresences = await Promise.all(userPresencePromises);
-        const validUserPresences = userPresences.filter(Boolean) as UserPresence[];
+      const userPresences = await Promise.all(userPresencePromises);
+      const validUserPresences = userPresences.filter(
+        Boolean
+      ) as UserPresence[];
 
-        setExistingConversations(conversationMap);
-        return validUserPresences;
-      } catch (error) {
-        console.error('Error loading conversations:', error);
-        setError('Failed to load conversations');
-        return [];
-      } finally {
-        setConversationsLoaded(true);
-      }
-    },
-    [user]
-  );
+      setExistingConversations(conversationMap);
+      return validUserPresences;
+    } catch (error) {
+      console.error('Error loading conversations:', error);
+      setError('Failed to load conversations');
+      return [];
+    } finally {
+      setConversationsLoaded(true);
+    }
+  }, [user]);
 
   useEffect(() => {
     if (!user) {
@@ -143,15 +145,17 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   }, [user]);
 
   // Store conversation users separately
-  const [conversationUsers, setConversationUsers] = useState<UserPresence[]>([]);
+  const [conversationUsers, setConversationUsers] = useState<UserPresence[]>(
+    []
+  );
 
   // Load conversations when user changes
   useEffect(() => {
     if (!user) {
       return;
     }
-    
-    loadConversations().then((users) => {
+
+    loadConversations().then(users => {
       setConversationUsers(users || []);
     });
   }, [user, loadConversations]);
@@ -310,7 +314,11 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
                 userId={userPresence.userId}
                 size='md'
                 showStatus
-                status={onlineUsers.some(ou => ou.userId === userPresence.userId) ? userPresence.status : 'OFFLINE'}
+                status={
+                  onlineUsers.some(ou => ou.userId === userPresence.userId)
+                    ? userPresence.status
+                    : 'OFFLINE'
+                }
               />
               <div>
                 <div className='font-medium text-gray-900 text-base'>

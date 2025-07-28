@@ -85,7 +85,9 @@ export default function NotificationBell() {
     }
 
     const loadNotifications = async () => {
-      const result = await notificationService.getUserNotifications(user.userId);
+      const result = await notificationService.getUserNotifications(
+        user.userId
+      );
       if (result.data) {
         setNotifications(result.data);
       } else if (result.error) {
@@ -148,49 +150,76 @@ export default function NotificationBell() {
 
         // Convert chat requests to notifications and save to database
         const chatNotifications: Notification[] = [];
-        
+
         // Handle database operations for new requests
         if (!isInitialLoad.current) {
-          const savePromises = requestsWithUsers.map(request => {
-            const title = request.requesterEmail || `User ${request.requesterId.slice(-4)}`;
-            const content = 'wants to chat with you';
-            
-            return notificationService.createNotification(
-              user.userId,
-              'chat_request',
-              title,
-              content,
-              request,
-              { chatRequestId: request.id }
-            );
-          });
-          
-          // Wait for all database operations to complete
-          await Promise.all(savePromises);
-        }
-        
-        // Create notifications for local state
-        for (const request of requestsWithUsers) {
-          const title = request.requesterEmail || `User ${request.requesterId.slice(-4)}`;
-          const content = 'wants to chat with you';
-          
-          chatNotifications.push({
-            id: request.id,
-            type: 'chat_request' as const,
-            title,
-            content,
-            timestamp: request.createdAt,
-            isRead: false,
-            data: request,
-          });
+          // Only create notifications for truly new requests (not existing ones)
+          const previousRequestIds = chatRequests.map(req => req.id);
+          const newRequests = requestsWithUsers.filter(
+            req => !previousRequestIds.includes(req.id)
+          );
+
+          if (newRequests.length > 0) {
+            const savePromises = newRequests.map(request => {
+              const title =
+                request.requesterEmail ||
+                `User ${request.requesterId.slice(-4)}`;
+              const content = 'wants to chat with you';
+
+              return notificationService.createNotification(
+                user.userId,
+                'chat_request',
+                title,
+                content,
+                request,
+                { chatRequestId: request.id }
+              );
+            });
+
+            // Wait for all database operations to complete
+            await Promise.all(savePromises);
+          }
         }
 
-        // Update notifications but preserve message notifications
+        // Create notifications for local state - only include requests that don't already have notifications
         setNotifications(prevNotifications => {
+          const existingChatRequestIds = prevNotifications
+            .filter(notif => notif.type === 'chat_request')
+            .map(notif => notif.id);
+
+          for (const request of requestsWithUsers) {
+            // Skip if notification already exists
+            if (!existingChatRequestIds.includes(request.id)) {
+              const title =
+                request.requesterEmail ||
+                `User ${request.requesterId.slice(-4)}`;
+              const content = 'wants to chat with you';
+
+              chatNotifications.push({
+                id: request.id,
+                type: 'chat_request' as const,
+                title,
+                content,
+                timestamp: request.createdAt,
+                isRead: false,
+                data: request,
+              });
+            }
+          }
+
+          // Only add new notifications, preserve existing ones
           const messageNotifications = prevNotifications.filter(
             notif => notif.type === 'message'
           );
-          return [...messageNotifications, ...chatNotifications];
+          const existingChatNotifications = prevNotifications.filter(
+            notif => notif.type === 'chat_request'
+          );
+
+          return [
+            ...messageNotifications,
+            ...existingChatNotifications,
+            ...chatNotifications,
+          ];
         });
       },
       () => {
@@ -222,10 +251,10 @@ export default function NotificationBell() {
           );
           const senderEmail = senderResult.data?.email;
 
-          // Handle database operations outside of state setter
-          const updateNotifications = async () => {
+          // Handle database operations and state update
+          setNotifications(prevNotifications => {
             // Find existing message notifications for this conversation
-            const existingConversationNotifications = notifications.filter(
+            const existingConversationNotifications = prevNotifications.filter(
               notif =>
                 notif.type === 'message' &&
                 notif.data &&
@@ -245,15 +274,16 @@ export default function NotificationBell() {
 
             // Create notification data
             const title = senderEmail || `User ${message.senderId.slice(-4)}`;
-            const content = newCount > 1
-              ? `${newCount} new messages: ${
-                  message.content.length > 30
-                    ? `${message.content.substring(0, 30)}...`
-                    : message.content
-                }`
-              : message.content.length > 50
-                ? `${message.content.substring(0, 50)}...`
-                : message.content;
+            const content =
+              newCount > 1
+                ? `${newCount} new messages: ${
+                    message.content.length > 30
+                      ? `${message.content.substring(0, 30)}...`
+                      : message.content
+                  }`
+                : message.content.length > 50
+                  ? `${message.content.substring(0, 50)}...`
+                  : message.content;
 
             const notificationData = {
               conversationId: message.conversationId,
@@ -262,50 +292,50 @@ export default function NotificationBell() {
               messageCount: newCount,
             };
 
-            // Save to database (delete old ones first, then create new)
-            await notificationService.deleteNotificationsForConversation(
-              user.userId,
-              message.conversationId
+            // Remove all existing notifications for this conversation
+            const otherNotifications = prevNotifications.filter(
+              notif =>
+                !(
+                  notif.type === 'message' &&
+                  notif.data &&
+                  'conversationId' in notif.data &&
+                  notif.data.conversationId === message.conversationId
+                )
             );
-            
-            await notificationService.createNotification(
-              user.userId,
-              'message',
+
+            // Create new notification for local state
+            const messageNotification: Notification = {
+              id: `message-${message.conversationId}`, // Use conversation ID so we replace per conversation
+              type: 'message',
               title,
               content,
-              notificationData,
-              { conversationId: message.conversationId }
-            );
+              timestamp: message.timestamp || message.createdAt,
+              isRead: false,
+              data: notificationData,
+            };
 
-            // Update local state
-            setNotifications(prevNotifications => {
-              // Remove all existing notifications for this conversation
-              const otherNotifications = prevNotifications.filter(
-                notif =>
-                  !(
-                    notif.type === 'message' &&
-                    notif.data &&
-                    'conversationId' in notif.data &&
-                    notif.data.conversationId === message.conversationId
-                  )
-              );
+            // Save to database in background (don't await to avoid blocking UI)
+            notificationService
+              .deleteNotificationsForConversation(
+                user.userId,
+                message.conversationId
+              )
+              .then(() => {
+                return notificationService.createNotification(
+                  user.userId,
+                  'message',
+                  title,
+                  content,
+                  notificationData,
+                  { conversationId: message.conversationId }
+                );
+              })
+              .catch(error => {
+                console.error('Error saving message notification:', error);
+              });
 
-              // Create new notification for local state
-              const messageNotification: Notification = {
-                id: `message-${message.conversationId}`, // Use conversation ID so we replace per conversation
-                type: 'message',
-                title,
-                content,
-                timestamp: message.timestamp || message.createdAt,
-                isRead: false,
-                data: notificationData,
-              };
-
-              return [messageNotification, ...otherNotifications];
-            });
-          };
-
-          updateNotifications();
+            return [messageNotification, ...otherNotifications];
+          });
         }
       },
       error => {
@@ -378,7 +408,7 @@ export default function NotificationBell() {
           chatRequestId
         );
       }
-      
+
       setChatRequests(prev => prev.filter(req => req.id !== chatRequestId));
       setNotifications(prev =>
         prev.filter(notif => notif.id !== chatRequestId)
@@ -410,7 +440,7 @@ export default function NotificationBell() {
         chatRequestId
       );
     }
-    
+
     // Optimistic update - immediately remove from both states
     setChatRequests(prev => prev.filter(req => req.id !== chatRequestId));
     setNotifications(prev => prev.filter(notif => notif.id !== chatRequestId));
@@ -481,7 +511,9 @@ export default function NotificationBell() {
   };
 
   const getNotificationIcon = (type: string | null) => {
-    if (!type) {return null;}
+    if (!type) {
+      return null;
+    }
     switch (type) {
       case 'chat_request':
         return (
@@ -664,7 +696,9 @@ export default function NotificationBell() {
             {/* Header */}
             <div className='p-3 border-b border-gray-100'>
               <div className='flex items-center justify-between'>
-                <h3 className='text-sm font-medium text-gray-900'>Notifications</h3>
+                <h3 className='text-sm font-medium text-gray-900'>
+                  Notifications
+                </h3>
 
                 {/* Subtle Filter Dropdown - Only show if there are multiple types */}
                 {(() => {
