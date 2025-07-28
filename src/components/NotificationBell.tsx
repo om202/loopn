@@ -92,10 +92,14 @@ export default function NotificationBell() {
         // Remove duplicates - keep only the latest notification per conversation for messages
         const deduplicatedNotifications: Notification[] = [];
         const seenConversations = new Set<string>();
-        
+
         for (const notif of result.data) {
-          if (notif.type === 'message' && notif.data && 'conversationId' in notif.data) {
-            const conversationId = notif.data.conversationId;
+          if (
+            notif.type === 'message' &&
+            notif.data &&
+            'conversationId' in notif.data
+          ) {
+            const { conversationId } = notif.data;
             if (!seenConversations.has(conversationId)) {
               seenConversations.add(conversationId);
               deduplicatedNotifications.push(notif);
@@ -105,7 +109,7 @@ export default function NotificationBell() {
             deduplicatedNotifications.push(notif);
           }
         }
-        
+
         setNotifications(deduplicatedNotifications);
       } else if (result.error) {
         setError(result.error);
@@ -172,13 +176,13 @@ export default function NotificationBell() {
           for (const request of requestsWithUsers) {
             // Check if notification for this chat request already exists
             const existingNotification = prevNotifications.find(
-              notif => 
-                notif.type === 'chat_request' && 
-                (notif.id === request.id || 
-                 (notif.data && 'id' in notif.data && notif.data.id === request.id))
+              notif =>
+                notif.type === 'chat_request' &&
+                (notif.id === request.id ||
+                  (notif.data &&
+                    'id' in notif.data &&
+                    notif.data.id === request.id))
             );
-
-
 
             if (!existingNotification) {
               const title =
@@ -249,9 +253,10 @@ export default function NotificationBell() {
 
             // Create notification data
             const title = senderEmail || `User ${message.senderId.slice(-4)}`;
-            const content = message.content.length > 50
-              ? `${message.content.substring(0, 50)}...`
-              : message.content;
+            const content =
+              message.content.length > 50
+                ? `${message.content.substring(0, 50)}...`
+                : message.content;
 
             const notificationData = {
               conversationId: message.conversationId,
@@ -272,21 +277,24 @@ export default function NotificationBell() {
             };
 
             // Clean up any existing database notifications for this conversation, then create new one
-            notificationService.deleteNotificationsForConversation(
-              user.userId,
-              message.conversationId
-            ).then(() => {
-              return notificationService.createNotification(
+            notificationService
+              .deleteNotificationsForConversation(
                 user.userId,
-                'message',
-                title,
-                content,
-                notificationData,
-                { conversationId: message.conversationId }
-              );
-            }).catch(error => {
-              console.error('Error managing message notification:', error);
-            });
+                message.conversationId
+              )
+              .then(() => {
+                return notificationService.createNotification(
+                  user.userId,
+                  'message',
+                  title,
+                  content,
+                  notificationData,
+                  { conversationId: message.conversationId }
+                );
+              })
+              .catch(error => {
+                console.error('Error managing message notification:', error);
+              });
 
             return [messageNotification, ...prevNotifications];
           });
