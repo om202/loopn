@@ -61,6 +61,7 @@ export default function NotificationBell() {
   const [dialogConversationId, setDialogConversationId] = useState<
     string | null
   >(null);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
   const { user } = useAuthenticator();
   const router = useRouter();
   const pathname = usePathname();
@@ -98,16 +99,30 @@ export default function NotificationBell() {
             };
           })
         );
-        // Check for new requests to show dialog
-        const previousRequestIds = chatRequests.map(req => req.id);
-        const newRequests = requestsWithUsers.filter(
-          req => !previousRequestIds.includes(req.id)
-        );
+        
+        // Check for new requests to show dialog (only after initial load)
+        if (!isInitialLoad) {
+          const previousRequestIds = chatRequests.map(req => req.id);
+          const newRequests = requestsWithUsers.filter(
+            req => !previousRequestIds.includes(req.id)
+          );
 
-        // Show dialog for the first new request
-        if (newRequests.length > 0 && !showDialog) {
-          setDialogRequest(newRequests[0]);
-          setShowDialog(true);
+          // Filter requests that were sent within the last minute
+          const now = new Date();
+          const oneMinuteAgo = new Date(now.getTime() - 60 * 1000);
+          const recentRequest = newRequests.find(req => {
+            const requestTime = new Date(req.createdAt);
+            return requestTime >= oneMinuteAgo;
+          });
+
+          // Show dialog for the most recent request if there's one and no dialog is open
+          if (recentRequest && !showDialog) {
+            setDialogRequest(recentRequest);
+            setShowDialog(true);
+          }
+        } else {
+          // Mark initial load as complete
+          setIsInitialLoad(false);
         }
 
         setChatRequests(requestsWithUsers);

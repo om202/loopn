@@ -9,7 +9,6 @@ import { createShortChatUrl } from '../lib/url-utils';
 import { chatService } from '../services/chat.service';
 import { userService } from '../services/user.service';
 
-import CircularIcon from './CircularIcon';
 import LoadingContainer from './LoadingContainer';
 import UserAvatar from './UserAvatar';
 
@@ -29,12 +28,15 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
     Map<string, string>
   >(new Map());
   const [error, setError] = useState<string | null>(null);
+  const [pendingRequestsLoaded, setPendingRequestsLoaded] = useState(false);
+  const [conversationsLoaded, setConversationsLoaded] = useState(false);
   const { user } = useAuthenticator();
   const router = useRouter();
 
   const checkExistingConversations = useCallback(
     async (users: UserPresence[]) => {
       if (!user) {
+        setConversationsLoaded(true);
         return;
       }
 
@@ -72,6 +74,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
       });
 
       setExistingConversations(conversationMap);
+      setConversationsLoaded(true);
     },
     [user]
   );
@@ -83,6 +86,8 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
 
     // Reset loading state for new user
     setInitialLoading(true);
+    setPendingRequestsLoaded(false);
+    setConversationsLoaded(false);
 
     // Subscribe to sent chat requests for real-time updates
     const sentRequestsSubscription = chatService.observeSentChatRequests(
@@ -90,9 +95,11 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
       requests => {
         const receiverIds = requests.map(req => req.receiverId);
         setPendingRequests(new Set(receiverIds));
+        setPendingRequestsLoaded(true);
       },
       error => {
         console.error('Error observing sent chat requests:', error);
+        setPendingRequestsLoaded(true);
       }
     );
 
@@ -108,7 +115,6 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
           );
 
         setOnlineUsers(otherUsers);
-        setInitialLoading(false); // Mark as loaded after first response
 
         // Check for existing conversations with these users
         checkExistingConversations(otherUsers);
@@ -126,7 +132,19 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
     };
   }, [user, checkExistingConversations]);
 
+  // Update initialLoading when both pending requests and conversations are loaded
+  useEffect(() => {
+    if (pendingRequestsLoaded && conversationsLoaded) {
+      setInitialLoading(false);
+    }
+  }, [pendingRequestsLoaded, conversationsLoaded]);
+
   const handleChatAction = async (receiverId: string) => {
+    // Do nothing if there's already a pending request
+    if (pendingRequests.has(receiverId)) {
+      return;
+    }
+
     // Check if there's an existing conversation
     const conversationId = existingConversations.get(receiverId);
 
@@ -170,7 +188,6 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
 
         if (existingRequest.data) {
           // Don't revert - they already have a pending request
-          setError('You already have a pending chat request with this user');
           return;
         }
 
@@ -220,11 +237,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   }
 
   if (initialLoading) {
-    return (
-      <div className='bg-white rounded-xl shadow-sm border border-gray-100 h-64'>
-        <LoadingContainer />
-      </div>
-    );
+    return <LoadingContainer />;
   }
 
   if (onlineUsers.length === 0) {
@@ -252,7 +265,8 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
         {onlineUsers.map(userPresence => (
           <div
             key={userPresence.userId}
-            className='flex items-center justify-between p-3 rounded-lg border border-gray-100 hover:border-indigo-200 hover:bg-indigo-50/30 transition-all'
+            onClick={() => handleChatAction(userPresence.userId)}
+            className='flex items-center justify-between p-3 rounded-lg border border-gray-100 hover:border-indigo-200 hover:bg-indigo-50/30 transition-all cursor-pointer'
           >
             <div className='flex items-center gap-3'>
               <UserAvatar
@@ -277,81 +291,14 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
               </div>
             </div>
 
-            <button
-              onClick={() => handleChatAction(userPresence.userId)}
-              disabled={pendingRequests.has(userPresence.userId)}
-              className='transition-colors'
-              title={
-                pendingRequests.has(userPresence.userId)
-                  ? 'Chat request pending'
-                  : existingConversations.has(userPresence.userId)
-                    ? 'Open chat'
-                    : 'Send chat request'
+            <div className='text-sm text-gray-500 font-medium'>
+              {pendingRequests.has(userPresence.userId) 
+                ? 'Pending Chat Request'
+                : existingConversations.has(userPresence.userId)
+                  ? 'Chat Now'
+                  : 'Send Chat Request'
               }
-            >
-              <CircularIcon
-                size='lg'
-                bgColor={
-                  pendingRequests.has(userPresence.userId)
-                    ? 'bg-gray-200'
-                    : existingConversations.has(userPresence.userId)
-                      ? 'bg-green-600'
-                      : 'bg-indigo-600'
-                }
-                icon={
-                  pendingRequests.has(userPresence.userId) ? (
-                    <svg
-                      className='text-gray-600'
-                      fill='none'
-                      stroke='currentColor'
-                      viewBox='0 0 24 24'
-                    >
-                      <path
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        strokeWidth={2}
-                        d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z'
-                      />
-                    </svg>
-                  ) : existingConversations.has(userPresence.userId) ? (
-                    <svg
-                      className='text-white'
-                      fill='none'
-                      stroke='currentColor'
-                      viewBox='0 0 24 24'
-                    >
-                      <path
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        strokeWidth={2}
-                        d='M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 4v-4z'
-                      />
-                    </svg>
-                  ) : (
-                    <svg
-                      className='text-white'
-                      fill='none'
-                      stroke='currentColor'
-                      viewBox='0 0 24 24'
-                    >
-                      <path
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        strokeWidth={2}
-                        d='M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z'
-                      />
-                    </svg>
-                  )
-                }
-                className={
-                  pendingRequests.has(userPresence.userId)
-                    ? 'cursor-not-allowed'
-                    : existingConversations.has(userPresence.userId)
-                      ? 'hover:bg-green-700 cursor-pointer'
-                      : 'hover:bg-indigo-700 cursor-pointer'
-                }
-              />
-            </button>
+            </div>
           </div>
         ))}
       </div>
