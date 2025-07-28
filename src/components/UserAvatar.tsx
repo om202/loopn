@@ -9,15 +9,14 @@ interface UserAvatarProps {
   className?: string;
 }
 
-export default function UserAvatar({ 
-  email, 
-  userId, 
-  size = 'md', 
-  showStatus = false, 
+export default function UserAvatar({
+  email,
+  userId,
+  size = 'md',
+  showStatus = false,
   status,
-  className = '' 
+  className = '',
 }: UserAvatarProps) {
-  
   const getInitial = () => {
     if (email) {
       return email.charAt(0).toUpperCase();
@@ -44,17 +43,17 @@ export default function UserAvatar({
       case 'sm':
         return {
           size: 'w-2.5 h-2.5',
-          position: '-top-0 -right-0'
+          position: '-top-0 -right-0',
         };
       case 'lg':
         return {
           size: 'w-3 h-3',
-          position: '-top-0 -right-0'
+          position: '-top-0 -right-0',
         };
       default: // md
         return {
           size: 'w-2.5 h-2.5',
-          position: '-top-0 -right-0'
+          position: '-top-0 -right-0',
         };
     }
   };
@@ -63,22 +62,36 @@ export default function UserAvatar({
     if (!showStatus) {
       return null;
     }
-    
+
     const { size: indicatorSize } = getIndicatorSizeAndPosition();
-    
+
     switch (status) {
       case 'ONLINE':
-        return <div className={`${indicatorSize} bg-green-500 rounded-full border-2 border-white box-content`} />;
+        return (
+          <div
+            className={`${indicatorSize} bg-green-500 rounded-full border-2 border-white box-content`}
+          />
+        );
       case 'BUSY':
-        return <div className={`${indicatorSize} bg-red-500 rounded-full border-2 border-white box-content`} />;
+        return (
+          <div
+            className={`${indicatorSize} bg-red-500 rounded-full border-2 border-white box-content`}
+          />
+        );
       default:
-        return <div className={`${indicatorSize} bg-yellow-500 rounded-full border-2 border-white box-content`} />;
+        return (
+          <div
+            className={`${indicatorSize} bg-yellow-500 rounded-full border-2 border-white box-content`}
+          />
+        );
     }
   };
 
   return (
     <div className={`relative ${className}`}>
-      <div className={`${getSizeClasses()} bg-indigo-600 rounded-full flex items-center justify-center text-white font-medium`}>
+      <div
+        className={`${getSizeClasses()} bg-indigo-600 rounded-full flex items-center justify-center text-white font-medium`}
+      >
         {getInitial()}
       </div>
       {showStatus === true && (
@@ -88,4 +101,4 @@ export default function UserAvatar({
       )}
     </div>
   );
-} 
+}

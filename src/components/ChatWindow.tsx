@@ -6,6 +6,7 @@ import { useState, useEffect, useRef } from 'react';
 import type { Schema } from '../../amplify/data/resource';
 import { chatService } from '../services/chat.service';
 import { messageService } from '../services/message.service';
+import { userService } from '../services/user.service';
 
 type Message = Schema['Message']['type'];
 type Conversation = Schema['Conversation']['type'];
@@ -24,6 +25,8 @@ export default function ChatWindow({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [timeLeft, setTimeLeft] = useState<string>('');
+  const [otherUserPresence, setOtherUserPresence] =
+    useState<UserPresence | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { user } = useAuthenticator();
 
@@ -65,6 +68,12 @@ export default function ChatWindow({
     return () => clearInterval(timer);
   }, [conversation.probationEndsAt, conversation.isConnected]);
 
+  // Get the other participant's ID
+  const otherParticipantId =
+    conversation.participant1Id === user?.userId
+      ? conversation.participant2Id
+      : conversation.participant1Id;
+
   // Subscribe to messages
   useEffect(() => {
     if (!conversation.id) {
@@ -86,6 +95,27 @@ export default function ChatWindow({
       subscription.unsubscribe();
     };
   }, [conversation.id]);
+
+  // Subscribe to other user's presence using existing real-time subscription
+  useEffect(() => {
+    if (!otherParticipantId) {
+      return;
+    }
+
+    const subscription = userService.observeUserPresence(
+      otherParticipantId,
+      presence => {
+        setOtherUserPresence(presence);
+      },
+      error => {
+        console.error('Error observing user presence:', error);
+      }
+    );
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [otherParticipantId]);
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
@@ -127,13 +157,6 @@ export default function ChatWindow({
     }
   };
 
-  const handleContinueProbation = async () => {
-    const result = await chatService.continueProbation(conversation.id);
-    if (result.error) {
-      setError(result.error);
-    }
-  };
-
   const formatMessageTime = (timestamp: string | null | undefined) => {
     if (!timestamp) {
       return 'Unknown time';
@@ -144,10 +167,37 @@ export default function ChatWindow({
     });
   };
 
-  const otherParticipantId =
-    conversation.participant1Id === user?.userId
-      ? conversation.participant2Id
-      : conversation.participant1Id;
+  const getPresenceDisplay = () => {
+    if (!otherUserPresence) {
+      return { text: 'Unknown', color: 'text-gray-500', dot: 'bg-gray-400' };
+    }
+
+    const now = new Date();
+    const lastSeen = otherUserPresence.lastSeen
+      ? new Date(otherUserPresence.lastSeen)
+      : null;
+    const isRecent =
+      lastSeen && now.getTime() - lastSeen.getTime() < 5 * 60 * 1000; // 5 minutes
+
+    switch (otherUserPresence.status) {
+      case 'ONLINE':
+        return { text: 'Online', color: 'text-green-600', dot: 'bg-green-500' };
+      case 'BUSY':
+        return { text: 'Busy', color: 'text-red-600', dot: 'bg-red-500' };
+      case 'OFFLINE':
+      default:
+        if (isRecent) {
+          return {
+            text: 'Recently active',
+            color: 'text-yellow-600',
+            dot: 'bg-yellow-500',
+          };
+        }
+        return { text: 'Offline', color: 'text-gray-500', dot: 'bg-gray-400' };
+    }
+  };
+
+  const presenceDisplay = getPresenceDisplay();
 
   return (
     <div className='bg-white rounded-lg shadow-md flex flex-col h-96'>
@@ -155,9 +205,20 @@ export default function ChatWindow({
       <div className='p-4 border-b border-gray-200'>
         <div className='flex items-center justify-between'>
           <div>
-            <h3 className='font-semibold text-gray-900'>
-              Chat with Professional {otherParticipantId.slice(-4)}
-            </h3>
+            <div className='flex items-center gap-2 mb-1'>
+              <h3 className='font-semibold text-gray-900'>
+                {otherUserPresence?.email ||
+                  `User ${otherParticipantId.slice(-4)}`}
+              </h3>
+              <div className='flex items-center gap-1'>
+                <div
+                  className={`w-2 h-2 rounded-full ${presenceDisplay.dot}`}
+                />
+                <span className={`text-xs ${presenceDisplay.color}`}>
+                  {presenceDisplay.text}
+                </span>
+              </div>
+            </div>
             {!conversation.isConnected && (
               <div className='text-sm text-amber-600'>
                 Probation period: {timeLeft} remaining
@@ -167,12 +228,6 @@ export default function ChatWindow({
 
           {!conversation.isConnected && (
             <div className='flex space-x-2'>
-              <button
-                onClick={handleContinueProbation}
-                className='px-3 py-1 bg-indigo-600 text-white text-xs rounded-md hover:bg-indigo-700'
-              >
-                Continue 7 days
-              </button>
               <button
                 onClick={handleEndChat}
                 className='px-3 py-1 bg-red-600 text-white text-xs rounded-md hover:bg-red-700'

@@ -46,7 +46,7 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   if (authStatus === 'unauthenticated') {
     return null; // Will redirect to /auth via useEffect
   }
-  
+
   if (authStatus === 'configuring') {
     return children; // Show the page immediately, let components handle their own loading
   }

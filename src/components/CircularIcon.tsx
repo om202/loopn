@@ -7,13 +7,12 @@ interface CircularIconProps {
   className?: string;
 }
 
-export default function CircularIcon({ 
-  icon, 
-  size = 'md', 
+export default function CircularIcon({
+  icon,
+  size = 'md',
   bgColor = 'bg-gray-200',
-  className = '' 
+  className = '',
 }: CircularIconProps) {
-  
   const getSizeClasses = () => {
     switch (size) {
       case 'sm':
@@ -37,10 +36,14 @@ export default function CircularIcon({
   };
 
   return (
-    <div className={`${getSizeClasses()} ${bgColor} rounded-full flex items-center justify-center ${className}`}>
-      <div className={`${getIconSizeClasses()} flex items-center justify-center`}>
+    <div
+      className={`${getSizeClasses()} ${bgColor} rounded-full flex items-center justify-center ${className}`}
+    >
+      <div
+        className={`${getIconSizeClasses()} flex items-center justify-center`}
+      >
         {icon}
       </div>
     </div>
   );
-} 
+}

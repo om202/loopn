@@ -53,7 +53,9 @@ export class ChatService {
   async respondToChatRequest(
     chatRequestId: string,
     status: 'ACCEPTED' | 'REJECTED'
-  ): Promise<DataResult<{ chatRequest: ChatRequest; conversation?: Conversation }>> {
+  ): Promise<
+    DataResult<{ chatRequest: ChatRequest; conversation?: Conversation }>
+  > {
     try {
       // First get the chat request to get participant IDs
       const chatRequestResult = await client.models.ChatRequest.get({
@@ -143,9 +145,7 @@ export class ChatService {
     }
   }
 
-  async getSentChatRequests(
-    userId: string
-  ): Promise<ListResult<ChatRequest>> {
+  async getSentChatRequests(userId: string): Promise<ListResult<ChatRequest>> {
     try {
       const result = await client.models.ChatRequest.list({
         filter: {
@@ -311,7 +311,9 @@ export class ChatService {
     }
   }
 
-  async getConversation(conversationId: string): Promise<DataResult<Conversation>> {
+  async getConversation(
+    conversationId: string
+  ): Promise<DataResult<Conversation>> {
     try {
       const result = await client.models.Conversation.get({
         id: conversationId,
@@ -325,9 +327,7 @@ export class ChatService {
       return {
         data: null,
         error:
-          error instanceof Error
-            ? error.message
-            : 'Failed to get conversation',
+          error instanceof Error ? error.message : 'Failed to get conversation',
       };
     }
   }
@@ -357,7 +357,8 @@ export class ChatService {
         });
       }
 
-      const conversation = result.data && result.data.length > 0 ? result.data[0] : null;
+      const conversation =
+        result.data && result.data.length > 0 ? result.data[0] : null;
 
       return {
         data: conversation,

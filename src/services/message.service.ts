@@ -31,9 +31,10 @@ export class MessageService {
       }
 
       // Determine receiverId (the other participant)
-      const receiverId = conversationResult.data.participant1Id === senderId
-        ? conversationResult.data.participant2Id
-        : conversationResult.data.participant1Id;
+      const receiverId =
+        conversationResult.data.participant1Id === senderId
+          ? conversationResult.data.participant2Id
+          : conversationResult.data.participant1Id;
 
       const timestamp = new Date();
       const sortKey = `${timestamp.toISOString()}_${crypto.randomUUID()}`;

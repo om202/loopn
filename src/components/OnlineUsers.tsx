@@ -2,14 +2,14 @@
 
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import type { Schema } from '../../amplify/data/resource';
 import { chatService } from '../services/chat.service';
 import { userService } from '../services/user.service';
 
-import UserAvatar from './UserAvatar';
 import CircularIcon from './CircularIcon';
+import UserAvatar from './UserAvatar';
 
 type UserPresence = Schema['UserPresence']['type'];
 
@@ -20,8 +20,12 @@ interface OnlineUsersProps {
 export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   const [onlineUsers, setOnlineUsers] = useState<UserPresence[]>([]);
   const [initialLoading, setInitialLoading] = useState(true);
-  const [pendingRequests, setPendingRequests] = useState<Set<string>>(new Set());
-  const [existingConversations, setExistingConversations] = useState<Map<string, string>>(new Map());
+  const [pendingRequests, setPendingRequests] = useState<Set<string>>(
+    new Set()
+  );
+  const [existingConversations, setExistingConversations] = useState<
+    Map<string, string>
+  >(new Map());
   const [error, setError] = useState<string | null>(null);
   const { user } = useAuthenticator();
   const router = useRouter();
@@ -59,12 +63,12 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
 
         setOnlineUsers(otherUsers);
         setInitialLoading(false); // Mark as loaded after first response
-        
+
         // Check for existing conversations with these users
         checkExistingConversations(otherUsers);
       },
-      error => {
-        console.error('Error observing online users:', error);
+      () => {
+        console.error('Error observing online users');
         setError('Failed to load online users');
         setInitialLoading(false); // Also mark as loaded on error
       }
@@ -74,39 +78,62 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
       sentRequestsSubscription.unsubscribe();
       onlineUsersSubscription.unsubscribe();
     };
-  }, [user]);
+  }, [user, checkExistingConversations]);
 
-  const checkExistingConversations = async (users: UserPresence[]) => {
-    if (!user) return;
-
-    const conversationMap = new Map<string, string>();
-    
-    for (const userPresence of users) {
-      if (userPresence.userId) {
-        try {
-          const result = await chatService.getConversationBetweenUsers(user.userId, userPresence.userId);
-          if (result.data?.id) {
-            conversationMap.set(userPresence.userId, result.data.id);
-          }
-        } catch (error) {
-          console.error('Error checking conversation:', error);
-        }
+  const checkExistingConversations = useCallback(
+    async (users: UserPresence[]) => {
+      if (!user) {
+        return;
       }
-    }
-    
-    setExistingConversations(conversationMap);
-  };
+
+      const conversationMap = new Map<string, string>();
+
+      // Use Promise.all instead of await in loop
+      const conversationPromises = users.map(async userPresence => {
+        if (userPresence.userId) {
+          try {
+            const result = await chatService.getConversationBetweenUsers(
+              user.userId,
+              userPresence.userId
+            );
+            if (result.data?.id) {
+              return {
+                userId: userPresence.userId,
+                conversationId: result.data.id,
+              };
+            }
+          } catch {
+            console.error(
+              'Error checking conversation for user:',
+              userPresence.userId
+            );
+          }
+        }
+        return null;
+      });
+
+      const results = await Promise.all(conversationPromises);
+      results.forEach(result => {
+        if (result) {
+          conversationMap.set(result.userId, result.conversationId);
+        }
+      });
+
+      setExistingConversations(conversationMap);
+    },
+    [user]
+  );
 
   const handleChatAction = async (receiverId: string) => {
     // Check if there's an existing conversation
     const conversationId = existingConversations.get(receiverId);
-    
+
     if (conversationId) {
       // Open existing chat
       router.push(`/chat/${conversationId}`);
       return;
     }
-    
+
     // Send new chat request
     handleSendChatRequest(receiverId);
   };
@@ -118,13 +145,16 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
 
     // Optimistic update - immediately show pending state
     setPendingRequests(prev => new Set([...prev, receiverId]));
-    
+
     // Do the API calls in the background without blocking UI
     (async () => {
       try {
         // Check if there's already a pending request
-        const existingRequest = await chatService.hasPendingChatRequest(user.userId, receiverId);
-        
+        const existingRequest = await chatService.hasPendingChatRequest(
+          user.userId,
+          receiverId
+        );
+
         if (existingRequest.error) {
           // Revert optimistic update
           setPendingRequests(prev => {
@@ -135,14 +165,17 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
           setError(existingRequest.error);
           return;
         }
-        
+
         if (existingRequest.data) {
           // Don't revert - they already have a pending request
           setError('You already have a pending chat request with this user');
           return;
         }
 
-        const result = await chatService.sendChatRequest(receiverId, user.userId);
+        const result = await chatService.sendChatRequest(
+          receiverId,
+          user.userId
+        );
 
         if (result.error) {
           // Revert optimistic update on error
@@ -156,7 +189,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
           onChatRequestSent();
           // Keep optimistic update - subscription will sync
         }
-      } catch (error) {
+      } catch {
         // Revert optimistic update on any error
         setPendingRequests(prev => {
           const newSet = new Set(prev);
@@ -167,8 +200,6 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
       }
     })();
   };
-
-
 
   const getDisplayName = (userPresence: UserPresence) => {
     if (userPresence.email) {
@@ -217,7 +248,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
           <span className='font-medium'>Online ({onlineUsers.length})</span>
         </div>
       </div>
-      
+
       <div className='p-4 space-y-3'>
         {onlineUsers.map(userPresence => (
           <div
@@ -225,10 +256,10 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
             className='flex items-center justify-between p-3 rounded-lg border border-gray-100 hover:border-indigo-200 hover:bg-indigo-50/30 transition-all'
           >
             <div className='flex items-center gap-3'>
-              <UserAvatar 
+              <UserAvatar
                 email={userPresence.email}
                 userId={userPresence.userId}
-                size="md"
+                size='md'
                 showStatus
                 status={userPresence.status}
               />
@@ -238,9 +269,9 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
                 </div>
                 <div className='text-sm text-gray-500'>
                   {userPresence.lastSeen
-                    ? new Date(userPresence.lastSeen).toLocaleTimeString([], { 
-                        hour: '2-digit', 
-                        minute: '2-digit' 
+                    ? new Date(userPresence.lastSeen).toLocaleTimeString([], {
+                        hour: '2-digit',
+                        minute: '2-digit',
                       })
                     : 'Online now'}
                 </div>
@@ -252,43 +283,73 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
               disabled={pendingRequests.has(userPresence.userId)}
               className='transition-colors'
               title={
-                pendingRequests.has(userPresence.userId) 
-                  ? 'Chat request pending' 
+                pendingRequests.has(userPresence.userId)
+                  ? 'Chat request pending'
                   : existingConversations.has(userPresence.userId)
-                  ? 'Open chat'
-                  : 'Send chat request'
+                    ? 'Open chat'
+                    : 'Send chat request'
               }
             >
               <CircularIcon
-                size="lg"
+                size='lg'
                 bgColor={
-                  pendingRequests.has(userPresence.userId) 
-                    ? 'bg-gray-200' 
+                  pendingRequests.has(userPresence.userId)
+                    ? 'bg-gray-200'
                     : existingConversations.has(userPresence.userId)
-                    ? 'bg-green-600'
-                    : 'bg-indigo-600'
+                      ? 'bg-green-600'
+                      : 'bg-indigo-600'
                 }
                 icon={
                   pendingRequests.has(userPresence.userId) ? (
-                    <svg className='text-gray-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                      <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' />
+                    <svg
+                      className='text-gray-600'
+                      fill='none'
+                      stroke='currentColor'
+                      viewBox='0 0 24 24'
+                    >
+                      <path
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        strokeWidth={2}
+                        d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z'
+                      />
                     </svg>
                   ) : existingConversations.has(userPresence.userId) ? (
-                    <svg className='text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                      <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 4v-4z' />
+                    <svg
+                      className='text-white'
+                      fill='none'
+                      stroke='currentColor'
+                      viewBox='0 0 24 24'
+                    >
+                      <path
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        strokeWidth={2}
+                        d='M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 4v-4z'
+                      />
                     </svg>
                   ) : (
-                    <svg className='text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                      <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z' />
+                    <svg
+                      className='text-white'
+                      fill='none'
+                      stroke='currentColor'
+                      viewBox='0 0 24 24'
+                    >
+                      <path
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        strokeWidth={2}
+                        d='M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z'
+                      />
                     </svg>
                   )
                 }
                 className={
-                  pendingRequests.has(userPresence.userId) 
-                    ? 'cursor-not-allowed' 
+                  pendingRequests.has(userPresence.userId)
+                    ? 'cursor-not-allowed'
                     : existingConversations.has(userPresence.userId)
-                    ? 'hover:bg-green-700 cursor-pointer'
-                    : 'hover:bg-indigo-700 cursor-pointer'
+                      ? 'hover:bg-green-700 cursor-pointer'
+                      : 'hover:bg-indigo-700 cursor-pointer'
                 }
               />
             </button>

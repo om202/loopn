@@ -40,7 +40,12 @@ interface NewRequestDialogProps {
 }
 
 // Connected state dialog component
-function ConnectedDialog({ isOpen, chatRequest, conversationId, onClose }: ConnectedDialogProps) {
+function ConnectedDialog({
+  isOpen,
+  chatRequest,
+  conversationId,
+  onClose,
+}: ConnectedDialogProps) {
   const [dontShowAgain, setDontShowAgain] = useState(false);
   const router = useRouter();
 
@@ -71,19 +76,30 @@ function ConnectedDialog({ isOpen, chatRequest, conversationId, onClose }: Conne
           <div className='mb-6'>
             <div className='flex justify-center mb-3'>
               <div className='w-12 h-12 bg-green-100 rounded-full flex items-center justify-center'>
-                <svg className='w-6 h-6 text-green-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M5 13l4 4L19 7' />
+                <svg
+                  className='w-6 h-6 text-green-600'
+                  fill='none'
+                  stroke='currentColor'
+                  viewBox='0 0 24 24'
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth={2}
+                    d='M5 13l4 4L19 7'
+                  />
                 </svg>
               </div>
             </div>
             <h3 className='text-xl font-medium text-green-600 mb-4'>
               Connected!
             </h3>
-            
+
             <div className='text-lg font-medium text-gray-900 mb-3'>
-              {chatRequest.requesterEmail || `User ${chatRequest.requesterId.slice(-4)}`}
+              {chatRequest.requesterEmail ||
+                `User ${chatRequest.requesterId.slice(-4)}`}
             </div>
-            
+
             <p className='text-base text-gray-700'>
               You are now connected to chat for 7 days.
             </p>
@@ -96,7 +112,7 @@ function ConnectedDialog({ isOpen, chatRequest, conversationId, onClose }: Conne
             type='checkbox'
             id='dontShowAgain'
             checked={dontShowAgain}
-            onChange={(e) => setDontShowAgain(e.target.checked)}
+            onChange={e => setDontShowAgain(e.target.checked)}
             className='w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500'
           />
           <label htmlFor='dontShowAgain' className='text-sm text-gray-600'>
@@ -114,7 +130,7 @@ function ConnectedDialog({ isOpen, chatRequest, conversationId, onClose }: Conne
           >
             Chat Now
           </button>
-          
+
           {/* OK Button */}
           <button
             onClick={handleOk}
@@ -129,7 +145,13 @@ function ConnectedDialog({ isOpen, chatRequest, conversationId, onClose }: Conne
 }
 
 // New request dialog component
-function NewRequestDialog({ isOpen, chatRequest, onClose, onAccept, onReject }: NewRequestDialogProps) {
+function NewRequestDialog({
+  isOpen,
+  chatRequest,
+  onClose,
+  onAccept,
+  onReject,
+}: NewRequestDialogProps) {
   const [justAccepted, setJustAccepted] = useState(false);
   const [dontShowAgain, setDontShowAgain] = useState(false);
 
@@ -146,12 +168,15 @@ function NewRequestDialog({ isOpen, chatRequest, onClose, onAccept, onReject }: 
       onReject();
       onClose();
     }
-    
+
     // Then perform the actual API call in the background
     try {
-      const result = await chatService.respondToChatRequest(chatRequest.id, status);
-      
-            if (result.error) {
+      const result = await chatService.respondToChatRequest(
+        chatRequest.id,
+        status
+      );
+
+      if (result.error) {
         console.error('Failed to respond to chat request:', result.error);
         // Could show a toast notification here if needed
       }
@@ -187,8 +212,18 @@ function NewRequestDialog({ isOpen, chatRequest, onClose, onAccept, onReject }: 
               <div className='mb-6'>
                 <div className='flex justify-center mb-3'>
                   <div className='w-12 h-12 bg-green-100 rounded-full flex items-center justify-center'>
-                    <svg className='w-6 h-6 text-green-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                      <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M5 13l4 4L19 7' />
+                    <svg
+                      className='w-6 h-6 text-green-600'
+                      fill='none'
+                      stroke='currentColor'
+                      viewBox='0 0 24 24'
+                    >
+                      <path
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        strokeWidth={2}
+                        d='M5 13l4 4L19 7'
+                      />
                     </svg>
                   </div>
                 </div>
@@ -207,7 +242,7 @@ function NewRequestDialog({ isOpen, chatRequest, onClose, onAccept, onReject }: 
                 type='checkbox'
                 id='dontShowAgain'
                 checked={dontShowAgain}
-                onChange={(e) => setDontShowAgain(e.target.checked)}
+                onChange={e => setDontShowAgain(e.target.checked)}
                 className='w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500'
               />
               <label htmlFor='dontShowAgain' className='text-sm text-gray-600'>
@@ -233,14 +268,15 @@ function NewRequestDialog({ isOpen, chatRequest, onClose, onAccept, onReject }: 
             </div>
 
             <div className='flex items-center gap-4 mb-6'>
-              <UserAvatar 
+              <UserAvatar
                 email={chatRequest.requesterEmail}
                 userId={chatRequest.requesterId}
-                size="md"
+                size='md'
               />
               <div className='flex-1 min-w-0'>
                 <div className='text-base font-medium text-gray-900 truncate'>
-                  {chatRequest.requesterEmail || `User ${chatRequest.requesterId.slice(-4)}`}
+                  {chatRequest.requesterEmail ||
+                    `User ${chatRequest.requesterId.slice(-4)}`}
                 </div>
                 <div className='text-sm text-gray-600 mt-1'>
                   wants to chat with you
@@ -311,4 +347,4 @@ export default function ChatRequestDialog({
       onReject={onReject}
     />
   );
-} 
+}
