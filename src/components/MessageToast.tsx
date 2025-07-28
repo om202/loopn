@@ -3,6 +3,8 @@
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
 
+import { createShortChatUrl } from '../lib/url-utils';
+
 interface MessageToastProps {
   isVisible: boolean;
   senderEmail?: string;
@@ -41,7 +43,7 @@ export default function MessageToast({
   }, [isVisible, handleClose]);
 
   const handleOpenChat = () => {
-    router.push(`/chat/${conversationId}`);
+    router.push(createShortChatUrl(conversationId));
     handleClose();
   };
 

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
 
 import type { Schema } from '../../amplify/data/resource';
+import { createShortChatUrl } from '../lib/url-utils';
 import { chatService } from '../services/chat.service';
 import { userService } from '../services/user.service';
 
@@ -130,8 +131,8 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
     const conversationId = existingConversations.get(receiverId);
 
     if (conversationId) {
-      // Open existing chat
-      router.push(`/chat/${conversationId}`);
+      // Open existing chat with short URL
+      router.push(createShortChatUrl(conversationId));
       return;
     }
 

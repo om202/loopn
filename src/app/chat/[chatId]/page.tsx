@@ -7,6 +7,7 @@ import { useState, useEffect, use, useCallback } from 'react';
 import type { Schema } from '../../../../amplify/data/resource';
 import ChatWindow from '../../../components/chat/ChatWindow';
 import ProtectedRoute from '../../../components/protected-route';
+import { getConversationIdFromParam } from '../../../lib/url-utils';
 import { chatService } from '../../../services/chat.service';
 
 type Conversation = Schema['Conversation']['type'];
@@ -28,7 +29,16 @@ export default function ChatPage({ params }: ChatPageProps) {
   const loadConversation = useCallback(async () => {
     try {
       setLoading(true);
-      const result = await chatService.getConversation(resolvedParams.chatId);
+
+      // Handle both short IDs and full UUIDs
+      const conversationId = getConversationIdFromParam(resolvedParams.chatId);
+
+      if (!conversationId) {
+        setError('Invalid chat ID format');
+        return;
+      }
+
+      const result = await chatService.getConversation(conversationId);
 
       if (result.error) {
         setError(result.error);

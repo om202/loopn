@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import type { Schema } from '../../amplify/data/resource';
+import { createShortChatUrl } from '../lib/url-utils';
 import { chatService } from '../services/chat.service';
 
 import UserAvatar from './UserAvatar';
@@ -64,7 +65,7 @@ function ConnectedDialog({
 
   const handleChatNow = () => {
     if (conversationId) {
-      router.push(`/chat/${conversationId}`);
+      router.push(createShortChatUrl(conversationId));
       onClose();
     }
   };
