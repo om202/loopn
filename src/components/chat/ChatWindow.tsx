@@ -199,7 +199,7 @@ export default function ChatWindow({
 
   const handleSendMessage = () => {
     // Programmatically check conditions instead of disabling button
-    if (!newMessage.trim() || !user || loading) {
+    if (!newMessage.trim() || !user) {
       return;
     }
 
@@ -283,7 +283,7 @@ export default function ChatWindow({
         newMessage={newMessage}
         setNewMessage={setNewMessage}
         onSendMessage={handleSendMessage}
-        disabled={loading}
+        disabled={false}
         autoFocus={!isInitializing && !externalLoading}
       />
 

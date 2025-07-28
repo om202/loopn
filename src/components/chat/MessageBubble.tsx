@@ -86,22 +86,12 @@ export default function MessageBubble({
         isOwnMessage ? 'justify-end' : 'justify-start'
       }`}
     >
-      {showAvatar && !messageIsEmojiOnly ? (
-        <UserAvatar
-          email={otherUserPresence?.email}
-          userId={otherParticipantId}
-          size='sm'
-          className='mr-3 flex-shrink-0'
-        />
-      ) : !isOwnMessage && !messageIsEmojiOnly ? (
-        <div className='w-8 h-8 mr-3 flex-shrink-0' />
-      ) : null}
       <div className='group relative'>
         {messageIsEmojiOnly ? (
           // Emoji-only messages without container
           <div className='text-4xl'>{message.content}</div>
         ) : (
-          // Regular text messages with container
+          // Regular text messages with container - same design for both sent and received
           <div
             className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg border ${
               isOwnMessage

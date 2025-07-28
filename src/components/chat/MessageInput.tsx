@@ -17,7 +17,7 @@ export default function MessageInput({
   setNewMessage,
   onSendMessage,
   disabled = false,
-  autoFocus = false,
+  autoFocus = true,
 }: MessageInputProps) {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -59,10 +59,16 @@ export default function MessageInput({
   };
 
   const handleSend = () => {
-    if (!newMessage.trim() || disabled) {
+    if (disabled) {
       return;
     }
+    // Always call onSendMessage - let the parent handle empty message logic
     onSendMessage();
+    
+    // Auto-focus input after sending message for continuous typing
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 0);
   };
 
   return (
@@ -118,7 +124,7 @@ export default function MessageInput({
             </div>
             <button
               onClick={handleSend}
-              disabled={disabled || !newMessage.trim()}
+              disabled={disabled}
               className='flex items-center justify-center w-12 h-12 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
             >
               <Send className='w-5 h-5 rotate-45 -translate-x-0.5' />
