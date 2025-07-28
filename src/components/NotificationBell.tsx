@@ -676,7 +676,7 @@ export default function NotificationBell() {
                         onChange={e =>
                           setActiveFilter(e.target.value as NotificationFilter)
                         }
-                        className='text-sm text-gray-600 bg-white border border-gray-200 rounded-md px-2 py-1 text-xs cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500'
+                        className='text-sm text-gray-600 bg-white border border-gray-200 rounded-md px-2 py-1 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500'
                       >
                         <option value='all'>
                           {counts.all > 0 ? `All (${counts.all})` : 'All'}
@@ -753,18 +753,19 @@ export default function NotificationBell() {
               ) : (
                 <div className='py-2'>
                   {getFilteredNotifications().map((notification, index) => (
-                    <div
+                    <button
                       key={notification.id}
-                      className={`px-4 py-3 hover:bg-gray-50 transition-colors duration-150 cursor-pointer ${
+                      className={`w-full text-left px-4 py-3 hover:bg-gray-50 transition-colors duration-150 ${
                         index !== getFilteredNotifications().length - 1
                           ? 'border-b border-gray-50'
                           : ''
-                      }`}
+                      } ${notification.type === 'message' ? 'cursor-pointer' : 'cursor-default'}`}
                       onClick={() => {
                         if (notification.type === 'message') {
                           handleNotificationClick(notification);
                         }
                       }}
+                      disabled={notification.type !== 'message'}
                     >
                       <div className='flex items-start gap-3'>
                         {notification.type === 'chat_request' ? (
@@ -864,7 +865,7 @@ export default function NotificationBell() {
                           ) : null}
                         </div>
                       </div>
-                    </div>
+                    </button>
                   ))}
                 </div>
               )}
