@@ -2,6 +2,7 @@
 
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
 
 import { userService } from '../services/user.service';
@@ -52,10 +53,13 @@ export default function Navbar() {
       <div className='max-w-6xl mx-auto px-6 py-4'>
         <div className='flex items-center justify-between'>
           {/* Logo */}
-          <div className='flex items-center space-x-3'>
+          <Link
+            href='/?stay=true'
+            className='flex items-center space-x-3 hover:opacity-80 transition-opacity'
+          >
             <Image src='/loopn.svg' alt='Loopn' width={32} height={32} />
             <h1 className='text-xl font-bold text-gray-900'>Loopn</h1>
-          </div>
+          </Link>
 
           {/* Notifications and User Menu */}
           <div className='flex items-center gap-2'>

@@ -94,7 +94,7 @@ export default function UserAvatar({
   };
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={`relative ${className} cursor-pointer`}>
       <div
         className={`${getSizeClasses()} bg-indigo-600 rounded-full flex items-center justify-center text-white font-medium`}
       >
