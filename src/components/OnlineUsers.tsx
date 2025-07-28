@@ -294,21 +294,19 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   };
 
   return (
-    <div className='bg-white rounded-xl shadow-sm border border-gray-100'>
-      <div className='p-4 border-b border-gray-100'>
-        <div className='flex items-center gap-2 text-gray-900'>
-          <span className='font-medium'>{getTitle()}</span>
-        </div>
+    <div>
+      <div className='mb-6'>
+        <h2 className='text-lg font-semibold text-gray-900'>{getTitle()}</h2>
       </div>
 
-      <div className='p-4 space-y-3'>
+      <div className='space-y-4'>
         {allUsers.map(userPresence => (
-          <button
+          <div
             key={userPresence.userId}
             onClick={() => handleChatAction(userPresence.userId)}
-            className='flex items-center justify-between p-3 rounded-lg border border-gray-100 hover:border-indigo-200 hover:bg-indigo-50/30 transition-all cursor-pointer w-full text-left'
+            className='flex items-center justify-between p-4 rounded-lg border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50/50 transition-all cursor-pointer bg-white'
           >
-            <div className='flex items-center gap-3'>
+            <div className='flex items-center gap-4'>
               <UserAvatar
                 email={userPresence.email}
                 userId={userPresence.userId}
@@ -324,7 +322,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
                 <div className='font-medium text-gray-900 text-base'>
                   {getDisplayName(userPresence)}
                 </div>
-                <div className='text-sm text-gray-500'>
+                <div className='text-sm text-gray-600'>
                   {onlineUsers.some(ou => ou.userId === userPresence.userId)
                     ? 'Online now'
                     : 'Offline'}
@@ -332,14 +330,14 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
               </div>
             </div>
 
-            <div className='text-sm text-gray-500 font-medium'>
+            <div className='text-sm text-gray-600 font-medium'>
               {pendingRequests.has(userPresence.userId)
-                ? 'Pending Chat Request'
+                ? 'Pending'
                 : existingConversations.has(userPresence.userId)
-                  ? 'Chat Now'
-                  : 'Send Chat Request'}
+                  ? 'Open Chat'
+                  : 'Connect'}
             </div>
-          </button>
+          </div>
         ))}
       </div>
     </div>

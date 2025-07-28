@@ -874,9 +874,33 @@ export default function NotificationBell() {
             {getFilteredNotifications().length > 0 && (
               <div className='px-4 py-2 border-t border-gray-100 bg-gray-50'>
                 <button
-                  onClick={() => {
-                    // Handle mark all as read or view all functionality
-                    setIsOpen(false);
+                  onClick={async () => {
+                    if (!user) {
+                      return;
+                    }
+
+                    try {
+                      // Mark all current notifications as read in database
+                      const markPromises = notifications.map(notification =>
+                        notificationService.markNotificationAsRead(
+                          notification.id
+                        )
+                      );
+
+                      await Promise.all(markPromises);
+
+                      // Clear all notifications from local state
+                      setNotifications([]);
+
+                      // Close the dropdown
+                      setIsOpen(false);
+                    } catch (error) {
+                      console.error(
+                        'Error marking notifications as read:',
+                        error
+                      );
+                      setError('Failed to mark notifications as read');
+                    }
                   }}
                   className='w-full text-center text-sm text-indigo-600 hover:text-indigo-800 font-medium py-1 transition-colors duration-150'
                 >
