@@ -99,15 +99,17 @@ export default function ChatPage({ params }: ChatPageProps) {
         {/* Main Chat Area - Full Width */}
         <div className='h-full flex flex-col'>
           <ChatWindow
-            conversation={conversation || {
-              id: resolvedParams.chatId,
-              participant1Id: '',
-              participant2Id: '',
-              isConnected: false,
-              probationEndsAt: null,
-              createdAt: '',
-              updatedAt: ''
-            }}
+            conversation={
+              conversation || {
+                id: resolvedParams.chatId,
+                participant1Id: '',
+                participant2Id: '',
+                isConnected: false,
+                probationEndsAt: null,
+                createdAt: '',
+                updatedAt: '',
+              }
+            }
             onChatEnded={handleChatEnded}
             isLoading={loading}
             error={error}

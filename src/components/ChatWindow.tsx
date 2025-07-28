@@ -1,9 +1,8 @@
 'use client';
 
 import { useAuthenticator } from '@aws-amplify/ui-react';
+import Image from 'next/image';
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { MessageBox } from 'react-chat-elements';
-import 'react-chat-elements/dist/main.css';
 
 import type { Schema } from '../../amplify/data/resource';
 import { chatService } from '../services/chat.service';
@@ -38,6 +37,8 @@ export default function ChatWindow({
   const [otherUserPresence, setOtherUserPresence] =
     useState<UserPresence | null>(null);
   const [isInitializing, setIsInitializing] = useState(true);
+  const [sendingConnectionRequest, setSendingConnectionRequest] =
+    useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { user } = useAuthenticator();
 
@@ -128,6 +129,24 @@ export default function ChatWindow({
     }
   }, [conversation.id, user, onChatEnded]);
 
+  const handleSendConnectionRequest = useCallback(async () => {
+    if (!user || sendingConnectionRequest) {
+      return;
+    }
+
+    setSendingConnectionRequest(true);
+    const result = await chatService.sendConnectionRequest(
+      user.userId,
+      otherParticipantId,
+      conversation.id
+    );
+
+    if (result.error) {
+      setError(result.error);
+    }
+    setSendingConnectionRequest(false);
+  }, [user, otherParticipantId, conversation.id, sendingConnectionRequest]);
+
   // Calculate time remaining in probation - now just updates the existing state
   useEffect(() => {
     if (!conversation.probationEndsAt || conversation.isConnected) {
@@ -137,14 +156,18 @@ export default function ChatWindow({
     const timer = setInterval(() => {
       const newTimeLeft = calculateTimeLeft();
       setTimeLeft(newTimeLeft);
-      
+
       if (newTimeLeft === 'Expired') {
         clearInterval(timer);
       }
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [conversation.probationEndsAt, conversation.isConnected, calculateTimeLeft]);
+  }, [
+    conversation.probationEndsAt,
+    conversation.isConnected,
+    calculateTimeLeft,
+  ]);
 
   // Subscribe to messages
   useEffect(() => {
@@ -240,16 +263,9 @@ export default function ChatWindow({
     return otherUserPresence?.email || `User ${otherParticipantId.slice(-4)}`;
   };
 
-  const getUserLetterItem = () => ({
-    id: otherParticipantId,
-    letter: getUserDisplayName().charAt(0).toUpperCase(),
-  });
-
-    // Show loading state while initializing or external loading
+  // Show loading state while initializing or external loading
   if (isInitializing || externalLoading) {
-    return (
-      <LoadingContainer size='lg'/>
-    );
+    return <LoadingContainer size='lg' />;
   }
 
   return (
@@ -291,14 +307,21 @@ export default function ChatWindow({
               {getUserDisplayName()}
             </div>
             <div className='flex items-center gap-2'>
-              {!conversation.isConnected && timeLeft && timeLeft !== 'Expired' ? (
+              {!conversation.isConnected &&
+              timeLeft &&
+              timeLeft !== 'Expired' ? (
                 <span className='text-sm text-gray-600'>
-                  Building connection · {timeLeft} remaining · <button
+                  Building connection · {timeLeft} remaining ·{' '}
+                  <button
                     onClick={handleEndChat}
                     className='text-gray-500 hover:text-gray-700 underline transition-colors cursor-pointer'
                   >
                     End Now
                   </button>
+                </span>
+              ) : conversation.isConnected ? (
+                <span className='text-sm text-green-600'>
+                  Connected - Chat forever!
                 </span>
               ) : (
                 <span className={`text-sm ${getPresenceDisplay().color}`}>
@@ -307,6 +330,28 @@ export default function ChatWindow({
               )}
             </div>
           </div>
+
+          {/* Connect Button - Right Side */}
+          {!conversation.isConnected &&
+            !!timeLeft &&
+            timeLeft !== 'Expired' && (
+              <button
+                onClick={handleSendConnectionRequest}
+                disabled={sendingConnectionRequest}
+                className='flex items-center gap-3 px-4 py-3 bg-indigo-600 hover:bg-indigo-700 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
+              >
+                <Image
+                  src='/connect-icon.svg'
+                  alt='Connect'
+                  width={20}
+                  height={20}
+                  className='flex-shrink-0'
+                />
+                <span className='text-base font-medium text-white'>
+                  {sendingConnectionRequest ? 'Connecting...' : 'Connect'}
+                </span>
+              </button>
+            )}
         </div>
       </div>
 
@@ -320,29 +365,70 @@ export default function ChatWindow({
             </div>
           ) : (
             <>
-              {messages.map(message => {
+              {messages.map((message, index) => {
                 const isOwnMessage = message.senderId === user?.userId;
+                const prevMessage = index > 0 ? messages[index - 1] : null;
+                const nextMessage = index < messages.length - 1 ? messages[index + 1] : null;
+                
+                // Check if messages are from same sender and within time threshold
+                const isPrevFromSameSender = prevMessage?.senderId === message.senderId;
+                const isNextFromSameSender = nextMessage?.senderId === message.senderId;
+                
+                // Calculate time difference with previous message (in minutes)
+                const prevTimeDiff = prevMessage ? 
+                  (new Date(message.timestamp || Date.now()).getTime() - new Date(prevMessage.timestamp || Date.now()).getTime()) / (1000 * 60) : 
+                  999;
+                
+                const nextTimeDiff = nextMessage ? 
+                  (new Date(nextMessage.timestamp || Date.now()).getTime() - new Date(message.timestamp || Date.now()).getTime()) / (1000 * 60) : 
+                  999;
+                
+                // Group messages if same sender and within 2 minutes
+                const isGroupedWithPrev = isPrevFromSameSender && prevTimeDiff <= 2;
+                const isGroupedWithNext = isNextFromSameSender && nextTimeDiff <= 2;
+                
+                // Determine margins based on grouping
+                const marginTop = isGroupedWithPrev ? 'mt-0.5' : 'mt-6';
+                const marginBottom = isGroupedWithNext ? 'mb-0.5' : 'mb-6';
+                
+                // Show avatar only for first message in group or standalone messages
+                const showAvatar = !isOwnMessage && !isGroupedWithPrev;
+                
                 return (
-                  <MessageBox
+                  <div
                     key={message.id}
-                    id={message.id}
-                    position={isOwnMessage ? 'right' : 'left'}
-                    type='text'
-                    title=''
-                    titleColor='transparent'
-                    text={message.content}
-                    date={new Date(message.timestamp || Date.now())}
-                    dateString={formatMessageTime(message.timestamp)}
-                    status={isOwnMessage ? 'sent' : 'received'}
-                    avatar={!isOwnMessage ? '' : undefined}
-                    letterItem={!isOwnMessage ? getUserLetterItem() : undefined}
-                    notch
-                    focus={false}
-                    forwarded={false}
-                    replyButton={false}
-                    removeButton={false}
-                    retracted={false}
-                  />
+                    className={`flex ${marginTop} ${marginBottom} ${isOwnMessage ? 'justify-end' : 'justify-start'}`}
+                                      >
+                      {showAvatar ? (
+                        <UserAvatar
+                          email={otherUserPresence?.email}
+                          userId={otherParticipantId}
+                          size='sm'
+                          className='mr-3 flex-shrink-0'
+                        />
+                      ) : !isOwnMessage ? (
+                        <div className='w-8 h-8 mr-3 flex-shrink-0' />
+                      ) : null}
+                    <div className="group relative">
+                      <div
+                        className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg border ${
+                          isOwnMessage
+                            ? 'bg-indigo-600 text-white border-indigo-600'
+                            : 'bg-white text-gray-900 border-gray-200'
+                        }`}
+                      >
+                        <p className='text-sm'>{message.content}</p>
+                      </div>
+                      {/* Timestamp tooltip - shows on hover */}
+                      <div className={`absolute z-10 px-2 py-1 text-xs text-white bg-gray-800 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap ${
+                        isOwnMessage 
+                          ? 'right-full mr-2 top-1/2 -translate-y-1/2' 
+                          : 'left-full ml-2 top-1/2 -translate-y-1/2'
+                      }`}>
+                        {formatMessageTime(message.timestamp)}
+                      </div>
+                    </div>
+                  </div>
                 );
               })}
             </>
@@ -387,7 +473,7 @@ export default function ChatWindow({
         </div>
       </div>
 
-      {(error || externalError) ? (
+      {error || externalError ? (
         <div className='flex-shrink-0 p-4 bg-red-50 border-t border-red-200 text-red-600 text-sm'>
           <div className='max-w-4xl mx-auto'>{error || externalError}</div>
         </div>

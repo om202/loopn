@@ -5,9 +5,9 @@ interface LoadingContainerProps {
   size?: 'sm' | 'md' | 'lg';
 }
 
-export default function LoadingContainer({ 
-  className = '', 
-  size = 'md' 
+export default function LoadingContainer({
+  className = '',
+  size = 'md',
 }: LoadingContainerProps) {
   const getSizeClasses = () => {
     switch (size) {
@@ -21,10 +21,12 @@ export default function LoadingContainer({
   };
 
   return (
-    <div className={`flex items-center justify-center w-full h-full ${className}`}>
-      <div 
+    <div
+      className={`flex items-center justify-center w-full h-full ${className}`}
+    >
+      <div
         className={`${getSizeClasses()} border-gray-100 border-t-gray-300 rounded-full animate-spin`}
       />
     </div>
   );
-} 
+}

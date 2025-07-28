@@ -15,3 +15,17 @@ a:hover,
 .cursor-pointer:hover {
   cursor: pointer;
 }
+
+/* Override react-chat-elements shadows for flat design */
+.rce-mbox {
+  box-shadow: none !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+.rce-mbox-body {
+  box-shadow: none !important;
+}
+
+.rce-mbox-text {
+  box-shadow: none !important;
+}
