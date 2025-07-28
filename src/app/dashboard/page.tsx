@@ -1,8 +1,8 @@
 'use client';
 
+import Navbar from '../../components/Navbar';
 import OnlineUsers from '../../components/OnlineUsers';
 import ProtectedRoute from '../../components/protected-route';
-import Navbar from '../../components/Navbar';
 
 export default function DashboardPage() {
   const handleChatRequestSent = () => {
@@ -18,11 +18,9 @@ export default function DashboardPage() {
         {/* Main Content */}
         <div className='max-w-6xl mx-auto px-6 py-8'>
           <div className='mb-8'>
-            <h2 className='text-2xl font-bold text-gray-900 mb-2'>
-              Professional Network
-            </h2>
+            <h2 className='text-2xl font-bold text-gray-900 mb-2'>Dashboard</h2>
             <p className='text-gray-600'>
-              Connect with professionals who are online and ready to network
+              See who&apos;s online and start connecting
             </p>
           </div>
 

@@ -3,8 +3,6 @@ import { client } from '../lib/amplify-config';
 
 // Type definitions from schema
 type UserPresence = Schema['UserPresence']['type'];
-// type CreateUserPresenceInput = Schema['UserPresence']['createType'];
-// type UpdateUserPresenceInput = Schema['UserPresence']['updateType'];
 
 // Result types
 type DataResult<T> = { data: T | null; error: string | null };
@@ -16,17 +14,19 @@ export class UserService {
     status: 'ONLINE' | 'OFFLINE' | 'BUSY'
   ): Promise<DataResult<UserPresence>> {
     try {
-      // Try to update existing presence first
+      // Try to update existing presence record first
       const existingResult = await client.models.UserPresence.get({
-        id: userId,
+        userId,
       });
 
       if (existingResult.data) {
         // Update existing presence
         const result = await client.models.UserPresence.update({
-          id: userId,
+          userId,
           status,
+          isOnline: status === 'ONLINE',
           lastSeen: new Date().toISOString(),
+          lastHeartbeat: new Date().toISOString(),
         });
 
         return {
@@ -34,11 +34,14 @@ export class UserService {
           error: null,
         };
       }
-      // Create new presence record
+
+      // Create new presence record only if none exists
       const result = await client.models.UserPresence.create({
         userId,
         status,
+        isOnline: status === 'ONLINE',
         lastSeen: new Date().toISOString(),
+        lastHeartbeat: new Date().toISOString(),
       });
 
       return {
@@ -58,7 +61,7 @@ export class UserService {
 
   async getUserPresence(userId: string): Promise<DataResult<UserPresence>> {
     try {
-      const result = await client.models.UserPresence.get({ id: userId });
+      const result = await client.models.UserPresence.get({ userId });
       return {
         data: result.data,
         error: null,
@@ -79,6 +82,7 @@ export class UserService {
       const result = await client.models.UserPresence.list({
         filter: {
           status: { eq: 'ONLINE' },
+          isOnline: { eq: true },
         },
       });
 
@@ -117,6 +121,7 @@ export class UserService {
     return client.models.UserPresence.observeQuery({
       filter: {
         status: { eq: 'ONLINE' },
+        isOnline: { eq: true },
       },
     }).subscribe({
       next: data => callback(data.items),

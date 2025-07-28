@@ -131,7 +131,6 @@ const schema = a.schema({
   // User online presence - simplified status
   UserPresence: a
     .model({
-      id: a.id().required(),
       userId: a.string().required(),
       isOnline: a.boolean().default(false),
       lastSeen: a.datetime(),
@@ -144,9 +143,10 @@ const schema = a.schema({
       // - aiGeneratedDescription: a.string()
       // - isAvailableForChat: a.boolean()
     })
+    .identifier(['userId'])
     .authorization(allow => [allow.authenticated()])
     .secondaryIndexes(index => [
-      index('userId'),
+      index('status'),
       // TODO: Later add index for AI matching:
       // index('isAvailableForChat').sortKeys(['lastSeen'])
     ]),

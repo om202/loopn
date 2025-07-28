@@ -30,7 +30,7 @@ export default function Navbar() {
           </div>
 
           {/* User Menu */}
-          <div 
+          <button
             className='relative'
             onMouseEnter={() => setIsDropdownOpen(true)}
             onMouseLeave={() => setIsDropdownOpen(false)}
@@ -42,7 +42,7 @@ export default function Navbar() {
             </button>
 
             {/* Dropdown Menu */}
-            {isDropdownOpen && (
+            {isDropdownOpen ? (
               <div className='absolute right-0 top-full w-72 max-w-sm bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-10'>
                 <div className='px-4 py-3 border-b border-gray-100'>
                   <div className='flex items-center space-x-3'>
@@ -50,8 +50,10 @@ export default function Navbar() {
                       {getUserInitial()}
                     </div>
                     <div className='min-w-0 flex-1'>
-                      <p className='text-sm font-medium text-gray-900'>Professional</p>
-                      <p 
+                      <p className='text-sm font-medium text-gray-900'>
+                        Professional
+                      </p>
+                      <p
                         className='text-sm text-gray-600 truncate'
                         title={getUserEmail()}
                       >
@@ -67,10 +69,10 @@ export default function Navbar() {
                   Sign Out
                 </button>
               </div>
-            )}
-          </div>
+            ) : null}
+          </button>
         </div>
       </div>
     </div>
   );
-} 
+}

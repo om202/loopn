@@ -38,6 +38,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
               // Remove duplicates by userId - keep only the first occurrence
               index === self.findIndex(u => u.userId === user.userId)
           );
+
         setOnlineUsers(otherUsers);
       },
       error => {
@@ -99,7 +100,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
         <div className='space-y-3'>
           {onlineUsers.map(userPresence => (
             <div
-              key={userPresence.id}
+              key={userPresence.userId}
               className='flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors'
             >
               <div className='flex items-center space-x-3'>
