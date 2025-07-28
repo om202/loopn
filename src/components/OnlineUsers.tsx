@@ -30,8 +30,14 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
     // Subscribe to online users updates
     const subscription = userService.observeOnlineUsers(
       users => {
-        // Filter out current user from the list
-        const otherUsers = users.filter(u => u.userId !== user.userId);
+        // Filter out current user from the list and remove duplicates by userId
+        const otherUsers = users
+          .filter(u => u.userId !== user.userId)
+          .filter(
+            (user, index, self) =>
+              // Remove duplicates by userId - keep only the first occurrence
+              index === self.findIndex(u => u.userId === user.userId)
+          );
         setOnlineUsers(otherUsers);
       },
       error => {
@@ -93,7 +99,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
         <div className='space-y-3'>
           {onlineUsers.map(userPresence => (
             <div
-              key={userPresence.userId}
+              key={userPresence.id}
               className='flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors'
             >
               <div className='flex items-center space-x-3'>
