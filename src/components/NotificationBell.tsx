@@ -752,121 +752,126 @@ export default function NotificationBell() {
                 </div>
               ) : (
                 <div className='py-2'>
-                  {getFilteredNotifications().map((notification, index) => (
-                    <button
-                      key={notification.id}
-                      className={`w-full text-left px-4 py-3 hover:bg-gray-50 transition-colors duration-150 ${
-                        index !== getFilteredNotifications().length - 1
-                          ? 'border-b border-gray-50'
-                          : ''
-                      } ${notification.type === 'message' ? 'cursor-pointer' : 'cursor-default'}`}
-                      onClick={() => {
-                        if (notification.type === 'message') {
-                          handleNotificationClick(notification);
-                        }
-                      }}
-                      disabled={notification.type !== 'message'}
-                    >
-                      <div className='flex items-start gap-3'>
-                        {notification.type === 'chat_request' ? (
-                          <div className='relative flex-shrink-0'>
-                            <UserAvatar
-                              email={
-                                (notification.data as ChatRequestWithUser)
-                                  ?.requesterEmail
-                              }
-                              userId={
-                                (notification.data as ChatRequestWithUser)
-                                  ?.requesterId
-                              }
-                              size='sm'
-                            />
-                            <div className='absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-blue-500 rounded-full border border-white flex items-center justify-center'>
-                              <svg
-                                className='w-2 h-2 text-white'
-                                fill='currentColor'
-                                viewBox='0 0 20 20'
-                              >
-                                <path
-                                  fillRule='evenodd'
-                                  d='M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7z'
-                                  clipRule='evenodd'
-                                />
-                              </svg>
+                  {getFilteredNotifications().map((notification, index) => {
+                    // Use div for chat requests (they have interactive buttons)
+                    // Use button for messages (they're clickable)
+                    const isClickable = notification.type === 'message';
+                    const Component = isClickable ? 'button' : 'div';
+                    const baseClasses = `w-full text-left px-4 py-3 hover:bg-gray-50 transition-colors duration-150 ${
+                      index !== getFilteredNotifications().length - 1
+                        ? 'border-b border-gray-50'
+                        : ''
+                    } ${notification.type === 'message' ? 'cursor-pointer' : 'cursor-default'}`;
+
+                    return (
+                      <Component
+                        key={notification.id}
+                        className={baseClasses}
+                        {...(isClickable && {
+                          onClick: () => handleNotificationClick(notification),
+                        })}
+                      >
+                        <div className='flex items-start gap-3'>
+                          {notification.type === 'chat_request' ? (
+                            <div className='relative flex-shrink-0'>
+                              <UserAvatar
+                                email={
+                                  (notification.data as ChatRequestWithUser)
+                                    ?.requesterEmail
+                                }
+                                userId={
+                                  (notification.data as ChatRequestWithUser)
+                                    ?.requesterId
+                                }
+                                size='sm'
+                              />
+                              <div className='absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-blue-500 rounded-full border border-white flex items-center justify-center'>
+                                <svg
+                                  className='w-2 h-2 text-white'
+                                  fill='currentColor'
+                                  viewBox='0 0 20 20'
+                                >
+                                  <path
+                                    fillRule='evenodd'
+                                    d='M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7z'
+                                    clipRule='evenodd'
+                                  />
+                                </svg>
+                              </div>
                             </div>
-                          </div>
-                        ) : (
-                          <div className='w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0'>
-                            {getNotificationIcon(notification.type)}
-                          </div>
-                        )}
+                          ) : (
+                            <div className='w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0'>
+                              {getNotificationIcon(notification.type)}
+                            </div>
+                          )}
 
-                        <div className='flex-1 min-w-0'>
-                          <div className='flex items-start justify-between mb-1'>
-                            <h4 className='text-sm font-semibold text-gray-900 truncate pr-2'>
-                              {notification.title}
-                            </h4>
-                            <span className='text-xs text-gray-500 flex-shrink-0 font-medium'>
-                              {formatTimeAgo(notification.timestamp)}
-                            </span>
-                          </div>
-                          <p className='text-sm text-gray-600 mb-3 leading-normal'>
-                            {notification.content}
-                          </p>
-
-                          {/* Action buttons for different notification types */}
-                          {notification.type === 'chat_request' &&
-                          notification.data &&
-                          'requesterId' in notification.data ? (
-                            (() => {
-                              const chatRequestData =
-                                notification.data as ChatRequestWithUser;
-                              return (
-                                <div className='flex items-center gap-3'>
-                                  <button
-                                    onClick={e => {
-                                      e.stopPropagation();
-                                      handleRespondToRequest(
-                                        notification.id,
-                                        'REJECTED',
-                                        chatRequestData
-                                      );
-                                    }}
-                                    disabled={decliningId === notification.id}
-                                    className='text-sm text-gray-600 hover:text-gray-800 font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-150'
-                                  >
-                                    {decliningId === notification.id
-                                      ? 'Declining...'
-                                      : 'Decline'}
-                                  </button>
-                                  <button
-                                    onClick={e => {
-                                      e.stopPropagation();
-                                      handleRespondToRequest(
-                                        notification.id,
-                                        'ACCEPTED',
-                                        chatRequestData
-                                      );
-                                    }}
-                                    disabled={decliningId === notification.id}
-                                    className='px-4 py-1.5 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-150'
-                                  >
-                                    Confirm
-                                  </button>
-                                </div>
-                              );
-                            })()
-                          ) : notification.type === 'message' ? (
-                            <div className='text-sm'>
-                              <span className='text-indigo-600 font-medium hover:text-indigo-800 cursor-pointer transition-colors duration-150'>
-                                Reply
+                          <div className='flex-1 min-w-0'>
+                            <div className='flex items-start justify-between mb-1'>
+                              <h4 className='text-sm font-semibold text-gray-900 truncate pr-2'>
+                                {notification.title}
+                              </h4>
+                              <span className='text-xs text-gray-500 flex-shrink-0 font-medium'>
+                                {formatTimeAgo(notification.timestamp)}
                               </span>
                             </div>
-                          ) : null}
+                            <p className='text-sm text-gray-600 mb-3 leading-normal'>
+                              {notification.content}
+                            </p>
+
+                            {/* Action buttons for different notification types */}
+                            {notification.type === 'chat_request' &&
+                            notification.data &&
+                            'requesterId' in notification.data ? (
+                              (() => {
+                                const chatRequestData =
+                                  notification.data as ChatRequestWithUser;
+                                return (
+                                  <div className='flex items-center gap-3'>
+                                    <button
+                                      onClick={e => {
+                                        e.stopPropagation();
+                                        handleRespondToRequest(
+                                          notification.id,
+                                          'REJECTED',
+                                          chatRequestData
+                                        );
+                                      }}
+                                      disabled={decliningId === notification.id}
+                                      className='text-sm text-gray-600 hover:text-gray-800 font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-150'
+                                    >
+                                      {decliningId === notification.id
+                                        ? 'Declining...'
+                                        : 'Decline'}
+                                    </button>
+                                    <button
+                                      onClick={e => {
+                                        e.stopPropagation();
+                                        handleRespondToRequest(
+                                          notification.id,
+                                          'ACCEPTED',
+                                          chatRequestData
+                                        );
+                                      }}
+                                      disabled={decliningId === notification.id}
+                                      className='px-4 py-1.5 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-150'
+                                    >
+                                      Confirm
+                                    </button>
+                                  </div>
+                                );
+                              })()
+                            ) : notification.type === 'message' ? (
+                              <div className='text-sm'>
+                                <span className='text-indigo-600 font-medium hover:text-indigo-800 cursor-pointer transition-colors duration-150'>
+                                  Reply
+                                </span>
+                              </div>
+                            ) : null}
+                          </div>
                         </div>
-                      </div>
-                    </button>
-                  ))}
+                      </Component>
+                    );
+                  })}
                 </div>
               )}
             </div>
