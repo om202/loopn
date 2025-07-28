@@ -35,11 +35,11 @@ export default function Navbar() {
             onMouseEnter={() => setIsDropdownOpen(true)}
             onMouseLeave={() => setIsDropdownOpen(false)}
           >
-            <button className='flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 transition-colors'>
+            <div className='flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 transition-colors'>
               <div className='w-8 h-8 bg-indigo-500 rounded-full flex items-center justify-center text-white text-sm font-medium'>
                 {getUserInitial()}
               </div>
-            </button>
+            </div>
 
             {/* Dropdown Menu */}
             {isDropdownOpen ? (
