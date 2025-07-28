@@ -7,6 +7,8 @@ import type { Schema } from '../../amplify/data/resource';
 import { chatService } from '../services/chat.service';
 import { userService } from '../services/user.service';
 
+import UserAvatar from './UserAvatar';
+
 type UserPresence = Schema['UserPresence']['type'];
 
 interface OnlineUsersProps {
@@ -16,6 +18,7 @@ interface OnlineUsersProps {
 export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   const [onlineUsers, setOnlineUsers] = useState<UserPresence[]>([]);
   const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { user } = useAuthenticator();
 
@@ -23,6 +26,9 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
     if (!user) {
       return;
     }
+
+    // Reset loading state for new user
+    setInitialLoading(true);
 
     // Subscribe to online users updates
     const subscription = userService.observeOnlineUsers(
@@ -36,10 +42,12 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
           );
 
         setOnlineUsers(otherUsers);
+        setInitialLoading(false); // Mark as loaded after first response
       },
       error => {
         console.error('Error observing online users:', error);
         setError('Failed to load online users');
+        setInitialLoading(false); // Also mark as loaded on error
       }
     );
 
@@ -65,88 +73,100 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
     setLoading(false);
   };
 
-  const getStatusColor = (status: string | null | undefined) => {
-    switch (status) {
-      case 'ONLINE':
-        return 'bg-green-400';
-      case 'BUSY':
-        return 'bg-red-400';
-      default:
-        return 'bg-gray-400';
+
+
+  const getDisplayName = (userPresence: UserPresence) => {
+    if (userPresence.email) {
+      return userPresence.email;
     }
+    return `User${userPresence.userId.slice(-4)}`;
   };
 
   if (error) {
-    return <div className='p-4 text-red-600 bg-red-50 rounded-lg'>{error}</div>;
+    return (
+      <div className='p-4 text-red-600 bg-red-50 rounded-xl border border-red-200 text-center'>
+        <div className='text-sm font-medium mb-1'>Error</div>
+        <div className='text-sm'>{error}</div>
+      </div>
+    );
+  }
+
+  if (initialLoading) {
+    return (
+      <div className='bg-white rounded-xl shadow-sm border border-gray-100 p-8'>
+        <div className='text-center text-gray-500'>
+          <div className='w-6 h-6 border-2 border-gray-300 border-t-indigo-600 rounded-full animate-spin mx-auto mb-3' />
+          <p>Finding professionals...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (onlineUsers.length === 0) {
+    return (
+      <div className='bg-white rounded-xl shadow-sm border border-gray-100 p-8'>
+        <div className='text-center text-gray-500'>
+          <div className='w-12 h-12 border-2 border-gray-300 rounded-full mx-auto mb-3 flex items-center justify-center'>
+            <div className='w-6 h-6 border border-gray-300 rounded-full' />
+          </div>
+          <p>No one online right now</p>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className='bg-white rounded-lg shadow-md p-6'>
-      <h2 className='text-xl font-semibold text-gray-900 mb-4'>
-        Online Professionals
-      </h2>
-
-      {/* Current user info */}
-      <div className='mb-4 p-3 bg-indigo-50 rounded-lg border border-indigo-200'>
-        <div className='text-sm font-medium text-indigo-900'>
-          You are online as:
-        </div>
-        <div className='text-sm text-indigo-700'>
-          Email: {user?.signInDetails?.loginId || 'Unknown'}
-        </div>
-        <div className='text-sm text-indigo-700'>
-          UserID: {user?.userId || 'Unknown'}
+    <div className='bg-white rounded-xl shadow-sm border border-gray-100'>
+      <div className='p-4 border-b border-gray-100'>
+        <div className='flex items-center gap-2 text-gray-900'>
+          <span className='font-medium'>Online ({onlineUsers.length})</span>
         </div>
       </div>
-
-      {onlineUsers.length === 0 ? (
-        <p className='text-gray-500 text-center py-8'>
-          No professionals online at the moment
-        </p>
-      ) : (
-        <div className='space-y-3'>
-          {onlineUsers.map(userPresence => (
-            <div
-              key={userPresence.userId}
-              className='flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors'
-            >
-              <div className='flex items-center space-x-3'>
-                <div className='relative'>
-                  <div className='w-10 h-10 bg-indigo-500 rounded-full flex items-center justify-center text-white font-medium'>
-                    {userPresence.userId.charAt(0).toUpperCase()}
-                  </div>
-                  <div
-                    className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${getStatusColor(userPresence.status)}`}
-                  />
+      
+      <div className='p-4 space-y-3'>
+        {onlineUsers.map(userPresence => (
+          <div
+            key={userPresence.userId}
+            className='flex items-center justify-between p-3 rounded-lg border border-gray-100 hover:border-indigo-200 hover:bg-indigo-50/30 transition-all'
+          >
+            <div className='flex items-center gap-3'>
+              <UserAvatar 
+                email={userPresence.email}
+                userId={userPresence.userId}
+                size="md"
+                showStatus
+                status={userPresence.status}
+              />
+              <div>
+                <div className='font-medium text-gray-900 text-sm'>
+                  {getDisplayName(userPresence)}
                 </div>
-                <div>
-                  <div className='font-medium text-gray-900'>
-                    {userPresence.email ||
-                      `Professional ${userPresence.userId.slice(-4)}`}
-                  </div>
-                  <div className='text-sm text-gray-500'>
-                    UserID: {userPresence.userId.slice(-8)}
-                  </div>
-                  <div className='text-xs text-gray-400'>
-                    Last seen:{' '}
-                    {userPresence.lastSeen
-                      ? new Date(userPresence.lastSeen).toLocaleTimeString()
-                      : 'Unknown'}
-                  </div>
+                <div className='text-sm text-gray-500'>
+                  {userPresence.lastSeen
+                    ? new Date(userPresence.lastSeen).toLocaleTimeString([], { 
+                        hour: '2-digit', 
+                        minute: '2-digit' 
+                      })
+                    : 'Online now'}
                 </div>
               </div>
-
-              <button
-                onClick={() => handleSendChatRequest(userPresence.userId)}
-                disabled={loading}
-                className='px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors'
-              >
-                {loading ? 'Sending...' : 'Chat'}
-              </button>
             </div>
-          ))}
-        </div>
-      )}
+
+            <button
+              onClick={() => handleSendChatRequest(userPresence.userId)}
+              disabled={loading}
+              className='px-3 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm font-medium'
+              title='Start chat'
+            >
+              {loading ? (
+                <div className='w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin' />
+              ) : (
+                'Chat'
+              )}
+            </button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
