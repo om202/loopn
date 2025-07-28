@@ -57,7 +57,7 @@ function ConnectedDialog({
     // TODO: Handle "don't show again" preference if checked
     if (dontShowAgain) {
       // Could save preference to localStorage or user settings
-      console.log('User chose not to show this confirmation again');
+      console.warn('User chose not to show this confirmation again');
     }
     onClose();
   };
@@ -196,7 +196,7 @@ function NewRequestDialog({
     // TODO: Handle "don't show again" preference if checked
     if (dontShowAgain) {
       // Could save preference to localStorage or user settings
-      console.log('User chose not to show this confirmation again');
+      console.warn('User chose not to show this confirmation again');
     }
     onClose();
     setJustAccepted(false);

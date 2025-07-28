@@ -102,7 +102,7 @@ export default function Navbar() {
                         </div>
                       </div>
                     </div>
-                    <div
+                    <button
                       onClick={handleSignOut}
                       className='w-full text-left px-4 py-3 text-base text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer flex items-center gap-3'
                     >
@@ -125,7 +125,7 @@ export default function Navbar() {
                         }
                       />
                       Sign Out
-                    </div>
+                    </button>
                   </div>
                 ) : null}
               </button>

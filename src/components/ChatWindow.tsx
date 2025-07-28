@@ -10,6 +10,7 @@ import { userService } from '../services/user.service';
 
 type Message = Schema['Message']['type'];
 type Conversation = Schema['Conversation']['type'];
+type UserPresence = Schema['UserPresence']['type'];
 
 interface ChatWindowProps {
   conversation: Conversation;

@@ -30,6 +30,50 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   const { user } = useAuthenticator();
   const router = useRouter();
 
+  const checkExistingConversations = useCallback(
+    async (users: UserPresence[]) => {
+      if (!user) {
+        return;
+      }
+
+      const conversationMap = new Map<string, string>();
+
+      // Use Promise.all instead of await in loop
+      const conversationPromises = users.map(async userPresence => {
+        if (userPresence.userId) {
+          try {
+            const result = await chatService.getConversationBetweenUsers(
+              user.userId,
+              userPresence.userId
+            );
+            if (result.data?.id) {
+              return {
+                userId: userPresence.userId,
+                conversationId: result.data.id,
+              };
+            }
+          } catch {
+            console.error(
+              'Error checking conversation for user:',
+              userPresence.userId
+            );
+          }
+        }
+        return null;
+      });
+
+      const results = await Promise.all(conversationPromises);
+      results.forEach(result => {
+        if (result) {
+          conversationMap.set(result.userId, result.conversationId);
+        }
+      });
+
+      setExistingConversations(conversationMap);
+    },
+    [user]
+  );
+
   useEffect(() => {
     if (!user) {
       return;
@@ -79,50 +123,6 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
       onlineUsersSubscription.unsubscribe();
     };
   }, [user, checkExistingConversations]);
-
-  const checkExistingConversations = useCallback(
-    async (users: UserPresence[]) => {
-      if (!user) {
-        return;
-      }
-
-      const conversationMap = new Map<string, string>();
-
-      // Use Promise.all instead of await in loop
-      const conversationPromises = users.map(async userPresence => {
-        if (userPresence.userId) {
-          try {
-            const result = await chatService.getConversationBetweenUsers(
-              user.userId,
-              userPresence.userId
-            );
-            if (result.data?.id) {
-              return {
-                userId: userPresence.userId,
-                conversationId: result.data.id,
-              };
-            }
-          } catch {
-            console.error(
-              'Error checking conversation for user:',
-              userPresence.userId
-            );
-          }
-        }
-        return null;
-      });
-
-      const results = await Promise.all(conversationPromises);
-      results.forEach(result => {
-        if (result) {
-          conversationMap.set(result.userId, result.conversationId);
-        }
-      });
-
-      setExistingConversations(conversationMap);
-    },
-    [user]
-  );
 
   const handleChatAction = async (receiverId: string) => {
     // Check if there's an existing conversation

@@ -130,7 +130,7 @@ export default function NotificationBell() {
   const handleRespondToRequest = async (
     chatRequestId: string,
     status: 'ACCEPTED' | 'REJECTED',
-    chatRequest: ChatRequest
+    chatRequest: ChatRequestWithUser
   ) => {
     // If accepting, show the dialog confirmation instead of immediate processing
     if (status === 'ACCEPTED') {
@@ -491,38 +491,44 @@ export default function NotificationBell() {
                           </p>
 
                           {/* Action buttons only for chat requests */}
-                          {notification.type === 'chat_request' && (
-                            <div className='flex gap-2 mt-1'>
-                              <button
-                                onClick={() =>
-                                  handleRespondToRequest(
-                                    notification.id,
-                                    'REJECTED',
-                                    notification.data
-                                  )
-                                }
-                                disabled={decliningId === notification.id}
-                                className='px-4 py-1.5 bg-gray-100 text-gray-700 text-sm font-medium rounded-full hover:bg-gray-200 disabled:opacity-50 transition-colors'
-                              >
-                                {decliningId === notification.id
-                                  ? 'Declining...'
-                                  : 'Delete'}
-                              </button>
-                              <button
-                                onClick={() =>
-                                  handleRespondToRequest(
-                                    notification.id,
-                                    'ACCEPTED',
-                                    notification.data
-                                  )
-                                }
-                                disabled={decliningId === notification.id}
-                                className='px-4 py-1.5 bg-indigo-600 text-white text-sm font-medium rounded-full hover:bg-indigo-700 disabled:opacity-50 transition-colors'
-                              >
-                                Confirm
-                              </button>
-                            </div>
-                          )}
+                          {notification.type === 'chat_request' &&
+                          notification.data
+                            ? (() => {
+                                const chatRequestData = notification.data;
+                                return (
+                                  <div className='flex gap-2 mt-1'>
+                                    <button
+                                      onClick={() =>
+                                        handleRespondToRequest(
+                                          notification.id,
+                                          'REJECTED',
+                                          chatRequestData
+                                        )
+                                      }
+                                      disabled={decliningId === notification.id}
+                                      className='px-4 py-1.5 bg-gray-100 text-gray-700 text-sm font-medium rounded-full hover:bg-gray-200 disabled:opacity-50 transition-colors'
+                                    >
+                                      {decliningId === notification.id
+                                        ? 'Declining...'
+                                        : 'Delete'}
+                                    </button>
+                                    <button
+                                      onClick={() =>
+                                        handleRespondToRequest(
+                                          notification.id,
+                                          'ACCEPTED',
+                                          chatRequestData
+                                        )
+                                      }
+                                      disabled={decliningId === notification.id}
+                                      className='px-4 py-1.5 bg-indigo-600 text-white text-sm font-medium rounded-full hover:bg-indigo-700 disabled:opacity-50 transition-colors'
+                                    >
+                                      Confirm
+                                    </button>
+                                  </div>
+                                );
+                              })()
+                            : null}
                         </div>
                       </div>
                     </div>
