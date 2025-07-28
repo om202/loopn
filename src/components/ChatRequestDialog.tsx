@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import type { Schema } from '../../amplify/data/resource';
@@ -20,11 +21,13 @@ interface ChatRequestDialogProps {
   onAccept: () => void;
   onReject: () => void;
   showConnectedState?: boolean;
+  conversationId?: string | null;
 }
 
 interface ConnectedDialogProps {
   isOpen: boolean;
   chatRequest: ChatRequestWithUser | null;
+  conversationId?: string;
   onClose: () => void;
 }
 
@@ -37,8 +40,9 @@ interface NewRequestDialogProps {
 }
 
 // Connected state dialog component
-function ConnectedDialog({ isOpen, chatRequest, onClose }: ConnectedDialogProps) {
+function ConnectedDialog({ isOpen, chatRequest, conversationId, onClose }: ConnectedDialogProps) {
   const [dontShowAgain, setDontShowAgain] = useState(false);
+  const router = useRouter();
 
   if (!isOpen || !chatRequest) {
     return null;
@@ -51,6 +55,13 @@ function ConnectedDialog({ isOpen, chatRequest, onClose }: ConnectedDialogProps)
       console.log('User chose not to show this confirmation again');
     }
     onClose();
+  };
+
+  const handleChatNow = () => {
+    if (conversationId) {
+      router.push(`/chat/${conversationId}`);
+      onClose();
+    }
   };
 
   return (
@@ -93,13 +104,25 @@ function ConnectedDialog({ isOpen, chatRequest, onClose }: ConnectedDialogProps)
           </label>
         </div>
 
-        {/* OK Button */}
-        <button
-          onClick={handleOk}
-          className='w-full px-4 py-2 bg-white text-gray-700 text-sm font-medium rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors'
-        >
-          OK
-        </button>
+        {/* Action Buttons */}
+        <div className='flex gap-3'>
+          {/* Chat Now Button */}
+          <button
+            onClick={handleChatNow}
+            disabled={!conversationId}
+            className='flex-1 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors'
+          >
+            Chat Now
+          </button>
+          
+          {/* OK Button */}
+          <button
+            onClick={handleOk}
+            className='flex-1 px-4 py-2 bg-white text-gray-700 text-sm font-medium rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors'
+          >
+            Later
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -128,10 +151,11 @@ function NewRequestDialog({ isOpen, chatRequest, onClose, onAccept, onReject }: 
     try {
       const result = await chatService.respondToChatRequest(chatRequest.id, status);
       
-      if (result.error) {
+            if (result.error) {
         console.error('Failed to respond to chat request:', result.error);
         // Could show a toast notification here if needed
       }
+      // No auto-redirect for NewRequestDialog - it transitions to connected state internally
     } catch (error) {
       console.error('Error responding to chat request:', error);
       // Could show a toast notification here if needed
@@ -264,6 +288,7 @@ export default function ChatRequestDialog({
   onAccept,
   onReject,
   showConnectedState = false,
+  conversationId,
 }: ChatRequestDialogProps) {
   // Route to the appropriate dialog based on state
   if (showConnectedState) {
@@ -271,6 +296,7 @@ export default function ChatRequestDialog({
       <ConnectedDialog
         isOpen={isOpen}
         chatRequest={chatRequest}
+        conversationId={conversationId || undefined}
         onClose={onClose}
       />
     );

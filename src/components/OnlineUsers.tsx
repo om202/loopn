@@ -1,6 +1,7 @@
 'use client';
 
 import { useAuthenticator } from '@aws-amplify/ui-react';
+import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
 import type { Schema } from '../../amplify/data/resource';
@@ -20,8 +21,10 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   const [onlineUsers, setOnlineUsers] = useState<UserPresence[]>([]);
   const [initialLoading, setInitialLoading] = useState(true);
   const [pendingRequests, setPendingRequests] = useState<Set<string>>(new Set());
+  const [existingConversations, setExistingConversations] = useState<Map<string, string>>(new Map());
   const [error, setError] = useState<string | null>(null);
   const { user } = useAuthenticator();
+  const router = useRouter();
 
   useEffect(() => {
     if (!user) {
@@ -56,6 +59,9 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
 
         setOnlineUsers(otherUsers);
         setInitialLoading(false); // Mark as loaded after first response
+        
+        // Check for existing conversations with these users
+        checkExistingConversations(otherUsers);
       },
       error => {
         console.error('Error observing online users:', error);
@@ -69,6 +75,41 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
       onlineUsersSubscription.unsubscribe();
     };
   }, [user]);
+
+  const checkExistingConversations = async (users: UserPresence[]) => {
+    if (!user) return;
+
+    const conversationMap = new Map<string, string>();
+    
+    for (const userPresence of users) {
+      if (userPresence.userId) {
+        try {
+          const result = await chatService.getConversationBetweenUsers(user.userId, userPresence.userId);
+          if (result.data?.id) {
+            conversationMap.set(userPresence.userId, result.data.id);
+          }
+        } catch (error) {
+          console.error('Error checking conversation:', error);
+        }
+      }
+    }
+    
+    setExistingConversations(conversationMap);
+  };
+
+  const handleChatAction = async (receiverId: string) => {
+    // Check if there's an existing conversation
+    const conversationId = existingConversations.get(receiverId);
+    
+    if (conversationId) {
+      // Open existing chat
+      router.push(`/chat/${conversationId}`);
+      return;
+    }
+    
+    // Send new chat request
+    handleSendChatRequest(receiverId);
+  };
 
   const handleSendChatRequest = async (receiverId: string) => {
     if (!user) {
@@ -207,18 +248,34 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
             </div>
 
             <button
-              onClick={() => handleSendChatRequest(userPresence.userId)}
+              onClick={() => handleChatAction(userPresence.userId)}
               disabled={pendingRequests.has(userPresence.userId)}
               className='transition-colors'
-              title={pendingRequests.has(userPresence.userId) ? 'Chat request pending' : 'Send chat request'}
+              title={
+                pendingRequests.has(userPresence.userId) 
+                  ? 'Chat request pending' 
+                  : existingConversations.has(userPresence.userId)
+                  ? 'Open chat'
+                  : 'Send chat request'
+              }
             >
               <CircularIcon
                 size="lg"
-                bgColor={pendingRequests.has(userPresence.userId) ? 'bg-gray-200' : 'bg-indigo-600'}
+                bgColor={
+                  pendingRequests.has(userPresence.userId) 
+                    ? 'bg-gray-200' 
+                    : existingConversations.has(userPresence.userId)
+                    ? 'bg-green-600'
+                    : 'bg-indigo-600'
+                }
                 icon={
                   pendingRequests.has(userPresence.userId) ? (
                     <svg className='text-gray-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                       <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' />
+                    </svg>
+                  ) : existingConversations.has(userPresence.userId) ? (
+                    <svg className='text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                      <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 4v-4z' />
                     </svg>
                   ) : (
                     <svg className='text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
@@ -226,7 +283,13 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
                     </svg>
                   )
                 }
-                className={pendingRequests.has(userPresence.userId) ? 'cursor-not-allowed' : 'hover:bg-indigo-700 cursor-pointer'}
+                className={
+                  pendingRequests.has(userPresence.userId) 
+                    ? 'cursor-not-allowed' 
+                    : existingConversations.has(userPresence.userId)
+                    ? 'hover:bg-green-700 cursor-pointer'
+                    : 'hover:bg-indigo-700 cursor-pointer'
+                }
               />
             </button>
           </div>

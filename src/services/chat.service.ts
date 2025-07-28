@@ -53,16 +53,57 @@ export class ChatService {
   async respondToChatRequest(
     chatRequestId: string,
     status: 'ACCEPTED' | 'REJECTED'
-  ): Promise<DataResult<ChatRequest>> {
+  ): Promise<DataResult<{ chatRequest: ChatRequest; conversation?: Conversation }>> {
     try {
+      // First get the chat request to get participant IDs
+      const chatRequestResult = await client.models.ChatRequest.get({
+        id: chatRequestId,
+      });
+
+      if (!chatRequestResult.data) {
+        return {
+          data: null,
+          error: 'Chat request not found',
+        };
+      }
+
+      // Update the chat request status
       const result = await client.models.ChatRequest.update({
         id: chatRequestId,
         status,
         respondedAt: new Date().toISOString(),
       });
 
+      if (!result.data) {
+        return {
+          data: null,
+          error: 'Failed to update chat request',
+        };
+      }
+
+      // If accepted, create a conversation
+      let conversation: Conversation | undefined;
+      if (status === 'ACCEPTED') {
+        const conversationResult = await this.createConversation(
+          chatRequestResult.data.requesterId,
+          chatRequestResult.data.receiverId
+        );
+
+        if (conversationResult.error) {
+          return {
+            data: null,
+            error: conversationResult.error,
+          };
+        }
+
+        conversation = conversationResult.data || undefined;
+      }
+
       return {
-        data: result.data,
+        data: {
+          chatRequest: result.data,
+          conversation,
+        },
         error: null,
       };
     } catch (error) {
@@ -266,6 +307,69 @@ export class ChatService {
           error instanceof Error
             ? error.message
             : 'Failed to continue probation',
+      };
+    }
+  }
+
+  async getConversation(conversationId: string): Promise<DataResult<Conversation>> {
+    try {
+      const result = await client.models.Conversation.get({
+        id: conversationId,
+      });
+
+      return {
+        data: result.data,
+        error: null,
+      };
+    } catch (error) {
+      return {
+        data: null,
+        error:
+          error instanceof Error
+            ? error.message
+            : 'Failed to get conversation',
+      };
+    }
+  }
+
+  async getConversationBetweenUsers(
+    user1Id: string,
+    user2Id: string
+  ): Promise<DataResult<Conversation>> {
+    try {
+      // Try to find conversation where user1 is participant1 and user2 is participant2
+      let result = await client.models.Conversation.list({
+        filter: {
+          participant1Id: { eq: user1Id },
+          participant2Id: { eq: user2Id },
+          chatStatus: { eq: 'ACTIVE' },
+        },
+      });
+
+      // If not found, try the opposite
+      if (!result.data || result.data.length === 0) {
+        result = await client.models.Conversation.list({
+          filter: {
+            participant1Id: { eq: user2Id },
+            participant2Id: { eq: user1Id },
+            chatStatus: { eq: 'ACTIVE' },
+          },
+        });
+      }
+
+      const conversation = result.data && result.data.length > 0 ? result.data[0] : null;
+
+      return {
+        data: conversation,
+        error: null,
+      };
+    } catch (error) {
+      return {
+        data: null,
+        error:
+          error instanceof Error
+            ? error.message
+            : 'Failed to get conversation between users',
       };
     }
   }

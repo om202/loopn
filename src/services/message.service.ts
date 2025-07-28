@@ -18,13 +18,30 @@ export class MessageService {
     replyToMessageId?: string
   ): Promise<DataResult<Message>> {
     try {
+      // Get conversation to determine receiverId
+      const conversationResult = await client.models.Conversation.get({
+        id: conversationId,
+      });
+
+      if (!conversationResult.data) {
+        return {
+          data: null,
+          error: 'Conversation not found',
+        };
+      }
+
+      // Determine receiverId (the other participant)
+      const receiverId = conversationResult.data.participant1Id === senderId
+        ? conversationResult.data.participant2Id
+        : conversationResult.data.participant1Id;
+
       const timestamp = new Date();
       const sortKey = `${timestamp.toISOString()}_${crypto.randomUUID()}`;
 
       const result = await client.models.Message.create({
         conversationId,
         senderId,
-        receiverId: '', // This needs to be set based on conversation participants
+        receiverId,
         content,
         messageType: 'TEXT',
         timestamp: timestamp.toISOString(),

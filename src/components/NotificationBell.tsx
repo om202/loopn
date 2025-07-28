@@ -1,6 +1,7 @@
 'use client';
 
 import { useAuthenticator } from '@aws-amplify/ui-react';
+import { useRouter } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react';
 
 import type { Schema } from '../../amplify/data/resource';
@@ -39,7 +40,9 @@ export default function NotificationBell() {
   const [showDialog, setShowDialog] = useState(false);
   const [dialogRequest, setDialogRequest] = useState<ChatRequestWithUser | null>(null);
   const [showDialogConnected, setShowDialogConnected] = useState(false);
+  const [dialogConversationId, setDialogConversationId] = useState<string | null>(null);
   const { user } = useAuthenticator();
+  const router = useRouter();
   
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -128,7 +131,12 @@ export default function NotificationBell() {
       
       // Perform the API call in the background
       try {
-        await chatService.respondToChatRequest(chatRequestId, status);
+        const result = await chatService.respondToChatRequest(chatRequestId, status);
+        
+        if (result.data?.conversation?.id) {
+          // Store the conversation ID for the connected dialog
+          setDialogConversationId(result.data.conversation.id);
+        }
       } catch (error) {
         console.error('Error responding to chat request:', error);
       }
@@ -277,6 +285,7 @@ export default function NotificationBell() {
     setShowDialog(false);
     setDialogRequest(null);
     setShowDialogConnected(false);
+    setDialogConversationId(null);
   };
 
   return (
@@ -288,6 +297,7 @@ export default function NotificationBell() {
         onAccept={handleDialogAccept}
         onReject={handleDialogReject}
         showConnectedState={showDialogConnected}
+        conversationId={dialogConversationId}
       />
     <div className='relative' ref={dropdownRef}>
       {/* Notification Bell Button */}
