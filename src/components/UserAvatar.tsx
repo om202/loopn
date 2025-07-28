@@ -78,6 +78,12 @@ export default function UserAvatar({
             className={`${indicatorSize} bg-red-500 rounded-full border-2 border-white box-content`}
           />
         );
+      case 'OFFLINE':
+        return (
+          <div
+            className={`${indicatorSize} bg-gray-400 rounded-full border-2 border-white box-content`}
+          />
+        );
       default:
         return (
           <div
