@@ -2,6 +2,8 @@
 
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { useState, useEffect, useRef } from 'react';
+import { MessageBox } from 'react-chat-elements';
+import 'react-chat-elements/dist/main.css';
 
 import type { Schema } from '../../amplify/data/resource';
 import { chatService } from '../services/chat.service';
@@ -55,13 +57,18 @@ export default function ChatWindow({
           (diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
         );
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
+        // Show shorter format based on time remaining
         if (days > 0) {
-          setTimeLeft(`${days}d ${hours}h ${minutes}m`);
+          setTimeLeft(`${days}d ${hours}h`);
         } else if (hours > 0) {
           setTimeLeft(`${hours}h ${minutes}m`);
-        } else {
+        } else if (minutes > 5) {
           setTimeLeft(`${minutes}m`);
+        } else {
+          // Show seconds when less than 5 minutes
+          setTimeLeft(`${minutes}m ${seconds}s`);
         }
       }
     }, 1000);
@@ -122,6 +129,57 @@ export default function ChatWindow({
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  // Update sidebar content
+  useEffect(() => {
+    const sidebarContent = document.getElementById('chat-sidebar-content');
+    if (!sidebarContent) return;
+
+    const presenceDisplay = getPresenceDisplay();
+
+    sidebarContent.innerHTML = `
+      <div class="space-y-6">
+        <div class="text-center">
+          <div class="w-16 h-16 bg-indigo-600 rounded-full flex items-center justify-center mx-auto mb-3">
+            <span class="text-white text-xl font-semibold">
+              ${(otherUserPresence?.email || `User ${otherParticipantId.slice(-4)}`).charAt(0).toUpperCase()}
+            </span>
+          </div>
+          <h3 class="font-semibold text-gray-900 text-lg">
+            ${otherUserPresence?.email || `User ${otherParticipantId.slice(-4)}`}
+          </h3>
+          <div class="flex items-center justify-center gap-2 mt-2">
+            <div class="w-2.5 h-2.5 rounded-full ${presenceDisplay.dot}"></div>
+            <span class="text-sm ${presenceDisplay.color}">
+              ${presenceDisplay.text}
+            </span>
+          </div>
+        </div>
+
+        ${!conversation.isConnected ? `
+          <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+            <div class="text-sm text-gray-800 font-medium mb-1">Probation Period</div>
+            <div class="text-sm text-gray-600">${timeLeft} remaining</div>
+          </div>
+        ` : ''}
+
+        ${!conversation.isConnected ? `
+          <button 
+            id="end-chat-btn"
+            class="w-full px-4 py-3 bg-gray-600 text-white text-sm rounded-md hover:bg-gray-700 transition-colors font-medium"
+          >
+            End chat now
+          </button>
+        ` : ''}
+      </div>
+    `;
+
+    // Add event listener for end chat button
+    const endChatBtn = document.getElementById('end-chat-btn');
+    if (endChatBtn) {
+      endChatBtn.onclick = handleEndChat;
+    }
+  }, [otherUserPresence, timeLeft, conversation.isConnected, otherParticipantId]);
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -198,114 +256,72 @@ export default function ChatWindow({
     }
   };
 
-  const presenceDisplay = getPresenceDisplay();
-
   return (
-    <div className='bg-white rounded-lg shadow-md flex flex-col h-96'>
-      {/* Chat Header */}
-      <div className='p-4 border-b border-gray-200'>
-        <div className='flex items-center justify-between'>
-          <div>
-            <div className='flex items-center gap-2 mb-1'>
-              <h3 className='font-semibold text-gray-900'>
-                {otherUserPresence?.email ||
-                  `User ${otherParticipantId.slice(-4)}`}
-              </h3>
-              <div className='flex items-center gap-1'>
-                <div
-                  className={`w-2 h-2 rounded-full ${presenceDisplay.dot}`}
+    <div className='flex flex-col h-full bg-white'>
+      {/* Messages Container */}
+      <div className='flex-1 overflow-y-auto bg-gray-50'>
+        <div className='max-w-4xl mx-auto p-4 space-y-2'>
+          {messages.length === 0 ? (
+            <div className='text-center text-gray-500 py-12'>
+              <div className='text-lg mb-2'>No messages yet</div>
+              <div className='text-sm'>Start the conversation!</div>
+            </div>
+          ) : (
+            messages.map(message => {
+              const isOwnMessage = message.senderId === user?.userId;
+              return (
+                <MessageBox
+                  key={message.id}
+                  id={message.id}
+                  position={isOwnMessage ? 'right' : 'left'}
+                  type={'text'}
+                  title={''}
+                  titleColor={'transparent'}
+                  text={message.content}
+                  date={new Date(message.timestamp || Date.now())}
+                  focus={false}
+                  forwarded={false}
+                  replyButton={false}
+                  removeButton={false}
+                  status={isOwnMessage ? 'sent' : 'received'}
+                  notch={true}
+                  retracted={false}
                 />
-                <span className={`text-xs ${presenceDisplay.color}`}>
-                  {presenceDisplay.text}
-                </span>
-              </div>
-            </div>
-            {!conversation.isConnected && (
-              <div className='text-sm text-amber-600'>
-                Probation period: {timeLeft} remaining
-              </div>
-            )}
-          </div>
-
-          {!conversation.isConnected && (
-            <div className='flex space-x-2'>
-              <button
-                onClick={handleEndChat}
-                className='px-3 py-1 bg-red-600 text-white text-xs rounded-md hover:bg-red-700'
-              >
-                End chat now
-              </button>
-            </div>
+              );
+            })
           )}
+          <div ref={messagesEndRef} />
         </div>
-      </div>
-
-      {/* Messages */}
-      <div className='flex-1 overflow-y-auto p-4 space-y-3'>
-        {messages.length === 0 ? (
-          <div className='text-center text-gray-500 py-8'>
-            No messages yet. Start the conversation!
-          </div>
-        ) : (
-          messages.map(message => {
-            const isOwnMessage = message.senderId === user?.userId;
-            return (
-              <div
-                key={message.id}
-                className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'}`}
-              >
-                <div
-                  className={`max-w-xs lg:max-w-md px-3 py-2 rounded-lg ${
-                    isOwnMessage
-                      ? 'bg-indigo-600 text-white'
-                      : 'bg-gray-200 text-gray-900'
-                  }`}
-                >
-                  <div className='text-sm'>{message.content}</div>
-                  <div
-                    className={`text-xs mt-1 ${
-                      isOwnMessage ? 'text-indigo-200' : 'text-gray-500'
-                    }`}
-                  >
-                    {formatMessageTime(message.timestamp)}
-                  </div>
-                </div>
-              </div>
-            );
-          })
-        )}
-        <div ref={messagesEndRef} />
       </div>
 
       {/* Message Input */}
-      <form
-        onSubmit={handleSendMessage}
-        className='p-4 border-t border-gray-200'
-      >
-        <div className='flex space-x-2'>
-          <input
-            type='text'
-            value={newMessage}
-            onChange={e => setNewMessage(e.target.value)}
-            placeholder='Type your message...'
-            className='flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500'
-            disabled={loading}
-          />
-          <button
-            type='submit'
-            disabled={loading || !newMessage.trim()}
-            className='px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed'
-          >
-            Send
-          </button>
+      <div className='flex-shrink-0 bg-white border-t border-gray-200'>
+        <div className='max-w-4xl mx-auto p-4'>
+          <form onSubmit={handleSendMessage} className='flex gap-3'>
+            <input
+              type='text'
+              value={newMessage}
+              onChange={e => setNewMessage(e.target.value)}
+              placeholder='Type your message...'
+              className='flex-1 px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm bg-gray-50'
+            />
+            <button
+              type='submit'
+              className='px-6 py-3 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors text-sm font-medium'
+            >
+              Send
+            </button>
+          </form>
         </div>
-      </form>
+      </div>
 
-      {error ? (
-        <div className='p-3 bg-red-50 border-t border-red-200 text-red-600 text-sm'>
-          {error}
+      {error && (
+        <div className='flex-shrink-0 p-4 bg-red-50 border-t border-red-200 text-red-600 text-sm'>
+          <div className='max-w-4xl mx-auto'>
+            {error}
+          </div>
         </div>
-      ) : null}
+      )}
     </div>
   );
 }

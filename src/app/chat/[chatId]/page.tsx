@@ -75,7 +75,7 @@ export default function ChatPage({ params }: ChatPageProps) {
   if (loading) {
     return (
       <ProtectedRoute>
-        <div className='min-h-screen bg-gray-50 flex items-center justify-center'>
+        <div className='min-h-screen bg-white flex items-center justify-center'>
           <div className='text-center'>
             <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mx-auto mb-4' />
             <p className='text-gray-600'>Loading chat...</p>
@@ -88,7 +88,7 @@ export default function ChatPage({ params }: ChatPageProps) {
   if (error) {
     return (
       <ProtectedRoute>
-        <div className='min-h-screen bg-gray-50 flex items-center justify-center'>
+        <div className='min-h-screen bg-white flex items-center justify-center'>
           <div className='text-center'>
             <h1 className='text-2xl font-bold text-gray-900 mb-4'>
               Chat Not Found
@@ -116,10 +116,11 @@ export default function ChatPage({ params }: ChatPageProps) {
 
   return (
     <ProtectedRoute>
-      <div className='min-h-screen bg-gray-50'>
-        {/* Header */}
-        <div className='bg-white border-b border-gray-200'>
-          <div className='max-w-4xl mx-auto px-4 py-4'>
+      <div className='h-screen flex bg-white'>
+        {/* Left Sidebar */}
+        <div className='w-80 bg-gray-50 border-r border-gray-200 flex flex-col'>
+          {/* Sidebar Header */}
+          <div className='p-4 border-b border-gray-200 bg-white'>
             <div className='flex items-center gap-4'>
               <button
                 onClick={() => router.push('/dashboard')}
@@ -142,10 +143,15 @@ export default function ChatPage({ params }: ChatPageProps) {
               <h1 className='text-xl font-semibold text-gray-900'>Chat</h1>
             </div>
           </div>
+
+          {/* Chat Info - This will be populated by ChatWindow */}
+          <div id='chat-sidebar-content' className='flex-1 p-4'>
+            {/* Content will be injected here by ChatWindow component */}
+          </div>
         </div>
 
-        {/* Chat Interface */}
-        <div className='max-w-4xl mx-auto'>
+        {/* Main Chat Area */}
+        <div className='flex-1 flex flex-col min-h-0'>
           <ChatWindow
             conversation={conversation}
             onChatEnded={handleChatEnded}
