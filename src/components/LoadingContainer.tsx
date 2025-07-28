@@ -23,7 +23,7 @@ export default function LoadingContainer({
   return (
     <div className={`flex items-center justify-center w-full h-full ${className}`}>
       <div 
-        className={`${getSizeClasses()} border-gray-300 border-t-gray-500 rounded-full animate-spin`}
+        className={`${getSizeClasses()} border-gray-100 border-t-gray-300 rounded-full animate-spin`}
       />
     </div>
   );
