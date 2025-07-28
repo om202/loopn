@@ -89,7 +89,24 @@ export default function NotificationBell() {
         user.userId
       );
       if (result.data) {
-        setNotifications(result.data);
+        // Remove duplicates - keep only the latest notification per conversation for messages
+        const deduplicatedNotifications: Notification[] = [];
+        const seenConversations = new Set<string>();
+        
+        for (const notif of result.data) {
+          if (notif.type === 'message' && notif.data && 'conversationId' in notif.data) {
+            const conversationId = notif.data.conversationId;
+            if (!seenConversations.has(conversationId)) {
+              seenConversations.add(conversationId);
+              deduplicatedNotifications.push(notif);
+            }
+          } else {
+            // For non-message notifications, keep all
+            deduplicatedNotifications.push(notif);
+          }
+        }
+        
+        setNotifications(deduplicatedNotifications);
       } else if (result.error) {
         setError(result.error);
       }
@@ -148,48 +165,22 @@ export default function NotificationBell() {
 
         setChatRequests(requestsWithUsers);
 
-        // Convert chat requests to notifications and save to database
-        const chatNotifications: Notification[] = [];
-
-        // Handle database operations for new requests
-        if (!isInitialLoad.current) {
-          // Only create notifications for truly new requests (not existing ones)
-          const previousRequestIds = chatRequests.map(req => req.id);
-          const newRequests = requestsWithUsers.filter(
-            req => !previousRequestIds.includes(req.id)
-          );
-
-          if (newRequests.length > 0) {
-            const savePromises = newRequests.map(request => {
-              const title =
-                request.requesterEmail ||
-                `User ${request.requesterId.slice(-4)}`;
-              const content = 'wants to chat with you';
-
-              return notificationService.createNotification(
-                user.userId,
-                'chat_request',
-                title,
-                content,
-                request,
-                { chatRequestId: request.id }
-              );
-            });
-
-            // Wait for all database operations to complete
-            await Promise.all(savePromises);
-          }
-        }
-
-        // Create notifications for local state - only include requests that don't already have notifications
+        // Create notifications for local state - simple ID matching to prevent duplicates
         setNotifications(prevNotifications => {
-          const existingChatRequestIds = prevNotifications
-            .filter(notif => notif.type === 'chat_request')
-            .map(notif => notif.id);
+          const chatNotifications: Notification[] = [];
 
           for (const request of requestsWithUsers) {
-            // Skip if notification already exists
-            if (!existingChatRequestIds.includes(request.id)) {
+            // Check if notification for this chat request already exists
+            const existingNotification = prevNotifications.find(
+              notif => 
+                notif.type === 'chat_request' && 
+                (notif.id === request.id || 
+                 (notif.data && 'id' in notif.data && notif.data.id === request.id))
+            );
+
+
+
+            if (!existingNotification) {
               const title =
                 request.requesterEmail ||
                 `User ${request.requesterId.slice(-4)}`;
@@ -207,19 +198,8 @@ export default function NotificationBell() {
             }
           }
 
-          // Only add new notifications, preserve existing ones
-          const messageNotifications = prevNotifications.filter(
-            notif => notif.type === 'message'
-          );
-          const existingChatNotifications = prevNotifications.filter(
-            notif => notif.type === 'chat_request'
-          );
-
-          return [
-            ...messageNotifications,
-            ...existingChatNotifications,
-            ...chatNotifications,
-          ];
+          // Only add new notifications that don't already exist
+          return [...prevNotifications, ...chatNotifications];
         });
       },
       () => {
@@ -262,50 +242,27 @@ export default function NotificationBell() {
                 notif.data.conversationId === message.conversationId
             );
 
-            // Calculate new count (existing count + 1)
-            const currentCount =
-              existingConversationNotifications.length > 0
-                ? (
-                    existingConversationNotifications[0]
-                      .data as MessageNotificationData
-                  ).messageCount
-                : 0;
-            const newCount = currentCount + 1;
+            // If we already have a notification for this conversation, don't create a duplicate
+            if (existingConversationNotifications.length > 0) {
+              return prevNotifications;
+            }
 
             // Create notification data
             const title = senderEmail || `User ${message.senderId.slice(-4)}`;
-            const content =
-              newCount > 1
-                ? `${newCount} new messages: ${
-                    message.content.length > 30
-                      ? `${message.content.substring(0, 30)}...`
-                      : message.content
-                  }`
-                : message.content.length > 50
-                  ? `${message.content.substring(0, 50)}...`
-                  : message.content;
+            const content = message.content.length > 50
+              ? `${message.content.substring(0, 50)}...`
+              : message.content;
 
             const notificationData = {
               conversationId: message.conversationId,
               message,
               senderEmail: senderEmail || undefined,
-              messageCount: newCount,
+              messageCount: 1,
             };
-
-            // Remove all existing notifications for this conversation
-            const otherNotifications = prevNotifications.filter(
-              notif =>
-                !(
-                  notif.type === 'message' &&
-                  notif.data &&
-                  'conversationId' in notif.data &&
-                  notif.data.conversationId === message.conversationId
-                )
-            );
 
             // Create new notification for local state
             const messageNotification: Notification = {
-              id: `message-${message.conversationId}`, // Use conversation ID so we replace per conversation
+              id: `message-${message.conversationId}`,
               type: 'message',
               title,
               content,
@@ -314,27 +271,24 @@ export default function NotificationBell() {
               data: notificationData,
             };
 
-            // Save to database in background (don't await to avoid blocking UI)
-            notificationService
-              .deleteNotificationsForConversation(
+            // Clean up any existing database notifications for this conversation, then create new one
+            notificationService.deleteNotificationsForConversation(
+              user.userId,
+              message.conversationId
+            ).then(() => {
+              return notificationService.createNotification(
                 user.userId,
-                message.conversationId
-              )
-              .then(() => {
-                return notificationService.createNotification(
-                  user.userId,
-                  'message',
-                  title,
-                  content,
-                  notificationData,
-                  { conversationId: message.conversationId }
-                );
-              })
-              .catch(error => {
-                console.error('Error saving message notification:', error);
-              });
+                'message',
+                title,
+                content,
+                notificationData,
+                { conversationId: message.conversationId }
+              );
+            }).catch(error => {
+              console.error('Error managing message notification:', error);
+            });
 
-            return [messageNotification, ...otherNotifications];
+            return [messageNotification, ...prevNotifications];
           });
         }
       },
