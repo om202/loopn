@@ -1,7 +1,8 @@
 'use client';
 
 import { useAuthenticator } from '@aws-amplify/ui-react';
-import { Send } from 'lucide-react';
+import EmojiPicker from 'emoji-picker-react';
+import { Send, Smile } from 'lucide-react';
 import Image from 'next/image';
 import { useState, useEffect, useRef, useCallback } from 'react';
 
@@ -40,8 +41,10 @@ export default function ChatWindow({
   const [isInitializing, setIsInitializing] = useState(true);
   const [sendingConnectionRequest, setSendingConnectionRequest] =
     useState(false);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const emojiPickerRef = useRef<HTMLDivElement>(null);
   const { user } = useAuthenticator();
 
   // Get the other participant's ID
@@ -219,6 +222,14 @@ export default function ChatWindow({
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  // Auto-scroll to bottom when component finishes initializing
+  useEffect(() => {
+    if (!isInitializing && messages.length > 0) {
+      // Use immediate scroll for initial load, then smooth for subsequent updates
+      messagesEndRef.current?.scrollIntoView({ behavior: 'auto' });
+    }
+  }, [isInitializing, messages.length]);
+
   // Initialize all data before showing UI
   useEffect(() => {
     // If there's external loading or no conversation data, keep initializing
@@ -303,12 +314,70 @@ export default function ChatWindow({
     return otherUserPresence?.email || `User ${otherParticipantId.slice(-4)}`;
   };
 
+  // Check if message contains only emojis
+  const isEmojiOnly = (text: string) => {
+    if (!text.trim()) {
+      return false;
+    }
+    // Remove all emojis and check if anything remains
+    const withoutEmojis = text.replace(/[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu, '').trim();
+    return withoutEmojis === '';
+  };
+
+  // Render message content with larger emojis
+  const renderMessageContent = (content: string) => {
+    // Split content into parts (emojis and text)
+    const parts = content.split(/([\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}])/gu);
+    
+    return parts.map((part, index) => {
+      // Check if this part is an emoji
+      const isEmoji = /[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu.test(part);
+      
+             if (isEmoji) {
+         return (
+           <span key={index} className="text-lg mx-0.5 inline-block">
+             {part}
+           </span>
+         );
+       }
+       return part;
+    });
+  };
+
   // Auto-focus input when component is ready
   useEffect(() => {
     if (!isInitializing && !externalLoading && inputRef.current) {
       inputRef.current.focus();
     }
   }, [isInitializing, externalLoading]);
+
+  // Close emoji picker when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        emojiPickerRef.current &&
+        !emojiPickerRef.current.contains(event.target as Node)
+      ) {
+        setShowEmojiPicker(false);
+      }
+    };
+
+    if (showEmojiPicker) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }
+  }, [showEmojiPicker]);
+
+  const handleEmojiClick = (emojiData: { emoji: string }) => {
+    setNewMessage(prev => prev + emojiData.emoji);
+    setShowEmojiPicker(false);
+    // Re-focus input after emoji selection
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 100);
+  };
 
   // Show loading state while initializing or external loading
   if (isInitializing || externalLoading) {
@@ -440,32 +509,43 @@ export default function ChatWindow({
                 
                 // Show avatar only for first message in group or standalone messages
                 const showAvatar = !isOwnMessage && !isGroupedWithPrev;
+                const messageIsEmojiOnly = isEmojiOnly(message.content);
                 
                 return (
                   <div
                     key={message.id}
                     className={`flex ${marginTop} ${marginBottom} ${isOwnMessage ? 'justify-end' : 'justify-start'}`}
                                       >
-                      {showAvatar ? (
+                      {showAvatar && !messageIsEmojiOnly ? (
                         <UserAvatar
                           email={otherUserPresence?.email}
                           userId={otherParticipantId}
                           size='sm'
                           className='mr-3 flex-shrink-0'
                         />
-                      ) : !isOwnMessage ? (
+                      ) : !isOwnMessage && !messageIsEmojiOnly ? (
                         <div className='w-8 h-8 mr-3 flex-shrink-0' />
                       ) : null}
                     <div className="group relative">
-                      <div
-                        className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg border ${
-                          isOwnMessage
-                            ? 'bg-indigo-600 text-white border-indigo-600'
-                            : 'bg-white text-gray-900 border-gray-200'
-                        }`}
-                      >
-                        <p className='text-sm'>{message.content}</p>
-                      </div>
+                      {messageIsEmojiOnly ? (
+                        // Emoji-only messages without container
+                        <div className='text-4xl'>
+                          {message.content}
+                        </div>
+                                              ) : (
+                          // Regular text messages with container
+                          <div
+                            className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg border ${
+                              isOwnMessage
+                                ? 'bg-indigo-600 text-white border-indigo-600'
+                                : 'bg-white text-gray-900 border-gray-200'
+                            }`}
+                          >
+                            <p className='text-sm leading-relaxed'>
+                              {renderMessageContent(message.content)}
+                            </p>
+                          </div>
+                        )}
                       {/* Timestamp tooltip - shows on hover */}
                       <div className={`absolute z-10 px-2 py-1 text-xs text-white bg-gray-800 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap ${
                         isOwnMessage 
@@ -484,11 +564,30 @@ export default function ChatWindow({
         </div>
       </div>
 
-      {/* Message Input - Custom implementation with send button */}
+      {/* Emoji Picker - Separate container */}
+      {showEmojiPicker === true && (
+        <div className='flex-shrink-0 bg-white border-t border-gray-200 p-4'>
+          <div className='max-w-4xl mx-auto flex justify-end'>
+            <div ref={emojiPickerRef}>
+              <EmojiPicker
+                onEmojiClick={handleEmojiClick}
+                autoFocusSearch={false}
+                width={350}
+                height={400}
+                previewConfig={{
+                  showPreview: false
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Message Input - Clean implementation with send button */}
       <div className='flex-shrink-0 bg-white border-t border-gray-200 p-4'>
         <div className='max-w-4xl mx-auto'>
           <div className='flex gap-3 items-end'>
-            <div className='flex-1'>
+            <div className='flex-1 relative'>
               <input
                 ref={inputRef}
                 type='text'
@@ -503,8 +602,14 @@ export default function ChatWindow({
                     handleSendMessage();
                   }
                 }}
-                className='w-full px-4 py-3 border border-gray-200 rounded-full focus:outline-none text-sm bg-gray-100'
+                className='w-full px-4 py-3 pr-14 border border-gray-200 rounded-full focus:outline-none text-sm bg-gray-100'
               />
+              <button
+                onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                className='absolute right-1 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors p-2 rounded-full hover:bg-gray-200'
+              >
+                <Smile className='w-7 h-7' />
+              </button>
             </div>
             <button
               onClick={handleSendMessage}
