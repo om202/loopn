@@ -161,6 +161,35 @@ const schema = a.schema({
       // TODO: Later add index for AI matching:
       // index('isAvailableForChat').sortKeys(['lastSeen'])
     ]),
+
+  // Notification system for persistent notification storage
+  Notification: a
+    .model({
+      id: a.id().required(),
+      userId: a.string().required(), // User who should receive this notification
+      type: a.enum(['chat_request', 'message', 'connection', 'system']),
+      title: a.string().required(),
+      content: a.string().required(),
+      timestamp: a.datetime().required(),
+      isRead: a.boolean().default(false),
+      readAt: a.datetime(),
+      // Additional data stored as JSON string (for flexibility)
+      data: a.json(), // Will store ChatRequestWithUser, MessageNotificationData, etc.
+      // Optional: reference to related entities
+      chatRequestId: a.id(), // If type is 'chat_request'
+      conversationId: a.id(), // If type is 'message' or 'connection'
+      connectionRequestId: a.id(), // If type is 'connection'
+      // TTL field - notifications expire after 30 days
+      expiresAt: a.datetime(),
+    })
+    .authorization(allow => [
+      // All authenticated users can access - we handle filtering in the service layer
+      allow.authenticated()
+    ])
+    .secondaryIndexes(index => [
+      // Get all notifications for a user, sorted by time (newest first)
+      index('userId').sortKeys(['timestamp']),
+    ]),
 });
 
 export type Schema = ClientSchema<typeof schema>;
