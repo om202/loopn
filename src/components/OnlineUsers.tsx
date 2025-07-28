@@ -244,9 +244,6 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
     return (
       <div className='bg-white rounded-xl shadow-sm border border-gray-100 p-8'>
         <div className='text-center text-gray-500'>
-          <div className='w-12 h-12 border-2 border-gray-300 rounded-full mx-auto mb-3 flex items-center justify-center'>
-            <div className='w-6 h-6 border border-gray-300 rounded-full' />
-          </div>
           <p>No one online right now</p>
         </div>
       </div>
@@ -263,10 +260,10 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
 
       <div className='p-4 space-y-3'>
         {onlineUsers.map(userPresence => (
-          <div
+          <button
             key={userPresence.userId}
             onClick={() => handleChatAction(userPresence.userId)}
-            className='flex items-center justify-between p-3 rounded-lg border border-gray-100 hover:border-indigo-200 hover:bg-indigo-50/30 transition-all cursor-pointer'
+            className='flex items-center justify-between p-3 rounded-lg border border-gray-100 hover:border-indigo-200 hover:bg-indigo-50/30 transition-all cursor-pointer w-full text-left'
           >
             <div className='flex items-center gap-3'>
               <UserAvatar
@@ -292,14 +289,13 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
             </div>
 
             <div className='text-sm text-gray-500 font-medium'>
-              {pendingRequests.has(userPresence.userId) 
+              {pendingRequests.has(userPresence.userId)
                 ? 'Pending Chat Request'
                 : existingConversations.has(userPresence.userId)
                   ? 'Chat Now'
-                  : 'Send Chat Request'
-              }
+                  : 'Send Chat Request'}
             </div>
-          </div>
+          </button>
         ))}
       </div>
     </div>

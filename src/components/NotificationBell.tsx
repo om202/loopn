@@ -61,7 +61,7 @@ export default function NotificationBell() {
   const [dialogConversationId, setDialogConversationId] = useState<
     string | null
   >(null);
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const isInitialLoad = useRef(true);
   const { user } = useAuthenticator();
   const router = useRouter();
   const pathname = usePathname();
@@ -99,9 +99,9 @@ export default function NotificationBell() {
             };
           })
         );
-        
+
         // Check for new requests to show dialog (only after initial load)
-        if (!isInitialLoad) {
+        if (!isInitialLoad.current) {
           const previousRequestIds = chatRequests.map(req => req.id);
           const newRequests = requestsWithUsers.filter(
             req => !previousRequestIds.includes(req.id)
@@ -122,7 +122,7 @@ export default function NotificationBell() {
           }
         } else {
           // Mark initial load as complete
-          setIsInitialLoad(false);
+          isInitialLoad.current = false;
         }
 
         setChatRequests(requestsWithUsers);
