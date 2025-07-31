@@ -54,7 +54,7 @@ export default function Navbar() {
               className='flex items-center space-x-3 hover:opacity-80 transition-opacity'
             >
               <Image src='/loopn.svg' alt='Loopn' width={32} height={32} />
-              <h1 className='text-2xl font-semibold text-gray-800'>Loopn</h1>
+              <h1 className='text-xl sm:text-2xl font-semibold text-gray-800'>Loopn</h1>
             </Link>
           </div>
 
@@ -86,15 +86,15 @@ export default function Navbar() {
                   <div className='py-1' role='none'>
                     <div className='flex flex-col items-center px-4 py-5 border-b border-gray-200'>
                       <UserAvatar email={getUserEmail()} size='lg' />
-                      <p className='mt-3 text-base font-medium text-gray-800 truncate'>
+                      <p className='mt-3 text-sm sm:text-base font-medium text-gray-800 truncate no-email-detection'>
                         {getUserEmail()}
                       </p>
-                      <p className='text-sm text-gray-500'>Welcome back</p>
+                      <p className='text-xs sm:text-sm text-gray-500'>Welcome back</p>
                     </div>
                     <div className='p-2'>
                       <button
                         onClick={handleSignOut}
-                        className='w-full text-left rounded-lg px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-3'
+                        className='w-full text-left rounded-lg px-4 py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-3'
                         role='menuitem'
                         tabIndex={-1}
                         id='user-menu-item-2'

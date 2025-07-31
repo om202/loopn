@@ -627,13 +627,13 @@ export default function NotificationBell() {
         {/* Dropdown Panel */}
         {isOpen && (
           <div
-            className='origin-top-right absolute right-0 mt-2 w-96 rounded-2xl shadow-lg bg-white border border-gray-200 focus:outline-none z-20'
+            className='origin-top-right absolute right-0 mt-2 w-80 sm:w-96 max-w-[calc(100vw-2rem)] rounded-2xl shadow-lg bg-white border border-gray-200 focus:outline-none z-20'
             role='menu'
             aria-orientation='vertical'
             aria-labelledby='user-menu-button'
           >
-            <div className='p-4 border-b border-gray-200'>
-              <h3 className='text-lg font-semibold text-gray-800'>
+            <div className='p-3 sm:p-4 border-b border-gray-200'>
+              <h3 className='text-base sm:text-lg font-semibold text-gray-800'>
                 Notifications
               </h3>
             </div>
@@ -641,13 +641,13 @@ export default function NotificationBell() {
             {/* Content */}
             <div className='max-h-[60vh] overflow-y-auto'>
               {error && (
-                <div className='p-4 text-red-700 bg-red-50 m-4 rounded-2xl'>
+                <div className='p-3 sm:p-4 text-red-700 bg-red-50 m-3 sm:m-4 rounded-2xl'>
                   {error}
                 </div>
               )}
 
               {getFilteredNotifications().length === 0 ? (
-                <div className='py-16 text-center text-gray-500'>
+                <div className='py-12 sm:py-16 text-center text-gray-500'>
                   <div className='w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center'>
                     <svg
                       className='w-8 h-8 text-gray-400'
@@ -679,7 +679,7 @@ export default function NotificationBell() {
                     return (
                       <Component
                         key={notification.id}
-                        className='w-full text-left p-4 hover:bg-gray-50 transition-colors'
+                        className='w-full text-left p-3 sm:p-4 hover:bg-gray-50 transition-colors'
                         {...(isClickable && {
                           onClick: () => handleNotificationClick(notification),
                         })}
@@ -707,7 +707,7 @@ export default function NotificationBell() {
 
                           <div className='flex-1 min-w-0'>
                             <div className='flex items-start justify-between mb-1'>
-                              <h4 className='text-sm font-semibold text-gray-800 truncate pr-2'>
+                              <h4 className='text-sm font-semibold text-gray-800 truncate pr-2 no-email-detection'>
                                 {notification.title}
                               </h4>
                               <span className='text-xs text-gray-500 flex-shrink-0 font-medium'>

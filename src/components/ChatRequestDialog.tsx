@@ -96,7 +96,7 @@ function ConnectedDialog({
               Connected!
             </h3>
 
-            <div className='text-lg font-medium text-gray-900 mb-3'>
+            <div className='text-lg font-medium text-gray-900 mb-3 no-email-detection'>
               {chatRequest.requesterEmail ||
                 `User ${chatRequest.requesterId.slice(-4)}`}
             </div>
@@ -275,7 +275,7 @@ function NewRequestDialog({
                 size='md'
               />
               <div className='flex-1 min-w-0'>
-                <div className='text-base font-medium text-gray-900 truncate'>
+                <div className='text-base font-medium text-gray-900 truncate no-email-detection'>
                   {chatRequest.requesterEmail ||
                     `User ${chatRequest.requesterId.slice(-4)}`}
                 </div>

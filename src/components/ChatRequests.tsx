@@ -165,7 +165,7 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
                   size='md'
                 />
                 <div>
-                  <div className='font-medium text-gray-900 text-sm'>
+                  <div className='font-medium text-gray-900 text-sm no-email-detection'>
                     {request.requesterEmail ||
                       `User ${request.requesterId.slice(-4)}`}
                   </div>

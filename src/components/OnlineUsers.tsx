@@ -333,9 +333,9 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
 
   if (error) {
     return (
-      <div className='p-6 text-red-600 bg-red-50 rounded-2xl border border-red-200 text-center'>
-        <div className='text-sm font-medium mb-1'>Error</div>
-        <div className='text-sm'>{error}</div>
+      <div className='p-4 sm:p-6 text-red-600 bg-red-50 rounded-2xl border border-red-200 text-center'>
+        <div className='text-xs sm:text-sm font-medium mb-1'>Error</div>
+        <div className='text-xs sm:text-sm'>{error}</div>
       </div>
     );
   }
@@ -346,9 +346,9 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
 
   if (allUsers.length === 0) {
     return (
-      <div className='bg-white rounded-2xl border border-gray-200 p-12'>
+      <div className='bg-white rounded-2xl border border-gray-200 p-8 sm:p-12'>
         <div className='text-center text-gray-500'>
-          <p>No users or conversations</p>
+          <p className='text-sm sm:text-base'>No users or conversations</p>
         </div>
       </div>
     );
@@ -361,17 +361,17 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   return (
     <div>
       <div className='mb-8'>
-        <h2 className='text-2xl font-medium text-gray-900 tracking-tight'>
+        <h2 className='text-xl sm:text-2xl font-medium text-gray-900 tracking-tight'>
           {getTitle()}
         </h2>
       </div>
 
-      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
+      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6'>
         {allUsers.map(userPresence => (
           <div
             key={userPresence.userId}
             onClick={() => handleChatAction(userPresence.userId)}
-            className='bg-white rounded-2xl border border-gray-200 p-6 cursor-pointer group hover:shadow-sm transition-shadow'
+            className='bg-white rounded-2xl border border-gray-200 p-4 sm:p-6 cursor-pointer group hover:shadow-sm transition-shadow'
           >
             <div className='flex flex-col items-center text-center'>
               <div className='mb-4'>
@@ -388,31 +388,31 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
                 />
               </div>
 
-              <div className='mb-4 min-h-[3rem] flex flex-col justify-center'>
-                <div className='font-medium text-gray-900 text-base mb-1 line-clamp-2'>
+              <div className='mb-3 sm:mb-4 min-h-[2.5rem] sm:min-h-[3rem] flex flex-col justify-center'>
+                <div className='font-medium text-gray-900 text-sm sm:text-base mb-1 line-clamp-2 no-email-detection'>
                   {getDisplayName(userPresence)}
                 </div>
-                <div className='text-sm text-gray-600 text-center'>
+                <div className='text-xs sm:text-sm text-gray-600 text-center'>
                   {onlineUsers.some(ou => ou.userId === userPresence.userId)
                     ? 'Online now'
                     : 'Offline'}
                 </div>
               </div>
 
-              <button className='w-full px-4 py-2 text-sm font-medium rounded-2xl border transition-colors bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100 flex items-center justify-center gap-2'>
+              <button className='w-full px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-2xl border transition-colors bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100 flex items-center justify-center gap-1 sm:gap-2'>
                 {pendingRequests.has(userPresence.userId) ? (
                   <>
-                    <Clock className='w-4 h-4' />
+                    <Clock className='w-3 h-3 sm:w-4 sm:h-4' />
                     Pending
                   </>
                 ) : existingConversations.has(userPresence.userId) ? (
                   <>
-                    <MessageCircle className='w-4 h-4' />
+                    <MessageCircle className='w-3 h-3 sm:w-4 sm:h-4' />
                     Open Chat
                   </>
                 ) : (
                   <>
-                    <CheckCircle2 className='w-4 h-4' />
+                    <CheckCircle2 className='w-3 h-3 sm:w-4 sm:h-4' />
                     Connect
                   </>
                 )}

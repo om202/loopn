@@ -12,6 +12,10 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: 'Loopn App',
   description: 'Full-stack app with Amplify authentication',
+  formatDetection: {
+    telephone: false,
+    email: false,
+  },
 };
 
 export default function RootLayout({
@@ -21,6 +25,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
+      <head>
+        <meta name="format-detection" content="telephone=no,email=no" />
+      </head>
       <body className={`${inter.variable} antialiased`}>
         <AmplifyProvider>{children}</AmplifyProvider>
       </body>

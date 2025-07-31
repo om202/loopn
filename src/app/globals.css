@@ -29,3 +29,29 @@ a:hover,
 .rce-mbox-text {
   box-shadow: none !important;
 }
+
+/* Prevent mobile browsers from auto-detecting and underlining email addresses */
+.no-email-detection {
+  text-decoration: none !important;
+  -webkit-text-decoration: none !important;
+  -webkit-touch-callout: none;
+  pointer-events: none;
+}
+
+.no-email-detection * {
+  text-decoration: none !important;
+  color: inherit !important;
+  pointer-events: none;
+}
+
+/* Override any auto-detected links within no-email-detection elements */
+.no-email-detection a,
+.no-email-detection a:link,
+.no-email-detection a:visited,
+.no-email-detection a:hover,
+.no-email-detection a:active {
+  text-decoration: none !important;
+  color: inherit !important;
+  cursor: default !important;
+  pointer-events: none !important;
+}
