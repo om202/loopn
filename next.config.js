@@ -1,6 +1,5 @@
-import type { NextConfig } from 'next';
-
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   async rewrites() {
     return [
       // Short chat URLs: /c/abc123 -> /chat/6d3b1cf9-a279-46d0-a446-fd338ae11351
@@ -12,4 +11,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+module.exports = nextConfig;

@@ -2,7 +2,7 @@
 
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { useRouter } from 'next/navigation';
-import { useState, useEffect, use, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import type { Schema } from '../../../../amplify/data/resource';
 import ChatWindow from '../../../components/chat/ChatWindow';
@@ -13,13 +13,12 @@ import { chatService } from '../../../services/chat.service';
 type Conversation = Schema['Conversation']['type'];
 
 interface ChatPageProps {
-  params: Promise<{
+  params: {
     chatId: string;
-  }>;
+  };
 }
 
 export default function ChatPage({ params }: ChatPageProps) {
-  const resolvedParams = use(params);
   const [conversation, setConversation] = useState<Conversation | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -31,7 +30,7 @@ export default function ChatPage({ params }: ChatPageProps) {
       setLoading(true);
 
       // Handle both short IDs and full UUIDs
-      const conversationId = getConversationIdFromParam(resolvedParams.chatId);
+      const conversationId = getConversationIdFromParam(params.chatId);
 
       if (!conversationId) {
         setError('Invalid chat ID format');
@@ -66,7 +65,7 @@ export default function ChatPage({ params }: ChatPageProps) {
     } finally {
       setLoading(false);
     }
-  }, [resolvedParams.chatId, user?.userId]);
+  }, [params.chatId, user?.userId]);
 
   useEffect(() => {
     if (!user) {
@@ -111,7 +110,7 @@ export default function ChatPage({ params }: ChatPageProps) {
           <ChatWindow
             conversation={
               conversation || {
-                id: resolvedParams.chatId,
+                id: params.chatId,
                 participant1Id: '',
                 participant2Id: '',
                 isConnected: false,
