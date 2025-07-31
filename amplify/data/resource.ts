@@ -24,175 +24,176 @@ Models:
 // - Anonymous profile display (job title, field only)
 =========================================================================*/
 
-const schema = a.schema({
-  // Request to start chatting with someone (Step 1)
-  ChatRequest: a
-    .model({
-      id: a.id().required(),
-      requesterId: a.string().required(), // User who wants to start chatting
-      receiverId: a.string().required(), // Professional being requested
-      status: a.enum(['PENDING', 'ACCEPTED', 'REJECTED', 'EXPIRED']),
-      requestedAt: a.datetime(),
-      respondedAt: a.datetime(),
-      // Chat requests expire after 24 hours if no response
-      expiresAt: a.datetime(), // TTL field for DynamoDB
-      // TODO: Later add requestMessage field for custom chat request message
-    })
-    .authorization(allow => [allow.authenticated()])
-    .secondaryIndexes(index => [
-      // Find all chat requests for a user (both sent and received)
-      index('requesterId').sortKeys(['requestedAt']),
-      index('receiverId').sortKeys(['requestedAt']),
-    ]),
+const schema = a
+  .schema({
+    // Request to start chatting with someone (Step 1)
+    ChatRequest: a
+      .model({
+        id: a.id().required(),
+        requesterId: a.string().required(), // User who wants to start chatting
+        receiverId: a.string().required(), // Professional being requested
+        status: a.enum(['PENDING', 'ACCEPTED', 'REJECTED', 'EXPIRED']),
+        requestedAt: a.datetime(),
+        respondedAt: a.datetime(),
+        // Chat requests expire after 24 hours if no response
+        expiresAt: a.datetime(), // TTL field for DynamoDB
+        // TODO: Later add requestMessage field for custom chat request message
+      })
+      .authorization(allow => [allow.authenticated()])
+      .secondaryIndexes(index => [
+        // Find all chat requests for a user (both sent and received)
+        index('requesterId').sortKeys(['requestedAt']),
+        index('receiverId').sortKeys(['requestedAt']),
+      ]),
 
-  // Request to connect permanently (Step 2 - during chat)
-  UserConnection: a
-    .model({
-      id: a.id().required(),
-      requesterId: a.string().required(), // User who wants to connect
-      receiverId: a.string().required(), // User who received connection request
-      conversationId: a.id().required(), // Which conversation this connection is for
-      status: a.enum(['PENDING', 'ACCEPTED', 'REJECTED']),
-      requestedAt: a.datetime(),
-      respondedAt: a.datetime(),
-      // Connection requests are tied to the conversation's 7-day period
-      expiresAt: a.datetime(), // TTL field - expires with the conversation
-    })
-    .authorization(allow => [allow.authenticated()])
-    .secondaryIndexes(index => [
-      index('requesterId').sortKeys(['requestedAt']),
-      index('receiverId').sortKeys(['requestedAt']),
-      index('conversationId'), // Find connection request for a specific conversation
-    ]),
+    // Request to connect permanently (Step 2 - during chat)
+    UserConnection: a
+      .model({
+        id: a.id().required(),
+        requesterId: a.string().required(), // User who wants to connect
+        receiverId: a.string().required(), // User who received connection request
+        conversationId: a.id().required(), // Which conversation this connection is for
+        status: a.enum(['PENDING', 'ACCEPTED', 'REJECTED']),
+        requestedAt: a.datetime(),
+        respondedAt: a.datetime(),
+        // Connection requests are tied to the conversation's 7-day period
+        expiresAt: a.datetime(), // TTL field - expires with the conversation
+      })
+      .authorization(allow => [allow.authenticated()])
+      .secondaryIndexes(index => [
+        index('requesterId').sortKeys(['requestedAt']),
+        index('receiverId').sortKeys(['requestedAt']),
+        index('conversationId'), // Find connection request for a specific conversation
+      ]),
 
-  // Conversation between two users
-  Conversation: a
-    .model({
-      id: a.id().required(),
-      // The two participants in the conversation
-      participant1Id: a.string().required(),
-      participant2Id: a.string().required(),
-      // Connection status affects data retention
-      isConnected: a.boolean().default(false), // Based on UserConnection acceptance
-      // Conversation metadata
-      lastMessageAt: a.datetime(),
-      lastMessageContent: a.string(), // Preview of last message
-      lastMessageSenderId: a.string(), // Who sent the last message
-      createdAt: a.datetime(),
-      updatedAt: a.datetime(),
-      // TTL field - delete unconnected conversations after 7 days
-      expiresAt: a.datetime(), // Only set if isConnected = false
-      // Enhanced probation period management
-      probationEndsAt: a.datetime(), // When the 7-day probation period ends (for UI countdown)
-      chatStatus: a.enum(['ACTIVE', 'PROBATION', 'ENDED']),
-      // Track who ended the chat (for different UI behavior)
-      endedByUserId: a.string(), // Optional: who clicked "End chat now"
-      endedAt: a.datetime(), // When chat was manually ended
-      // Multi-user authorization: both participants can access
-      participants: a.string().array(),
-    })
-    .authorization(allow => [
-      // Allow both participants to access the conversation
-      allow.ownersDefinedIn('participants'),
-    ])
-    .secondaryIndexes(index => [
-      // Find conversations for a specific user, sorted by last activity
-      index('participant1Id').sortKeys(['lastMessageAt']),
-      index('participant2Id').sortKeys(['lastMessageAt']),
-    ]),
+    // Conversation between two users
+    Conversation: a
+      .model({
+        id: a.id().required(),
+        // The two participants in the conversation
+        participant1Id: a.string().required(),
+        participant2Id: a.string().required(),
+        // Connection status affects data retention
+        isConnected: a.boolean().default(false), // Based on UserConnection acceptance
+        // Conversation metadata
+        lastMessageAt: a.datetime(),
+        lastMessageContent: a.string(), // Preview of last message
+        lastMessageSenderId: a.string(), // Who sent the last message
+        createdAt: a.datetime(),
+        updatedAt: a.datetime(),
+        // TTL field - delete unconnected conversations after 7 days
+        expiresAt: a.datetime(), // Only set if isConnected = false
+        // Enhanced probation period management
+        probationEndsAt: a.datetime(), // When the 7-day probation period ends (for UI countdown)
+        chatStatus: a.enum(['ACTIVE', 'PROBATION', 'ENDED']),
+        // Track who ended the chat (for different UI behavior)
+        endedByUserId: a.string(), // Optional: who clicked "End chat now"
+        endedAt: a.datetime(), // When chat was manually ended
+        // Multi-user authorization: both participants can access
+        participants: a.string().array(),
+      })
+      .authorization(allow => [
+        // Allow both participants to access the conversation
+        allow.ownersDefinedIn('participants'),
+      ])
+      .secondaryIndexes(index => [
+        // Find conversations for a specific user, sorted by last activity
+        index('participant1Id').sortKeys(['lastMessageAt']),
+        index('participant2Id').sortKeys(['lastMessageAt']),
+      ]),
 
-  // Individual messages within conversations
-  Message: a
-    .model({
-      id: a.id().required(),
-      conversationId: a.id().required(),
-      senderId: a.string().required(),
-      receiverId: a.string().required(),
-      content: a.string().required(),
-      messageType: a.enum(['TEXT', 'SYSTEM']), // SYSTEM for "User A wants to connect" notifications
-      timestamp: a.datetime(),
-      // For message ordering (timestamp + random suffix for uniqueness)
-      sortKey: a.string().required(),
-      // Message status
-      isRead: a.boolean().default(false),
-      readAt: a.datetime(),
-      // Optional: for message editing/deleting
-      isEdited: a.boolean().default(false),
-      editedAt: a.datetime(),
-      isDeleted: a.boolean().default(false),
-      deletedAt: a.datetime(),
-      // Reply functionality
-      replyToMessageId: a.id(),
-      // TTL field - inherits from conversation's TTL if unconnected
-      expiresAt: a.datetime(),
-      // Multi-user authorization: both sender and receiver can access
-      participants: a.string().array(),
-    })
-    .authorization(allow => [
-      // Allow both participants (sender and receiver) to access the message
-      allow.ownersDefinedIn('participants'),
-    ])
-    .secondaryIndexes(index => [
-      // Get messages for a conversation, ordered by time
-      index('conversationId').sortKeys(['sortKey']),
-      // Get messages sent by a user
-      index('senderId').sortKeys(['timestamp']),
-    ]),
+    // Individual messages within conversations
+    Message: a
+      .model({
+        id: a.id().required(),
+        conversationId: a.id().required(),
+        senderId: a.string().required(),
+        receiverId: a.string().required(),
+        content: a.string().required(),
+        messageType: a.enum(['TEXT', 'SYSTEM']), // SYSTEM for "User A wants to connect" notifications
+        timestamp: a.datetime(),
+        // For message ordering (timestamp + random suffix for uniqueness)
+        sortKey: a.string().required(),
+        // Message status
+        isRead: a.boolean().default(false),
+        readAt: a.datetime(),
+        // Optional: for message editing/deleting
+        isEdited: a.boolean().default(false),
+        editedAt: a.datetime(),
+        isDeleted: a.boolean().default(false),
+        deletedAt: a.datetime(),
+        // Reply functionality
+        replyToMessageId: a.id(),
+        // TTL field - inherits from conversation's TTL if unconnected
+        expiresAt: a.datetime(),
+        // Multi-user authorization: both sender and receiver can access
+        participants: a.string().array(),
+      })
+      .authorization(allow => [
+        // Allow both participants (sender and receiver) to access the message
+        allow.ownersDefinedIn('participants'),
+      ])
+      .secondaryIndexes(index => [
+        // Get messages for a conversation, ordered by time
+        index('conversationId').sortKeys(['sortKey']),
+        // Get messages sent by a user
+        index('senderId').sortKeys(['timestamp']),
+      ]),
 
-  // User online presence - simplified status
-  UserPresence: a
-    .model({
-      userId: a.string().required(),
-      email: a.string(), // Made nullable to handle existing records
-      isOnline: a.boolean().default(false),
-      lastSeen: a.datetime(),
-      status: a.enum(['ONLINE', 'OFFLINE', 'BUSY']),
-      // For heartbeat mechanism
-      lastHeartbeat: a.datetime(),
-      // TODO: Later add fields for AI matching:
-      // - jobTitle: a.string()
-      // - field: a.string()
-      // - aiGeneratedDescription: a.string()
-      // - isAvailableForChat: a.boolean()
-    })
-    .identifier(['userId'])
-    .authorization(allow => [allow.authenticated()])
-    .secondaryIndexes(index => [
-      index('status'),
-      // TODO: Later add index for AI matching:
-      // index('isAvailableForChat').sortKeys(['lastSeen'])
-    ]),
+    // User online presence - simplified status
+    UserPresence: a
+      .model({
+        userId: a.string().required(),
+        email: a.string(), // Made nullable to handle existing records
+        isOnline: a.boolean().default(false),
+        lastSeen: a.datetime(),
+        status: a.enum(['ONLINE', 'OFFLINE', 'BUSY']),
+        // For heartbeat mechanism
+        lastHeartbeat: a.datetime(),
+        // TODO: Later add fields for AI matching:
+        // - jobTitle: a.string()
+        // - field: a.string()
+        // - aiGeneratedDescription: a.string()
+        // - isAvailableForChat: a.boolean()
+      })
+      .identifier(['userId'])
+      .authorization(allow => [allow.authenticated()])
+      .secondaryIndexes(index => [
+        index('status'),
+        // TODO: Later add index for AI matching:
+        // index('isAvailableForChat').sortKeys(['lastSeen'])
+      ]),
 
-  // Notification system for persistent notification storage
-  Notification: a
-    .model({
-      id: a.id().required(),
-      userId: a.string().required(), // User who should receive this notification
-      type: a.enum(['chat_request', 'message', 'connection', 'system']),
-      title: a.string().required(),
-      content: a.string().required(),
-      timestamp: a.datetime().required(),
-      isRead: a.boolean().default(false),
-      readAt: a.datetime(),
-      // Additional data stored as JSON string (for flexibility)
-      data: a.json(), // Will store ChatRequestWithUser, MessageNotificationData, etc.
-      // Optional: reference to related entities
-      chatRequestId: a.id(), // If type is 'chat_request'
-      conversationId: a.id(), // If type is 'message' or 'connection'
-      connectionRequestId: a.id(), // If type is 'connection'
-      // TTL field - notifications expire after 30 days
-      expiresAt: a.datetime(),
-    })
-    .authorization(allow => [
-      // All authenticated users can access - we handle filtering in the service layer
-      allow.authenticated(),
-    ])
-    .secondaryIndexes(index => [
-      // Get all notifications for a user, sorted by time (newest first)
-      index('userId').sortKeys(['timestamp']),
-    ]),
-})
-.authorization(allow => [allow.resource(presenceCleanup)]);
+    // Notification system for persistent notification storage
+    Notification: a
+      .model({
+        id: a.id().required(),
+        userId: a.string().required(), // User who should receive this notification
+        type: a.enum(['chat_request', 'message', 'connection', 'system']),
+        title: a.string().required(),
+        content: a.string().required(),
+        timestamp: a.datetime().required(),
+        isRead: a.boolean().default(false),
+        readAt: a.datetime(),
+        // Additional data stored as JSON string (for flexibility)
+        data: a.json(), // Will store ChatRequestWithUser, MessageNotificationData, etc.
+        // Optional: reference to related entities
+        chatRequestId: a.id(), // If type is 'chat_request'
+        conversationId: a.id(), // If type is 'message' or 'connection'
+        connectionRequestId: a.id(), // If type is 'connection'
+        // TTL field - notifications expire after 30 days
+        expiresAt: a.datetime(),
+      })
+      .authorization(allow => [
+        // All authenticated users can access - we handle filtering in the service layer
+        allow.authenticated(),
+      ])
+      .secondaryIndexes(index => [
+        // Get all notifications for a user, sorted by time (newest first)
+        index('userId').sortKeys(['timestamp']),
+      ]),
+  })
+  .authorization(allow => [allow.resource(presenceCleanup)]);
 
 export type Schema = ClientSchema<typeof schema>;
 

@@ -65,7 +65,6 @@ class SimplePresenceManager {
         this.currentUser.userId,
         this.currentUser.email
       );
-
     } catch (error) {
       console.error('Failed to set user offline:', error);
     }
@@ -81,7 +80,9 @@ class SimplePresenceManager {
     if (!this.isSigningOut) {
       userService
         .setUserOnline(this.currentUser.userId, this.currentUser.email)
-        .catch(error => console.error('Failed to set user online during setup:', error));
+        .catch(error =>
+          console.error('Failed to set user online during setup:', error)
+        );
     }
 
     // Listen to AppSync connection state changes
@@ -120,7 +121,10 @@ class SimplePresenceManager {
               userService
                 .setUserOffline(this.currentUser.userId, this.currentUser.email)
                 .catch(error =>
-                  console.error('Failed to set user offline on disconnect:', error)
+                  console.error(
+                    'Failed to set user offline on disconnect:',
+                    error
+                  )
                 );
             }
             break;
@@ -163,7 +167,10 @@ class SimplePresenceManager {
           userService
             .setUserOnline(this.currentUser.userId, this.currentUser.email)
             .catch(error =>
-              console.error('Failed to set user online after visibility change:', error)
+              console.error(
+                'Failed to set user online after visibility change:',
+                error
+              )
             );
         }
       }
@@ -183,12 +190,11 @@ class SimplePresenceManager {
     const handlePageHide = () => {
       if (this.currentUser && !this.isSigningOut) {
         // Best effort attempt to set offline
-        userService.setUserOffline(
-          this.currentUser.userId,
-          this.currentUser.email
-        ).catch(() => {
-          // Ignore errors - server timeout will handle it
-        });
+        userService
+          .setUserOffline(this.currentUser.userId, this.currentUser.email)
+          .catch(() => {
+            // Ignore errors - server timeout will handle it
+          });
       }
     };
 
@@ -204,12 +210,11 @@ class SimplePresenceManager {
     this.heartbeatInterval = setInterval(() => {
       if (this.currentUser && !this.isSigningOut && !document.hidden) {
         // Send heartbeat - updates lastSeen timestamp
-        userService.setUserOnline(
-          this.currentUser.userId,
-          this.currentUser.email
-        ).catch(error => {
-          console.error('Heartbeat failed:', error);
-        });
+        userService
+          .setUserOnline(this.currentUser.userId, this.currentUser.email)
+          .catch(error => {
+            console.error('Heartbeat failed:', error);
+          });
       }
     }, this.HEARTBEAT_INTERVAL);
   }
@@ -235,7 +240,7 @@ class SimplePresenceManager {
       clearTimeout(this.visibilityTimeout);
       this.visibilityTimeout = null;
     }
-    
+
     if (this.heartbeatInterval) {
       clearInterval(this.heartbeatInterval);
       this.heartbeatInterval = null;
