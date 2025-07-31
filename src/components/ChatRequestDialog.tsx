@@ -72,7 +72,7 @@ function ConnectedDialog({
 
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/5'>
-      <div className='bg-white rounded-lg shadow-xl border border-gray-200 max-w-md w-full mx-4 p-6'>
+      <div className='bg-white rounded-2xl shadow-xl border border-gray-200 max-w-md w-full mx-4 p-6'>
         <div className='text-center py-6'>
           <div className='mb-6'>
             <div className='flex justify-center mb-3'>
@@ -127,7 +127,7 @@ function ConnectedDialog({
           <button
             onClick={handleChatNow}
             disabled={!conversationId}
-            className='flex-1 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors'
+            className='flex-1 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-2xl hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors'
           >
             Chat Now
           </button>
@@ -135,7 +135,7 @@ function ConnectedDialog({
           {/* OK Button */}
           <button
             onClick={handleOk}
-            className='flex-1 px-4 py-2 bg-white text-gray-700 text-sm font-medium rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors'
+            className='flex-1 px-4 py-2 bg-white text-gray-700 text-sm font-medium rounded-2xl border border-gray-300 hover:bg-gray-50 transition-colors'
           >
             Later
           </button>
@@ -205,7 +205,7 @@ function NewRequestDialog({
 
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/5'>
-      <div className='bg-white rounded-lg shadow-xl border border-gray-200 max-w-md w-full mx-4 p-6'>
+      <div className='bg-white rounded-2xl shadow-xl border border-gray-200 max-w-md w-full mx-4 p-6'>
         {justAccepted ? (
           /* Connected Message */
           <>
@@ -254,7 +254,7 @@ function NewRequestDialog({
             {/* OK Button */}
             <button
               onClick={handleOk}
-              className='w-full px-4 py-2 bg-white text-gray-700 text-sm font-medium rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors'
+              className='w-full px-4 py-2 bg-white text-gray-700 text-sm font-medium rounded-2xl border border-gray-300 hover:bg-gray-50 transition-colors'
             >
               OK
             </button>
@@ -290,7 +290,7 @@ function NewRequestDialog({
               {/* Accept Button */}
               <button
                 onClick={() => handleResponse('ACCEPTED')}
-                className='flex-1 px-4 py-3 bg-indigo-600 text-white text-base font-medium rounded-lg hover:bg-indigo-700 transition-colors'
+                className='flex-1 px-4 py-3 bg-indigo-600 text-white text-base font-medium rounded-2xl hover:bg-indigo-700 transition-colors'
               >
                 Accept
               </button>
@@ -298,7 +298,7 @@ function NewRequestDialog({
               {/* Reject Button */}
               <button
                 onClick={() => handleResponse('REJECTED')}
-                className='flex-1 px-4 py-3 bg-gray-100 text-gray-700 text-base font-medium rounded-lg hover:bg-gray-200 transition-colors'
+                className='flex-1 px-4 py-3 bg-gray-100 text-gray-700 text-base font-medium rounded-2xl hover:bg-gray-200 transition-colors'
               >
                 Reject
               </button>

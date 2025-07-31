@@ -326,7 +326,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
 
   if (error) {
     return (
-      <div className='p-4 text-red-600 bg-red-50 rounded-xl border border-red-200 text-center'>
+      <div className='p-6 text-red-600 bg-red-50 rounded-2xl border border-red-200 text-center'>
         <div className='text-sm font-medium mb-1'>Error</div>
         <div className='text-sm'>{error}</div>
       </div>
@@ -339,7 +339,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
 
   if (allUsers.length === 0) {
     return (
-      <div className='bg-white rounded-xl shadow-sm border border-gray-100 p-8'>
+      <div className='bg-white rounded-2xl border border-gray-200 p-12'>
         <div className='text-center text-gray-500'>
           <p>No users or conversations</p>
         </div>
@@ -353,50 +353,54 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
 
   return (
     <div>
-      <div className='mb-6'>
-        <h2 className='text-lg font-semibold text-gray-900'>{getTitle()}</h2>
+      <div className='mb-8'>
+        <h2 className='text-2xl font-medium text-gray-900 tracking-tight'>{getTitle()}</h2>
       </div>
 
-      <div className='space-y-4'>
-        {allUsers.map(userPresence => (
-          <div
-            key={userPresence.userId}
-            onClick={() => handleChatAction(userPresence.userId)}
-            className='flex items-center justify-between p-4 rounded-lg border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50/50 transition-all cursor-pointer bg-white'
-          >
-            <div className='flex items-center gap-4'>
-              <UserAvatar
-                email={userPresence.email}
-                userId={userPresence.userId}
-                size='md'
-                showStatus
-                status={
-                  onlineUsers.some(ou => ou.userId === userPresence.userId)
-                    ? userPresence.status
-                    : 'OFFLINE'
-                }
-              />
-              <div>
-                <div className='font-medium text-gray-900 text-base'>
-                  {getDisplayName(userPresence)}
-                </div>
-                <div className='text-sm text-gray-600'>
-                  {onlineUsers.some(ou => ou.userId === userPresence.userId)
-                    ? 'Online now'
-                    : 'Offline'}
+      <div className='bg-white rounded-2xl border border-gray-200 overflow-hidden'>
+        <div className='divide-y divide-gray-100'>
+          {allUsers.map(userPresence => (
+            <div
+              key={userPresence.userId}
+              onClick={() => handleChatAction(userPresence.userId)}
+              className='flex items-center justify-between p-6 cursor-pointer group'
+            >
+              <div className='flex items-center gap-4'>
+                <UserAvatar
+                  email={userPresence.email}
+                  userId={userPresence.userId}
+                  size='md'
+                  showStatus
+                  status={
+                    onlineUsers.some(ou => ou.userId === userPresence.userId)
+                      ? userPresence.status
+                      : 'OFFLINE'
+                  }
+                />
+                <div>
+                  <div className='font-medium text-gray-900 text-base'>
+                    {getDisplayName(userPresence)}
+                  </div>
+                  <div className='text-sm text-gray-600 mt-1'>
+                    {onlineUsers.some(ou => ou.userId === userPresence.userId)
+                      ? 'Online now'
+                      : 'Offline'}
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className='text-sm text-gray-600 font-medium'>
-              {pendingRequests.has(userPresence.userId)
-                ? 'Pending'
-                : existingConversations.has(userPresence.userId)
-                  ? 'Open Chat'
-                  : 'Connect'}
+              <div className='flex items-center'>
+                <span className='text-sm text-gray-600 font-medium px-3 py-1.5 rounded-full bg-gray-100 group-hover:bg-gray-200 transition-colors'>
+                  {pendingRequests.has(userPresence.userId)
+                    ? 'Pending'
+                    : existingConversations.has(userPresence.userId)
+                      ? 'Open Chat'
+                      : 'Connect'}
+                </span>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );

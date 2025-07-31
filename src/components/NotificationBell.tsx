@@ -627,7 +627,7 @@ export default function NotificationBell() {
         {/* Dropdown Panel */}
         {isOpen && (
           <div
-            className='origin-top-right absolute right-0 mt-2 w-96 rounded-lg shadow-lg bg-white focus:outline-none z-20'
+            className='origin-top-right absolute right-0 mt-2 w-96 rounded-2xl shadow-lg bg-white border border-gray-200 focus:outline-none z-20'
             role='menu'
             aria-orientation='vertical'
             aria-labelledby='user-menu-button'
@@ -641,7 +641,7 @@ export default function NotificationBell() {
             {/* Content */}
             <div className='max-h-[60vh] overflow-y-auto'>
               {error && (
-                <div className='p-4 text-red-700 bg-red-50 m-4 rounded-lg'>
+                <div className='p-4 text-red-700 bg-red-50 m-4 rounded-2xl'>
                   {error}
                 </div>
               )}
@@ -736,7 +736,7 @@ export default function NotificationBell() {
                                         );
                                       }}
                                       disabled={decliningId === notification.id}
-                                      className='px-4 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 disabled:opacity-50 transition-colors'
+                                      className='px-4 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-2xl hover:bg-gray-200 disabled:opacity-50 transition-colors'
                                     >
                                       {decliningId === notification.id
                                         ? 'Declining...'
@@ -752,7 +752,7 @@ export default function NotificationBell() {
                                         );
                                       }}
                                       disabled={decliningId === notification.id}
-                                      className='px-4 py-1.5 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 disabled:opacity-50 transition-colors'
+                                      className='px-4 py-1.5 bg-indigo-600 text-white text-sm font-medium rounded-2xl hover:bg-indigo-700 disabled:opacity-50 transition-colors'
                                     >
                                       Confirm
                                     </button>
@@ -790,7 +790,7 @@ export default function NotificationBell() {
                       setError('Failed to mark notifications as read');
                     }
                   }}
-                  className='w-full text-center text-sm text-indigo-600 hover:text-indigo-800 font-medium py-2 rounded-lg hover:bg-gray-100 transition-colors'
+                  className='w-full text-center text-sm text-indigo-600 hover:text-indigo-800 font-medium py-2 rounded-2xl hover:bg-gray-100 transition-colors'
                 >
                   Mark all as read
                 </button>
