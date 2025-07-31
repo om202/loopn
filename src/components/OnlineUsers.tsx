@@ -2,6 +2,7 @@
 
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { fetchAuthSession } from 'aws-amplify/auth';
+import { MessageCircle, Clock, CheckCircle2, Globe, WifiOff } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
 
@@ -357,19 +358,19 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
         <h2 className='text-2xl font-medium text-gray-900 tracking-tight'>{getTitle()}</h2>
       </div>
 
-      <div className='bg-white rounded-2xl border border-gray-200 overflow-hidden'>
-        <div className='divide-y divide-gray-100'>
-          {allUsers.map(userPresence => (
-            <div
-              key={userPresence.userId}
-              onClick={() => handleChatAction(userPresence.userId)}
-              className='flex items-center justify-between p-6 cursor-pointer group'
-            >
-              <div className='flex items-center gap-4'>
+      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
+        {allUsers.map(userPresence => (
+          <div
+            key={userPresence.userId}
+            onClick={() => handleChatAction(userPresence.userId)}
+            className='bg-white rounded-2xl border border-gray-200 p-6 cursor-pointer group hover:shadow-sm transition-shadow'
+          >
+            <div className='flex flex-col items-center text-center'>
+              <div className='mb-4'>
                 <UserAvatar
                   email={userPresence.email}
                   userId={userPresence.userId}
-                  size='md'
+                  size='lg'
                   showStatus
                   status={
                     onlineUsers.some(ou => ou.userId === userPresence.userId)
@@ -377,30 +378,40 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
                       : 'OFFLINE'
                   }
                 />
-                <div>
-                  <div className='font-medium text-gray-900 text-base'>
-                    {getDisplayName(userPresence)}
-                  </div>
-                  <div className='text-sm text-gray-600 mt-1'>
-                    {onlineUsers.some(ou => ou.userId === userPresence.userId)
-                      ? 'Online now'
-                      : 'Offline'}
-                  </div>
+              </div>
+              
+              <div className='mb-4 min-h-[3rem] flex flex-col justify-center'>
+                <div className='font-medium text-gray-900 text-base mb-1 line-clamp-2'>
+                  {getDisplayName(userPresence)}
+                </div>
+                <div className='text-sm text-gray-600 text-center'>
+                  {onlineUsers.some(ou => ou.userId === userPresence.userId)
+                    ? 'Online now'
+                    : 'Offline'}
                 </div>
               </div>
 
-              <div className='flex items-center'>
-                <span className='text-sm text-gray-600 font-medium px-3 py-1.5 rounded-full bg-gray-100 group-hover:bg-gray-200 transition-colors'>
-                  {pendingRequests.has(userPresence.userId)
-                    ? 'Pending'
-                    : existingConversations.has(userPresence.userId)
-                      ? 'Open Chat'
-                      : 'Connect'}
-                </span>
-              </div>
+              <button className='w-full px-4 py-2 text-sm font-medium rounded-2xl border transition-colors bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100 flex items-center justify-center gap-2'>
+                {pendingRequests.has(userPresence.userId) ? (
+                  <>
+                    <Clock className='w-4 h-4' />
+                    Pending
+                  </>
+                ) : existingConversations.has(userPresence.userId) ? (
+                  <>
+                    <MessageCircle className='w-4 h-4' />
+                    Open Chat
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle2 className='w-4 h-4' />
+                    Connect
+                  </>
+                )}
+              </button>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     </div>
   );
