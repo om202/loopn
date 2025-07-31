@@ -253,7 +253,7 @@ export default function ChatWindow({
   }
 
   return (
-    <div className='flex flex-col h-full bg-white'>
+    <div className='flex flex-col h-full bg-gray-100'>
       <ChatHeader
         conversation={conversation}
         otherParticipantId={otherParticipantId}
@@ -282,8 +282,23 @@ export default function ChatWindow({
       />
 
       {error || externalError ? (
-        <div className='flex-shrink-0 p-4 bg-red-50 border-t border-red-200 text-red-600 text-sm'>
-          <div className='max-w-4xl mx-auto'>{error || externalError}</div>
+        <div className='flex-shrink-0 mx-4 mb-4'>
+          <div className='bg-red-50 border border-red-200 rounded-lg p-4 shadow-sm'>
+            <div className='flex items-start'>
+              <svg 
+                className='h-5 w-5 text-red-400 mt-0.5 mr-3 flex-shrink-0' 
+                fill='currentColor' 
+                viewBox='0 0 20 20'
+              >
+                <path 
+                  fillRule='evenodd' 
+                  d='M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z' 
+                  clipRule='evenodd' 
+                />
+              </svg>
+              <p className='text-sm text-red-800 font-medium'>{error || externalError}</p>
+            </div>
+          </div>
         </div>
       ) : null}
     </div>

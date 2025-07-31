@@ -82,33 +82,41 @@ export default function MessageBubble({
         isOwnMessage ? 'justify-end' : 'justify-start'
       }`}
     >
-      <div className='group relative'>
+      <div className='group relative max-w-xs sm:max-w-sm lg:max-w-md'>
         {messageIsEmojiOnly ? (
           // Emoji-only messages without container
-          <div className='text-4xl'>{message.content}</div>
+          <div className='text-4xl leading-none'>{message.content}</div>
         ) : (
-          // Regular text messages with container - same design for both sent and received
+          // Regular text messages with Material Design bubble styling
           <div
-            className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg border ${
+            className={`px-4 py-3 rounded-2xl border ${
               isOwnMessage
-                ? 'bg-indigo-600 text-white border-indigo-600'
-                : 'bg-gray-100 text-gray-900 border-gray-200'
+                ? 'bg-indigo-600 text-white border-indigo-600 rounded-br-md'
+                : 'bg-white text-gray-900 border-gray-200 rounded-bl-md'
             }`}
           >
-            <p className='text-sm leading-relaxed'>
+            <p className='text-sm leading-relaxed break-words'>
               {renderMessageContent(message.content)}
             </p>
           </div>
         )}
-        {/* Timestamp tooltip - shows on hover */}
+        {/* Timestamp tooltip - shows on hover with Material Design styling */}
         <div
-          className={`absolute z-10 px-2 py-1 text-xs text-white bg-gray-800 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap ${
+          className={`absolute z-20 px-3 py-1.5 text-xs text-white bg-gray-900 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none whitespace-nowrap ${
             isOwnMessage
-              ? 'right-full mr-2 top-1/2 -translate-y-1/2'
-              : 'left-full ml-2 top-1/2 -translate-y-1/2'
+              ? 'right-full mr-3 top-1/2 -translate-y-1/2'
+              : 'left-full ml-3 top-1/2 -translate-y-1/2'
           }`}
         >
           {formatMessageTime(message.timestamp)}
+          {/* Arrow pointing to message */}
+          <div
+            className={`absolute top-1/2 -translate-y-1/2 w-0 h-0 ${
+              isOwnMessage
+                ? 'left-full border-l-4 border-l-gray-900 border-t-2 border-b-2 border-t-transparent border-b-transparent'
+                : 'right-full border-r-4 border-r-gray-900 border-t-2 border-b-2 border-t-transparent border-b-transparent'
+            }`}
+          />
         </div>
       </div>
     </div>

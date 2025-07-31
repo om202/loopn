@@ -64,83 +64,97 @@ export default function ChatHeader({
   };
 
   return (
-    <div className='flex-shrink-0 bg-white border-b border-gray-200 px-6 py-4'>
-      <div className='flex items-center gap-3'>
-        {/* Back Button */}
-        <button
-          onClick={onBack}
-          className='text-gray-500 hover:text-gray-700 mr-2'
-        >
-          <svg
-            className='w-6 h-6'
-            fill='none'
-            stroke='currentColor'
-            viewBox='0 0 24 24'
-          >
-            <path
-              strokeLinecap='round'
-              strokeLinejoin='round'
-              strokeWidth={2}
-              d='M15 19l-7-7 7-7'
-            />
-          </svg>
-        </button>
-
-        {/* Custom UserAvatar */}
-        <UserAvatar
-          email={otherUserPresence?.email}
-          userId={otherParticipantId}
-          size='md'
-          showStatus
-          status={otherUserPresence?.status}
-        />
-
-        <div className='flex-1'>
-          <div className='font-semibold text-gray-900'>
-            {getUserDisplayName()}
-          </div>
-          <div className='flex items-center gap-2'>
-            {!conversation.isConnected && timeLeft && timeLeft !== 'Expired' ? (
-              <span className='text-sm text-gray-600'>
-                Building connection · {timeLeft} remaining ·{' '}
-                <button
-                  onClick={onEndChat}
-                  className='text-gray-500 hover:text-gray-700 underline transition-colors cursor-pointer'
-                >
-                  End Now
-                </button>
-              </span>
-            ) : conversation.isConnected ? (
-              <span className='text-sm text-green-600'>
-                Connected - Chat forever!
-              </span>
-            ) : (
-              <span className={`text-sm ${getPresenceDisplay().color}`}>
-                {getPresenceDisplay().text}
-              </span>
-            )}
-          </div>
-        </div>
-
-        {/* Connect Button - Right Side */}
-        {!conversation.isConnected && !!timeLeft && timeLeft !== 'Expired' && (
+    <div className='flex-shrink-0 bg-white shadow-sm border-b border-gray-200'>
+      <div className='px-4 sm:px-6 py-4'>
+        <div className='flex items-center gap-3'>
+          {/* Back Button */}
           <button
-            onClick={onSendConnectionRequest}
-            disabled={sendingConnectionRequest}
-            className='flex items-center gap-3 px-4 py-3 bg-indigo-600 hover:bg-indigo-700 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
+            onClick={onBack}
+            className='p-2 -ml-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
           >
-            <Image
-              src='/connect-icon.svg'
-              alt='Connect'
-              width={20}
-              height={20}
-              className='flex-shrink-0'
-            />
-            <span className='text-base font-medium text-white'>
-              {sendingConnectionRequest ? 'Connecting...' : 'Connect'}
-            </span>
+            <svg
+              className='w-5 h-5'
+              fill='none'
+              stroke='currentColor'
+              viewBox='0 0 24 24'
+            >
+              <path
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                strokeWidth={2}
+                d='M15 19l-7-7 7-7'
+              />
+            </svg>
           </button>
-        )}
+
+          {/* User Avatar */}
+          <UserAvatar
+            email={otherUserPresence?.email}
+            userId={otherParticipantId}
+            size='md'
+            showStatus
+            status={otherUserPresence?.status}
+          />
+
+          <div className='flex-1 min-w-0'>
+            <h1 className='text-base font-semibold text-gray-900 truncate'>
+              {getUserDisplayName()}
+            </h1>
+            <div className='flex items-center gap-2 mt-0.5'>
+              {!conversation.isConnected && timeLeft && timeLeft !== 'Expired' ? (
+                <div className='flex items-center gap-2 text-sm text-gray-600'>
+                  <span className='flex items-center'>
+                    <svg className='w-3 h-3 mr-1 text-gray-500' fill='currentColor' viewBox='0 0 20 20'>
+                      <path fillRule='evenodd' d='M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z' clipRule='evenodd' />
+                    </svg>
+                    Building connection
+                  </span>
+                  <span className='text-gray-400'>•</span>
+                  <span className='font-medium text-blue-600'>{timeLeft} remaining</span>
+                  <span className='text-gray-400'>•</span>
+                  <button
+                    onClick={onEndChat}
+                    className='text-red-500 hover:text-red-600 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 rounded px-1'
+                  >
+                    End Now
+                  </button>
+                </div>
+              ) : conversation.isConnected ? (
+                <div className='flex items-center text-sm text-green-600'>
+                  <svg className='w-3 h-3 mr-1' fill='currentColor' viewBox='0 0 20 20'>
+                    <path fillRule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clipRule='evenodd' />
+                  </svg>
+                  Connected - Chat forever!
+                </div>
+              ) : (
+                <div className={`flex items-center text-sm ${getPresenceDisplay().color}`}>
+                  <span className={`w-2 h-2 rounded-full mr-2 ${getPresenceDisplay().dot}`}></span>
+                  {getPresenceDisplay().text}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Connect Button - Right Side */}
+          {!conversation.isConnected && !!timeLeft && timeLeft !== 'Expired' && (
+            <button
+              onClick={onSendConnectionRequest}
+              disabled={sendingConnectionRequest}
+              className='flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed'
+            >
+              <Image
+                src='/connect-icon.svg'
+                alt='Connect'
+                width={18}
+                height={18}
+                className='flex-shrink-0'
+              />
+              <span className='text-sm font-medium'>
+                {sendingConnectionRequest ? 'Connecting...' : 'Connect'}
+              </span>
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

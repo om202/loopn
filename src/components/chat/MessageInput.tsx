@@ -73,11 +73,11 @@ export default function MessageInput({
 
   return (
     <>
-      {/* Emoji Picker - Separate container */}
+      {/* Emoji Picker - Material Design container */}
       {showEmojiPicker ? (
-        <div className='flex-shrink-0 bg-white border-t border-gray-200 p-4'>
-          <div className='max-w-4xl mx-auto flex justify-end'>
-            <div ref={emojiPickerRef}>
+        <div className=''>
+          <div className='max-w-3xl mx-auto flex justify-end'>
+            <div ref={emojiPickerRef} className='rounded-lg overflow-hidden shadow-xl'>
               <EmojiPicker
                 onEmojiClick={handleEmojiClick}
                 autoFocusSearch={false}
@@ -92,9 +92,9 @@ export default function MessageInput({
         </div>
       ) : null}
 
-      {/* Message Input */}
-      <div className='flex-shrink-0 bg-white border-t border-gray-200 p-4'>
-        <div className='max-w-4xl mx-auto'>
+      {/* Message Input - Material Design styling */}
+      <div className='flex-shrink-0 bg-white border-t border-gray-200 p-4 shadow-lg'>
+        <div className='max-w-3xl mx-auto'>
           <div className='flex gap-3 items-end'>
             <div className='flex-1 relative'>
               <input
@@ -112,22 +112,24 @@ export default function MessageInput({
                   }
                 }}
                 disabled={disabled}
-                className='w-full px-4 py-3 pr-14 border border-gray-200 rounded-full focus:outline-none text-sm bg-gray-100 disabled:opacity-50'
+                className='w-full px-5 py-3 pr-14 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm bg-gray-50 hover:bg-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed placeholder-gray-500'
               />
               <button
                 onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                 disabled={disabled}
-                className='absolute right-1 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors p-2 rounded-full hover:bg-gray-200 disabled:opacity-50'
+                className={`absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-all duration-200 p-2 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 ${
+                  showEmojiPicker ? 'text-indigo-600 bg-indigo-50' : ''
+                }`}
               >
-                <Smile className='w-7 h-7' />
+                <Smile className='w-5 h-5' />
               </button>
             </div>
             <button
               onClick={handleSend}
               disabled={disabled}
-              className='flex items-center justify-center w-12 h-12 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
+              className='flex items-center justify-center w-12 h-12 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 focus:bg-indigo-700 transition-all duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none transform hover:scale-105 active:scale-95'
             >
-              <Send className='w-5 h-5 rotate-45 -translate-x-0.5' />
+              <Send className='w-4 h-4 ml-0.5 rotate-45' />
             </button>
           </div>
         </div>
