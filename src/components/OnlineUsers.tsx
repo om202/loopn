@@ -2,7 +2,13 @@
 
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { fetchAuthSession } from 'aws-amplify/auth';
-import { MessageCircle, Clock, CheckCircle2, Globe, WifiOff } from 'lucide-react';
+import {
+  MessageCircle,
+  Clock,
+  CheckCircle2,
+  Globe,
+  WifiOff,
+} from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
 
@@ -355,7 +361,9 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   return (
     <div>
       <div className='mb-8'>
-        <h2 className='text-2xl font-medium text-gray-900 tracking-tight'>{getTitle()}</h2>
+        <h2 className='text-2xl font-medium text-gray-900 tracking-tight'>
+          {getTitle()}
+        </h2>
       </div>
 
       <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
@@ -379,7 +387,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
                   }
                 />
               </div>
-              
+
               <div className='mb-4 min-h-[3rem] flex flex-col justify-center'>
                 <div className='font-medium text-gray-900 text-base mb-1 line-clamp-2'>
                   {getDisplayName(userPresence)}

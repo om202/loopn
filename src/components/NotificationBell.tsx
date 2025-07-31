@@ -664,7 +664,7 @@ export default function NotificationBell() {
                     </svg>
                   </div>
                   <h4 className='text-base font-medium text-gray-800'>
-                    You're all caught up
+                    You&apos;re all caught up
                   </h4>
                   <p className='text-sm text-gray-500 mt-1'>
                     No new notifications
@@ -720,46 +720,50 @@ export default function NotificationBell() {
 
                             {notification.type === 'chat_request' &&
                             notification.data &&
-                            'requesterId' in notification.data ? (
-                              (() => {
-                                const chatRequestData =
-                                  notification.data as ChatRequestWithUser;
-                                return (
-                                  <div className='flex items-center gap-3 mt-3'>
-                                    <button
-                                      onClick={e => {
-                                        e.stopPropagation();
-                                        handleRespondToRequest(
-                                          notification.id,
-                                          'REJECTED',
-                                          chatRequestData
-                                        );
-                                      }}
-                                      disabled={decliningId === notification.id}
-                                      className='px-4 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-2xl hover:bg-gray-200 disabled:opacity-50 transition-colors'
-                                    >
-                                      {decliningId === notification.id
-                                        ? 'Declining...'
-                                        : 'Decline'}
-                                    </button>
-                                    <button
-                                      onClick={e => {
-                                        e.stopPropagation();
-                                        handleRespondToRequest(
-                                          notification.id,
-                                          'ACCEPTED',
-                                          chatRequestData
-                                        );
-                                      }}
-                                      disabled={decliningId === notification.id}
-                                      className='px-4 py-1.5 bg-indigo-600 text-white text-sm font-medium rounded-2xl hover:bg-indigo-700 disabled:opacity-50 transition-colors'
-                                    >
-                                      Confirm
-                                    </button>
-                                  </div>
-                                );
-                              })()
-                            ) : null}
+                            'requesterId' in notification.data
+                              ? (() => {
+                                  const chatRequestData =
+                                    notification.data as ChatRequestWithUser;
+                                  return (
+                                    <div className='flex items-center gap-3 mt-3'>
+                                      <button
+                                        onClick={e => {
+                                          e.stopPropagation();
+                                          handleRespondToRequest(
+                                            notification.id,
+                                            'REJECTED',
+                                            chatRequestData
+                                          );
+                                        }}
+                                        disabled={
+                                          decliningId === notification.id
+                                        }
+                                        className='px-4 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-2xl hover:bg-gray-200 disabled:opacity-50 transition-colors'
+                                      >
+                                        {decliningId === notification.id
+                                          ? 'Declining...'
+                                          : 'Decline'}
+                                      </button>
+                                      <button
+                                        onClick={e => {
+                                          e.stopPropagation();
+                                          handleRespondToRequest(
+                                            notification.id,
+                                            'ACCEPTED',
+                                            chatRequestData
+                                          );
+                                        }}
+                                        disabled={
+                                          decliningId === notification.id
+                                        }
+                                        className='px-4 py-1.5 bg-indigo-600 text-white text-sm font-medium rounded-2xl hover:bg-indigo-700 disabled:opacity-50 transition-colors'
+                                      >
+                                        Confirm
+                                      </button>
+                                    </div>
+                                  );
+                                })()
+                              : null}
                           </div>
                         </div>
                       </Component>
