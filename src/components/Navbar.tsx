@@ -44,95 +44,85 @@ export default function Navbar() {
   };
 
   return (
-    <div className='bg-white border-b border-gray-200'>
-      <div className='max-w-6xl mx-auto px-6 py-4'>
-        <div className='flex items-center justify-between'>
+    <nav className='bg-white border-b border-gray-200'>
+      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+        <div className='flex items-center justify-between h-16'>
           {/* Logo */}
-          <Link
-            href='/?stay=true'
-            className='flex items-center space-x-3 hover:opacity-80 transition-opacity'
-          >
-            <Image src='/loopn.svg' alt='Loopn' width={32} height={32} />
-            <h1 className='text-xl font-bold text-gray-900'>Loopn</h1>
-          </Link>
+          <div className='flex items-center'>
+            <Link
+              href='/?stay=true'
+              className='flex items-center space-x-3 hover:opacity-80 transition-opacity'
+            >
+              <Image src='/loopn.svg' alt='Loopn' width={32} height={32} />
+              <h1 className='text-2xl font-semibold text-gray-800'>Loopn</h1>
+            </Link>
+          </div>
 
-          {/* Notifications and User Menu */}
-          <div className='flex items-center gap-2'>
+          {/* Right side icons */}
+          <div className='flex items-center gap-4'>
             <NotificationBell />
+
+            {/* User menu */}
             <div className='relative' ref={dropdownRef}>
-              {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
-              <div onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
-                <div className='relative p-2 rounded-lg hover:bg-gray-50 transition-colors'>
+              <div>
+                {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
+                <div
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  className='p-1 rounded-full hover:bg-gray-100 cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors'
+                >
+                  <span className='sr-only'>Open user menu</span>
                   <UserAvatar email={getUserEmail()} size='md' />
-                  {/* Dropdown Arrow - Bottom Right Corner */}
-                  <div className='absolute bottom-1 right-1 w-4 h-4 bg-white rounded-full flex items-center justify-center border border-gray-200'>
-                    <svg
-                      className='w-2.5 h-2.5 text-gray-600'
-                      fill='none'
-                      stroke='currentColor'
-                      viewBox='0 0 24 24'
-                    >
-                      <path
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        strokeWidth={2}
-                        d='M19 9l-7 7-7-7'
-                      />
-                    </svg>
+                </div>
+              </div>
+
+              {isDropdownOpen && (
+                <div
+                  className='origin-top-right absolute right-0 mt-2 w-80 rounded-2xl shadow-lg bg-white focus:outline-none z-10'
+                  role='menu'
+                  aria-orientation='vertical'
+                  aria-labelledby='user-menu-button'
+                  tabIndex={-1}
+                >
+                  <div className='py-1' role='none'>
+                    <div className='flex flex-col items-center px-4 py-5 border-b border-gray-200'>
+                      <UserAvatar email={getUserEmail()} size='lg' />
+                      <p className='mt-3 text-base font-medium text-gray-800 truncate'>
+                        {getUserEmail()}
+                      </p>
+                      <p className='text-sm text-gray-500'>Welcome back</p>
+                    </div>
+                    <div className='p-2'>
+                      <button
+                        onClick={handleSignOut}
+                        className='w-full text-left rounded-lg px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-3'
+                        role='menuitem'
+                        tabIndex={-1}
+                        id='user-menu-item-2'
+                      >
+                        <svg
+                          xmlns='http://www.w3.org/2000/svg'
+                          className='h-5 w-5 text-gray-500'
+                          fill='none'
+                          viewBox='0 0 24 24'
+                          stroke='currentColor'
+                          strokeWidth={2}
+                        >
+                          <path
+                            strokeLinecap='round'
+                            strokeLinejoin='round'
+                            d='M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1'
+                          />
+                        </svg>
+                        Sign Out
+                      </button>
+                    </div>
                   </div>
                 </div>
-
-                {/* Dropdown Menu */}
-                {isDropdownOpen ? (
-                  <div className='absolute right-0 top-full w-80 max-w-md bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-10'>
-                    <div className='px-4 py-3 border-b border-gray-100'>
-                      <div className='flex items-center space-x-3'>
-                        <UserAvatar
-                          email={getUserEmail()}
-                          size='sm'
-                          className='flex-shrink-0'
-                        />
-                        <div className='min-w-0 flex-1'>
-                          <p
-                            className='text-base font-medium text-gray-900 truncate text-left'
-                            title={getUserEmail()}
-                          >
-                            {getUserEmail()}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <button
-                      onClick={handleSignOut}
-                      className='w-full text-left px-4 py-3 text-base text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer flex items-center gap-3'
-                    >
-                      <CircularIcon
-                        size='md'
-                        icon={
-                          <svg
-                            className='text-gray-600'
-                            fill='none'
-                            stroke='currentColor'
-                            viewBox='0 0 24 24'
-                          >
-                            <path
-                              strokeLinecap='round'
-                              strokeLinejoin='round'
-                              strokeWidth={2}
-                              d='M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1'
-                            />
-                          </svg>
-                        }
-                      />
-                      Sign Out
-                    </button>
-                  </div>
-                ) : null}
-              </div>
+              )}
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </nav>
   );
 }
