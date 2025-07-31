@@ -125,7 +125,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
       let authReady = false;
       let retries = 0;
       const maxRetries = 5;
-      
+
       while (!authReady && retries < maxRetries) {
         authReady = await isAuthSessionReady();
         if (!authReady) {
