@@ -360,13 +360,46 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
 
   return (
     <div>
-      <div className='mb-8'>
-        <h2 className='text-xl sm:text-2xl font-medium text-gray-900 tracking-tight'>
-          {getTitle()}
-        </h2>
+      {/* Thin Google-style Header */}
+      <div className='mb-6 sm:mb-7'>
+        <div className='bg-white rounded-2xl border border-gray-200'>
+          <div className='px-4 sm:px-6 py-2.5 sm:py-3'>
+            <div className='flex items-center justify-between'>
+              <div className='flex items-center gap-3'>
+                <div className='w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center'>
+                  <MessageCircle className='w-4 h-4 text-gray-600' />
+                </div>
+                <div className='flex items-center gap-2'>
+                  <h2 className='text-lg sm:text-xl font-medium text-gray-900'>
+                    Chats
+                  </h2>
+                  <div className='w-6 h-6 bg-gray-100 rounded-md flex items-center justify-center'>
+                    <span className='text-xs font-medium text-gray-700'>
+                      {allUsers.length}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className='flex items-center gap-2'>
+                <div className='w-6 h-6 bg-green-50 rounded-md flex items-center justify-center'>
+                  <Globe className='w-3 h-3 text-green-600' />
+                </div>
+                <span className='text-sm font-medium text-gray-900'>
+                  Online
+                </span>
+                <div className='w-5 h-5 bg-gray-100 rounded-md flex items-center justify-center'>
+                  <span className='text-xs font-medium text-gray-700'>
+                    {onlineUsers.length}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6'>
+      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8'>
         {allUsers.map(userPresence => (
           <div
             key={userPresence.userId}
@@ -388,7 +421,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
                 />
               </div>
 
-              <div className='mb-3 sm:mb-4 min-h-[2.5rem] sm:min-h-[3rem] flex flex-col justify-center'>
+              <div className='mb-4 sm:mb-5 min-h-[2.5rem] sm:min-h-[3rem] flex flex-col justify-center'>
                 <div className='font-medium text-gray-900 text-sm sm:text-base mb-1 line-clamp-2 no-email-detection'>
                   {getDisplayName(userPresence)}
                 </div>
