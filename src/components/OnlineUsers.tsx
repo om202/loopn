@@ -1,6 +1,7 @@
 'use client';
 
 import { useAuthenticator } from '@aws-amplify/ui-react';
+import { fetchAuthSession } from 'aws-amplify/auth';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
 
@@ -33,6 +34,17 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   const [conversationsLoaded, setConversationsLoaded] = useState(false);
   const { user } = useAuthenticator();
   const router = useRouter();
+
+  // Helper function to check if authentication session is ready
+  const isAuthSessionReady = async (): Promise<boolean> => {
+    try {
+      const session = await fetchAuthSession();
+      return !!(session.tokens?.accessToken && session.credentials);
+    } catch (error) {
+      console.log('Auth session not ready yet:', error);
+      return false;
+    }
+  };
 
   const loadConversations = useCallback(async () => {
     if (!user) {
@@ -104,43 +116,75 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
     setPendingRequestsLoaded(false);
     setConversationsLoaded(false);
 
-    // Subscribe to sent chat requests for real-time updates
-    const sentRequestsSubscription = chatService.observeSentChatRequests(
-      user.userId,
-      requests => {
-        const receiverIds = requests.map(req => req.receiverId);
-        setPendingRequests(new Set(receiverIds));
-        setPendingRequestsLoaded(true);
-      },
-      error => {
-        console.error('Error observing sent chat requests:', error);
-        setPendingRequestsLoaded(true);
-      }
-    );
+    let sentRequestsSubscription: any;
+    let onlineUsersSubscription: any;
 
-    // Subscribe to online users updates
-    const onlineUsersSubscription = userService.observeOnlineUsers(
-      users => {
-        // Filter out current user and remove duplicates
-        const otherUsers = users
-          .filter(u => u?.userId && u.userId !== user.userId)
-          .filter(
-            (user, index, self) =>
-              index === self.findIndex(u => u.userId === user.userId)
-          );
-
-        setOnlineUsers(otherUsers);
-      },
-      () => {
-        console.error('Error observing online users');
-        setError('Failed to load online users');
-        setInitialLoading(false); // Also mark as loaded on error
+    // Add delay and wait for authentication session to be fully established
+    const authDelay = setTimeout(async () => {
+      // Wait for auth session to be ready with retry logic
+      let authReady = false;
+      let retries = 0;
+      const maxRetries = 5;
+      
+      while (!authReady && retries < maxRetries) {
+        authReady = await isAuthSessionReady();
+        if (!authReady) {
+          retries++;
+          console.log(`Waiting for auth session... (${retries}/${maxRetries})`);
+          await new Promise(resolve => setTimeout(resolve, 1000));
+        }
       }
-    );
+
+      if (!authReady) {
+        console.error('Failed to establish auth session after retries');
+        setPendingRequestsLoaded(true);
+        setInitialLoading(false);
+        return;
+      }
+
+      // Subscribe to sent chat requests for real-time updates
+      sentRequestsSubscription = chatService.observeSentChatRequests(
+        user.userId,
+        requests => {
+          const receiverIds = requests.map(req => req.receiverId);
+          setPendingRequests(new Set(receiverIds));
+          setPendingRequestsLoaded(true);
+        },
+        error => {
+          console.error('Error observing sent chat requests:', error);
+          setPendingRequestsLoaded(true);
+        }
+      );
+
+      // Subscribe to online users updates
+      onlineUsersSubscription = userService.observeOnlineUsers(
+        users => {
+          // Filter out current user and remove duplicates
+          const otherUsers = users
+            .filter(u => u?.userId && u.userId !== user.userId)
+            .filter(
+              (user, index, self) =>
+                index === self.findIndex(u => u.userId === user.userId)
+            );
+
+          setOnlineUsers(otherUsers);
+        },
+        () => {
+          console.error('Error observing online users');
+          setError('Failed to load online users');
+          setInitialLoading(false); // Also mark as loaded on error
+        }
+      );
+    }, 500); // Initial delay before checking auth
 
     return () => {
-      sentRequestsSubscription.unsubscribe();
-      onlineUsersSubscription.unsubscribe();
+      clearTimeout(authDelay);
+      if (sentRequestsSubscription) {
+        sentRequestsSubscription.unsubscribe();
+      }
+      if (onlineUsersSubscription) {
+        onlineUsersSubscription.unsubscribe();
+      }
     };
   }, [user]);
 
@@ -155,9 +199,23 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
       return;
     }
 
-    loadConversations().then(users => {
-      setConversationUsers(users || []);
-    });
+    // Add delay to ensure authentication session is fully established before loading conversations
+    const conversationDelay = setTimeout(async () => {
+      // Wait for auth session to be ready
+      const authReady = await isAuthSessionReady();
+      if (authReady) {
+        loadConversations().then(users => {
+          setConversationUsers(users || []);
+        });
+      } else {
+        console.log('Auth session not ready for conversation loading');
+        setConversationsLoaded(true); // Mark as loaded to prevent infinite waiting
+      }
+    }, 800); // Delay for conversations
+
+    return () => {
+      clearTimeout(conversationDelay);
+    };
   }, [user, loadConversations]);
 
   // Combine online users with conversation users whenever either changes
