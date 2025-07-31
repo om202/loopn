@@ -3,7 +3,7 @@
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { useEffect } from 'react';
 
-import { userService } from '../services/user.service';
+import { simplePresenceManager } from '../lib/presence-utils';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -17,25 +17,22 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
 
   useEffect(() => {
     if (authStatus === 'unauthenticated') {
+      // Set user offline and clean up presence when user is unauthenticated
+      simplePresenceManager.setOffline().finally(() => {
+        simplePresenceManager.cleanup();
+      });
       window.location.href = '/auth';
     }
 
     if (authStatus === 'authenticated' && user) {
-      // Set user online
-      userService.setUserOnline(user.userId, user.signInDetails?.loginId || '');
-
-      // Set offline only on page unload (browser close/refresh)
-      const handleUnload = () => {
-        userService.setUserOffline(
-          user.userId,
-          user.signInDetails?.loginId || ''
-        );
-      };
-      window.addEventListener('beforeunload', handleUnload);
+      // Initialize simple presence management
+      simplePresenceManager.initialize(
+        user.userId,
+        user.signInDetails?.loginId || ''
+      );
 
       return () => {
-        window.removeEventListener('beforeunload', handleUnload);
-        // Removed setUserOffline from cleanup - only set offline on browser close
+        // Cleanup will be handled when auth status changes
       };
     }
   }, [authStatus, user]);

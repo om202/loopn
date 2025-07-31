@@ -30,11 +30,11 @@ export default function RootPage() {
 
   // Show loading while auth is configuring
   if (authStatus === 'configuring') {
-  return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-gray-500">Loading...</div>
-        </div>
-  );
+    return (
+      <div className='min-h-screen flex items-center justify-center'>
+        <div className='text-gray-500'>Loading...</div>
+      </div>
+    );
   }
 
   // Show nothing while redirecting

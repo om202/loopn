@@ -1,4 +1,5 @@
 import { type ClientSchema, a, defineData } from '@aws-amplify/backend';
+import { presenceCleanup } from '../functions/presence-cleanup/resource';
 
 /*== LOOPN CHAT APP SCHEMA ==============================================
 This schema implements the Loopn user story:
@@ -190,7 +191,8 @@ const schema = a.schema({
       // Get all notifications for a user, sorted by time (newest first)
       index('userId').sortKeys(['timestamp']),
     ]),
-});
+})
+.authorization(allow => [allow.resource(presenceCleanup)]);
 
 export type Schema = ClientSchema<typeof schema>;
 

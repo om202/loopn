@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
 
-import { userService } from '../services/user.service';
+import { simplePresenceManager } from '../lib/presence-utils';
 
 import CircularIcon from './CircularIcon';
 import NotificationBell from './NotificationBell';
@@ -38,13 +38,8 @@ export default function Navbar() {
   }, []);
 
   const handleSignOut = async () => {
-    if (user) {
-      // Set user offline immediately before signing out
-      await userService.setUserOffline(
-        user.userId,
-        user.signInDetails?.loginId || ''
-      );
-    }
+    // Use the presence manager's setOffline method for proper cleanup
+    await simplePresenceManager.setOffline();
     signOut();
   };
 
