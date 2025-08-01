@@ -1,6 +1,7 @@
 'use client';
 
 import type { Schema } from '../../../amplify/data/resource';
+import UserAvatar from '../UserAvatar';
 
 type Message = Schema['Message']['type'];
 type UserPresence = Schema['UserPresence']['type'];
@@ -13,13 +14,17 @@ interface MessageBubbleProps {
   otherParticipantId: string;
   marginTop: string;
   marginBottom: string;
+  showSenderName: boolean;
 }
 
 export default function MessageBubble({
   message,
   isOwnMessage,
+  otherUserPresence,
+  otherParticipantId,
   marginTop,
   marginBottom,
+  showSenderName,
 }: MessageBubbleProps) {
   // Check if message contains only emojis
   const isEmojiOnly = (text: string) => {
@@ -76,13 +81,38 @@ export default function MessageBubble({
 
   const messageIsEmojiOnly = isEmojiOnly(message.content);
 
+  // Get sender display name with time
+  const getSenderNameWithTime = () => {
+    const senderName = isOwnMessage 
+      ? 'You' 
+      : otherUserPresence?.email || `User ${message.senderId.slice(-4)}`;
+    const time = formatMessageTime(message.timestamp);
+    return `${senderName} · ${time}`;
+  };
+
   return (
     <div
-      className={`flex ${marginTop} ${marginBottom} ${
-        isOwnMessage ? 'justify-end' : 'justify-start'
+      className={`flex flex-col ${marginTop} ${marginBottom} ${
+        isOwnMessage ? 'items-end' : 'items-start'
       }`}
     >
-      <div className='group relative max-w-xs sm:max-w-sm lg:max-w-md'>
+      {/* Sender name with time - only show for first message in group */}
+      {showSenderName && (
+        <div className={`text-xs text-gray-500 mb-1 px-1 ${isOwnMessage ? 'text-right' : 'text-left'}`}>
+          {getSenderNameWithTime()}
+        </div>
+      )}
+      
+      <div className={`flex items-end gap-2 ${isOwnMessage ? 'flex-row-reverse' : 'flex-row'}`}>
+        {!isOwnMessage && showSenderName && (
+          <UserAvatar
+            email={otherUserPresence?.email}
+            userId={otherParticipantId}
+            size='sm'
+            showStatus={false}
+          />
+        )}
+        <div className='group relative max-w-xs sm:max-w-sm lg:max-w-md'>
         {messageIsEmojiOnly ? (
           // Emoji-only messages without container
           <div className='text-4xl leading-none'>{message.content}</div>
@@ -117,6 +147,7 @@ export default function MessageBubble({
                 : 'right-full border-r-4 border-r-gray-900 border-t-2 border-b-2 border-t-transparent border-b-transparent'
             }`}
           />
+        </div>
         </div>
       </div>
     </div>

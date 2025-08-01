@@ -102,23 +102,21 @@ export default function ChatHeader({
             </h1>
             <div className='flex items-center gap-1 sm:gap-2 mt-0.5'>
               {!conversation.isConnected && timeLeft && timeLeft !== 'Expired' ? (
-                <div className='flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-gray-600'>
-                  <span className='flex items-center'>
-                    <svg className='w-2.5 h-2.5 sm:w-3 sm:h-3 mr-1 text-gray-500' fill='currentColor' viewBox='0 0 20 20'>
-                      <path fillRule='evenodd' d='M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z' clipRule='evenodd' />
-                    </svg>
-                    <span className='hidden sm:inline'>Building connection</span>
-                    <span className='sm:hidden'>Building</span>
+                <div className='flex items-center gap-1 sm:gap-2'>
+                  <span className='text-xs sm:text-sm text-gray-600'>
+                    <span className='hidden sm:inline'>Trial Chat</span>
+                    <span className='sm:hidden'>Trial</span>
                   </span>
-                  <span className='text-gray-400 hidden sm:inline'>•</span>
-                  <span className='font-medium text-blue-600 truncate max-w-20 sm:max-w-none'>{timeLeft}</span>
-                  <span className='text-gray-400 hidden sm:inline'>•</span>
+                  <span className='font-medium text-blue-600 text-xs sm:text-sm ml-1'>
+                    {timeLeft}
+                  </span>
                   <button
                     onClick={onEndChat}
-                    className='text-red-500 hover:text-red-600 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 rounded px-1 text-xs sm:text-sm'
+                    className='inline-flex ml-1 items-center px-2 py-0 rounded-full bg-red-50 text-red-500 border border-red-100 hover:bg-red-100 hover:border-red-300 transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-red-500 focus:ring-offset-1'
+                    style={{ fontSize: '12px' }}
                   >
                     <span className='hidden sm:inline'>End Now</span>
-                    <span className='sm:hidden'>End</span>
+                    <span className='sm:hidden'>End Now</span>
                   </button>
                 </div>
               ) : conversation.isConnected ? (

@@ -90,12 +90,45 @@ export default function MessageList({
           const isGroupedWithPrev = isPrevFromSameSender && prevTimeDiff <= 2;
           const isGroupedWithNext = isNextFromSameSender && nextTimeDiff <= 2;
 
-          // Determine margins based on grouping - tighter spacing for Material Design
-          const marginTop = isGroupedWithPrev ? 'mt-1' : 'mt-4';
-          const marginBottom = isGroupedWithNext ? 'mb-1' : 'mb-4';
+          // Determine margins based on time difference - progressive spacing
+          let marginTop = 'mt-4'; // default spacing
+          let marginBottom = 'mb-4';
+
+          if (isGroupedWithPrev) {
+            // Very close messages (within 1 minute)
+            if (prevTimeDiff <= 1) {
+              marginTop = 'mt-0.5';
+            } else {
+              marginTop = 'mt-1';
+            }
+          } else {
+            // Far apart messages get more spacing
+            if (prevTimeDiff > 60) { // More than 1 hour
+              marginTop = 'mt-12';
+            } else if (prevTimeDiff > 30) { // More than 30 minutes
+              marginTop = 'mt-10';
+            } else if (prevTimeDiff > 10) { // More than 10 minutes
+              marginTop = 'mt-8';
+            } else {
+              marginTop = 'mt-6';
+            }
+          }
+
+          if (isGroupedWithNext) {
+            if (nextTimeDiff <= 1) {
+              marginBottom = 'mb-0.5';
+            } else {
+              marginBottom = 'mb-1';
+            }
+          } else {
+            marginBottom = 'mb-4';
+          }
 
           // Show avatar only for first message in group or standalone messages
           const showAvatar = !isOwnMessage && !isGroupedWithPrev;
+          
+          // Show sender name only for first message in group (not grouped with previous)
+          const showSenderName = !isGroupedWithPrev;
 
           return (
             <MessageBubble
@@ -107,6 +140,7 @@ export default function MessageList({
               otherParticipantId={otherParticipantId}
               marginTop={marginTop}
               marginBottom={marginBottom}
+              showSenderName={showSenderName}
             />
           );
         })}
