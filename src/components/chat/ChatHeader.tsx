@@ -224,19 +224,21 @@ export default function ChatHeader({
       <DialogContainer
         isOpen={showEndChatDialog}
         onClose={() => setShowEndChatDialog(false)}
-        maxWidth="xs"
+        maxWidth='xs'
       >
-        <div className="p-4">
-          <h3 className="text-base font-medium text-gray-900 text-center mb-3">
+        <div className='p-4'>
+          <h3 className='text-base font-medium text-gray-900 text-center mb-3'>
             End trial chat?
           </h3>
-          <p className="text-sm text-gray-600 text-center mb-4">
-            This will immediately end the chat. You won't be able to send more messages, but chat history will remain accessible until the trial period expires.
+          <p className='text-sm text-gray-600 text-center mb-4'>
+            This will immediately end the chat. You won&apos;t be able to send
+            more messages, but chat history will remain accessible until the
+            trial period expires.
           </p>
-          <div className="flex gap-2">
+          <div className='flex gap-2'>
             <button
               onClick={() => setShowEndChatDialog(false)}
-              className="flex-1 px-3 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none transition-colors"
+              className='flex-1 px-3 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none transition-colors'
             >
               Cancel
             </button>
@@ -245,7 +247,7 @@ export default function ChatHeader({
                 onEndChat();
                 setShowEndChatDialog(false);
               }}
-              className="flex-1 px-3 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 focus:outline-none transition-colors"
+              className='flex-1 px-3 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 focus:outline-none transition-colors'
             >
               End Chat
             </button>

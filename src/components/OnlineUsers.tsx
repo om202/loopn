@@ -368,7 +368,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
               <h1 className='text-lg font-semibold text-blue-600 mr-4'>
                 Connect
               </h1>
-              
+
               <div className='flex items-center gap-4'>
                 <div className='flex items-center gap-2'>
                   <MessageCircle className='w-4 h-4 text-gray-600' />
