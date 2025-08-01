@@ -27,6 +27,15 @@ export default function UserAvatar({
     return email || userId || 'anonymous-user';
   };
 
+  const getAvatarColors = () => {
+    // Use gray and light colors for anonymous users
+    if (!email && !userId) {
+      return ['#E5E7EB', '#D1D5DB', '#9CA3AF', '#6B7280', '#F3F4F6'];
+    }
+    // Use default colorful palette for actual users
+    return colors;
+  };
+
   const getAvatarSize = () => {
     switch (size) {
       case 'sm':
@@ -100,7 +109,7 @@ export default function UserAvatar({
           size={getAvatarSize()}
           name={getUserIdentifier()}
           variant={variant}
-          colors={colors}
+          colors={getAvatarColors()}
         />
       </div>
       {showStatus === true && (
