@@ -13,6 +13,7 @@ import {
 import { chatService } from '../services/chat.service';
 import { messageService } from '../services/message.service';
 import { notificationService } from '../services/notification.service';
+import { soundService } from '../services/sound.service';
 import { userService } from '../services/user.service';
 
 import ChatRequestDialog from './ChatRequestDialog';
@@ -162,6 +163,8 @@ export default function NotificationBell() {
           if (recentRequest && !showDialog) {
             setDialogRequest(recentRequest);
             setShowDialog(true);
+            // Play happy sound for new chat request
+            soundService.playHappySound();
           }
         } else {
           // Mark initial load as complete
@@ -296,6 +299,9 @@ export default function NotificationBell() {
               .catch(error => {
                 console.error('Error managing message notification:', error);
               });
+
+            // Play bell sound for new message notification
+            soundService.playBellSound();
 
             return [messageNotification, ...prevNotifications];
           });

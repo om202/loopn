@@ -7,6 +7,7 @@ import type { Schema } from '../../../amplify/data/resource';
 import { chatService } from '../../services/chat.service';
 import { messageService } from '../../services/message.service';
 import { userService } from '../../services/user.service';
+import { soundService } from '../../services/sound.service';
 import LoadingContainer from '../LoadingContainer';
 
 import ChatHeader from './ChatHeader';
@@ -236,6 +237,11 @@ export default function ChatWindow({
                   !latestRealMessage.timestamp ||
                   newMsg.timestamp > latestRealMessage.timestamp) {
                 messagesToAdd.push(newMsg);
+                
+                // Play received sound for messages from other users
+                if (newMsg.senderId !== user?.userId) {
+                  soundService.playReceivedSound();
+                }
               }
             }
           });
@@ -368,6 +374,8 @@ export default function ChatWindow({
               msg.id === tempId ? result.data! : msg
             )
           );
+          // Play sent sound effect
+          soundService.playSentSound();
           // Reset auto-scroll trigger after successful send
           setShouldAutoScroll(false);
         }
