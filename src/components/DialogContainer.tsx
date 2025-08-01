@@ -65,7 +65,7 @@ export default function DialogContainer({
   );
 
   // Render dialog as a portal to avoid any parent container overflow issues
-  return typeof window !== 'undefined' 
+  return typeof window !== 'undefined'
     ? createPortal(dialogContent, document.body)
     : null;
 }

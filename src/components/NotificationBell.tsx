@@ -944,7 +944,8 @@ export default function NotificationBell() {
                         ) {
                           return notificationService.deleteNotificationsForConversation(
                             user.userId,
-                            (notification.data as MessageNotificationData).conversationId
+                            (notification.data as MessageNotificationData)
+                              .conversationId
                           );
                         } else {
                           // For other notification types, mark as read
@@ -971,10 +972,7 @@ export default function NotificationBell() {
                       setNotifications([]);
                       setIsOpen(false);
                     } catch (error) {
-                      console.error(
-                        'Error processing notifications:',
-                        error
-                      );
+                      console.error('Error processing notifications:', error);
                       setError('Failed to process notifications');
                     }
                   }}

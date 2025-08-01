@@ -210,7 +210,7 @@ export default function ChatWindow({
     };
 
     loadInitialMessages();
-  }, [conversation.id]);
+  }, [conversation.id, user?.userId]);
 
   // Subscribe to real-time messages after initial load
   useEffect(() => {
@@ -330,7 +330,14 @@ export default function ChatWindow({
     return () => {
       subscription.unsubscribe();
     };
-  }, [conversation.id, initialLoadComplete, messages]);
+  }, [
+    conversation.id,
+    initialLoadComplete,
+    messages,
+    user?.userId,
+    hasActiveSession,
+    chatEnteredAt,
+  ]);
 
   // Subscribe to other user's presence using existing real-time subscription
   useEffect(() => {
@@ -504,7 +511,7 @@ export default function ChatWindow({
     return () => clearTimeout(timer);
   }, [
     hasActiveSession,
-    unreadMessagesSnapshot.size,
+    unreadMessagesSnapshot,
     messages,
     user?.userId,
     markUnreadMessagesAsRead,
