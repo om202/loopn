@@ -607,19 +607,26 @@ export default function NotificationBell() {
           className='flex items-center hover:opacity-80 focus:outline-none transition-opacity'
         >
           <span className='sr-only'>View notifications</span>
-          
+
           {/* Notification Badges */}
           {notifications.length > 0 && (
             <div className='flex flex-col items-start gap-1 mr-1'>
               {(() => {
-                const messageCount = notifications.filter(n => n.type === 'message').length;
-                const otherCount = notifications.filter(n => n.type !== 'message').length;
+                const messageCount = notifications.filter(
+                  n => n.type === 'message'
+                ).length;
+                const otherCount = notifications.filter(
+                  n => n.type !== 'message'
+                ).length;
                 const badges = [];
 
                 // Message badge (top position)
                 if (messageCount > 0) {
                   badges.push(
-                    <div key="message" className='flex items-center gap-1.5 bg-white text-red-500 rounded-2xl rounded-br-sm px-3 py-1 border border-red-300 min-h-[24px]'>
+                    <div
+                      key='message'
+                      className='flex items-center gap-1.5 bg-white text-red-500 rounded-2xl rounded-br-sm px-3 py-1 border border-red-300 min-h-[24px]'
+                    >
                       <MessageCircle className='w-4 h-4 flex-shrink-0' />
                       <span className='text-sm font-bold leading-none'>
                         {messageCount > 99 ? '99+' : messageCount}
@@ -631,9 +638,22 @@ export default function NotificationBell() {
                 // Other notifications badge (bottom position)
                 if (otherCount > 0) {
                   badges.push(
-                    <div key="other" className='flex items-center gap-1.5 bg-white text-red-500 rounded-2xl rounded-br-sm px-3 py-1 border border-red-300 min-h-[24px]'>
-                      <svg className='w-4 h-4 flex-shrink-0' fill='none' stroke='currentColor' viewBox='0 0 24 24' strokeWidth={2}>
-                        <path strokeLinecap='round' strokeLinejoin='round' d='M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9' />
+                    <div
+                      key='other'
+                      className='flex items-center gap-1.5 bg-white text-red-500 rounded-2xl rounded-br-sm px-3 py-1 border border-red-300 min-h-[24px]'
+                    >
+                      <svg
+                        className='w-4 h-4 flex-shrink-0'
+                        fill='none'
+                        stroke='currentColor'
+                        viewBox='0 0 24 24'
+                        strokeWidth={2}
+                      >
+                        <path
+                          strokeLinecap='round'
+                          strokeLinejoin='round'
+                          d='M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9'
+                        />
                       </svg>
                       <span className='text-sm font-bold leading-none'>
                         {otherCount > 99 ? '99+' : otherCount}
@@ -740,7 +760,9 @@ export default function NotificationBell() {
                                 size='md'
                               />
                             </div>
-                          ) : notification.type === 'message' && notification.data && 'senderEmail' in notification.data ? (
+                          ) : notification.type === 'message' &&
+                            notification.data &&
+                            'senderEmail' in notification.data ? (
                             <div className='relative flex-shrink-0'>
                               <UserAvatar
                                 email={
@@ -775,107 +797,124 @@ export default function NotificationBell() {
 
                             {notification.type === 'chat_request' &&
                             notification.data &&
-                            'requesterId' in notification.data
-                              ? (() => {
-                                  const chatRequestData =
-                                    notification.data as ChatRequestWithUser;
-                                  return (
-                                    <div className='flex items-center gap-2 mt-3'>
-                                      <button
-                                        onClick={e => {
-                                          e.stopPropagation();
-                                          handleRespondToRequest(
-                                            notification.id,
-                                            'REJECTED',
-                                            chatRequestData
-                                          );
-                                        }}
-                                        disabled={
-                                          decliningId === notification.id
-                                        }
-                                        className='px-3 py-1.5 text-sm font-semibold text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 disabled:opacity-50 transition-colors'
-                                      >
-                                        {decliningId === notification.id
-                                          ? 'Declining...'
-                                          : 'Decline'}
-                                      </button>
-                                      <button
-                                        onClick={e => {
-                                          e.stopPropagation();
-                                          handleRespondToRequest(
-                                            notification.id,
-                                            'ACCEPTED',
-                                            chatRequestData
-                                          );
-                                        }}
-                                        disabled={
-                                          decliningId === notification.id
-                                        }
-                                        className='px-3 py-1.5 bg-blue-500 text-white text-sm font-semibold rounded-lg hover:bg-blue-600 disabled:opacity-50 transition-colors'
-                                      >
-                                        Confirm
-                                      </button>
-                                    </div>
-                                  );
-                                })()
-                              : notification.type === 'message' ? (
-                                <div className='flex items-center gap-2 mt-3'>
-                                  <button
-                                    onClick={e => {
-                                      e.stopPropagation();
-                                      handleNotificationClick(notification);
-                                    }}
-                                    className='px-3 py-1.5 bg-blue-500 text-white text-sm font-semibold rounded-lg hover:bg-blue-600 transition-colors'
-                                  >
-                                    Reply
-                                  </button>
-                                  <button
-                                    onClick={async e => {
-                                      e.stopPropagation();
-                                      if (!user) return;
-                                      try {
-                                        // For message notifications, delete from database and remove from state
-                                        if (notification.data && 'conversationId' in notification.data) {
-                                          await notificationService.deleteNotificationsForConversation(
-                                            user.userId,
-                                            (notification.data as MessageNotificationData).conversationId
-                                          );
-                                        }
-                                        setNotifications(prevNotifications =>
-                                          prevNotifications.filter(notif => notif.id !== notification.id)
+                            'requesterId' in notification.data ? (
+                              (() => {
+                                const chatRequestData =
+                                  notification.data as ChatRequestWithUser;
+                                return (
+                                  <div className='flex items-center gap-2 mt-3'>
+                                    <button
+                                      onClick={e => {
+                                        e.stopPropagation();
+                                        handleRespondToRequest(
+                                          notification.id,
+                                          'REJECTED',
+                                          chatRequestData
                                         );
-                                      } catch (error) {
-                                        console.error('Error marking message notification as read:', error);
-                                        setError('Failed to mark notification as read');
-                                      }
-                                    }}
-                                    className='px-3 py-1.5 text-sm font-semibold text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors'
-                                  >
-                                    Mark as Read
-                                  </button>
-                                </div>
-                              ) : (
-                                <div className='flex items-center gap-2 mt-3'>
-                                  <button
-                                    onClick={async e => {
-                                      e.stopPropagation();
-                                      if (!user) return;
-                                      try {
-                                        await notificationService.markNotificationAsRead(notification.id);
-                                        setNotifications(prevNotifications =>
-                                          prevNotifications.filter(notif => notif.id !== notification.id)
+                                      }}
+                                      disabled={decliningId === notification.id}
+                                      className='px-3 py-1.5 text-sm font-semibold text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 disabled:opacity-50 transition-colors'
+                                    >
+                                      {decliningId === notification.id
+                                        ? 'Declining...'
+                                        : 'Decline'}
+                                    </button>
+                                    <button
+                                      onClick={e => {
+                                        e.stopPropagation();
+                                        handleRespondToRequest(
+                                          notification.id,
+                                          'ACCEPTED',
+                                          chatRequestData
                                         );
-                                      } catch (error) {
-                                        console.error('Error marking notification as read:', error);
-                                        setError('Failed to mark notification as read');
+                                      }}
+                                      disabled={decliningId === notification.id}
+                                      className='px-3 py-1.5 bg-blue-500 text-white text-sm font-semibold rounded-lg hover:bg-blue-600 disabled:opacity-50 transition-colors'
+                                    >
+                                      Confirm
+                                    </button>
+                                  </div>
+                                );
+                              })()
+                            ) : notification.type === 'message' ? (
+                              <div className='flex items-center gap-2 mt-3'>
+                                <button
+                                  onClick={e => {
+                                    e.stopPropagation();
+                                    handleNotificationClick(notification);
+                                  }}
+                                  className='px-3 py-1.5 bg-blue-500 text-white text-sm font-semibold rounded-lg hover:bg-blue-600 transition-colors'
+                                >
+                                  Reply
+                                </button>
+                                <button
+                                  onClick={async e => {
+                                    e.stopPropagation();
+                                    if (!user) return;
+                                    try {
+                                      // For message notifications, delete from database and remove from state
+                                      if (
+                                        notification.data &&
+                                        'conversationId' in notification.data
+                                      ) {
+                                        await notificationService.deleteNotificationsForConversation(
+                                          user.userId,
+                                          (
+                                            notification.data as MessageNotificationData
+                                          ).conversationId
+                                        );
                                       }
-                                    }}
-                                    className='px-3 py-1.5 text-sm font-semibold text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors'
-                                  >
-                                    Mark as Read
-                                  </button>
-                                </div>
-                              )}
+                                      setNotifications(prevNotifications =>
+                                        prevNotifications.filter(
+                                          notif => notif.id !== notification.id
+                                        )
+                                      );
+                                    } catch (error) {
+                                      console.error(
+                                        'Error marking message notification as read:',
+                                        error
+                                      );
+                                      setError(
+                                        'Failed to mark notification as read'
+                                      );
+                                    }
+                                  }}
+                                  className='px-3 py-1.5 text-sm font-semibold text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors'
+                                >
+                                  Mark as Read
+                                </button>
+                              </div>
+                            ) : (
+                              <div className='flex items-center gap-2 mt-3'>
+                                <button
+                                  onClick={async e => {
+                                    e.stopPropagation();
+                                    if (!user) return;
+                                    try {
+                                      await notificationService.markNotificationAsRead(
+                                        notification.id
+                                      );
+                                      setNotifications(prevNotifications =>
+                                        prevNotifications.filter(
+                                          notif => notif.id !== notification.id
+                                        )
+                                      );
+                                    } catch (error) {
+                                      console.error(
+                                        'Error marking notification as read:',
+                                        error
+                                      );
+                                      setError(
+                                        'Failed to mark notification as read'
+                                      );
+                                    }
+                                  }}
+                                  className='px-3 py-1.5 text-sm font-semibold text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors'
+                                >
+                                  Mark as Read
+                                </button>
+                              </div>
+                            )}
                           </div>
                         </div>
                       </Component>

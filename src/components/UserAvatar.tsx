@@ -95,7 +95,7 @@ export default function UserAvatar({
 
   return (
     <div className={`relative ${className} cursor-pointer`}>
-      <div className="rounded-full overflow-hidden border border-slate-500">
+      <div className='rounded-full overflow-hidden border border-slate-500'>
         <Avatar
           size={getAvatarSize()}
           name={getUserIdentifier()}

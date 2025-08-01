@@ -364,17 +364,21 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
       <div className='mb-8'>
         <div className='flex items-center justify-between'>
           <h1 className='text-2xl font-bold text-gray-900'>Connections</h1>
-          
+
           <div className='flex items-center gap-3'>
             <div className='flex items-center gap-2 px-3 py-1.5 bg-white rounded-full border border-gray-200'>
               <MessageCircle className='w-4 h-4 text-gray-600' />
-              <span className='font-semibold text-gray-900'>{allUsers.length}</span>
+              <span className='font-semibold text-gray-900'>
+                {allUsers.length}
+              </span>
               <span className='text-sm text-gray-600'>Conversations</span>
             </div>
-            
+
             <div className='flex items-center gap-2 px-3 py-1.5 bg-white rounded-full border border-gray-200'>
               <Globe className='w-4 h-4 text-gray-600' />
-              <span className='font-semibold text-gray-900'>{onlineUsers.length}</span>
+              <span className='font-semibold text-gray-900'>
+                {onlineUsers.length}
+              </span>
               <span className='text-sm text-gray-600'>Online</span>
             </div>
           </div>

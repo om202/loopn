@@ -131,6 +131,42 @@ export default function MessageList({
     fetchReactions();
   }, [fetchReactions]);
 
+  // Subscribe to real-time reaction changes
+  useEffect(() => {
+    if (messages.length === 0) return;
+
+    const messageIds = messages.map(msg => msg.id);
+
+    const subscription = reactionService.subscribeToReactionChanges(
+      messageIds,
+      (reaction, action) => {
+        setMessageReactions(prev => {
+          const updated = { ...prev };
+          const currentReactions = updated[reaction.messageId] || [];
+
+          if (action === 'create') {
+            // Add new reaction
+            updated[reaction.messageId] = [...currentReactions, reaction];
+          } else if (action === 'delete') {
+            // Remove deleted reaction
+            updated[reaction.messageId] = currentReactions.filter(
+              r => r.id !== reaction.id
+            );
+          }
+
+          return updated;
+        });
+      },
+      error => {
+        console.error('Error subscribing to reaction changes:', error);
+      }
+    );
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [messages]);
+
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });

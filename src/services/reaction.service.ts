@@ -164,6 +164,53 @@ export class ReactionService {
 
     return Object.values(grouped);
   }
+
+  // Subscribe to reaction changes for all messages in a conversation
+  subscribeToReactionChanges(
+    messageIds: string[],
+    callback: (reaction: MessageReaction, action: 'create' | 'delete') => void,
+    onError?: (error: Error) => void
+  ) {
+    // Subscribe to new reactions
+    const createSubscription =
+      client.models.MessageReaction.onCreate().subscribe({
+        next: reaction => {
+          // Only notify for reactions on messages we're watching
+          if (messageIds.includes(reaction.messageId)) {
+            callback(reaction, 'create');
+          }
+        },
+        error: error => {
+          if (onError) {
+            onError(error);
+          }
+        },
+      });
+
+    // Subscribe to deleted reactions
+    const deleteSubscription =
+      client.models.MessageReaction.onDelete().subscribe({
+        next: reaction => {
+          // Only notify for reactions on messages we're watching
+          if (messageIds.includes(reaction.messageId)) {
+            callback(reaction, 'delete');
+          }
+        },
+        error: error => {
+          if (onError) {
+            onError(error);
+          }
+        },
+      });
+
+    // Return combined unsubscribe function
+    return {
+      unsubscribe: () => {
+        createSubscription.unsubscribe();
+        deleteSubscription.unsubscribe();
+      },
+    };
+  }
 }
 
 export const reactionService = new ReactionService();

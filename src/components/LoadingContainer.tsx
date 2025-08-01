@@ -26,15 +26,27 @@ export default function LoadingContainer({
     switch (variant) {
       case 'pulse':
         return (
-          <div className={`${getSizeClasses().replace('border-[3px]', '').replace('border-[5px]', '')} bg-blue-500 rounded-full animate-pulse`} />
+          <div
+            className={`${getSizeClasses().replace('border-[3px]', '').replace('border-[5px]', '')} bg-blue-500 rounded-full animate-pulse`}
+          />
         );
       case 'dots':
-        const dotSize = size === 'sm' ? 'w-2 h-2' : size === 'lg' ? 'w-4 h-4' : 'w-3 h-3';
+        const dotSize =
+          size === 'sm' ? 'w-2 h-2' : size === 'lg' ? 'w-4 h-4' : 'w-3 h-3';
         return (
-          <div className="flex space-x-2">
-            <div className={`${dotSize} bg-blue-500 rounded-full animate-bounce`} style={{ animationDelay: '0ms' }} />
-            <div className={`${dotSize} bg-blue-500 rounded-full animate-bounce`} style={{ animationDelay: '150ms' }} />
-            <div className={`${dotSize} bg-blue-500 rounded-full animate-bounce`} style={{ animationDelay: '300ms' }} />
+          <div className='flex space-x-2'>
+            <div
+              className={`${dotSize} bg-blue-500 rounded-full animate-bounce`}
+              style={{ animationDelay: '0ms' }}
+            />
+            <div
+              className={`${dotSize} bg-blue-500 rounded-full animate-bounce`}
+              style={{ animationDelay: '150ms' }}
+            />
+            <div
+              className={`${dotSize} bg-blue-500 rounded-full animate-bounce`}
+              style={{ animationDelay: '300ms' }}
+            />
           </div>
         );
       default:
