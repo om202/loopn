@@ -360,52 +360,36 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
 
   return (
     <div>
-      {/* Thin Google-style Header */}
-      <div className='mb-12'>
-        <div className='bg-white rounded-full border border-gray-200'>
-          <div className='px-6 sm:px-8 py-2.5 sm:py-3'>
-            <div className='flex items-center gap-8'>
-              <h1 className='text-lg font-semibold text-blue-600 mr-4'>
-                Connect
-              </h1>
-
-              <div className='flex items-center gap-4'>
-                <div className='flex items-center gap-2'>
-                  <MessageCircle className='w-4 h-4 text-gray-600' />
-                  <span className='text-sm font-medium text-gray-900'>
-                    Chats
-                  </span>
-                  <span className='text-xs font-medium text-gray-500'>
-                    {allUsers.length}
-                  </span>
-                </div>
-
-                <div className='w-px h-4 bg-gray-300'></div>
-
-                <div className='flex items-center gap-2'>
-                  <Globe className='w-4 h-4 text-gray-600' />
-                  <span className='text-sm font-medium text-gray-900'>
-                    Online
-                  </span>
-                  <span className='text-xs font-medium text-gray-500'>
-                    {onlineUsers.length}
-                  </span>
-                </div>
-              </div>
+      {/* Dashboard Header */}
+      <div className='mb-8'>
+        <div className='flex items-center justify-between'>
+          <h1 className='text-2xl font-bold text-gray-900'>Connections</h1>
+          
+          <div className='flex items-center gap-3'>
+            <div className='flex items-center gap-2 px-3 py-1.5 bg-white rounded-full border border-gray-200'>
+              <MessageCircle className='w-4 h-4 text-gray-600' />
+              <span className='font-semibold text-gray-900'>{allUsers.length}</span>
+              <span className='text-sm text-gray-600'>Conversations</span>
+            </div>
+            
+            <div className='flex items-center gap-2 px-3 py-1.5 bg-white rounded-full border border-gray-200'>
+              <Globe className='w-4 h-4 text-gray-600' />
+              <span className='font-semibold text-gray-900'>{onlineUsers.length}</span>
+              <span className='text-sm text-gray-600'>Online</span>
             </div>
           </div>
         </div>
       </div>
 
-      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8'>
+      <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
         {allUsers.map(userPresence => (
           <div
             key={userPresence.userId}
             onClick={() => handleChatAction(userPresence.userId)}
             className='bg-white rounded-2xl border border-gray-200 px-8 py-6 cursor-pointer group hover:shadow-sm transition-shadow'
           >
-            <div className='flex flex-col items-center text-center'>
-              <div className='mb-4'>
+            <div className='flex items-center gap-4'>
+              <div className='flex-shrink-0'>
                 <UserAvatar
                   email={userPresence.email}
                   userId={userPresence.userId}
@@ -419,35 +403,37 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
                 />
               </div>
 
-              <div className='mb-4 sm:mb-5 min-h-[2.5rem] sm:min-h-[3rem] flex flex-col justify-center'>
-                <div className='font-medium text-gray-900 text-sm sm:text-base mb-1 line-clamp-2 no-email-detection break-words max-w-full'>
+              <div className='flex-1 min-w-0'>
+                <div className='font-medium text-gray-900 text-sm sm:text-base mb-1 line-clamp-2 no-email-detection break-words'>
                   {getDisplayName(userPresence)}
                 </div>
-                <div className='text-xs sm:text-sm text-gray-600 text-center'>
+                <div className='text-xs sm:text-sm text-gray-600'>
                   {onlineUsers.some(ou => ou.userId === userPresence.userId)
                     ? 'Online now'
                     : 'Offline'}
                 </div>
               </div>
 
-              <button className='px-4 sm:px-5 py-1.5 text-sm font-medium rounded-full border transition-colors bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100 flex items-center justify-center gap-1 sm:gap-1.5'>
-                {pendingRequests.has(userPresence.userId) ? (
-                  <>
-                    <Clock className='w-3 h-3 sm:w-4 sm:h-4 text-gray-600' />
-                    Pending
-                  </>
-                ) : existingConversations.has(userPresence.userId) ? (
-                  <>
-                    <MessageCircle className='w-3 h-3 sm:w-4 sm:h-4 text-gray-600' />
-                    Chat
-                  </>
-                ) : (
-                  <>
-                    <CheckCircle2 className='w-3 h-3 sm:w-4 sm:h-4 text-gray-600' />
-                    Connect
-                  </>
-                )}
-              </button>
+              <div className='flex-shrink-0'>
+                <button className='px-4 sm:px-5 py-1.5 text-sm font-medium rounded-full border transition-colors bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100 flex items-center gap-1 sm:gap-1.5'>
+                  {pendingRequests.has(userPresence.userId) ? (
+                    <>
+                      <Clock className='w-3 h-3 sm:w-4 sm:h-4 text-gray-600' />
+                      Pending
+                    </>
+                  ) : existingConversations.has(userPresence.userId) ? (
+                    <>
+                      <MessageCircle className='w-3 h-3 sm:w-4 sm:h-4 text-gray-600' />
+                      Chat
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle2 className='w-3 h-3 sm:w-4 sm:h-4 text-gray-600' />
+                      Connect
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
         ))}

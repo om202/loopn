@@ -4,6 +4,8 @@ import { useAuthenticator } from '@aws-amplify/ui-react';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
+import LoadingContainer from '../components/LoadingContainer';
+
 export default function RootPage() {
   const { authStatus } = useAuthenticator(context => [context.authStatus]);
   const router = useRouter();
