@@ -235,7 +235,7 @@ export default function MessageBubble({
             </div>
           )}
 
-          <div className='relative max-w-xs sm:max-w-sm lg:max-w-md'>
+          <div className='relative max-w-xs sm:max-w-sm lg:max-w-lg'>
             {messageIsEmojiOnly ? (
               // Emoji-only messages without container
               <div className='text-4xl leading-none'>{message.content}</div>

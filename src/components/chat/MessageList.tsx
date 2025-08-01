@@ -106,7 +106,7 @@ export default function MessageList({
   if (messages.length === 0) {
     return (
       <div className='flex-1 overflow-y-auto bg-gray-100'>
-        <div className='max-w-3xl mx-auto px-4 py-8'>
+        <div className='max-w-5xl mx-auto px-4 py-8'>
           <div className='flex flex-col items-center justify-center text-center py-20'>
             <div className='w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mb-4'>
               <svg
@@ -138,7 +138,7 @@ export default function MessageList({
 
   return (
     <div className='flex-1 overflow-y-auto bg-gray-100'>
-      <div className='max-w-3xl mx-auto px-4 py-6'>
+      <div className='max-w-5xl mx-auto px-4 py-6'>
         {messages.map((message, index) => {
           const isOwnMessage = message.senderId === currentUserId;
           const prevMessage = index > 0 ? messages[index - 1] : null;

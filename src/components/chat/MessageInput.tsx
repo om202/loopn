@@ -126,7 +126,7 @@ export default function MessageInput({
       {/* Emoji Picker - Material Design container */}
       {showEmojiPicker ? (
         <div className=''>
-          <div className='max-w-3xl mx-auto flex justify-end'>
+                      <div className='max-w-5xl mx-auto flex justify-end'>
             <div
               ref={emojiPickerRef}
               className='rounded-lg overflow-hidden shadow-xl'
@@ -147,7 +147,7 @@ export default function MessageInput({
 
       {/* Message Input - Material Design styling */}
       <div className='flex-shrink-0 bg-white border-t border-gray-200 p-4 shadow-lg'>
-        <div className='max-w-3xl mx-auto'>
+        <div className='max-w-5xl mx-auto'>
           <div className='flex gap-3 items-end'>
             <div className='flex-1 relative'>
               <input
