@@ -40,6 +40,14 @@ export default function ChatWindow({
   const [sendingConnectionRequest, setSendingConnectionRequest] =
     useState(false);
   const [replyToMessage, setReplyToMessage] = useState<Message | null>(null);
+  
+  // Pagination state
+  const [nextToken, setNextToken] = useState<string | undefined>(undefined);
+  const [hasMoreMessages, setHasMoreMessages] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [initialLoadComplete, setInitialLoadComplete] = useState(false);
+  const [lastLoadWasOlderMessages, setLastLoadWasOlderMessages] = useState(false);
+  const [shouldAutoScroll, setShouldAutoScroll] = useState(false);
 
   const { user } = useAuthenticator();
 
@@ -140,27 +148,131 @@ export default function ChatWindow({
     calculateTimeLeft,
   ]);
 
-  // Subscribe to messages
+  // Load initial messages with pagination
   useEffect(() => {
     if (!conversation.id) {
       return;
     }
 
+    const loadInitialMessages = async () => {
+      setIsInitializing(true);
+      const result = await messageService.getConversationMessages(conversation.id, 50);
+      
+      if (result.error) {
+        setError(result.error);
+      } else {
+        // Sort messages oldest first for chat display
+        const sortedMessages = result.data.sort((a, b) => {
+          const timestampA = a.timestamp ? new Date(a.timestamp).getTime() : 0;
+          const timestampB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
+          return timestampA - timestampB;
+        });
+        
+        setMessages(sortedMessages);
+        setNextToken(result.nextToken);
+        setHasMoreMessages(!!result.nextToken);
+        setInitialLoadComplete(true);
+        setLastLoadWasOlderMessages(false);
+      }
+      setIsInitializing(false);
+    };
+
+    loadInitialMessages();
+  }, [conversation.id]);
+
+  // Subscribe to real-time messages after initial load
+  useEffect(() => {
+    if (!conversation.id || !initialLoadComplete) {
+      return;
+    }
+
     const subscription = messageService.observeMessages(
       conversation.id,
-      msgs => {
-        setMessages(msgs);
+      (newMessages) => {
+        setMessages(prev => {
+          // Create a map of existing messages for faster lookup
+          const existingMessagesMap = new Map();
+          const tempMessages = new Map(); // Track optimistic messages
+          
+          prev.forEach(msg => {
+            existingMessagesMap.set(msg.id, msg);
+            // Track optimistic messages by content and timestamp
+            if (msg.id.startsWith('temp-')) {
+              const key = `${msg.content}-${msg.senderId}-${msg.timestamp}`;
+              tempMessages.set(key, msg);
+            }
+          });
+
+          const messagesToAdd: typeof newMessages = [];
+          const tempMessagesToRemove = new Set<string>();
+
+          newMessages.forEach(newMsg => {
+            // Skip if we already have this exact message
+            if (existingMessagesMap.has(newMsg.id)) {
+              return;
+            }
+
+            // Check if this is the real version of an optimistic message
+            const optimisticKey = `${newMsg.content}-${newMsg.senderId}-${newMsg.timestamp}`;
+            const matchingOptimistic = tempMessages.get(optimisticKey);
+            
+            if (matchingOptimistic) {
+              // Replace optimistic message with real one
+              tempMessagesToRemove.add(matchingOptimistic.id);
+              messagesToAdd.push(newMsg);
+            } else {
+              // This is a genuinely new message (from other user or different device)
+              // Only add if it's newer than our latest non-temp message
+              const latestRealMessage = prev
+                .filter(msg => !msg.id.startsWith('temp-'))
+                .sort((a, b) => {
+                  const timeA = a.timestamp ? new Date(a.timestamp).getTime() : 0;
+                  const timeB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
+                  return timeB - timeA;
+                })[0];
+              
+              if (!latestRealMessage || 
+                  !newMsg.timestamp || 
+                  !latestRealMessage.timestamp ||
+                  newMsg.timestamp > latestRealMessage.timestamp) {
+                messagesToAdd.push(newMsg);
+              }
+            }
+          });
+
+          // If we have messages to update
+          if (messagesToAdd.length > 0 || tempMessagesToRemove.size > 0) {
+            // Remove optimistic messages that are being replaced
+            let updatedMessages = prev.filter(msg => !tempMessagesToRemove.has(msg.id));
+            
+            // Add new real messages
+            if (messagesToAdd.length > 0) {
+              const sortedNewMessages = messagesToAdd.sort((a, b) => {
+                const timestampA = a.timestamp ? new Date(a.timestamp).getTime() : 0;
+                const timestampB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
+                return timestampA - timestampB;
+              });
+              updatedMessages = [...updatedMessages, ...sortedNewMessages];
+            }
+            
+            setLastLoadWasOlderMessages(false);
+            setShouldAutoScroll(false); // Reset auto-scroll after messages are processed
+            return updatedMessages;
+          }
+
+          return prev;
+        });
       },
       error => {
         console.error('Error observing messages:', error);
-        setError('Failed to load messages');
+        setError('Failed to load real-time messages');
       }
     );
 
     return () => {
       subscription.unsubscribe();
     };
-  }, [conversation.id]);
+  }, [conversation.id, initialLoadComplete, messages]);
 
   // Subscribe to other user's presence using existing real-time subscription
   useEffect(() => {
@@ -230,6 +342,8 @@ export default function ChatWindow({
     setMessages(prev => [...prev, optimisticMessage]);
     setNewMessage('');
     setReplyToMessage(null); // Clear reply state
+    setLastLoadWasOlderMessages(false); // Ensure scroll logic treats this as new message
+    setShouldAutoScroll(true); // Trigger auto-scroll for sent message
 
     // Send to server
     messageService
@@ -246,6 +360,16 @@ export default function ChatWindow({
           setNewMessage(messageContent); // Restore message text
           setReplyToMessage(replyToMessage); // Restore reply state
           setError(result.error);
+        } else if (result.data) {
+          // Success: Replace optimistic message with real one
+          // Note: The real-time subscription will also handle this, but this ensures immediate update
+          setMessages(prev => 
+            prev.map(msg => 
+              msg.id === tempId ? result.data! : msg
+            )
+          );
+          // Reset auto-scroll trigger after successful send
+          setShouldAutoScroll(false);
         }
       })
       .catch(() => {
@@ -294,6 +418,37 @@ export default function ChatWindow({
     }
   };
 
+  // Load more messages handler
+  const handleLoadMoreMessages = useCallback(async () => {
+    if (!nextToken || isLoadingMore || !conversation.id) {
+      return;
+    }
+
+    setIsLoadingMore(true);
+    const result = await messageService.getConversationMessages(
+      conversation.id, 
+      50, 
+      nextToken
+    );
+
+    if (result.error) {
+      setError(result.error);
+    } else {
+      // Sort older messages and prepend to existing messages
+      const sortedOlderMessages = result.data.sort((a, b) => {
+        const timestampA = a.timestamp ? new Date(a.timestamp).getTime() : 0;
+        const timestampB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
+        return timestampA - timestampB;
+      });
+
+      setMessages(prev => [...sortedOlderMessages, ...prev]);
+      setNextToken(result.nextToken);
+      setHasMoreMessages(!!result.nextToken);
+      setLastLoadWasOlderMessages(true);
+    }
+    setIsLoadingMore(false);
+  }, [nextToken, isLoadingMore, conversation.id]);
+
   // Show loading state while initializing or external loading
   if (isInitializing || externalLoading) {
     return <LoadingContainer />;
@@ -320,6 +475,11 @@ export default function ChatWindow({
         isInitializing={isInitializing}
         onReplyToMessage={handleReplyToMessage}
         onDeleteMessage={handleDeleteMessage}
+        onLoadMoreMessages={handleLoadMoreMessages}
+        hasMoreMessages={hasMoreMessages}
+        isLoadingMore={isLoadingMore}
+        lastLoadWasOlderMessages={lastLoadWasOlderMessages}
+        shouldAutoScroll={shouldAutoScroll}
       />
 
       <MessageInput

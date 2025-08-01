@@ -68,17 +68,19 @@ export class MessageService {
 
   async getConversationMessages(
     conversationId: string,
-    limit = 50
-  ): Promise<ListResult<Message>> {
+    limit = 50,
+    nextToken?: string
+  ): Promise<ListResult<Message> & { nextToken?: string }> {
     try {
       const result = await client.models.Message.list({
         filter: {
           conversationId: { eq: conversationId },
         },
         limit,
+        nextToken,
       });
 
-      // Sort by timestamp (newest first)
+      // Sort by timestamp (newest first) - AppSync should handle this via sortKey but ensuring client-side
       const sortedMessages = (result.data || []).sort((a, b) => {
         const timestampA = a.timestamp ? new Date(a.timestamp).getTime() : 0;
         const timestampB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
@@ -88,14 +90,28 @@ export class MessageService {
       return {
         data: sortedMessages,
         error: null,
+        nextToken: result.nextToken || undefined,
       };
     } catch (error) {
       return {
         data: [],
         error:
           error instanceof Error ? error.message : 'Failed to fetch messages',
+        nextToken: undefined,
       };
     }
+  }
+
+  // New method for getting recent messages (for real-time subscription initialization)
+  async getRecentMessages(
+    conversationId: string,
+    limit = 50
+  ): Promise<ListResult<Message>> {
+    const result = await this.getConversationMessages(conversationId, limit);
+    return {
+      data: result.data,
+      error: result.error,
+    };
   }
 
   async markMessageAsRead(messageId: string): Promise<DataResult<Message>> {

@@ -149,9 +149,15 @@ export default function MessageInput({
       {/* Message Input - Material Design styling */}
       <div className='flex-shrink-0 bg-white border-t border-gray-200 p-4 shadow-lg'>
         <div className='max-w-5xl mx-auto'>
-          <div className='flex gap-3 items-end'>
-            <div className='flex-1 relative'>
-              <input
+          <form 
+            autoComplete='off' 
+            onSubmit={(e) => { e.preventDefault(); handleSend(); }}
+            data-form-type='other'
+            style={{ position: 'relative' }}
+          >
+            <div className='flex gap-3 items-end'>
+              <div className='flex-1 relative'>
+                <input
                 ref={inputRef}
                 type='text'
                 placeholder='Type your message...'
@@ -166,6 +172,25 @@ export default function MessageInput({
                   }
                 }}
                 disabled={disabled}
+                autoComplete='off'
+                autoCorrect='off'
+                autoCapitalize='off'
+                spellCheck='false'
+                data-lpignore='true'
+                data-form-type='other'
+                data-ms-editor='false'
+                data-ms-spell-check='false'
+                data-gramm='false'
+                data-gramm_editor='false'
+                data-enable-grammarly='false'
+                name='message'
+                role='textbox'
+                aria-label='Type your message'
+                style={{ 
+                  fontSize: '14px',
+                  WebkitAppearance: 'none',
+                  MozAppearance: 'textfield'
+                }}
                 className='w-full px-5 py-3 pr-14 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-gray-50 hover:bg-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed placeholder-gray-500'
               />
               <button
@@ -191,7 +216,8 @@ export default function MessageInput({
                 className='flex-shrink-0 brightness-0 invert translate-x-0.5 opacity-80 hover:opacity-100 transition-opacity duration-200'
               />
             </button>
-          </div>
+            </div>
+          </form>
         </div>
       </div>
     </>

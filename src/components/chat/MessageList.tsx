@@ -19,6 +19,11 @@ interface MessageListProps {
   isInitializing: boolean;
   onReplyToMessage?: (message: Message) => void;
   onDeleteMessage?: (messageId: string) => void;
+  onLoadMoreMessages?: () => void;
+  hasMoreMessages?: boolean;
+  isLoadingMore?: boolean;
+  lastLoadWasOlderMessages?: boolean;
+  shouldAutoScroll?: boolean;
 }
 
 export default function MessageList({
@@ -29,9 +34,17 @@ export default function MessageList({
   isInitializing,
   onReplyToMessage,
   onDeleteMessage,
+  onLoadMoreMessages,
+  hasMoreMessages = false,
+  isLoadingMore = false,
+  lastLoadWasOlderMessages = false,
+  shouldAutoScroll = false,
 }: MessageListProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const loadMoreRef = useRef<HTMLDivElement>(null);
+  const lastMessageCountRef = useRef(0);
+  const scrollPositionRef = useRef(0);
   const [messageReactions, setMessageReactions] = useState<
     Record<string, MessageReaction[]>
   >({});
@@ -176,20 +189,110 @@ export default function MessageList({
     };
   }, [messages]);
 
-  // Auto-scroll to bottom when new messages arrive (after reactions are loaded)
+  // Handle scroll position preservation when loading older messages
   useEffect(() => {
-    if (reactionsLoaded && messages.length > 0) {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [messages, reactionsLoaded]);
+    if (!containerRef.current) return;
 
-  // Auto-scroll to bottom when component finishes initializing (after reactions are loaded)
-  useEffect(() => {
-    if (!isInitializing && messages.length > 0 && reactionsLoaded) {
-      // Use immediate scroll for initial load, then smooth for subsequent updates
+    const container = containerRef.current;
+    const previousMessageCount = lastMessageCountRef.current;
+    const currentMessageCount = messages.length;
+
+    // If messages were added and we have a previous count
+    if (currentMessageCount > previousMessageCount && previousMessageCount > 0) {
+      
+      if (lastLoadWasOlderMessages) {
+        // Older messages were loaded - preserve scroll position
+        const newMessagesAdded = currentMessageCount - previousMessageCount;
+        
+        // Use requestAnimationFrame to ensure DOM is updated
+        requestAnimationFrame(() => {
+          if (containerRef.current) {
+            // Calculate approximate height per message to restore scroll position
+            const averageMessageHeight = containerRef.current.scrollHeight / currentMessageCount;
+            const scrollOffset = newMessagesAdded * averageMessageHeight;
+            
+            // Restore scroll position by scrolling down by the amount of new content added
+            containerRef.current.scrollTop = scrollPositionRef.current + scrollOffset;
+          }
+        });
+      } else {
+        // New messages at the end - check if any are from current user (own messages)
+        const newMessages = messages.slice(previousMessageCount);
+        const hasOwnMessage = newMessages.some(msg => msg.senderId === currentUserId);
+        
+        // Always scroll for own messages, or if user was near bottom for others
+        const isNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 150;
+        
+        if (hasOwnMessage || isNearBottom || shouldAutoScroll) {
+          // Use requestAnimationFrame to ensure DOM updates are complete
+          requestAnimationFrame(() => {
+            messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+          });
+        }
+      }
+    } else if (currentMessageCount > 0 && previousMessageCount === 0) {
+      // Initial load - scroll to bottom
       messagesEndRef.current?.scrollIntoView({ behavior: 'auto' });
     }
-  }, [isInitializing, messages.length, reactionsLoaded]);
+
+    lastMessageCountRef.current = currentMessageCount;
+  }, [messages, reactionsLoaded, lastLoadWasOlderMessages, currentUserId, shouldAutoScroll]);
+
+  // Force auto-scroll when explicitly requested (for sent messages)
+  useEffect(() => {
+    if (shouldAutoScroll && messagesEndRef.current) {
+      // Double requestAnimationFrame to ensure all layout is complete
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+    }
+  }, [shouldAutoScroll]);
+
+  // Store scroll position continuously for pagination restoration
+  useEffect(() => {
+    if (!containerRef.current) return;
+    
+    const container = containerRef.current;
+    const handleScroll = () => {
+      scrollPositionRef.current = container.scrollTop;
+    };
+
+    container.addEventListener('scroll', handleScroll);
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Intersection Observer for auto-loading more messages when scrolled to top
+  useEffect(() => {
+    if (!hasMoreMessages || isLoadingMore || !onLoadMoreMessages) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (entry.isIntersecting && containerRef.current) {
+          // Store current scroll position before loading
+          scrollPositionRef.current = containerRef.current.scrollTop;
+          onLoadMoreMessages();
+        }
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '20px',
+      }
+    );
+
+    const loadMoreElement = loadMoreRef.current;
+    if (loadMoreElement) {
+      observer.observe(loadMoreElement);
+    }
+
+    return () => {
+      if (loadMoreElement) {
+        observer.unobserve(loadMoreElement);
+      }
+    };
+  }, [hasMoreMessages, isLoadingMore, onLoadMoreMessages]);
 
   if (messages.length === 0) {
     return (
@@ -227,6 +330,25 @@ export default function MessageList({
   return (
     <div className='flex-1 overflow-y-auto bg-gray-50' style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23d1d5db' fill-opacity='0.08' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E")` }}>
       <div ref={containerRef} className='max-w-5xl mx-auto px-4 py-6'>
+        {/* Load More Messages Button/Indicator */}
+        {hasMoreMessages && (
+          <div ref={loadMoreRef} className='flex justify-center py-4'>
+            {isLoadingMore ? (
+              <div className='flex items-center space-x-2 text-gray-500'>
+                <div className='animate-spin h-4 w-4 border-2 border-gray-400 border-t-transparent rounded-full'></div>
+                <span className='text-sm'>Loading older messages...</span>
+              </div>
+            ) : (
+              <button
+                onClick={onLoadMoreMessages}
+                className='px-4 py-2 text-sm text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-lg transition-colors duration-200'
+              >
+                Load older messages
+              </button>
+            )}
+          </div>
+        )}
+        
         {messages.map((message, index) => {
           const isOwnMessage = message.senderId === currentUserId;
           const prevMessage = index > 0 ? messages[index - 1] : null;
