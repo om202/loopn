@@ -154,21 +154,22 @@ export default function MessageList({
 
       setReactionsLoaded(false);
 
-      // Load reactions only for new message IDs
-      const reactionPromises = messageIdsToLoad.map(async messageId => {
-        const result = await reactionService.getMessageReactions(messageId);
-        loadedMessageIds.current.add(messageId); // Mark as loaded
-        return { messageId, reactions: result.data || [] };
+      // Load reactions for all new message IDs in a single batch call
+      const result =
+        await reactionService.getBatchMessageReactions(messageIdsToLoad);
+
+      if (result.error) {
+        console.error('Error loading batch reactions:', result.error);
+        setReactionsLoaded(true);
+        return;
+      }
+
+      // Mark all message IDs as loaded
+      messageIdsToLoad.forEach(messageId => {
+        loadedMessageIds.current.add(messageId);
       });
 
-      const results = await Promise.all(reactionPromises);
-      const newReactionsMap = results.reduce(
-        (acc, { messageId, reactions }) => {
-          acc[messageId] = reactions;
-          return acc;
-        },
-        {} as Record<string, MessageReaction[]>
-      );
+      const newReactionsMap = result.data;
 
       setMessageReactions(prev => ({ ...prev, ...newReactionsMap }));
       setReactionsLoaded(true);

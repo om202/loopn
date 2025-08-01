@@ -100,6 +100,91 @@ export class ReactionService {
     }
   }
 
+  // Batch fetch reactions for multiple messages at once using OR filter
+  // Falls back to concurrent individual calls if OR filter is not supported
+  async getBatchMessageReactions(messageIds: string[]): Promise<{
+    data: Record<string, MessageReaction[]>;
+    error: string | null;
+  }> {
+    try {
+      if (messageIds.length === 0) {
+        return { data: {}, error: null };
+      }
+
+
+
+      // Try using the OR filter syntax for AppSync
+      const result = await client.models.MessageReaction.list({
+        filter: {
+          or: messageIds.map(messageId => ({
+            messageId: { eq: messageId }
+          }))
+        },
+      });
+
+      // Group reactions by messageId
+      const reactionsByMessageId = result.data?.reduce(
+        (acc, reaction) => {
+          if (!acc[reaction.messageId]) {
+            acc[reaction.messageId] = [];
+          }
+          acc[reaction.messageId].push(reaction);
+          return acc;
+        },
+        {} as Record<string, MessageReaction[]>
+      ) || {};
+
+      // Ensure all messageIds have an entry (even if empty)
+      messageIds.forEach(messageId => {
+        if (!reactionsByMessageId[messageId]) {
+          reactionsByMessageId[messageId] = [];
+        }
+      });
+
+
+
+      return {
+        data: reactionsByMessageId,
+        error: null,
+      };
+    } catch (error) {
+      console.error('Error in getBatchMessageReactions with OR filter:', error);
+      // If the batch approach fails, fall back to individual calls
+      
+      try {
+        const reactionPromises = messageIds.map(async messageId => {
+          const result = await this.getMessageReactions(messageId);
+          return { messageId, reactions: result.data || [] };
+        });
+
+        const results = await Promise.all(reactionPromises);
+        const reactionsByMessageId = results.reduce(
+          (acc, { messageId, reactions }) => {
+            acc[messageId] = reactions;
+            return acc;
+          },
+          {} as Record<string, MessageReaction[]>
+        );
+
+
+
+        return {
+          data: reactionsByMessageId,
+          error: null,
+        };
+      } catch (fallbackError) {
+        console.error('Fallback also failed:', fallbackError);
+        return {
+          data: {},
+          error:
+            fallbackError instanceof Error
+              ? fallbackError.message
+              : 'Failed to fetch batch reactions',
+        };
+      }
+    }
+  }
+
   async getUserReactionForMessage(
     messageId: string,
     userId: string,
