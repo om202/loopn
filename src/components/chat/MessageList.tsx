@@ -15,6 +15,7 @@ interface MessageListProps {
   otherUserPresence: UserPresence | null;
   otherParticipantId: string;
   isInitializing: boolean;
+  onReplyToMessage?: (message: Message) => void;
 }
 
 export default function MessageList({
@@ -23,6 +24,7 @@ export default function MessageList({
   otherUserPresence,
   otherParticipantId,
   isInitializing,
+  onReplyToMessage,
 }: MessageListProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -141,6 +143,8 @@ export default function MessageList({
               marginTop={marginTop}
               marginBottom={marginBottom}
               showSenderName={showSenderName}
+              onReplyToMessage={onReplyToMessage}
+              allMessages={messages}
             />
           );
         })}

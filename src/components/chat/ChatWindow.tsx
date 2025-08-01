@@ -39,6 +39,7 @@ export default function ChatWindow({
   const [isInitializing, setIsInitializing] = useState(true);
   const [sendingConnectionRequest, setSendingConnectionRequest] =
     useState(false);
+  const [replyToMessage, setReplyToMessage] = useState<Message | null>(null);
 
   const { user } = useAuthenticator();
 
@@ -219,6 +220,7 @@ export default function ChatWindow({
       isRead: false,
       isEdited: false,
       isDeleted: false,
+      replyToMessageId: replyToMessage?.id,
       participants: [user.userId, otherParticipantId],
       createdAt: now,
       updatedAt: now,
@@ -227,15 +229,17 @@ export default function ChatWindow({
     // Immediately add to UI (optimistic update)
     setMessages(prev => [...prev, optimisticMessage]);
     setNewMessage('');
+    setReplyToMessage(null); // Clear reply state
 
     // Send to server
     messageService
-      .sendMessage(conversation.id, user.userId, messageContent)
+      .sendMessage(conversation.id, user.userId, messageContent, replyToMessage?.id)
       .then(result => {
         if (result.error) {
           // Rollback optimistic update on error
           setMessages(prev => prev.filter(msg => msg.id !== tempId));
           setNewMessage(messageContent); // Restore message text
+          setReplyToMessage(replyToMessage); // Restore reply state
           setError(result.error);
         }
       })
@@ -243,8 +247,17 @@ export default function ChatWindow({
         // Rollback on network error
         setMessages(prev => prev.filter(msg => msg.id !== tempId));
         setNewMessage(messageContent); // Restore message text
+        setReplyToMessage(replyToMessage); // Restore reply state
         setError('Failed to send message. Please try again.');
       });
+  };
+
+  const handleReplyToMessage = (message: Message) => {
+    setReplyToMessage(message);
+  };
+
+  const handleCancelReply = () => {
+    setReplyToMessage(null);
   };
 
   // Show loading state while initializing or external loading
@@ -271,6 +284,7 @@ export default function ChatWindow({
         otherUserPresence={otherUserPresence}
         otherParticipantId={otherParticipantId}
         isInitializing={isInitializing}
+        onReplyToMessage={handleReplyToMessage}
       />
 
       <MessageInput
@@ -279,6 +293,8 @@ export default function ChatWindow({
         onSendMessage={handleSendMessage}
         disabled={false}
         autoFocus={!isInitializing && !externalLoading}
+        replyToMessage={replyToMessage}
+        onCancelReply={handleCancelReply}
       />
 
       {error || externalError ? (

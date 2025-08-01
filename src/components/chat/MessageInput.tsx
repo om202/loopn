@@ -1,8 +1,11 @@
 'use client';
 
 import EmojiPicker from 'emoji-picker-react';
-import { Send, Smile } from 'lucide-react';
+import { Send, Smile, X } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
+import type { Schema } from '../../../amplify/data/resource';
+
+type Message = Schema['Message']['type'];
 
 interface MessageInputProps {
   newMessage: string;
@@ -10,6 +13,8 @@ interface MessageInputProps {
   onSendMessage: () => void;
   disabled?: boolean;
   autoFocus?: boolean;
+  replyToMessage?: Message | null;
+  onCancelReply?: () => void;
 }
 
 export default function MessageInput({
@@ -18,6 +23,8 @@ export default function MessageInput({
   onSendMessage,
   disabled = false,
   autoFocus = true,
+  replyToMessage,
+  onCancelReply,
 }: MessageInputProps) {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -71,8 +78,49 @@ export default function MessageInput({
     }, 0);
   };
 
+  const getRepliedToContent = (content: string) => {
+    const maxLength = 60;
+    return content.length > maxLength ? content.substring(0, maxLength) + '...' : content;
+  };
+
   return (
     <>
+      {/* Reply Preview */}
+      {replyToMessage && (
+        <div className='bg-gray-50 border-t border-gray-200 px-4 py-3 flex items-start justify-between'>
+          <div className='flex-1 min-w-0'>
+            <div className='flex items-center text-sm text-gray-600 mb-1'>
+              <svg 
+                className='w-4 h-4 mr-2 text-blue-500' 
+                fill='none' 
+                stroke='currentColor' 
+                viewBox='0 0 24 24'
+              >
+                <path 
+                  strokeLinecap='round' 
+                  strokeLinejoin='round' 
+                  strokeWidth={2} 
+                  d='M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6' 
+                />
+              </svg>
+              <span className='font-medium'>Replying to message</span>
+            </div>
+            <div className='text-sm text-gray-800 bg-white rounded-lg px-3 py-2 border border-gray-200'>
+              {getRepliedToContent(replyToMessage.content)}
+            </div>
+          </div>
+          {onCancelReply && (
+            <button
+              onClick={onCancelReply}
+              className='ml-3 p-1 text-gray-400 hover:text-gray-600 transition-colors'
+              title='Cancel reply'
+            >
+              <X className='w-5 h-5' />
+            </button>
+          )}
+        </div>
+      )}
+
       {/* Emoji Picker - Material Design container */}
       {showEmojiPicker ? (
         <div className=''>

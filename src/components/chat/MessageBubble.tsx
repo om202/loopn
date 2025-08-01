@@ -15,6 +15,8 @@ interface MessageBubbleProps {
   marginTop: string;
   marginBottom: string;
   showSenderName: boolean;
+  onReplyToMessage?: (message: Message) => void;
+  allMessages?: Message[]; // For finding replied-to messages
 }
 
 export default function MessageBubble({
@@ -25,6 +27,8 @@ export default function MessageBubble({
   marginTop,
   marginBottom,
   showSenderName,
+  onReplyToMessage,
+  allMessages = [],
 }: MessageBubbleProps) {
   // Check if message contains only emojis
   const isEmojiOnly = (text: string) => {
@@ -90,20 +94,33 @@ export default function MessageBubble({
     return `${senderName} · ${time}`;
   };
 
+  // Find the message this is replying to
+  const repliedToMessage = message.replyToMessageId 
+    ? allMessages.find(msg => msg.id === message.replyToMessageId)
+    : null;
+
+  // Get display content for replied message (truncated)
+  const getRepliedToContent = (content: string) => {
+    const maxLength = 50;
+    return content.length > maxLength ? content.substring(0, maxLength) + '...' : content;
+  };
+
+  const handleReplyClick = () => {
+    if (onReplyToMessage) {
+      onReplyToMessage(message);
+    }
+  };
+
   return (
     <div
       className={`flex flex-col ${marginTop} ${marginBottom} ${
         isOwnMessage ? 'items-end' : 'items-start'
       }`}
     >
-      {/* Sender name with time - only show for first message in group */}
-      {showSenderName && (
-        <div className={`text-xs text-gray-500 mb-1 px-1 ${isOwnMessage ? 'text-right' : 'text-left'}`}>
-          {getSenderNameWithTime()}
-        </div>
-      )}
+
       
-      <div className={`flex items-end gap-2 ${isOwnMessage ? 'flex-row-reverse' : 'flex-row'}`}>
+      <div className='group relative flex items-center gap-2'>
+        {/* Avatar always on the left for other users */}
         {!isOwnMessage && showSenderName && (
           <UserAvatar
             email={otherUserPresence?.email}
@@ -112,7 +129,65 @@ export default function MessageBubble({
             showStatus={false}
           />
         )}
-        <div className='group relative max-w-xs sm:max-w-sm lg:max-w-md'>
+        
+        {/* Message content and actions wrapper */}
+        <div className={`flex items-center gap-2 ${!isOwnMessage ? 'flex-row-reverse' : 'flex-row'}`}>
+          {/* Action icons with conditional positioning */}
+          {onReplyToMessage && (
+            <div className={`opacity-0 group-hover:opacity-100 transition-all duration-150 ease-out flex items-center gap-2 ${
+              !isOwnMessage ? 'ml-3' : 'mr-3'
+            }`}>
+              {/* Reply button */}
+              <button
+                onClick={handleReplyClick}
+                className='w-8 h-8 bg-gray-200 hover:bg-gray-300 rounded-full transition-colors duration-150 flex items-center justify-center'
+                title="Reply"
+              >
+                <svg 
+                  className='w-4 h-4 text-gray-600' 
+                  fill='none' 
+                  stroke='currentColor' 
+                  viewBox='0 0 24 24'
+                >
+                  <path 
+                    strokeLinecap='round' 
+                    strokeLinejoin='round' 
+                    strokeWidth={2} 
+                    d='M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6' 
+                  />
+                </svg>
+              </button>
+              
+              {/* Emoji reaction placeholder */}
+              <button
+                className='w-8 h-8 bg-gray-200 hover:bg-gray-300 rounded-full transition-colors duration-150 flex items-center justify-center'
+                title="Add reaction"
+              >
+                <svg 
+                  className='w-4 h-4 text-gray-600' 
+                  fill='none' 
+                  stroke='currentColor' 
+                  viewBox='0 0 24 24'
+                >
+                  <path 
+                    strokeLinecap='round' 
+                    strokeLinejoin='round' 
+                    strokeWidth={2} 
+                    d='M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z' 
+                  />
+                </svg>
+              </button>
+              
+              {/* Timestamp */}
+              <div className='bg-gray-200 hover:bg-gray-300 rounded-full px-3 py-1 transition-colors duration-150'>
+                <span className='text-xs text-gray-600'>
+                  {formatMessageTime(message.timestamp)}
+                </span>
+              </div>
+            </div>
+          )}
+
+          <div className='relative max-w-xs sm:max-w-sm lg:max-w-md'>
         {messageIsEmojiOnly ? (
           // Emoji-only messages without container
           <div className='text-4xl leading-none'>{message.content}</div>
@@ -125,29 +200,33 @@ export default function MessageBubble({
                 : 'bg-white text-gray-900 border-gray-200 rounded-bl-md'
             }`}
           >
+            {/* Reply preview */}
+            {repliedToMessage && (
+              <div className={`mb-2 pt-2 pb-2 border-l-2 pl-3 pr-3 ${
+                isOwnMessage 
+                  ? 'border-blue-300 bg-blue-500 bg-opacity-20' 
+                  : 'border-gray-400 bg-gray-100'
+              } rounded-r-lg`}>
+                <div className={`text-xs ${
+                  isOwnMessage ? 'text-blue-100' : 'text-gray-600'
+                } mb-1`}>
+                  Replying to {repliedToMessage.senderId === message.senderId ? 'yourself' : 
+                    (repliedToMessage.senderId === otherParticipantId ? 'Them' : 'You')}
+                </div>
+                <div className={`text-xs ${
+                  isOwnMessage ? 'text-blue-100' : 'text-gray-600'
+                }`}>
+                  {getRepliedToContent(repliedToMessage.content)}
+                </div>
+              </div>
+            )}
+            
             <p className='text-sm leading-relaxed break-words'>
               {renderMessageContent(message.content)}
             </p>
           </div>
         )}
-        {/* Timestamp tooltip - shows on hover with Material Design styling */}
-        <div
-          className={`absolute z-20 px-3 py-1.5 text-xs text-white bg-gray-900 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none whitespace-nowrap ${
-            isOwnMessage
-              ? 'right-full mr-3 top-1/2 -translate-y-1/2'
-              : 'left-full ml-3 top-1/2 -translate-y-1/2'
-          }`}
-        >
-          {formatMessageTime(message.timestamp)}
-          {/* Arrow pointing to message */}
-          <div
-            className={`absolute top-1/2 -translate-y-1/2 w-0 h-0 ${
-              isOwnMessage
-                ? 'left-full border-l-4 border-l-gray-900 border-t-2 border-b-2 border-t-transparent border-b-transparent'
-                : 'right-full border-r-4 border-r-gray-900 border-t-2 border-b-2 border-t-transparent border-b-transparent'
-            }`}
-          />
-        </div>
+          </div>
         </div>
       </div>
     </div>
