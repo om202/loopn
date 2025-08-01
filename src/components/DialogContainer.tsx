@@ -2,6 +2,7 @@
 
 import { useEffect, ReactNode } from 'react';
 import { createPortal } from 'react-dom';
+import type { ReactElement } from 'react';
 
 interface DialogContainerProps {
   isOpen: boolean;
@@ -15,7 +16,7 @@ export default function DialogContainer({
   onClose,
   children,
   maxWidth = 'xs',
-}: DialogContainerProps) {
+}: DialogContainerProps): ReactElement | null {
   // Handle escape key
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -66,6 +67,6 @@ export default function DialogContainer({
 
   // Render dialog as a portal to avoid any parent container overflow issues
   return typeof window !== 'undefined'
-    ? createPortal(dialogContent, document.body)
+    ? (createPortal(dialogContent, document.body) as ReactElement)
     : null;
 }
