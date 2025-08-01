@@ -3,11 +3,13 @@
 interface LoadingContainerProps {
   className?: string;
   size?: 'sm' | 'md' | 'lg';
+  variant?: 'spin' | 'pulse' | 'dots';
 }
 
 export default function LoadingContainer({
   className = '',
   size = 'md',
+  variant = 'pulse',
 }: LoadingContainerProps) {
   const getSizeClasses = () => {
     switch (size) {
@@ -20,13 +22,35 @@ export default function LoadingContainer({
     }
   };
 
+  const renderSpinner = () => {
+    switch (variant) {
+      case 'pulse':
+        return (
+          <div className={`${getSizeClasses().replace('border-[3px]', '').replace('border-[5px]', '')} bg-blue-500 rounded-full animate-pulse`} />
+        );
+      case 'dots':
+        const dotSize = size === 'sm' ? 'w-2 h-2' : size === 'lg' ? 'w-4 h-4' : 'w-3 h-3';
+        return (
+          <div className="flex space-x-2">
+            <div className={`${dotSize} bg-blue-500 rounded-full animate-bounce`} style={{ animationDelay: '0ms' }} />
+            <div className={`${dotSize} bg-blue-500 rounded-full animate-bounce`} style={{ animationDelay: '150ms' }} />
+            <div className={`${dotSize} bg-blue-500 rounded-full animate-bounce`} style={{ animationDelay: '300ms' }} />
+          </div>
+        );
+      default:
+        return (
+          <div
+            className={`${getSizeClasses()} border-gray-200 border-t-blue-500 rounded-full animate-spin`}
+          />
+        );
+    }
+  };
+
   return (
     <div
       className={`flex items-start justify-center w-full h-full pt-20 ${className}`}
     >
-      <div
-        className={`${getSizeClasses()} border-gray-200 border-t-blue-500 rounded-full animate-spin`}
-      />
+      {renderSpinner()}
     </div>
   );
 }
