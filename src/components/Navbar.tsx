@@ -44,7 +44,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className='bg-white border-b border-gray-200'>
+    <nav className='bg-white border-b border-gray-200 py-1'>
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='flex items-center justify-between h-16'>
           {/* Logo */}
@@ -53,7 +53,7 @@ export default function Navbar() {
               href='/?stay=true'
               className='flex items-center space-x-3 hover:opacity-80 transition-opacity'
             >
-              <Image src='/loopn.svg' alt='Loopn' width={32} height={32} />
+              <Image src='/loopn.svg' alt='Loopn' width={40} height={40} />
               <h1 className='text-xl font-semibold text-gray-800'>Loopn</h1>
             </Link>
           </div>
