@@ -7,6 +7,7 @@ import { Info } from 'lucide-react';
 import type { Schema } from '../../../amplify/data/resource';
 import UserAvatar from '../UserAvatar';
 import TrialChatInfoDialog from '../TrialChatInfoDialog';
+import DialogContainer from '../DialogContainer';
 
 type Conversation = Schema['Conversation']['type'];
 type UserPresence = Schema['UserPresence']['type'];
@@ -33,6 +34,7 @@ export default function ChatHeader({
   onBack,
 }: ChatHeaderProps) {
   const [showTrialInfoDialog, setShowTrialInfoDialog] = useState(false);
+  const [showEndChatDialog, setShowEndChatDialog] = useState(false);
   const getPresenceDisplay = () => {
     if (!otherUserPresence) {
       return {
@@ -89,7 +91,7 @@ export default function ChatHeader({
   };
 
   return (
-    <div className='flex-shrink-0 bg-white shadow-sm border-b border-gray-200'>
+    <div className='flex-shrink-0 bg-white shadow-lg border-b border-gray-200'>
       <div className='px-3 sm:px-4 py-2 sm:py-3'>
         <div className='flex items-center gap-2 sm:gap-3'>
           {/* Back Button */}
@@ -175,7 +177,7 @@ export default function ChatHeader({
                   <span className='font-medium'>Trial Chat</span>
                   <span className='text-gray-500'>6d 1h</span>
                   <button
-                    onClick={onEndChat}
+                    onClick={() => setShowEndChatDialog(true)}
                     className='text-red-500 hover:text-red-600 font-medium transition-colors border-b border-red-500 hover:border-red-600'
                   >
                     End Now
@@ -217,6 +219,39 @@ export default function ChatHeader({
         isOpen={showTrialInfoDialog}
         onClose={() => setShowTrialInfoDialog(false)}
       />
+
+      {/* End Chat Confirmation Dialog */}
+      <DialogContainer
+        isOpen={showEndChatDialog}
+        onClose={() => setShowEndChatDialog(false)}
+        maxWidth="xs"
+      >
+        <div className="p-4">
+          <h3 className="text-base font-medium text-gray-900 text-center mb-3">
+            End trial chat?
+          </h3>
+          <p className="text-sm text-gray-600 text-center mb-4">
+            This will immediately end the chat. You won't be able to send more messages, but chat history will remain accessible until the trial period expires.
+          </p>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setShowEndChatDialog(false)}
+              className="flex-1 px-3 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={() => {
+                onEndChat();
+                setShowEndChatDialog(false);
+              }}
+              className="flex-1 px-3 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 focus:outline-none transition-colors"
+            >
+              End Chat
+            </button>
+          </div>
+        </div>
+      </DialogContainer>
     </div>
   );
 }
