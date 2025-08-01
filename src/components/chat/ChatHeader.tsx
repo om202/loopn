@@ -1,9 +1,12 @@
 'use client';
 
 import Image from 'next/image';
+import { useState } from 'react';
+import { Info } from 'lucide-react';
 
 import type { Schema } from '../../../amplify/data/resource';
 import UserAvatar from '../UserAvatar';
+import TrialChatInfoDialog from '../TrialChatInfoDialog';
 
 type Conversation = Schema['Conversation']['type'];
 type UserPresence = Schema['UserPresence']['type'];
@@ -29,9 +32,10 @@ export default function ChatHeader({
   onSendConnectionRequest,
   onBack,
 }: ChatHeaderProps) {
+  const [showTrialInfoDialog, setShowTrialInfoDialog] = useState(false);
   const getPresenceDisplay = () => {
     if (!otherUserPresence) {
-      return { text: 'Unknown', color: 'text-gray-500', dot: 'bg-gray-400' };
+      return { text: 'Unknown', color: 'text-gray-500', dot: 'bg-gray-400', showDot: true };
     }
 
     const now = new Date();
@@ -43,9 +47,9 @@ export default function ChatHeader({
 
     switch (otherUserPresence.status) {
       case 'ONLINE':
-        return { text: 'Online', color: 'text-green-600', dot: 'bg-green-500' };
+        return { text: 'Online', color: 'text-gray-500', dot: 'bg-green-500', showDot: false };
       case 'BUSY':
-        return { text: 'Busy', color: 'text-red-600', dot: 'bg-red-500' };
+        return { text: 'Busy', color: 'text-red-600', dot: 'bg-red-500', showDot: true };
       case 'OFFLINE':
       default:
         if (isRecent) {
@@ -53,9 +57,10 @@ export default function ChatHeader({
             text: 'Recently active',
             color: 'text-yellow-600',
             dot: 'bg-yellow-500',
+            showDot: true,
           };
         }
-        return { text: 'Offline', color: 'text-gray-500', dot: 'bg-gray-400' };
+        return { text: 'Offline', color: 'text-gray-500', dot: 'bg-gray-400', showDot: true };
     }
   };
 
@@ -101,27 +106,7 @@ export default function ChatHeader({
               {getUserDisplayName()}
             </h1>
             <div className='flex items-center gap-1 sm:gap-2 mt-0.5'>
-              {!conversation.isConnected &&
-              timeLeft &&
-              timeLeft !== 'Expired' ? (
-                <div className='flex items-center gap-1 sm:gap-2'>
-                  <span className='text-xs sm:text-sm text-gray-600'>
-                    <span className='hidden sm:inline'>Trial Chat</span>
-                    <span className='sm:hidden'>Trial</span>
-                  </span>
-                  <span className='font-medium text-blue-600 text-xs sm:text-sm ml-1'>
-                    {timeLeft}
-                  </span>
-                  <button
-                    onClick={onEndChat}
-                    className='inline-flex ml-1 items-center px-2 py-0 rounded-full bg-red-50 text-red-500 border border-red-100 hover:bg-red-100 hover:border-red-300 transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-red-500 focus:ring-offset-1'
-                    style={{ fontSize: '12px' }}
-                  >
-                    <span className='hidden sm:inline'>End Now</span>
-                    <span className='sm:hidden'>End Now</span>
-                  </button>
-                </div>
-              ) : conversation.isConnected ? (
+              {conversation.isConnected ? (
                 <div className='flex items-center text-xs sm:text-sm text-green-600'>
                   <svg
                     className='w-2.5 h-2.5 sm:w-3 sm:h-3 mr-1'
@@ -143,43 +128,75 @@ export default function ChatHeader({
                 <div
                   className={`flex items-center text-xs sm:text-sm ${getPresenceDisplay().color}`}
                 >
-                  <span
-                    className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full mr-1 sm:mr-2 ${getPresenceDisplay().dot}`}
-                  ></span>
+                  {getPresenceDisplay().showDot && (
+                    <span
+                      className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full mr-1 sm:mr-2 ${getPresenceDisplay().dot}`}
+                    ></span>
+                  )}
                   {getPresenceDisplay().text}
                 </div>
               )}
             </div>
           </div>
 
-          {/* Connect Button - Right Side */}
+          {/* Trial Chat Countdown and Connect Button - Right Side */}
           {!conversation.isConnected &&
             !!timeLeft &&
             timeLeft !== 'Expired' && (
-              <button
-                onClick={onSendConnectionRequest}
-                disabled={sendingConnectionRequest}
-                className='flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 sm:py-2.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed'
-              >
-                <Image
-                  src='/connect-icon.svg'
-                  alt='Connect'
-                  width={16}
-                  height={16}
-                  className='flex-shrink-0 sm:w-[18px] sm:h-[18px]'
-                />
-                <span className='text-xs sm:text-sm font-medium'>
-                  <span className='hidden sm:inline'>
-                    {sendingConnectionRequest ? 'Connecting...' : 'Connect'}
+              <div className='flex items-center gap-3'>
+                <div className='flex items-center gap-2 text-xs sm:text-sm text-gray-600'>
+                  <button
+                    onClick={() => setShowTrialInfoDialog(true)}
+                    className='flex items-center gap-1 text-gray-500 hover:text-blue-600 transition-colors p-1 rounded-full hover:bg-blue-50'
+                    title='Learn about trial chat period'
+                  >
+                    <Info className='w-4 h-4' />
+                  </button>
+                  <span className='font-medium'>Trial Chat</span>
+                  <span className='text-gray-500'>6d 1h</span>
+                  <button
+                    onClick={onEndChat}
+                    className='text-red-500 hover:text-red-600 font-medium transition-colors border-b border-red-500 hover:border-red-600'
+                  >
+                    End Now
+                  </button>
+                </div>
+                
+                {/* Line Separator */}
+                <div className='w-px h-6 bg-gray-300'></div>
+                
+                {/* Connect Button */}
+                <button
+                  onClick={onSendConnectionRequest}
+                  disabled={sendingConnectionRequest}
+                  className='flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 sm:py-2.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed'
+                >
+                  <Image
+                    src='/connect-icon.svg'
+                    alt='Connect'
+                    width={16}
+                    height={16}
+                    className='flex-shrink-0 sm:w-[18px] sm:h-[18px]'
+                  />
+                  <span className='text-xs sm:text-sm font-medium'>
+                    <span className='hidden sm:inline'>
+                      {sendingConnectionRequest ? 'Connecting...' : 'Connect'}
+                    </span>
+                    <span className='sm:hidden'>
+                      {sendingConnectionRequest ? '...' : 'Connect'}
+                    </span>
                   </span>
-                  <span className='sm:hidden'>
-                    {sendingConnectionRequest ? '...' : 'Connect'}
-                  </span>
-                </span>
-              </button>
+                </button>
+              </div>
             )}
         </div>
       </div>
+
+      {/* Trial Chat Info Dialog */}
+      <TrialChatInfoDialog
+        isOpen={showTrialInfoDialog}
+        onClose={() => setShowTrialInfoDialog(false)}
+      />
     </div>
   );
 }

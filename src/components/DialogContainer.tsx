@@ -1,0 +1,63 @@
+'use client';
+
+import { useEffect, ReactNode } from 'react';
+
+interface DialogContainerProps {
+  isOpen: boolean;
+  onClose: () => void;
+  children: ReactNode;
+  maxWidth?: 'xs' | 'sm' | 'md' | 'lg';
+}
+
+export default function DialogContainer({
+  isOpen,
+  onClose,
+  children,
+  maxWidth = 'xs'
+}: DialogContainerProps) {
+  // Handle escape key
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen) {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscape);
+      // Prevent body scroll when dialog is open
+      document.body.style.overflow = 'hidden';
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen, onClose]);
+
+  if (!isOpen) return null;
+
+  const maxWidthClasses = {
+    xs: 'max-w-xs',
+    sm: 'max-w-sm',
+    md: 'max-w-md',
+    lg: 'max-w-lg'
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 overflow-y-auto">
+      {/* Background overlay */}
+      <div
+        className="fixed inset-0 bg-white/30 transition-opacity"
+        onClick={onClose}
+      />
+      
+      {/* Dialog container */}
+      <div className="flex min-h-full items-center justify-center p-4">
+        <div className={`relative w-full ${maxWidthClasses[maxWidth]} transform overflow-hidden rounded-xl bg-white border border-gray-200 shadow-xl transition-all`}>
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+}
