@@ -194,14 +194,18 @@ export default function MessageBubble({
       }`}
     >
       <div className='group relative flex items-center gap-2'>
-        {/* Avatar always on the left for other users */}
-        {!isOwnMessage && showSenderName && (
-          <UserAvatar
-            email={otherUserPresence?.email}
-            userId={otherParticipantId}
-            size='sm'
-            showStatus={false}
-          />
+        {/* Avatar container - always takes up space for other users to maintain consistent alignment */}
+        {!isOwnMessage && (
+          <div className='flex-shrink-0 w-8 h-8'>
+            {showSenderName && (
+              <UserAvatar
+                email={otherUserPresence?.email}
+                userId={otherParticipantId}
+                size='sm'
+                showStatus={false}
+              />
+            )}
+          </div>
         )}
 
         {/* Message content and actions wrapper */}

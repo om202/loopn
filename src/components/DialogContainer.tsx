@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 
 interface DialogContainerProps {
   isOpen: boolean;
@@ -44,7 +45,7 @@ export default function DialogContainer({
     lg: 'max-w-lg',
   };
 
-  return (
+  const dialogContent = (
     <div className='fixed inset-0 z-50 overflow-y-auto'>
       {/* Background overlay */}
       <div
@@ -62,4 +63,9 @@ export default function DialogContainer({
       </div>
     </div>
   );
+
+  // Render dialog as a portal to avoid any parent container overflow issues
+  return typeof window !== 'undefined' 
+    ? createPortal(dialogContent, document.body)
+    : null;
 }

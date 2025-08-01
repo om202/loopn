@@ -90,7 +90,7 @@ export default function Navbar() {
                         {getUserEmail()}
                       </p>
                       <p className='text-xs sm:text-sm text-gray-500'>
-                        Welcome back
+                        Welcome
                       </p>
                     </div>
                     <div className='p-2'>
