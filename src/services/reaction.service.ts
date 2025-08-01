@@ -111,28 +111,27 @@ export class ReactionService {
         return { data: {}, error: null };
       }
 
-
-
       // Try using the OR filter syntax for AppSync
       const result = await client.models.MessageReaction.list({
         filter: {
           or: messageIds.map(messageId => ({
-            messageId: { eq: messageId }
-          }))
+            messageId: { eq: messageId },
+          })),
         },
       });
 
       // Group reactions by messageId
-      const reactionsByMessageId = result.data?.reduce(
-        (acc, reaction) => {
-          if (!acc[reaction.messageId]) {
-            acc[reaction.messageId] = [];
-          }
-          acc[reaction.messageId].push(reaction);
-          return acc;
-        },
-        {} as Record<string, MessageReaction[]>
-      ) || {};
+      const reactionsByMessageId =
+        result.data?.reduce(
+          (acc, reaction) => {
+            if (!acc[reaction.messageId]) {
+              acc[reaction.messageId] = [];
+            }
+            acc[reaction.messageId].push(reaction);
+            return acc;
+          },
+          {} as Record<string, MessageReaction[]>
+        ) || {};
 
       // Ensure all messageIds have an entry (even if empty)
       messageIds.forEach(messageId => {
@@ -141,8 +140,6 @@ export class ReactionService {
         }
       });
 
-
-
       return {
         data: reactionsByMessageId,
         error: null,
@@ -150,7 +147,7 @@ export class ReactionService {
     } catch (error) {
       console.error('Error in getBatchMessageReactions with OR filter:', error);
       // If the batch approach fails, fall back to individual calls
-      
+
       try {
         const reactionPromises = messageIds.map(async messageId => {
           const result = await this.getMessageReactions(messageId);
@@ -165,8 +162,6 @@ export class ReactionService {
           },
           {} as Record<string, MessageReaction[]>
         );
-
-
 
         return {
           data: reactionsByMessageId,
