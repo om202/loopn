@@ -1,5 +1,7 @@
 'use client';
 
+import Avatar from 'boring-avatars';
+
 interface UserAvatarProps {
   email?: string | null;
   userId?: string;
@@ -7,6 +9,8 @@ interface UserAvatarProps {
   showStatus?: boolean;
   status?: string | null;
   className?: string;
+  variant?: 'marble' | 'beam' | 'pixel' | 'sunset' | 'ring' | 'bauhaus';
+  colors?: string[];
 }
 
 export default function UserAvatar({
@@ -16,25 +20,21 @@ export default function UserAvatar({
   showStatus = false,
   status,
   className = '',
+  variant = 'beam',
+  colors = ['#92A1C6', '#146A7C', '#F0AB3D', '#C271B4', '#C20D90'],
 }: UserAvatarProps) {
-  const getInitial = () => {
-    if (email) {
-      return email.charAt(0).toUpperCase();
-    }
-    if (userId) {
-      return userId.charAt(0).toUpperCase();
-    }
-    return 'U';
+  const getUserIdentifier = () => {
+    return email || userId || 'anonymous-user';
   };
 
-  const getSizeClasses = () => {
+  const getAvatarSize = () => {
     switch (size) {
       case 'sm':
-        return 'w-8 h-8 text-sm';
+        return 32; // w-8 h-8
       case 'lg':
-        return 'w-12 h-12 text-lg';
+        return 48; // w-12 h-12
       default:
-        return 'w-10 h-10 text-sm';
+        return 40; // w-10 h-10
     }
   };
 
@@ -43,17 +43,17 @@ export default function UserAvatar({
       case 'sm':
         return {
           size: 'w-2.5 h-2.5',
-          position: '-top-0 -right-0',
+          position: '-bottom-0 -right-0',
         };
       case 'lg':
         return {
-          size: 'w-3 h-3',
-          position: '-top-0 -right-0',
+          size: 'w-3.5 h-3.5',
+          position: '-bottom-0 -right-0',
         };
       default: // md
         return {
-          size: 'w-2.5 h-2.5',
-          position: '-top-0 -right-0',
+          size: 'w-3 h-3',
+          position: '-bottom-0 -right-0',
         };
     }
   };
@@ -95,10 +95,13 @@ export default function UserAvatar({
 
   return (
     <div className={`relative ${className} cursor-pointer`}>
-      <div
-        className={`${getSizeClasses()} bg-blue-600 rounded-full flex items-center justify-center text-white font-medium`}
-      >
-        {getInitial()}
+      <div className="rounded-full overflow-hidden border border-slate-500">
+        <Avatar
+          size={getAvatarSize()}
+          name={getUserIdentifier()}
+          variant={variant}
+          colors={colors}
+        />
       </div>
       {showStatus === true && (
         <div className={`absolute ${getIndicatorSizeAndPosition().position}`}>

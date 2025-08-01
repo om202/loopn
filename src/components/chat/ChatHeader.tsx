@@ -40,8 +40,6 @@ export default function ChatHeader({
       return {
         text: 'Unknown',
         color: 'text-gray-500',
-        dot: 'bg-gray-400',
-        showDot: true,
       };
     }
 
@@ -57,15 +55,11 @@ export default function ChatHeader({
         return {
           text: 'Online',
           color: 'text-gray-500',
-          dot: 'bg-green-500',
-          showDot: false,
         };
       case 'BUSY':
         return {
           text: 'Busy',
           color: 'text-red-600',
-          dot: 'bg-red-500',
-          showDot: true,
         };
       case 'OFFLINE':
       default:
@@ -73,15 +67,11 @@ export default function ChatHeader({
           return {
             text: 'Recently active',
             color: 'text-yellow-600',
-            dot: 'bg-yellow-500',
-            showDot: true,
           };
         }
         return {
           text: 'Offline',
           color: 'text-gray-500',
-          dot: 'bg-gray-400',
-          showDot: true,
         };
     }
   };
@@ -150,11 +140,6 @@ export default function ChatHeader({
                 <div
                   className={`flex items-center text-xs sm:text-sm ${getPresenceDisplay().color}`}
                 >
-                  {getPresenceDisplay().showDot && (
-                    <span
-                      className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full mr-1 sm:mr-2 ${getPresenceDisplay().dot}`}
-                    ></span>
-                  )}
                   {getPresenceDisplay().text}
                 </div>
               )}
