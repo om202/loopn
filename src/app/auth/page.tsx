@@ -7,7 +7,7 @@ function AuthHeader() {
   return (
     <div className='text-center mb-16'>
       <div className='flex items-center justify-center space-x-3 mb-6'>
-        <Image src='/loopn.svg' alt='Loopn' width={40} height={40} />
+        <Image src='/loopn.svg' alt='Loopn' width={40} height={40} priority />
         <h1 className='text-2xl font-bold text-gray-900'>Loopn</h1>
       </div>
       <p className='text-gray-600'>

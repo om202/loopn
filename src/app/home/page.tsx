@@ -50,7 +50,13 @@ export default function HomePage() {
           <div className='flex justify-between items-center h-16'>
             <div className='flex items-center'>
               <div className='flex items-center space-x-2'>
-                <Image src='/loopn.svg' alt='Loopn' width={32} height={32} />
+                <Image
+                  src='/loopn.svg'
+                  alt='Loopn'
+                  width={32}
+                  height={32}
+                  priority
+                />
                 <span className='text-xl font-bold text-gray-900'>Loopn</span>
               </div>
             </div>

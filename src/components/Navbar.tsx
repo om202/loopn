@@ -53,7 +53,13 @@ export default function Navbar() {
               href='/?stay=true'
               className='flex items-center space-x-3 hover:opacity-80 transition-opacity'
             >
-              <Image src='/loopn.svg' alt='Loopn' width={40} height={40} />
+              <Image
+                src='/loopn.svg'
+                alt='Loopn'
+                width={40}
+                height={40}
+                priority
+              />
               <h1 className='text-xl font-semibold text-gray-800'>Loopn</h1>
             </Link>
           </div>
