@@ -26,6 +26,29 @@ interface MessageBubbleProps {
   onAddReaction?: (messageId: string, emoji: string) => void;
 }
 
+// Tick indicator component
+const MessageTicks = ({ isOptimistic }: { isOptimistic: boolean }) => {
+  return (
+    <div className="flex items-center">
+      {isOptimistic ? (
+        // Single tick for optimistic (sending) messages
+        <img 
+          src="/tick.svg" 
+          alt="sent" 
+          className="w-5 h-5 opacity-30 filter brightness-0 invert" 
+        />
+      ) : (
+        // Double tick for successfully sent messages
+        <img 
+          src="/double_tick.svg" 
+          alt="delivered" 
+          className="w-5 h-5 opacity-50 filter brightness-0 invert" 
+        />
+      )}
+    </div>
+  );
+};
+
 export default function MessageBubble({
   message,
   isOwnMessage,
@@ -226,12 +249,7 @@ export default function MessageBubble({
                 />
               </div>
 
-              {/* Timestamp */}
-              <div className='bg-gray-200 hover:bg-gray-300 rounded-full px-3 py-1 transition-colors duration-150'>
-                <span className='text-xs text-gray-600'>
-                  {formatMessageTime(message.timestamp)}
-                </span>
-              </div>
+
             </div>
           )}
 
@@ -242,7 +260,7 @@ export default function MessageBubble({
             ) : (
               // Regular text messages with Material Design bubble styling
               <div
-                className={`px-4 py-3 rounded-2xl border ${
+                className={`px-3 py-2 rounded-2xl border ${
                   isOwnMessage
                     ? 'bg-blue-600 text-white border-blue-600 rounded-br-md'
                     : 'bg-white text-gray-900 border-gray-200 rounded-bl-md'
@@ -279,9 +297,16 @@ export default function MessageBubble({
                   </div>
                 )}
 
-                <p className='text-sm leading-relaxed break-words'>
-                  {renderMessageContent(message.content)}
-                </p>
+                <div className="relative">
+                  <p className='text-sm leading-relaxed break-words pr-10'>
+                    {renderMessageContent(message.content)}
+                  </p>
+                  {isOwnMessage && (
+                    <div className="absolute bottom-0 right-0">
+                      <MessageTicks isOptimistic={message.id.startsWith('temp-')} />
+                    </div>
+                  )}
+                </div>
               </div>
             )}
 
