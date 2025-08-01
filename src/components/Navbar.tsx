@@ -54,7 +54,7 @@ export default function Navbar() {
               className='flex items-center space-x-3 hover:opacity-80 transition-opacity'
             >
               <Image src='/loopn.svg' alt='Loopn' width={32} height={32} />
-              <h1 className='text-xl sm:text-2xl font-semibold text-gray-800'>
+              <h1 className='text-xl font-semibold text-gray-800'>
                 Loopn
               </h1>
             </Link>

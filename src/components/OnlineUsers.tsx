@@ -361,35 +361,33 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   return (
     <div>
       {/* Thin Google-style Header */}
-      <div className='mb-6 sm:mb-7'>
-        <div className='bg-white rounded-2xl border border-gray-200'>
-          <div className='px-4 sm:px-6 py-2.5 sm:py-3'>
-            <div className='flex items-center justify-between'>
-              <div className='flex items-center gap-3'>
-                <div className='w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center'>
-                  <MessageCircle className='w-4 h-4 text-gray-600' />
-                </div>
+      <div className='mb-12'>
+        <div className='bg-white rounded-full border border-gray-200'>
+          <div className='px-6 sm:px-8 py-2.5 sm:py-3'>
+            <div className='flex items-center gap-8'>
+              <h1 className='text-lg font-semibold text-blue-600 mr-4'>
+                Connect
+              </h1>
+              
+              <div className='flex items-center gap-4'>
                 <div className='flex items-center gap-2'>
-                  <h2 className='text-lg sm:text-xl font-medium text-gray-900'>
+                  <MessageCircle className='w-4 h-4 text-gray-600' />
+                  <span className='text-sm font-medium text-gray-900'>
                     Chats
-                  </h2>
-                  <div className='w-6 h-6 bg-gray-100 rounded-md flex items-center justify-center'>
-                    <span className='text-xs font-medium text-gray-700'>
-                      {allUsers.length}
-                    </span>
-                  </div>
+                  </span>
+                  <span className='text-xs font-medium text-gray-500'>
+                    {allUsers.length}
+                  </span>
                 </div>
-              </div>
 
-              <div className='flex items-center gap-2'>
-                <div className='w-6 h-6 bg-green-50 rounded-md flex items-center justify-center'>
-                  <Globe className='w-3 h-3 text-green-600' />
-                </div>
-                <span className='text-sm font-medium text-gray-900'>
-                  Online
-                </span>
-                <div className='w-5 h-5 bg-gray-100 rounded-md flex items-center justify-center'>
-                  <span className='text-xs font-medium text-gray-700'>
+                <div className='w-px h-4 bg-gray-300'></div>
+
+                <div className='flex items-center gap-2'>
+                  <Globe className='w-4 h-4 text-gray-600' />
+                  <span className='text-sm font-medium text-gray-900'>
+                    Online
+                  </span>
+                  <span className='text-xs font-medium text-gray-500'>
                     {onlineUsers.length}
                   </span>
                 </div>
@@ -399,12 +397,12 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
         </div>
       </div>
 
-      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8'>
+      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8'>
         {allUsers.map(userPresence => (
           <div
             key={userPresence.userId}
             onClick={() => handleChatAction(userPresence.userId)}
-            className='bg-white rounded-2xl border border-gray-200 p-4 sm:p-6 cursor-pointer group hover:shadow-sm transition-shadow'
+            className='bg-white rounded-2xl border border-gray-200 px-8 py-6 cursor-pointer group hover:shadow-sm transition-shadow'
           >
             <div className='flex flex-col items-center text-center'>
               <div className='mb-4'>
@@ -422,7 +420,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
               </div>
 
               <div className='mb-4 sm:mb-5 min-h-[2.5rem] sm:min-h-[3rem] flex flex-col justify-center'>
-                <div className='font-medium text-gray-900 text-sm sm:text-base mb-1 line-clamp-2 no-email-detection'>
+                <div className='font-medium text-gray-900 text-sm sm:text-base mb-1 line-clamp-2 no-email-detection break-words max-w-full'>
                   {getDisplayName(userPresence)}
                 </div>
                 <div className='text-xs sm:text-sm text-gray-600 text-center'>
@@ -432,20 +430,20 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
                 </div>
               </div>
 
-              <button className='w-full px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-2xl border transition-colors bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100 flex items-center justify-center gap-1 sm:gap-2'>
+              <button className='px-4 sm:px-5 py-1.5 text-sm font-medium rounded-full border transition-colors bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100 flex items-center justify-center gap-1 sm:gap-1.5'>
                 {pendingRequests.has(userPresence.userId) ? (
                   <>
-                    <Clock className='w-3 h-3 sm:w-4 sm:h-4' />
+                    <Clock className='w-3 h-3 sm:w-4 sm:h-4 text-gray-600' />
                     Pending
                   </>
                 ) : existingConversations.has(userPresence.userId) ? (
                   <>
-                    <MessageCircle className='w-3 h-3 sm:w-4 sm:h-4' />
-                    Open Chat
+                    <MessageCircle className='w-3 h-3 sm:w-4 sm:h-4 text-gray-600' />
+                    Chat
                   </>
                 ) : (
                   <>
-                    <CheckCircle2 className='w-3 h-3 sm:w-4 sm:h-4' />
+                    <CheckCircle2 className='w-3 h-3 sm:w-4 sm:h-4 text-gray-600' />
                     Connect
                   </>
                 )}
