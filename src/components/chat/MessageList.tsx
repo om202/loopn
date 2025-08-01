@@ -38,27 +38,9 @@ export default function MessageList({
   const [openEmojiPickerMessageId, setOpenEmojiPickerMessageId] = useState<
     string | null
   >(null);
+  const [reactionsLoaded, setReactionsLoaded] = useState(false);
 
-  // Fetch reactions for all messages
-  const fetchReactions = useCallback(async () => {
-    if (messages.length === 0) return;
 
-    const reactionPromises = messages.map(async message => {
-      const result = await reactionService.getMessageReactions(message.id);
-      return { messageId: message.id, reactions: result.data || [] };
-    });
-
-    const results = await Promise.all(reactionPromises);
-    const reactionsMap = results.reduce(
-      (acc, { messageId, reactions }) => {
-        acc[messageId] = reactions;
-        return acc;
-      },
-      {} as Record<string, MessageReaction[]>
-    );
-
-    setMessageReactions(reactionsMap);
-  }, [messages]);
 
   // Handle adding/removing reactions
   const handleAddReaction = useCallback(
@@ -126,10 +108,37 @@ export default function MessageList({
     };
   }, [openEmojiPickerMessageId]);
 
-  // Fetch reactions when messages change
+  // Fetch reactions when messages change - before any scrolling
   useEffect(() => {
-    fetchReactions();
-  }, [fetchReactions]);
+    const loadReactionsImmediately = async () => {
+      if (messages.length === 0) {
+        setReactionsLoaded(true);
+        return;
+      }
+
+      setReactionsLoaded(false);
+
+      // Load reactions synchronously to prevent layout shift
+      const reactionPromises = messages.map(async message => {
+        const result = await reactionService.getMessageReactions(message.id);
+        return { messageId: message.id, reactions: result.data || [] };
+      });
+
+      const results = await Promise.all(reactionPromises);
+      const reactionsMap = results.reduce(
+        (acc, { messageId, reactions }) => {
+          acc[messageId] = reactions;
+          return acc;
+        },
+        {} as Record<string, MessageReaction[]>
+      );
+
+      setMessageReactions(reactionsMap);
+      setReactionsLoaded(true);
+    };
+
+    loadReactionsImmediately();
+  }, [messages]); // Direct dependency on messages, not fetchReactions
 
   // Subscribe to real-time reaction changes
   useEffect(() => {
@@ -167,18 +176,20 @@ export default function MessageList({
     };
   }, [messages]);
 
-  // Auto-scroll to bottom when new messages arrive
+  // Auto-scroll to bottom when new messages arrive (after reactions are loaded)
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+    if (reactionsLoaded && messages.length > 0) {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages, reactionsLoaded]);
 
-  // Auto-scroll to bottom when component finishes initializing
+  // Auto-scroll to bottom when component finishes initializing (after reactions are loaded)
   useEffect(() => {
-    if (!isInitializing && messages.length > 0) {
+    if (!isInitializing && messages.length > 0 && reactionsLoaded) {
       // Use immediate scroll for initial load, then smooth for subsequent updates
       messagesEndRef.current?.scrollIntoView({ behavior: 'auto' });
     }
-  }, [isInitializing, messages.length]);
+  }, [isInitializing, messages.length, reactionsLoaded]);
 
   if (messages.length === 0) {
     return (
