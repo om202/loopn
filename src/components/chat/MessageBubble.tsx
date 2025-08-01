@@ -91,7 +91,7 @@ export default function MessageBubble({
           <div
             className={`px-4 py-3 rounded-2xl border ${
               isOwnMessage
-                ? 'bg-indigo-600 text-white border-indigo-600 rounded-br-md'
+                ? 'bg-blue-600 text-white border-blue-600 rounded-br-md'
                 : 'bg-white text-gray-900 border-gray-200 rounded-bl-md'
             }`}
           >

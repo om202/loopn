@@ -756,7 +756,7 @@ export default function NotificationBell() {
                                         disabled={
                                           decliningId === notification.id
                                         }
-                                        className='px-4 py-1.5 bg-indigo-600 text-white text-sm font-medium rounded-2xl hover:bg-indigo-700 disabled:opacity-50 transition-colors'
+                                        className='px-4 py-1.5 bg-blue-600 text-white text-sm font-medium rounded-2xl hover:bg-blue-700 disabled:opacity-50 transition-colors'
                                       >
                                         Confirm
                                       </button>
@@ -794,7 +794,7 @@ export default function NotificationBell() {
                       setError('Failed to mark notifications as read');
                     }
                   }}
-                  className='w-full text-center text-sm text-indigo-600 hover:text-indigo-800 font-medium py-2 rounded-2xl hover:bg-gray-100 transition-colors'
+                  className='w-full text-center text-sm text-blue-600 hover:text-blue-800 font-medium py-2 rounded-2xl hover:bg-gray-100 transition-colors'
                 >
                   Mark all as read
                 </button>

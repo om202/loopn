@@ -3,9 +3,9 @@
   <!-- Gray background circle -->
   <circle cx="110" cy="110" r="80" fill="#D9D9D9" />
 
-  <!-- Left indigo circle -->
-  <circle cx="75" cy="110" r="35" fill="#4F46E5" />
+  <!-- Left blue circle -->
+  <circle cx="75" cy="110" r="35" fill="#2563eb" />
 
-  <!-- Right indigo circle -->
-  <circle cx="145" cy="110" r="35" fill="#4F46E5" />
+  <!-- Right blue circle -->
+  <circle cx="145" cy="110" r="35" fill="#2563eb" />
 </svg> 

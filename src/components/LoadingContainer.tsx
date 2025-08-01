@@ -25,7 +25,7 @@ export default function LoadingContainer({
       className={`flex items-center justify-center w-full h-full ${className}`}
     >
       <div
-        className={`${getSizeClasses()} border-gray-100 border-t-gray-300 rounded-full animate-spin`}
+        className={`${getSizeClasses()} border-gray-200 border-t-blue-500 rounded-full animate-spin`}
       />
     </div>
   );

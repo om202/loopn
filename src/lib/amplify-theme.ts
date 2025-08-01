@@ -16,15 +16,15 @@ export const amplifyTheme: Theme = {
       },
       button: {
         primary: {
-          backgroundColor: 'rgb(79, 70, 229)', // indigo-600
+          backgroundColor: 'rgb(79, 70, 229)', // blue-600
           _hover: {
-            backgroundColor: 'rgb(67, 56, 202)', // indigo-700
+            backgroundColor: 'rgb(67, 56, 202)', // blue-700
           },
           _focus: {
             backgroundColor: 'rgb(67, 56, 202)',
           },
           _active: {
-            backgroundColor: 'rgb(55, 48, 163)', // indigo-800
+            backgroundColor: 'rgb(55, 48, 163)', // blue-800
           },
         },
         link: {
@@ -56,13 +56,13 @@ export const amplifyTheme: Theme = {
     colors: {
       brand: {
         primary: {
-          10: 'rgb(238, 242, 255)', // indigo-50
-          20: 'rgb(224, 231, 255)', // indigo-100
-          40: 'rgb(165, 180, 252)', // indigo-300
-          60: 'rgb(129, 140, 248)', // indigo-400
-          80: 'rgb(99, 102, 241)', // indigo-500
-          90: 'rgb(79, 70, 229)', // indigo-600
-          100: 'rgb(67, 56, 202)', // indigo-700
+          10: 'rgb(238, 242, 255)', // blue-50
+          20: 'rgb(224, 231, 255)', // blue-100
+          40: 'rgb(165, 180, 252)', // blue-300
+          60: 'rgb(129, 140, 248)', // blue-400
+          80: 'rgb(99, 102, 241)', // blue-500
+          90: 'rgb(79, 70, 229)', // blue-600
+          100: 'rgb(67, 56, 202)', // blue-700
         },
       },
     },

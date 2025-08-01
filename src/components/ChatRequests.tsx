@@ -156,7 +156,7 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
           {chatRequests.map(request => (
             <div
               key={request.id}
-              className='flex items-center justify-between p-3 rounded-lg border border-gray-100 hover:border-indigo-200 hover:bg-indigo-50/30 transition-all'
+              className='flex items-center justify-between p-3 rounded-lg border border-gray-100 hover:border-blue-200 hover:bg-blue-50/30 transition-all'
             >
               <div className='flex items-center gap-3'>
                 <UserAvatar
@@ -194,7 +194,7 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
                   disabled={
                     acceptingId === request.id || decliningId === request.id
                   }
-                  className='px-3 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 disabled:opacity-50 transition-colors'
+                  className='px-3 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors'
                 >
                   {acceptingId === request.id ? 'Accepting...' : 'Accept'}
                 </button>
