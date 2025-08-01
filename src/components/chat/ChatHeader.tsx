@@ -35,7 +35,12 @@ export default function ChatHeader({
   const [showTrialInfoDialog, setShowTrialInfoDialog] = useState(false);
   const getPresenceDisplay = () => {
     if (!otherUserPresence) {
-      return { text: 'Unknown', color: 'text-gray-500', dot: 'bg-gray-400', showDot: true };
+      return {
+        text: 'Unknown',
+        color: 'text-gray-500',
+        dot: 'bg-gray-400',
+        showDot: true,
+      };
     }
 
     const now = new Date();
@@ -47,9 +52,19 @@ export default function ChatHeader({
 
     switch (otherUserPresence.status) {
       case 'ONLINE':
-        return { text: 'Online', color: 'text-gray-500', dot: 'bg-green-500', showDot: false };
+        return {
+          text: 'Online',
+          color: 'text-gray-500',
+          dot: 'bg-green-500',
+          showDot: false,
+        };
       case 'BUSY':
-        return { text: 'Busy', color: 'text-red-600', dot: 'bg-red-500', showDot: true };
+        return {
+          text: 'Busy',
+          color: 'text-red-600',
+          dot: 'bg-red-500',
+          showDot: true,
+        };
       case 'OFFLINE':
       default:
         if (isRecent) {
@@ -60,7 +75,12 @@ export default function ChatHeader({
             showDot: true,
           };
         }
-        return { text: 'Offline', color: 'text-gray-500', dot: 'bg-gray-400', showDot: true };
+        return {
+          text: 'Offline',
+          color: 'text-gray-500',
+          dot: 'bg-gray-400',
+          showDot: true,
+        };
     }
   };
 
@@ -161,10 +181,10 @@ export default function ChatHeader({
                     End Now
                   </button>
                 </div>
-                
+
                 {/* Line Separator */}
                 <div className='w-px h-6 bg-gray-300'></div>
-                
+
                 {/* Connect Button */}
                 <button
                   onClick={onSendConnectionRequest}

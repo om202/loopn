@@ -13,7 +13,7 @@ export default function DialogContainer({
   isOpen,
   onClose,
   children,
-  maxWidth = 'xs'
+  maxWidth = 'xs',
 }: DialogContainerProps) {
   // Handle escape key
   useEffect(() => {
@@ -41,20 +41,22 @@ export default function DialogContainer({
     xs: 'max-w-xs',
     sm: 'max-w-sm',
     md: 'max-w-md',
-    lg: 'max-w-lg'
+    lg: 'max-w-lg',
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
+    <div className='fixed inset-0 z-50 overflow-y-auto'>
       {/* Background overlay */}
       <div
-        className="fixed inset-0 bg-white/30 transition-opacity"
+        className='fixed inset-0 bg-white/30 transition-opacity'
         onClick={onClose}
       />
-      
+
       {/* Dialog container */}
-      <div className="flex min-h-full items-center justify-center p-4">
-        <div className={`relative w-full ${maxWidthClasses[maxWidth]} transform overflow-hidden rounded-xl bg-white border border-gray-200 shadow-xl transition-all`}>
+      <div className='flex min-h-full items-center justify-center p-4'>
+        <div
+          className={`relative w-full ${maxWidthClasses[maxWidth]} transform overflow-hidden rounded-xl bg-white border border-gray-200 shadow-xl transition-all`}
+        >
           {children}
         </div>
       </div>

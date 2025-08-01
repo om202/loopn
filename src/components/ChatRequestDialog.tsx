@@ -72,7 +72,7 @@ function ConnectedDialog({
   };
 
   return (
-    <DialogContainer isOpen={isOpen} onClose={onClose} maxWidth="md">
+    <DialogContainer isOpen={isOpen} onClose={onClose} maxWidth='md'>
       <div className='p-6'>
         <div className='text-center py-6'>
           <div className='mb-6'>
@@ -205,7 +205,7 @@ function NewRequestDialog({
   };
 
   return (
-    <DialogContainer isOpen={isOpen} onClose={onClose} maxWidth="md">
+    <DialogContainer isOpen={isOpen} onClose={onClose} maxWidth='md'>
       <div className='p-6'>
         {justAccepted ? (
           /* Connected Message */

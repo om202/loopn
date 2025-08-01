@@ -272,9 +272,9 @@ export default function ChatWindow({
 
     // Optimistically mark the message as deleted in UI
     const originalMessages = [...messages];
-    setMessages(prev => 
-      prev.map(msg => 
-        msg.id === messageId 
+    setMessages(prev =>
+      prev.map(msg =>
+        msg.id === messageId
           ? { ...msg, isDeleted: true, deletedAt: new Date().toISOString() }
           : msg
       )
