@@ -3,14 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "npm run lint:fix && npm run format && next dev",
-    "build": "npm run lint:fix && npm run format && next build",
+    "dev": "yarn lint:fix && yarn format && next dev",
+    "build": "yarn lint:fix && yarn format && next build",
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf node_modules yarn.lock .next",
+    "clean:install": "yarn clean && yarn install",
+    "fresh": "yarn clean:install && yarn dev"
   },
   "dependencies": {
     "@aws-amplify/ui-react": "6.11.2",
