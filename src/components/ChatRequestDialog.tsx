@@ -8,6 +8,7 @@ import { createShortChatUrl } from '../lib/url-utils';
 import { chatService } from '../services/chat.service';
 
 import UserAvatar from './UserAvatar';
+import DialogContainer from './DialogContainer';
 
 type ChatRequest = Schema['ChatRequest']['type'];
 
@@ -71,8 +72,8 @@ function ConnectedDialog({
   };
 
   return (
-    <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/5'>
-      <div className='bg-white rounded-2xl shadow-xl border border-gray-200 max-w-md w-full mx-4 p-6'>
+    <DialogContainer isOpen={isOpen} onClose={onClose} maxWidth="md">
+      <div className='p-6'>
         <div className='text-center py-6'>
           <div className='mb-6'>
             <div className='flex justify-center mb-3'>
@@ -141,7 +142,7 @@ function ConnectedDialog({
           </button>
         </div>
       </div>
-    </div>
+    </DialogContainer>
   );
 }
 
@@ -204,8 +205,8 @@ function NewRequestDialog({
   };
 
   return (
-    <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/5'>
-      <div className='bg-white rounded-2xl shadow-xl border border-gray-200 max-w-md w-full mx-4 p-6'>
+    <DialogContainer isOpen={isOpen} onClose={onClose} maxWidth="md">
+      <div className='p-6'>
         {justAccepted ? (
           /* Connected Message */
           <>
@@ -314,7 +315,7 @@ function NewRequestDialog({
           </>
         )}
       </div>
-    </div>
+    </DialogContainer>
   );
 }
 
