@@ -29,9 +29,11 @@ export default function MessageList({
   onReplyToMessage,
 }: MessageListProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [messageReactions, setMessageReactions] = useState<
     Record<string, MessageReaction[]>
   >({});
+  const [openEmojiPickerMessageId, setOpenEmojiPickerMessageId] = useState<string | null>(null);
 
   // Fetch reactions for all messages
   const fetchReactions = useCallback(async () => {
@@ -81,9 +83,42 @@ export default function MessageList({
           }));
         }
       }
+      
+      // Close emoji picker after adding reaction
+      setOpenEmojiPickerMessageId(null);
     },
     [messages, currentUserId]
   );
+
+  // Handle emoji picker toggle
+  const handleEmojiPickerToggle = useCallback((messageId: string) => {
+    setOpenEmojiPickerMessageId(prev => prev === messageId ? null : messageId);
+  }, []);
+
+  // Handle click away to close emoji picker
+  useEffect(() => {
+    const handleClickAway = (event: MouseEvent) => {
+      if (!openEmojiPickerMessageId) return;
+      
+      const target = event.target as Element;
+      
+      // Check if click is inside an emoji picker or emoji button
+      const isInsideEmojiPicker = target.closest('[data-emoji-picker]');
+      const isInsideEmojiButton = target.closest('[data-emoji-button]');
+      
+      if (!isInsideEmojiPicker && !isInsideEmojiButton) {
+        setOpenEmojiPickerMessageId(null);
+      }
+    };
+
+    if (openEmojiPickerMessageId) {
+      document.addEventListener('mousedown', handleClickAway);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickAway);
+    };
+  }, [openEmojiPickerMessageId]);
 
   // Fetch reactions when messages change
   useEffect(() => {
@@ -138,7 +173,7 @@ export default function MessageList({
 
   return (
     <div className='flex-1 overflow-y-auto bg-gray-100'>
-      <div className='max-w-5xl mx-auto px-4 py-6'>
+      <div ref={containerRef} className='max-w-5xl mx-auto px-4 py-6'>
         {messages.map((message, index) => {
           const isOwnMessage = message.senderId === currentUserId;
           const prevMessage = index > 0 ? messages[index - 1] : null;
@@ -227,6 +262,8 @@ export default function MessageList({
               reactions={messageReactions[message.id] || []}
               currentUserId={currentUserId}
               onAddReaction={handleAddReaction}
+              showEmojiPicker={openEmojiPickerMessageId === message.id}
+              onEmojiPickerToggle={() => handleEmojiPickerToggle(message.id)}
             />
           );
         })}

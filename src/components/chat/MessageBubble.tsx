@@ -24,6 +24,8 @@ interface MessageBubbleProps {
   reactions?: MessageReaction[]; // Reactions for this message
   currentUserId: string; // Current user ID for reaction handling
   onAddReaction?: (messageId: string, emoji: string) => void;
+  showEmojiPicker: boolean; // Controlled by parent
+  onEmojiPickerToggle: () => void; // Handled by parent
 }
 
 // Tick indicator component
@@ -62,16 +64,9 @@ export default function MessageBubble({
   reactions = [],
   currentUserId,
   onAddReaction,
+  showEmojiPicker,
+  onEmojiPickerToggle,
 }: MessageBubbleProps) {
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const [isHovering, setIsHovering] = useState(false);
-
-  // Close emoji picker when not hovering
-  useEffect(() => {
-    if (!isHovering && showEmojiPicker) {
-      setShowEmojiPicker(false);
-    }
-  }, [isHovering, showEmojiPicker]);
 
   // Check if message contains only emojis
   const isEmojiOnly = (text: string) => {
@@ -174,11 +169,7 @@ export default function MessageBubble({
         isOwnMessage ? 'items-end' : 'items-start'
       }`}
     >
-      <div 
-        className='group relative flex items-center gap-2'
-        onMouseEnter={() => setIsHovering(true)}
-        onMouseLeave={() => setIsHovering(false)}
-      >
+      <div className='group relative flex items-center gap-2'>
         {/* Avatar always on the left for other users */}
         {!isOwnMessage && showSenderName && (
           <UserAvatar
@@ -196,14 +187,14 @@ export default function MessageBubble({
           {/* Action icons with conditional positioning */}
           {onReplyToMessage && (
             <div
-              className={`opacity-0 group-hover:opacity-100 transition-all duration-150 ease-out flex items-center gap-2 ${
+              className={`${showEmojiPicker ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} transition-all duration-150 ease-out flex items-center gap-2 ${
                 !isOwnMessage ? 'ml-3' : 'mr-3'
               }`}
             >
               {/* Reply button */}
               <button
                 onClick={handleReplyClick}
-                className='w-8 h-8 bg-gray-200 hover:bg-gray-300 rounded-full transition-colors duration-150 flex items-center justify-center'
+                className='w-8 h-8 bg-gray-200 rounded-full transition-colors duration-150 flex items-center justify-center'
                 title='Reply'
               >
                 <svg
@@ -224,12 +215,17 @@ export default function MessageBubble({
               {/* Emoji reaction button */}
               <div className='relative'>
                 <button
-                  onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                  className='w-8 h-8 bg-gray-200 hover:bg-gray-300 rounded-full transition-colors duration-150 flex items-center justify-center'
+                  onClick={onEmojiPickerToggle}
+                  data-emoji-button
+                  className={`w-8 h-8 rounded-full transition-all duration-150 flex items-center justify-center ${
+                    showEmojiPicker 
+                      ? 'bg-blue-500 text-white' 
+                      : 'bg-gray-200 text-gray-600'
+                  }`}
                   title='Add reaction'
                 >
                   <svg
-                    className='w-4 h-4 text-gray-600'
+                    className='w-4 h-4'
                     fill='none'
                     stroke='currentColor'
                     viewBox='0 0 24 24'
@@ -242,11 +238,13 @@ export default function MessageBubble({
                     />
                   </svg>
                 </button>
-                <EmojiPicker
-                  isOpen={showEmojiPicker}
-                  onEmojiSelect={handleEmojiSelect}
-                  onClose={() => setShowEmojiPicker(false)}
-                />
+                {showEmojiPicker && (
+                  <EmojiPicker
+                    isOpen={showEmojiPicker}
+                    onEmojiSelect={handleEmojiSelect}
+                    onClose={onEmojiPickerToggle}
+                  />
+                )}
               </div>
 
 
