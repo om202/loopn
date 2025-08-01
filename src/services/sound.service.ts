@@ -126,7 +126,7 @@ class SoundService {
    */
   setVolume(volume: number) {
     const clampedVolume = Math.max(0, Math.min(1, volume));
-    
+
     if (this.sentSound) {
       this.sentSound.volume = clampedVolume;
     }

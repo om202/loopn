@@ -57,8 +57,6 @@ export default function MessageList({
   >(null);
   const [reactionsLoaded, setReactionsLoaded] = useState(false);
 
-
-
   // Handle adding/removing reactions
   const handleAddReaction = useCallback(
     async (messageId: string, emoji: string) => {
@@ -202,31 +200,41 @@ export default function MessageList({
     const currentMessageCount = messages.length;
 
     // If messages were added and we have a previous count
-    if (currentMessageCount > previousMessageCount && previousMessageCount > 0) {
-      
+    if (
+      currentMessageCount > previousMessageCount &&
+      previousMessageCount > 0
+    ) {
       if (lastLoadWasOlderMessages) {
         // Older messages were loaded - preserve scroll position
         const newMessagesAdded = currentMessageCount - previousMessageCount;
-        
+
         // Use requestAnimationFrame to ensure DOM is updated
         requestAnimationFrame(() => {
           if (containerRef.current) {
             // Calculate approximate height per message to restore scroll position
-            const averageMessageHeight = containerRef.current.scrollHeight / currentMessageCount;
+            const averageMessageHeight =
+              containerRef.current.scrollHeight / currentMessageCount;
             const scrollOffset = newMessagesAdded * averageMessageHeight;
-            
+
             // Restore scroll position by scrolling down by the amount of new content added
-            containerRef.current.scrollTop = scrollPositionRef.current + scrollOffset;
+            containerRef.current.scrollTop =
+              scrollPositionRef.current + scrollOffset;
           }
         });
       } else {
         // New messages at the end - check if any are from current user (own messages)
         const newMessages = messages.slice(previousMessageCount);
-        const hasOwnMessage = newMessages.some(msg => msg.senderId === currentUserId);
-        
+        const hasOwnMessage = newMessages.some(
+          msg => msg.senderId === currentUserId
+        );
+
         // Always scroll for own messages, or if user was near bottom for others
-        const isNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 150;
-        
+        const isNearBottom =
+          container.scrollHeight -
+            container.scrollTop -
+            container.clientHeight <
+          150;
+
         if (hasOwnMessage || isNearBottom || shouldAutoScroll) {
           // Use requestAnimationFrame to ensure DOM updates are complete
           requestAnimationFrame(() => {
@@ -240,7 +248,13 @@ export default function MessageList({
     }
 
     lastMessageCountRef.current = currentMessageCount;
-  }, [messages, reactionsLoaded, lastLoadWasOlderMessages, currentUserId, shouldAutoScroll]);
+  }, [
+    messages,
+    reactionsLoaded,
+    lastLoadWasOlderMessages,
+    currentUserId,
+    shouldAutoScroll,
+  ]);
 
   // Force auto-scroll when explicitly requested (for sent messages)
   useEffect(() => {
@@ -257,7 +271,7 @@ export default function MessageList({
   // Store scroll position continuously for pagination restoration
   useEffect(() => {
     if (!containerRef.current) return;
-    
+
     const container = containerRef.current;
     const handleScroll = () => {
       scrollPositionRef.current = container.scrollTop;
@@ -272,7 +286,7 @@ export default function MessageList({
     if (!hasMoreMessages || isLoadingMore || !onLoadMoreMessages) return;
 
     const observer = new IntersectionObserver(
-      (entries) => {
+      entries => {
         const [entry] = entries;
         if (entry.isIntersecting && containerRef.current) {
           // Store current scroll position before loading
@@ -300,7 +314,12 @@ export default function MessageList({
 
   if (messages.length === 0) {
     return (
-      <div className='flex-1 overflow-y-auto bg-gray-50' style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23d1d5db' fill-opacity='0.08' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E")` }}>
+      <div
+        className='flex-1 overflow-y-auto bg-gray-50'
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23d1d5db' fill-opacity='0.08' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E")`,
+        }}
+      >
         <div className='max-w-5xl mx-auto px-4 py-8'>
           <div className='flex flex-col items-center justify-center text-center py-20'>
             <div className='w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mb-4'>
@@ -332,7 +351,12 @@ export default function MessageList({
   }
 
   return (
-    <div className='flex-1 overflow-y-auto bg-gray-50' style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23d1d5db' fill-opacity='0.08' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E")` }}>
+    <div
+      className='flex-1 overflow-y-auto bg-gray-50'
+      style={{
+        backgroundImage: `url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23d1d5db' fill-opacity='0.08' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E")`,
+      }}
+    >
       <div ref={containerRef} className='max-w-5xl mx-auto px-4 py-6'>
         {/* Load More Messages Button/Indicator */}
         {hasMoreMessages ? (
@@ -361,7 +385,7 @@ export default function MessageList({
             </div>
           </div>
         )}
-        
+
         {messages.map((message, index) => {
           const isOwnMessage = message.senderId === currentUserId;
           const prevMessage = index > 0 ? messages[index - 1] : null;
@@ -370,18 +394,20 @@ export default function MessageList({
 
           // Check if we should show "new messages" separator before this message
           // Only show once at the beginning of the unread messages group using snapshot
-          const isFirstUnreadMessage = unreadMessagesSnapshot && 
-            !isOwnMessage && 
+          const isFirstUnreadMessage =
+            unreadMessagesSnapshot &&
+            !isOwnMessage &&
             unreadMessagesSnapshot.has(message.id) &&
             message.senderId !== 'SYSTEM' &&
             // Check if previous message was NOT in unread snapshot (indicating start of unread group)
-            (prevMessage ? 
-              (!unreadMessagesSnapshot.has(prevMessage.id) || 
-               prevMessage.senderId === currentUserId || 
-               prevMessage.senderId === 'SYSTEM') 
+            (prevMessage
+              ? !unreadMessagesSnapshot.has(prevMessage.id) ||
+                prevMessage.senderId === currentUserId ||
+                prevMessage.senderId === 'SYSTEM'
               : true);
 
-          const shouldShowNewMessagesSeparator = chatEnteredAt && isFirstUnreadMessage;
+          const shouldShowNewMessagesSeparator =
+            chatEnteredAt && isFirstUnreadMessage;
 
           // Check if messages are from same sender and within time threshold
           const isPrevFromSameSender =
@@ -463,26 +489,26 @@ export default function MessageList({
                   </div>
                 </div>
               )}
-              
-                <MessageBubble
-                  key={message.id}
-                  message={message}
-                  isOwnMessage={isOwnMessage}
-                  showAvatar={showAvatar}
-                  otherUserPresence={otherUserPresence}
-                  otherParticipantId={otherParticipantId}
-                  marginTop={marginTop}
-                  marginBottom={marginBottom}
-                  showSenderName={showSenderName}
-                  onReplyToMessage={onReplyToMessage}
-                  onDeleteMessage={onDeleteMessage}
-                  allMessages={messages}
-                  reactions={messageReactions[message.id] || []}
-                  currentUserId={currentUserId}
-                  onAddReaction={handleAddReaction}
-                  showEmojiPicker={openEmojiPickerMessageId === message.id}
-                  onEmojiPickerToggle={() => handleEmojiPickerToggle(message.id)}
-                />
+
+              <MessageBubble
+                key={message.id}
+                message={message}
+                isOwnMessage={isOwnMessage}
+                showAvatar={showAvatar}
+                otherUserPresence={otherUserPresence}
+                otherParticipantId={otherParticipantId}
+                marginTop={marginTop}
+                marginBottom={marginBottom}
+                showSenderName={showSenderName}
+                onReplyToMessage={onReplyToMessage}
+                onDeleteMessage={onDeleteMessage}
+                allMessages={messages}
+                reactions={messageReactions[message.id] || []}
+                currentUserId={currentUserId}
+                onAddReaction={handleAddReaction}
+                showEmojiPicker={openEmojiPickerMessageId === message.id}
+                onEmojiPickerToggle={() => handleEmojiPickerToggle(message.id)}
+              />
             </React.Fragment>
           );
         })}

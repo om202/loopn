@@ -41,25 +41,27 @@ export default function ChatWindow({
   const [sendingConnectionRequest, setSendingConnectionRequest] =
     useState(false);
   const [replyToMessage, setReplyToMessage] = useState<Message | null>(null);
-  
+
   // Pagination state
   const [nextToken, setNextToken] = useState<string | undefined>(undefined);
   const [hasMoreMessages, setHasMoreMessages] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [initialLoadComplete, setInitialLoadComplete] = useState(false);
-  const [lastLoadWasOlderMessages, setLastLoadWasOlderMessages] = useState(false);
+  const [lastLoadWasOlderMessages, setLastLoadWasOlderMessages] =
+    useState(false);
   const [shouldAutoScroll, setShouldAutoScroll] = useState(false);
   const [chatEnteredAt, setChatEnteredAt] = useState<Date>(new Date());
   const [hasActiveSession, setHasActiveSession] = useState(false);
-  const [unreadMessagesSnapshot, setUnreadMessagesSnapshot] = useState<Set<string>>(new Set());
+  const [unreadMessagesSnapshot, setUnreadMessagesSnapshot] = useState<
+    Set<string>
+  >(new Set());
 
   const { user } = useAuthenticator();
 
   // Check if there are unread messages from other users (for reply-based marking)
-  const hasUnreadMessages = messages.some(msg => 
-    !msg.isRead && 
-    msg.senderId !== user?.userId && 
-    msg.senderId !== 'SYSTEM'
+  const hasUnreadMessages = messages.some(
+    msg =>
+      !msg.isRead && msg.senderId !== user?.userId && msg.senderId !== 'SYSTEM'
   );
 
   // Get the other participant's ID
@@ -167,8 +169,11 @@ export default function ChatWindow({
 
     const loadInitialMessages = async () => {
       setIsInitializing(true);
-      const result = await messageService.getConversationMessages(conversation.id, 50);
-      
+      const result = await messageService.getConversationMessages(
+        conversation.id,
+        50
+      );
+
       if (result.error) {
         setError(result.error);
       } else {
@@ -178,21 +183,26 @@ export default function ChatWindow({
           const timestampB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
           return timestampA - timestampB;
         });
-        
+
         setMessages(sortedMessages);
         setNextToken(result.nextToken);
         setHasMoreMessages(!!result.nextToken);
         setInitialLoadComplete(true);
         setLastLoadWasOlderMessages(false);
-        
+
         // Take a snapshot of unread message IDs when first loading
         const unreadIds = new Set(
           sortedMessages
-            .filter(msg => !msg.isRead && msg.senderId !== user?.userId && msg.senderId !== 'SYSTEM')
+            .filter(
+              msg =>
+                !msg.isRead &&
+                msg.senderId !== user?.userId &&
+                msg.senderId !== 'SYSTEM'
+            )
             .map(msg => msg.id)
         );
         setUnreadMessagesSnapshot(unreadIds);
-        
+
         // Mark this as an active session once messages are loaded
         setHasActiveSession(true);
       }
@@ -210,12 +220,12 @@ export default function ChatWindow({
 
     const subscription = messageService.observeMessages(
       conversation.id,
-      (newMessages) => {
+      newMessages => {
         setMessages(prev => {
           // Create a map of existing messages for faster lookup
           const existingMessagesMap = new Map();
           const tempMessages = new Map(); // Track optimistic messages
-          
+
           prev.forEach(msg => {
             existingMessagesMap.set(msg.id, msg);
             // Track optimistic messages by content and timestamp
@@ -237,7 +247,7 @@ export default function ChatWindow({
             // Check if this is the real version of an optimistic message
             const optimisticKey = `${newMsg.content}-${newMsg.senderId}-${newMsg.timestamp}`;
             const matchingOptimistic = tempMessages.get(optimisticKey);
-            
+
             if (matchingOptimistic) {
               // Replace optimistic message with real one
               tempMessagesToRemove.add(matchingOptimistic.id);
@@ -248,23 +258,31 @@ export default function ChatWindow({
               const latestRealMessage = prev
                 .filter(msg => !msg.id.startsWith('temp-'))
                 .sort((a, b) => {
-                  const timeA = a.timestamp ? new Date(a.timestamp).getTime() : 0;
-                  const timeB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
+                  const timeA = a.timestamp
+                    ? new Date(a.timestamp).getTime()
+                    : 0;
+                  const timeB = b.timestamp
+                    ? new Date(b.timestamp).getTime()
+                    : 0;
                   return timeB - timeA;
                 })[0];
-              
-              if (!latestRealMessage || 
-                  !newMsg.timestamp || 
-                  !latestRealMessage.timestamp ||
-                  newMsg.timestamp > latestRealMessage.timestamp) {
+
+              if (
+                !latestRealMessage ||
+                !newMsg.timestamp ||
+                !latestRealMessage.timestamp ||
+                newMsg.timestamp > latestRealMessage.timestamp
+              ) {
                 messagesToAdd.push(newMsg);
-                
-                // Only play received sound for messages from other users that arrive 
+
+                // Only play received sound for messages from other users that arrive
                 // while we have an active session (not for old/unread messages)
                 if (newMsg.senderId !== user?.userId && hasActiveSession) {
-                  const messageTime = new Date(newMsg.timestamp || newMsg.createdAt);
+                  const messageTime = new Date(
+                    newMsg.timestamp || newMsg.createdAt
+                  );
                   const sessionStartTime = chatEnteredAt;
-                  
+
                   // Only play sound if message was sent after we entered the chat
                   if (messageTime > sessionStartTime) {
                     soundService.playReceivedSound();
@@ -277,18 +295,24 @@ export default function ChatWindow({
           // If we have messages to update
           if (messagesToAdd.length > 0 || tempMessagesToRemove.size > 0) {
             // Remove optimistic messages that are being replaced
-            let updatedMessages = prev.filter(msg => !tempMessagesToRemove.has(msg.id));
-            
+            let updatedMessages = prev.filter(
+              msg => !tempMessagesToRemove.has(msg.id)
+            );
+
             // Add new real messages
             if (messagesToAdd.length > 0) {
               const sortedNewMessages = messagesToAdd.sort((a, b) => {
-                const timestampA = a.timestamp ? new Date(a.timestamp).getTime() : 0;
-                const timestampB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
+                const timestampA = a.timestamp
+                  ? new Date(a.timestamp).getTime()
+                  : 0;
+                const timestampB = b.timestamp
+                  ? new Date(b.timestamp).getTime()
+                  : 0;
                 return timestampA - timestampB;
               });
               updatedMessages = [...updatedMessages, ...sortedNewMessages];
             }
-            
+
             setLastLoadWasOlderMessages(false);
             setShouldAutoScroll(false); // Reset auto-scroll after messages are processed
             return updatedMessages;
@@ -397,17 +421,15 @@ export default function ChatWindow({
         } else if (result.data) {
           // Success: Replace optimistic message with real one
           // Note: The real-time subscription will also handle this, but this ensures immediate update
-          setMessages(prev => 
-            prev.map(msg => 
-              msg.id === tempId ? result.data! : msg
-            )
+          setMessages(prev =>
+            prev.map(msg => (msg.id === tempId ? result.data! : msg))
           );
           // Play sent sound effect
           soundService.playSentSound();
-          
+
           // Mark unread messages from other users as read when user replies
           markUnreadMessagesAsRead();
-          
+
           // Reset auto-scroll trigger after successful send
           setShouldAutoScroll(false);
         }
@@ -423,31 +445,30 @@ export default function ChatWindow({
 
   const markUnreadMessagesAsRead = useCallback(async () => {
     if (!user) return;
-    
+
     // Find unread messages from other users
-    const unreadMessages = messages.filter(msg => 
-      !msg.isRead && 
-      msg.senderId !== user.userId && 
-      msg.senderId !== 'SYSTEM'
+    const unreadMessages = messages.filter(
+      msg =>
+        !msg.isRead && msg.senderId !== user.userId && msg.senderId !== 'SYSTEM'
     );
-    
+
     // Mark them as read
     const markPromises = unreadMessages.map(msg =>
       messageService.markMessageAsRead(msg.id)
     );
-    
+
     try {
       await Promise.all(markPromises);
-      
+
       // Update local state
-      setMessages(prev => 
-        prev.map(msg => 
+      setMessages(prev =>
+        prev.map(msg =>
           unreadMessages.some(unread => unread.id === msg.id)
             ? { ...msg, isRead: true, readAt: new Date().toISOString() }
             : msg
         )
       );
-      
+
       // Remove marked messages from unread snapshot
       setUnreadMessagesSnapshot(prev => {
         const newSnapshot = new Set(prev);
@@ -467,11 +488,12 @@ export default function ChatWindow({
 
     const timer = setTimeout(() => {
       // Only auto-mark if there are still unread messages from the snapshot
-      const currentUnreadFromSnapshot = messages.filter(msg => 
-        unreadMessagesSnapshot.has(msg.id) && 
-        !msg.isRead && 
-        msg.senderId !== user?.userId && 
-        msg.senderId !== 'SYSTEM'
+      const currentUnreadFromSnapshot = messages.filter(
+        msg =>
+          unreadMessagesSnapshot.has(msg.id) &&
+          !msg.isRead &&
+          msg.senderId !== user?.userId &&
+          msg.senderId !== 'SYSTEM'
       );
 
       if (currentUnreadFromSnapshot.length > 0) {
@@ -480,7 +502,13 @@ export default function ChatWindow({
     }, 5000); // 5 seconds
 
     return () => clearTimeout(timer);
-  }, [hasActiveSession, unreadMessagesSnapshot.size, messages, user?.userId, markUnreadMessagesAsRead]);
+  }, [
+    hasActiveSession,
+    unreadMessagesSnapshot.size,
+    messages,
+    user?.userId,
+    markUnreadMessagesAsRead,
+  ]);
 
   const handleReplyToMessage = (message: Message) => {
     setReplyToMessage(message);
@@ -527,8 +555,8 @@ export default function ChatWindow({
 
     setIsLoadingMore(true);
     const result = await messageService.getConversationMessages(
-      conversation.id, 
-      50, 
+      conversation.id,
+      50,
       nextToken
     );
 

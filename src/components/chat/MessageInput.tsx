@@ -124,12 +124,15 @@ export default function MessageInput({
         </div>
       )}
 
-            {/* Message Input - Material Design styling */}
+      {/* Message Input - Material Design styling */}
       <div className='flex-shrink-0 bg-white border-t border-gray-200 p-4 shadow-lg relative'>
         <div className='max-w-5xl mx-auto'>
-          <form 
-            autoComplete='off' 
-            onSubmit={(e) => { e.preventDefault(); handleSend(); }}
+          <form
+            autoComplete='off'
+            onSubmit={e => {
+              e.preventDefault();
+              handleSend();
+            }}
             data-form-type='other'
             style={{ position: 'relative' }}
           >
@@ -155,64 +158,64 @@ export default function MessageInput({
             <div className='flex gap-3 items-end'>
               <div className='flex-1 relative'>
                 <input
-                ref={inputRef}
-                type='text'
-                placeholder='Type your message...'
-                value={newMessage}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setNewMessage(e.target.value)
-                }
-                onKeyPress={(e: React.KeyboardEvent) => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    handleSend();
+                  ref={inputRef}
+                  type='text'
+                  placeholder='Type your message...'
+                  value={newMessage}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setNewMessage(e.target.value)
                   }
-                }}
-                disabled={disabled}
-                autoComplete='off'
-                autoCorrect='off'
-                autoCapitalize='off'
-                spellCheck='false'
-                data-lpignore='true'
-                data-form-type='other'
-                data-ms-editor='false'
-                data-ms-spell-check='false'
-                data-gramm='false'
-                data-gramm_editor='false'
-                data-enable-grammarly='false'
-                name='message'
-                role='textbox'
-                aria-label='Type your message'
-                style={{ 
-                  fontSize: '16px',
-                  WebkitAppearance: 'none',
-                  MozAppearance: 'textfield'
-                }}
-                className='w-full px-5 py-3 pr-14 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base bg-gray-50 hover:bg-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed placeholder-gray-500'
-              />
+                  onKeyPress={(e: React.KeyboardEvent) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSend();
+                    }
+                  }}
+                  disabled={disabled}
+                  autoComplete='off'
+                  autoCorrect='off'
+                  autoCapitalize='off'
+                  spellCheck='false'
+                  data-lpignore='true'
+                  data-form-type='other'
+                  data-ms-editor='false'
+                  data-ms-spell-check='false'
+                  data-gramm='false'
+                  data-gramm_editor='false'
+                  data-enable-grammarly='false'
+                  name='message'
+                  role='textbox'
+                  aria-label='Type your message'
+                  style={{
+                    fontSize: '16px',
+                    WebkitAppearance: 'none',
+                    MozAppearance: 'textfield',
+                  }}
+                  className='w-full px-5 py-3 pr-14 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base bg-gray-50 hover:bg-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed placeholder-gray-500'
+                />
+                <button
+                  onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                  disabled={disabled}
+                  className={`absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-all duration-200 p-2 rounded-full hover:bg-gray-100 focus:outline-none disabled:opacity-50 ${
+                    showEmojiPicker ? 'text-blue-600 bg-blue-50' : ''
+                  }`}
+                >
+                  <Smile className='w-6 h-6' />
+                </button>
+              </div>
               <button
-                onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                onClick={handleSend}
                 disabled={disabled}
-                className={`absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-all duration-200 p-2 rounded-full hover:bg-gray-100 focus:outline-none disabled:opacity-50 ${
-                  showEmojiPicker ? 'text-blue-600 bg-blue-50' : ''
-                }`}
+                className='flex items-center justify-center w-12 h-12 bg-blue-600 text-white rounded-full hover:bg-blue-700 focus:bg-blue-700 transition-all duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none'
               >
-                <Smile className='w-6 h-6' />
+                <Image
+                  src='/send_icon.svg'
+                  alt='Send'
+                  width={20}
+                  height={20}
+                  className='flex-shrink-0 brightness-0 invert translate-x-0.5 opacity-80 hover:opacity-100 transition-opacity duration-200'
+                />
               </button>
-            </div>
-            <button
-              onClick={handleSend}
-              disabled={disabled}
-              className='flex items-center justify-center w-12 h-12 bg-blue-600 text-white rounded-full hover:bg-blue-700 focus:bg-blue-700 transition-all duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none'
-            >
-              <Image
-                src='/send_icon.svg'
-                alt='Send'
-                width={20}
-                height={20}
-                className='flex-shrink-0 brightness-0 invert translate-x-0.5 opacity-80 hover:opacity-100 transition-opacity duration-200'
-              />
-            </button>
             </div>
           </form>
         </div>

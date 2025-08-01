@@ -87,7 +87,7 @@ export default function NotificationBell() {
     }
 
     const loadNotifications = async () => {
-      const result = await notificationService.getUserNotifications(
+      const result = await notificationService.getUnreadNotifications(
         user.userId
       );
       if (result.data) {
@@ -935,20 +935,47 @@ export default function NotificationBell() {
                   onClick={async () => {
                     if (!user) return;
                     try {
-                      const markPromises = notifications.map(notification =>
-                        notificationService.markNotificationAsRead(
-                          notification.id
-                        )
+                      const markPromises = notifications.map(notification => {
+                        // Handle message notifications differently - delete them instead of marking as read
+                        if (
+                          notification.type === 'message' &&
+                          notification.data &&
+                          'conversationId' in notification.data
+                        ) {
+                          return notificationService.deleteNotificationsForConversation(
+                            user.userId,
+                            (notification.data as MessageNotificationData).conversationId
+                          );
+                        } else {
+                          // For other notification types, mark as read
+                          return notificationService.markNotificationAsRead(
+                            notification.id
+                          );
+                        }
+                      });
+                      const results = await Promise.all(markPromises);
+
+                      // Check if any marking failed
+                      const failedResults = results.filter(
+                        result => result.error
                       );
-                      await Promise.all(markPromises);
+                      if (failedResults.length > 0) {
+                        console.error(
+                          'Some notifications failed to be processed:',
+                          failedResults
+                        );
+                        setError('Some notifications failed to be processed');
+                        return;
+                      }
+
                       setNotifications([]);
                       setIsOpen(false);
                     } catch (error) {
                       console.error(
-                        'Error marking notifications as read:',
+                        'Error processing notifications:',
                         error
                       );
-                      setError('Failed to mark notifications as read');
+                      setError('Failed to process notifications');
                     }
                   }}
                   className='w-full text-center text-sm text-blue-600 hover:text-blue-800 font-medium py-2 rounded-2xl hover:bg-gray-100 transition-colors'
