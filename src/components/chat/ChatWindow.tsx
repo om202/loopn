@@ -265,6 +265,35 @@ export default function ChatWindow({
     setReplyToMessage(null);
   };
 
+  const handleDeleteMessage = async (messageId: string) => {
+    if (!user) {
+      return;
+    }
+
+    // Optimistically mark the message as deleted in UI
+    const originalMessages = [...messages];
+    setMessages(prev => 
+      prev.map(msg => 
+        msg.id === messageId 
+          ? { ...msg, isDeleted: true, deletedAt: new Date().toISOString() }
+          : msg
+      )
+    );
+
+    try {
+      const result = await messageService.deleteMessage(messageId);
+      if (result.error) {
+        // Rollback optimistic update on error
+        setMessages(originalMessages);
+        setError(result.error);
+      }
+    } catch (error) {
+      // Rollback on network error
+      setMessages(originalMessages);
+      setError('Failed to delete message. Please try again.');
+    }
+  };
+
   // Show loading state while initializing or external loading
   if (isInitializing || externalLoading) {
     return <LoadingContainer size='lg' />;
@@ -290,6 +319,7 @@ export default function ChatWindow({
         otherParticipantId={otherParticipantId}
         isInitializing={isInitializing}
         onReplyToMessage={handleReplyToMessage}
+        onDeleteMessage={handleDeleteMessage}
       />
 
       <MessageInput

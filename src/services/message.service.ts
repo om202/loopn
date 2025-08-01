@@ -123,7 +123,11 @@ export class MessageService {
 
   async deleteMessage(messageId: string): Promise<DataResult<void>> {
     try {
-      await client.models.Message.delete({ id: messageId });
+      await client.models.Message.update({
+        id: messageId,
+        isDeleted: true,
+        deletedAt: new Date().toISOString(),
+      });
       return {
         data: null,
         error: null,

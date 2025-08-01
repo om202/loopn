@@ -18,6 +18,7 @@ interface MessageListProps {
   otherParticipantId: string;
   isInitializing: boolean;
   onReplyToMessage?: (message: Message) => void;
+  onDeleteMessage?: (messageId: string) => void;
 }
 
 export default function MessageList({
@@ -27,6 +28,7 @@ export default function MessageList({
   otherParticipantId,
   isInitializing,
   onReplyToMessage,
+  onDeleteMessage,
 }: MessageListProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -262,6 +264,7 @@ export default function MessageList({
               marginBottom={marginBottom}
               showSenderName={showSenderName}
               onReplyToMessage={onReplyToMessage}
+              onDeleteMessage={onDeleteMessage}
               allMessages={messages}
               reactions={messageReactions[message.id] || []}
               currentUserId={currentUserId}
