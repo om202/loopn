@@ -51,10 +51,11 @@ export default function ChatWindow({
   const [shouldAutoScroll, setShouldAutoScroll] = useState(false);
   const [chatEnteredAt, setChatEnteredAt] = useState<Date>(new Date());
   const [hasActiveSession, setHasActiveSession] = useState(false);
+  const [unreadMessagesSnapshot, setUnreadMessagesSnapshot] = useState<Set<string>>(new Set());
 
   const { user } = useAuthenticator();
 
-  // Check if there are unread messages from other users
+  // Check if there are unread messages from other users (for reply-based marking)
   const hasUnreadMessages = messages.some(msg => 
     !msg.isRead && 
     msg.senderId !== user?.userId && 
@@ -183,6 +184,14 @@ export default function ChatWindow({
         setHasMoreMessages(!!result.nextToken);
         setInitialLoadComplete(true);
         setLastLoadWasOlderMessages(false);
+        
+        // Take a snapshot of unread message IDs when first loading
+        const unreadIds = new Set(
+          sortedMessages
+            .filter(msg => !msg.isRead && msg.senderId !== user?.userId && msg.senderId !== 'SYSTEM')
+            .map(msg => msg.id)
+        );
+        setUnreadMessagesSnapshot(unreadIds);
         
         // Mark this as an active session once messages are loaded
         setHasActiveSession(true);
@@ -438,10 +447,40 @@ export default function ChatWindow({
             : msg
         )
       );
+      
+      // Remove marked messages from unread snapshot
+      setUnreadMessagesSnapshot(prev => {
+        const newSnapshot = new Set(prev);
+        unreadMessages.forEach(msg => newSnapshot.delete(msg.id));
+        return newSnapshot;
+      });
     } catch (error) {
       console.error('Error marking messages as read:', error);
     }
   }, [messages, user]);
+
+  // Auto-mark messages as read after 5 seconds when chat first loads
+  useEffect(() => {
+    if (!hasActiveSession || unreadMessagesSnapshot.size === 0) {
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      // Only auto-mark if there are still unread messages from the snapshot
+      const currentUnreadFromSnapshot = messages.filter(msg => 
+        unreadMessagesSnapshot.has(msg.id) && 
+        !msg.isRead && 
+        msg.senderId !== user?.userId && 
+        msg.senderId !== 'SYSTEM'
+      );
+
+      if (currentUnreadFromSnapshot.length > 0) {
+        markUnreadMessagesAsRead();
+      }
+    }, 5000); // 5 seconds
+
+    return () => clearTimeout(timer);
+  }, [hasActiveSession, unreadMessagesSnapshot.size, messages, user?.userId, markUnreadMessagesAsRead]);
 
   const handleReplyToMessage = (message: Message) => {
     setReplyToMessage(message);
@@ -543,6 +582,7 @@ export default function ChatWindow({
         lastLoadWasOlderMessages={lastLoadWasOlderMessages}
         shouldAutoScroll={shouldAutoScroll}
         chatEnteredAt={chatEnteredAt}
+        unreadMessagesSnapshot={unreadMessagesSnapshot}
       />
 
       <MessageInput
@@ -553,8 +593,6 @@ export default function ChatWindow({
         autoFocus={!isInitializing && !externalLoading}
         replyToMessage={replyToMessage}
         onCancelReply={handleCancelReply}
-        onMarkAsRead={markUnreadMessagesAsRead}
-        hasUnreadMessages={hasUnreadMessages}
       />
 
       {error || externalError ? (

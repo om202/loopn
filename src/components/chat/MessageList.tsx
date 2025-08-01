@@ -25,6 +25,7 @@ interface MessageListProps {
   lastLoadWasOlderMessages?: boolean;
   shouldAutoScroll?: boolean;
   chatEnteredAt?: Date;
+  unreadMessagesSnapshot?: Set<string>;
 }
 
 export default function MessageList({
@@ -41,6 +42,7 @@ export default function MessageList({
   lastLoadWasOlderMessages = false,
   shouldAutoScroll = false,
   chatEnteredAt,
+  unreadMessagesSnapshot,
 }: MessageListProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -367,13 +369,14 @@ export default function MessageList({
             index < messages.length - 1 ? messages[index + 1] : null;
 
           // Check if we should show "new messages" separator before this message
-          // Only show once at the beginning of the unread messages group
-          const isFirstUnreadMessage = !isOwnMessage && 
-            !message.isRead && 
+          // Only show once at the beginning of the unread messages group using snapshot
+          const isFirstUnreadMessage = unreadMessagesSnapshot && 
+            !isOwnMessage && 
+            unreadMessagesSnapshot.has(message.id) &&
             message.senderId !== 'SYSTEM' &&
-            // Check if previous message was read/own/system (indicating start of unread group)
+            // Check if previous message was NOT in unread snapshot (indicating start of unread group)
             (prevMessage ? 
-              (prevMessage.isRead || 
+              (!unreadMessagesSnapshot.has(prevMessage.id) || 
                prevMessage.senderId === currentUserId || 
                prevMessage.senderId === 'SYSTEM') 
               : true);
