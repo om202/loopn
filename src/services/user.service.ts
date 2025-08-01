@@ -128,13 +128,27 @@ export class UserService {
     callback: (users: UserPresence[]) => void,
     onError?: (error: Error) => void
   ) {
+    let previousOnlineUserIds = new Set<string>();
+
     return client.models.UserPresence.observeQuery({
-      // No filter - listen to ALL presence changes, then filter in UI
+      filter: {
+        isOnline: { eq: true }, // Only listen to online users
+      },
     }).subscribe({
       next: data => {
-        // Filter online users in the callback instead
         const onlineUsers = data.items.filter(user => user.isOnline === true);
-        callback(onlineUsers);
+
+        // Only trigger callback if the set of online users actually changed
+        const currentOnlineUserIds = new Set(onlineUsers.map(u => u.userId));
+
+        // Compare sets to see if online users changed
+        if (
+          currentOnlineUserIds.size !== previousOnlineUserIds.size ||
+          ![...currentOnlineUserIds].every(id => previousOnlineUserIds.has(id))
+        ) {
+          previousOnlineUserIds = currentOnlineUserIds;
+          callback(onlineUsers);
+        }
       },
       error: error => {
         if (onError) {

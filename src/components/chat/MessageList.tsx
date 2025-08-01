@@ -1,6 +1,12 @@
 'use client';
 
-import React, { useRef, useEffect, useState, useCallback } from 'react';
+import React, {
+  useRef,
+  useEffect,
+  useState,
+  useCallback,
+  useMemo,
+} from 'react';
 
 import type { Schema } from '../../../amplify/data/resource';
 
@@ -123,24 +129,40 @@ export default function MessageList({
     };
   }, [openEmojiPickerMessageId]);
 
-  // Fetch reactions when messages change - before any scrolling
+  // Fetch reactions for new messages only - use ref to avoid infinite loops
+  const loadedMessageIds = useRef<Set<string>>(new Set());
+
+  // Memoize message IDs to prevent unnecessary effect re-runs
+  const messageIds = useMemo(() => messages.map(msg => msg.id), [messages]);
+
   useEffect(() => {
-    const loadReactionsImmediately = async () => {
-      if (messages.length === 0) {
+    const loadReactionsForNewMessages = async () => {
+      if (messageIds.length === 0) {
+        setReactionsLoaded(true);
+        return;
+      }
+
+      // Only fetch reactions for message IDs we haven't loaded reactions for yet
+      const messageIdsToLoad = messageIds.filter(
+        msgId => !loadedMessageIds.current.has(msgId)
+      );
+
+      if (messageIdsToLoad.length === 0) {
         setReactionsLoaded(true);
         return;
       }
 
       setReactionsLoaded(false);
 
-      // Load reactions synchronously to prevent layout shift
-      const reactionPromises = messages.map(async message => {
-        const result = await reactionService.getMessageReactions(message.id);
-        return { messageId: message.id, reactions: result.data || [] };
+      // Load reactions only for new message IDs
+      const reactionPromises = messageIdsToLoad.map(async messageId => {
+        const result = await reactionService.getMessageReactions(messageId);
+        loadedMessageIds.current.add(messageId); // Mark as loaded
+        return { messageId, reactions: result.data || [] };
       });
 
       const results = await Promise.all(reactionPromises);
-      const reactionsMap = results.reduce(
+      const newReactionsMap = results.reduce(
         (acc, { messageId, reactions }) => {
           acc[messageId] = reactions;
           return acc;
@@ -148,18 +170,17 @@ export default function MessageList({
         {} as Record<string, MessageReaction[]>
       );
 
-      setMessageReactions(reactionsMap);
+      setMessageReactions(prev => ({ ...prev, ...newReactionsMap }));
       setReactionsLoaded(true);
     };
 
-    loadReactionsImmediately();
-  }, [messages]); // Direct dependency on messages, not fetchReactions
+    loadReactionsForNewMessages();
+  }, [messageIds]); // Only depend on messageIds
 
   // Subscribe to real-time reaction changes
-  useEffect(() => {
-    if (messages.length === 0) return;
 
-    const messageIds = messages.map(msg => msg.id);
+  useEffect(() => {
+    if (messageIds.length === 0) return;
 
     const subscription = reactionService.subscribeToReactionChanges(
       messageIds,
@@ -189,7 +210,7 @@ export default function MessageList({
     return () => {
       subscription.unsubscribe();
     };
-  }, [messages]);
+  }, [messageIds]);
 
   // Handle scroll position preservation when loading older messages
   useEffect(() => {

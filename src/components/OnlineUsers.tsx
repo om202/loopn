@@ -111,7 +111,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
     } finally {
       setConversationsLoaded(true);
     }
-  }, [user]);
+  }, [user]); // State setters are stable and don't need to be included
 
   useEffect(() => {
     if (!user) {

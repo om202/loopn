@@ -65,6 +65,7 @@ export default function NotificationBell() {
     string | null
   >(null);
   const isInitialLoad = useRef(true);
+  const previousRequestIdsRef = useRef<string[]>([]);
   const { user } = useAuthenticator();
   const router = useRouter();
   const pathname = usePathname();
@@ -146,9 +147,8 @@ export default function NotificationBell() {
 
         // Check for new requests to show dialog (only after initial load)
         if (!isInitialLoad.current) {
-          const previousRequestIds = chatRequests.map(req => req.id);
           const newRequests = requestsWithUsers.filter(
-            req => !previousRequestIds.includes(req.id)
+            req => !previousRequestIdsRef.current.includes(req.id)
           );
 
           // Filter requests that were sent within the last minute
@@ -172,6 +172,9 @@ export default function NotificationBell() {
         }
 
         setChatRequests(requestsWithUsers);
+
+        // Update the ref with current request IDs for next comparison
+        previousRequestIdsRef.current = requestsWithUsers.map(req => req.id);
 
         // Create notifications for local state - simple ID matching to prevent duplicates
         setNotifications(prevNotifications => {
@@ -218,7 +221,7 @@ export default function NotificationBell() {
     return () => {
       subscription.unsubscribe();
     };
-  }, [user, chatRequests, showDialog]);
+  }, [user, showDialog]); // Remove chatRequests dependency to prevent infinite loops
 
   // Subscribe to messages (separate from chat requests)
   useEffect(() => {

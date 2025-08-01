@@ -333,7 +333,6 @@ export default function ChatWindow({
   }, [
     conversation.id,
     initialLoadComplete,
-    messages,
     user?.userId,
     hasActiveSession,
     chatEnteredAt,
