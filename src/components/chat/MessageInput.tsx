@@ -127,7 +127,7 @@ export default function MessageInput({
       {/* Emoji Picker - Material Design container */}
       {showEmojiPicker ? (
         <div className=''>
-                      <div className='max-w-5xl mx-auto flex justify-end'>
+          <div className='max-w-5xl mx-auto flex justify-end'>
             <div
               ref={emojiPickerRef}
               className='rounded-lg overflow-hidden shadow-xl'

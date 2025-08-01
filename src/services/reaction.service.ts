@@ -82,9 +82,9 @@ export class ReactionService {
       const result = await client.models.MessageReaction.list({
         filter: {
           messageId: {
-            eq: messageId
-          }
-        }
+            eq: messageId,
+          },
+        },
       });
 
       return {

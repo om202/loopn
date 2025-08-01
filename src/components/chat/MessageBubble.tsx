@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import type { Schema } from '../../../amplify/data/resource';
 import UserAvatar from '../UserAvatar';
 import EmojiPicker from '../EmojiPicker';
@@ -31,20 +32,24 @@ interface MessageBubbleProps {
 // Tick indicator component
 const MessageTicks = ({ isOptimistic }: { isOptimistic: boolean }) => {
   return (
-    <div className="flex items-center">
+    <div className='flex items-center'>
       {isOptimistic ? (
         // Single tick for optimistic (sending) messages
-        <img 
-          src="/tick.svg" 
-          alt="sent" 
-          className="w-5 h-5 opacity-30 filter brightness-0 invert" 
+        <Image
+          src='/tick.svg'
+          alt='sent'
+          width={20}
+          height={20}
+          className='opacity-30 filter brightness-0 invert'
         />
       ) : (
         // Double tick for successfully sent messages
-        <img 
-          src="/double_tick.svg" 
-          alt="delivered" 
-          className="w-5 h-5 opacity-50 filter brightness-0 invert" 
+        <Image
+          src='/double_tick.svg'
+          alt='delivered'
+          width={20}
+          height={20}
+          className='opacity-50 filter brightness-0 invert'
         />
       )}
     </div>
@@ -67,7 +72,6 @@ export default function MessageBubble({
   showEmojiPicker,
   onEmojiPickerToggle,
 }: MessageBubbleProps) {
-
   // Check if message contains only emojis
   const isEmojiOnly = (text: string) => {
     if (!text.trim()) {
@@ -218,8 +222,8 @@ export default function MessageBubble({
                   onClick={onEmojiPickerToggle}
                   data-emoji-button
                   className={`w-8 h-8 rounded-full transition-all duration-150 flex items-center justify-center ${
-                    showEmojiPicker 
-                      ? 'bg-blue-500 text-white' 
+                    showEmojiPicker
+                      ? 'bg-blue-500 text-white'
                       : 'bg-gray-200 text-gray-600'
                   }`}
                   title='Add reaction'
@@ -246,8 +250,6 @@ export default function MessageBubble({
                   />
                 )}
               </div>
-
-
             </div>
           )}
 
@@ -295,13 +297,15 @@ export default function MessageBubble({
                   </div>
                 )}
 
-                <div className="relative">
+                <div className='relative'>
                   <p className='text-sm leading-relaxed break-words pr-10'>
                     {renderMessageContent(message.content)}
                   </p>
                   {isOwnMessage && (
-                    <div className="absolute bottom-0 right-0">
-                      <MessageTicks isOptimistic={message.id.startsWith('temp-')} />
+                    <div className='absolute bottom-0 right-0'>
+                      <MessageTicks
+                        isOptimistic={message.id.startsWith('temp-')}
+                      />
                     </div>
                   )}
                 </div>

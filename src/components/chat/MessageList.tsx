@@ -33,7 +33,9 @@ export default function MessageList({
   const [messageReactions, setMessageReactions] = useState<
     Record<string, MessageReaction[]>
   >({});
-  const [openEmojiPickerMessageId, setOpenEmojiPickerMessageId] = useState<string | null>(null);
+  const [openEmojiPickerMessageId, setOpenEmojiPickerMessageId] = useState<
+    string | null
+  >(null);
 
   // Fetch reactions for all messages
   const fetchReactions = useCallback(async () => {
@@ -83,7 +85,7 @@ export default function MessageList({
           }));
         }
       }
-      
+
       // Close emoji picker after adding reaction
       setOpenEmojiPickerMessageId(null);
     },
@@ -92,20 +94,22 @@ export default function MessageList({
 
   // Handle emoji picker toggle
   const handleEmojiPickerToggle = useCallback((messageId: string) => {
-    setOpenEmojiPickerMessageId(prev => prev === messageId ? null : messageId);
+    setOpenEmojiPickerMessageId(prev =>
+      prev === messageId ? null : messageId
+    );
   }, []);
 
   // Handle click away to close emoji picker
   useEffect(() => {
     const handleClickAway = (event: MouseEvent) => {
       if (!openEmojiPickerMessageId) return;
-      
+
       const target = event.target as Element;
-      
+
       // Check if click is inside an emoji picker or emoji button
       const isInsideEmojiPicker = target.closest('[data-emoji-picker]');
       const isInsideEmojiButton = target.closest('[data-emoji-button]');
-      
+
       if (!isInsideEmojiPicker && !isInsideEmojiButton) {
         setOpenEmojiPickerMessageId(null);
       }
