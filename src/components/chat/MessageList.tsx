@@ -1,13 +1,15 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
 
 import type { Schema } from '../../../amplify/data/resource';
 
 import MessageBubble from './MessageBubble';
+import { reactionService } from '../../services/reaction.service';
 
 type Message = Schema['Message']['type'];
 type UserPresence = Schema['UserPresence']['type'];
+type MessageReaction = Schema['MessageReaction']['type'];
 
 interface MessageListProps {
   messages: Message[];
@@ -27,6 +29,66 @@ export default function MessageList({
   onReplyToMessage,
 }: MessageListProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [messageReactions, setMessageReactions] = useState<
+    Record<string, MessageReaction[]>
+  >({});
+
+  // Fetch reactions for all messages
+  const fetchReactions = useCallback(async () => {
+    if (messages.length === 0) return;
+
+    const reactionPromises = messages.map(async message => {
+      const result = await reactionService.getMessageReactions(message.id);
+      return { messageId: message.id, reactions: result.data || [] };
+    });
+
+    const results = await Promise.all(reactionPromises);
+    const reactionsMap = results.reduce(
+      (acc, { messageId, reactions }) => {
+        acc[messageId] = reactions;
+        return acc;
+      },
+      {} as Record<string, MessageReaction[]>
+    );
+
+    setMessageReactions(reactionsMap);
+  }, [messages]);
+
+  // Handle adding/removing reactions
+  const handleAddReaction = useCallback(
+    async (messageId: string, emoji: string) => {
+      // Find the message to get participants
+      const message = messages.find(msg => msg.id === messageId);
+      if (!message) return;
+
+      const participants = [message.senderId, message.receiverId];
+
+      const result = await reactionService.addReaction(
+        messageId,
+        currentUserId,
+        emoji,
+        participants
+      );
+
+      if (!result.error) {
+        // Refresh reactions for this message
+        const updatedReactions =
+          await reactionService.getMessageReactions(messageId);
+        if (!updatedReactions.error) {
+          setMessageReactions(prev => ({
+            ...prev,
+            [messageId]: updatedReactions.data,
+          }));
+        }
+      }
+    },
+    [messages, currentUserId]
+  );
+
+  // Fetch reactions when messages change
+  useEffect(() => {
+    fetchReactions();
+  }, [fetchReactions]);
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
@@ -47,12 +109,26 @@ export default function MessageList({
         <div className='max-w-3xl mx-auto px-4 py-8'>
           <div className='flex flex-col items-center justify-center text-center py-20'>
             <div className='w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mb-4'>
-              <svg className='w-8 h-8 text-gray-400' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z' />
+              <svg
+                className='w-8 h-8 text-gray-400'
+                fill='none'
+                stroke='currentColor'
+                viewBox='0 0 24 24'
+              >
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  strokeWidth={2}
+                  d='M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z'
+                />
               </svg>
             </div>
-            <h3 className='text-lg font-medium text-gray-900 mb-2'>No messages yet</h3>
-            <p className='text-sm text-gray-500 max-w-sm'>Start the conversation! Send your first message to begin chatting.</p>
+            <h3 className='text-lg font-medium text-gray-900 mb-2'>
+              No messages yet
+            </h3>
+            <p className='text-sm text-gray-500 max-w-sm'>
+              Start the conversation! Send your first message to begin chatting.
+            </p>
           </div>
           <div ref={messagesEndRef} />
         </div>
@@ -105,11 +181,14 @@ export default function MessageList({
             }
           } else {
             // Far apart messages get more spacing
-            if (prevTimeDiff > 60) { // More than 1 hour
+            if (prevTimeDiff > 60) {
+              // More than 1 hour
               marginTop = 'mt-12';
-            } else if (prevTimeDiff > 30) { // More than 30 minutes
+            } else if (prevTimeDiff > 30) {
+              // More than 30 minutes
               marginTop = 'mt-10';
-            } else if (prevTimeDiff > 10) { // More than 10 minutes
+            } else if (prevTimeDiff > 10) {
+              // More than 10 minutes
               marginTop = 'mt-8';
             } else {
               marginTop = 'mt-6';
@@ -128,7 +207,7 @@ export default function MessageList({
 
           // Show avatar only for first message in group or standalone messages
           const showAvatar = !isOwnMessage && !isGroupedWithPrev;
-          
+
           // Show sender name only for first message in group (not grouped with previous)
           const showSenderName = !isGroupedWithPrev;
 
@@ -145,6 +224,9 @@ export default function MessageList({
               showSenderName={showSenderName}
               onReplyToMessage={onReplyToMessage}
               allMessages={messages}
+              reactions={messageReactions[message.id] || []}
+              currentUserId={currentUserId}
+              onAddReaction={handleAddReaction}
             />
           );
         })}

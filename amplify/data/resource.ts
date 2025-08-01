@@ -140,6 +140,30 @@ const schema = a
         index('senderId').sortKeys(['timestamp']),
       ]),
 
+    // Message reactions
+    MessageReaction: a
+      .model({
+        id: a.id().required(),
+        messageId: a.id().required(),
+        userId: a.string().required(),
+        emoji: a.string().required(), // The emoji character
+        timestamp: a.datetime().required(),
+        // TTL field - inherits from message's TTL
+        expiresAt: a.datetime(),
+        // Multi-user authorization: all participants can see reactions
+        participants: a.string().array(),
+      })
+      .authorization(allow => [
+        // Allow participants to view reactions
+        allow.ownersDefinedIn('participants'),
+      ])
+      .secondaryIndexes(index => [
+        // Get all reactions for a message
+        index('messageId').sortKeys(['timestamp']),
+        // Get all reactions by a user
+        index('userId').sortKeys(['timestamp']),
+      ]),
+
     // User online presence - simplified status
     UserPresence: a
       .model({

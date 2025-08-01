@@ -380,7 +380,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
                   </div>
                 </div>
               </div>
-              
+
               <div className='flex items-center gap-2'>
                 <div className='w-6 h-6 bg-green-50 rounded-md flex items-center justify-center'>
                   <Globe className='w-3 h-3 text-green-600' />

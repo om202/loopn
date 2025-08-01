@@ -54,7 +54,9 @@ export default function Navbar() {
               className='flex items-center space-x-3 hover:opacity-80 transition-opacity'
             >
               <Image src='/loopn.svg' alt='Loopn' width={32} height={32} />
-              <h1 className='text-xl sm:text-2xl font-semibold text-gray-800'>Loopn</h1>
+              <h1 className='text-xl sm:text-2xl font-semibold text-gray-800'>
+                Loopn
+              </h1>
             </Link>
           </div>
 
@@ -89,7 +91,9 @@ export default function Navbar() {
                       <p className='mt-3 text-sm sm:text-base font-medium text-gray-800 truncate no-email-detection'>
                         {getUserEmail()}
                       </p>
-                      <p className='text-xs sm:text-sm text-gray-500'>Welcome back</p>
+                      <p className='text-xs sm:text-sm text-gray-500'>
+                        Welcome back
+                      </p>
                     </div>
                     <div className='p-2'>
                       <button

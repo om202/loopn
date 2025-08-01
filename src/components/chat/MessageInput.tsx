@@ -80,7 +80,9 @@ export default function MessageInput({
 
   const getRepliedToContent = (content: string) => {
     const maxLength = 60;
-    return content.length > maxLength ? content.substring(0, maxLength) + '...' : content;
+    return content.length > maxLength
+      ? content.substring(0, maxLength) + '...'
+      : content;
   };
 
   return (
@@ -90,17 +92,17 @@ export default function MessageInput({
         <div className='bg-gray-50 border-t border-gray-200 px-4 py-3 flex items-start justify-between'>
           <div className='flex-1 min-w-0'>
             <div className='flex items-center text-sm text-gray-600 mb-1'>
-              <svg 
-                className='w-4 h-4 mr-2 text-blue-500' 
-                fill='none' 
-                stroke='currentColor' 
+              <svg
+                className='w-4 h-4 mr-2 text-blue-500'
+                fill='none'
+                stroke='currentColor'
                 viewBox='0 0 24 24'
               >
-                <path 
-                  strokeLinecap='round' 
-                  strokeLinejoin='round' 
-                  strokeWidth={2} 
-                  d='M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6' 
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  strokeWidth={2}
+                  d='M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6'
                 />
               </svg>
               <span className='font-medium'>Replying to message</span>
@@ -125,7 +127,10 @@ export default function MessageInput({
       {showEmojiPicker ? (
         <div className=''>
           <div className='max-w-3xl mx-auto flex justify-end'>
-            <div ref={emojiPickerRef} className='rounded-lg overflow-hidden shadow-xl'>
+            <div
+              ref={emojiPickerRef}
+              className='rounded-lg overflow-hidden shadow-xl'
+            >
               <EmojiPicker
                 onEmojiClick={handleEmojiClick}
                 autoFocusSearch={false}

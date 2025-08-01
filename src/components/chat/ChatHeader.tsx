@@ -101,7 +101,9 @@ export default function ChatHeader({
               {getUserDisplayName()}
             </h1>
             <div className='flex items-center gap-1 sm:gap-2 mt-0.5'>
-              {!conversation.isConnected && timeLeft && timeLeft !== 'Expired' ? (
+              {!conversation.isConnected &&
+              timeLeft &&
+              timeLeft !== 'Expired' ? (
                 <div className='flex items-center gap-1 sm:gap-2'>
                   <span className='text-xs sm:text-sm text-gray-600'>
                     <span className='hidden sm:inline'>Trial Chat</span>
@@ -121,15 +123,29 @@ export default function ChatHeader({
                 </div>
               ) : conversation.isConnected ? (
                 <div className='flex items-center text-xs sm:text-sm text-green-600'>
-                  <svg className='w-2.5 h-2.5 sm:w-3 sm:h-3 mr-1' fill='currentColor' viewBox='0 0 20 20'>
-                    <path fillRule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clipRule='evenodd' />
+                  <svg
+                    className='w-2.5 h-2.5 sm:w-3 sm:h-3 mr-1'
+                    fill='currentColor'
+                    viewBox='0 0 20 20'
+                  >
+                    <path
+                      fillRule='evenodd'
+                      d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z'
+                      clipRule='evenodd'
+                    />
                   </svg>
-                  <span className='hidden sm:inline'>Connected - Chat forever!</span>
+                  <span className='hidden sm:inline'>
+                    Connected - Chat forever!
+                  </span>
                   <span className='sm:hidden'>Connected</span>
                 </div>
               ) : (
-                <div className={`flex items-center text-xs sm:text-sm ${getPresenceDisplay().color}`}>
-                  <span className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full mr-1 sm:mr-2 ${getPresenceDisplay().dot}`}></span>
+                <div
+                  className={`flex items-center text-xs sm:text-sm ${getPresenceDisplay().color}`}
+                >
+                  <span
+                    className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full mr-1 sm:mr-2 ${getPresenceDisplay().dot}`}
+                  ></span>
                   {getPresenceDisplay().text}
                 </div>
               )}
@@ -137,29 +153,31 @@ export default function ChatHeader({
           </div>
 
           {/* Connect Button - Right Side */}
-          {!conversation.isConnected && !!timeLeft && timeLeft !== 'Expired' && (
-            <button
-              onClick={onSendConnectionRequest}
-              disabled={sendingConnectionRequest}
-              className='flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 sm:py-2.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed'
-            >
-              <Image
-                src='/connect-icon.svg'
-                alt='Connect'
-                width={16}
-                height={16}
-                className='flex-shrink-0 sm:w-[18px] sm:h-[18px]'
-              />
-              <span className='text-xs sm:text-sm font-medium'>
-                <span className='hidden sm:inline'>
-                  {sendingConnectionRequest ? 'Connecting...' : 'Connect'}
+          {!conversation.isConnected &&
+            !!timeLeft &&
+            timeLeft !== 'Expired' && (
+              <button
+                onClick={onSendConnectionRequest}
+                disabled={sendingConnectionRequest}
+                className='flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 sm:py-2.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed'
+              >
+                <Image
+                  src='/connect-icon.svg'
+                  alt='Connect'
+                  width={16}
+                  height={16}
+                  className='flex-shrink-0 sm:w-[18px] sm:h-[18px]'
+                />
+                <span className='text-xs sm:text-sm font-medium'>
+                  <span className='hidden sm:inline'>
+                    {sendingConnectionRequest ? 'Connecting...' : 'Connect'}
+                  </span>
+                  <span className='sm:hidden'>
+                    {sendingConnectionRequest ? '...' : 'Connect'}
+                  </span>
                 </span>
-                <span className='sm:hidden'>
-                  {sendingConnectionRequest ? '...' : 'Connect'}
-                </span>
-              </span>
-            </button>
-          )}
+              </button>
+            )}
         </div>
       </div>
     </div>

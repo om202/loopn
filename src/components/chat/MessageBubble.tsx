@@ -1,10 +1,14 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import type { Schema } from '../../../amplify/data/resource';
 import UserAvatar from '../UserAvatar';
+import EmojiPicker from '../EmojiPicker';
+import MessageReactions from '../MessageReactions';
 
 type Message = Schema['Message']['type'];
 type UserPresence = Schema['UserPresence']['type'];
+type MessageReaction = Schema['MessageReaction']['type'];
 
 interface MessageBubbleProps {
   message: Message;
@@ -17,6 +21,9 @@ interface MessageBubbleProps {
   showSenderName: boolean;
   onReplyToMessage?: (message: Message) => void;
   allMessages?: Message[]; // For finding replied-to messages
+  reactions?: MessageReaction[]; // Reactions for this message
+  currentUserId: string; // Current user ID for reaction handling
+  onAddReaction?: (messageId: string, emoji: string) => void;
 }
 
 export default function MessageBubble({
@@ -29,7 +36,20 @@ export default function MessageBubble({
   showSenderName,
   onReplyToMessage,
   allMessages = [],
+  reactions = [],
+  currentUserId,
+  onAddReaction,
 }: MessageBubbleProps) {
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [isHovering, setIsHovering] = useState(false);
+
+  // Close emoji picker when not hovering
+  useEffect(() => {
+    if (!isHovering && showEmojiPicker) {
+      setShowEmojiPicker(false);
+    }
+  }, [isHovering, showEmojiPicker]);
+
   // Check if message contains only emojis
   const isEmojiOnly = (text: string) => {
     if (!text.trim()) {
@@ -87,27 +107,41 @@ export default function MessageBubble({
 
   // Get sender display name with time
   const getSenderNameWithTime = () => {
-    const senderName = isOwnMessage 
-      ? 'You' 
+    const senderName = isOwnMessage
+      ? 'You'
       : otherUserPresence?.email || `User ${message.senderId.slice(-4)}`;
     const time = formatMessageTime(message.timestamp);
     return `${senderName} · ${time}`;
   };
 
   // Find the message this is replying to
-  const repliedToMessage = message.replyToMessageId 
+  const repliedToMessage = message.replyToMessageId
     ? allMessages.find(msg => msg.id === message.replyToMessageId)
     : null;
 
   // Get display content for replied message (truncated)
   const getRepliedToContent = (content: string) => {
     const maxLength = 50;
-    return content.length > maxLength ? content.substring(0, maxLength) + '...' : content;
+    return content.length > maxLength
+      ? content.substring(0, maxLength) + '...'
+      : content;
   };
 
   const handleReplyClick = () => {
     if (onReplyToMessage) {
       onReplyToMessage(message);
+    }
+  };
+
+  const handleEmojiSelect = (emoji: string) => {
+    if (onAddReaction) {
+      onAddReaction(message.id, emoji);
+    }
+  };
+
+  const handleToggleReaction = (emoji: string) => {
+    if (onAddReaction) {
+      onAddReaction(message.id, emoji);
     }
   };
 
@@ -117,9 +151,11 @@ export default function MessageBubble({
         isOwnMessage ? 'items-end' : 'items-start'
       }`}
     >
-
-      
-      <div className='group relative flex items-center gap-2'>
+      <div 
+        className='group relative flex items-center gap-2'
+        onMouseEnter={() => setIsHovering(true)}
+        onMouseLeave={() => setIsHovering(false)}
+      >
         {/* Avatar always on the left for other users */}
         {!isOwnMessage && showSenderName && (
           <UserAvatar
@@ -129,55 +165,67 @@ export default function MessageBubble({
             showStatus={false}
           />
         )}
-        
+
         {/* Message content and actions wrapper */}
-        <div className={`flex items-center gap-2 ${!isOwnMessage ? 'flex-row-reverse' : 'flex-row'}`}>
+        <div
+          className={`flex items-center gap-2 ${!isOwnMessage ? 'flex-row-reverse' : 'flex-row'}`}
+        >
           {/* Action icons with conditional positioning */}
           {onReplyToMessage && (
-            <div className={`opacity-0 group-hover:opacity-100 transition-all duration-150 ease-out flex items-center gap-2 ${
-              !isOwnMessage ? 'ml-3' : 'mr-3'
-            }`}>
+            <div
+              className={`opacity-0 group-hover:opacity-100 transition-all duration-150 ease-out flex items-center gap-2 ${
+                !isOwnMessage ? 'ml-3' : 'mr-3'
+              }`}
+            >
               {/* Reply button */}
               <button
                 onClick={handleReplyClick}
                 className='w-8 h-8 bg-gray-200 hover:bg-gray-300 rounded-full transition-colors duration-150 flex items-center justify-center'
-                title="Reply"
+                title='Reply'
               >
-                <svg 
-                  className='w-4 h-4 text-gray-600' 
-                  fill='none' 
-                  stroke='currentColor' 
+                <svg
+                  className='w-4 h-4 text-gray-600'
+                  fill='none'
+                  stroke='currentColor'
                   viewBox='0 0 24 24'
                 >
-                  <path 
-                    strokeLinecap='round' 
-                    strokeLinejoin='round' 
-                    strokeWidth={2} 
-                    d='M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6' 
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth={2}
+                    d='M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6'
                   />
                 </svg>
               </button>
-              
-              {/* Emoji reaction placeholder */}
-              <button
-                className='w-8 h-8 bg-gray-200 hover:bg-gray-300 rounded-full transition-colors duration-150 flex items-center justify-center'
-                title="Add reaction"
-              >
-                <svg 
-                  className='w-4 h-4 text-gray-600' 
-                  fill='none' 
-                  stroke='currentColor' 
-                  viewBox='0 0 24 24'
+
+              {/* Emoji reaction button */}
+              <div className='relative'>
+                <button
+                  onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                  className='w-8 h-8 bg-gray-200 hover:bg-gray-300 rounded-full transition-colors duration-150 flex items-center justify-center'
+                  title='Add reaction'
                 >
-                  <path 
-                    strokeLinecap='round' 
-                    strokeLinejoin='round' 
-                    strokeWidth={2} 
-                    d='M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z' 
-                  />
-                </svg>
-              </button>
-              
+                  <svg
+                    className='w-4 h-4 text-gray-600'
+                    fill='none'
+                    stroke='currentColor'
+                    viewBox='0 0 24 24'
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      strokeWidth={2}
+                      d='M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
+                    />
+                  </svg>
+                </button>
+                <EmojiPicker
+                  isOpen={showEmojiPicker}
+                  onEmojiSelect={handleEmojiSelect}
+                  onClose={() => setShowEmojiPicker(false)}
+                />
+              </div>
+
               {/* Timestamp */}
               <div className='bg-gray-200 hover:bg-gray-300 rounded-full px-3 py-1 transition-colors duration-150'>
                 <span className='text-xs text-gray-600'>
@@ -188,44 +236,61 @@ export default function MessageBubble({
           )}
 
           <div className='relative max-w-xs sm:max-w-sm lg:max-w-md'>
-        {messageIsEmojiOnly ? (
-          // Emoji-only messages without container
-          <div className='text-4xl leading-none'>{message.content}</div>
-        ) : (
-          // Regular text messages with Material Design bubble styling
-          <div
-            className={`px-4 py-3 rounded-2xl border ${
-              isOwnMessage
-                ? 'bg-blue-600 text-white border-blue-600 rounded-br-md'
-                : 'bg-white text-gray-900 border-gray-200 rounded-bl-md'
-            }`}
-          >
-            {/* Reply preview */}
-            {repliedToMessage && (
-              <div className={`mb-2 pt-2 pb-2 border-l-2 pl-3 pr-3 ${
-                isOwnMessage 
-                  ? 'border-blue-300 bg-blue-500 bg-opacity-20' 
-                  : 'border-gray-400 bg-gray-100'
-              } rounded-r-lg`}>
-                <div className={`text-xs ${
-                  isOwnMessage ? 'text-blue-100' : 'text-gray-600'
-                } mb-1`}>
-                  Replying to {repliedToMessage.senderId === message.senderId ? 'yourself' : 
-                    (repliedToMessage.senderId === otherParticipantId ? 'Them' : 'You')}
-                </div>
-                <div className={`text-xs ${
-                  isOwnMessage ? 'text-blue-100' : 'text-gray-600'
-                }`}>
-                  {getRepliedToContent(repliedToMessage.content)}
-                </div>
+            {messageIsEmojiOnly ? (
+              // Emoji-only messages without container
+              <div className='text-4xl leading-none'>{message.content}</div>
+            ) : (
+              // Regular text messages with Material Design bubble styling
+              <div
+                className={`px-4 py-3 rounded-2xl border ${
+                  isOwnMessage
+                    ? 'bg-blue-600 text-white border-blue-600 rounded-br-md'
+                    : 'bg-white text-gray-900 border-gray-200 rounded-bl-md'
+                }`}
+              >
+                {/* Reply preview */}
+                {repliedToMessage && (
+                  <div
+                    className={`mb-2 pt-2 pb-2 border-l-2 pl-3 pr-3 ${
+                      isOwnMessage
+                        ? 'border-blue-300 bg-blue-500 bg-opacity-20'
+                        : 'border-gray-400 bg-gray-100'
+                    } rounded-r-lg`}
+                  >
+                    <div
+                      className={`text-xs ${
+                        isOwnMessage ? 'text-blue-100' : 'text-gray-600'
+                      } mb-1`}
+                    >
+                      Replying to{' '}
+                      {repliedToMessage.senderId === message.senderId
+                        ? 'yourself'
+                        : repliedToMessage.senderId === otherParticipantId
+                          ? 'Them'
+                          : 'You'}
+                    </div>
+                    <div
+                      className={`text-xs ${
+                        isOwnMessage ? 'text-blue-100' : 'text-gray-600'
+                      }`}
+                    >
+                      {getRepliedToContent(repliedToMessage.content)}
+                    </div>
+                  </div>
+                )}
+
+                <p className='text-sm leading-relaxed break-words'>
+                  {renderMessageContent(message.content)}
+                </p>
               </div>
             )}
-            
-            <p className='text-sm leading-relaxed break-words'>
-              {renderMessageContent(message.content)}
-            </p>
-          </div>
-        )}
+
+            {/* Message reactions */}
+            <MessageReactions
+              reactions={reactions}
+              currentUserId={currentUserId}
+              onToggleReaction={handleToggleReaction}
+            />
           </div>
         </div>
       </div>
