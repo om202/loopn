@@ -124,30 +124,8 @@ export default function MessageInput({
         </div>
       )}
 
-      {/* Emoji Picker - Material Design container */}
-      {showEmojiPicker ? (
-        <div className=''>
-          <div className='max-w-5xl mx-auto flex justify-end'>
-            <div
-              ref={emojiPickerRef}
-              className='rounded-lg overflow-hidden shadow-xl'
-            >
-              <EmojiPicker
-                onEmojiClick={handleEmojiClick}
-                autoFocusSearch={false}
-                width={350}
-                height={400}
-                previewConfig={{
-                  showPreview: false,
-                }}
-              />
-            </div>
-          </div>
-        </div>
-      ) : null}
-
-      {/* Message Input - Material Design styling */}
-      <div className='flex-shrink-0 bg-white border-t border-gray-200 p-4 shadow-lg'>
+            {/* Message Input - Material Design styling */}
+      <div className='flex-shrink-0 bg-white border-t border-gray-200 p-4 shadow-lg relative'>
         <div className='max-w-5xl mx-auto'>
           <form 
             autoComplete='off' 
@@ -155,6 +133,25 @@ export default function MessageInput({
             data-form-type='other'
             style={{ position: 'relative' }}
           >
+            {/* Emoji Picker positioned above input */}
+            {showEmojiPicker && (
+              <div className='absolute bottom-full right-0 mb-2 z-50'>
+                <div
+                  ref={emojiPickerRef}
+                  className='rounded-lg overflow-hidden shadow-xl w-[350px]'
+                >
+                  <EmojiPicker
+                    onEmojiClick={handleEmojiClick}
+                    autoFocusSearch={false}
+                    width={350}
+                    height={400}
+                    previewConfig={{
+                      showPreview: false,
+                    }}
+                  />
+                </div>
+              </div>
+            )}
             <div className='flex gap-3 items-end'>
               <div className='flex-1 relative'>
                 <input
@@ -187,16 +184,16 @@ export default function MessageInput({
                 role='textbox'
                 aria-label='Type your message'
                 style={{ 
-                  fontSize: '14px',
+                  fontSize: '16px',
                   WebkitAppearance: 'none',
                   MozAppearance: 'textfield'
                 }}
-                className='w-full px-5 py-3 pr-14 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-gray-50 hover:bg-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed placeholder-gray-500'
+                className='w-full px-5 py-3 pr-14 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base bg-gray-50 hover:bg-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed placeholder-gray-500'
               />
               <button
                 onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                 disabled={disabled}
-                className={`absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-all duration-200 p-2 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 ${
+                className={`absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-all duration-200 p-2 rounded-full hover:bg-gray-100 focus:outline-none disabled:opacity-50 ${
                   showEmojiPicker ? 'text-blue-600 bg-blue-50' : ''
                 }`}
               >
