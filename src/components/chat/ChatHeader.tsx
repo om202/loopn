@@ -81,7 +81,7 @@ export default function ChatHeader({
   };
 
   return (
-    <div className='flex-shrink-0 bg-white shadow-lg border-b border-gray-200'>
+    <div className='flex-shrink-0 bg-white border-b border-gray-200 relative z-10' style={{ filter: 'drop-shadow(0 12px 24px rgba(249, 250, 251, 1))' }}>
       <div className='px-3 sm:px-4 py-2 sm:py-3'>
         <div className='flex items-center gap-2 sm:gap-3'>
           {/* Back Button */}
@@ -150,7 +150,7 @@ export default function ChatHeader({
           {!conversation.isConnected &&
             !!timeLeft &&
             timeLeft !== 'Expired' && (
-              <div className='flex items-center gap-3'>
+              <div className='flex items-center gap-3 sm:gap-4 md:gap-6'>
                 <div className='flex items-center gap-2 text-xs sm:text-sm text-gray-600'>
                   <button
                     onClick={() => setShowTrialInfoDialog(true)}
@@ -163,7 +163,7 @@ export default function ChatHeader({
                   <span className='text-gray-500'>6d 1h</span>
                   <button
                     onClick={() => setShowEndChatDialog(true)}
-                    className='text-red-500 hover:text-red-600 font-medium transition-colors border-b border-red-500 hover:border-red-600'
+                    className='text-red-500 hover:text-red-600 font-medium transition-colors border-b border-dotted border-red-300 hover:border-red-400'
                   >
                     End Now
                   </button>
