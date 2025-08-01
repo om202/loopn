@@ -296,7 +296,7 @@ export default function ChatWindow({
 
   // Show loading state while initializing or external loading
   if (isInitializing || externalLoading) {
-    return <LoadingContainer size='lg' />;
+    return <LoadingContainer />;
   }
 
   return (
