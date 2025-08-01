@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useEffect, useState, useCallback } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 
 import type { Schema } from '../../../amplify/data/resource';
 
@@ -24,6 +24,7 @@ interface MessageListProps {
   isLoadingMore?: boolean;
   lastLoadWasOlderMessages?: boolean;
   shouldAutoScroll?: boolean;
+  chatEnteredAt?: Date;
 }
 
 export default function MessageList({
@@ -39,6 +40,7 @@ export default function MessageList({
   isLoadingMore = false,
   lastLoadWasOlderMessages = false,
   shouldAutoScroll = false,
+  chatEnteredAt,
 }: MessageListProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -364,6 +366,20 @@ export default function MessageList({
           const nextMessage =
             index < messages.length - 1 ? messages[index + 1] : null;
 
+          // Check if we should show "new messages" separator before this message
+          // Only show once at the beginning of the unread messages group
+          const isFirstUnreadMessage = !isOwnMessage && 
+            !message.isRead && 
+            message.senderId !== 'SYSTEM' &&
+            // Check if previous message was read/own/system (indicating start of unread group)
+            (prevMessage ? 
+              (prevMessage.isRead || 
+               prevMessage.senderId === currentUserId || 
+               prevMessage.senderId === 'SYSTEM') 
+              : true);
+
+          const shouldShowNewMessagesSeparator = chatEnteredAt && isFirstUnreadMessage;
+
           // Check if messages are from same sender and within time threshold
           const isPrevFromSameSender =
             prevMessage?.senderId === message.senderId;
@@ -431,25 +447,40 @@ export default function MessageList({
           const showSenderName = !isGroupedWithPrev;
 
           return (
-            <MessageBubble
-              key={message.id}
-              message={message}
-              isOwnMessage={isOwnMessage}
-              showAvatar={showAvatar}
-              otherUserPresence={otherUserPresence}
-              otherParticipantId={otherParticipantId}
-              marginTop={marginTop}
-              marginBottom={marginBottom}
-              showSenderName={showSenderName}
-              onReplyToMessage={onReplyToMessage}
-              onDeleteMessage={onDeleteMessage}
-              allMessages={messages}
-              reactions={messageReactions[message.id] || []}
-              currentUserId={currentUserId}
-              onAddReaction={handleAddReaction}
-              showEmojiPicker={openEmojiPickerMessageId === message.id}
-              onEmojiPickerToggle={() => handleEmojiPickerToggle(message.id)}
-            />
+            <React.Fragment key={message.id}>
+              {/* New Messages Separator */}
+              {shouldShowNewMessagesSeparator && (
+                <div className='flex items-center justify-center my-4 px-4'>
+                  <div className='flex items-center w-full max-w-xs'>
+                    <div className='flex-1 h-px bg-gray-300'></div>
+                    <div className='px-3 text-gray-500 text-xs font-medium'>
+                      New messages
+                    </div>
+                    <div className='flex-1 h-px bg-gray-300'></div>
+                  </div>
+                </div>
+              )}
+              
+                <MessageBubble
+                  key={message.id}
+                  message={message}
+                  isOwnMessage={isOwnMessage}
+                  showAvatar={showAvatar}
+                  otherUserPresence={otherUserPresence}
+                  otherParticipantId={otherParticipantId}
+                  marginTop={marginTop}
+                  marginBottom={marginBottom}
+                  showSenderName={showSenderName}
+                  onReplyToMessage={onReplyToMessage}
+                  onDeleteMessage={onDeleteMessage}
+                  allMessages={messages}
+                  reactions={messageReactions[message.id] || []}
+                  currentUserId={currentUserId}
+                  onAddReaction={handleAddReaction}
+                  showEmojiPicker={openEmojiPickerMessageId === message.id}
+                  onEmojiPickerToggle={() => handleEmojiPickerToggle(message.id)}
+                />
+            </React.Fragment>
           );
         })}
         <div ref={messagesEndRef} className='h-4' />

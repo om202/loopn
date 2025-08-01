@@ -49,8 +49,17 @@ export default function ChatWindow({
   const [initialLoadComplete, setInitialLoadComplete] = useState(false);
   const [lastLoadWasOlderMessages, setLastLoadWasOlderMessages] = useState(false);
   const [shouldAutoScroll, setShouldAutoScroll] = useState(false);
+  const [chatEnteredAt, setChatEnteredAt] = useState<Date>(new Date());
+  const [hasActiveSession, setHasActiveSession] = useState(false);
 
   const { user } = useAuthenticator();
+
+  // Check if there are unread messages from other users
+  const hasUnreadMessages = messages.some(msg => 
+    !msg.isRead && 
+    msg.senderId !== user?.userId && 
+    msg.senderId !== 'SYSTEM'
+  );
 
   // Get the other participant's ID
   const otherParticipantId =
@@ -174,6 +183,9 @@ export default function ChatWindow({
         setHasMoreMessages(!!result.nextToken);
         setInitialLoadComplete(true);
         setLastLoadWasOlderMessages(false);
+        
+        // Mark this as an active session once messages are loaded
+        setHasActiveSession(true);
       }
       setIsInitializing(false);
     };
@@ -238,9 +250,16 @@ export default function ChatWindow({
                   newMsg.timestamp > latestRealMessage.timestamp) {
                 messagesToAdd.push(newMsg);
                 
-                // Play received sound for messages from other users
-                if (newMsg.senderId !== user?.userId) {
-                  soundService.playReceivedSound();
+                // Only play received sound for messages from other users that arrive 
+                // while we have an active session (not for old/unread messages)
+                if (newMsg.senderId !== user?.userId && hasActiveSession) {
+                  const messageTime = new Date(newMsg.timestamp || newMsg.createdAt);
+                  const sessionStartTime = chatEnteredAt;
+                  
+                  // Only play sound if message was sent after we entered the chat
+                  if (messageTime > sessionStartTime) {
+                    soundService.playReceivedSound();
+                  }
                 }
               }
             }
@@ -376,6 +395,10 @@ export default function ChatWindow({
           );
           // Play sent sound effect
           soundService.playSentSound();
+          
+          // Mark unread messages from other users as read when user replies
+          markUnreadMessagesAsRead();
+          
           // Reset auto-scroll trigger after successful send
           setShouldAutoScroll(false);
         }
@@ -388,6 +411,37 @@ export default function ChatWindow({
         setError('Failed to send message. Please try again.');
       });
   };
+
+  const markUnreadMessagesAsRead = useCallback(async () => {
+    if (!user) return;
+    
+    // Find unread messages from other users
+    const unreadMessages = messages.filter(msg => 
+      !msg.isRead && 
+      msg.senderId !== user.userId && 
+      msg.senderId !== 'SYSTEM'
+    );
+    
+    // Mark them as read
+    const markPromises = unreadMessages.map(msg =>
+      messageService.markMessageAsRead(msg.id)
+    );
+    
+    try {
+      await Promise.all(markPromises);
+      
+      // Update local state
+      setMessages(prev => 
+        prev.map(msg => 
+          unreadMessages.some(unread => unread.id === msg.id)
+            ? { ...msg, isRead: true, readAt: new Date().toISOString() }
+            : msg
+        )
+      );
+    } catch (error) {
+      console.error('Error marking messages as read:', error);
+    }
+  }, [messages, user]);
 
   const handleReplyToMessage = (message: Message) => {
     setReplyToMessage(message);
@@ -488,6 +542,7 @@ export default function ChatWindow({
         isLoadingMore={isLoadingMore}
         lastLoadWasOlderMessages={lastLoadWasOlderMessages}
         shouldAutoScroll={shouldAutoScroll}
+        chatEnteredAt={chatEnteredAt}
       />
 
       <MessageInput
@@ -498,6 +553,8 @@ export default function ChatWindow({
         autoFocus={!isInitializing && !externalLoading}
         replyToMessage={replyToMessage}
         onCancelReply={handleCancelReply}
+        onMarkAsRead={markUnreadMessagesAsRead}
+        hasUnreadMessages={hasUnreadMessages}
       />
 
       {error || externalError ? (

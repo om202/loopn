@@ -16,6 +16,8 @@ interface MessageInputProps {
   autoFocus?: boolean;
   replyToMessage?: Message | null;
   onCancelReply?: () => void;
+  onMarkAsRead?: () => void;
+  hasUnreadMessages?: boolean;
 }
 
 export default function MessageInput({
@@ -26,6 +28,8 @@ export default function MessageInput({
   autoFocus = true,
   replyToMessage,
   onCancelReply,
+  onMarkAsRead,
+  hasUnreadMessages = false,
 }: MessageInputProps) {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -200,6 +204,15 @@ export default function MessageInput({
                 <Smile className='w-6 h-6' />
               </button>
             </div>
+            {hasUnreadMessages && onMarkAsRead && (
+              <button
+                onClick={onMarkAsRead}
+                disabled={disabled}
+                className='flex items-center justify-center px-3 py-2 text-sm font-medium text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 disabled:opacity-50'
+              >
+                Mark read
+              </button>
+            )}
             <button
               onClick={handleSend}
               disabled={disabled}
