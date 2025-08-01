@@ -10,8 +10,41 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'Loopn App',
-  description: 'Full-stack app with Amplify authentication',
+  title: 'Loopn - Real-Time Messaging Platform',
+  description: 'Connect and chat with people instantly. Secure real-time messaging with chat requests, user presence, message reactions, and time-limited conversations.',
+  keywords: [
+    'real-time messaging',
+    'chat platform',
+    'instant messaging',
+    'secure chat',
+    'online communication',
+    'message reactions',
+    'user presence',
+    'chat requests'
+  ],
+  authors: [{ name: 'Loopn Team' }],
+  openGraph: {
+    title: 'Loopn - Real-Time Messaging Platform',
+    description: 'Connect and chat with people instantly. Secure real-time messaging with chat requests, user presence, message reactions, and time-limited conversations.',
+    type: 'website',
+    siteName: 'Loopn',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Loopn - Real-Time Messaging Platform',
+    description: 'Connect and chat with people instantly. Secure real-time messaging with chat requests, user presence, message reactions, and time-limited conversations.',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   formatDetection: {
     telephone: false,
     email: false,
