@@ -181,7 +181,7 @@ export default function MessageBubble({
     if (message.senderId === currentUserId) {
       return;
     }
-    
+
     if (onAddReaction) {
       onAddReaction(message.id, emoji);
     }
@@ -192,7 +192,7 @@ export default function MessageBubble({
     if (message.senderId === currentUserId) {
       return;
     }
-    
+
     if (onAddReaction) {
       onAddReaction(message.id, emoji);
     }

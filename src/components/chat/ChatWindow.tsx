@@ -168,23 +168,21 @@ export default function ChatWindow({
     }
 
     setIsInitializing(true);
-    
+
     // Set up real-time subscription immediately - this is more reliable than the API call
     let isFirstLoad = true;
     let previousMessageIds = new Set<string>();
     let canPlaySounds = false; // Flag to prevent sounds during initial loads
-    
+
     const subscription = messageService.observeMessages(
       conversation.id,
-      (newMessages) => {
-
-        
+      newMessages => {
         if (isFirstLoad) {
           // First load: set all messages and complete initialization
           setMessages(newMessages);
           setInitialLoadComplete(true);
           setHasActiveSession(true);
-          
+
           // Take a snapshot of unread message IDs when first loading
           const unreadIds = new Set(
             newMessages
@@ -197,17 +195,17 @@ export default function ChatWindow({
               .map(msg => msg.id)
           );
           setUnreadMessagesSnapshot(unreadIds);
-          
+
           // Initialize previous message IDs for next updates
           previousMessageIds = new Set(newMessages.map(msg => msg.id));
-          
+
           setIsInitializing(false);
-          
+
           // Trigger scroll to bottom after messages are loaded
           setShouldAutoScroll(true);
-          
+
           isFirstLoad = false;
-          
+
           // Enable sound playing after a short delay to avoid playing sounds for existing messages
           setTimeout(() => {
             canPlaySounds = true;
@@ -215,28 +213,30 @@ export default function ChatWindow({
         } else {
           // Subsequent updates: check for new messages from other users
           const currentMessageIds = new Set(newMessages.map(msg => msg.id));
-          const newMessageIds = newMessages.filter(msg => !previousMessageIds.has(msg.id));
-          
+          const newMessageIds = newMessages.filter(
+            msg => !previousMessageIds.has(msg.id)
+          );
+
           // Play received sound for new messages from other users (not system or self)
           // Only play if we're past the initial load period
           if (canPlaySounds) {
             const newMessagesFromOthers = newMessageIds.filter(
               msg => msg.senderId !== user?.userId && msg.senderId !== 'SYSTEM'
             );
-            
+
             if (newMessagesFromOthers.length > 0) {
               soundService.playReceivedSound();
             }
           }
-          
+
           // Update previous message IDs for next comparison
           previousMessageIds = currentMessageIds;
-          
+
           // Update messages
           setMessages(newMessages);
         }
       },
-      (error) => {
+      error => {
         setError('Failed to load real-time messages');
         setIsInitializing(false);
       }
@@ -246,8 +246,6 @@ export default function ChatWindow({
       subscription.unsubscribe();
     };
   }, [conversation.id, user?.userId]);
-
-
 
   // Subscribe to other user's presence using existing real-time subscription
   useEffect(() => {

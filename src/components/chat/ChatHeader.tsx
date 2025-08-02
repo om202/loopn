@@ -63,7 +63,8 @@ export default function ChatHeader({
     // For offline users, calculate status bucket
     if (otherUserPresence.lastSeen) {
       const presenceText = formatPresenceTime(otherUserPresence.lastSeen);
-      const color = presenceText === 'Recently active' ? 'text-sky-500' : 'text-gray-500';
+      const color =
+        presenceText === 'Recently active' ? 'text-sky-500' : 'text-gray-500';
       return {
         text: presenceText,
         color,
@@ -116,11 +117,14 @@ export default function ChatHeader({
               size='md'
               showStatus
               status={
-                otherUserPresence?.status === 'ONLINE' || otherUserPresence?.status === 'BUSY'
+                otherUserPresence?.status === 'ONLINE' ||
+                otherUserPresence?.status === 'BUSY'
                   ? otherUserPresence.status
-                  : otherUserPresence?.lastSeen && formatPresenceTime(otherUserPresence.lastSeen) === 'Recently active'
-                  ? 'RECENTLY_ACTIVE'
-                  : 'OFFLINE'
+                  : otherUserPresence?.lastSeen &&
+                      formatPresenceTime(otherUserPresence.lastSeen) ===
+                        'Recently active'
+                    ? 'RECENTLY_ACTIVE'
+                    : 'OFFLINE'
               }
             />
 

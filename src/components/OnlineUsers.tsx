@@ -27,8 +27,6 @@ interface OnlineUsersProps {
   onChatRequestSent: () => void;
 }
 
-
-
 export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   const [onlineUsers, setOnlineUsers] = useState<UserPresence[]>([]);
   const [allUsers, setAllUsers] = useState<UserPresence[]>([]);
@@ -390,8 +388,10 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
 
       <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
         {allUsers.map(userPresence => {
-          const isOnline = onlineUsers.some(ou => ou.userId === userPresence.userId);
-          
+          const isOnline = onlineUsers.some(
+            ou => ou.userId === userPresence.userId
+          );
+
           return (
             <div
               key={userPresence.userId}
@@ -406,11 +406,13 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
                     size='lg'
                     showStatus
                     status={
-                      isOnline 
-                        ? userPresence.status 
-                        : userPresence.lastSeen && formatPresenceTime(userPresence.lastSeen) === 'Recently active'
-                        ? 'RECENTLY_ACTIVE'
-                        : 'OFFLINE'
+                      isOnline
+                        ? userPresence.status
+                        : userPresence.lastSeen &&
+                            formatPresenceTime(userPresence.lastSeen) ===
+                              'Recently active'
+                          ? 'RECENTLY_ACTIVE'
+                          : 'OFFLINE'
                     }
                   />
                 </div>
@@ -419,18 +421,22 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
                   <div className='font-medium text-gray-900 text-sm sm:text-base mb-1 line-clamp-2 no-email-detection break-words'>
                     {getDisplayName(userPresence)}
                   </div>
-                  <div className={`text-xs sm:text-sm ${
-                    isOnline 
-                      ? 'text-green-600' 
-                      : userPresence.lastSeen && formatPresenceTime(userPresence.lastSeen) === 'Recently active'
-                      ? 'text-sky-500'
-                      : 'text-gray-600'
-                  }`}>
+                  <div
+                    className={`text-xs sm:text-sm ${
+                      isOnline
+                        ? 'text-green-600'
+                        : userPresence.lastSeen &&
+                            formatPresenceTime(userPresence.lastSeen) ===
+                              'Recently active'
+                          ? 'text-sky-500'
+                          : 'text-gray-600'
+                    }`}
+                  >
                     {isOnline
                       ? 'Online now'
                       : userPresence.lastSeen
-                      ? formatPresenceTime(userPresence.lastSeen)
-                      : 'Offline'}
+                        ? formatPresenceTime(userPresence.lastSeen)
+                        : 'Offline'}
                   </div>
                 </div>
 

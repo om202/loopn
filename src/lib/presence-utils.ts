@@ -10,7 +10,8 @@ import { userService } from '../services/user.service';
  * @returns Formatted presence status bucket
  */
 export function formatPresenceTime(lastSeen: Date | string): string {
-  const lastSeenDate = typeof lastSeen === 'string' ? new Date(lastSeen) : lastSeen;
+  const lastSeenDate =
+    typeof lastSeen === 'string' ? new Date(lastSeen) : lastSeen;
   const now = new Date();
   const diffMs = now.getTime() - lastSeenDate.getTime();
   const diffMinutes = Math.floor(diffMs / (1000 * 60));
@@ -19,12 +20,10 @@ export function formatPresenceTime(lastSeen: Date | string): string {
   if (diffMinutes <= 15) {
     return 'Recently active';
   }
-  
+
   // 15+ minutes: Offline
   return 'Offline';
 }
-
-
 
 interface UserInfo {
   userId: string;

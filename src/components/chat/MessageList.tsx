@@ -283,7 +283,7 @@ export default function MessageList({
     if (shouldAutoScroll && messagesEndRef.current) {
       // Simple scroll with final delay to ensure completion
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-      
+
       // Final scroll after delay to handle any late-loading content
       setTimeout(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
