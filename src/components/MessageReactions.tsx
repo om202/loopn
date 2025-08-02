@@ -84,7 +84,7 @@ export default function MessageReactions({
     return null;
   }
 
-  // Group reactions by emoji
+  // Group reactions by emoji and track the earliest timestamp for each emoji
   const groupedReactions = reactions.reduce(
     (acc, reaction) => {
       if (!acc[reaction.emoji]) {
@@ -93,6 +93,7 @@ export default function MessageReactions({
           count: 0,
           users: [],
           hasCurrentUser: false,
+          earliestTimestamp: reaction.timestamp,
         };
       }
       acc[reaction.emoji].count++;
@@ -100,12 +101,19 @@ export default function MessageReactions({
       if (reaction.userId === currentUserId) {
         acc[reaction.emoji].hasCurrentUser = true;
       }
+      // Keep track of the earliest timestamp for this emoji type
+      if (reaction.timestamp < acc[reaction.emoji].earliestTimestamp) {
+        acc[reaction.emoji].earliestTimestamp = reaction.timestamp;
+      }
       return acc;
     },
-    {} as Record<string, ReactionGroup>
+    {} as Record<string, ReactionGroup & { earliestTimestamp: string }>
   );
 
-  const reactionGroups = Object.values(groupedReactions);
+  // Sort reaction groups by their earliest timestamp (first occurrence)
+  const reactionGroups = Object.values(groupedReactions).sort(
+    (a, b) => new Date(a.earliestTimestamp).getTime() - new Date(b.earliestTimestamp).getTime()
+  );
 
   return (
     <div className='flex flex-wrap gap-1 -mt-2 mb-1'>

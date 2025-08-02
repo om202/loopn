@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
+import EmojiPickerReact from 'emoji-picker-react';
 
 interface EmojiPickerProps {
   onEmojiSelect: (emoji: string) => void;
@@ -8,53 +9,69 @@ interface EmojiPickerProps {
   isOpen: boolean;
 }
 
-const COMMON_EMOJIS = [
-  '👍',
-  '👏',
-  '🙌',
-  '💡',
-  '🎯',
-  '🚀',
-  '💼',
-  '🤝',
-  '⭐',
-  '🔥',
-  '💯',
-  '✅',
-  '🎉',
-  '💪',
-  '🏆',
-  '❤️',
-];
+const QUICK_EMOJIS = ['👍', '❤️', '😂', '😮', '😢'];
 
 export default function EmojiPicker({
   onEmojiSelect,
   onClose,
   isOpen,
 }: EmojiPickerProps) {
+  const [showFullPicker, setShowFullPicker] = useState(false);
   const pickerRef = useRef<HTMLDivElement>(null);
 
   if (!isOpen) return null;
+
+  const handleEmojiSelect = (emoji: string) => {
+    onEmojiSelect(emoji);
+    setShowFullPicker(false);
+    onClose();
+  };
+
+  const handleFullEmojiClick = (emojiData: { emoji: string }) => {
+    handleEmojiSelect(emojiData.emoji);
+  };
+
+  if (showFullPicker) {
+    return (
+      <div
+        className='absolute bottom-full mb-3 left-1/2 transform -translate-x-1/2 z-50'
+        data-emoji-picker
+      >
+        <div className='rounded-xl overflow-hidden shadow-lg'>
+          <EmojiPickerReact
+            onEmojiClick={handleFullEmojiClick}
+            autoFocusSearch={false}
+            width={280}
+            height={350}
+            previewConfig={{ showPreview: false }}
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
       ref={pickerRef}
       data-emoji-picker
-      className='absolute bottom-full mb-3 left-1/2 transform -translate-x-1/2 bg-white border border-gray-200 rounded-xl p-2 z-50 w-[180px] backdrop-blur-sm'
+      className='absolute bottom-full mb-2 left-1/2 p-2 py-1 transform -translate-x-1/4 bg-white border border-gray-200 rounded-full z-50 backdrop-blur-sm shadow-xs'
     >
-      <div className='grid grid-cols-4 gap-0.5'>
-        {COMMON_EMOJIS.map(emoji => (
+      <div className='flex gap-1 items-center'>
+        {QUICK_EMOJIS.map(emoji => (
           <button
             key={emoji}
-            onClick={() => {
-              onEmojiSelect(emoji);
-              onClose();
-            }}
-            className='h-9 w-9 rounded-full transition-all duration-150 ease-out flex items-center justify-center focus:outline-none hover:bg-gray-100'
+            onClick={() => handleEmojiSelect(emoji)}
+            className='h-8 w-8 rounded-full transition-all duration-150 ease-out flex items-center justify-center focus:outline-none hover:bg-gray-100'
           >
             <span className='text-2xl'>{emoji}</span>
           </button>
         ))}
+        <button
+          onClick={() => setShowFullPicker(true)}
+          className='h-8 w-8 rounded-full transition-all duration-150 ease-out flex items-center justify-center focus:outline-none hover:bg-gray-100 bg-gray-50'
+        >
+          <span className='text-xl text-gray-600'>+</span>
+        </button>
       </div>
     </div>
   );
