@@ -9,7 +9,7 @@ interface EmojiPickerProps {
   isOpen: boolean;
 }
 
-const QUICK_EMOJIS = ['👍', '❤️', '😂', '😮', '😢'];
+const QUICK_EMOJIS = ['👍', '👏', '💡', '🎉', '🎯'];
 
 export default function EmojiPicker({
   onEmojiSelect,

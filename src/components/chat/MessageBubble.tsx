@@ -177,22 +177,12 @@ export default function MessageBubble({
   };
 
   const handleEmojiSelect = (emoji: string) => {
-    // Prevent users from reacting to their own messages
-    if (message.senderId === currentUserId) {
-      return;
-    }
-
     if (onAddReaction) {
       onAddReaction(message.id, emoji);
     }
   };
 
   const handleToggleReaction = (emoji: string) => {
-    // Prevent users from reacting to their own messages
-    if (message.senderId === currentUserId) {
-      return;
-    }
-
     if (onAddReaction) {
       onAddReaction(message.id, emoji);
     }
@@ -281,9 +271,8 @@ export default function MessageBubble({
                 </button>
               )}
 
-              {/* Emoji reaction button - only for other people's messages */}
-              {!isOwnMessage && (
-                <div className='relative'>
+              {/* Emoji reaction button */}
+              <div className='relative'>
                   <button
                     onClick={onEmojiPickerToggle}
                     data-emoji-button
@@ -316,7 +305,6 @@ export default function MessageBubble({
                     />
                   )}
                 </div>
-              )}
             </div>
           )}
 
