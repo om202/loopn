@@ -11,7 +11,8 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: 'Loopn - Real-Time Messaging Platform',
-  description: 'Connect and chat with people instantly. Secure real-time messaging with chat requests, user presence, message reactions, and time-limited conversations.',
+  description:
+    'Connect and chat with people instantly. Secure real-time messaging with chat requests, user presence, message reactions, and time-limited conversations.',
   keywords: [
     'real-time messaging',
     'chat platform',
@@ -20,19 +21,21 @@ export const metadata: Metadata = {
     'online communication',
     'message reactions',
     'user presence',
-    'chat requests'
+    'chat requests',
   ],
   authors: [{ name: 'Loopn Team' }],
   openGraph: {
     title: 'Loopn - Real-Time Messaging Platform',
-    description: 'Connect and chat with people instantly. Secure real-time messaging with chat requests, user presence, message reactions, and time-limited conversations.',
+    description:
+      'Connect and chat with people instantly. Secure real-time messaging with chat requests, user presence, message reactions, and time-limited conversations.',
     type: 'website',
     siteName: 'Loopn',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Loopn - Real-Time Messaging Platform',
-    description: 'Connect and chat with people instantly. Secure real-time messaging with chat requests, user presence, message reactions, and time-limited conversations.',
+    description:
+      'Connect and chat with people instantly. Secure real-time messaging with chat requests, user presence, message reactions, and time-limited conversations.',
   },
   robots: {
     index: true,
