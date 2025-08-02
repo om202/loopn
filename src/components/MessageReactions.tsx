@@ -81,9 +81,8 @@ export default function MessageReactions({
     previousReactionsRef.current = reactions;
   }, [reactions, currentUserId, onNewReaction]);
 
-  if (!reactions || reactions.length === 0) {
-    return null;
-  }
+  // Always render the container to prevent layout shifts
+  // If no reactions, render an empty container with reserved height
 
   // Group reactions by emoji and track the earliest timestamp for each emoji
   const groupedReactions = reactions.reduce(
@@ -117,27 +116,32 @@ export default function MessageReactions({
   );
 
   return (
-    <div className='flex flex-wrap gap-1 -mt-2 mb-1'>
-      {reactionGroups.map(group => {
-        const isAnimating = animatingEmojis.has(group.emoji);
-        return (
-          <button
-            key={group.emoji}
-            onClick={() => onToggleReaction(group.emoji)}
-            className={`inline-flex items-center justify-center min-w-[28px] h-7 px-1 rounded-full transition-all duration-150 ${
-              group.hasCurrentUser
-                ? 'bg-white border border-gray-300'
-                : 'bg-white border border-gray-300'
-            } ${isAnimating ? 'reaction-animate' : ''}`}
-            title={`${group.count} reaction${group.count !== 1 ? 's' : ''}`}
-          >
-            <span>{group.emoji}</span>
-            {group.count > 1 && (
-              <span className='ml-1 text-xs font-medium'>{group.count}</span>
-            )}
-          </button>
-        );
-      })}
+    <div className='flex flex-wrap gap-1 -mt-2 mb-1 min-h-[24px]'>
+      {(!reactions || reactions.length === 0) ? (
+        // Empty container to maintain layout space
+        <div className='h-6 w-0' />
+      ) : (
+        reactionGroups.map(group => {
+          const isAnimating = animatingEmojis.has(group.emoji);
+          return (
+            <button
+              key={group.emoji}
+              onClick={() => onToggleReaction(group.emoji)}
+              className={`inline-flex items-center justify-center min-w-[24px] h-6 px-0.5 rounded-full transition-all duration-150 shadow-sm ${
+                group.hasCurrentUser
+                  ? 'bg-white border border-gray-100'
+                  : 'bg-white border border-gray-50'
+              } ${isAnimating ? 'reaction-animate' : ''}`}
+              title={`${group.count} reaction${group.count !== 1 ? 's' : ''}`}
+            >
+              <span>{group.emoji}</span>
+              {group.count > 1 && (
+                <span className='ml-1 text-xs font-medium'>{group.count}</span>
+              )}
+            </button>
+          );
+        })
+      )}
     </div>
   );
 }

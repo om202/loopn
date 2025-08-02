@@ -460,9 +460,9 @@ export default function MessageList({
   if (messages.length === 0 && !isInitializing) {
     return (
       <div
-        className='flex-1 overflow-y-auto bg-gray-50'
+        className='flex-1 overflow-y-auto'
         style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23d1d5db' fill-opacity='0.08' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E")`,
+          background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #f3f4f6 100%)',
         }}
       >
         <div className='max-w-5xl mx-auto px-4 py-8'>
@@ -497,9 +497,9 @@ export default function MessageList({
 
   return (
     <div
-      className='flex-1 overflow-y-auto bg-gray-50'
+      className='flex-1 overflow-y-auto'
       style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23d1d5db' fill-opacity='0.08' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E")`,
+        background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #f3f4f6 100%)',
       }}
     >
       <div ref={containerRef} className='max-w-5xl mx-auto px-4 py-6'>
@@ -584,31 +584,31 @@ export default function MessageList({
           if (isGroupedWithPrev) {
             // Very close messages (within 1 minute)
             if (prevTimeDiff <= 1) {
-              marginTop = 'mt-0.5';
-            } else {
               marginTop = 'mt-1';
+            } else {
+              marginTop = 'mt-2';
             }
           } else {
             // Far apart messages get more spacing
             if (prevTimeDiff > 60) {
               // More than 1 hour
-              marginTop = 'mt-12';
+              marginTop = 'mt-8';
             } else if (prevTimeDiff > 30) {
               // More than 30 minutes
-              marginTop = 'mt-10';
+              marginTop = 'mt-7';
             } else if (prevTimeDiff > 10) {
               // More than 10 minutes
-              marginTop = 'mt-8';
-            } else {
               marginTop = 'mt-6';
+            } else {
+              marginTop = 'mt-5';
             }
           }
 
           if (isGroupedWithNext) {
             if (nextTimeDiff <= 1) {
-              marginBottom = 'mb-0.5';
-            } else {
               marginBottom = 'mb-1';
+            } else {
+              marginBottom = 'mb-2';
             }
           } else {
             marginBottom = 'mb-4';

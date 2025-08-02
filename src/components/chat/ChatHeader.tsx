@@ -85,7 +85,7 @@ export default function ChatHeader({
   return (
     <div
       className='flex-shrink-0 bg-white border-b border-gray-200 relative z-10'
-      style={{ filter: 'drop-shadow(0 12px 24px rgba(249, 250, 251, 1))' }}
+      style={{ boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.04)' }}
     >
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='py-2 sm:py-3'>
