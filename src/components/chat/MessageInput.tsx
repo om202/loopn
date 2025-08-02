@@ -134,8 +134,20 @@ export default function MessageInput({
               handleSend();
             }}
             data-form-type='other'
+            data-lpignore='true'
+            data-1p-ignore
+            data-bwignore
             style={{ position: 'relative' }}
           >
+            {/* Hidden input to trick password managers */}
+            <input
+              autoComplete='false'
+              name='hidden'
+              type='text'
+              style={{ display: 'none' }}
+              tabIndex={-1}
+              aria-hidden='true'
+            />
             {/* Emoji Picker positioned above input */}
             {showEmojiPicker && (
               <div className='absolute bottom-full right-0 mb-2 z-50'>
@@ -172,18 +184,21 @@ export default function MessageInput({
                     }
                   }}
                   disabled={disabled}
-                  autoComplete='off'
+                  autoComplete='new-text'
                   autoCorrect='off'
                   autoCapitalize='off'
                   spellCheck='false'
                   data-lpignore='true'
+                  data-1p-ignore
+                  data-bwignore
                   data-form-type='other'
                   data-ms-editor='false'
                   data-ms-spell-check='false'
                   data-gramm='false'
                   data-gramm_editor='false'
                   data-enable-grammarly='false'
-                  name='message'
+                  name='chat-input'
+                  id='chat-message-input'
                   role='textbox'
                   aria-label='Type your message'
                   style={{
