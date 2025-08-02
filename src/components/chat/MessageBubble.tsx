@@ -390,7 +390,7 @@ export default function MessageBubble({
                   <EmojiPicker
                     isOpen={showEmojiPicker}
                     onEmojiSelect={handleEmojiSelect}
-                    onClose={() => {}} 
+                    onClose={() => {}}
                   />
                 )}
               </div>

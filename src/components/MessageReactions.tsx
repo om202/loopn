@@ -112,12 +112,14 @@ export default function MessageReactions({
 
   // Sort reaction groups by their earliest timestamp (first occurrence)
   const reactionGroups = Object.values(groupedReactions).sort(
-    (a, b) => new Date(a.earliestTimestamp).getTime() - new Date(b.earliestTimestamp).getTime()
+    (a, b) =>
+      new Date(a.earliestTimestamp).getTime() -
+      new Date(b.earliestTimestamp).getTime()
   );
 
   return (
     <div className='flex flex-wrap gap-1 -mt-2 mb-1 min-h-[24px]'>
-      {(!reactions || reactions.length === 0) ? (
+      {!reactions || reactions.length === 0 ? (
         // Empty container to maintain layout space
         <div className='h-6 w-0' />
       ) : (

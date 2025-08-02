@@ -63,8 +63,9 @@ export default function MessageList({
     string | null
   >(null);
   const [reactionsLoaded, setReactionsLoaded] = useState(false);
-  const [animationTriggers, setAnimationTriggers] = useState<Record<string, string>>({});
-
+  const [animationTriggers, setAnimationTriggers] = useState<
+    Record<string, string>
+  >({});
 
   const handleAddReaction = useCallback(
     async (messageId: string, emoji: string) => {
@@ -83,7 +84,7 @@ export default function MessageList({
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
-      
+
       setMessageReactions(prev => ({
         ...prev,
         [messageId]: [...currentReactions, optimisticReaction],
@@ -91,7 +92,7 @@ export default function MessageList({
 
       soundService.playPopSound();
       setAnimationTriggers(prev => ({ ...prev, [messageId]: emoji }));
-      
+
       setTimeout(() => {
         setAnimationTriggers(prev => {
           const updated = { ...prev };
@@ -118,7 +119,8 @@ export default function MessageList({
           }));
           console.error('Failed to add reaction:', result.error);
         } else {
-          const updatedReactions = await reactionService.getMessageReactions(messageId);
+          const updatedReactions =
+            await reactionService.getMessageReactions(messageId);
           if (!updatedReactions.error) {
             setMessageReactions(prev => ({
               ...prev,
@@ -145,7 +147,8 @@ export default function MessageList({
       const participants = [message.senderId, message.receiverId];
       const currentReactions = messageReactions[messageId] || [];
       const existingReaction = currentReactions.find(
-        reaction => reaction.userId === currentUserId && reaction.emoji === emoji
+        reaction =>
+          reaction.userId === currentUserId && reaction.emoji === emoji
       );
       if (existingReaction) {
         const optimisticReactions = currentReactions.filter(
@@ -166,7 +169,7 @@ export default function MessageList({
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         };
-        
+
         setMessageReactions(prev => ({
           ...prev,
           [messageId]: [...currentReactions, optimisticReaction],
@@ -189,7 +192,8 @@ export default function MessageList({
           }));
           console.error('Failed to toggle reaction:', result.error);
         } else {
-          const updatedReactions = await reactionService.getMessageReactions(messageId);
+          const updatedReactions =
+            await reactionService.getMessageReactions(messageId);
           if (!updatedReactions.error) {
             setMessageReactions(prev => ({
               ...prev,
@@ -207,7 +211,6 @@ export default function MessageList({
     },
     [messages, currentUserId, messageReactions]
   );
-
 
   const handleEmojiPickerToggle = useCallback((messageId: string) => {
     setOpenEmojiPickerMessageId(prev =>
@@ -288,7 +291,6 @@ export default function MessageList({
 
     loadReactionsForNewMessages();
   }, [messageIds]); // Only depend on messageIds
-
 
   useEffect(() => {
     if (messageIds.length === 0) return;
@@ -462,7 +464,8 @@ export default function MessageList({
       <div
         className='flex-1 overflow-y-auto'
         style={{
-          background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #f3f4f6 100%)',
+          background:
+            'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #f3f4f6 100%)',
         }}
       >
         <div className='max-w-5xl mx-auto px-4 py-8'>
@@ -499,7 +502,8 @@ export default function MessageList({
     <div
       className='flex-1 overflow-y-auto'
       style={{
-        background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #f3f4f6 100%)',
+        background:
+          'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #f3f4f6 100%)',
       }}
     >
       <div ref={containerRef} className='max-w-5xl mx-auto px-4 py-6'>
