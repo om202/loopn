@@ -24,13 +24,14 @@ interface MessageBubbleProps {
   showSenderName: boolean;
   onReplyToMessage?: (message: Message) => void;
   onDeleteMessage?: (messageId: string) => void;
-  allMessages?: Message[]; // For finding replied-to messages
-  reactions?: MessageReaction[]; // Reactions for this message
-  currentUserId: string; // Current user ID for reaction handling
+  allMessages?: Message[];
+  reactions?: MessageReaction[];
+  currentUserId: string;
   onAddReaction?: (messageId: string, emoji: string) => void;
   onToggleReaction?: (messageId: string, emoji: string) => void;
-  showEmojiPicker: boolean; // Controlled by parent
-  onEmojiPickerToggle: () => void; // Handled by parent
+  showEmojiPicker: boolean;
+  onEmojiPickerToggle: () => void;
+  animationTrigger?: string;
 }
 
 // Tick indicator component
@@ -77,6 +78,7 @@ export default function MessageBubble({
   onToggleReaction,
   showEmojiPicker,
   onEmojiPickerToggle,
+  animationTrigger,
 }: MessageBubbleProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
@@ -191,7 +193,6 @@ export default function MessageBubble({
   };
 
   const handleNewReaction = (reaction: MessageReaction) => {
-    // Play pop sound when someone else reacts
     if (reaction.userId !== currentUserId) {
       soundService.playPopSound();
     }
@@ -390,6 +391,7 @@ export default function MessageBubble({
                   currentUserId={currentUserId}
                   onToggleReaction={handleToggleReaction}
                   onNewReaction={handleNewReaction}
+                  triggerAnimation={animationTrigger}
                 />
               </div>
             )}

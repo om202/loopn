@@ -12,6 +12,7 @@ import type { Schema } from '../../../amplify/data/resource';
 
 import MessageBubble from './MessageBubble';
 import { reactionService } from '../../services/reaction.service';
+import { soundService } from '../../services/sound.service';
 
 type Message = Schema['Message']['type'];
 type UserPresence = Schema['UserPresence']['type'];
@@ -62,20 +63,18 @@ export default function MessageList({
     string | null
   >(null);
   const [reactionsLoaded, setReactionsLoaded] = useState(false);
+  const [animationTriggers, setAnimationTriggers] = useState<Record<string, string>>({});
 
-  // Handle adding reactions from emoji picker (always add, never toggle)
+
   const handleAddReaction = useCallback(
     async (messageId: string, emoji: string) => {
-      // Find the message to get participants
       const message = messages.find(msg => msg.id === messageId);
       if (!message) return;
 
       const participants = [message.senderId, message.receiverId];
       const currentReactions = messageReactions[messageId] || [];
-      
-      // OPTIMISTIC UPDATE: Always add new reaction (no toggle behavior for picker)
       const optimisticReaction = {
-        id: `temp-${Date.now()}-${Math.random()}`, // Temporary ID
+        id: `temp-${Date.now()}-${Math.random()}`,
         messageId,
         userId: currentUserId,
         emoji,
@@ -90,28 +89,35 @@ export default function MessageList({
         [messageId]: [...currentReactions, optimisticReaction],
       }));
 
-      // Close emoji picker immediately for better UX
+      soundService.playPopSound();
+      setAnimationTriggers(prev => ({ ...prev, [messageId]: emoji }));
+      
+      setTimeout(() => {
+        setAnimationTriggers(prev => {
+          const updated = { ...prev };
+          delete updated[messageId];
+          return updated;
+        });
+      }, 100);
+
       setOpenEmojiPickerMessageId(null);
 
-      // Make actual server request in background
       try {
         const result = await reactionService.addReaction(
           messageId,
           currentUserId,
           emoji,
           participants,
-          true // allowMultiple = true for picker (always add new instances)
+          true
         );
 
         if (result.error) {
-          // Rollback on error: restore original state
           setMessageReactions(prev => ({
             ...prev,
             [messageId]: currentReactions,
           }));
           console.error('Failed to add reaction:', result.error);
         } else {
-          // Success: refresh with actual server data to ensure consistency
           const updatedReactions = await reactionService.getMessageReactions(messageId);
           if (!updatedReactions.error) {
             setMessageReactions(prev => ({
@@ -121,7 +127,6 @@ export default function MessageList({
           }
         }
       } catch (error) {
-        // Rollback on network error
         setMessageReactions(prev => ({
           ...prev,
           [messageId]: currentReactions,
@@ -132,24 +137,17 @@ export default function MessageList({
     [messages, currentUserId, messageReactions]
   );
 
-  // Handle toggling reactions from applied reaction buttons (toggle behavior)
   const handleToggleReaction = useCallback(
     async (messageId: string, emoji: string) => {
-      // Find the message to get participants
       const message = messages.find(msg => msg.id === messageId);
       if (!message) return;
 
       const participants = [message.senderId, message.receiverId];
       const currentReactions = messageReactions[messageId] || [];
-      
-      // Check if user already has this reaction
       const existingReaction = currentReactions.find(
         reaction => reaction.userId === currentUserId && reaction.emoji === emoji
       );
-
-      // OPTIMISTIC UPDATE: Toggle behavior for applied reaction buttons
       if (existingReaction) {
-        // Remove existing reaction optimistically
         const optimisticReactions = currentReactions.filter(
           reaction => reaction.id !== existingReaction.id
         );
@@ -158,9 +156,8 @@ export default function MessageList({
           [messageId]: optimisticReactions,
         }));
       } else {
-        // Add new reaction optimistically
         const optimisticReaction = {
-          id: `temp-${Date.now()}-${Math.random()}`, // Temporary ID
+          id: `temp-${Date.now()}-${Math.random()}`,
           messageId,
           userId: currentUserId,
           emoji,
@@ -176,25 +173,22 @@ export default function MessageList({
         }));
       }
 
-      // Make actual server request in background
       try {
         const result = await reactionService.addReaction(
           messageId,
           currentUserId,
           emoji,
           participants,
-          false // allowMultiple = false for toggle behavior (remove if exists)
+          false
         );
 
         if (result.error) {
-          // Rollback on error: restore original state
           setMessageReactions(prev => ({
             ...prev,
             [messageId]: currentReactions,
           }));
           console.error('Failed to toggle reaction:', result.error);
         } else {
-          // Success: refresh with actual server data to ensure consistency
           const updatedReactions = await reactionService.getMessageReactions(messageId);
           if (!updatedReactions.error) {
             setMessageReactions(prev => ({
@@ -204,7 +198,6 @@ export default function MessageList({
           }
         }
       } catch (error) {
-        // Rollback on network error
         setMessageReactions(prev => ({
           ...prev,
           [messageId]: currentReactions,
@@ -215,7 +208,7 @@ export default function MessageList({
     [messages, currentUserId, messageReactions]
   );
 
-  // Handle emoji picker toggle
+
   const handleEmojiPickerToggle = useCallback((messageId: string) => {
     setOpenEmojiPickerMessageId(prev =>
       prev === messageId ? null : messageId
@@ -296,15 +289,13 @@ export default function MessageList({
     loadReactionsForNewMessages();
   }, [messageIds]); // Only depend on messageIds
 
-  // Subscribe to real-time reaction changes (only for other users to avoid conflicts with optimistic UI)
+
   useEffect(() => {
     if (messageIds.length === 0) return;
 
     const subscription = reactionService.subscribeToReactionChanges(
       messageIds,
       (reaction, action) => {
-        // Skip processing reactions from the current user to avoid conflicts with optimistic UI
-        // The optimistic UI already handles the current user's reactions immediately
         if (reaction.userId === currentUserId) {
           return;
         }
@@ -314,10 +305,8 @@ export default function MessageList({
           const currentReactions = updated[reaction.messageId] || [];
 
           if (action === 'create') {
-            // Add new reaction from other users
             updated[reaction.messageId] = [...currentReactions, reaction];
           } else if (action === 'delete') {
-            // Remove deleted reaction from other users
             updated[reaction.messageId] = currentReactions.filter(
               r => r.id !== reaction.id
             );
@@ -665,6 +654,7 @@ export default function MessageList({
                 onToggleReaction={handleToggleReaction}
                 showEmojiPicker={openEmojiPickerMessageId === message.id}
                 onEmojiPickerToggle={() => handleEmojiPickerToggle(message.id)}
+                animationTrigger={animationTriggers[message.id]}
               />
             </React.Fragment>
           );

@@ -16,7 +16,8 @@ interface MessageReactionsProps {
   reactions: MessageReaction[];
   currentUserId: string;
   onToggleReaction: (emoji: string) => void;
-  onNewReaction?: (reaction: MessageReaction) => void; // Callback for new reactions from others
+  onNewReaction?: (reaction: MessageReaction) => void;
+  triggerAnimation?: string;
 }
 
 export default function MessageReactions({
@@ -24,59 +25,59 @@ export default function MessageReactions({
   currentUserId,
   onToggleReaction,
   onNewReaction,
+  triggerAnimation,
 }: MessageReactionsProps) {
   const [animatingEmojis, setAnimatingEmojis] = useState<Set<string>>(
     new Set()
   );
   const previousReactionsRef = useRef<MessageReaction[]>([]);
 
-  // Detect new reactions from other users and trigger animation
   useEffect(() => {
-    // Always update previous reactions at the end, but check for new ones first
+    if (triggerAnimation) {
+      setAnimatingEmojis(new Set([triggerAnimation]));
+      setTimeout(() => {
+        setAnimatingEmojis(new Set());
+      }, 400);
+    }
+  }, [triggerAnimation]);
+
+  useEffect(() => {
     const previousReactions = previousReactionsRef.current;
 
     if (previousReactions.length === 0 && reactions.length > 0) {
-      // First load with existing reactions - don't animate
       previousReactionsRef.current = reactions;
       return;
     }
 
     if (reactions.length === 0) {
-      // No reactions to process
       previousReactionsRef.current = reactions;
       return;
     }
 
-    // Find new reactions that weren't in the previous list
     const previousIds = new Set(previousReactions.map(r => r.id));
     const newReactions = reactions.filter(r => !previousIds.has(r.id));
 
     if (newReactions.length > 0) {
-      // Check for new reactions from other users
       const newReactionsFromOthers = newReactions.filter(
         r => r.userId !== currentUserId
       );
 
       if (newReactionsFromOthers.length > 0) {
-        // Trigger animation for the new emojis
         const newEmojis = new Set(newReactionsFromOthers.map(r => r.emoji));
         setAnimatingEmojis(newEmojis);
 
-        // Call the callback to play sound
         if (onNewReaction) {
           newReactionsFromOthers.forEach(reaction => {
             onNewReaction(reaction);
           });
         }
 
-        // Remove animation after 400ms
         setTimeout(() => {
           setAnimatingEmojis(new Set());
         }, 400);
       }
     }
 
-    // Always update previous reactions
     previousReactionsRef.current = reactions;
   }, [reactions, currentUserId, onNewReaction]);
 
