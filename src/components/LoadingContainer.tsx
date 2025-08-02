@@ -9,7 +9,7 @@ interface LoadingContainerProps {
 export default function LoadingContainer({
   className = '',
   size = 'md',
-  variant = 'pulse',
+  variant = 'spin',
 }: LoadingContainerProps) {
   const getSizeClasses = () => {
     switch (size) {
