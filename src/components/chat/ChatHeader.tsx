@@ -8,6 +8,7 @@ import type { Schema } from '../../../amplify/data/resource';
 import UserAvatar from '../UserAvatar';
 import TrialChatInfoDialog from '../TrialChatInfoDialog';
 import DialogContainer from '../DialogContainer';
+import { formatPresenceTime } from '../../lib/presence-utils';
 
 type Conversation = Schema['Conversation']['type'];
 type UserPresence = Schema['UserPresence']['type'];
@@ -43,37 +44,37 @@ export default function ChatHeader({
       };
     }
 
-    const now = new Date();
-    const lastSeen = otherUserPresence.lastSeen
-      ? new Date(otherUserPresence.lastSeen)
-      : null;
-    const isRecent =
-      lastSeen && now.getTime() - lastSeen.getTime() < 5 * 60 * 1000; // 5 minutes
-
-    switch (otherUserPresence.status) {
-      case 'ONLINE':
-        return {
-          text: 'Online',
-          color: 'text-gray-500',
-        };
-      case 'BUSY':
-        return {
-          text: 'Busy',
-          color: 'text-red-600',
-        };
-      case 'OFFLINE':
-      default:
-        if (isRecent) {
-          return {
-            text: 'Recently active',
-            color: 'text-yellow-600',
-          };
-        }
-        return {
-          text: 'Offline',
-          color: 'text-gray-500',
-        };
+    // If user is busy, show "Busy" (takes priority over online status)
+    if (otherUserPresence.status === 'BUSY') {
+      return {
+        text: 'Busy',
+        color: 'text-red-600',
+      };
     }
+
+    // If user is currently online, show "Online" in green
+    if (otherUserPresence.status === 'ONLINE') {
+      return {
+        text: 'Online',
+        color: 'text-green-600',
+      };
+    }
+
+    // For offline users, calculate status bucket
+    if (otherUserPresence.lastSeen) {
+      const presenceText = formatPresenceTime(otherUserPresence.lastSeen);
+      const color = presenceText === 'Recently active' ? 'text-sky-500' : 'text-gray-500';
+      return {
+        text: presenceText,
+        color,
+      };
+    }
+
+    // Fallback for users without lastSeen data
+    return {
+      text: 'Offline',
+      color: 'text-gray-500',
+    };
   };
 
   const getUserDisplayName = () => {
@@ -114,7 +115,13 @@ export default function ChatHeader({
               userId={otherParticipantId}
               size='md'
               showStatus
-              status={otherUserPresence?.status}
+              status={
+                otherUserPresence?.status === 'ONLINE' || otherUserPresence?.status === 'BUSY'
+                  ? otherUserPresence.status
+                  : otherUserPresence?.lastSeen && formatPresenceTime(otherUserPresence.lastSeen) === 'Recently active'
+                  ? 'RECENTLY_ACTIVE'
+                  : 'OFFLINE'
+              }
             />
 
             <div className='flex-1 min-w-0'>

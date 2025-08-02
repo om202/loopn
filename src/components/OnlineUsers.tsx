@@ -14,6 +14,7 @@ import { useState, useEffect, useCallback } from 'react';
 
 import type { Schema } from '../../amplify/data/resource';
 import { createShortChatUrl } from '../lib/url-utils';
+import { formatPresenceTime } from '../lib/presence-utils';
 import { chatService } from '../services/chat.service';
 import { userService } from '../services/user.service';
 
@@ -25,6 +26,8 @@ type UserPresence = Schema['UserPresence']['type'];
 interface OnlineUsersProps {
   onChatRequestSent: () => void;
 }
+
+
 
 export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   const [onlineUsers, setOnlineUsers] = useState<UserPresence[]>([]);
@@ -386,61 +389,75 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
       </div>
 
       <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-        {allUsers.map(userPresence => (
-          <div
-            key={userPresence.userId}
-            onClick={() => handleChatAction(userPresence.userId)}
-            className='bg-white rounded-2xl border border-gray-200 px-8 py-6 cursor-pointer group hover:shadow-sm transition-shadow'
-          >
-            <div className='flex items-center gap-4'>
-              <div className='flex-shrink-0'>
-                <UserAvatar
-                  email={userPresence.email}
-                  userId={userPresence.userId}
-                  size='lg'
-                  showStatus
-                  status={
-                    onlineUsers.some(ou => ou.userId === userPresence.userId)
-                      ? userPresence.status
-                      : 'OFFLINE'
-                  }
-                />
-              </div>
-
-              <div className='flex-1 min-w-0'>
-                <div className='font-medium text-gray-900 text-sm sm:text-base mb-1 line-clamp-2 no-email-detection break-words'>
-                  {getDisplayName(userPresence)}
+        {allUsers.map(userPresence => {
+          const isOnline = onlineUsers.some(ou => ou.userId === userPresence.userId);
+          
+          return (
+            <div
+              key={userPresence.userId}
+              onClick={() => handleChatAction(userPresence.userId)}
+              className='bg-white rounded-2xl border border-gray-200 px-8 py-6 cursor-pointer group hover:shadow-sm transition-shadow'
+            >
+              <div className='flex items-center gap-4'>
+                <div className='flex-shrink-0'>
+                  <UserAvatar
+                    email={userPresence.email}
+                    userId={userPresence.userId}
+                    size='lg'
+                    showStatus
+                    status={
+                      isOnline 
+                        ? userPresence.status 
+                        : userPresence.lastSeen && formatPresenceTime(userPresence.lastSeen) === 'Recently active'
+                        ? 'RECENTLY_ACTIVE'
+                        : 'OFFLINE'
+                    }
+                  />
                 </div>
-                <div className='text-xs sm:text-sm text-gray-600'>
-                  {onlineUsers.some(ou => ou.userId === userPresence.userId)
-                    ? 'Online now'
-                    : 'Offline'}
-                </div>
-              </div>
 
-              <div className='flex-shrink-0'>
-                <button className='px-4 sm:px-5 py-1.5 text-sm font-medium rounded-full border transition-colors bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100 flex items-center gap-1 sm:gap-1.5'>
-                  {pendingRequests.has(userPresence.userId) ? (
-                    <>
-                      <Clock className='w-3 h-3 sm:w-4 sm:h-4 text-gray-600' />
-                      Pending
-                    </>
-                  ) : existingConversations.has(userPresence.userId) ? (
-                    <>
-                      <MessageCircle className='w-3 h-3 sm:w-4 sm:h-4 text-gray-600' />
-                      Chat
-                    </>
-                  ) : (
-                    <>
-                      <CheckCircle2 className='w-3 h-3 sm:w-4 sm:h-4 text-gray-600' />
-                      Connect
-                    </>
-                  )}
-                </button>
+                <div className='flex-1 min-w-0'>
+                  <div className='font-medium text-gray-900 text-sm sm:text-base mb-1 line-clamp-2 no-email-detection break-words'>
+                    {getDisplayName(userPresence)}
+                  </div>
+                  <div className={`text-xs sm:text-sm ${
+                    isOnline 
+                      ? 'text-green-600' 
+                      : userPresence.lastSeen && formatPresenceTime(userPresence.lastSeen) === 'Recently active'
+                      ? 'text-sky-500'
+                      : 'text-gray-600'
+                  }`}>
+                    {isOnline
+                      ? 'Online now'
+                      : userPresence.lastSeen
+                      ? formatPresenceTime(userPresence.lastSeen)
+                      : 'Offline'}
+                  </div>
+                </div>
+
+                <div className='flex-shrink-0'>
+                  <button className='px-4 sm:px-5 py-1.5 text-sm font-medium rounded-full border transition-colors bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100 flex items-center gap-1 sm:gap-1.5'>
+                    {pendingRequests.has(userPresence.userId) ? (
+                      <>
+                        <Clock className='w-3 h-3 sm:w-4 sm:h-4 text-gray-600' />
+                        Pending
+                      </>
+                    ) : existingConversations.has(userPresence.userId) ? (
+                      <>
+                        <MessageCircle className='w-3 h-3 sm:w-4 sm:h-4 text-gray-600' />
+                        Chat
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle2 className='w-3 h-3 sm:w-4 sm:h-4 text-gray-600' />
+                        Connect
+                      </>
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

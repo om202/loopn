@@ -131,11 +131,11 @@ export class UserService {
     let previousOnlineUserIds = new Set<string>();
 
     return client.models.UserPresence.observeQuery({
-      filter: {
-        isOnline: { eq: true }, // Only listen to online users
-      },
+      // Remove the filter to listen to ALL presence changes (online and offline)
+      // We'll filter client-side to only return online users
     }).subscribe({
       next: data => {
+        // Filter for online users client-side
         const onlineUsers = data.items.filter(user => user.isOnline === true);
 
         // Only trigger callback if the set of online users actually changed

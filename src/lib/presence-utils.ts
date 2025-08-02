@@ -4,6 +4,28 @@ import { CONNECTION_STATE_CHANGE, ConnectionState } from 'aws-amplify/api';
 import { Hub } from 'aws-amplify/utils';
 import { userService } from '../services/user.service';
 
+/**
+ * Formats the time since last activity into user-friendly status buckets
+ * @param lastSeen - Date when user was last seen
+ * @returns Formatted presence status bucket
+ */
+export function formatPresenceTime(lastSeen: Date | string): string {
+  const lastSeenDate = typeof lastSeen === 'string' ? new Date(lastSeen) : lastSeen;
+  const now = new Date();
+  const diffMs = now.getTime() - lastSeenDate.getTime();
+  const diffMinutes = Math.floor(diffMs / (1000 * 60));
+
+  // 0-15 minutes: Recently active
+  if (diffMinutes <= 15) {
+    return 'Recently active';
+  }
+  
+  // 15+ minutes: Offline
+  return 'Offline';
+}
+
+
+
 interface UserInfo {
   userId: string;
   email: string;

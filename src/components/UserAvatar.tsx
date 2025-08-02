@@ -87,6 +87,12 @@ export default function UserAvatar({
             className={`${indicatorSize} bg-red-500 rounded-full border-2 border-white box-content`}
           />
         );
+      case 'RECENTLY_ACTIVE':
+        return (
+          <div
+            className={`${indicatorSize} bg-sky-500 rounded-full border-2 border-white box-content`}
+          />
+        );
       case 'OFFLINE':
         return (
           <div
@@ -96,7 +102,7 @@ export default function UserAvatar({
       default:
         return (
           <div
-            className={`${indicatorSize} bg-yellow-500 rounded-full border-2 border-white box-content`}
+            className={`${indicatorSize} bg-gray-400 rounded-full border-2 border-white box-content`}
           />
         );
     }
