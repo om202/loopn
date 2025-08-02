@@ -171,6 +171,9 @@ export default function ChatWindow({
     
     // Set up real-time subscription immediately - this is more reliable than the API call
     let isFirstLoad = true;
+    let previousMessageIds = new Set<string>();
+    let canPlaySounds = false; // Flag to prevent sounds during initial loads
+    
     const subscription = messageService.observeMessages(
       conversation.id,
       (newMessages) => {
@@ -195,14 +198,41 @@ export default function ChatWindow({
           );
           setUnreadMessagesSnapshot(unreadIds);
           
+          // Initialize previous message IDs for next updates
+          previousMessageIds = new Set(newMessages.map(msg => msg.id));
+          
           setIsInitializing(false);
           
           // Trigger scroll to bottom after messages are loaded
           setShouldAutoScroll(true);
           
           isFirstLoad = false;
+          
+          // Enable sound playing after a short delay to avoid playing sounds for existing messages
+          setTimeout(() => {
+            canPlaySounds = true;
+          }, 1000); // 1 second delay before enabling sounds
         } else {
-          // Subsequent updates: just update messages
+          // Subsequent updates: check for new messages from other users
+          const currentMessageIds = new Set(newMessages.map(msg => msg.id));
+          const newMessageIds = newMessages.filter(msg => !previousMessageIds.has(msg.id));
+          
+          // Play received sound for new messages from other users (not system or self)
+          // Only play if we're past the initial load period
+          if (canPlaySounds) {
+            const newMessagesFromOthers = newMessageIds.filter(
+              msg => msg.senderId !== user?.userId && msg.senderId !== 'SYSTEM'
+            );
+            
+            if (newMessagesFromOthers.length > 0) {
+              soundService.playReceivedSound();
+            }
+          }
+          
+          // Update previous message IDs for next comparison
+          previousMessageIds = currentMessageIds;
+          
+          // Update messages
           setMessages(newMessages);
         }
       },

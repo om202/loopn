@@ -7,6 +7,7 @@ import UserAvatar from '../UserAvatar';
 import EmojiPicker from '../EmojiPicker';
 import MessageReactions from '../MessageReactions';
 import DeleteConfirmationDialog from '../DeleteConfirmationDialog';
+import { soundService } from '../../services/sound.service';
 
 type Message = Schema['Message']['type'];
 type UserPresence = Schema['UserPresence']['type'];
@@ -176,14 +177,31 @@ export default function MessageBubble({
   };
 
   const handleEmojiSelect = (emoji: string) => {
+    // Prevent users from reacting to their own messages
+    if (message.senderId === currentUserId) {
+      return;
+    }
+    
     if (onAddReaction) {
       onAddReaction(message.id, emoji);
     }
   };
 
   const handleToggleReaction = (emoji: string) => {
+    // Prevent users from reacting to their own messages
+    if (message.senderId === currentUserId) {
+      return;
+    }
+    
     if (onAddReaction) {
       onAddReaction(message.id, emoji);
+    }
+  };
+
+  const handleNewReaction = (reaction: MessageReaction) => {
+    // Play pop sound when someone else reacts
+    if (reaction.userId !== currentUserId) {
+      soundService.playPopSound();
     }
   };
 
@@ -263,40 +281,42 @@ export default function MessageBubble({
                 </button>
               )}
 
-              {/* Emoji reaction button */}
-              <div className='relative'>
-                <button
-                  onClick={onEmojiPickerToggle}
-                  data-emoji-button
-                  className={`w-8 h-8 rounded-full transition-all duration-150 flex items-center justify-center ${
-                    showEmojiPicker
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-gray-200 text-gray-600'
-                  }`}
-                  title='Add reaction'
-                >
-                  <svg
-                    className='w-4 h-4'
-                    fill='none'
-                    stroke='currentColor'
-                    viewBox='0 0 24 24'
+              {/* Emoji reaction button - only for other people's messages */}
+              {!isOwnMessage && (
+                <div className='relative'>
+                  <button
+                    onClick={onEmojiPickerToggle}
+                    data-emoji-button
+                    className={`w-8 h-8 rounded-full transition-all duration-150 flex items-center justify-center ${
+                      showEmojiPicker
+                        ? 'bg-blue-500 text-white'
+                        : 'bg-gray-200 text-gray-600'
+                    }`}
+                    title='Add reaction'
                   >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      strokeWidth={2}
-                      d='M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
+                    <svg
+                      className='w-4 h-4'
+                      fill='none'
+                      stroke='currentColor'
+                      viewBox='0 0 24 24'
+                    >
+                      <path
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        strokeWidth={2}
+                        d='M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
+                      />
+                    </svg>
+                  </button>
+                  {showEmojiPicker && (
+                    <EmojiPicker
+                      isOpen={showEmojiPicker}
+                      onEmojiSelect={handleEmojiSelect}
+                      onClose={onEmojiPickerToggle}
                     />
-                  </svg>
-                </button>
-                {showEmojiPicker && (
-                  <EmojiPicker
-                    isOpen={showEmojiPicker}
-                    onEmojiSelect={handleEmojiSelect}
-                    onClose={onEmojiPickerToggle}
-                  />
-                )}
-              </div>
+                  )}
+                </div>
+              )}
             </div>
           )}
 
@@ -379,6 +399,7 @@ export default function MessageBubble({
                   reactions={reactions}
                   currentUserId={currentUserId}
                   onToggleReaction={handleToggleReaction}
+                  onNewReaction={handleNewReaction}
                 />
               </div>
             )}

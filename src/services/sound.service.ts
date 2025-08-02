@@ -8,6 +8,7 @@ class SoundService {
   private receivedSound: HTMLAudioElement | null = null;
   private bellSound: HTMLAudioElement | null = null;
   private happySound: HTMLAudioElement | null = null;
+  private popSound: HTMLAudioElement | null = null;
   private isEnabled: boolean = true;
 
   constructor() {
@@ -22,18 +23,21 @@ class SoundService {
       this.receivedSound = new Audio('/sounds/received.mp3');
       this.bellSound = new Audio('/sounds/bell.mp3');
       this.happySound = new Audio('/sounds/happy.mp3');
+      this.popSound = new Audio('/sounds/pop.mp3');
 
       // Preload audio files
       this.sentSound.preload = 'auto';
       this.receivedSound.preload = 'auto';
       this.bellSound.preload = 'auto';
       this.happySound.preload = 'auto';
+      this.popSound.preload = 'auto';
 
       // Set volume (0.0 to 1.0)
       this.sentSound.volume = 0.5;
       this.receivedSound.volume = 0.5;
       this.bellSound.volume = 0.6;
       this.happySound.volume = 0.7;
+      this.popSound.volume = 0.4;
     } catch (error) {
       console.warn('Failed to initialize sound files:', error);
     }
@@ -87,6 +91,23 @@ class SoundService {
       });
     } catch (error) {
       console.warn('Error playing bell sound:', error);
+    }
+  }
+
+  /**
+   * Play pop sound for emoji reactions
+   */
+  playPopSound() {
+    if (!this.isEnabled || !this.popSound) return;
+
+    try {
+      // Reset audio to beginning and play
+      this.popSound.currentTime = 0;
+      this.popSound.play().catch(error => {
+        console.warn('Failed to play pop sound:', error);
+      });
+    } catch (error) {
+      console.warn('Error playing pop sound:', error);
     }
   }
 
