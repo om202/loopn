@@ -46,6 +46,27 @@ const schema = a
         index('receiverId').sortKeys(['requestedAt']),
       ]),
 
+    // Track when users can reconnect after ending chats (2-week restriction)
+    ChatRestriction: a
+      .model({
+        id: a.id().required(),
+        user1Id: a.string().required(), // First user involved in ended chat
+        user2Id: a.string().required(), // Second user involved in ended chat
+        endedConversationId: a.id().required(), // Reference to the ended conversation
+        restrictionEndsAt: a.datetime().required(), // When users can send new chat requests (2 weeks from end)
+        createdAt: a.datetime().required(),
+        // TTL field - remove restriction after it expires
+        expiresAt: a.datetime(), // Same as restrictionEndsAt for cleanup
+      })
+      .authorization(allow => [allow.authenticated()])
+      .secondaryIndexes(index => [
+        // Find restrictions for a user pair
+        index('user1Id').sortKeys(['user2Id']),
+        index('user2Id').sortKeys(['user1Id']),
+        // Find all restrictions ending soon for cleanup
+        index('restrictionEndsAt'),
+      ]),
+
     // Request to connect permanently (Step 2 - during chat)
     UserConnection: a
       .model({
@@ -81,8 +102,7 @@ const schema = a
         lastMessageSenderId: a.string(), // Who sent the last message
         createdAt: a.datetime(),
         updatedAt: a.datetime(),
-        // TTL field - delete unconnected conversations after 7 days
-        expiresAt: a.datetime(), // Only set if isConnected = false
+        // Note: Conversations are now permanent and never auto-deleted
         // Enhanced probation period management
         probationEndsAt: a.datetime(), // When the 7-day probation period ends (for UI countdown)
         chatStatus: a.enum(['ACTIVE', 'PROBATION', 'ENDED']),
@@ -124,8 +144,7 @@ const schema = a
         deletedAt: a.datetime(),
         // Reply functionality
         replyToMessageId: a.id(),
-        // TTL field - inherits from conversation's TTL if unconnected
-        expiresAt: a.datetime(),
+        // Note: Messages are now permanent and never auto-deleted
         // Multi-user authorization: both sender and receiver can access
         participants: a.string().array(),
       })
@@ -148,8 +167,7 @@ const schema = a
         userId: a.string().required(),
         emoji: a.string().required(), // The emoji character
         timestamp: a.datetime().required(),
-        // TTL field - inherits from message's TTL
-        expiresAt: a.datetime(),
+        // Note: Reactions are now permanent and never auto-deleted
         // Multi-user authorization: all participants can see reactions
         participants: a.string().array(),
       })
@@ -258,15 +276,13 @@ const acceptChatRequest = async (chatRequestId: string, requesterId: string, rec
   
   // Create conversation with 7-day probation
   const probationEndsAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
-  const expiresAt = probationEndsAt; // Same as probation end
   
   await client.models.Conversation.create({
     participant1Id: requesterId,
     participant2Id: receiverId,
     isConnected: false,
     chatStatus: 'ACTIVE',
-    probationEndsAt: probationEndsAt.toISOString(),
-    expiresAt: expiresAt.toISOString()
+    probationEndsAt: probationEndsAt.toISOString()
   });
 };
 ```
@@ -301,7 +317,6 @@ const continueProbation = async (conversationId: string) => {
   await client.models.Conversation.update({
     id: conversationId,
     probationEndsAt: newProbationEnd.toISOString(),
-    expiresAt: newProbationEnd.toISOString(),
     chatStatus: 'ACTIVE' // Reset to active if it was in probation
   });
 };
@@ -313,7 +328,7 @@ const endChatNow = async (conversationId: string) => {
     chatStatus: 'ENDED',
     endedByUserId: currentUser.userId,
     endedAt: new Date().toISOString()
-    // Keep expiresAt - will still clean up after 7 days
+    // Note: Chat data is now permanent and never auto-deleted
   });
 };
 
@@ -358,8 +373,8 @@ const sendConnectionRequest = async (conversationId: string, receiverId: string)
     requesterId: currentUser.userId,
     receiverId,
     conversationId,
-    status: 'PENDING',
-    expiresAt: conversation.expiresAt // Same as conversation expiry
+    status: 'PENDING'
+    // Note: UserConnections are now permanent (no TTL)
   });
   
   // Send system message to chat
@@ -382,17 +397,15 @@ const acceptConnectionRequest = async (connectionRequestId: string, conversation
     respondedAt: new Date().toISOString()
   });
   
-  // Make conversation permanent - remove all TTLs
+  // Make conversation permanent
   await client.models.Conversation.update({
     id: conversationId,
     isConnected: true,
-    expiresAt: null, // Remove TTL - chat forever!
     probationEndsAt: null, // No more probation period
     chatStatus: 'ACTIVE'
   });
   
-  // TODO: Update all messages in this conversation to remove TTL
-  // This would require a bulk update operation
+  // Note: Messages are now permanent by default (no TTL removal needed)
 };
 ```
 
@@ -429,12 +442,14 @@ const canSendMessage = async (conversationId: string, receiverId: string) => {
 };
 ```
 
-TTL CLEANUP (Automatic by DynamoDB):
-- Chat requests: 24 hours if no response
-- Unconnected conversations: 7 days from probationEndsAt
-- Connection requests: 7 days (tied to conversation)
-- Messages in unconnected chats: 7 days
-- Connected user data: Never expires
+DATA RETENTION POLICY:
+- Chat requests: 24 hours if no response (TTL)
+- ChatRestrictions: 2 weeks after chat ends (TTL)
+- Conversations: Permanent (never deleted)
+- Messages: Permanent (never deleted)
+- Reactions: Permanent (never deleted)
+- UserConnections: Permanent (never deleted)
+- Notifications: 30 days (TTL)
 
 ENHANCED PROBATION FEATURES:
 - ⏰ Real-time countdown timer showing time left

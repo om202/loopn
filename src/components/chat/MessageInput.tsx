@@ -31,13 +31,11 @@ export default function MessageInput({
   const inputRef = useRef<HTMLInputElement>(null);
   const emojiPickerRef = useRef<HTMLDivElement>(null);
 
-
   useEffect(() => {
     if (autoFocus && inputRef.current) {
       inputRef.current.focus();
     }
   }, [autoFocus]);
-
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -59,7 +57,6 @@ export default function MessageInput({
 
   const handleEmojiClick = (emojiData: { emoji: string }) => {
     setNewMessage(newMessage + emojiData.emoji);
-
   };
 
   const handleSend = () => {
@@ -68,7 +65,6 @@ export default function MessageInput({
     }
 
     onSendMessage();
-
 
     setTimeout(() => {
       inputRef.current?.focus();
@@ -84,7 +80,6 @@ export default function MessageInput({
 
   return (
     <>
-
       {replyToMessage && (
         <div className='bg-gray-50 border-t border-gray-200 px-4 py-3 flex items-start justify-between'>
           <div className='flex-1 min-w-0'>
@@ -120,7 +115,6 @@ export default function MessageInput({
         </div>
       )}
 
-
       <div className='flex-shrink-0 bg-white border-t border-gray-200 p-4 shadow-lg relative'>
         <div className='max-w-5xl mx-auto'>
           <form
@@ -135,7 +129,6 @@ export default function MessageInput({
             data-bwignore
             style={{ position: 'relative' }}
           >
-
             <input
               autoComplete='false'
               name='hidden'
@@ -205,7 +198,7 @@ export default function MessageInput({
                   className='w-full px-5 py-3 pr-14 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base font-medium bg-gray-50 hover:bg-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed placeholder-gray-500'
                 />
                 <button
-                  type="button"
+                  type='button'
                   onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                   disabled={disabled}
                   className={`absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-all duration-200 p-2 rounded-full hover:bg-gray-100 focus:outline-none disabled:opacity-50 ${

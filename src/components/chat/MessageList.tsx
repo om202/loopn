@@ -218,13 +218,11 @@ export default function MessageList({
     );
   }, []);
 
-
   useEffect(() => {
     const handleClickAway = (event: MouseEvent) => {
       if (!openEmojiPickerMessageId) return;
 
       const target = event.target as Element;
-
 
       const isInsideEmojiPicker = target.closest('[data-emoji-picker]');
       const isInsideEmojiButton = target.closest('[data-emoji-button]');
@@ -243,9 +241,7 @@ export default function MessageList({
     };
   }, [openEmojiPickerMessageId]);
 
-
   const loadedMessageIds = useRef<Set<string>>(new Set());
-
 
   const messageIds = useMemo(() => messages.map(msg => msg.id), [messages]);
 
@@ -255,7 +251,6 @@ export default function MessageList({
         setReactionsLoaded(true);
         return;
       }
-
 
       const messageIdsToLoad = messageIds.filter(
         msgId => !loadedMessageIds.current.has(msgId)
@@ -268,7 +263,6 @@ export default function MessageList({
 
       setReactionsLoaded(false);
 
-
       const result =
         await reactionService.getBatchMessageReactions(messageIdsToLoad);
 
@@ -277,7 +271,6 @@ export default function MessageList({
         setReactionsLoaded(true);
         return;
       }
-
 
       messageIdsToLoad.forEach(messageId => {
         loadedMessageIds.current.add(messageId);
@@ -327,7 +320,6 @@ export default function MessageList({
     };
   }, [messageIds, currentUserId]);
 
-
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -335,35 +327,28 @@ export default function MessageList({
     const previousMessageCount = lastMessageCountRef.current;
     const currentMessageCount = messages.length;
 
-
     if (
       currentMessageCount > previousMessageCount &&
       previousMessageCount > 0
     ) {
       if (lastLoadWasOlderMessages) {
-
         const newMessagesAdded = currentMessageCount - previousMessageCount;
-
 
         requestAnimationFrame(() => {
           if (containerRef.current) {
-
             const averageMessageHeight =
               containerRef.current.scrollHeight / currentMessageCount;
             const scrollOffset = newMessagesAdded * averageMessageHeight;
-
 
             containerRef.current.scrollTop =
               scrollPositionRef.current + scrollOffset;
           }
         });
       } else {
-
         const newMessages = messages.slice(previousMessageCount);
         const hasOwnMessage = newMessages.some(
           msg => msg.senderId === currentUserId
         );
-
 
         const isNearBottom =
           container.scrollHeight -
@@ -372,14 +357,12 @@ export default function MessageList({
           150;
 
         if (hasOwnMessage || isNearBottom || shouldAutoScroll) {
-
           requestAnimationFrame(() => {
             messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
           });
         }
       }
     } else if (currentMessageCount > 0 && previousMessageCount === 0) {
-
       messagesEndRef.current?.scrollIntoView({ behavior: 'auto' });
     }
 
@@ -392,19 +375,15 @@ export default function MessageList({
     shouldAutoScroll,
   ]);
 
-
   useEffect(() => {
     if (shouldAutoScroll && messagesEndRef.current) {
-
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-
 
       setTimeout(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
       }, 100);
     }
   }, [shouldAutoScroll]);
-
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -418,7 +397,6 @@ export default function MessageList({
     return () => container.removeEventListener('scroll', handleScroll);
   }, []);
 
-
   useEffect(() => {
     if (!hasMoreMessages || isLoadingMore || !onLoadMoreMessages) return;
 
@@ -426,7 +404,6 @@ export default function MessageList({
       entries => {
         const [entry] = entries;
         if (entry.isIntersecting && containerRef.current) {
-
           scrollPositionRef.current = containerRef.current.scrollTop;
           onLoadMoreMessages();
         }
@@ -449,7 +426,6 @@ export default function MessageList({
     };
   }, [hasMoreMessages, isLoadingMore, onLoadMoreMessages]);
 
-
   if (messages.length === 0 && isInitializing) {
     return (
       <div className='flex-1 overflow-y-auto bg-gray-50'>
@@ -457,7 +433,6 @@ export default function MessageList({
       </div>
     );
   }
-
 
   if (messages.length === 0 && !isInitializing) {
     return (
@@ -525,7 +500,6 @@ export default function MessageList({
             )}
           </div>
         ) : (
-
           <div className='flex justify-center py-4'>
             <div className='flex items-center space-x-2 text-gray-400'>
               <div className='h-px bg-gray-300 w-8'></div>
@@ -541,13 +515,11 @@ export default function MessageList({
           const nextMessage =
             index < messages.length - 1 ? messages[index + 1] : null;
 
-
           const isFirstUnreadMessage =
             unreadMessagesSnapshot &&
             !isOwnMessage &&
             unreadMessagesSnapshot.has(message.id) &&
             message.senderId !== 'SYSTEM' &&
-
             (prevMessage
               ? !unreadMessagesSnapshot.has(prevMessage.id) ||
                 prevMessage.senderId === currentUserId ||
@@ -557,12 +529,10 @@ export default function MessageList({
           const shouldShowNewMessagesSeparator =
             chatEnteredAt && isFirstUnreadMessage;
 
-
           const isPrevFromSameSender =
             prevMessage?.senderId === message.senderId;
           const isNextFromSameSender =
             nextMessage?.senderId === message.senderId;
-
 
           const prevTimeDiff = prevMessage
             ? (new Date(message.timestamp || Date.now()).getTime() -
@@ -576,7 +546,6 @@ export default function MessageList({
               (1000 * 60)
             : 999;
 
-
           const isGroupedWithPrev = isPrevFromSameSender && prevTimeDiff <= 2;
           const isGroupedWithNext = isNextFromSameSender && nextTimeDiff <= 2;
 
@@ -584,7 +553,6 @@ export default function MessageList({
           let marginBottom = 'mb-2';
 
           if (isGroupedWithPrev) {
-
             if (prevTimeDiff <= 1) {
               marginTop = 'mt-0.5';
             } else {
@@ -612,15 +580,12 @@ export default function MessageList({
             marginBottom = 'mb-2';
           }
 
-
           const showAvatar = !isOwnMessage && !isGroupedWithPrev;
-
 
           const showSenderName = !isGroupedWithPrev;
 
           return (
             <React.Fragment key={message.id}>
-
               {shouldShowNewMessagesSeparator && (
                 <div className='flex items-center justify-center my-4 px-4'>
                   <div className='flex items-center w-full max-w-xs'>

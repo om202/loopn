@@ -8,7 +8,11 @@ import EmojiPicker from '../EmojiPicker';
 import MessageReactions from '../MessageReactions';
 import DeleteConfirmationDialog from '../DeleteConfirmationDialog';
 import { soundService } from '../../services/sound.service';
-import { isEmojiOnly, isEmoji, splitTextWithEmojis } from '../../lib/emoji-utils';
+import {
+  isEmojiOnly,
+  isEmoji,
+  splitTextWithEmojis,
+} from '../../lib/emoji-utils';
 
 type Message = Schema['Message']['type'];
 type UserPresence = Schema['UserPresence']['type'];
@@ -35,12 +39,10 @@ interface MessageBubbleProps {
   animationTrigger?: string;
 }
 
-
 const MessageTicks = ({ isOptimistic }: { isOptimistic: boolean }) => {
   return (
     <div className='flex items-center'>
       {isOptimistic ? (
-
         <Image
           src='/tick.svg'
           alt='sent'
@@ -49,7 +51,6 @@ const MessageTicks = ({ isOptimistic }: { isOptimistic: boolean }) => {
           className='opacity-30 filter brightness-0 invert'
         />
       ) : (
-
         <Image
           src='/double_tick.svg'
           alt='delivered'
@@ -83,13 +84,10 @@ export default function MessageBubble({
 }: MessageBubbleProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
-
   const renderMessageContent = (content: string) => {
-
     const parts = splitTextWithEmojis(content);
 
     return parts.map(part => {
-
       if (isEmoji(part)) {
         return (
           <span
@@ -116,7 +114,6 @@ export default function MessageBubble({
 
   const messageIsEmojiOnly = isEmojiOnly(message.content);
 
-
   const getSenderNameWithTime = () => {
     const senderName = isOwnMessage
       ? 'You'
@@ -125,11 +122,9 @@ export default function MessageBubble({
     return `${senderName} · ${time}`;
   };
 
-
   const repliedToMessage = message.replyToMessageId
     ? allMessages.find(msg => msg.id === message.replyToMessageId)
     : null;
-
 
   const getRepliedToContent = (content: string) => {
     const maxLength = 50;
@@ -202,7 +197,6 @@ export default function MessageBubble({
         <div className='relative flex gap-2'>
           <div className='relative max-w-xs sm:max-w-sm lg:max-w-lg'>
             {message.isDeleted ? (
-
               <div
                 className={`px-3 py-2 rounded-3xl border ${
                   isOwnMessage
@@ -213,10 +207,8 @@ export default function MessageBubble({
                 <p className='text-sm italic'>Message deleted</p>
               </div>
             ) : messageIsEmojiOnly ? (
-
               <div className='text-4xl leading-none'>{message.content}</div>
             ) : (
-
               <div
                 className={`px-3 py-2 rounded-3xl border ${
                   isOwnMessage
@@ -224,7 +216,6 @@ export default function MessageBubble({
                     : 'bg-white text-gray-900 border-gray-300 rounded-bl-sm'
                 }`}
               >
-
                 {repliedToMessage && (
                   <div
                     className={`mb-2 pt-2 pb-2 border-l-2 pl-3 pr-3 ${
@@ -270,7 +261,6 @@ export default function MessageBubble({
               </div>
             )}
 
-
             {!message.isDeleted && (
               <div
                 className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'} -mt-1`}
@@ -286,7 +276,6 @@ export default function MessageBubble({
             )}
           </div>
 
-
           {onReplyToMessage && !message.isDeleted && (
             <div
               className={`absolute top-1/2 -translate-y-6 ${
@@ -295,7 +284,6 @@ export default function MessageBubble({
                 isOwnMessage ? 'flex-row-reverse' : 'flex-row'
               }`}
             >
-
               <button
                 onClick={handleReplyClick}
                 className='w-8 h-8 bg-gray-200 hover:bg-gray-300 rounded-full transition-colors duration-150 flex items-center justify-center'
@@ -315,7 +303,6 @@ export default function MessageBubble({
                   />
                 </svg>
               </button>
-
 
               {isOwnMessage && onDeleteMessage && !message.isDeleted && (
                 <button
@@ -338,7 +325,6 @@ export default function MessageBubble({
                   </svg>
                 </button>
               )}
-
 
               <div className='relative'>
                 <button
@@ -377,7 +363,6 @@ export default function MessageBubble({
           )}
         </div>
       </div>
-
 
       <DeleteConfirmationDialog
         isOpen={showDeleteDialog}

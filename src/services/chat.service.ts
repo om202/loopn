@@ -14,6 +14,8 @@ type UserConnection = Schema['UserConnection']['type'];
 // type CreateUserConnectionInput = Schema['UserConnection']['createType'];
 // type UpdateUserConnectionInput = Schema['UserConnection']['updateType'];
 
+type ChatRestriction = Schema['ChatRestriction']['type'];
+
 // Result types
 type DataResult<T> = { data: T | null; error: string | null };
 type ListResult<T> = { data: T[]; error: string | null };
@@ -26,6 +28,27 @@ export class ChatService {
     requesterId: string
   ): Promise<DataResult<ChatRequest>> {
     try {
+      // Check for active chat restrictions (2-week cooldown)
+      const restrictionCheck = await this.hasActiveChatRestriction(
+        requesterId,
+        receiverId
+      );
+
+      if (restrictionCheck.error) {
+        return {
+          data: null,
+          error: restrictionCheck.error,
+        };
+      }
+
+      if (restrictionCheck.data) {
+        return {
+          data: null,
+          error:
+            'Cannot send chat request. Please wait for the cooldown period to end.',
+        };
+      }
+
       const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
 
       const result = await client.models.ChatRequest.create({
@@ -213,7 +236,6 @@ export class ChatService {
         isConnected: false,
         chatStatus: 'ACTIVE',
         probationEndsAt: probationEndsAt.toISOString(),
-        expiresAt: probationEndsAt.toISOString(), // TTL
         createdAt: now.toISOString(),
         // Set participants for multi-user authorization
         participants: [participant1Id, participant2Id],
@@ -267,11 +289,40 @@ export class ChatService {
     userId: string
   ): Promise<DataResult<Conversation>> {
     try {
+      // First get the conversation to know the participants
+      const conversationResult = await client.models.Conversation.get({
+        id: conversationId,
+      });
+
+      if (!conversationResult.data) {
+        return {
+          data: null,
+          error: 'Conversation not found',
+        };
+      }
+
+      const conversation = conversationResult.data;
+
+      // Update conversation to ended status
       const result = await client.models.Conversation.update({
         id: conversationId,
         chatStatus: 'ENDED',
         endedAt: new Date().toISOString(),
         endedByUserId: userId,
+      });
+
+      // Create ChatRestriction to prevent reconnection
+      const now = new Date();
+      // TODO: when deploying change to 2 weeks (14 * 24 * 60 * 60 * 1000)
+      const restrictionEnds = new Date(now.getTime() + 3 * 60 * 1000); // 3 minutes for testing
+
+      await client.models.ChatRestriction.create({
+        user1Id: conversation.participant1Id,
+        user2Id: conversation.participant2Id,
+        endedConversationId: conversationId,
+        restrictionEndsAt: restrictionEnds.toISOString(),
+        createdAt: now.toISOString(),
+        expiresAt: restrictionEnds.toISOString(), // TTL cleanup
       });
 
       return {
@@ -295,7 +346,6 @@ export class ChatService {
       const result = await client.models.Conversation.update({
         id: conversationId,
         probationEndsAt: newProbationEnd.toISOString(),
-        expiresAt: newProbationEnd.toISOString(),
       });
 
       return {
@@ -429,6 +479,52 @@ export class ChatService {
           error instanceof Error
             ? error.message
             : 'Failed to respond to connection request',
+      };
+    }
+  }
+
+  // ===== CHAT RESTRICTIONS =====
+
+  async hasActiveChatRestriction(
+    user1Id: string,
+    user2Id: string
+  ): Promise<DataResult<boolean>> {
+    try {
+      const now = new Date();
+
+      // Check if there's an active restriction between these users
+      // We need to check both directions since restrictions can be created with either user as user1
+      const restriction1 = await client.models.ChatRestriction.list({
+        filter: {
+          user1Id: { eq: user1Id },
+          user2Id: { eq: user2Id },
+          restrictionEndsAt: { gt: now.toISOString() },
+        },
+      });
+
+      const restriction2 = await client.models.ChatRestriction.list({
+        filter: {
+          user1Id: { eq: user2Id },
+          user2Id: { eq: user1Id },
+          restrictionEndsAt: { gt: now.toISOString() },
+        },
+      });
+
+      const hasRestriction =
+        (restriction1.data && restriction1.data.length > 0) ||
+        (restriction2.data && restriction2.data.length > 0);
+
+      return {
+        data: hasRestriction,
+        error: null,
+      };
+    } catch (error) {
+      return {
+        data: false,
+        error:
+          error instanceof Error
+            ? error.message
+            : 'Failed to check chat restrictions',
       };
     }
   }

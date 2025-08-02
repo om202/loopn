@@ -76,6 +76,33 @@ export default function ChatPage({ params }: ChatPageProps) {
     loadConversation();
   }, [user, loadConversation, router]);
 
+  // Subscribe to real-time conversation updates
+  useEffect(() => {
+    if (!user?.userId || !conversation?.id) {
+      return;
+    }
+
+    const subscription = chatService.observeConversations(
+      user.userId,
+      conversations => {
+        // Find the current conversation in the updated list
+        const updatedConversation = conversations.find(
+          conv => conv.id === conversation.id
+        );
+        if (updatedConversation) {
+          setConversation(updatedConversation);
+        }
+      },
+      error => {
+        console.error('Error observing conversation updates:', error);
+      }
+    );
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [user?.userId, conversation?.id]);
+
   const handleChatEnded = () => {
     // Redirect back to dashboard when chat is ended
     router.push('/dashboard');

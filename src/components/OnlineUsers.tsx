@@ -22,6 +22,7 @@ import LoadingContainer from './LoadingContainer';
 import UserAvatar from './UserAvatar';
 
 type UserPresence = Schema['UserPresence']['type'];
+type Conversation = Schema['Conversation']['type'];
 
 interface OnlineUsersProps {
   onChatRequestSent: () => void;
@@ -35,7 +36,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
     new Set()
   );
   const [existingConversations, setExistingConversations] = useState<
-    Map<string, string>
+    Map<string, Conversation>
   >(new Map());
   const [error, setError] = useState<string | null>(null);
   const [pendingRequestsLoaded, setPendingRequestsLoaded] = useState(false);
@@ -72,7 +73,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
       }
 
       const conversations = conversationsResult.data || [];
-      const conversationMap = new Map<string, string>();
+      const conversationMap = new Map<string, Conversation>();
       const userIds = new Set<string>();
 
       // Extract participant IDs and conversation mappings
@@ -82,7 +83,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
             ? conv.participant2Id
             : conv.participant1Id;
         if (otherUserId) {
-          conversationMap.set(otherUserId, conv.id);
+          conversationMap.set(otherUserId, conv);
           userIds.add(otherUserId);
         }
       });
@@ -226,6 +227,43 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
     };
   }, [user, loadConversations]);
 
+  // Subscribe to real-time conversation updates to keep status current
+  useEffect(() => {
+    if (!user?.userId) {
+      return;
+    }
+
+    const subscription = chatService.observeConversations(
+      user.userId,
+      conversations => {
+        const conversationMap = new Map<string, Conversation>();
+
+        // Update conversation mappings with latest data
+        conversations.forEach(conv => {
+          const otherUserId =
+            conv.participant1Id === user.userId
+              ? conv.participant2Id
+              : conv.participant1Id;
+          if (otherUserId) {
+            conversationMap.set(otherUserId, conv);
+          }
+        });
+
+        setExistingConversations(conversationMap);
+      },
+      error => {
+        console.error(
+          'Error observing conversation updates in dashboard:',
+          error
+        );
+      }
+    );
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [user?.userId]);
+
   // Combine online users with conversation users whenever either changes
   useEffect(() => {
     const combinedUsers = [...onlineUsers];
@@ -251,11 +289,11 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
     }
 
     // Check if there's an existing conversation
-    const conversationId = existingConversations.get(receiverId);
+    const conversation = existingConversations.get(receiverId);
 
-    if (conversationId) {
+    if (conversation) {
       // Open existing chat with short URL
-      router.push(createShortChatUrl(conversationId));
+      router.push(createShortChatUrl(conversation.id));
       return;
     }
 
@@ -423,20 +461,28 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
                   </div>
                   <div
                     className={`text-xs sm:text-sm ${
-                      isOnline
-                        ? 'text-green-600'
-                        : userPresence.lastSeen &&
-                            formatPresenceTime(userPresence.lastSeen) ===
-                              'Recently active'
-                          ? 'text-sky-500'
-                          : 'text-gray-600'
+                      existingConversations.has(userPresence.userId) &&
+                      existingConversations.get(userPresence.userId)
+                        ?.chatStatus === 'ENDED'
+                        ? 'text-orange-600'
+                        : isOnline
+                          ? 'text-green-600'
+                          : userPresence.lastSeen &&
+                              formatPresenceTime(userPresence.lastSeen) ===
+                                'Recently active'
+                            ? 'text-sky-500'
+                            : 'text-gray-600'
                     }`}
                   >
-                    {isOnline
-                      ? 'Online now'
-                      : userPresence.lastSeen
-                        ? formatPresenceTime(userPresence.lastSeen)
-                        : 'Offline'}
+                    {existingConversations.has(userPresence.userId) &&
+                    existingConversations.get(userPresence.userId)
+                      ?.chatStatus === 'ENDED'
+                      ? 'Trial ended'
+                      : isOnline
+                        ? 'Online now'
+                        : userPresence.lastSeen
+                          ? formatPresenceTime(userPresence.lastSeen)
+                          : 'Offline'}
                   </div>
                 </div>
 
@@ -450,7 +496,10 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
                     ) : existingConversations.has(userPresence.userId) ? (
                       <>
                         <MessageCircle className='w-3 h-3 sm:w-4 sm:h-4 text-gray-600' />
-                        Chat
+                        {existingConversations.get(userPresence.userId)
+                          ?.chatStatus === 'ENDED'
+                          ? 'See Conversation'
+                          : 'Chat'}
                       </>
                     ) : (
                       <>
