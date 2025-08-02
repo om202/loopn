@@ -278,15 +278,16 @@ export default function MessageList({
     shouldAutoScroll,
   ]);
 
-  // Force auto-scroll when explicitly requested (for sent messages)
+  // Force auto-scroll when explicitly requested (for sent messages and initial load)
   useEffect(() => {
     if (shouldAutoScroll && messagesEndRef.current) {
-      // Double requestAnimationFrame to ensure all layout is complete
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-        });
-      });
+      // Simple scroll with final delay to ensure completion
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+      
+      // Final scroll after delay to handle any late-loading content
+      setTimeout(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
     }
   }, [shouldAutoScroll]);
 
@@ -334,7 +335,17 @@ export default function MessageList({
     };
   }, [hasMoreMessages, isLoadingMore, onLoadMoreMessages]);
 
-  if (messages.length === 0) {
+  // If no messages and still initializing, show empty container (parent will show loading)
+  if (messages.length === 0 && isInitializing) {
+    return (
+      <div className='flex-1 overflow-y-auto bg-gray-50'>
+        <div ref={messagesEndRef} />
+      </div>
+    );
+  }
+
+  // If no messages and not initializing, show empty state
+  if (messages.length === 0 && !isInitializing) {
     return (
       <div
         className='flex-1 overflow-y-auto bg-gray-50'

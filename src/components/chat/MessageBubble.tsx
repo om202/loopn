@@ -372,7 +372,9 @@ export default function MessageBubble({
 
             {/* Message reactions - hide for deleted messages */}
             {!message.isDeleted && (
-              <div className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'}`}>
+              <div
+                className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'}`}
+              >
                 <MessageReactions
                   reactions={reactions}
                   currentUserId={currentUserId}

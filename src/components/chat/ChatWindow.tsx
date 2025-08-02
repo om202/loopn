@@ -161,182 +161,63 @@ export default function ChatWindow({
     calculateTimeLeft,
   ]);
 
-  // Load initial messages with pagination
+  // Initialize with real-time subscription - more reliable than initial API call
   useEffect(() => {
-    if (!conversation.id) {
+    if (!conversation.id || !user?.userId) {
       return;
     }
 
-    const loadInitialMessages = async () => {
-      setIsInitializing(true);
-      const result = await messageService.getConversationMessages(
-        conversation.id,
-        50
-      );
-
-      if (result.error) {
-        setError(result.error);
-      } else {
-        // Sort messages oldest first for chat display
-        const sortedMessages = result.data.sort((a, b) => {
-          const timestampA = a.timestamp ? new Date(a.timestamp).getTime() : 0;
-          const timestampB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
-          return timestampA - timestampB;
-        });
-
-        setMessages(sortedMessages);
-        setNextToken(result.nextToken);
-        setHasMoreMessages(!!result.nextToken);
-        setInitialLoadComplete(true);
-        setLastLoadWasOlderMessages(false);
-
-        // Take a snapshot of unread message IDs when first loading
-        const unreadIds = new Set(
-          sortedMessages
-            .filter(
-              msg =>
-                !msg.isRead &&
-                msg.senderId !== user?.userId &&
-                msg.senderId !== 'SYSTEM'
-            )
-            .map(msg => msg.id)
-        );
-        setUnreadMessagesSnapshot(unreadIds);
-
-        // Mark this as an active session once messages are loaded
-        setHasActiveSession(true);
-      }
-      setIsInitializing(false);
-    };
-
-    loadInitialMessages();
-  }, [conversation.id, user?.userId]);
-
-  // Subscribe to real-time messages after initial load
-  useEffect(() => {
-    if (!conversation.id || !initialLoadComplete) {
-      return;
-    }
-
+    setIsInitializing(true);
+    
+    // Set up real-time subscription immediately - this is more reliable than the API call
+    let isFirstLoad = true;
     const subscription = messageService.observeMessages(
       conversation.id,
-      newMessages => {
-        setMessages(prev => {
-          // Create a map of existing messages for faster lookup
-          const existingMessagesMap = new Map();
-          const tempMessages = new Map(); // Track optimistic messages
+      (newMessages) => {
 
-          prev.forEach(msg => {
-            existingMessagesMap.set(msg.id, msg);
-            // Track optimistic messages by content and timestamp
-            if (msg.id.startsWith('temp-')) {
-              const key = `${msg.content}-${msg.senderId}-${msg.timestamp}`;
-              tempMessages.set(key, msg);
-            }
-          });
-
-          const messagesToAdd: typeof newMessages = [];
-          const tempMessagesToRemove = new Set<string>();
-
-          newMessages.forEach(newMsg => {
-            // Skip if we already have this exact message
-            if (existingMessagesMap.has(newMsg.id)) {
-              return;
-            }
-
-            // Check if this is the real version of an optimistic message
-            const optimisticKey = `${newMsg.content}-${newMsg.senderId}-${newMsg.timestamp}`;
-            const matchingOptimistic = tempMessages.get(optimisticKey);
-
-            if (matchingOptimistic) {
-              // Replace optimistic message with real one
-              tempMessagesToRemove.add(matchingOptimistic.id);
-              messagesToAdd.push(newMsg);
-            } else {
-              // This is a genuinely new message (from other user or different device)
-              // Only add if it's newer than our latest non-temp message
-              const latestRealMessage = prev
-                .filter(msg => !msg.id.startsWith('temp-'))
-                .sort((a, b) => {
-                  const timeA = a.timestamp
-                    ? new Date(a.timestamp).getTime()
-                    : 0;
-                  const timeB = b.timestamp
-                    ? new Date(b.timestamp).getTime()
-                    : 0;
-                  return timeB - timeA;
-                })[0];
-
-              if (
-                !latestRealMessage ||
-                !newMsg.timestamp ||
-                !latestRealMessage.timestamp ||
-                newMsg.timestamp > latestRealMessage.timestamp
-              ) {
-                messagesToAdd.push(newMsg);
-
-                // Only play received sound for messages from other users that arrive
-                // while we have an active session (not for old/unread messages)
-                if (newMsg.senderId !== user?.userId && hasActiveSession) {
-                  const messageTime = new Date(
-                    newMsg.timestamp || newMsg.createdAt
-                  );
-                  const sessionStartTime = chatEnteredAt;
-
-                  // Only play sound if message was sent after we entered the chat
-                  if (messageTime > sessionStartTime) {
-                    soundService.playReceivedSound();
-                  }
-                }
-              }
-            }
-          });
-
-          // If we have messages to update
-          if (messagesToAdd.length > 0 || tempMessagesToRemove.size > 0) {
-            // Remove optimistic messages that are being replaced
-            let updatedMessages = prev.filter(
-              msg => !tempMessagesToRemove.has(msg.id)
-            );
-
-            // Add new real messages
-            if (messagesToAdd.length > 0) {
-              const sortedNewMessages = messagesToAdd.sort((a, b) => {
-                const timestampA = a.timestamp
-                  ? new Date(a.timestamp).getTime()
-                  : 0;
-                const timestampB = b.timestamp
-                  ? new Date(b.timestamp).getTime()
-                  : 0;
-                return timestampA - timestampB;
-              });
-              updatedMessages = [...updatedMessages, ...sortedNewMessages];
-            }
-
-            setLastLoadWasOlderMessages(false);
-            setShouldAutoScroll(false); // Reset auto-scroll after messages are processed
-            return updatedMessages;
-          }
-
-          return prev;
-        });
+        
+        if (isFirstLoad) {
+          // First load: set all messages and complete initialization
+          setMessages(newMessages);
+          setInitialLoadComplete(true);
+          setHasActiveSession(true);
+          
+          // Take a snapshot of unread message IDs when first loading
+          const unreadIds = new Set(
+            newMessages
+              .filter(
+                msg =>
+                  !msg.isRead &&
+                  msg.senderId !== user?.userId &&
+                  msg.senderId !== 'SYSTEM'
+              )
+              .map(msg => msg.id)
+          );
+          setUnreadMessagesSnapshot(unreadIds);
+          
+          setIsInitializing(false);
+          
+          // Trigger scroll to bottom after messages are loaded
+          setShouldAutoScroll(true);
+          
+          isFirstLoad = false;
+        } else {
+          // Subsequent updates: just update messages
+          setMessages(newMessages);
+        }
       },
-      error => {
-        console.error('Error observing messages:', error);
+      (error) => {
         setError('Failed to load real-time messages');
+        setIsInitializing(false);
       }
     );
 
     return () => {
       subscription.unsubscribe();
     };
-  }, [
-    conversation.id,
-    initialLoadComplete,
-    user?.userId,
-    hasActiveSession,
-    chatEnteredAt,
-  ]);
+  }, [conversation.id, user?.userId]);
+
+
 
   // Subscribe to other user's presence using existing real-time subscription
   useEffect(() => {
@@ -359,19 +240,8 @@ export default function ChatWindow({
     };
   }, [otherParticipantId]);
 
-  // Initialize all data before showing UI
-  useEffect(() => {
-    // If there's external loading or no conversation data, keep initializing
-    if (externalLoading || !conversation.id) {
-      return;
-    }
-
-    const timer = setTimeout(() => {
-      setIsInitializing(false);
-    }, 800);
-
-    return () => clearTimeout(timer);
-  }, [externalLoading, conversation.id]);
+  // Note: isInitializing is controlled by the loadInitialMessages function
+  // which properly sets it to false only after messages are actually loaded
 
   const handleSendMessage = () => {
     // Programmatically check conditions instead of disabling button
@@ -584,8 +454,8 @@ export default function ChatWindow({
     setIsLoadingMore(false);
   }, [nextToken, isLoadingMore, conversation.id]);
 
-  // Show loading state while initializing or external loading
-  if (isInitializing || externalLoading) {
+  // Show loading state while initializing, external loading, or no conversation data
+  if (isInitializing || externalLoading || !conversation.id) {
     return <LoadingContainer />;
   }
 
