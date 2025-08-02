@@ -220,12 +220,12 @@ export default function MessageBubble({
 
         {/* Message content and actions wrapper */}
         <div
-          className={`flex items-center gap-2 ${!isOwnMessage ? 'flex-row-reverse' : 'flex-row'}`}
+          className={`flex items-start gap-2 ${!isOwnMessage ? 'flex-row-reverse' : 'flex-row'}`}
         >
           {/* Action icons with conditional positioning - hide for deleted messages */}
           {onReplyToMessage && !message.isDeleted && (
             <div
-              className={`${showEmojiPicker ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} transition-all duration-150 ease-out flex items-center gap-2 ${
+              className={`${showEmojiPicker ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} transition-all duration-150 ease-out flex items-center gap-2 self-start ${
                 !isOwnMessage ? 'ml-3' : 'mr-3'
               }`}
             >
