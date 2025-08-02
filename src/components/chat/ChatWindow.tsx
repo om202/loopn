@@ -139,6 +139,11 @@ export default function ChatWindow({
     setSendingConnectionRequest(false);
   }, [user, otherParticipantId, conversation.id, sendingConnectionRequest]);
 
+  const handleReconnect = useCallback(() => {
+    // Navigate back to dashboard where user can send a new chat request
+    window.location.href = '/dashboard';
+  }, []);
+
   // Calculate time remaining in probation - now just updates the existing state
   useEffect(() => {
     if (!conversation.probationEndsAt || conversation.isConnected) {
@@ -497,6 +502,7 @@ export default function ChatWindow({
         sendingConnectionRequest={sendingConnectionRequest}
         onEndChat={handleEndChat}
         onSendConnectionRequest={handleSendConnectionRequest}
+        onReconnect={handleReconnect}
         onBack={() => window.history.back()}
       />
 

@@ -21,6 +21,7 @@ interface ChatHeaderProps {
   sendingConnectionRequest: boolean;
   onEndChat: () => void;
   onSendConnectionRequest: () => void;
+  onReconnect: () => void;
   onBack: () => void;
 }
 
@@ -32,6 +33,7 @@ export default function ChatHeader({
   sendingConnectionRequest,
   onEndChat,
   onSendConnectionRequest,
+  onReconnect,
   onBack,
 }: ChatHeaderProps) {
   const [showTrialInfoDialog, setShowTrialInfoDialog] = useState(false);
@@ -235,6 +237,32 @@ export default function ChatHeader({
                         </span>
                       )}
                     </div>
+
+                    {/* Show Reconnect button when restriction period ends */}
+                    {reconnectionTime === 'Can reconnect now' && (
+                      <>
+                        {/* Line Separator */}
+                        <div className='w-px h-6 bg-gray-300'></div>
+
+                        {/* Reconnect Button */}
+                        <button
+                          onClick={onReconnect}
+                          className='flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 sm:py-2.5 bg-orange-600 hover:bg-orange-700 text-white rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2'
+                        >
+                          <Image
+                            src='/connect-icon.svg'
+                            alt='Reconnect'
+                            width={16}
+                            height={16}
+                            className='flex-shrink-0 sm:w-[18px] sm:h-[18px]'
+                          />
+                          <span className='text-xs sm:text-sm font-medium'>
+                            <span className='hidden sm:inline'>Reconnect</span>
+                            <span className='sm:hidden'>Reconnect</span>
+                          </span>
+                        </button>
+                      </>
+                    )}
                   </div>
                 )}
 
@@ -281,10 +309,10 @@ export default function ChatHeader({
                           <span className='hidden sm:inline'>
                             {sendingConnectionRequest
                               ? 'Connecting...'
-                              : 'Connect'}
+                              : 'Send Trial Connect'}
                           </span>
                           <span className='sm:hidden'>
-                            {sendingConnectionRequest ? '...' : 'Connect'}
+                            {sendingConnectionRequest ? '...' : 'Trial Connect'}
                           </span>
                         </span>
                       </button>

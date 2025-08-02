@@ -373,20 +373,7 @@ export default function NotificationBell() {
       setShowDialogConnected(true);
       setIsOpen(false); // Close the notification dropdown
 
-      // Delete notification from database and update state
-      if (user) {
-        await notificationService.deleteNotificationsForChatRequest(
-          user.userId,
-          chatRequestId
-        );
-      }
-
-      setChatRequests(prev => prev.filter(req => req.id !== chatRequestId));
-      setNotifications(prev =>
-        prev.filter(notif => notif.id !== chatRequestId)
-      );
-
-      // Perform the API call in the background
+      // Perform the API call in the background (notification cleanup is handled automatically by the service)
       try {
         const result = await chatService.respondToChatRequest(
           chatRequestId,
@@ -397,6 +384,12 @@ export default function NotificationBell() {
           // Store the conversation ID for the connected dialog
           setDialogConversationId(result.data.conversation.id);
         }
+
+        // Remove from local state after successful API call
+        setChatRequests(prev => prev.filter(req => req.id !== chatRequestId));
+        setNotifications(prev =>
+          prev.filter(notif => notif.id !== chatRequestId)
+        );
       } catch (error) {
         console.error('Error responding to chat request:', error);
       }
@@ -405,19 +398,11 @@ export default function NotificationBell() {
     }
 
     // For rejection, proceed with normal flow
-    // Delete notification from database and update state
-    if (user) {
-      await notificationService.deleteNotificationsForChatRequest(
-        user.userId,
-        chatRequestId
-      );
-    }
+    setDecliningId(chatRequestId);
 
     // Optimistic update - immediately remove from both states
     setChatRequests(prev => prev.filter(req => req.id !== chatRequestId));
     setNotifications(prev => prev.filter(notif => notif.id !== chatRequestId));
-
-    setDecliningId(chatRequestId);
 
     try {
       const result = await chatService.respondToChatRequest(

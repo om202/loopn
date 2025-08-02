@@ -41,6 +41,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   const [error, setError] = useState<string | null>(null);
   const [pendingRequestsLoaded, setPendingRequestsLoaded] = useState(false);
   const [conversationsLoaded, setConversationsLoaded] = useState(false);
+  // Calculate reconnectable users directly in render to avoid infinite requests
   const { user } = useAuthenticator();
   const router = useRouter();
 
@@ -114,6 +115,25 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
       setConversationsLoaded(true);
     }
   }, [user]); // State setters are stable and don't need to be included
+
+  // Helper function to check if a user can reconnect (no backend calls)
+  const canUserReconnect = (userId: string): boolean => {
+    const conversation = existingConversations.get(userId);
+    if (
+      !conversation ||
+      conversation.chatStatus !== 'ENDED' ||
+      !conversation.endedAt
+    ) {
+      return false;
+    }
+
+    // Check if restriction period has ended (3 minutes for testing)
+    const endedDate = new Date(conversation.endedAt);
+    // TODO: when deploying change to 2 weeks (14 * 24 * 60 * 60 * 1000)
+    const canReconnectAt = new Date(endedDate.getTime() + 3 * 60 * 1000); // 3 minutes for testing
+
+    return new Date() >= canReconnectAt;
+  };
 
   useEffect(() => {
     if (!user) {
@@ -215,6 +235,8 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
       if (authReady) {
         loadConversations().then(users => {
           setConversationUsers(users || []);
+          // No automatic reconnect checks to avoid infinite requests
+          // Users can refresh the page to check reconnect availability
         });
       } else {
         console.log('Auth session not ready for conversation loading');
@@ -250,6 +272,8 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
         });
 
         setExistingConversations(conversationMap);
+        // Only check reconnectable users occasionally to avoid excessive calls
+        // The interval will handle regular updates
       },
       error => {
         console.error(
@@ -292,6 +316,12 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
     const conversation = existingConversations.get(receiverId);
 
     if (conversation) {
+      // If this is a reconnectable ended chat, send a new chat request
+      if (conversation.chatStatus === 'ENDED' && canUserReconnect(receiverId)) {
+        handleSendChatRequest(receiverId);
+        return;
+      }
+
       // Open existing chat with short URL
       router.push(createShortChatUrl(conversation.id));
       return;
@@ -363,6 +393,22 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
     })();
   };
 
+  const handleClearStuckRequests = async () => {
+    if (!user) return;
+
+    try {
+      const result = await chatService.clearStuckPendingRequests(user.userId);
+      if (result.error) {
+        setError(result.error);
+      } else {
+        console.log(`Cleared ${result.data} stuck pending requests`);
+        // The real-time subscription will update the UI automatically
+      }
+    } catch (error) {
+      setError('Failed to clear stuck requests');
+    }
+  };
+
   const getDisplayName = (userPresence: UserPresence) => {
     if (userPresence.email) {
       return userPresence.email;
@@ -420,6 +466,17 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
               </span>
               <span className='text-sm text-gray-600'>Online</span>
             </div>
+
+            {/* Debug button to clear stuck requests */}
+            {pendingRequests.size > 0 && (
+              <button
+                onClick={handleClearStuckRequests}
+                className='px-3 py-1.5 bg-orange-100 text-orange-700 hover:bg-orange-200 rounded-full border border-orange-200 text-xs font-medium transition-colors'
+                title='Clear stuck pending requests (older than 5 minutes)'
+              >
+                Clear Stuck ({pendingRequests.size})
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -464,7 +521,9 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
                       existingConversations.has(userPresence.userId) &&
                       existingConversations.get(userPresence.userId)
                         ?.chatStatus === 'ENDED'
-                        ? 'text-orange-600'
+                        ? canUserReconnect(userPresence.userId)
+                          ? 'text-blue-600'
+                          : 'text-orange-600'
                         : isOnline
                           ? 'text-green-600'
                           : userPresence.lastSeen &&
@@ -477,7 +536,9 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
                     {existingConversations.has(userPresence.userId) &&
                     existingConversations.get(userPresence.userId)
                       ?.chatStatus === 'ENDED'
-                      ? 'Trial ended'
+                      ? canUserReconnect(userPresence.userId)
+                        ? 'Can reconnect'
+                        : 'Trial ended'
                       : isOnline
                         ? 'Online now'
                         : userPresence.lastSeen
@@ -498,13 +559,15 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
                         <MessageCircle className='w-3 h-3 sm:w-4 sm:h-4 text-gray-600' />
                         {existingConversations.get(userPresence.userId)
                           ?.chatStatus === 'ENDED'
-                          ? 'See Conversation'
+                          ? canUserReconnect(userPresence.userId)
+                            ? 'Reconnect'
+                            : 'See Conversation'
                           : 'Chat'}
                       </>
                     ) : (
                       <>
                         <CheckCircle2 className='w-3 h-3 sm:w-4 sm:h-4 text-gray-600' />
-                        Connect
+                        Start Chat
                       </>
                     )}
                   </button>

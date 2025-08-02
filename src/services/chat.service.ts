@@ -1,5 +1,7 @@
 import type { Schema } from '../../amplify/data/resource';
 import { client } from '../lib/amplify-config';
+import { notificationService } from './notification.service';
+import { userService } from './user.service';
 
 // Type definitions from schema
 type ChatRequest = Schema['ChatRequest']['type'];
@@ -58,6 +60,24 @@ export class ChatService {
         expiresAt: expiresAt.toISOString(),
       });
 
+      // Create a notification for the receiver (especially important for offline users)
+      if (result.data) {
+        // Get requester's information for a more personalized notification
+        const requesterResult = await userService.getUserPresence(requesterId);
+        const requesterName = requesterResult.data?.email
+          ? requesterResult.data.email.split('@')[0]
+          : `User ${requesterId.slice(-4)}`;
+
+        await notificationService.createNotification(
+          receiverId,
+          'chat_request',
+          'New Chat Request',
+          `${requesterName} wants to chat with you`,
+          result.data,
+          { chatRequestId: result.data.id }
+        );
+      }
+
       return {
         data: result.data,
         error: null,
@@ -105,6 +125,20 @@ export class ChatService {
           error: 'Failed to update chat request',
         };
       }
+
+      // Clean up notifications for both users when request is responded to
+      await Promise.all([
+        // Clean up notification for the receiver (who responded)
+        notificationService.deleteNotificationsForChatRequest(
+          chatRequestResult.data.receiverId,
+          chatRequestId
+        ),
+        // Also clean up any notifications for the requester (edge case)
+        notificationService.deleteNotificationsForChatRequest(
+          chatRequestResult.data.requesterId,
+          chatRequestId
+        ),
+      ]);
 
       // If accepted, create a conversation
       let conversation: Conversation | undefined;
@@ -216,6 +250,56 @@ export class ChatService {
           error instanceof Error
             ? error.message
             : 'Failed to check existing chat requests',
+      };
+    }
+  }
+
+  async clearStuckPendingRequests(userId: string): Promise<DataResult<number>> {
+    try {
+      // Get all pending sent requests for this user
+      const sentResult = await client.models.ChatRequest.list({
+        filter: {
+          requesterId: { eq: userId },
+          status: { eq: 'PENDING' },
+        },
+      });
+
+      if (!sentResult.data) {
+        return {
+          data: 0,
+          error: 'Failed to fetch pending requests',
+        };
+      }
+
+      // Cancel all pending sent requests that are older than 5 minutes
+      const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+      const stuckRequests = sentResult.data.filter(request => {
+        const createdAt = new Date(request.createdAt);
+        return createdAt < fiveMinutesAgo;
+      });
+
+      // Update stuck requests to EXPIRED status
+      const updatePromises = stuckRequests.map(request =>
+        client.models.ChatRequest.update({
+          id: request.id,
+          status: 'REJECTED', // Use REJECTED to clear them
+          respondedAt: new Date().toISOString(),
+        })
+      );
+
+      await Promise.all(updatePromises);
+
+      return {
+        data: stuckRequests.length,
+        error: null,
+      };
+    } catch (error) {
+      return {
+        data: 0,
+        error:
+          error instanceof Error
+            ? error.message
+            : 'Failed to clear stuck requests',
       };
     }
   }
