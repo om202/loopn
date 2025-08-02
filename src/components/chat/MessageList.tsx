@@ -218,14 +218,14 @@ export default function MessageList({
     );
   }, []);
 
-  // Handle click away to close emoji picker
+
   useEffect(() => {
     const handleClickAway = (event: MouseEvent) => {
       if (!openEmojiPickerMessageId) return;
 
       const target = event.target as Element;
 
-      // Check if click is inside an emoji picker or emoji button
+
       const isInsideEmojiPicker = target.closest('[data-emoji-picker]');
       const isInsideEmojiButton = target.closest('[data-emoji-button]');
 
@@ -243,10 +243,10 @@ export default function MessageList({
     };
   }, [openEmojiPickerMessageId]);
 
-  // Fetch reactions for new messages only - use ref to avoid infinite loops
+
   const loadedMessageIds = useRef<Set<string>>(new Set());
 
-  // Memoize message IDs to prevent unnecessary effect re-runs
+
   const messageIds = useMemo(() => messages.map(msg => msg.id), [messages]);
 
   useEffect(() => {
@@ -256,7 +256,7 @@ export default function MessageList({
         return;
       }
 
-      // Only fetch reactions for message IDs we haven't loaded reactions for yet
+
       const messageIdsToLoad = messageIds.filter(
         msgId => !loadedMessageIds.current.has(msgId)
       );
@@ -268,7 +268,7 @@ export default function MessageList({
 
       setReactionsLoaded(false);
 
-      // Load reactions for all new message IDs in a single batch call
+
       const result =
         await reactionService.getBatchMessageReactions(messageIdsToLoad);
 
@@ -278,7 +278,7 @@ export default function MessageList({
         return;
       }
 
-      // Mark all message IDs as loaded
+
       messageIdsToLoad.forEach(messageId => {
         loadedMessageIds.current.add(messageId);
       });
@@ -290,7 +290,7 @@ export default function MessageList({
     };
 
     loadReactionsForNewMessages();
-  }, [messageIds]); // Only depend on messageIds
+  }, [messageIds]);
 
   useEffect(() => {
     if (messageIds.length === 0) return;
@@ -327,7 +327,7 @@ export default function MessageList({
     };
   }, [messageIds, currentUserId]);
 
-  // Handle scroll position preservation when loading older messages
+
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -335,36 +335,36 @@ export default function MessageList({
     const previousMessageCount = lastMessageCountRef.current;
     const currentMessageCount = messages.length;
 
-    // If messages were added and we have a previous count
+
     if (
       currentMessageCount > previousMessageCount &&
       previousMessageCount > 0
     ) {
       if (lastLoadWasOlderMessages) {
-        // Older messages were loaded - preserve scroll position
+
         const newMessagesAdded = currentMessageCount - previousMessageCount;
 
-        // Use requestAnimationFrame to ensure DOM is updated
+
         requestAnimationFrame(() => {
           if (containerRef.current) {
-            // Calculate approximate height per message to restore scroll position
+
             const averageMessageHeight =
               containerRef.current.scrollHeight / currentMessageCount;
             const scrollOffset = newMessagesAdded * averageMessageHeight;
 
-            // Restore scroll position by scrolling down by the amount of new content added
+
             containerRef.current.scrollTop =
               scrollPositionRef.current + scrollOffset;
           }
         });
       } else {
-        // New messages at the end - check if any are from current user (own messages)
+
         const newMessages = messages.slice(previousMessageCount);
         const hasOwnMessage = newMessages.some(
           msg => msg.senderId === currentUserId
         );
 
-        // Always scroll for own messages, or if user was near bottom for others
+
         const isNearBottom =
           container.scrollHeight -
             container.scrollTop -
@@ -372,14 +372,14 @@ export default function MessageList({
           150;
 
         if (hasOwnMessage || isNearBottom || shouldAutoScroll) {
-          // Use requestAnimationFrame to ensure DOM updates are complete
+
           requestAnimationFrame(() => {
             messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
           });
         }
       }
     } else if (currentMessageCount > 0 && previousMessageCount === 0) {
-      // Initial load - scroll to bottom
+
       messagesEndRef.current?.scrollIntoView({ behavior: 'auto' });
     }
 
@@ -392,20 +392,20 @@ export default function MessageList({
     shouldAutoScroll,
   ]);
 
-  // Force auto-scroll when explicitly requested (for sent messages and initial load)
+
   useEffect(() => {
     if (shouldAutoScroll && messagesEndRef.current) {
-      // Simple scroll with final delay to ensure completion
+
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
 
-      // Final scroll after delay to handle any late-loading content
+
       setTimeout(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
       }, 100);
     }
   }, [shouldAutoScroll]);
 
-  // Store scroll position continuously for pagination restoration
+
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -418,7 +418,7 @@ export default function MessageList({
     return () => container.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Intersection Observer for auto-loading more messages when scrolled to top
+
   useEffect(() => {
     if (!hasMoreMessages || isLoadingMore || !onLoadMoreMessages) return;
 
@@ -426,7 +426,7 @@ export default function MessageList({
       entries => {
         const [entry] = entries;
         if (entry.isIntersecting && containerRef.current) {
-          // Store current scroll position before loading
+
           scrollPositionRef.current = containerRef.current.scrollTop;
           onLoadMoreMessages();
         }
@@ -449,7 +449,7 @@ export default function MessageList({
     };
   }, [hasMoreMessages, isLoadingMore, onLoadMoreMessages]);
 
-  // If no messages and still initializing, show empty container (parent will show loading)
+
   if (messages.length === 0 && isInitializing) {
     return (
       <div className='flex-1 overflow-y-auto bg-gray-50'>
@@ -458,7 +458,7 @@ export default function MessageList({
     );
   }
 
-  // If no messages and not initializing, show empty state
+
   if (messages.length === 0 && !isInitializing) {
     return (
       <div
@@ -525,7 +525,7 @@ export default function MessageList({
             )}
           </div>
         ) : (
-          /* End of messages indicator */
+
           <div className='flex justify-center py-4'>
             <div className='flex items-center space-x-2 text-gray-400'>
               <div className='h-px bg-gray-300 w-8'></div>
@@ -541,14 +541,13 @@ export default function MessageList({
           const nextMessage =
             index < messages.length - 1 ? messages[index + 1] : null;
 
-          // Check if we should show "new messages" separator before this message
-          // Only show once at the beginning of the unread messages group using snapshot
+
           const isFirstUnreadMessage =
             unreadMessagesSnapshot &&
             !isOwnMessage &&
             unreadMessagesSnapshot.has(message.id) &&
             message.senderId !== 'SYSTEM' &&
-            // Check if previous message was NOT in unread snapshot (indicating start of unread group)
+
             (prevMessage
               ? !unreadMessagesSnapshot.has(prevMessage.id) ||
                 prevMessage.senderId === currentUserId ||
@@ -558,13 +557,13 @@ export default function MessageList({
           const shouldShowNewMessagesSeparator =
             chatEnteredAt && isFirstUnreadMessage;
 
-          // Check if messages are from same sender and within time threshold
+
           const isPrevFromSameSender =
             prevMessage?.senderId === message.senderId;
           const isNextFromSameSender =
             nextMessage?.senderId === message.senderId;
 
-          // Calculate time difference with previous message (in minutes)
+
           const prevTimeDiff = prevMessage
             ? (new Date(message.timestamp || Date.now()).getTime() -
                 new Date(prevMessage.timestamp || Date.now()).getTime()) /
@@ -577,56 +576,51 @@ export default function MessageList({
               (1000 * 60)
             : 999;
 
-          // Group messages if same sender and within 2 minutes - Material Design spacing
+
           const isGroupedWithPrev = isPrevFromSameSender && prevTimeDiff <= 2;
           const isGroupedWithNext = isNextFromSameSender && nextTimeDiff <= 2;
 
-          // Determine margins based on time difference - progressive spacing
-          let marginTop = 'mt-4'; // default spacing
-          let marginBottom = 'mb-4';
+          let marginTop = 'mt-2';
+          let marginBottom = 'mb-2';
 
           if (isGroupedWithPrev) {
-            // Very close messages (within 1 minute)
+
             if (prevTimeDiff <= 1) {
-              marginTop = 'mt-1';
+              marginTop = 'mt-0.5';
             } else {
-              marginTop = 'mt-2';
+              marginTop = 'mt-1';
             }
           } else {
-            // Far apart messages get more spacing
             if (prevTimeDiff > 60) {
-              // More than 1 hour
-              marginTop = 'mt-8';
-            } else if (prevTimeDiff > 30) {
-              // More than 30 minutes
-              marginTop = 'mt-7';
-            } else if (prevTimeDiff > 10) {
-              // More than 10 minutes
               marginTop = 'mt-6';
-            } else {
+            } else if (prevTimeDiff > 30) {
               marginTop = 'mt-5';
+            } else if (prevTimeDiff > 10) {
+              marginTop = 'mt-4';
+            } else {
+              marginTop = 'mt-3';
             }
           }
 
           if (isGroupedWithNext) {
             if (nextTimeDiff <= 1) {
-              marginBottom = 'mb-1';
+              marginBottom = 'mb-0.5';
             } else {
-              marginBottom = 'mb-2';
+              marginBottom = 'mb-1';
             }
           } else {
-            marginBottom = 'mb-4';
+            marginBottom = 'mb-2';
           }
 
-          // Show avatar only for first message in group or standalone messages
+
           const showAvatar = !isOwnMessage && !isGroupedWithPrev;
 
-          // Show sender name only for first message in group (not grouped with previous)
+
           const showSenderName = !isGroupedWithPrev;
 
           return (
             <React.Fragment key={message.id}>
-              {/* New Messages Separator */}
+
               {shouldShowNewMessagesSeparator && (
                 <div className='flex items-center justify-center my-4 px-4'>
                   <div className='flex items-center w-full max-w-xs'>

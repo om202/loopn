@@ -8,6 +8,7 @@ import EmojiPicker from '../EmojiPicker';
 import MessageReactions from '../MessageReactions';
 import DeleteConfirmationDialog from '../DeleteConfirmationDialog';
 import { soundService } from '../../services/sound.service';
+import { isEmojiOnly, isEmoji, splitTextWithEmojis } from '../../lib/emoji-utils';
 
 type Message = Schema['Message']['type'];
 type UserPresence = Schema['UserPresence']['type'];
@@ -34,12 +35,12 @@ interface MessageBubbleProps {
   animationTrigger?: string;
 }
 
-// Tick indicator component
+
 const MessageTicks = ({ isOptimistic }: { isOptimistic: boolean }) => {
   return (
     <div className='flex items-center'>
       {isOptimistic ? (
-        // Single tick for optimistic (sending) messages
+
         <Image
           src='/tick.svg'
           alt='sent'
@@ -48,7 +49,7 @@ const MessageTicks = ({ isOptimistic }: { isOptimistic: boolean }) => {
           className='opacity-30 filter brightness-0 invert'
         />
       ) : (
-        // Double tick for successfully sent messages
+
         <Image
           src='/double_tick.svg'
           alt='delivered'
@@ -82,36 +83,14 @@ export default function MessageBubble({
 }: MessageBubbleProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
-  // Check if message contains only emojis
-  const isEmojiOnly = (text: string) => {
-    if (!text.trim()) {
-      return false;
-    }
-    // Remove all emojis and check if anything remains
-    const withoutEmojis = text
-      .replace(
-        /[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu,
-        ''
-      )
-      .trim();
-    return withoutEmojis === '';
-  };
 
-  // Render message content with larger emojis
   const renderMessageContent = (content: string) => {
-    // Split content into parts (emojis and text)
-    const parts = content.split(
-      /([\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}])/gu
-    );
+
+    const parts = splitTextWithEmojis(content);
 
     return parts.map(part => {
-      // Check if this part is an emoji
-      const isEmoji =
-        /[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu.test(
-          part
-        );
 
-      if (isEmoji) {
+      if (isEmoji(part)) {
         return (
           <span
             key={`emoji-${part}-${Math.random()}`}
@@ -137,7 +116,7 @@ export default function MessageBubble({
 
   const messageIsEmojiOnly = isEmojiOnly(message.content);
 
-  // Get sender display name with time
+
   const getSenderNameWithTime = () => {
     const senderName = isOwnMessage
       ? 'You'
@@ -146,12 +125,12 @@ export default function MessageBubble({
     return `${senderName} · ${time}`;
   };
 
-  // Find the message this is replying to
+
   const repliedToMessage = message.replyToMessageId
     ? allMessages.find(msg => msg.id === message.replyToMessageId)
     : null;
 
-  // Get display content for replied message (truncated)
+
   const getRepliedToContent = (content: string) => {
     const maxLength = 50;
     return content.length > maxLength
@@ -223,7 +202,7 @@ export default function MessageBubble({
         <div className='relative flex gap-2'>
           <div className='relative max-w-xs sm:max-w-sm lg:max-w-lg'>
             {message.isDeleted ? (
-              // Deleted message placeholder
+
               <div
                 className={`px-3 py-2 rounded-3xl border ${
                   isOwnMessage
@@ -234,10 +213,10 @@ export default function MessageBubble({
                 <p className='text-sm italic'>Message deleted</p>
               </div>
             ) : messageIsEmojiOnly ? (
-              // Emoji-only messages without container
+
               <div className='text-4xl leading-none'>{message.content}</div>
             ) : (
-              // Regular text messages with Material Design bubble styling
+
               <div
                 className={`px-3 py-2 rounded-3xl border ${
                   isOwnMessage
@@ -245,7 +224,7 @@ export default function MessageBubble({
                     : 'bg-white text-gray-900 border-gray-300 rounded-bl-sm'
                 }`}
               >
-                {/* Reply preview */}
+
                 {repliedToMessage && (
                   <div
                     className={`mb-2 pt-2 pb-2 border-l-2 pl-3 pr-3 ${
@@ -277,7 +256,7 @@ export default function MessageBubble({
                 )}
 
                 <div className='relative'>
-                  <p className='text-sm leading-relaxed break-words pr-10'>
+                  <p className='text-sm font-medium leading-relaxed break-words pr-10'>
                     {renderMessageContent(message.content)}
                   </p>
                   {isOwnMessage && (
@@ -291,10 +270,10 @@ export default function MessageBubble({
               </div>
             )}
 
-            {/* Message reactions - hide for deleted messages */}
+
             {!message.isDeleted && (
               <div
-                className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'}`}
+                className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'} -mt-1`}
               >
                 <MessageReactions
                   reactions={reactions}
@@ -307,7 +286,7 @@ export default function MessageBubble({
             )}
           </div>
 
-          {/* Action icons positioned relative to message bubble only */}
+
           {onReplyToMessage && !message.isDeleted && (
             <div
               className={`absolute top-1/2 -translate-y-6 ${
@@ -316,7 +295,7 @@ export default function MessageBubble({
                 isOwnMessage ? 'flex-row-reverse' : 'flex-row'
               }`}
             >
-              {/* Reply button */}
+
               <button
                 onClick={handleReplyClick}
                 className='w-8 h-8 bg-gray-200 hover:bg-gray-300 rounded-full transition-colors duration-150 flex items-center justify-center'
@@ -337,7 +316,7 @@ export default function MessageBubble({
                 </svg>
               </button>
 
-              {/* Delete button - only for own messages that aren't deleted */}
+
               {isOwnMessage && onDeleteMessage && !message.isDeleted && (
                 <button
                   onClick={handleDeleteClick}
@@ -360,7 +339,7 @@ export default function MessageBubble({
                 </button>
               )}
 
-              {/* Emoji reaction button */}
+
               <div className='relative'>
                 <button
                   onClick={onEmojiPickerToggle}
@@ -399,7 +378,7 @@ export default function MessageBubble({
         </div>
       </div>
 
-      {/* Delete confirmation dialog */}
+
       <DeleteConfirmationDialog
         isOpen={showDeleteDialog}
         onConfirm={handleConfirmDelete}

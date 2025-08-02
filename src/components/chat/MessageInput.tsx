@@ -31,14 +31,14 @@ export default function MessageInput({
   const inputRef = useRef<HTMLInputElement>(null);
   const emojiPickerRef = useRef<HTMLDivElement>(null);
 
-  // Auto-focus input when component is ready
+
   useEffect(() => {
     if (autoFocus && inputRef.current) {
       inputRef.current.focus();
     }
   }, [autoFocus]);
 
-  // Close emoji picker when clicking outside
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -59,21 +59,17 @@ export default function MessageInput({
 
   const handleEmojiClick = (emojiData: { emoji: string }) => {
     setNewMessage(newMessage + emojiData.emoji);
-    setShowEmojiPicker(false);
-    // Re-focus input after emoji selection
-    setTimeout(() => {
-      inputRef.current?.focus();
-    }, 100);
+
   };
 
   const handleSend = () => {
     if (disabled) {
       return;
     }
-    // Always call onSendMessage - let the parent handle empty message logic
+
     onSendMessage();
 
-    // Auto-focus input after sending message for continuous typing
+
     setTimeout(() => {
       inputRef.current?.focus();
     }, 0);
@@ -88,7 +84,7 @@ export default function MessageInput({
 
   return (
     <>
-      {/* Reply Preview */}
+
       {replyToMessage && (
         <div className='bg-gray-50 border-t border-gray-200 px-4 py-3 flex items-start justify-between'>
           <div className='flex-1 min-w-0'>
@@ -124,7 +120,7 @@ export default function MessageInput({
         </div>
       )}
 
-      {/* Message Input - Material Design styling */}
+
       <div className='flex-shrink-0 bg-white border-t border-gray-200 p-4 shadow-lg relative'>
         <div className='max-w-5xl mx-auto'>
           <form
@@ -139,7 +135,7 @@ export default function MessageInput({
             data-bwignore
             style={{ position: 'relative' }}
           >
-            {/* Hidden input to trick password managers */}
+
             <input
               autoComplete='false'
               name='hidden'
@@ -148,7 +144,7 @@ export default function MessageInput({
               tabIndex={-1}
               aria-hidden='true'
             />
-            {/* Emoji Picker positioned above input */}
+
             {showEmojiPicker && (
               <div className='absolute bottom-full right-0 mb-2 z-50'>
                 <div
@@ -206,9 +202,10 @@ export default function MessageInput({
                     WebkitAppearance: 'none',
                     MozAppearance: 'textfield',
                   }}
-                  className='w-full px-5 py-3 pr-14 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base bg-gray-50 hover:bg-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed placeholder-gray-500'
+                  className='w-full px-5 py-3 pr-14 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base font-medium bg-gray-50 hover:bg-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed placeholder-gray-500'
                 />
                 <button
+                  type="button"
                   onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                   disabled={disabled}
                   className={`absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-all duration-200 p-2 rounded-full hover:bg-gray-100 focus:outline-none disabled:opacity-50 ${
