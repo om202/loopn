@@ -309,10 +309,10 @@ export default function ChatHeader({
                           <span className='hidden sm:inline'>
                             {sendingConnectionRequest
                               ? 'Connecting...'
-                              : 'Send Trial Connect'}
+                              : 'Connect'}
                           </span>
                           <span className='sm:hidden'>
-                            {sendingConnectionRequest ? '...' : 'Trial Connect'}
+                            {sendingConnectionRequest ? '...' : 'Connect'}
                           </span>
                         </span>
                       </button>

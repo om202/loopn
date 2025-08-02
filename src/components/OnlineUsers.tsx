@@ -77,13 +77,21 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
       const conversationMap = new Map<string, Conversation>();
       const userIds = new Set<string>();
 
-      // Extract participant IDs and conversation mappings
-      conversations.forEach(conv => {
+      // Sort conversations by creation date (newest first) to ensure we get the latest conversation per user
+      const sortedConversations = conversations.sort((a, b) => {
+        const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+        const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+        return dateB - dateA; // Newest first
+      });
+
+      // Extract participant IDs and conversation mappings (newest conversation per user)
+      sortedConversations.forEach(conv => {
         const otherUserId =
           conv.participant1Id === user.userId
             ? conv.participant2Id
             : conv.participant1Id;
-        if (otherUserId) {
+        if (otherUserId && !conversationMap.has(otherUserId)) {
+          // Only set if we haven't seen this user yet (since we're going newest first)
           conversationMap.set(otherUserId, conv);
           userIds.add(otherUserId);
         }
@@ -260,13 +268,21 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
       conversations => {
         const conversationMap = new Map<string, Conversation>();
 
-        // Update conversation mappings with latest data
-        conversations.forEach(conv => {
+        // Sort conversations by creation date (newest first) and update mappings with latest data
+        const sortedConversations = conversations.sort((a, b) => {
+          const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+          const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+          return dateB - dateA; // Newest first
+        });
+
+        // Update conversation mappings (newest conversation per user)
+        sortedConversations.forEach(conv => {
           const otherUserId =
             conv.participant1Id === user.userId
               ? conv.participant2Id
               : conv.participant1Id;
-          if (otherUserId) {
+          if (otherUserId && !conversationMap.has(otherUserId)) {
+            // Only set if we haven't seen this user yet (since we're going newest first)
             conversationMap.set(otherUserId, conv);
           }
         });
