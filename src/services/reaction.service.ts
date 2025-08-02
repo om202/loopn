@@ -16,19 +16,22 @@ export class ReactionService {
     messageId: string,
     userId: string,
     emoji: string,
-    participants: string[]
+    participants: string[],
+    allowMultiple: boolean = false
   ): Promise<DataResult<MessageReaction>> {
     try {
-      // Check if user already reacted with this emoji
-      const existingReactions = await this.getMessageReactions(messageId);
-      if (existingReactions.data) {
-        const existingReaction = existingReactions.data.find(
-          reaction => reaction.userId === userId && reaction.emoji === emoji
-        );
+      // Only check for existing reactions if not allowing multiple
+      if (!allowMultiple) {
+        const existingReactions = await this.getMessageReactions(messageId);
+        if (existingReactions.data) {
+          const existingReaction = existingReactions.data.find(
+            reaction => reaction.userId === userId && reaction.emoji === emoji
+          );
 
-        if (existingReaction) {
-          // Remove existing reaction instead of adding duplicate
-          return await this.removeReaction(existingReaction.id);
+          if (existingReaction) {
+            // Remove existing reaction instead of adding duplicate
+            return await this.removeReaction(existingReaction.id);
+          }
         }
       }
 

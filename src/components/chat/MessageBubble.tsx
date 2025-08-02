@@ -28,6 +28,7 @@ interface MessageBubbleProps {
   reactions?: MessageReaction[]; // Reactions for this message
   currentUserId: string; // Current user ID for reaction handling
   onAddReaction?: (messageId: string, emoji: string) => void;
+  onToggleReaction?: (messageId: string, emoji: string) => void;
   showEmojiPicker: boolean; // Controlled by parent
   onEmojiPickerToggle: () => void; // Handled by parent
 }
@@ -73,6 +74,7 @@ export default function MessageBubble({
   reactions = [],
   currentUserId,
   onAddReaction,
+  onToggleReaction,
   showEmojiPicker,
   onEmojiPickerToggle,
 }: MessageBubbleProps) {
@@ -183,8 +185,8 @@ export default function MessageBubble({
   };
 
   const handleToggleReaction = (emoji: string) => {
-    if (onAddReaction) {
-      onAddReaction(message.id, emoji);
+    if (onToggleReaction) {
+      onToggleReaction(message.id, emoji);
     }
   };
 
@@ -301,7 +303,7 @@ export default function MessageBubble({
                     <EmojiPicker
                       isOpen={showEmojiPicker}
                       onEmojiSelect={handleEmojiSelect}
-                      onClose={onEmojiPickerToggle}
+                      onClose={() => {}} 
                     />
                   )}
                 </div>
