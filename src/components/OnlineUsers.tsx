@@ -8,6 +8,10 @@ import {
   CheckCircle2,
   Globe,
   WifiOff,
+  Users,
+  Timer,
+  Calendar,
+  Trash2,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
@@ -28,6 +32,8 @@ interface OnlineUsersProps {
   onChatRequestSent: () => void;
 }
 
+type SidebarSection = 'online' | 'connections' | 'chat-trial';
+
 export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   const [onlineUsers, setOnlineUsers] = useState<UserPresence[]>([]);
   const [allUsers, setAllUsers] = useState<UserPresence[]>([]);
@@ -41,6 +47,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   const [error, setError] = useState<string | null>(null);
   const [pendingRequestsLoaded, setPendingRequestsLoaded] = useState(false);
   const [conversationsLoaded, setConversationsLoaded] = useState(false);
+  const [activeSection, setActiveSection] = useState<SidebarSection>('online');
   // Calculate reconnectable users directly in render to avoid infinite requests
   const { user } = useAuthenticator();
   const router = useRouter();
@@ -446,6 +453,31 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
     return `User${userPresence.userId.slice(-4)}`;
   };
 
+  // Helper functions to categorize users
+  const getOnlineUsers = () => {
+    return onlineUsers;
+  };
+
+  const getConnectionUsers = () => {
+    // For now, connections is empty since we only have chat trials
+    // When permanent connections are implemented, this will filter for permanent connections
+    return [];
+  };
+
+  const getActiveChatTrialUsers = () => {
+    return allUsers.filter(user => {
+      const conversation = existingConversations.get(user.userId);
+      return conversation && conversation.chatStatus === 'ACTIVE';
+    });
+  };
+
+  const getEndedChatTrialUsers = () => {
+    return allUsers.filter(user => {
+      const conversation = existingConversations.get(user.userId);
+      return conversation && conversation.chatStatus === 'ENDED';
+    });
+  };
+
   if (error) {
     return (
       <div className='p-4 sm:p-6 text-red-600 bg-red-50 rounded-2xl border border-red-200 text-center'>
@@ -459,152 +491,244 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
     return <LoadingContainer />;
   }
 
-  if (allUsers.length === 0) {
-    return (
-      <div className='bg-white rounded-2xl border border-gray-200 p-8 sm:p-12'>
-        <div className='text-center text-gray-500'>
-          <p className='text-sm sm:text-base'>No users or conversations</p>
-        </div>
-      </div>
+  // Helper function to render user cards
+  const renderUserCard = (userPresence: UserPresence) => {
+    const isOnline = onlineUsers.some(
+      ou => ou.userId === userPresence.userId
     );
-  }
 
-  const getTitle = () => {
-    return `Chats - ${allUsers.length}`;
-  };
+    return (
+      <div
+        key={userPresence.userId}
+        className='bg-white rounded-2xl border border-gray-200 px-6 py-4 group hover:shadow-sm transition-shadow'
+      >
+        <div className='flex items-center gap-4'>
+          <div className='flex-shrink-0'>
+            <UserAvatar
+              email={userPresence.email}
+              userId={userPresence.userId}
+              size='md'
+              showStatus
+              status={
+                isOnline
+                  ? userPresence.status
+                  : userPresence.lastSeen &&
+                      formatPresenceTime(userPresence.lastSeen) ===
+                        'Recently active'
+                    ? 'RECENTLY_ACTIVE'
+                    : 'OFFLINE'
+              }
+            />
+          </div>
 
-  return (
-    <div>
-      {/* Dashboard Header */}
-      <div className='mb-8'>
-        <div className='flex items-center justify-between'>
-          <h1 className='text-2xl font-bold text-gray-900'>Connections</h1>
-
-          <div className='flex items-center gap-3'>
-            <div className='flex items-center gap-2 px-3 py-1.5 bg-white rounded-full border border-gray-200'>
-              <MessageCircle className='w-4 h-4 text-gray-600' />
-              <span className='font-semibold text-gray-900'>
-                {allUsers.length}
-              </span>
-              <span className='text-sm text-gray-600'>Conversations</span>
+          <div className='flex-1 min-w-0'>
+            <div className='font-medium text-gray-900 text-sm mb-1 line-clamp-2 no-email-detection break-words'>
+              {getDisplayName(userPresence)}
             </div>
-
-            <div className='flex items-center gap-2 px-3 py-1.5 bg-white rounded-full border border-gray-200'>
-              <Globe className='w-4 h-4 text-gray-600' />
-              <span className='font-semibold text-gray-900'>
-                {onlineUsers.length}
-              </span>
-              <span className='text-sm text-gray-600'>Online</span>
+            <div
+              className={`text-xs ${
+                existingConversations.has(userPresence.userId) &&
+                existingConversations.get(userPresence.userId)
+                  ?.chatStatus === 'ENDED'
+                  ? canUserReconnect(userPresence.userId)
+                    ? 'text-blue-600'
+                    : 'text-orange-600'
+                  : isOnline
+                    ? 'text-green-600'
+                    : userPresence.lastSeen &&
+                        formatPresenceTime(userPresence.lastSeen) ===
+                          'Recently active'
+                      ? 'text-sky-500'
+                      : 'text-gray-600'
+              }`}
+            >
+              {existingConversations.has(userPresence.userId) &&
+              existingConversations.get(userPresence.userId)
+                ?.chatStatus === 'ENDED'
+                ? canUserReconnect(userPresence.userId)
+                  ? 'Can Reconnect Now'
+                  : 'Chat Trial Ended'
+                : isOnline
+                  ? 'Online now'
+                  : userPresence.lastSeen
+                    ? formatPresenceTime(userPresence.lastSeen)
+                    : 'Offline'}
             </div>
+          </div>
 
-
+          <div className='flex-shrink-0'>
+            <button 
+              onClick={() => {
+                if (pendingRequests.has(userPresence.userId)) {
+                  handleCancelChatRequest(userPresence.userId);
+                } else {
+                  handleChatAction(userPresence.userId);
+                }
+              }}
+              className='px-3 py-1.5 text-xs font-medium rounded-full border transition-colors bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100 flex items-center gap-1'
+            >
+              {pendingRequests.has(userPresence.userId) ? (
+                <>
+                  <Trash2 className='w-4 h-4 mr-1 text-red-600' />
+                  <span className='text-red-600'>Cancel Chat Request</span>
+                </>
+              ) : existingConversations.has(userPresence.userId) ? (
+                <>
+                  <MessageCircle className='w-4 h-4 text-gray-600 mr-1' />
+                  {existingConversations.get(userPresence.userId)
+                    ?.chatStatus === 'ENDED'
+                    ? canUserReconnect(userPresence.userId)
+                      ? 'Send New Request'
+                      : 'View'
+                    : 'Chat'}
+                </>
+              ) : (
+                <>
+                  <CheckCircle2 className='w-3 h-3 text-gray-600' />
+                  Start
+                </>
+              )}
+            </button>
           </div>
         </div>
       </div>
+    );
+  };
 
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-        {allUsers.map(userPresence => {
-          const isOnline = onlineUsers.some(
-            ou => ou.userId === userPresence.userId
-          );
+  const getSectionContent = () => {
+    switch (activeSection) {
+      case 'online':
+        const onlineUsers = getOnlineUsers();
+        return (
+          <div>
+            <div className='mb-4'>
+              <h2 className='text-lg font-semibold text-gray-900 mb-2'>Online Now</h2>
+              <p className='text-sm text-gray-600'>All users currently online</p>
+            </div>
+            <div className='space-y-3'>
+              {onlineUsers.map(renderUserCard)}
+            </div>
+          </div>
+        );
 
-          return (
-            <div
-              key={userPresence.userId}
-              className='bg-white rounded-2xl border border-gray-200 px-8 py-6 group hover:shadow-sm transition-shadow'
-            >
-              <div className='flex items-center gap-4'>
-                <div className='flex-shrink-0'>
-                  <UserAvatar
-                    email={userPresence.email}
-                    userId={userPresence.userId}
-                    size='lg'
-                    showStatus
-                    status={
-                      isOnline
-                        ? userPresence.status
-                        : userPresence.lastSeen &&
-                            formatPresenceTime(userPresence.lastSeen) ===
-                              'Recently active'
-                          ? 'RECENTLY_ACTIVE'
-                          : 'OFFLINE'
-                    }
-                  />
-                </div>
+      case 'connections':
+        const connectionUsers = getConnectionUsers();
+        return (
+          <div>
+            <div className='mb-4'>
+              <h2 className='text-lg font-semibold text-gray-900 mb-2'>Connections</h2>
+              <p className='text-sm text-gray-600'>Your permanent connections</p>
+            </div>
+            <div className='space-y-3'>
+              {connectionUsers.map(renderUserCard)}
+            </div>
+          </div>
+        );
 
-                <div className='flex-1 min-w-0'>
-                  <div className='font-medium text-gray-900 text-sm sm:text-base mb-1 line-clamp-2 no-email-detection break-words'>
-                    {getDisplayName(userPresence)}
-                  </div>
-                  <div
-                    className={`text-xs sm:text-sm ${
-                      existingConversations.has(userPresence.userId) &&
-                      existingConversations.get(userPresence.userId)
-                        ?.chatStatus === 'ENDED'
-                        ? canUserReconnect(userPresence.userId)
-                          ? 'text-blue-600'
-                          : 'text-orange-600'
-                        : isOnline
-                          ? 'text-green-600'
-                          : userPresence.lastSeen &&
-                              formatPresenceTime(userPresence.lastSeen) ===
-                                'Recently active'
-                            ? 'text-sky-500'
-                            : 'text-gray-600'
-                    }`}
-                  >
-                    {existingConversations.has(userPresence.userId) &&
-                    existingConversations.get(userPresence.userId)
-                      ?.chatStatus === 'ENDED'
-                      ? canUserReconnect(userPresence.userId)
-                        ? 'Can reconnect'
-                        : 'Trial ended'
-                      : isOnline
-                        ? 'Online now'
-                        : userPresence.lastSeen
-                          ? formatPresenceTime(userPresence.lastSeen)
-                          : 'Offline'}
-                  </div>
-                </div>
+      case 'chat-trial':
+        const activeChatTrials = getActiveChatTrialUsers();
+        const endedChatTrials = getEndedChatTrialUsers();
+        return (
+          <div>
+            <div className='mb-6'>
+              <h2 className='text-lg font-semibold text-gray-900 mb-2'>Chat Trials</h2>
+              <p className='text-sm text-gray-600'>Manage your active and ended chat trials</p>
+            </div>
 
-                <div className='flex-shrink-0'>
-                  <button 
-                    onClick={() => {
-                      if (pendingRequests.has(userPresence.userId)) {
-                        handleCancelChatRequest(userPresence.userId);
-                      } else {
-                        handleChatAction(userPresence.userId);
-                      }
-                    }}
-                    className='px-4 sm:px-5 py-1.5 text-sm font-medium rounded-full border transition-colors bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100 flex items-center gap-1 sm:gap-1.5'
-                  >
-                    {pendingRequests.has(userPresence.userId) ? (
-                      <>
-                        <WifiOff className='w-3 h-3 sm:w-4 sm:h-4 text-red-600' />
-                        <span className='text-red-600'>Delete request</span>
-                      </>
-                    ) : existingConversations.has(userPresence.userId) ? (
-                      <>
-                        <MessageCircle className='w-3 h-3 sm:w-4 sm:h-4 text-gray-600' />
-                        {existingConversations.get(userPresence.userId)
-                          ?.chatStatus === 'ENDED'
-                          ? canUserReconnect(userPresence.userId)
-                            ? 'Reconnect'
-                            : 'See Conversation'
-                          : 'Chat'}
-                      </>
-                    ) : (
-                      <>
-                        <CheckCircle2 className='w-3 h-3 sm:w-4 sm:h-4 text-gray-600' />
-                        Start Chat
-                      </>
-                    )}
-                  </button>
-                </div>
+            {/* Active Chat Trials */}
+            <div className='mb-8'>
+              <div className='flex items-center gap-2 mb-4'>
+                <Timer className='w-5 h-5 text-gray-600' />
+                <h3 className='text-md font-medium text-gray-900'>Active Chat Trials</h3>
+                <span className='text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-full'>
+                  {activeChatTrials.length}
+                </span>
+              </div>
+              <div className='space-y-3 mb-6'>
+                {activeChatTrials.map(renderUserCard)}
               </div>
             </div>
-          );
-        })}
+
+            {/* Ended Chat Trials */}
+            <div>
+              <div className='flex items-center gap-2 mb-4'>
+                <Calendar className='w-5 h-5 text-gray-600' />
+                <h3 className='text-md font-medium text-gray-900'>Ended Chat Trials</h3>
+                <span className='text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-full'>
+                  {endedChatTrials.length}
+                </span>
+              </div>
+              <div className='space-y-3'>
+                {endedChatTrials.map(renderUserCard)}
+              </div>
+            </div>
+          </div>
+        );
+
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className='flex gap-6'>
+      {/* Sidebar */}
+      <div className='w-64 flex-shrink-0'>
+        <div className='bg-white rounded-2xl border border-gray-200 p-4'>
+          <h2 className='text-lg font-semibold text-gray-900 mb-4'>Dashboard</h2>
+          
+          <nav className='space-y-2'>
+            <button
+              onClick={() => setActiveSection('online')}
+              className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left transition-colors ${
+                activeSection === 'online'
+                  ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                  : 'text-gray-700 hover:bg-gray-50'
+              }`}
+            >
+              <Globe className='w-4 h-4' />
+              <span className='font-medium'>Online Now</span>
+              <span className='ml-auto text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full'>
+                {getOnlineUsers().length}
+              </span>
+            </button>
+
+            <button
+              onClick={() => setActiveSection('connections')}
+              className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left transition-colors ${
+                activeSection === 'connections'
+                  ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                  : 'text-gray-700 hover:bg-gray-50'
+              }`}
+            >
+              <MessageCircle className='w-4 h-4' />
+              <span className='font-medium'>Connections</span>
+              <span className='ml-auto text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full'>
+                {getConnectionUsers().length}
+              </span>
+            </button>
+
+            <button
+              onClick={() => setActiveSection('chat-trial')}
+              className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left transition-colors ${
+                activeSection === 'chat-trial'
+                  ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                  : 'text-gray-700 hover:bg-gray-50'
+              }`}
+            >
+              <Timer className='w-4 h-4' />
+              <span className='font-medium'>Chat Trials</span>
+              <span className='ml-auto text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full'>
+                {getActiveChatTrialUsers().length + getEndedChatTrialUsers().length}
+              </span>
+            </button>
+          </nav>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className='flex-1'>
+        {getSectionContent()}
       </div>
     </div>
   );
