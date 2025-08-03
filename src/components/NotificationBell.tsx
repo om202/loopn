@@ -64,6 +64,7 @@ export default function NotificationBell() {
   const [dialogConversationId, setDialogConversationId] = useState<
     string | null
   >(null);
+  const [dialogRequestCancelled, setDialogRequestCancelled] = useState(false);
   const isInitialLoad = useRef(true);
   const previousRequestIdsRef = useRef<string[]>([]);
   const shownDialogRequestIds = useRef<Set<string>>(new Set());
@@ -187,6 +188,11 @@ export default function NotificationBell() {
         shownDialogRequestIds.current.forEach(requestId => {
           if (!currentRequestIds.has(requestId)) {
             shownDialogRequestIds.current.delete(requestId);
+            // If this is the currently shown dialog request, mark it as cancelled
+            // BUT only if it's not in a connected state (which means it was accepted)
+            if (dialogRequest && dialogRequest.id === requestId && showDialog && !showDialogConnected) {
+              setDialogRequestCancelled(true);
+            }
           }
         });
 
@@ -364,7 +370,7 @@ export default function NotificationBell() {
 
   const handleNotificationClick = async (notification: Notification) => {
     if (
-      notification.type === 'message' &&
+      (notification.type === 'message' || notification.type === 'connection') &&
       notification.data &&
       'conversationId' in notification.data
     ) {
@@ -373,10 +379,15 @@ export default function NotificationBell() {
 
       // Delete notification from database
       if (user) {
-        await notificationService.deleteNotificationsForConversation(
-          user.userId,
-          notification.data.conversationId
-        );
+        if (notification.type === 'message') {
+          await notificationService.deleteNotificationsForConversation(
+            user.userId,
+            notification.data.conversationId
+          );
+        } else {
+          // For connection notifications, mark as read
+          await notificationService.markNotificationAsRead(notification.id);
+        }
       }
 
       // Remove the notification since user is now viewing the conversation
@@ -612,6 +623,7 @@ export default function NotificationBell() {
     setDialogRequest(null);
     setShowDialogConnected(false);
     setDialogConversationId(null);
+    setDialogRequestCancelled(false);
   };
 
   return (
@@ -624,6 +636,7 @@ export default function NotificationBell() {
         onReject={handleDialogReject}
         showConnectedState={showDialogConnected}
         conversationId={dialogConversationId}
+        requestCancelled={dialogRequestCancelled}
       />
       <div className='relative' ref={dropdownRef}>
         {/* Combined Notification Badge + Bell Button */}
@@ -759,7 +772,7 @@ export default function NotificationBell() {
               ) : (
                 <div className='divide-y divide-gray-100'>
                   {getFilteredNotifications().map(notification => {
-                    const isClickable = notification.type === 'message';
+                    const isClickable = notification.type === 'message' || notification.type === 'connection';
                     const Component = isClickable ? 'button' : 'div';
 
                     return (
@@ -897,6 +910,45 @@ export default function NotificationBell() {
                                     } catch (error) {
                                       console.error(
                                         'Error marking message notification as read:',
+                                        error
+                                      );
+                                      setError(
+                                        'Failed to mark notification as read'
+                                      );
+                                    }
+                                  }}
+                                  className='px-3 py-1.5 text-sm font-semibold text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors'
+                                >
+                                  Mark as Read
+                                </button>
+                              </div>
+                            ) : notification.type === 'connection' ? (
+                              <div className='flex items-center gap-2 mt-3'>
+                                <button
+                                  onClick={e => {
+                                    e.stopPropagation();
+                                    handleNotificationClick(notification);
+                                  }}
+                                  className='px-3 py-1.5 bg-green-500 text-white text-sm font-semibold rounded-lg hover:bg-green-600 transition-colors'
+                                >
+                                  Start Chat
+                                </button>
+                                <button
+                                  onClick={async e => {
+                                    e.stopPropagation();
+                                    if (!user) return;
+                                    try {
+                                      await notificationService.markNotificationAsRead(
+                                        notification.id
+                                      );
+                                      setNotifications(prevNotifications =>
+                                        prevNotifications.filter(
+                                          notif => notif.id !== notification.id
+                                        )
+                                      );
+                                    } catch (error) {
+                                      console.error(
+                                        'Error marking connection notification as read:',
                                         error
                                       );
                                       setError(

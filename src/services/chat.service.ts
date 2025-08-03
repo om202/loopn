@@ -140,7 +140,7 @@ export class ChatService {
         ),
       ]);
 
-      // If accepted, create a conversation
+      // If accepted, create a conversation and notify the requester
       let conversation: Conversation | undefined;
       if (status === 'ACCEPTED') {
         const conversationResult = await this.createConversation(
@@ -156,6 +156,30 @@ export class ChatService {
         }
 
         conversation = conversationResult.data || undefined;
+
+        // Create a notification for the requester (sender) that their request was accepted
+        if (conversation) {
+          // Get receiver's information for a personalized notification
+          const receiverResult = await userService.getUserPresence(
+            chatRequestResult.data.receiverId
+          );
+          const receiverName = receiverResult.data?.email
+            ? receiverResult.data.email.split('@')[0]
+            : `User ${chatRequestResult.data.receiverId.slice(-4)}`;
+
+          await notificationService.createNotification(
+            chatRequestResult.data.requesterId, // Send to the original requester
+            'connection',
+            'Chat Request Accepted!',
+            `${receiverName} accepted your chat request. You can now chat!`,
+            {
+              conversationId: conversation.id,
+              acceptedByUserId: chatRequestResult.data.receiverId,
+              acceptedByEmail: receiverResult.data?.email,
+            },
+            { conversationId: conversation.id }
+          );
+        }
       }
 
       return {
@@ -172,6 +196,69 @@ export class ChatService {
           error instanceof Error
             ? error.message
             : 'Failed to respond to chat request',
+      };
+    }
+  }
+
+  async cancelChatRequest(
+    requesterId: string,
+    receiverId: string
+  ): Promise<DataResult<boolean>> {
+    try {
+      // Find the pending chat request between these users
+      const result = await client.models.ChatRequest.list({
+        filter: {
+          requesterId: { eq: requesterId },
+          receiverId: { eq: receiverId },
+          status: { eq: 'PENDING' },
+        },
+      });
+
+      if (!result.data || result.data.length === 0) {
+        return {
+          data: false,
+          error: 'No pending chat request found',
+        };
+      }
+
+      // Update the first matching request to REJECTED status
+      const chatRequest = result.data[0];
+      const updateResult = await client.models.ChatRequest.update({
+        id: chatRequest.id,
+        status: 'REJECTED', // Use REJECTED to mark as cancelled
+        respondedAt: new Date().toISOString(),
+      });
+
+      if (!updateResult.data) {
+        return {
+          data: false,
+          error: 'Failed to cancel chat request',
+        };
+      }
+
+      // Clean up notifications for both users
+      await Promise.all([
+        notificationService.deleteNotificationsForChatRequest(
+          receiverId,
+          chatRequest.id
+        ),
+        notificationService.deleteNotificationsForChatRequest(
+          requesterId,
+          chatRequest.id
+        ),
+      ]);
+
+      return {
+        data: true,
+        error: null,
+      };
+    } catch (error) {
+      return {
+        data: false,
+        error:
+          error instanceof Error
+            ? error.message
+            : 'Failed to cancel chat request',
       };
     }
   }

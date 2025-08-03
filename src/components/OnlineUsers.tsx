@@ -409,21 +409,35 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
     })();
   };
 
-  const handleClearStuckRequests = async () => {
-    if (!user) return;
+  const handleCancelChatRequest = async (receiverId: string) => {
+    if (!user) {
+      return;
+    }
+
+    // Optimistic update - immediately remove pending state
+    setPendingRequests(prev => {
+      const newSet = new Set(prev);
+      newSet.delete(receiverId);
+      return newSet;
+    });
 
     try {
-      const result = await chatService.clearStuckPendingRequests(user.userId);
+      const result = await chatService.cancelChatRequest(user.userId, receiverId);
+
       if (result.error) {
+        // Revert optimistic update on error
+        setPendingRequests(prev => new Set([...prev, receiverId]));
         setError(result.error);
-      } else {
-        console.log(`Cleared ${result.data} stuck pending requests`);
-        // The real-time subscription will update the UI automatically
       }
-    } catch (error) {
-      setError('Failed to clear stuck requests');
+      // On success, keep the optimistic update
+    } catch {
+      // Revert optimistic update on any error
+      setPendingRequests(prev => new Set([...prev, receiverId]));
+      setError('Failed to cancel chat request');
     }
   };
+
+
 
   const getDisplayName = (userPresence: UserPresence) => {
     if (userPresence.email) {
@@ -483,16 +497,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
               <span className='text-sm text-gray-600'>Online</span>
             </div>
 
-            {/* Debug button to clear stuck requests */}
-            {pendingRequests.size > 0 && (
-              <button
-                onClick={handleClearStuckRequests}
-                className='px-3 py-1.5 bg-orange-100 text-orange-700 hover:bg-orange-200 rounded-full border border-orange-200 text-xs font-medium transition-colors'
-                title='Clear stuck pending requests (older than 5 minutes)'
-              >
-                Clear Stuck ({pendingRequests.size})
-              </button>
-            )}
+
           </div>
         </div>
       </div>
@@ -506,8 +511,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
           return (
             <div
               key={userPresence.userId}
-              onClick={() => handleChatAction(userPresence.userId)}
-              className='bg-white rounded-2xl border border-gray-200 px-8 py-6 cursor-pointer group hover:shadow-sm transition-shadow'
+              className='bg-white rounded-2xl border border-gray-200 px-8 py-6 group hover:shadow-sm transition-shadow'
             >
               <div className='flex items-center gap-4'>
                 <div className='flex-shrink-0'>
@@ -564,11 +568,20 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
                 </div>
 
                 <div className='flex-shrink-0'>
-                  <button className='px-4 sm:px-5 py-1.5 text-sm font-medium rounded-full border transition-colors bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100 flex items-center gap-1 sm:gap-1.5'>
+                  <button 
+                    onClick={() => {
+                      if (pendingRequests.has(userPresence.userId)) {
+                        handleCancelChatRequest(userPresence.userId);
+                      } else {
+                        handleChatAction(userPresence.userId);
+                      }
+                    }}
+                    className='px-4 sm:px-5 py-1.5 text-sm font-medium rounded-full border transition-colors bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100 flex items-center gap-1 sm:gap-1.5'
+                  >
                     {pendingRequests.has(userPresence.userId) ? (
                       <>
-                        <Clock className='w-3 h-3 sm:w-4 sm:h-4 text-gray-600' />
-                        Pending
+                        <WifiOff className='w-3 h-3 sm:w-4 sm:h-4 text-red-600' />
+                        <span className='text-red-600'>Delete request</span>
                       </>
                     ) : existingConversations.has(userPresence.userId) ? (
                       <>

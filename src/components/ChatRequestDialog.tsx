@@ -24,6 +24,7 @@ interface ChatRequestDialogProps {
   onReject: () => void;
   showConnectedState?: boolean;
   conversationId?: string | null;
+  requestCancelled?: boolean;
 }
 
 interface ConnectedDialogProps {
@@ -39,6 +40,7 @@ interface NewRequestDialogProps {
   onClose: () => void;
   onAccept: () => void;
   onReject: () => void;
+  requestCancelled?: boolean;
 }
 
 // Connected state dialog component
@@ -153,6 +155,7 @@ function NewRequestDialog({
   onClose,
   onAccept,
   onReject,
+  requestCancelled = false,
 }: NewRequestDialogProps) {
   const [justAccepted, setJustAccepted] = useState(false);
   const [dontShowAgain, setDontShowAgain] = useState(false);
@@ -207,7 +210,46 @@ function NewRequestDialog({
   return (
     <DialogContainer isOpen={isOpen} onClose={onClose} maxWidth='md'>
       <div className='p-6'>
-        {justAccepted ? (
+        {requestCancelled ? (
+          /* Request Cancelled Message */
+          <>
+            <div className='text-center py-6'>
+              <div className='mb-6'>
+                <div className='flex justify-center mb-3'>
+                  <div className='w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center'>
+                    <svg
+                      className='w-6 h-6 text-orange-600'
+                      fill='none'
+                      stroke='currentColor'
+                      viewBox='0 0 24 24'
+                    >
+                      <path
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        strokeWidth={2}
+                        d='M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L5.732 15.5c-.77.833.192 2.5 1.732 2.5z'
+                      />
+                    </svg>
+                  </div>
+                </div>
+                <h3 className='text-xl font-medium text-orange-600 mb-2'>
+                  Request Removed
+                </h3>
+                <p className='text-base text-gray-700'>
+                  The chat request was removed by the other user
+                </p>
+              </div>
+            </div>
+
+            {/* OK Button */}
+            <button
+              onClick={onClose}
+              className='w-full px-4 py-2 bg-white text-gray-700 text-sm font-medium rounded-2xl border border-gray-300 hover:bg-gray-50 transition-colors'
+            >
+              OK
+            </button>
+          </>
+        ) : justAccepted ? (
           /* Connected Message */
           <>
             <div className='text-center py-6'>
@@ -327,6 +369,7 @@ export default function ChatRequestDialog({
   onReject,
   showConnectedState = false,
   conversationId,
+  requestCancelled = false,
 }: ChatRequestDialogProps) {
   // Route to the appropriate dialog based on state
   if (showConnectedState) {
@@ -347,6 +390,7 @@ export default function ChatRequestDialog({
       onClose={onClose}
       onAccept={onAccept}
       onReject={onReject}
+      requestCancelled={requestCancelled}
     />
   );
 }
