@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 
 import './globals.css';
 import AmplifyProvider from './amplify-provider';
+import { RealtimeProvider } from '@/contexts/RealtimeContext';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -65,7 +66,9 @@ export default function RootLayout({
         <meta name='format-detection' content='telephone=no,email=no' />
       </head>
       <body className={`${inter.variable} antialiased`}>
-        <AmplifyProvider>{children}</AmplifyProvider>
+        <AmplifyProvider>
+          <RealtimeProvider>{children}</RealtimeProvider>
+        </AmplifyProvider>
       </body>
     </html>
   );
