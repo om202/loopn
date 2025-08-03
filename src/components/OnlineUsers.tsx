@@ -50,11 +50,9 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
 
   // Filter out current user for display (memoized to prevent infinite loops)
   const onlineUsers = useMemo(() => {
-    return allOnlineUsers.filter(
-      u => u?.userId && u.userId !== user?.userId
-    );
+    return allOnlineUsers.filter(u => u?.userId && u.userId !== user?.userId);
   }, [allOnlineUsers, user?.userId]);
-  
+
   const initialLoading = onlineUsersLoading;
 
   // Helper function to check if authentication session is ready

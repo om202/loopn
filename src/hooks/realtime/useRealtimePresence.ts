@@ -154,13 +154,19 @@ export function useRealtimeOnlineUsers({
   }, [enabled, subscribeToOnlineUsers]);
 
   // Utility functions (memoized to prevent infinite loops)
-  const isUserOnline = useCallback((userId: string): boolean => {
-    return onlineUsers.some(user => user.userId === userId && user.isOnline);
-  }, [onlineUsers]);
+  const isUserOnline = useCallback(
+    (userId: string): boolean => {
+      return onlineUsers.some(user => user.userId === userId && user.isOnline);
+    },
+    [onlineUsers]
+  );
 
-  const getUserPresence = useCallback((userId: string): UserPresence | null => {
-    return onlineUsers.find(user => user.userId === userId) || null;
-  }, [onlineUsers]);
+  const getUserPresence = useCallback(
+    (userId: string): UserPresence | null => {
+      return onlineUsers.find(user => user.userId === userId) || null;
+    },
+    [onlineUsers]
+  );
 
   return {
     onlineUsers,

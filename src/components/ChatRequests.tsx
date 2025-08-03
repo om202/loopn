@@ -1,11 +1,14 @@
 'use client';
 
 import { useAuthenticator } from '@aws-amplify/ui-react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import type { Schema } from '../../amplify/data/resource';
 import { chatService } from '../services/chat.service';
-import { userService } from '../services/user.service';
+import {
+  useRealtimeChatRequests,
+  type ChatRequestWithUser,
+} from '../hooks/realtime';
 
 import UserAvatar from './UserAvatar';
 
@@ -15,50 +18,27 @@ interface ChatRequestsProps {
   onRequestAccepted: (chatRequest: ChatRequest) => void;
 }
 
-interface ChatRequestWithUser extends ChatRequest {
-  requesterEmail?: string;
-}
-
 export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
-  const [chatRequests, setChatRequests] = useState<ChatRequestWithUser[]>([]);
   const [acceptingId, setAcceptingId] = useState<string | null>(null);
   const [decliningId, setDecliningId] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [localError, setLocalError] = useState<string | null>(null);
   const { user } = useAuthenticator();
 
-  useEffect(() => {
-    if (!user) {
-      return;
-    }
+  // Use our new realtime chat requests hook
+  const {
+    chatRequests,
+    isLoading,
+    error: chatRequestsError,
+    removeRequest,
+    addOptimisticRequest,
+  } = useRealtimeChatRequests({
+    userId: user?.userId || '',
+    enabled: !!user?.userId,
+  });
 
-    // Subscribe to incoming chat requests
-    const subscription = chatService.observeChatRequests(
-      user.userId,
-      async requests => {
-        // Fetch user details for each request
-        const requestsWithUsers = await Promise.all(
-          requests.map(async request => {
-            const userResult = await userService.getUserPresence(
-              request.requesterId
-            );
-            return {
-              ...request,
-              requesterEmail: userResult.data?.email || undefined,
-            };
-          })
-        );
-        setChatRequests(requestsWithUsers);
-      },
-      error => {
-        console.error('Error observing chat requests:', error);
-        setError('Failed to load chat requests');
-      }
-    );
+  const error = chatRequestsError || localError;
 
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [user]);
+  // Note: Chat requests subscription logic moved to useRealtimeChatRequests hook
 
   const handleRespondToRequest = async (
     chatRequestId: string,
@@ -66,7 +46,7 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
     chatRequest: ChatRequest
   ) => {
     // Optimistic update - immediately remove the request from UI
-    setChatRequests(prev => prev.filter(req => req.id !== chatRequestId));
+    removeRequest(chatRequestId);
 
     if (status === 'ACCEPTED') {
       setAcceptingId(chatRequestId);
@@ -84,15 +64,15 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
 
       if (result.error) {
         // Revert optimistic update - add request back
-        setChatRequests(prev => [...prev, chatRequest]);
-        setError(result.error);
+        addOptimisticRequest(chatRequest);
+        setLocalError(result.error);
         // Note: we don't revert onRequestAccepted since it might have triggered navigation
       }
       // On success, keep the optimistic update
     } catch {
       // Revert optimistic update on any error
-      setChatRequests(prev => [...prev, chatRequest]);
-      setError('Failed to respond to chat request');
+      addOptimisticRequest(chatRequest);
+      setLocalError('Failed to respond to chat request');
     }
 
     setAcceptingId(null);
