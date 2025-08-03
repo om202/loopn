@@ -48,6 +48,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   const [pendingRequestsLoaded, setPendingRequestsLoaded] = useState(false);
   const [conversationsLoaded, setConversationsLoaded] = useState(false);
   const [activeSection, setActiveSection] = useState<SidebarSection>('online');
+  const [currentTime, setCurrentTime] = useState(new Date());
   // Calculate reconnectable users directly in render to avoid infinite requests
   const { user } = useAuthenticator();
   const router = useRouter();
@@ -148,6 +149,43 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
     const canReconnectAt = new Date(endedDate.getTime() + 3 * 60 * 1000); // 3 minutes for testing
 
     return new Date() >= canReconnectAt;
+  };
+
+  // Helper function to get reconnection time remaining
+  const getReconnectTimeRemaining = (userId: string): string | null => {
+    const conversation = existingConversations.get(userId);
+    if (
+      !conversation ||
+      conversation.chatStatus !== 'ENDED' ||
+      !conversation.endedAt
+    ) {
+      return null;
+    }
+
+    const endedDate = new Date(conversation.endedAt);
+    // TODO: when deploying change to 2 weeks (14 * 24 * 60 * 60 * 1000)
+    const canReconnectAt = new Date(endedDate.getTime() + 3 * 60 * 1000); // 3 minutes for testing
+    const now = new Date();
+
+    if (now >= canReconnectAt) {
+      return null; // Can reconnect now
+    }
+
+    const timeRemaining = canReconnectAt.getTime() - now.getTime();
+    const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+    if (days > 0) {
+      return `${days}d ${hours}h`;
+    } else if (hours > 0) {
+      return `${hours}h ${minutes}m`;
+    } else if (minutes > 0) {
+      return `${minutes}m ${seconds}s`;
+    } else {
+      return `${seconds}s`;
+    }
   };
 
   useEffect(() => {
@@ -310,6 +348,15 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
       subscription.unsubscribe();
     };
   }, [user?.userId]);
+
+  // Timer to update countdown every second
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   // Combine online users with conversation users whenever either changes
   useEffect(() => {
@@ -557,38 +604,59 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
           </div>
 
           <div className='flex-shrink-0'>
-            <button 
-              onClick={() => {
-                if (pendingRequests.has(userPresence.userId)) {
-                  handleCancelChatRequest(userPresence.userId);
-                } else {
-                  handleChatAction(userPresence.userId);
-                }
-              }}
-              className='px-3 py-1.5 text-xs font-medium rounded-full border transition-colors bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100 flex items-center gap-1'
-            >
+            {(() => {
+              const conversation = existingConversations.get(userPresence.userId);
+              const isEndedWithTimer = conversation?.chatStatus === 'ENDED' && 
+                !canUserReconnect(userPresence.userId) && 
+                getReconnectTimeRemaining(userPresence.userId);
+              
+              if (isEndedWithTimer) {
+                const timeRemaining = getReconnectTimeRemaining(userPresence.userId);
+                return (
+                  <div className='text-sm text-gray-500'>
+                    Can reconnect in {timeRemaining}
+                  </div>
+                );
+              }
+              
+              return (
+                <button 
+                  onClick={() => {
+                    if (pendingRequests.has(userPresence.userId)) {
+                      handleCancelChatRequest(userPresence.userId);
+                    } else {
+                      handleChatAction(userPresence.userId);
+                    }
+                  }}
+                  className='px-3 py-1.5 text-xs font-medium rounded-full border transition-colors bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100 flex items-center gap-1'
+                >
               {pendingRequests.has(userPresence.userId) ? (
                 <>
                   <Trash2 className='w-4 h-4 mr-1 text-red-600' />
                   <span className='text-red-600'>Cancel Chat Request</span>
                 </>
-              ) : existingConversations.has(userPresence.userId) ? (
-                <>
-                  <MessageCircle className='w-4 h-4 text-gray-600 mr-1' />
-                  {existingConversations.get(userPresence.userId)
-                    ?.chatStatus === 'ENDED'
-                    ? canUserReconnect(userPresence.userId)
-                      ? 'Send New Request'
-                      : 'View'
-                    : 'Chat'}
-                </>
-              ) : (
+                              ) : existingConversations.has(userPresence.userId) ? (
+                  <>
+                    <MessageCircle className='w-4 h-4 text-gray-600 mr-1' />
+                    {existingConversations.get(userPresence.userId)
+                      ?.chatStatus === 'ENDED'
+                      ? canUserReconnect(userPresence.userId)
+                        ? 'Send New Request'
+                        : (() => {
+                            const timeRemaining = getReconnectTimeRemaining(userPresence.userId);
+                            return timeRemaining ? `Can reconnect in ${timeRemaining}` : 'View';
+                          })()
+                      : 'Chat'}
+                  </>
+                ) : (
                 <>
                   <CheckCircle2 className='w-3 h-3 text-gray-600' />
                   Start
                 </>
               )}
-            </button>
+                </button>
+              );
+            })()}
           </div>
         </div>
       </div>
