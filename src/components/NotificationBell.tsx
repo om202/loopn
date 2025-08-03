@@ -1,7 +1,7 @@
 'use client';
 
 import { useAuthenticator } from '@aws-amplify/ui-react';
-import { MessageCircle } from 'lucide-react';
+import { MessageCircle, CheckCircle2 } from 'lucide-react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useState, useEffect, useRef, useCallback } from 'react';
 
@@ -553,15 +553,7 @@ export default function NotificationBell() {
           </svg>
         );
       case 'connection':
-        return (
-          <svg
-            className='w-4 h-4 text-purple-500'
-            fill='currentColor'
-            viewBox='0 0 20 20'
-          >
-            <path d='M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z' />
-          </svg>
-        );
+        return <CheckCircle2 className='w-6 h-6 text-green-500' />;
       case 'system':
         return (
           <svg
@@ -663,7 +655,7 @@ export default function NotificationBell() {
 
           {/* Notification Badges */}
           {notifications.length > 0 && (
-            <div className='flex flex-col items-start gap-1 mr-1'>
+            <div className='flex flex-col items-start gap-1.5 mr-2'>
               {(() => {
                 const messageCount = notifications.filter(
                   n => n.type === 'message'
@@ -678,10 +670,10 @@ export default function NotificationBell() {
                   badges.push(
                     <div
                       key='message'
-                      className='flex items-center gap-1.5 bg-white text-red-500 rounded-2xl rounded-br-sm px-3 py-1 border border-red-300 min-h-[24px]'
+                      className='flex items-center gap-2 bg-white text-red-500 rounded-2xl rounded-br-sm px-4 py-1.5 border border-red-300 min-h-[28px]'
                     >
-                      <MessageCircle className='w-4 h-4 flex-shrink-0' />
-                      <span className='text-sm font-bold leading-none'>
+                      <MessageCircle className='w-5 h-5 flex-shrink-0' />
+                      <span className='text-base font-bold leading-none'>
                         {messageCount > 99 ? '99+' : messageCount}
                       </span>
                     </div>
@@ -693,10 +685,10 @@ export default function NotificationBell() {
                   badges.push(
                     <div
                       key='other'
-                      className='flex items-center gap-1.5 bg-white text-red-500 rounded-2xl rounded-br-sm px-3 py-1 border border-red-300 min-h-[24px]'
+                      className='flex items-center gap-2 bg-white text-red-500 rounded-2xl rounded-br-sm px-4 py-1.5 border border-red-300 min-h-[28px]'
                     >
                       <svg
-                        className='w-4 h-4 flex-shrink-0'
+                        className='w-5 h-5 flex-shrink-0'
                         fill='none'
                         stroke='currentColor'
                         viewBox='0 0 24 24'
@@ -708,7 +700,7 @@ export default function NotificationBell() {
                           d='M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9'
                         />
                       </svg>
-                      <span className='text-sm font-bold leading-none'>
+                      <span className='text-base font-bold leading-none'>
                         {otherCount > 99 ? '99+' : otherCount}
                       </span>
                     </div>
@@ -721,9 +713,9 @@ export default function NotificationBell() {
           )}
 
           {/* Notification Bell */}
-          <div className='p-1 w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors flex items-center justify-center'>
+          <div className='p-1.5 w-12 h-12 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors flex items-center justify-center'>
             <svg
-              className='h-6 w-6 text-gray-600'
+              className='h-7 w-7 text-gray-600'
               fill='none'
               stroke='currentColor'
               viewBox='0 0 24 24'
@@ -832,7 +824,7 @@ export default function NotificationBell() {
                               />
                             </div>
                           ) : (
-                            <div className='w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0'>
+                            <div className='flex-shrink-0'>
                               {getNotificationIcon(notification.type)}
                             </div>
                           )}

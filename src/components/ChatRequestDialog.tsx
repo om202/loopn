@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { CheckCircle2 } from 'lucide-react';
 
 import type { Schema } from '../../amplify/data/resource';
 import { createShortChatUrl } from '../lib/url-utils';
@@ -80,19 +81,7 @@ function ConnectedDialog({
           <div className='mb-6'>
             <div className='flex justify-center mb-3'>
               <div className='w-12 h-12 bg-green-100 rounded-full flex items-center justify-center'>
-                <svg
-                  className='w-6 h-6 text-green-600'
-                  fill='none'
-                  stroke='currentColor'
-                  viewBox='0 0 24 24'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M5 13l4 4L19 7'
-                  />
-                </svg>
+                <CheckCircle2 className='w-6 h-6 text-green-600' />
               </div>
             </div>
             <h3 className='text-xl font-medium text-green-600 mb-4'>
@@ -256,19 +245,7 @@ function NewRequestDialog({
               <div className='mb-6'>
                 <div className='flex justify-center mb-3'>
                   <div className='w-12 h-12 bg-green-100 rounded-full flex items-center justify-center'>
-                    <svg
-                      className='w-6 h-6 text-green-600'
-                      fill='none'
-                      stroke='currentColor'
-                      viewBox='0 0 24 24'
-                    >
-                      <path
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        strokeWidth={2}
-                        d='M5 13l4 4L19 7'
-                      />
-                    </svg>
+                    <CheckCircle2 className='w-6 h-6 text-green-600' />
                   </div>
                 </div>
                 <h3 className='text-xl font-medium text-green-600 mb-2'>
