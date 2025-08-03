@@ -65,6 +65,7 @@ export default function NotificationBell() {
     string | null
   >(null);
   const [dialogRequestCancelled, setDialogRequestCancelled] = useState(false);
+  const [acceptingRequestId, setAcceptingRequestId] = useState<string | null>(null);
   const isInitialLoad = useRef(true);
   const previousRequestIdsRef = useRef<string[]>([]);
   const shownDialogRequestIds = useRef<Set<string>>(new Set());
@@ -189,12 +190,14 @@ export default function NotificationBell() {
           if (!currentRequestIds.has(requestId)) {
             shownDialogRequestIds.current.delete(requestId);
             // If this is the currently shown dialog request, mark it as cancelled
-            // BUT only if it's not in a connected state (which means it was accepted)
+            // BUT only if it's not in a connected state AND we're not currently accepting it
+            // (which means it was actually cancelled/rejected, not accepted)
             if (
               dialogRequest &&
               dialogRequest.id === requestId &&
               showDialog &&
-              !showDialogConnected
+              !showDialogConnected &&
+              acceptingRequestId !== requestId // Don't mark as cancelled if we're accepting it
             ) {
               setDialogRequestCancelled(true);
             }
@@ -262,7 +265,7 @@ export default function NotificationBell() {
     return () => {
       subscription.unsubscribe();
     };
-  }, [user, showDialog, dialogRequest, showDialogConnected]); // Add missing dependencies
+  }, [user, showDialog, dialogRequest, showDialogConnected, acceptingRequestId]); // Add missing dependencies
 
   // Subscribe to messages (separate from chat requests)
   useEffect(() => {
@@ -414,6 +417,7 @@ export default function NotificationBell() {
   ) => {
     // If accepting, show the dialog confirmation instead of immediate processing
     if (status === 'ACCEPTED') {
+      setAcceptingRequestId(chatRequestId); // Track that we're accepting this request
       setDialogRequest(chatRequest);
       setShowDialog(true);
       setShowDialogConnected(true);
@@ -438,6 +442,8 @@ export default function NotificationBell() {
         );
       } catch (error) {
         console.error('Error responding to chat request:', error);
+      } finally {
+        setAcceptingRequestId(null); // Clear accepting state
       }
 
       return;
@@ -632,6 +638,7 @@ export default function NotificationBell() {
     setShowDialogConnected(false);
     setDialogConversationId(null);
     setDialogRequestCancelled(false);
+    setAcceptingRequestId(null); // Clear accepting state when dialog closes
   };
 
   return (
