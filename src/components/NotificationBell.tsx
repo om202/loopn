@@ -65,7 +65,9 @@ export default function NotificationBell() {
     string | null
   >(null);
   const [dialogRequestCancelled, setDialogRequestCancelled] = useState(false);
-  const [acceptingRequestId, setAcceptingRequestId] = useState<string | null>(null);
+  const [acceptingRequestId, setAcceptingRequestId] = useState<string | null>(
+    null
+  );
   const isInitialLoad = useRef(true);
   const previousRequestIdsRef = useRef<string[]>([]);
   const shownDialogRequestIds = useRef<Set<string>>(new Set());
@@ -265,7 +267,13 @@ export default function NotificationBell() {
     return () => {
       subscription.unsubscribe();
     };
-  }, [user, showDialog, dialogRequest, showDialogConnected, acceptingRequestId]); // Add missing dependencies
+  }, [
+    user,
+    showDialog,
+    dialogRequest,
+    showDialogConnected,
+    acceptingRequestId,
+  ]); // Add missing dependencies
 
   // Subscribe to messages (separate from chat requests)
   useEffect(() => {
