@@ -322,7 +322,10 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   }, [pendingRequestsLoaded, conversationsLoaded]);
 
   const handleChatAction = async (receiverId: string) => {
-    const action = await chatActions.handleChatAction(receiverId, pendingRequests);
+    const action = await chatActions.handleChatAction(
+      receiverId,
+      pendingRequests
+    );
     if (action === 'send-request') {
       chatActions.handleSendChatRequest(receiverId, setPendingRequests);
     }
@@ -344,8 +347,6 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   if (initialLoading) {
     return <LoadingContainer />;
   }
-
-
 
   return (
     <div className='flex gap-4 h-[calc(100vh-5rem)]'>

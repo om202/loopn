@@ -1,11 +1,6 @@
 'use client';
 
-import {
-  Globe,
-  MessageCircle,
-  Timer,
-  Calendar,
-} from 'lucide-react';
+import { Globe, MessageCircle, Timer, Calendar } from 'lucide-react';
 
 import type { Schema } from '../../../amplify/data/resource';
 
@@ -123,9 +118,7 @@ export default function DashboardSectionContent({
             <div className='mb-6'>
               <div className='flex items-center gap-3 py-2 px-4 bg-gray-50 rounded-xl'>
                 <Timer className='w-5 h-5 text-gray-600' />
-                <h3 className='text-base text-gray-900'>
-                  Active Chat Trials
-                </h3>
+                <h3 className='text-base text-gray-900'>Active Chat Trials</h3>
                 <span className='text-sm bg-white text-gray-700 px-3 py-1 rounded-full font-medium'>
                   {activeChatTrialUsers.length}
                 </span>
@@ -148,9 +141,7 @@ export default function DashboardSectionContent({
             <div className='mb-6'>
               <div className='flex items-center gap-3 py-2 px-4 bg-gray-50 rounded-xl'>
                 <Calendar className='w-5 h-5 text-gray-600' />
-                <h3 className='text-base text-gray-900'>
-                  Ended Chat Trials
-                </h3>
+                <h3 className='text-base text-gray-900'>Ended Chat Trials</h3>
                 <span className='text-sm bg-white text-gray-700 px-3 py-1 rounded-full font-medium'>
                   {endedChatTrialUsers.length}
                 </span>

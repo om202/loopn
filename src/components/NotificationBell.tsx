@@ -190,7 +190,12 @@ export default function NotificationBell() {
             shownDialogRequestIds.current.delete(requestId);
             // If this is the currently shown dialog request, mark it as cancelled
             // BUT only if it's not in a connected state (which means it was accepted)
-            if (dialogRequest && dialogRequest.id === requestId && showDialog && !showDialogConnected) {
+            if (
+              dialogRequest &&
+              dialogRequest.id === requestId &&
+              showDialog &&
+              !showDialogConnected
+            ) {
               setDialogRequestCancelled(true);
             }
           }
@@ -199,12 +204,15 @@ export default function NotificationBell() {
         // Synchronize notifications with current chat requests
         setNotifications(prevNotifications => {
           // Get all current chat request IDs
-          const currentRequestIds = new Set(requestsWithUsers.map(req => req.id));
-          
+          const currentRequestIds = new Set(
+            requestsWithUsers.map(req => req.id)
+          );
+
           // Remove notifications for chat requests that are no longer PENDING
           const filteredNotifications = prevNotifications.filter(notif => {
             if (notif.type === 'chat_request') {
-              const requestId = notif.id || (notif.data && 'id' in notif.data && notif.data.id);
+              const requestId =
+                notif.id || (notif.data && 'id' in notif.data && notif.data.id);
               return currentRequestIds.has(requestId as string);
             }
             // Keep all non-chat-request notifications
@@ -246,7 +254,7 @@ export default function NotificationBell() {
           return [...filteredNotifications, ...chatNotifications];
         });
       },
-      (error) => {
+      error => {
         setError('Failed to load notifications');
       }
     );
@@ -254,7 +262,7 @@ export default function NotificationBell() {
     return () => {
       subscription.unsubscribe();
     };
-  }, [user, showDialog]); // Remove chatRequests dependency to prevent infinite loops
+  }, [user, showDialog, dialogRequest, showDialogConnected]); // Add missing dependencies
 
   // Subscribe to messages (separate from chat requests)
   useEffect(() => {
@@ -772,7 +780,9 @@ export default function NotificationBell() {
               ) : (
                 <div className='divide-y divide-gray-100'>
                   {getFilteredNotifications().map(notification => {
-                    const isClickable = notification.type === 'message' || notification.type === 'connection';
+                    const isClickable =
+                      notification.type === 'message' ||
+                      notification.type === 'connection';
                     const Component = isClickable ? 'button' : 'div';
 
                     return (

@@ -1,10 +1,6 @@
 'use client';
 
-import {
-  MessageCircle,
-  CheckCircle2,
-  Trash2,
-} from 'lucide-react';
+import { MessageCircle, CheckCircle2, Trash2 } from 'lucide-react';
 
 import type { Schema } from '../../../amplify/data/resource';
 import { formatPresenceTime } from '../../lib/presence-utils';
@@ -103,9 +99,7 @@ export default function UserCard({
 
         <div className='flex-shrink-0'>
           {(() => {
-            const conversation = existingConversations.get(
-              userPresence.userId
-            );
+            const conversation = existingConversations.get(userPresence.userId);
             const isEndedWithTimer =
               conversation?.chatStatus === 'ENDED' &&
               !canUserReconnect(userPresence.userId) &&

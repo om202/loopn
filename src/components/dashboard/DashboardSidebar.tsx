@@ -1,10 +1,6 @@
 'use client';
 
-import {
-  Globe,
-  MessageCircle,
-  Timer,
-} from 'lucide-react';
+import { Globe, MessageCircle, Timer } from 'lucide-react';
 
 type SidebarSection = 'online' | 'connections' | 'chat-trial';
 
@@ -26,9 +22,7 @@ export default function DashboardSidebar({
   return (
     <div className='w-80 flex-shrink-0'>
       <div className='bg-white rounded-2xl border border-gray-200 p-6 h-full'>
-        <h2 className='text-lg font-semibold text-gray-900 mb-4'>
-          Dashboard
-        </h2>
+        <h2 className='text-lg font-semibold text-gray-900 mb-4'>Dashboard</h2>
 
         <nav className='space-y-2'>
           <button

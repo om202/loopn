@@ -25,7 +25,10 @@ export function useChatActions({
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
 
-  const handleChatAction = async (receiverId: string, pendingRequests: Set<string>) => {
+  const handleChatAction = async (
+    receiverId: string,
+    pendingRequests: Set<string>
+  ) => {
     // Do nothing if there's already a pending request
     if (pendingRequests.has(receiverId)) {
       return;
@@ -49,7 +52,10 @@ export function useChatActions({
     return 'send-request';
   };
 
-  const handleSendChatRequest = async (receiverId: string, setPendingRequests: (fn: (prev: Set<string>) => Set<string>) => void) => {
+  const handleSendChatRequest = async (
+    receiverId: string,
+    setPendingRequests: (fn: (prev: Set<string>) => Set<string>) => void
+  ) => {
     if (!user) {
       return;
     }
@@ -81,10 +87,7 @@ export function useChatActions({
         return;
       }
 
-      const result = await chatService.sendChatRequest(
-        receiverId,
-        user.userId
-      );
+      const result = await chatService.sendChatRequest(receiverId, user.userId);
 
       if (result.error) {
         // Revert optimistic update on error
@@ -109,7 +112,10 @@ export function useChatActions({
     }
   };
 
-  const handleCancelChatRequest = async (receiverId: string, setPendingRequests: (fn: (prev: Set<string>) => Set<string>) => void) => {
+  const handleCancelChatRequest = async (
+    receiverId: string,
+    setPendingRequests: (fn: (prev: Set<string>) => Set<string>) => void
+  ) => {
     if (!user) {
       return;
     }
