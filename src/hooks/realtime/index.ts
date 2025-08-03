@@ -8,6 +8,4 @@ export {
   useRealtimeNotifications,
   useRealtimeChatRequests,
 } from './useRealtimeNotifications';
-
-// TODO: Add more hooks as we refactor other components
-// export { useRealtimeReactions } from './useRealtimeReactions';
+export { useRealtimeReactions } from './useRealtimeReactions';

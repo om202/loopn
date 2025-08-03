@@ -123,27 +123,38 @@ export function RealtimeProvider({ children }: RealtimeProviderProps) {
     );
   };
 
-  // Reaction subscriptions (simplified for now)
+  // Reaction subscriptions for multiple messages
   const subscribeToReactions = (
     messageIds: string[],
     callback: SubscriptionCallback
   ): UnsubscribeFn => {
-    // For now, create a subscription for the first message
-    // TODO: Implement proper batch message reaction subscriptions
     if (messageIds.length === 0) {
       return () => {};
     }
 
+    // For now, subscribe to all reactions without filtering by messageId
+    // This is less efficient but will work with AppSync's filter limitations
+    // TODO: Optimize this when AppSync supports better filtering
     return subscriptionManager.subscribe(
       {
         key: createSubscriptionKey.reactions(messageIds),
-        query: () =>
-          client.models.MessageReaction.observeQuery({
-            filter: { messageId: { eq: messageIds[0] } },
-          }),
-        variables: { filter: { messageId: { eq: messageIds[0] } } },
+        query: () => client.models.MessageReaction.observeQuery({}),
+        variables: {},
       },
-      callback
+      data => {
+        // Filter reactions on the client side to only include relevant messages
+        if (data.items) {
+          const filteredData = {
+            ...data,
+            items: data.items.filter((reaction: any) =>
+              messageIds.includes(reaction.messageId)
+            ),
+          };
+          callback(filteredData);
+        } else {
+          callback(data);
+        }
+      }
     );
   };
 

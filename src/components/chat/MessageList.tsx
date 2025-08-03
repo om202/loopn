@@ -13,6 +13,7 @@ import type { Schema } from '../../../amplify/data/resource';
 import MessageBubble from './MessageBubble';
 import { reactionService } from '../../services/reaction.service';
 import { soundService } from '../../services/sound.service';
+import { useRealtimeReactions } from '../../hooks/realtime';
 
 type Message = Schema['Message']['type'];
 type UserPresence = Schema['UserPresence']['type'];
@@ -56,16 +57,32 @@ export default function MessageList({
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const lastMessageCountRef = useRef(0);
   const scrollPositionRef = useRef(0);
-  const [messageReactions, setMessageReactions] = useState<
-    Record<string, MessageReaction[]>
-  >({});
   const [openEmojiPickerMessageId, setOpenEmojiPickerMessageId] = useState<
     string | null
   >(null);
-  const [reactionsLoaded, setReactionsLoaded] = useState(false);
   const [animationTriggers, setAnimationTriggers] = useState<
     Record<string, string>
   >({});
+
+  // Get message IDs for reactions subscription
+  const messageIds = useMemo(() => messages.map(msg => msg.id), [messages]);
+
+  // Use our new realtime reactions hook
+  const {
+    messageReactions,
+    isLoading: reactionsLoading,
+    error: reactionsError,
+    getReactionsForMessage,
+    addOptimisticReaction,
+    removeOptimisticReaction,
+    updateReactionsForMessage,
+  } = useRealtimeReactions({
+    messageIds,
+    currentUserId,
+    enabled: messageIds.length > 0,
+  });
+
+  const reactionsLoaded = !reactionsLoading;
 
   const handleAddReaction = useCallback(
     async (messageId: string, emoji: string) => {
@@ -73,7 +90,7 @@ export default function MessageList({
       if (!message) return;
 
       const participants = [message.senderId, message.receiverId];
-      const currentReactions = messageReactions[messageId] || [];
+      const currentReactions = getReactionsForMessage(messageId);
       const optimisticReaction = {
         id: `temp-${Date.now()}-${Math.random()}`,
         messageId,
@@ -85,10 +102,7 @@ export default function MessageList({
         updatedAt: new Date().toISOString(),
       };
 
-      setMessageReactions(prev => ({
-        ...prev,
-        [messageId]: [...currentReactions, optimisticReaction],
-      }));
+      addOptimisticReaction(messageId, optimisticReaction);
 
       soundService.playPopSound();
       setAnimationTriggers(prev => ({ ...prev, [messageId]: emoji }));
@@ -113,30 +127,31 @@ export default function MessageList({
         );
 
         if (result.error) {
-          setMessageReactions(prev => ({
-            ...prev,
-            [messageId]: currentReactions,
-          }));
+          // Revert optimistic update
+          removeOptimisticReaction(messageId, optimisticReaction.id);
           console.error('Failed to add reaction:', result.error);
         } else {
+          // Fetch updated reactions and replace optimistic with real data
           const updatedReactions =
             await reactionService.getMessageReactions(messageId);
           if (!updatedReactions.error) {
-            setMessageReactions(prev => ({
-              ...prev,
-              [messageId]: updatedReactions.data,
-            }));
+            updateReactionsForMessage(messageId, updatedReactions.data);
           }
         }
       } catch (error) {
-        setMessageReactions(prev => ({
-          ...prev,
-          [messageId]: currentReactions,
-        }));
+        // Revert optimistic update
+        removeOptimisticReaction(messageId, optimisticReaction.id);
         console.error('Network error while adding reaction:', error);
       }
     },
-    [messages, currentUserId, messageReactions]
+    [
+      messages,
+      currentUserId,
+      getReactionsForMessage,
+      addOptimisticReaction,
+      removeOptimisticReaction,
+      updateReactionsForMessage,
+    ]
   );
 
   const handleToggleReaction = useCallback(
@@ -145,20 +160,20 @@ export default function MessageList({
       if (!message) return;
 
       const participants = [message.senderId, message.receiverId];
-      const currentReactions = messageReactions[messageId] || [];
+      const currentReactions = getReactionsForMessage(messageId);
       const existingReaction = currentReactions.find(
         reaction =>
           reaction.userId === currentUserId && reaction.emoji === emoji
       );
+      let removedReactionId: string | null = null;
+      let addedReaction: any = null;
+
       if (existingReaction) {
-        const optimisticReactions = currentReactions.filter(
-          reaction => reaction.id !== existingReaction.id
-        );
-        setMessageReactions(prev => ({
-          ...prev,
-          [messageId]: optimisticReactions,
-        }));
+        // Remove existing reaction optimistically
+        removeOptimisticReaction(messageId, existingReaction.id);
+        removedReactionId = existingReaction.id;
       } else {
+        // Add new reaction optimistically
         const optimisticReaction = {
           id: `temp-${Date.now()}-${Math.random()}`,
           messageId,
@@ -170,10 +185,8 @@ export default function MessageList({
           updatedAt: new Date().toISOString(),
         };
 
-        setMessageReactions(prev => ({
-          ...prev,
-          [messageId]: [...currentReactions, optimisticReaction],
-        }));
+        addOptimisticReaction(messageId, optimisticReaction);
+        addedReaction = optimisticReaction;
       }
 
       try {
@@ -186,30 +199,39 @@ export default function MessageList({
         );
 
         if (result.error) {
-          setMessageReactions(prev => ({
-            ...prev,
-            [messageId]: currentReactions,
-          }));
+          // Revert optimistic update
+          if (removedReactionId && existingReaction) {
+            addOptimisticReaction(messageId, existingReaction);
+          } else if (addedReaction) {
+            removeOptimisticReaction(messageId, addedReaction.id);
+          }
           console.error('Failed to toggle reaction:', result.error);
         } else {
+          // Fetch updated reactions and replace optimistic with real data
           const updatedReactions =
             await reactionService.getMessageReactions(messageId);
           if (!updatedReactions.error) {
-            setMessageReactions(prev => ({
-              ...prev,
-              [messageId]: updatedReactions.data,
-            }));
+            updateReactionsForMessage(messageId, updatedReactions.data);
           }
         }
       } catch (error) {
-        setMessageReactions(prev => ({
-          ...prev,
-          [messageId]: currentReactions,
-        }));
+        // Revert optimistic update
+        if (removedReactionId && existingReaction) {
+          addOptimisticReaction(messageId, existingReaction);
+        } else if (addedReaction) {
+          removeOptimisticReaction(messageId, addedReaction.id);
+        }
         console.error('Network error while toggling reaction:', error);
       }
     },
-    [messages, currentUserId, messageReactions]
+    [
+      messages,
+      currentUserId,
+      getReactionsForMessage,
+      addOptimisticReaction,
+      removeOptimisticReaction,
+      updateReactionsForMessage,
+    ]
   );
 
   const handleEmojiPickerToggle = useCallback((messageId: string) => {
@@ -241,84 +263,9 @@ export default function MessageList({
     };
   }, [openEmojiPickerMessageId]);
 
-  const loadedMessageIds = useRef<Set<string>>(new Set());
+  // Note: Reaction loading logic moved to useRealtimeReactions hook
 
-  const messageIds = useMemo(() => messages.map(msg => msg.id), [messages]);
-
-  useEffect(() => {
-    const loadReactionsForNewMessages = async () => {
-      if (messageIds.length === 0) {
-        setReactionsLoaded(true);
-        return;
-      }
-
-      const messageIdsToLoad = messageIds.filter(
-        msgId => !loadedMessageIds.current.has(msgId)
-      );
-
-      if (messageIdsToLoad.length === 0) {
-        setReactionsLoaded(true);
-        return;
-      }
-
-      setReactionsLoaded(false);
-
-      const result =
-        await reactionService.getBatchMessageReactions(messageIdsToLoad);
-
-      if (result.error) {
-        console.error('Error loading batch reactions:', result.error);
-        setReactionsLoaded(true);
-        return;
-      }
-
-      messageIdsToLoad.forEach(messageId => {
-        loadedMessageIds.current.add(messageId);
-      });
-
-      const newReactionsMap = result.data;
-
-      setMessageReactions(prev => ({ ...prev, ...newReactionsMap }));
-      setReactionsLoaded(true);
-    };
-
-    loadReactionsForNewMessages();
-  }, [messageIds]);
-
-  useEffect(() => {
-    if (messageIds.length === 0) return;
-
-    const subscription = reactionService.subscribeToReactionChanges(
-      messageIds,
-      (reaction, action) => {
-        if (reaction.userId === currentUserId) {
-          return;
-        }
-
-        setMessageReactions(prev => {
-          const updated = { ...prev };
-          const currentReactions = updated[reaction.messageId] || [];
-
-          if (action === 'create') {
-            updated[reaction.messageId] = [...currentReactions, reaction];
-          } else if (action === 'delete') {
-            updated[reaction.messageId] = currentReactions.filter(
-              r => r.id !== reaction.id
-            );
-          }
-
-          return updated;
-        });
-      },
-      error => {
-        console.error('Error subscribing to reaction changes:', error);
-      }
-    );
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [messageIds, currentUserId]);
+  // Note: Reaction subscription logic moved to useRealtimeReactions hook
 
   useEffect(() => {
     if (!containerRef.current) return;
