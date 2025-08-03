@@ -7,7 +7,7 @@ import type { Schema } from '../../../amplify/data/resource';
 import { chatService } from '../../services/chat.service';
 import { messageService } from '../../services/message.service';
 import { userService } from '../../services/user.service';
-import { soundService } from '../../services/sound.service';
+import { useRealtimeMessages } from '../../hooks/realtime';
 import LoadingContainer from '../LoadingContainer';
 
 import ChatHeader from './ChatHeader';
@@ -31,13 +31,11 @@ export default function ChatWindow({
   isLoading: externalLoading = false,
   error: externalError = null,
 }: ChatWindowProps) {
-  const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
-  const [error, setError] = useState<string | null>(null);
+  const [localError, setLocalError] = useState<string | null>(null);
   const [timeLeft, setTimeLeft] = useState<string>('');
   const [otherUserPresence, setOtherUserPresence] =
     useState<UserPresence | null>(null);
-  const [isInitializing, setIsInitializing] = useState(true);
   const [sendingConnectionRequest, setSendingConnectionRequest] =
     useState(false);
   const [replyToMessage, setReplyToMessage] = useState<Message | null>(null);
@@ -46,17 +44,29 @@ export default function ChatWindow({
   const [nextToken, setNextToken] = useState<string | undefined>(undefined);
   const [hasMoreMessages, setHasMoreMessages] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const [initialLoadComplete, setInitialLoadComplete] = useState(false);
   const [lastLoadWasOlderMessages, setLastLoadWasOlderMessages] =
     useState(false);
-  const [shouldAutoScroll, setShouldAutoScroll] = useState(false);
   const [chatEnteredAt, setChatEnteredAt] = useState<Date>(new Date());
-  const [hasActiveSession, setHasActiveSession] = useState(false);
-  const [unreadMessagesSnapshot, setUnreadMessagesSnapshot] = useState<
-    Set<string>
-  >(new Set());
 
   const { user } = useAuthenticator();
+
+  // Use our new realtime messages hook
+  const {
+    messages,
+    isInitializing,
+    isInitialLoadComplete: initialLoadComplete,
+    hasActiveSession,
+    shouldAutoScroll,
+    unreadMessagesSnapshot,
+    error: messageError,
+    setShouldAutoScroll,
+  } = useRealtimeMessages({
+    conversationId: conversation.id,
+    userId: user?.userId || '',
+    enabled: !!conversation.id && !!user?.userId,
+  });
+
+  const error = externalError || messageError || localError;
 
   // Check if there are unread messages from other users (for reply-based marking)
   const hasUnreadMessages = messages.some(
@@ -115,7 +125,7 @@ export default function ChatWindow({
 
     const result = await chatService.endChat(conversation.id, user.userId);
     if (result.error) {
-      setError(result.error);
+      setLocalError(result.error);
     } else {
       onChatEnded();
     }
@@ -134,7 +144,7 @@ export default function ChatWindow({
     );
 
     if (result.error) {
-      setError(result.error);
+      setLocalError(result.error);
     }
     setSendingConnectionRequest(false);
   }, [user, otherParticipantId, conversation.id, sendingConnectionRequest]);
@@ -166,91 +176,7 @@ export default function ChatWindow({
     calculateTimeLeft,
   ]);
 
-  // Initialize with real-time subscription - more reliable than initial API call
-  useEffect(() => {
-    if (!conversation.id || !user?.userId) {
-      return;
-    }
-
-    setIsInitializing(true);
-
-    // Set up real-time subscription immediately - this is more reliable than the API call
-    let isFirstLoad = true;
-    let previousMessageIds = new Set<string>();
-    let canPlaySounds = false; // Flag to prevent sounds during initial loads
-
-    const subscription = messageService.observeMessages(
-      conversation.id,
-      newMessages => {
-        if (isFirstLoad) {
-          // First load: set all messages and complete initialization
-          setMessages(newMessages);
-          setInitialLoadComplete(true);
-          setHasActiveSession(true);
-
-          // Take a snapshot of unread message IDs when first loading
-          const unreadIds = new Set(
-            newMessages
-              .filter(
-                msg =>
-                  !msg.isRead &&
-                  msg.senderId !== user?.userId &&
-                  msg.senderId !== 'SYSTEM'
-              )
-              .map(msg => msg.id)
-          );
-          setUnreadMessagesSnapshot(unreadIds);
-
-          // Initialize previous message IDs for next updates
-          previousMessageIds = new Set(newMessages.map(msg => msg.id));
-
-          setIsInitializing(false);
-
-          // Trigger scroll to bottom after messages are loaded
-          setShouldAutoScroll(true);
-
-          isFirstLoad = false;
-
-          // Enable sound playing after a short delay to avoid playing sounds for existing messages
-          setTimeout(() => {
-            canPlaySounds = true;
-          }, 1000); // 1 second delay before enabling sounds
-        } else {
-          // Subsequent updates: check for new messages from other users
-          const currentMessageIds = new Set(newMessages.map(msg => msg.id));
-          const newMessageIds = newMessages.filter(
-            msg => !previousMessageIds.has(msg.id)
-          );
-
-          // Play received sound for new messages from other users (not system or self)
-          // Only play if we're past the initial load period
-          if (canPlaySounds) {
-            const newMessagesFromOthers = newMessageIds.filter(
-              msg => msg.senderId !== user?.userId && msg.senderId !== 'SYSTEM'
-            );
-
-            if (newMessagesFromOthers.length > 0) {
-              soundService.playReceivedSound();
-            }
-          }
-
-          // Update previous message IDs for next comparison
-          previousMessageIds = currentMessageIds;
-
-          // Update messages
-          setMessages(newMessages);
-        }
-      },
-      error => {
-        setError('Failed to load real-time messages');
-        setIsInitializing(false);
-      }
-    );
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [conversation.id, user?.userId]);
+  // Note: Message subscription logic moved to useRealtimeMessages hook
 
   // Subscribe to other user's presence using existing real-time subscription
   useEffect(() => {
@@ -276,7 +202,7 @@ export default function ChatWindow({
   // Note: isInitializing is controlled by the loadInitialMessages function
   // which properly sets it to false only after messages are actually loaded
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     // Programmatically check conditions instead of disabling button
     if (!newMessage.trim() || !user || conversation.chatStatus === 'ENDED') {
       return;
@@ -305,51 +231,34 @@ export default function ChatWindow({
       updatedAt: now,
     };
 
-    // Immediately add to UI (optimistic update)
-    setMessages(prev => [...prev, optimisticMessage]);
+    // Clear input immediately
     setNewMessage('');
     setReplyToMessage(null); // Clear reply state
     setLastLoadWasOlderMessages(false); // Ensure scroll logic treats this as new message
     setShouldAutoScroll(true); // Trigger auto-scroll for sent message
 
-    // Send to server
-    messageService
-      .sendMessage(
+    // Send to server - let real-time subscription handle UI updates
+    try {
+      const result = await messageService.sendMessage(
         conversation.id,
         user.userId,
         messageContent,
         replyToMessage?.id
-      )
-      .then(result => {
-        if (result.error) {
-          // Rollback optimistic update on error
-          setMessages(prev => prev.filter(msg => msg.id !== tempId));
-          setNewMessage(messageContent); // Restore message text
-          setReplyToMessage(replyToMessage); // Restore reply state
-          setError(result.error);
-        } else if (result.data) {
-          // Success: Replace optimistic message with real one
-          // Note: The real-time subscription will also handle this, but this ensures immediate update
-          setMessages(prev =>
-            prev.map(msg => (msg.id === tempId ? result.data! : msg))
-          );
-          // Play sent sound effect
-          soundService.playSentSound();
+      );
 
-          // Mark unread messages from other users as read when user replies
-          markUnreadMessagesAsRead();
-
-          // Reset auto-scroll trigger after successful send
-          setShouldAutoScroll(false);
-        }
-      })
-      .catch(() => {
-        // Rollback on network error
-        setMessages(prev => prev.filter(msg => msg.id !== tempId));
-        setNewMessage(messageContent); // Restore message text
+      if (result.error) {
+        setLocalError(result.error);
+        setNewMessage(messageContent); // Restore message text on error
         setReplyToMessage(replyToMessage); // Restore reply state
-        setError('Failed to send message. Please try again.');
-      });
+      } else if (result.data) {
+        // Mark unread messages from other users as read when user replies
+        markUnreadMessagesAsRead();
+      }
+    } catch (error) {
+      setLocalError('Failed to send message. Please try again.');
+      setNewMessage(messageContent); // Restore message text on error
+      setReplyToMessage(replyToMessage); // Restore reply state
+    }
   };
 
   const markUnreadMessagesAsRead = useCallback(async () => {
@@ -361,29 +270,16 @@ export default function ChatWindow({
         !msg.isRead && msg.senderId !== user.userId && msg.senderId !== 'SYSTEM'
     );
 
-    // Mark them as read
+    if (unreadMessages.length === 0) return;
+
+    // Mark them as read - let real-time subscription handle UI updates
     const markPromises = unreadMessages.map(msg =>
       messageService.markMessageAsRead(msg.id)
     );
 
     try {
       await Promise.all(markPromises);
-
-      // Update local state
-      setMessages(prev =>
-        prev.map(msg =>
-          unreadMessages.some(unread => unread.id === msg.id)
-            ? { ...msg, isRead: true, readAt: new Date().toISOString() }
-            : msg
-        )
-      );
-
-      // Remove marked messages from unread snapshot
-      setUnreadMessagesSnapshot(prev => {
-        const newSnapshot = new Set(prev);
-        unreadMessages.forEach(msg => newSnapshot.delete(msg.id));
-        return newSnapshot;
-      });
+      // Real-time subscription will handle state updates
     } catch (error) {
       console.error('Error marking messages as read:', error);
     }
@@ -432,31 +328,18 @@ export default function ChatWindow({
       return;
     }
 
-    // Optimistically mark the message as deleted in UI
-    const originalMessages = [...messages];
-    setMessages(prev =>
-      prev.map(msg =>
-        msg.id === messageId
-          ? { ...msg, isDeleted: true, deletedAt: new Date().toISOString() }
-          : msg
-      )
-    );
-
     try {
       const result = await messageService.deleteMessage(messageId);
       if (result.error) {
-        // Rollback optimistic update on error
-        setMessages(originalMessages);
-        setError(result.error);
+        setLocalError(result.error);
       }
+      // Real-time subscription will handle UI updates
     } catch (error) {
-      // Rollback on network error
-      setMessages(originalMessages);
-      setError('Failed to delete message. Please try again.');
+      setLocalError('Failed to delete message. Please try again.');
     }
   };
 
-  // Load more messages handler
+  // Load more messages handler - TODO: Implement pagination with real-time hook
   const handleLoadMoreMessages = useCallback(async () => {
     if (!nextToken || isLoadingMore || !conversation.id) {
       return;
@@ -470,16 +353,10 @@ export default function ChatWindow({
     );
 
     if (result.error) {
-      setError(result.error);
+      setLocalError(result.error);
     } else {
-      // Sort older messages and prepend to existing messages
-      const sortedOlderMessages = result.data.sort((a, b) => {
-        const timestampA = a.timestamp ? new Date(a.timestamp).getTime() : 0;
-        const timestampB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
-        return timestampA - timestampB;
-      });
-
-      setMessages(prev => [...sortedOlderMessages, ...prev]);
+      // TODO: For now, pagination is disabled since our real-time hook manages all messages
+      // We'll implement this properly in a future iteration
       setNextToken(result.nextToken);
       setHasMoreMessages(!!result.nextToken);
       setLastLoadWasOlderMessages(true);
