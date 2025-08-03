@@ -66,6 +66,7 @@ export default function NotificationBell() {
   >(null);
   const isInitialLoad = useRef(true);
   const previousRequestIdsRef = useRef<string[]>([]);
+  const shownDialogRequestIds = useRef<Set<string>>(new Set());
   const { user } = useAuthenticator();
   const router = useRouter();
   const pathname = usePathname();
@@ -151,16 +152,21 @@ export default function NotificationBell() {
             req => !previousRequestIdsRef.current.includes(req.id)
           );
 
-          // Filter requests that were sent within the last minute
+          // Filter requests that were sent within the last minute and haven't been shown yet
           const now = new Date();
           const oneMinuteAgo = new Date(now.getTime() - 60 * 1000);
           const recentRequest = newRequests.find(req => {
             const requestTime = new Date(req.createdAt);
-            return requestTime >= oneMinuteAgo;
+            return (
+              requestTime >= oneMinuteAgo &&
+              !shownDialogRequestIds.current.has(req.id)
+            );
           });
 
           // Show dialog for the most recent request if there's one and no dialog is open
           if (recentRequest && !showDialog) {
+            // Immediately mark this request as shown to prevent duplicates
+            shownDialogRequestIds.current.add(recentRequest.id);
             setDialogRequest(recentRequest);
             setShowDialog(true);
             // Play happy sound for new chat request
@@ -176,13 +182,34 @@ export default function NotificationBell() {
         // Update the ref with current request IDs for next comparison
         previousRequestIdsRef.current = requestsWithUsers.map(req => req.id);
 
-        // Create notifications for local state - simple ID matching to prevent duplicates
-        setNotifications(prevNotifications => {
-          const chatNotifications: Notification[] = [];
+        // Clean up shown dialog IDs for requests that no longer exist (rejected/accepted)
+        const currentRequestIds = new Set(requestsWithUsers.map(req => req.id));
+        shownDialogRequestIds.current.forEach(requestId => {
+          if (!currentRequestIds.has(requestId)) {
+            shownDialogRequestIds.current.delete(requestId);
+          }
+        });
 
+        // Synchronize notifications with current chat requests
+        setNotifications(prevNotifications => {
+          // Get all current chat request IDs
+          const currentRequestIds = new Set(requestsWithUsers.map(req => req.id));
+          
+          // Remove notifications for chat requests that are no longer PENDING
+          const filteredNotifications = prevNotifications.filter(notif => {
+            if (notif.type === 'chat_request') {
+              const requestId = notif.id || (notif.data && 'id' in notif.data && notif.data.id);
+              return currentRequestIds.has(requestId as string);
+            }
+            // Keep all non-chat-request notifications
+            return true;
+          });
+
+          // Add new notifications for requests that don't have notifications yet
+          const chatNotifications: Notification[] = [];
           for (const request of requestsWithUsers) {
             // Check if notification for this chat request already exists
-            const existingNotification = prevNotifications.find(
+            const existingNotification = filteredNotifications.find(
               notif =>
                 notif.type === 'chat_request' &&
                 (notif.id === request.id ||
@@ -209,11 +236,11 @@ export default function NotificationBell() {
             }
           }
 
-          // Only add new notifications that don't already exist
-          return [...prevNotifications, ...chatNotifications];
+          // Return synchronized notifications: existing non-chat-request + remaining chat-request + new chat-request
+          return [...filteredNotifications, ...chatNotifications];
         });
       },
-      () => {
+      (error) => {
         setError('Failed to load notifications');
       }
     );
@@ -563,6 +590,8 @@ export default function NotificationBell() {
       setNotifications(prev =>
         prev.filter(notif => notif.id !== dialogRequest.id)
       );
+      // Ensure this request won't show dialog again
+      shownDialogRequestIds.current.add(dialogRequest.id);
     }
   };
 
@@ -573,6 +602,8 @@ export default function NotificationBell() {
       setNotifications(prev =>
         prev.filter(notif => notif.id !== dialogRequest.id)
       );
+      // Ensure this request won't show dialog again
+      shownDialogRequestIds.current.add(dialogRequest.id);
     }
   };
 
