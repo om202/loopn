@@ -2,28 +2,16 @@
 
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { fetchAuthSession } from 'aws-amplify/auth';
-import {
-  MessageCircle,
-  Clock,
-  CheckCircle2,
-  Globe,
-  WifiOff,
-  Users,
-  Timer,
-  Calendar,
-  Trash2,
-} from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
 
 import type { Schema } from '../../amplify/data/resource';
-import { createShortChatUrl } from '../lib/url-utils';
-import { formatPresenceTime } from '../lib/presence-utils';
 import { chatService } from '../services/chat.service';
 import { userService } from '../services/user.service';
 
+import { DashboardSidebar, DashboardSectionContent } from './dashboard';
 import LoadingContainer from './LoadingContainer';
-import UserAvatar from './UserAvatar';
+import { useChatActions } from '../hooks/useChatActions';
+import { useUserCategorization } from '../hooks/useUserCategorization';
 
 type UserPresence = Schema['UserPresence']['type'];
 type Conversation = Schema['Conversation']['type'];
@@ -49,9 +37,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   const [conversationsLoaded, setConversationsLoaded] = useState(false);
   const [activeSection, setActiveSection] = useState<SidebarSection>('online');
   const [currentTime, setCurrentTime] = useState(new Date());
-  // Calculate reconnectable users directly in render to avoid infinite requests
   const { user } = useAuthenticator();
-  const router = useRouter();
 
   // Helper function to check if authentication session is ready
   const isAuthSessionReady = async (): Promise<boolean> => {
@@ -132,61 +118,20 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
     }
   }, [user]); // State setters are stable and don't need to be included
 
-  // Helper function to check if a user can reconnect (no backend calls)
-  const canUserReconnect = (userId: string): boolean => {
-    const conversation = existingConversations.get(userId);
-    if (
-      !conversation ||
-      conversation.chatStatus !== 'ENDED' ||
-      !conversation.endedAt
-    ) {
-      return false;
-    }
+  // Use extracted hooks
+  const userCategories = useUserCategorization({
+    onlineUsers,
+    allUsers,
+    existingConversations,
+    currentTime,
+  });
 
-    // Check if restriction period has ended (3 minutes for testing)
-    const endedDate = new Date(conversation.endedAt);
-    // TODO: when deploying change to 2 weeks (14 * 24 * 60 * 60 * 1000)
-    const canReconnectAt = new Date(endedDate.getTime() + 3 * 60 * 1000); // 3 minutes for testing
-
-    return new Date() >= canReconnectAt;
-  };
-
-  // Helper function to get reconnection time remaining
-  const getReconnectTimeRemaining = (userId: string): string | null => {
-    const conversation = existingConversations.get(userId);
-    if (
-      !conversation ||
-      conversation.chatStatus !== 'ENDED' ||
-      !conversation.endedAt
-    ) {
-      return null;
-    }
-
-    const endedDate = new Date(conversation.endedAt);
-    // TODO: when deploying change to 2 weeks (14 * 24 * 60 * 60 * 1000)
-    const canReconnectAt = new Date(endedDate.getTime() + 3 * 60 * 1000); // 3 minutes for testing
-    const now = new Date();
-
-    if (now >= canReconnectAt) {
-      return null; // Can reconnect now
-    }
-
-    const timeRemaining = canReconnectAt.getTime() - now.getTime();
-    const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-
-    if (days > 0) {
-      return `${days}d ${hours}h`;
-    } else if (hours > 0) {
-      return `${hours}h ${minutes}m`;
-    } else if (minutes > 0) {
-      return `${minutes}m ${seconds}s`;
-    } else {
-      return `${seconds}s`;
-    }
-  };
+  const chatActions = useChatActions({
+    user,
+    existingConversations,
+    canUserReconnect: userCategories.canUserReconnect,
+    onChatRequestSent,
+  });
 
   useEffect(() => {
     if (!user) {
@@ -377,159 +322,21 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   }, [pendingRequestsLoaded, conversationsLoaded]);
 
   const handleChatAction = async (receiverId: string) => {
-    // Do nothing if there's already a pending request
-    if (pendingRequests.has(receiverId)) {
-      return;
-    }
-
-    // Check if there's an existing conversation
-    const conversation = existingConversations.get(receiverId);
-
-    if (conversation) {
-      // If this is a reconnectable ended chat, send a new chat request
-      if (conversation.chatStatus === 'ENDED' && canUserReconnect(receiverId)) {
-        handleSendChatRequest(receiverId);
-        return;
-      }
-
-      // Open existing chat with short URL
-      router.push(createShortChatUrl(conversation.id));
-      return;
-    }
-
-    // Send new chat request
-    handleSendChatRequest(receiverId);
-  };
-
-  const handleSendChatRequest = async (receiverId: string) => {
-    if (!user) {
-      return;
-    }
-
-    // Optimistic update - immediately show pending state
-    setPendingRequests(prev => new Set([...prev, receiverId]));
-
-    // Do the API calls in the background without blocking UI
-    (async () => {
-      try {
-        // Check if there's already a pending request
-        const existingRequest = await chatService.hasPendingChatRequest(
-          user.userId,
-          receiverId
-        );
-
-        if (existingRequest.error) {
-          // Revert optimistic update
-          setPendingRequests(prev => {
-            const newSet = new Set(prev);
-            newSet.delete(receiverId);
-            return newSet;
-          });
-          setError(existingRequest.error);
-          return;
-        }
-
-        if (existingRequest.data) {
-          // Don't revert - they already have a pending request
-          return;
-        }
-
-        const result = await chatService.sendChatRequest(
-          receiverId,
-          user.userId
-        );
-
-        if (result.error) {
-          // Revert optimistic update on error
-          setPendingRequests(prev => {
-            const newSet = new Set(prev);
-            newSet.delete(receiverId);
-            return newSet;
-          });
-          setError(result.error);
-        } else {
-          onChatRequestSent();
-          // Keep optimistic update - subscription will sync
-        }
-      } catch {
-        // Revert optimistic update on any error
-        setPendingRequests(prev => {
-          const newSet = new Set(prev);
-          newSet.delete(receiverId);
-          return newSet;
-        });
-        setError('Failed to send chat request');
-      }
-    })();
-  };
-
-  const handleCancelChatRequest = async (receiverId: string) => {
-    if (!user) {
-      return;
-    }
-
-    // Optimistic update - immediately remove pending state
-    setPendingRequests(prev => {
-      const newSet = new Set(prev);
-      newSet.delete(receiverId);
-      return newSet;
-    });
-
-    try {
-      const result = await chatService.cancelChatRequest(user.userId, receiverId);
-
-      if (result.error) {
-        // Revert optimistic update on error
-        setPendingRequests(prev => new Set([...prev, receiverId]));
-        setError(result.error);
-      }
-      // On success, keep the optimistic update
-    } catch {
-      // Revert optimistic update on any error
-      setPendingRequests(prev => new Set([...prev, receiverId]));
-      setError('Failed to cancel chat request');
+    const action = await chatActions.handleChatAction(receiverId, pendingRequests);
+    if (action === 'send-request') {
+      chatActions.handleSendChatRequest(receiverId, setPendingRequests);
     }
   };
 
-
-
-  const getDisplayName = (userPresence: UserPresence) => {
-    if (userPresence.email) {
-      return userPresence.email;
-    }
-    return `User${userPresence.userId.slice(-4)}`;
+  const handleCancelChatRequest = (receiverId: string) => {
+    chatActions.handleCancelChatRequest(receiverId, setPendingRequests);
   };
 
-  // Helper functions to categorize users
-  const getOnlineUsers = () => {
-    return onlineUsers;
-  };
-
-  const getConnectionUsers = () => {
-    // For now, connections is empty since we only have chat trials
-    // When permanent connections are implemented, this will filter for permanent connections
-    return [];
-  };
-
-  const getActiveChatTrialUsers = () => {
-    return allUsers.filter(user => {
-      const conversation = existingConversations.get(user.userId);
-      return conversation && conversation.chatStatus === 'ACTIVE';
-    });
-  };
-
-  const getEndedChatTrialUsers = () => {
-    return allUsers.filter(user => {
-      const conversation = existingConversations.get(user.userId);
-      return conversation && conversation.chatStatus === 'ENDED';
-    });
-  };
-
-  if (error) {
+  if (error || chatActions.error) {
     return (
       <div className='p-4 sm:p-6 text-red-600 bg-red-50 rounded-2xl border border-red-200 text-center'>
         <div className='text-xs sm:text-sm font-medium mb-1'>Error</div>
-        <div className='text-xs sm:text-sm'>{error}</div>
+        <div className='text-xs sm:text-sm'>{error || chatActions.error}</div>
       </div>
     );
   }
@@ -538,265 +345,36 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
     return <LoadingContainer />;
   }
 
-  // Helper function to render user cards
-  const renderUserCard = (userPresence: UserPresence) => {
-    const isOnline = onlineUsers.some(
-      ou => ou.userId === userPresence.userId
-    );
 
-    return (
-      <div
-        key={userPresence.userId}
-        className='bg-white rounded-2xl border border-gray-200 px-6 py-4 group hover:shadow-sm transition-shadow'
-      >
-        <div className='flex items-center gap-4'>
-          <div className='flex-shrink-0'>
-            <UserAvatar
-              email={userPresence.email}
-              userId={userPresence.userId}
-              size='md'
-              showStatus
-              status={
-                isOnline
-                  ? userPresence.status
-                  : userPresence.lastSeen &&
-                      formatPresenceTime(userPresence.lastSeen) ===
-                        'Recently active'
-                    ? 'RECENTLY_ACTIVE'
-                    : 'OFFLINE'
-              }
-            />
-          </div>
-
-          <div className='flex-1 min-w-0'>
-            <div className='font-medium text-gray-900 text-sm mb-1 line-clamp-2 no-email-detection break-words'>
-              {getDisplayName(userPresence)}
-            </div>
-            <div
-              className={`text-xs ${
-                existingConversations.has(userPresence.userId) &&
-                existingConversations.get(userPresence.userId)
-                  ?.chatStatus === 'ENDED'
-                  ? canUserReconnect(userPresence.userId)
-                    ? 'text-blue-600'
-                    : 'text-orange-600'
-                  : isOnline
-                    ? 'text-green-600'
-                    : userPresence.lastSeen &&
-                        formatPresenceTime(userPresence.lastSeen) ===
-                          'Recently active'
-                      ? 'text-sky-500'
-                      : 'text-gray-600'
-              }`}
-            >
-              {existingConversations.has(userPresence.userId) &&
-              existingConversations.get(userPresence.userId)
-                ?.chatStatus === 'ENDED'
-                ? canUserReconnect(userPresence.userId)
-                  ? 'Can Reconnect Now'
-                  : 'Chat Trial Ended'
-                : isOnline
-                  ? 'Online now'
-                  : userPresence.lastSeen
-                    ? formatPresenceTime(userPresence.lastSeen)
-                    : 'Offline'}
-            </div>
-          </div>
-
-          <div className='flex-shrink-0'>
-            {(() => {
-              const conversation = existingConversations.get(userPresence.userId);
-              const isEndedWithTimer = conversation?.chatStatus === 'ENDED' && 
-                !canUserReconnect(userPresence.userId) && 
-                getReconnectTimeRemaining(userPresence.userId);
-              
-              if (isEndedWithTimer) {
-                const timeRemaining = getReconnectTimeRemaining(userPresence.userId);
-                return (
-                  <div className='text-sm text-gray-500'>
-                    Can reconnect in {timeRemaining}
-                  </div>
-                );
-              }
-              
-              return (
-                <button 
-                  onClick={() => {
-                    if (pendingRequests.has(userPresence.userId)) {
-                      handleCancelChatRequest(userPresence.userId);
-                    } else {
-                      handleChatAction(userPresence.userId);
-                    }
-                  }}
-                  className='px-3 py-1.5 text-xs font-medium rounded-full border transition-colors bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100 flex items-center gap-1'
-                >
-              {pendingRequests.has(userPresence.userId) ? (
-                <>
-                  <Trash2 className='w-4 h-4 mr-1 text-red-600' />
-                  <span className='text-red-600'>Cancel Chat Request</span>
-                </>
-                              ) : existingConversations.has(userPresence.userId) ? (
-                  <>
-                    <MessageCircle className='w-4 h-4 text-gray-600 mr-1' />
-                    {existingConversations.get(userPresence.userId)
-                      ?.chatStatus === 'ENDED'
-                      ? canUserReconnect(userPresence.userId)
-                        ? 'Send New Request'
-                        : (() => {
-                            const timeRemaining = getReconnectTimeRemaining(userPresence.userId);
-                            return timeRemaining ? `Can reconnect in ${timeRemaining}` : 'View';
-                          })()
-                      : 'Chat'}
-                  </>
-                ) : (
-                <>
-                  <CheckCircle2 className='w-3 h-3 text-gray-600' />
-                  Start
-                </>
-              )}
-                </button>
-              );
-            })()}
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const getSectionContent = () => {
-    switch (activeSection) {
-      case 'online':
-        const onlineUsers = getOnlineUsers();
-        return (
-          <div>
-            <div className='mb-4'>
-              <h2 className='text-lg font-semibold text-gray-900 mb-2'>Online Now</h2>
-              <p className='text-sm text-gray-600'>All users currently online</p>
-            </div>
-            <div className='space-y-3'>
-              {onlineUsers.map(renderUserCard)}
-            </div>
-          </div>
-        );
-
-      case 'connections':
-        const connectionUsers = getConnectionUsers();
-        return (
-          <div>
-            <div className='mb-4'>
-              <h2 className='text-lg font-semibold text-gray-900 mb-2'>Connections</h2>
-              <p className='text-sm text-gray-600'>Your permanent connections</p>
-            </div>
-            <div className='space-y-3'>
-              {connectionUsers.map(renderUserCard)}
-            </div>
-          </div>
-        );
-
-      case 'chat-trial':
-        const activeChatTrials = getActiveChatTrialUsers();
-        const endedChatTrials = getEndedChatTrialUsers();
-        return (
-          <div>
-            <div className='mb-6'>
-              <h2 className='text-lg font-semibold text-gray-900 mb-2'>Chat Trials</h2>
-              <p className='text-sm text-gray-600'>Manage your active and ended chat trials</p>
-            </div>
-
-            {/* Active Chat Trials */}
-            <div className='mb-8'>
-              <div className='flex items-center gap-2 mb-4'>
-                <Timer className='w-5 h-5 text-gray-600' />
-                <h3 className='text-md font-medium text-gray-900'>Active Chat Trials</h3>
-                <span className='text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-full'>
-                  {activeChatTrials.length}
-                </span>
-              </div>
-              <div className='space-y-3 mb-6'>
-                {activeChatTrials.map(renderUserCard)}
-              </div>
-            </div>
-
-            {/* Ended Chat Trials */}
-            <div>
-              <div className='flex items-center gap-2 mb-4'>
-                <Calendar className='w-5 h-5 text-gray-600' />
-                <h3 className='text-md font-medium text-gray-900'>Ended Chat Trials</h3>
-                <span className='text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-full'>
-                  {endedChatTrials.length}
-                </span>
-              </div>
-              <div className='space-y-3'>
-                {endedChatTrials.map(renderUserCard)}
-              </div>
-            </div>
-          </div>
-        );
-
-      default:
-        return null;
-    }
-  };
 
   return (
-    <div className='flex gap-6'>
-      {/* Sidebar */}
-      <div className='w-64 flex-shrink-0'>
-        <div className='bg-white rounded-2xl border border-gray-200 p-4'>
-          <h2 className='text-lg font-semibold text-gray-900 mb-4'>Dashboard</h2>
-          
-          <nav className='space-y-2'>
-            <button
-              onClick={() => setActiveSection('online')}
-              className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left transition-colors ${
-                activeSection === 'online'
-                  ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                  : 'text-gray-700 hover:bg-gray-50'
-              }`}
-            >
-              <Globe className='w-4 h-4' />
-              <span className='font-medium'>Online Now</span>
-              <span className='ml-auto text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full'>
-                {getOnlineUsers().length}
-              </span>
-            </button>
-
-            <button
-              onClick={() => setActiveSection('connections')}
-              className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left transition-colors ${
-                activeSection === 'connections'
-                  ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                  : 'text-gray-700 hover:bg-gray-50'
-              }`}
-            >
-              <MessageCircle className='w-4 h-4' />
-              <span className='font-medium'>Connections</span>
-              <span className='ml-auto text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full'>
-                {getConnectionUsers().length}
-              </span>
-            </button>
-
-            <button
-              onClick={() => setActiveSection('chat-trial')}
-              className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left transition-colors ${
-                activeSection === 'chat-trial'
-                  ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                  : 'text-gray-700 hover:bg-gray-50'
-              }`}
-            >
-              <Timer className='w-4 h-4' />
-              <span className='font-medium'>Chat Trials</span>
-              <span className='ml-auto text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full'>
-                {getActiveChatTrialUsers().length + getEndedChatTrialUsers().length}
-              </span>
-            </button>
-          </nav>
-        </div>
-      </div>
+    <div className='flex gap-4 h-[calc(100vh-5rem)]'>
+      <DashboardSidebar
+        activeSection={activeSection}
+        onSectionChange={setActiveSection}
+        onlineUsersCount={userCategories.onlineUsers.length}
+        connectionsCount={userCategories.connectionUsers.length}
+        chatTrialsCount={
+          userCategories.activeChatTrialUsers.length +
+          userCategories.endedChatTrialUsers.length
+        }
+      />
 
       {/* Main Content */}
-      <div className='flex-1'>
-        {getSectionContent()}
+      <div className='flex-1 bg-white rounded-2xl border border-gray-200 p-6 overflow-y-auto'>
+        <DashboardSectionContent
+          activeSection={activeSection}
+          onlineUsers={userCategories.onlineUsers}
+          connectionUsers={userCategories.connectionUsers}
+          activeChatTrialUsers={userCategories.activeChatTrialUsers}
+          endedChatTrialUsers={userCategories.endedChatTrialUsers}
+          existingConversations={existingConversations}
+          pendingRequests={pendingRequests}
+          onChatAction={handleChatAction}
+          onCancelChatRequest={handleCancelChatRequest}
+          canUserReconnect={userCategories.canUserReconnect}
+          getReconnectTimeRemaining={userCategories.getReconnectTimeRemaining}
+        />
       </div>
     </div>
   );
