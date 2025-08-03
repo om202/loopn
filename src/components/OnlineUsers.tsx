@@ -2,7 +2,7 @@
 
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { fetchAuthSession } from 'aws-amplify/auth';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 
 import type { Schema } from '../../amplify/data/resource';
 import { chatService } from '../services/chat.service';
@@ -12,6 +12,7 @@ import { DashboardSidebar, DashboardSectionContent } from './dashboard';
 import LoadingContainer from './LoadingContainer';
 import { useChatActions } from '../hooks/useChatActions';
 import { useUserCategorization } from '../hooks/useUserCategorization';
+import { useRealtimeOnlineUsers } from '../hooks/realtime';
 
 type UserPresence = Schema['UserPresence']['type'];
 type Conversation = Schema['Conversation']['type'];
@@ -23,9 +24,7 @@ interface OnlineUsersProps {
 type SidebarSection = 'online' | 'connections' | 'chat-trial';
 
 export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
-  const [onlineUsers, setOnlineUsers] = useState<UserPresence[]>([]);
   const [allUsers, setAllUsers] = useState<UserPresence[]>([]);
-  const [initialLoading, setInitialLoading] = useState(true);
   const [pendingRequests, setPendingRequests] = useState<Set<string>>(
     new Set()
   );
@@ -38,6 +37,25 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   const [activeSection, setActiveSection] = useState<SidebarSection>('online');
   const [currentTime, setCurrentTime] = useState(new Date());
   const { user } = useAuthenticator();
+
+  // Use our new realtime online users hook
+  const {
+    onlineUsers: allOnlineUsers,
+    isLoading: onlineUsersLoading,
+    error: onlineUsersError,
+    isUserOnline,
+  } = useRealtimeOnlineUsers({
+    enabled: !!user?.userId,
+  });
+
+  // Filter out current user for display (memoized to prevent infinite loops)
+  const onlineUsers = useMemo(() => {
+    return allOnlineUsers.filter(
+      u => u?.userId && u.userId !== user?.userId
+    );
+  }, [allOnlineUsers, user?.userId]);
+  
+  const initialLoading = onlineUsersLoading;
 
   // Helper function to check if authentication session is ready
   const isAuthSessionReady = async (): Promise<boolean> => {
@@ -139,12 +157,10 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
     }
 
     // Reset loading state for new user
-    setInitialLoading(true);
     setPendingRequestsLoaded(false);
     setConversationsLoaded(false);
 
     let sentRequestsSubscription: any;
-    let onlineUsersSubscription: any;
 
     // Add delay and wait for authentication session to be fully established
     const authDelay = setTimeout(async () => {
@@ -165,7 +181,6 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
       if (!authReady) {
         console.error('Failed to establish auth session after retries');
         setPendingRequestsLoaded(true);
-        setInitialLoading(false);
         return;
       }
 
@@ -183,34 +198,13 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
         }
       );
 
-      // Subscribe to online users updates
-      onlineUsersSubscription = userService.observeOnlineUsers(
-        users => {
-          // Filter out current user and remove duplicates
-          const otherUsers = users
-            .filter(u => u?.userId && u.userId !== user.userId)
-            .filter(
-              (user, index, self) =>
-                index === self.findIndex(u => u.userId === user.userId)
-            );
-
-          setOnlineUsers(otherUsers);
-        },
-        () => {
-          console.error('Error observing online users');
-          setError('Failed to load online users');
-          setInitialLoading(false); // Also mark as loaded on error
-        }
-      );
+      // Note: Online users subscription moved to useRealtimeOnlineUsers hook
     }, 500); // Initial delay before checking auth
 
     return () => {
       clearTimeout(authDelay);
       if (sentRequestsSubscription) {
         sentRequestsSubscription.unsubscribe();
-      }
-      if (onlineUsersSubscription) {
-        onlineUsersSubscription.unsubscribe();
       }
     };
   }, [user]);
@@ -314,12 +308,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
     setAllUsers(combinedUsers);
   }, [onlineUsers, conversationUsers]);
 
-  // Update initialLoading when both pending requests and conversations are loaded
-  useEffect(() => {
-    if (pendingRequestsLoaded && conversationsLoaded) {
-      setInitialLoading(false);
-    }
-  }, [pendingRequestsLoaded, conversationsLoaded]);
+  // Note: initialLoading is now controlled by useRealtimeOnlineUsers hook
 
   const handleChatAction = async (receiverId: string) => {
     const action = await chatActions.handleChatAction(
@@ -335,11 +324,13 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
     chatActions.handleCancelChatRequest(receiverId, setPendingRequests);
   };
 
-  if (error || chatActions.error) {
+  if (error || onlineUsersError || chatActions.error) {
     return (
       <div className='p-4 sm:p-6 text-red-600 bg-red-50 rounded-2xl border border-red-200 text-center'>
         <div className='text-xs sm:text-sm font-medium mb-1'>Error</div>
-        <div className='text-xs sm:text-sm'>{error || chatActions.error}</div>
+        <div className='text-xs sm:text-sm'>
+          {error || onlineUsersError || chatActions.error}
+        </div>
       </div>
     );
   }

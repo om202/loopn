@@ -7,7 +7,7 @@ import type { Schema } from '../../../amplify/data/resource';
 import { chatService } from '../../services/chat.service';
 import { messageService } from '../../services/message.service';
 import { userService } from '../../services/user.service';
-import { useRealtimeMessages } from '../../hooks/realtime';
+import { useRealtimeMessages, useRealtimePresence } from '../../hooks/realtime';
 import LoadingContainer from '../LoadingContainer';
 
 import ChatHeader from './ChatHeader';
@@ -34,8 +34,6 @@ export default function ChatWindow({
   const [newMessage, setNewMessage] = useState('');
   const [localError, setLocalError] = useState<string | null>(null);
   const [timeLeft, setTimeLeft] = useState<string>('');
-  const [otherUserPresence, setOtherUserPresence] =
-    useState<UserPresence | null>(null);
   const [sendingConnectionRequest, setSendingConnectionRequest] =
     useState(false);
   const [replyToMessage, setReplyToMessage] = useState<Message | null>(null);
@@ -79,6 +77,19 @@ export default function ChatWindow({
     conversation.participant1Id === user?.userId
       ? conversation.participant2Id
       : conversation.participant1Id;
+
+  // Use our new realtime presence hook for the other participant
+  const {
+    presence: otherUserPresence,
+    isOnline: isOtherUserOnline,
+    error: presenceError,
+  } = useRealtimePresence({
+    userId: otherParticipantId || '',
+    enabled: !!otherParticipantId,
+  });
+
+  // Update error to include presence error
+  const finalError = error || presenceError;
 
   // Calculate initial time remaining immediately
   const calculateTimeLeft = useCallback(() => {
@@ -177,27 +188,7 @@ export default function ChatWindow({
   ]);
 
   // Note: Message subscription logic moved to useRealtimeMessages hook
-
-  // Subscribe to other user's presence using existing real-time subscription
-  useEffect(() => {
-    if (!otherParticipantId) {
-      return;
-    }
-
-    const subscription = userService.observeUserPresence(
-      otherParticipantId,
-      presence => {
-        setOtherUserPresence(presence);
-      },
-      error => {
-        console.error('Error observing user presence:', error);
-      }
-    );
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [otherParticipantId]);
+  // Note: Presence subscription logic moved to useRealtimePresence hook
 
   // Note: isInitializing is controlled by the loadInitialMessages function
   // which properly sets it to false only after messages are actually loaded
@@ -414,7 +405,7 @@ export default function ChatWindow({
         onCancelReply={handleCancelReply}
       />
 
-      {error || externalError ? (
+      {finalError || externalError ? (
         <div className='flex-shrink-0 mx-4 mb-4'>
           <div className='bg-red-50 border border-red-200 rounded-lg p-4 shadow-sm'>
             <div className='flex items-start'>
@@ -430,7 +421,7 @@ export default function ChatWindow({
                 />
               </svg>
               <p className='text-sm text-red-800 font-medium'>
-                {error || externalError}
+                {finalError || externalError}
               </p>
             </div>
           </div>
