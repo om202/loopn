@@ -30,7 +30,6 @@ export function useChatRequests({ userId, enabled }: UseChatRequestsProps) {
 
   const { subscribeToChatRequests, subscribeSentChatRequests } = useRealtime();
 
-  // Subscribe to incoming chat requests (where user is receiver)
   useEffect(() => {
     if (!enabled || !userId) {
       setIsLoadingIncoming(false);
@@ -41,16 +40,10 @@ export function useChatRequests({ userId, enabled }: UseChatRequestsProps) {
     setIsLoadingIncoming(true);
     setError(null);
 
-    console.log(
-      '[useChatRequests] Setting up incoming requests subscription for:',
-      userId
-    );
-
     const unsubscribe = subscribeToChatRequests(userId, async data => {
       try {
         const typedData = data as { items?: Schema['ChatRequest']['type'][] };
         const requests = typedData.items || [];
-        // Convert and fetch user details for each request
         const requestsWithUsers = await Promise.all(
           requests.map(async request => {
             try {
@@ -84,15 +77,6 @@ export function useChatRequests({ userId, enabled }: UseChatRequestsProps) {
           })
         );
 
-        console.log('[useChatRequests] Received incoming requests:', {
-          total: requestsWithUsers.length,
-          requests: requestsWithUsers.map(r => ({
-            id: r.id.slice(-6),
-            requesterId: r.requesterId.slice(-6),
-            status: r.status,
-          })),
-        });
-
         setIncomingRequests(requestsWithUsers);
         setIsLoadingIncoming(false);
       } catch (err) {
@@ -108,15 +92,10 @@ export function useChatRequests({ userId, enabled }: UseChatRequestsProps) {
     });
 
     return () => {
-      console.log(
-        '[useChatRequests] Cleaning up incoming requests subscription for:',
-        userId
-      );
       unsubscribe();
     };
   }, [userId, enabled, subscribeToChatRequests]);
 
-  // Subscribe to sent chat requests (where user is requester)
   useEffect(() => {
     if (!enabled || !userId) {
       setIsLoadingSent(false);
@@ -126,16 +105,10 @@ export function useChatRequests({ userId, enabled }: UseChatRequestsProps) {
 
     setIsLoadingSent(true);
 
-    console.log(
-      '[useChatRequests] Setting up sent requests subscription for:',
-      userId
-    );
-
     const unsubscribe = subscribeSentChatRequests(userId, async data => {
       try {
         const typedData = data as { items?: Schema['ChatRequest']['type'][] };
         const requests = typedData.items || [];
-        // Convert and fetch user details for each request
         const requestsWithUsers = await Promise.all(
           requests.map(async request => {
             try {
@@ -169,15 +142,6 @@ export function useChatRequests({ userId, enabled }: UseChatRequestsProps) {
           })
         );
 
-        console.log('[useChatRequests] Received sent requests:', {
-          total: requestsWithUsers.length,
-          requests: requestsWithUsers.map(r => ({
-            id: r.id.slice(-6),
-            receiverId: r.receiverId.slice(-6),
-            status: r.status,
-          })),
-        });
-
         setSentRequests(requestsWithUsers);
         setIsLoadingSent(false);
       } catch (err) {
@@ -193,18 +157,12 @@ export function useChatRequests({ userId, enabled }: UseChatRequestsProps) {
     });
 
     return () => {
-      console.log(
-        '[useChatRequests] Cleaning up sent requests subscription for:',
-        userId
-      );
       unsubscribe();
     };
   }, [userId, enabled, subscribeSentChatRequests]);
 
-  // Computed values
   const isLoading = isLoadingIncoming || isLoadingSent;
 
-  // Get pending receiver IDs for easy lookup (for UI buttons)
   const pendingReceiverIds = useMemo((): Set<string> => {
     return new Set(
       sentRequests
@@ -213,21 +171,18 @@ export function useChatRequests({ userId, enabled }: UseChatRequestsProps) {
     );
   }, [sentRequests]);
 
-  // Helper to check if there's a pending request to a specific user
   const hasPendingRequestTo = (receiverId: string): boolean => {
     return sentRequests.some(
       req => req.receiverId === receiverId && req.status === 'PENDING'
     );
   };
 
-  // Helper to get a specific incoming request by ID
   const getIncomingRequestById = (
     requestId: string
   ): ChatRequestWithUser | null => {
     return incomingRequests.find(req => req.id === requestId) || null;
   };
 
-  // Helper to get a specific sent request by ID
   const getSentRequestById = (
     requestId: string
   ): ChatRequestWithUser | null => {
@@ -235,25 +190,14 @@ export function useChatRequests({ userId, enabled }: UseChatRequestsProps) {
   };
 
   return {
-    // Incoming requests (where user is receiver)
     incomingRequests,
-
-    // Sent requests (where user is requester)
     sentRequests,
-
-    // Combined loading state
     isLoading,
     isLoadingIncoming,
     isLoadingSent,
-
-    // Error state
     error,
-
-    // Computed helpers
     pendingReceiverIds,
     hasPendingRequestTo,
-
-    // Request lookups
     getIncomingRequestById,
     getSentRequestById,
   };
