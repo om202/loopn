@@ -124,8 +124,9 @@ export function useRealtimeOnlineUsers({
         const users = data.items || [];
 
         // Filter only online users and sort by lastSeen (most recent first)
-        const sortedOnlineUsers = users
-          .filter((user: UserPresence) => user.isOnline)
+        const onlineUsers = users.filter((user: UserPresence) => user.isOnline === true);
+        
+        const sortedOnlineUsers = onlineUsers
           .sort((a: UserPresence, b: UserPresence) => {
             const lastSeenA = a.lastSeen ? new Date(a.lastSeen).getTime() : 0;
             const lastSeenB = b.lastSeen ? new Date(b.lastSeen).getTime() : 0;

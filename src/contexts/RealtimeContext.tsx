@@ -267,9 +267,10 @@ export function RealtimeProvider({ children }: RealtimeProviderProps) {
         key: createSubscriptionKey.onlineUsers(),
         query: () =>
           client.models.UserPresence.observeQuery({
-            filter: { isOnline: { eq: true } },
+            // Remove filter to listen to ALL presence changes (online and offline)
+            // We'll filter for online users client-side in the hook
           }),
-        variables: { filter: { isOnline: { eq: true } } },
+        variables: {},
       },
       callback
     );
