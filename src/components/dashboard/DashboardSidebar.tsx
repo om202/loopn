@@ -86,7 +86,7 @@ export default function DashboardSidebar({
 
               {/* Count indicator for mobile */}
               {count > 0 && (
-                <span className='absolute -top-0.5 -right-0.5 bg-blue-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center min-w-[16px] font-semibold'>
+                <span className='absolute -top-0.5 -right-0.5 bg-blue-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center min-w-[16px] font-semibold'>
                   {count > 99 ? '99+' : count}
                 </span>
               )}

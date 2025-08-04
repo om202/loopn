@@ -32,7 +32,7 @@ const getNotificationIcon = (type: string | null) => {
     case 'chat_request':
       return (
         <svg
-          className='w-4 h-4 text-blue-500'
+          className='w-4 h-4 text-blue-600'
           fill='currentColor'
           viewBox='0 0 20 20'
         >
@@ -206,7 +206,7 @@ export default function NotificationItem({
                       );
                     }}
                     disabled={decliningId === notification.id}
-                    className='px-3 py-1.5 bg-blue-500 text-white text-sm font-semibold rounded-lg hover:bg-blue-600 disabled:opacity-50 transition-colors'
+                    className='px-3 py-1.5 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-600 disabled:opacity-50 transition-colors'
                   >
                     Confirm
                   </button>
@@ -220,7 +220,7 @@ export default function NotificationItem({
                   e.stopPropagation();
                   onNotificationClick(notification);
                 }}
-                className='px-3 py-1.5 bg-blue-500 text-white text-sm font-semibold rounded-lg hover:bg-blue-600 transition-colors'
+                className='px-3 py-1.5 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-600 transition-colors'
               >
                 Reply
               </button>

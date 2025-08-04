@@ -87,7 +87,7 @@ export default function MessageInput({
           <div className='relative pr-8'>
             <div className='flex items-center text-sm text-slate-600 mb-3'>
               <svg
-                className='w-4 h-4 mr-2 text-blue-500'
+                className='w-4 h-4 mr-2 text-blue-600'
                 fill='none'
                 stroke='currentColor'
                 viewBox='0 0 24 24'
@@ -197,7 +197,7 @@ export default function MessageInput({
                     WebkitAppearance: 'none',
                     MozAppearance: 'textfield',
                   }}
-                  className='w-full px-5 py-3 pr-14 border border-slate-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base font-medium bg-slate-50 hover:bg-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed placeholder-slate-500'
+                  className='w-full px-5 py-3 pr-14 border border-slate-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent text-base font-medium bg-slate-50 hover:bg-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed placeholder-slate-500'
                 />
                 <button
                   type='button'
@@ -213,7 +213,7 @@ export default function MessageInput({
               <button
                 onClick={handleSend}
                 disabled={disabled}
-                className='flex items-center justify-center w-12 h-12 bg-blue-600 text-white rounded-full hover:bg-blue-700 focus:bg-blue-700 transition-all duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none'
+                className='flex items-center justify-center w-12 h-12 bg-blue-600 text-white rounded-full hover:bg-blue-700 focus:bg-blue-700 transition-all duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none'
               >
                 <Image
                   src='/send_icon.svg'

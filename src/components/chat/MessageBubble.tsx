@@ -293,7 +293,7 @@ export default function MessageBubble({
                   <div
                     className={`mb-2 pt-2 pb-2 border-l-2 pl-3 pr-3 ${
                       isOwnMessage
-                        ? 'border-blue-300 bg-blue-500 bg-opacity-20'
+                        ? 'border-blue-300 bg-blue-600 bg-opacity-20'
                         : 'border-slate-400 bg-slate-100'
                     } rounded-r-lg`}
                   >
@@ -412,7 +412,7 @@ export default function MessageBubble({
                     data-emoji-button
                     className={`${isTouchDevice ? 'w-10 h-10' : 'w-8 h-8'} rounded-full transition-all duration-150 flex items-center justify-center ${
                       showEmojiPicker
-                        ? 'bg-blue-500 text-white border border-blue-500'
+                        ? 'bg-blue-600 text-white border border-blue-600'
                         : isTouchDevice && showActionsOnMobile
                           ? 'bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200'
                           : 'bg-slate-200 text-slate-600'
