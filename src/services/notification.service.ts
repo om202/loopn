@@ -34,7 +34,7 @@ export class NotificationService {
 
         if (isUserActiveInChat) {
           // User is actively viewing this chat - don't create notification
-          console.log('Skipping notification - user is active in chat');
+          console.info('Skipping notification - user is active in chat');
           return { data: null, error: null, skipped: true };
         }
 

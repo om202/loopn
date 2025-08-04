@@ -156,11 +156,6 @@ export default function UserCard({
                                     className='w-3 h-3 text-gray-400 hover:text-gray-600 cursor-pointer transition-colors'
                                     onClick={e => {
                                       e.stopPropagation();
-                                      // Add your click handler here
-                                      console.log(
-                                        'Timer clicked for user:',
-                                        userPresence.userId
-                                      );
                                     }}
                                   />
                                 </div>

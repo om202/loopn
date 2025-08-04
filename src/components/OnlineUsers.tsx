@@ -73,7 +73,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
       const session = await fetchAuthSession();
       return !!(session.tokens?.accessToken && session.credentials);
     } catch (error) {
-      console.log('Auth session not ready yet:', error);
+      console.error('Auth session not ready yet:', error);
       return false;
     }
   };
@@ -171,7 +171,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
           setConversationUsers(users || []);
         });
       } else {
-        console.log('Auth session not ready for conversation loading');
+        console.error('Auth session not ready for conversation loading');
         setConversationsLoaded(true);
       }
     }, 800);
