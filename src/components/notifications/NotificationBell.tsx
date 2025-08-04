@@ -16,7 +16,6 @@ import { useChatRequests } from '../../hooks/realtime/useChatRequests';
 import { userService } from '../../services/user.service';
 
 import ChatRequestDialog from '../ChatRequestDialog';
-import NotificationBadge from './NotificationBadge';
 import NotificationDropdown from './NotificationDropdown';
 import type {
   Notification,
@@ -509,16 +508,14 @@ export default function NotificationBell() {
       <div className='relative' ref={dropdownRef}>
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className='flex items-center hover:opacity-80 focus:outline-none transition-opacity'
+          className='relative flex items-center hover:opacity-80 focus:outline-none transition-opacity'
         >
           <span className='sr-only'>View notifications</span>
 
-          <NotificationBadge notifications={notifications} />
-
           {/* Notification Bell */}
-          <div className='p-1.5 w-12 h-12 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors flex items-center justify-center'>
+          <div className='p-1.5 w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors flex items-center justify-center'>
             <svg
-              className='h-7 w-7 text-gray-600'
+              className='h-6 w-6 text-gray-600'
               fill='none'
               stroke='currentColor'
               viewBox='0 0 24 24'
@@ -530,6 +527,13 @@ export default function NotificationBell() {
                 d='M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9'
               />
             </svg>
+            
+            {/* Notification Count Badge */}
+            {notifications.length > 0 && (
+              <div className='absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1'>
+                {notifications.length > 99 ? '99+' : notifications.length}
+              </div>
+            )}
           </div>
         </button>
 
