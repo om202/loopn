@@ -43,9 +43,9 @@ export default function UserCard({
   return (
     <div
       key={userPresence.userId}
-      className='bg-white rounded-2xl border border-gray-200 px-4 py-4 group hover:bg-gray-50 transition-all duration-200'
+      className='bg-white rounded-2xl border border-gray-200 px-3 lg:px-4 py-3 lg:py-4 group hover:bg-gray-50 transition-all duration-200'
     >
-      <div className='flex items-center gap-4'>
+      <div className='flex items-center gap-3 lg:gap-4'>
         <div className='flex-shrink-0'>
           <UserAvatar
             email={userPresence.email}
@@ -65,11 +65,11 @@ export default function UserCard({
         </div>
 
         <div className='flex-1 min-w-0'>
-          <div className='font-medium text-gray-900 text-base mb-1 line-clamp-2 no-email-detection break-words'>
+          <div className='font-medium text-gray-900 text-sm lg:text-base mb-1 line-clamp-2 no-email-detection break-words'>
             {getDisplayName(userPresence)}
           </div>
           <div
-            className={`text-sm ${
+            className={`text-xs lg:text-sm ${
               existingConversations.has(userPresence.userId) &&
               existingConversations.get(userPresence.userId)?.chatStatus ===
                 'ENDED'
@@ -110,7 +110,7 @@ export default function UserCard({
                 userPresence.userId
               );
               return (
-                <div className='text-sm text-right'>
+                <div className='text-xs lg:text-sm text-right'>
                   <div className='text-gray-500'>Can connect</div>
                   <div className='text-gray-500 flex items-center justify-end gap-1'>
                     <Clock className='w-3 h-3 text-gray-400 hover:text-gray-600 cursor-pointer transition-colors' />
@@ -129,31 +129,36 @@ export default function UserCard({
                     onChatAction(userPresence.userId);
                   }
                 }}
-                className='px-3 py-1.5 text-sm font-medium rounded-xl border transition-colors bg-white text-gray-700 border-gray-200 hover:bg-gray-50 hover:border-gray-300 flex items-center gap-2'
+                className='px-2 lg:px-3 py-1.5 text-xs lg:text-sm font-medium rounded-xl border transition-colors bg-white text-gray-700 border-gray-200 hover:bg-gray-50 hover:border-gray-300 flex items-center gap-1 lg:gap-2 flex-shrink-0'
               >
                 {pendingRequests.has(userPresence.userId) ? (
                   <>
-                    <Trash2 className='w-4 h-4 mr-1 text-red-600' />
-                    <span className='text-red-600'>Cancel Chat Request</span>
+                    <Trash2 className='w-4 lg:w-4 h-4 lg:h-4 text-red-600 flex-shrink-0' />
+                    <span className='text-red-600 hidden sm:inline'>Cancel Chat Request</span>
+                    <span className='text-red-600 sm:hidden'>Cancel</span>
                   </>
                 ) : existingConversations.has(userPresence.userId) ? (
                   <>
-                    <MessageCircle className='w-4 h-4 text-gray-600 mr-1' />
+                    <MessageCircle className='w-4 lg:w-4 h-4 lg:h-4 text-gray-600 flex-shrink-0' />
                     {existingConversations.get(userPresence.userId)
                       ?.chatStatus === 'ENDED'
                       ? canUserReconnect(userPresence.userId)
-                        ? 'Send New Request'
+                        ? <>
+                            <span className='hidden sm:inline'>Send New Request</span>
+                            <span className='sm:hidden'>Request</span>
+                          </>
                         : (() => {
                             const timeRemaining = getReconnectTimeRemaining(
                               userPresence.userId
                             );
                             return timeRemaining ? (
                               <div className='text-right'>
-                                <div>Can connect</div>
+                                <div className='hidden sm:block'>Can connect</div>
+                                <div className='sm:hidden'>Wait</div>
                                 <div className='flex items-center justify-end gap-1'>
                                   {timeRemaining}
                                   <Clock
-                                    className='w-3 h-3 text-gray-400 hover:text-gray-600 cursor-pointer transition-colors'
+                                    className='w-4 h-4 text-gray-400 hover:text-gray-600 cursor-pointer transition-colors'
                                     onClick={e => {
                                       e.stopPropagation();
                                     }}
@@ -168,7 +173,7 @@ export default function UserCard({
                   </>
                 ) : (
                   <>
-                    <CheckCircle2 className='w-3 h-3 text-gray-600' />
+                    <CheckCircle2 className='w-4 lg:w-4 h-4 lg:h-4 text-gray-600 flex-shrink-0' />
                     Start
                   </>
                 )}
