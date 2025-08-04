@@ -81,10 +81,10 @@ function ConnectedDialog({
           <div className='mb-6'>
             <div className='flex justify-center mb-3'>
               <div className='w-12 h-12 bg-green-100 rounded-full flex items-center justify-center'>
-                <CheckCircle2 className='w-6 h-6 text-green-600' />
+                <CheckCircle2 className='w-6 h-6 text-green-500' />
               </div>
             </div>
-            <h3 className='text-xl font-medium text-green-600 mb-4'>
+            <h3 className='text-xl font-medium text-green-500 mb-4'>
               Connected!
             </h3>
 
@@ -245,10 +245,10 @@ function NewRequestDialog({
               <div className='mb-6'>
                 <div className='flex justify-center mb-3'>
                   <div className='w-12 h-12 bg-green-100 rounded-full flex items-center justify-center'>
-                    <CheckCircle2 className='w-6 h-6 text-green-600' />
+                    <CheckCircle2 className='w-6 h-6 text-green-500' />
                   </div>
                 </div>
-                <h3 className='text-xl font-medium text-green-600 mb-2'>
+                <h3 className='text-xl font-medium text-green-500 mb-2'>
                   Connected!
                 </h3>
                 <p className='text-base text-slate-700'>

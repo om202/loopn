@@ -77,7 +77,7 @@ export default function UserCard({
                   ? 'text-blue-600'
                   : 'text-orange-600'
                 : isOnline
-                  ? 'text-green-600'
+                  ? 'text-green-500'
                   : userPresence.lastSeen &&
                       formatPresenceTime(userPresence.lastSeen) ===
                         'Recently active'

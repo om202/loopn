@@ -261,7 +261,7 @@ export default function NotificationItem({
                   e.stopPropagation();
                   onNotificationClick(notification);
                 }}
-                className='px-3 py-1.5 bg-green-500 text-white text-sm font-semibold rounded-lg hover:bg-green-600 transition-colors'
+                className='px-3 py-1.5 bg-green-500 text-white text-sm font-semibold rounded-lg hover:bg-green-500 transition-colors'
               >
                 Start Chat
               </button>
