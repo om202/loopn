@@ -84,7 +84,10 @@ export default function MessageBubble({
 }: MessageBubbleProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
-  const renderMessageContent = (content: string) => {
+  const renderMessageContent = (
+    content: string,
+    isEmojiOnlyMessage = false
+  ) => {
     const parts = splitTextWithEmojis(content);
 
     return parts.map(part => {
@@ -92,7 +95,7 @@ export default function MessageBubble({
         return (
           <span
             key={`emoji-${part}-${Math.random()}`}
-            className='text-lg mx-0.5 inline-block'
+            className={`mx-0.5 inline-block ${isEmojiOnlyMessage ? '' : 'text-2xl'}`}
           >
             {part}
           </span>
@@ -189,7 +192,9 @@ export default function MessageBubble({
                 <p className='text-sm italic'>Message deleted</p>
               </div>
             ) : messageIsEmojiOnly ? (
-              <div className='text-4xl leading-none'>{message.content}</div>
+              <div className='text-5xl leading-none'>
+                {renderMessageContent(message.content, true)}
+              </div>
             ) : (
               <div
                 className={`px-3 py-2 rounded-3xl border ${
@@ -230,7 +235,7 @@ export default function MessageBubble({
 
                 <div className='relative'>
                   <p className='text-sm font-medium leading-relaxed break-words pr-10'>
-                    {renderMessageContent(message.content)}
+                    {renderMessageContent(message.content, false)}
                   </p>
                   {isOwnMessage && (
                     <div className='absolute bottom-0 right-0'>

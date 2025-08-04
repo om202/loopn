@@ -6,7 +6,7 @@ import ProtectedRoute from '../../components/protected-route';
 
 export default function DashboardPage() {
   const handleChatRequestSent = () => {
-    console.warn('Chat request sent');
+    console.info('Chat request sent');
   };
 
   return (
