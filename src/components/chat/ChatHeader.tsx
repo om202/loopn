@@ -244,7 +244,7 @@ export default function ChatHeader({
                         Chat Ended
                       </span>
                       {reconnectionTime && (
-                        <span className='text-orange-500'>
+                        <span className={reconnectionTime === 'Can reconnect now' ? 'text-orange-500 font-medium' : 'text-orange-500'}>
                           {reconnectionTime}
                         </span>
                       )}

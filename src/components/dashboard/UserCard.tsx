@@ -110,8 +110,8 @@ export default function UserCard({
                 userPresence.userId
               );
               return (
-                <div className='text-sm text-gray-500'>
-                  Can reconnect in {timeRemaining}
+                <div className='text-sm text-orange-500'>
+                  Can connect in {timeRemaining}
                 </div>
               );
             }
@@ -144,7 +144,7 @@ export default function UserCard({
                               userPresence.userId
                             );
                             return timeRemaining
-                              ? `Can reconnect in ${timeRemaining}`
+                              ? `Can connect in ${timeRemaining}`
                               : 'View';
                           })()
                       : 'Chat'}
