@@ -147,7 +147,7 @@ export default function UserCard({
                       canUserReconnect(userPresence.userId) ? (
                         <>
                           <span className='hidden sm:inline'>
-                            Send New Request
+                            Send Chat Request
                           </span>
                           <span className='sm:hidden'>Request</span>
                         </>
