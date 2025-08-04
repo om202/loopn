@@ -4,11 +4,11 @@ import { useAuthenticator } from '@aws-amplify/ui-react';
 
 import { notificationService } from '../../services/notification.service';
 import NotificationItem from './NotificationItem';
-import type { 
-  Notification, 
-  NotificationFilter, 
+import type {
+  Notification,
+  NotificationFilter,
   ChatRequestWithUser,
-  MessageNotificationData 
+  MessageNotificationData,
 } from './types';
 
 interface NotificationDropdownProps {
@@ -150,7 +150,7 @@ export default function NotificationDropdown({
           </div>
         )}
       </div>
-      
+
       {getFilteredNotifications().length > 0 && (
         <div className='p-2 border-t border-gray-200 bg-gray-50'>
           <button

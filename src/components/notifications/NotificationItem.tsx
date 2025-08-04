@@ -5,10 +5,10 @@ import { CheckCircle2 } from 'lucide-react';
 
 import { notificationService } from '../../services/notification.service';
 import UserAvatar from '../UserAvatar';
-import type { 
-  Notification, 
-  ChatRequestWithUser, 
-  MessageNotificationData 
+import type {
+  Notification,
+  ChatRequestWithUser,
+  MessageNotificationData,
 } from './types';
 
 interface NotificationItemProps {
@@ -129,9 +129,7 @@ export default function NotificationItem({
         {notification.type === 'chat_request' ? (
           <div className='relative flex-shrink-0'>
             <UserAvatar
-              email={
-                (notification.data as ChatRequestWithUser)?.requesterEmail
-              }
+              email={(notification.data as ChatRequestWithUser)?.requesterEmail}
               userId={(notification.data as ChatRequestWithUser)?.requesterId}
               size='md'
             />
@@ -141,9 +139,12 @@ export default function NotificationItem({
           'senderEmail' in notification.data ? (
           <div className='relative flex-shrink-0'>
             <UserAvatar
-              email={(notification.data as MessageNotificationData)?.senderEmail}
+              email={
+                (notification.data as MessageNotificationData)?.senderEmail
+              }
               userId={
-                (notification.data as MessageNotificationData)?.message?.senderId
+                (notification.data as MessageNotificationData)?.message
+                  ?.senderId
               }
               size='sm'
             />
@@ -186,7 +187,9 @@ export default function NotificationItem({
                     disabled={decliningId === notification.id}
                     className='px-3 py-1.5 text-sm font-semibold text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 disabled:opacity-50 transition-colors'
                   >
-                    {decliningId === notification.id ? 'Declining...' : 'Decline'}
+                    {decliningId === notification.id
+                      ? 'Declining...'
+                      : 'Decline'}
                   </button>
                   <button
                     onClick={e => {

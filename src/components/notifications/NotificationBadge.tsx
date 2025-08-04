@@ -7,7 +7,9 @@ interface NotificationBadgeProps {
   notifications: Notification[];
 }
 
-export default function NotificationBadge({ notifications }: NotificationBadgeProps) {
+export default function NotificationBadge({
+  notifications,
+}: NotificationBadgeProps) {
   if (notifications.length === 0) {
     return null;
   }
@@ -58,9 +60,5 @@ export default function NotificationBadge({ notifications }: NotificationBadgePr
     );
   }
 
-  return (
-    <div className='flex flex-col items-start gap-1.5 mr-2'>
-      {badges}
-    </div>
-  );
+  return <div className='flex flex-col items-start gap-1.5 mr-2'>{badges}</div>;
 }

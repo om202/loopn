@@ -18,11 +18,11 @@ import { userService } from '../../services/user.service';
 import ChatRequestDialog from '../ChatRequestDialog';
 import NotificationBadge from './NotificationBadge';
 import NotificationDropdown from './NotificationDropdown';
-import type { 
+import type {
   Notification,
   NotificationFilter,
   ChatRequestWithUser,
-  MessageNotificationData
+  MessageNotificationData,
 } from './types';
 
 export default function NotificationBell() {
