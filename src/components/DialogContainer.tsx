@@ -56,7 +56,7 @@ export default function DialogContainer({
       {/* Dialog container */}
       <div className='flex min-h-full items-center justify-center p-4'>
         <div
-          className={`relative w-full ${maxWidthClasses[maxWidth]} transform overflow-hidden rounded-xl bg-white border border-gray-200 shadow-xl transition-all`}
+          className={`relative w-full ${maxWidthClasses[maxWidth]} transform overflow-hidden rounded-xl bg-white border border-slate-200 shadow-xl transition-all`}
         >
           {children}
         </div>

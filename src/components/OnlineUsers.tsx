@@ -300,7 +300,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
         }
       />
 
-      <div className='flex-1 bg-white sm:rounded-2xl sm:border sm:border-gray-200 p-4 lg:p-6 overflow-hidden flex flex-col min-h-0'>
+      <div className='flex-1 bg-white sm:rounded-2xl sm:border sm:border-slate-200 p-4 lg:p-6 overflow-hidden flex flex-col min-h-0'>
         <div className='overflow-y-auto flex-1'>
           <DashboardSectionContent
             activeSection={activeSection}

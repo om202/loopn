@@ -88,12 +88,12 @@ function ConnectedDialog({
               Connected!
             </h3>
 
-            <div className='text-lg font-medium text-gray-900 mb-3 no-email-detection'>
+            <div className='text-lg font-medium text-slate-900 mb-3 no-email-detection'>
               {chatRequest.requesterEmail ||
                 `User ${chatRequest.requesterId.slice(-4)}`}
             </div>
 
-            <p className='text-base text-gray-700'>
+            <p className='text-base text-slate-700'>
               You are now connected to chat for 7 days.
             </p>
           </div>
@@ -106,9 +106,9 @@ function ConnectedDialog({
             id='dontShowAgain'
             checked={dontShowAgain}
             onChange={e => setDontShowAgain(e.target.checked)}
-            className='w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500'
+            className='w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500'
           />
-          <label htmlFor='dontShowAgain' className='text-sm text-gray-600'>
+          <label htmlFor='dontShowAgain' className='text-sm text-slate-600'>
             Don&apos;t show this confirmation again
           </label>
         </div>
@@ -127,7 +127,7 @@ function ConnectedDialog({
           {/* OK Button */}
           <button
             onClick={handleOk}
-            className='flex-1 px-4 py-2 bg-white text-gray-700 text-sm font-medium rounded-2xl border border-gray-300 hover:bg-gray-50 transition-colors'
+            className='flex-1 px-4 py-2 bg-white text-slate-700 text-sm font-medium rounded-2xl border border-slate-300 hover:bg-slate-50 transition-colors'
           >
             Later
           </button>
@@ -224,7 +224,7 @@ function NewRequestDialog({
                 <h3 className='text-xl font-medium text-orange-600 mb-2'>
                   Request Removed
                 </h3>
-                <p className='text-base text-gray-700'>
+                <p className='text-base text-slate-700'>
                   The chat request was removed by the other user
                 </p>
               </div>
@@ -233,7 +233,7 @@ function NewRequestDialog({
             {/* OK Button */}
             <button
               onClick={onClose}
-              className='w-full px-4 py-2 bg-white text-gray-700 text-sm font-medium rounded-2xl border border-gray-300 hover:bg-gray-50 transition-colors'
+              className='w-full px-4 py-2 bg-white text-slate-700 text-sm font-medium rounded-2xl border border-slate-300 hover:bg-slate-50 transition-colors'
             >
               OK
             </button>
@@ -251,7 +251,7 @@ function NewRequestDialog({
                 <h3 className='text-xl font-medium text-green-600 mb-2'>
                   Connected!
                 </h3>
-                <p className='text-base text-gray-700'>
+                <p className='text-base text-slate-700'>
                   You are connected to chat for 7 days
                 </p>
               </div>
@@ -264,9 +264,9 @@ function NewRequestDialog({
                 id='dontShowAgain'
                 checked={dontShowAgain}
                 onChange={e => setDontShowAgain(e.target.checked)}
-                className='w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500'
+                className='w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500'
               />
-              <label htmlFor='dontShowAgain' className='text-sm text-gray-600'>
+              <label htmlFor='dontShowAgain' className='text-sm text-slate-600'>
                 Don&apos;t show this confirmation again
               </label>
             </div>
@@ -274,7 +274,7 @@ function NewRequestDialog({
             {/* OK Button */}
             <button
               onClick={handleOk}
-              className='w-full px-4 py-2 bg-white text-gray-700 text-sm font-medium rounded-2xl border border-gray-300 hover:bg-gray-50 transition-colors'
+              className='w-full px-4 py-2 bg-white text-slate-700 text-sm font-medium rounded-2xl border border-slate-300 hover:bg-slate-50 transition-colors'
             >
               OK
             </button>
@@ -283,7 +283,7 @@ function NewRequestDialog({
           /* Normal Chat Request */
           <>
             <div className='text-center mb-6'>
-              <h3 className='text-lg font-medium text-gray-900 mb-2'>
+              <h3 className='text-lg font-medium text-slate-900 mb-2'>
                 New Chat Request
               </h3>
             </div>
@@ -295,11 +295,11 @@ function NewRequestDialog({
                 size='md'
               />
               <div className='flex-1 min-w-0'>
-                <div className='text-base font-medium text-gray-900 truncate no-email-detection'>
+                <div className='text-base font-medium text-slate-900 truncate no-email-detection'>
                   {chatRequest.requesterEmail ||
                     `User ${chatRequest.requesterId.slice(-4)}`}
                 </div>
-                <div className='text-sm text-gray-600 mt-1'>
+                <div className='text-sm text-slate-600 mt-1'>
                   wants to chat with you
                 </div>
               </div>
@@ -318,7 +318,7 @@ function NewRequestDialog({
               {/* Reject Button */}
               <button
                 onClick={() => handleResponse('REJECTED')}
-                className='flex-1 px-4 py-3 bg-gray-100 text-gray-700 text-base font-medium rounded-2xl hover:bg-gray-200 transition-colors'
+                className='flex-1 px-4 py-3 bg-slate-100 text-slate-700 text-base font-medium rounded-2xl hover:bg-slate-200 transition-colors'
               >
                 Reject
               </button>
@@ -327,7 +327,7 @@ function NewRequestDialog({
             {/* Maybe Later Button */}
             <button
               onClick={handleMaybeLater}
-              className='w-full px-4 py-3 text-sm text-gray-500 hover:text-gray-700 transition-colors'
+              className='w-full px-4 py-3 text-sm text-slate-500 hover:text-slate-700 transition-colors'
             >
               Maybe Later
             </button>

@@ -18,12 +18,12 @@ export default function TrialChatInfoDialog({
       {/* Dialog content */}
       <div className='p-6'>
         {/* Title */}
-        <h3 className='text-lg font-semibold text-gray-900 mb-4'>
+        <h3 className='text-lg font-semibold text-slate-900 mb-4'>
           Trial Chat Period
         </h3>
 
         {/* Content */}
-        <div className='text-sm text-gray-600 space-y-3'>
+        <div className='text-sm text-slate-600 space-y-3'>
           <p>
             <strong>What is a Trial Chat?</strong>
             <br />

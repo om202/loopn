@@ -389,7 +389,7 @@ export default function MessageList({
 
   if (messages.length === 0 && isInitializing) {
     return (
-      <div className='flex-1 overflow-y-auto bg-gray-50'>
+      <div className='flex-1 overflow-y-auto bg-slate-50'>
         <div ref={messagesEndRef} />
       </div>
     );
@@ -406,13 +406,13 @@ export default function MessageList({
       >
         <div className='w-full px-4 sm:px-6 lg:px-20 xl:px-32 py-6 sm:py-8'>
           <div className='flex flex-col items-center justify-center text-center py-20'>
-            <div className='w-14 h-14 bg-gray-200 rounded-full flex items-center justify-center mb-3'>
-              <MessageCircle className='w-8 h-8 text-gray-600' />
+            <div className='w-14 h-14 bg-slate-200 rounded-full flex items-center justify-center mb-3'>
+              <MessageCircle className='w-8 h-8 text-slate-600' />
             </div>
-            <h3 className='text-lg font-medium text-gray-900 mb-2'>
+            <h3 className='text-lg font-medium text-slate-900 mb-2'>
               No messages yet
             </h3>
-            <p className='text-base text-gray-500 max-w-sm'>
+            <p className='text-base text-slate-500 max-w-sm'>
               Send your first message to begin chatting.
             </p>
           </div>
@@ -438,8 +438,8 @@ export default function MessageList({
         {hasMoreMessages ? (
           <div ref={loadMoreRef} className='flex justify-center py-4'>
             {isLoadingMore ? (
-              <div className='flex items-center space-x-2 text-gray-500'>
-                <div className='animate-spin h-4 w-4 border-2 border-gray-400 border-t-transparent rounded-full'></div>
+              <div className='flex items-center space-x-2 text-slate-500'>
+                <div className='animate-spin h-4 w-4 border-2 border-slate-400 border-t-transparent rounded-full'></div>
                 <span className='text-sm'>Loading older messages...</span>
               </div>
             ) : (
@@ -453,10 +453,10 @@ export default function MessageList({
           </div>
         ) : (
           <div className='flex justify-center py-4'>
-            <div className='flex items-center space-x-2 text-gray-400'>
-              <div className='h-px bg-gray-300 w-8'></div>
+            <div className='flex items-center space-x-2 text-slate-400'>
+              <div className='h-px bg-slate-300 w-8'></div>
               <span className='text-sm'>End of messages</span>
-              <div className='h-px bg-gray-300 w-8'></div>
+              <div className='h-px bg-slate-300 w-8'></div>
             </div>
           </div>
         )}
@@ -541,11 +541,11 @@ export default function MessageList({
               {shouldShowNewMessagesSeparator && (
                 <div className='flex items-center justify-center my-4 px-4'>
                   <div className='flex items-center w-full max-w-xs'>
-                    <div className='flex-1 h-px bg-gray-300'></div>
-                    <div className='px-3 text-gray-500 text-sm font-medium'>
+                    <div className='flex-1 h-px bg-slate-300'></div>
+                    <div className='px-3 text-slate-500 text-sm font-medium'>
                       New messages
                     </div>
-                    <div className='flex-1 h-px bg-gray-300'></div>
+                    <div className='flex-1 h-px bg-slate-300'></div>
                   </div>
                 </div>
               )}

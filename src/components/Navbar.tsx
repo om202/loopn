@@ -43,7 +43,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className='bg-white/95 backdrop-blur-md border-b border-gray-200 sticky top-0 z-40'>
+    <nav className='bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-40'>
       <div className='w-full px-3 sm:px-4 lg:px-6'>
         <div className='flex items-center justify-between h-14 sm:h-16'>
           {/* Logo */}
@@ -60,7 +60,7 @@ export default function Navbar() {
                 className='sm:w-10 sm:h-10'
                 priority
               />
-              <h1 className='text-lg sm:text-xl font-semibold text-gray-800'>
+              <h1 className='text-lg sm:text-xl font-semibold text-slate-800'>
                 Loopn
               </h1>
             </Link>
@@ -76,7 +76,7 @@ export default function Navbar() {
                 {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
                 <div
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className='p-1.5 rounded-full hover:bg-gray-100 cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors'
+                  className='p-1.5 rounded-full hover:bg-slate-100 cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors'
                 >
                   <span className='sr-only'>Open user menu</span>
                   <div className='sm:hidden'>
@@ -90,33 +90,33 @@ export default function Navbar() {
 
               {isDropdownOpen && (
                 <div
-                  className='origin-top-right absolute right-0 mt-2 w-72 sm:w-80 rounded-2xl shadow-xl bg-white/95 backdrop-blur-md border border-gray-200 focus:outline-none z-50'
+                  className='origin-top-right absolute right-0 mt-2 w-72 sm:w-80 rounded-2xl shadow-xl bg-white/95 backdrop-blur-md border border-slate-200 focus:outline-none z-50'
                   role='menu'
                   aria-orientation='vertical'
                   aria-labelledby='user-menu-button'
                   tabIndex={-1}
                 >
                   <div className='py-1' role='none'>
-                    <div className='flex flex-col items-center px-4 py-4 sm:py-5 border-b border-gray-200'>
+                    <div className='flex flex-col items-center px-4 py-4 sm:py-5 border-b border-slate-200'>
                       <UserAvatar email={getUserEmail()} size='lg' />
-                      <p className='mt-3 text-sm sm:text-base font-medium text-gray-800 truncate no-email-detection max-w-full px-2'>
+                      <p className='mt-3 text-sm sm:text-base font-medium text-slate-800 truncate no-email-detection max-w-full px-2'>
                         {getUserEmail()}
                       </p>
-                      <p className='text-xs sm:text-sm text-gray-500'>
+                      <p className='text-xs sm:text-sm text-slate-500'>
                         Welcome
                       </p>
                     </div>
                     <div className='p-2'>
                       <button
                         onClick={handleSignOut}
-                        className='w-full text-left rounded-xl px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-3 transition-colors'
+                        className='w-full text-left rounded-xl px-4 py-3 text-sm text-slate-700 hover:bg-slate-100 flex items-center gap-3 transition-colors'
                         role='menuitem'
                         tabIndex={-1}
                         id='user-menu-item-2'
                       >
                         <svg
                           xmlns='http://www.w3.org/2000/svg'
-                          className='h-5 w-5 text-gray-500'
+                          className='h-5 w-5 text-slate-500'
                           fill='none'
                           viewBox='0 0 24 24'
                           stroke='currentColor'

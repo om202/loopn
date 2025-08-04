@@ -44,7 +44,7 @@ export default function DashboardSidebar({
     <>
       {/* Desktop Sidebar */}
       <div className='hidden lg:block w-80 flex-shrink-0'>
-        <div className='bg-white rounded-2xl border border-gray-200 p-6 h-full flex flex-col'>
+        <div className='bg-white rounded-2xl border border-slate-200 p-6 h-full flex flex-col'>
           <nav className='space-y-2 flex-1 overflow-y-auto'>
             {sidebarItems.map(({ id, icon: Icon, label, count }) => (
               <button
@@ -53,12 +53,12 @@ export default function DashboardSidebar({
                 className={`relative w-full flex items-center justify-start gap-3 px-3 py-2.5 rounded-xl text-left border transition-all duration-200 ${
                   activeSection === id
                     ? 'bg-blue-50 text-blue-700 border-transparent'
-                    : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'
+                    : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
                 }`}
               >
                 <Icon className='w-5 h-5 flex-shrink-0' />
                 <span className='font-medium text-base'>{label}</span>
-                <span className='ml-auto text-base text-gray-600 font-medium mr-2'>
+                <span className='ml-auto text-base text-slate-600 font-medium mr-2'>
                   {count}
                 </span>
               </button>
@@ -68,7 +68,7 @@ export default function DashboardSidebar({
       </div>
 
       {/* Mobile Bottom Bar */}
-      <div className='lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-gray-100 px-4 py-2'>
+      <div className='lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-100 px-4 py-2'>
         <nav className='flex justify-around items-center max-w-sm mx-auto'>
           {sidebarItems.map(({ id, icon: Icon, label, count }) => (
             <button
@@ -77,7 +77,7 @@ export default function DashboardSidebar({
               className={`relative flex flex-col items-center justify-center gap-1 px-3 py-2.5 rounded-xl transition-all duration-200 ${
                 activeSection === id
                   ? 'text-blue-600 bg-blue-50'
-                  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                  : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'
               }`}
               title={label}
             >

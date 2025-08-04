@@ -11,7 +11,7 @@ export default function DashboardPage() {
 
   return (
     <ProtectedRoute>
-      <div className='h-screen sm:bg-gray-50 flex flex-col overflow-hidden'>
+      <div className='h-screen sm:bg-slate-50 flex flex-col overflow-hidden'>
         <Navbar />
 
         {/* Main Content Area */}
