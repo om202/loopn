@@ -70,7 +70,9 @@ export default function DashboardSectionContent({
             ) : (
               <div className='text-center py-6 lg:py-8 text-gray-500'>
                 <Globe className='w-6 lg:w-8 h-6 lg:h-8 mx-auto mb-2 text-gray-400' />
-                <p className='text-sm lg:text-base'>No users online right now</p>
+                <p className='text-sm lg:text-base'>
+                  No users online right now
+                </p>
               </div>
             )}
           </div>
@@ -118,7 +120,9 @@ export default function DashboardSectionContent({
             <div className='mb-4 lg:mb-6'>
               <div className='flex items-center gap-2 lg:gap-3 py-2 px-3 lg:px-4 bg-gray-50 rounded-xl'>
                 <Timer className='w-4 lg:w-5 h-4 lg:h-5 text-gray-600 flex-shrink-0' />
-                <h3 className='text-sm lg:text-base text-gray-900 font-medium'>Active Chat Trials</h3>
+                <h3 className='text-sm lg:text-base text-gray-900 font-medium'>
+                  Active Chat Trials
+                </h3>
                 <span className='text-xs lg:text-sm bg-white text-gray-700 px-2 lg:px-3 py-1 rounded-full font-medium ml-auto'>
                   {activeChatTrialUsers.length}
                 </span>
@@ -141,7 +145,9 @@ export default function DashboardSectionContent({
             <div className='mb-4 lg:mb-6'>
               <div className='flex items-center gap-2 lg:gap-3 py-2 px-3 lg:px-4 bg-gray-50 rounded-xl'>
                 <Calendar className='w-4 lg:w-5 h-4 lg:h-5 text-gray-600 flex-shrink-0' />
-                <h3 className='text-sm lg:text-base text-gray-900 font-medium'>Ended Chat Trials</h3>
+                <h3 className='text-sm lg:text-base text-gray-900 font-medium'>
+                  Ended Chat Trials
+                </h3>
                 <span className='text-xs lg:text-sm bg-white text-gray-700 px-2 lg:px-3 py-1 rounded-full font-medium ml-auto'>
                   {endedChatTrialUsers.length}
                 </span>

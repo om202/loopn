@@ -61,7 +61,7 @@ export default function DashboardSidebar({
               title={label} // Tooltip for icon-only view
             >
               <Icon className='w-5 h-5 flex-shrink-0' />
-              
+
               {/* Text and count - hidden on small screens, visible on large screens */}
               <span className='hidden lg:block font-medium text-base'>
                 {label}
@@ -69,7 +69,7 @@ export default function DashboardSidebar({
               <span className='hidden lg:block ml-auto text-base text-gray-600 font-medium mr-2'>
                 {count}
               </span>
-              
+
               {/* Small count indicator for mobile - only show if count > 0 */}
               {count > 0 && (
                 <span className='lg:hidden absolute -top-1 -right-1 bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center min-w-[20px]'>

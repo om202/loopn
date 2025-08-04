@@ -134,42 +134,50 @@ export default function UserCard({
                 {pendingRequests.has(userPresence.userId) ? (
                   <>
                     <Trash2 className='w-4 lg:w-4 h-4 lg:h-4 text-red-600 flex-shrink-0' />
-                    <span className='text-red-600 hidden sm:inline'>Cancel Chat Request</span>
+                    <span className='text-red-600 hidden sm:inline'>
+                      Cancel Chat Request
+                    </span>
                     <span className='text-red-600 sm:hidden'>Cancel</span>
                   </>
                 ) : existingConversations.has(userPresence.userId) ? (
                   <>
                     <MessageCircle className='w-4 lg:w-4 h-4 lg:h-4 text-gray-600 flex-shrink-0' />
                     {existingConversations.get(userPresence.userId)
-                      ?.chatStatus === 'ENDED'
-                      ? canUserReconnect(userPresence.userId)
-                        ? <>
-                            <span className='hidden sm:inline'>Send New Request</span>
-                            <span className='sm:hidden'>Request</span>
-                          </>
-                        : (() => {
-                            const timeRemaining = getReconnectTimeRemaining(
-                              userPresence.userId
-                            );
-                            return timeRemaining ? (
-                              <div className='text-right'>
-                                <div className='hidden sm:block'>Can connect</div>
-                                <div className='sm:hidden'>Wait</div>
-                                <div className='flex items-center justify-end gap-1'>
-                                  {timeRemaining}
-                                  <Clock
-                                    className='w-4 h-4 text-gray-400 hover:text-gray-600 cursor-pointer transition-colors'
-                                    onClick={e => {
-                                      e.stopPropagation();
-                                    }}
-                                  />
-                                </div>
+                      ?.chatStatus === 'ENDED' ? (
+                      canUserReconnect(userPresence.userId) ? (
+                        <>
+                          <span className='hidden sm:inline'>
+                            Send New Request
+                          </span>
+                          <span className='sm:hidden'>Request</span>
+                        </>
+                      ) : (
+                        (() => {
+                          const timeRemaining = getReconnectTimeRemaining(
+                            userPresence.userId
+                          );
+                          return timeRemaining ? (
+                            <div className='text-right'>
+                              <div className='hidden sm:block'>Can connect</div>
+                              <div className='sm:hidden'>Wait</div>
+                              <div className='flex items-center justify-end gap-1'>
+                                {timeRemaining}
+                                <Clock
+                                  className='w-4 h-4 text-gray-400 hover:text-gray-600 cursor-pointer transition-colors'
+                                  onClick={e => {
+                                    e.stopPropagation();
+                                  }}
+                                />
                               </div>
-                            ) : (
-                              'View'
-                            );
-                          })()
-                      : 'Chat'}
+                            </div>
+                          ) : (
+                            'View'
+                          );
+                        })()
+                      )
+                    ) : (
+                      'Chat'
+                    )}
                   </>
                 ) : (
                   <>
