@@ -1,6 +1,6 @@
 'use client';
 
-import { Globe, MessageCircle, Timer, Users } from 'lucide-react';
+import { MessageCircle, Timer, Users } from 'lucide-react';
 
 type SidebarSection = 'all' | 'connections' | 'chat-trial';
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { Globe, MessageCircle, Timer, Users } from 'lucide-react';
+import { MessageCircle, Timer, Users } from 'lucide-react';
 
 import type { Schema } from '../../../amplify/data/resource';
 
@@ -118,9 +118,7 @@ export default function DashboardSectionContent({
   return (
     <div>
       <div className='mb-8 lg:mb-10'>
-        <h2 className='text-2xl font-bold text-slate-900 mb-2'>
-          {title}
-        </h2>
+        <h2 className='text-2xl font-bold text-slate-900 mb-2'>{title}</h2>
         <p className='text-base text-slate-600'>{description}</p>
       </div>
       <div className='space-y-3'>
