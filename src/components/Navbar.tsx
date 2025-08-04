@@ -43,28 +43,29 @@ export default function Navbar() {
   };
 
   return (
-    <nav className='bg-white border-b border-gray-200 py-1'>
-      <div className='w-full px-4 sm:px-6 lg:px-8'>
-        <div className='flex items-center justify-between h-16'>
+    <nav className='bg-white/95 backdrop-blur-md border-b border-gray-200 sticky top-0 z-40'>
+      <div className='w-full px-3 sm:px-4 lg:px-6'>
+        <div className='flex items-center justify-between h-14 sm:h-16'>
           {/* Logo */}
           <div className='flex items-center'>
             <Link
               href='/?stay=true'
-              className='flex items-center space-x-3 hover:opacity-80 transition-opacity'
+              className='flex items-center space-x-2 sm:space-x-3 hover:opacity-80 transition-opacity'
             >
               <Image
                 src='/loopn.svg'
                 alt='Loopn'
-                width={40}
-                height={40}
+                width={32}
+                height={32}
+                className='sm:w-10 sm:h-10'
                 priority
               />
-              <h1 className='text-xl font-semibold text-gray-800'>Loopn</h1>
+              <h1 className='text-lg sm:text-xl font-semibold text-gray-800'>Loopn</h1>
             </Link>
           </div>
 
           {/* Right side icons */}
-          <div className='flex items-center gap-6'>
+          <div className='flex items-center gap-3 sm:gap-4'>
             <NotificationBell />
 
             {/* User menu */}
@@ -73,35 +74,40 @@ export default function Navbar() {
                 {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
                 <div
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className='p-1 rounded-full hover:bg-gray-100 cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors'
+                  className='p-1.5 rounded-full hover:bg-gray-100 cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors'
                 >
                   <span className='sr-only'>Open user menu</span>
-                  <UserAvatar email={getUserEmail()} size='md' />
+                  <div className='sm:hidden'>
+                    <UserAvatar email={getUserEmail()} size='sm' />
+                  </div>
+                  <div className='hidden sm:block'>
+                    <UserAvatar email={getUserEmail()} size='md' />
+                  </div>
                 </div>
               </div>
 
               {isDropdownOpen && (
                 <div
-                  className='origin-top-right absolute right-0 mt-2 w-80 rounded-2xl shadow-lg bg-white border border-gray-200 focus:outline-none z-10'
+                  className='origin-top-right absolute right-0 mt-2 w-72 sm:w-80 rounded-2xl shadow-xl bg-white/95 backdrop-blur-md border border-gray-200 focus:outline-none z-50'
                   role='menu'
                   aria-orientation='vertical'
                   aria-labelledby='user-menu-button'
                   tabIndex={-1}
                 >
                   <div className='py-1' role='none'>
-                    <div className='flex flex-col items-center px-4 py-5 border-b border-gray-200'>
+                    <div className='flex flex-col items-center px-4 py-4 sm:py-5 border-b border-gray-200'>
                       <UserAvatar email={getUserEmail()} size='lg' />
-                      <p className='mt-3 text-sm sm:text-base font-medium text-gray-800 truncate no-email-detection'>
+                      <p className='mt-3 text-sm sm:text-base font-medium text-gray-800 truncate no-email-detection max-w-full px-2'>
                         {getUserEmail()}
                       </p>
-                      <p className='text-sm sm:text-sm text-gray-500'>
+                      <p className='text-xs sm:text-sm text-gray-500'>
                         Welcome
                       </p>
                     </div>
                     <div className='p-2'>
                       <button
                         onClick={handleSignOut}
-                        className='w-full text-left rounded-lg px-4 py-2 text-sm sm:text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-3'
+                        className='w-full text-left rounded-xl px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-3 transition-colors'
                         role='menuitem'
                         tabIndex={-1}
                         id='user-menu-item-2'

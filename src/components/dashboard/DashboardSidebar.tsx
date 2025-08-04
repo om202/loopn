@@ -72,25 +72,25 @@ export default function DashboardSidebar({
       </div>
 
       {/* Mobile Bottom Bar */}
-      <div className='lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 px-4 py-3'>
+      <div className='lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-gray-100 px-4 py-2'>
         <nav className='flex justify-around items-center max-w-sm mx-auto'>
           {sidebarItems.map(({ id, icon: Icon, label, count }) => (
             <button
               key={id}
               onClick={() => onSectionChange(id)}
-              className={`relative flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-xl transition-all duration-200 ${
+              className={`relative flex flex-col items-center justify-center gap-1 px-3 py-2.5 rounded-xl transition-all duration-200 ${
                 activeSection === id
-                  ? 'text-blue-700'
-                  : 'text-gray-600 hover:text-gray-800'
+                  ? 'text-blue-600 bg-blue-50'
+                  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
               }`}
               title={label}
             >
-              <Icon className='w-6 h-6 flex-shrink-0' />
-              <span className='text-sm font-medium'>{label}</span>
+              <Icon className='w-5 h-5 flex-shrink-0' />
+              <span className='text-xs font-medium'>{label}</span>
 
               {/* Count indicator for mobile */}
               {count > 0 && (
-                <span className='absolute -top-1 -right-1 bg-blue-500 text-white text-sm rounded-full w-5 h-5 flex items-center justify-center min-w-[20px]'>
+                <span className='absolute -top-0.5 -right-0.5 bg-blue-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center min-w-[16px] font-semibold'>
                   {count > 99 ? '99+' : count}
                 </span>
               )}

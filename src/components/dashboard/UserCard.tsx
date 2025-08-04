@@ -65,7 +65,7 @@ export default function UserCard({
         </div>
 
         <div className='flex-1 min-w-0'>
-          <div className='font-medium text-gray-900 text-sm lg:text-base mb-1 line-clamp-2 no-email-detection break-words'>
+          <div className='font-medium text-gray-900 text-sm lg:text-base mb-1 truncate no-email-detection'>
             {getDisplayName(userPresence)}
           </div>
           <div
