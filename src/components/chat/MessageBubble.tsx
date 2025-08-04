@@ -47,14 +47,14 @@ interface MessageBubbleProps {
 
 const MessageTicks = ({ isOptimistic }: { isOptimistic: boolean }) => {
   return (
-    <div className='flex items-center'>
+    <div className='flex items-center select-none'>
       {isOptimistic ? (
         <Image
           src='/tick.svg'
           alt='sent'
           width={20}
           height={20}
-          className='opacity-30 filter brightness-0 invert'
+          className='opacity-30 filter brightness-0 invert select-none'
         />
       ) : (
         <Image
@@ -62,7 +62,7 @@ const MessageTicks = ({ isOptimistic }: { isOptimistic: boolean }) => {
           alt='delivered'
           width={20}
           height={20}
-          className='opacity-50 filter brightness-0 invert'
+          className='opacity-50 filter brightness-0 invert select-none'
         />
       )}
     </div>

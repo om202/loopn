@@ -288,7 +288,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   }
 
   return (
-    <div className='flex lg:gap-4 h-[calc(100vh-5rem)] pb-24 lg:pb-0'>
+    <div className='flex lg:gap-4 h-full pb-24 lg:pb-0'>
       <DashboardSidebar
         activeSection={activeSection}
         onSectionChange={setActiveSection}
@@ -300,20 +300,22 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
         }
       />
 
-      <div className='flex-1 bg-white sm:rounded-2xl sm:border sm:border-gray-200 p-4 lg:p-6 overflow-y-auto'>
-        <DashboardSectionContent
-          activeSection={activeSection}
-          onlineUsers={userCategories.onlineUsers}
-          connectionUsers={userCategories.connectionUsers}
-          activeChatTrialUsers={userCategories.activeChatTrialUsers}
-          endedChatTrialUsers={userCategories.endedChatTrialUsers}
-          existingConversations={existingConversations}
-          pendingRequests={combinedPendingRequests}
-          onChatAction={handleChatAction}
-          onCancelChatRequest={handleCancelChatRequest}
-          canUserReconnect={userCategories.canUserReconnect}
-          getReconnectTimeRemaining={userCategories.getReconnectTimeRemaining}
-        />
+      <div className='flex-1 bg-white sm:rounded-2xl sm:border sm:border-gray-200 p-4 lg:p-6 overflow-hidden flex flex-col min-h-0'>
+        <div className='overflow-y-auto flex-1'>
+          <DashboardSectionContent
+            activeSection={activeSection}
+            onlineUsers={userCategories.onlineUsers}
+            connectionUsers={userCategories.connectionUsers}
+            activeChatTrialUsers={userCategories.activeChatTrialUsers}
+            endedChatTrialUsers={userCategories.endedChatTrialUsers}
+            existingConversations={existingConversations}
+            pendingRequests={combinedPendingRequests}
+            onChatAction={handleChatAction}
+            onCancelChatRequest={handleCancelChatRequest}
+            canUserReconnect={userCategories.canUserReconnect}
+            getReconnectTimeRemaining={userCategories.getReconnectTimeRemaining}
+          />
+        </div>
       </div>
     </div>
   );

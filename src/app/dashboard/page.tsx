@@ -11,11 +11,11 @@ export default function DashboardPage() {
 
   return (
     <ProtectedRoute>
-      <div className='min-h-screen bg-gray-50'>
+      <div className='h-screen bg-gray-50 flex flex-col overflow-hidden'>
         <Navbar />
 
         {/* Main Content Area */}
-        <div className='w-full px-2 sm:px-3 lg:px-6 py-2 sm:py-3 lg:py-4'>
+        <div className='flex-1 w-full px-2 sm:px-3 lg:px-6 py-2 sm:py-3 lg:py-4 min-h-0'>
           <OnlineUsers onChatRequestSent={handleChatRequestSent} />
         </div>
       </div>

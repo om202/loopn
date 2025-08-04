@@ -44,12 +44,12 @@ export default function DashboardSidebar({
     <>
       {/* Desktop Sidebar */}
       <div className='hidden lg:block w-80 flex-shrink-0'>
-        <div className='bg-white rounded-2xl border border-gray-200 p-6 h-full'>
+        <div className='bg-white rounded-2xl border border-gray-200 p-6 h-full flex flex-col'>
           <h2 className='text-lg font-semibold text-gray-900 mb-4'>
             Dashboard
           </h2>
 
-          <nav className='space-y-2'>
+          <nav className='space-y-2 flex-1 overflow-y-auto'>
             {sidebarItems.map(({ id, icon: Icon, label, count }) => (
               <button
                 key={id}

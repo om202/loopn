@@ -140,7 +140,7 @@ export default function ChatHeader({
       className='flex-shrink-0 bg-white border-b border-gray-200 relative z-10'
       style={{ boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.04)' }}
     >
-      <div className='w-full px-2 sm:px-4'>
+      <div className='w-full px-3 sm:px-4 lg:px-6'>
         <div className='py-2 sm:py-3'>
           <div className='flex items-center gap-2 sm:gap-3'>
             {/* Back Button */}
@@ -367,10 +367,10 @@ export default function ChatHeader({
         maxWidth='xs'
       >
         <div className='p-4'>
-          <h3 className='text-base font-medium text-gray-900 text-center mb-3'>
+          <h3 className='text-lg font-medium text-gray-900 text-center mb-3'>
             End trial chat?
           </h3>
-          <p className='text-base text-gray-600 text-center mb-4'>
+          <p className='text-sm text-gray-600 text-center mb-4'>
             This will immediately end the chat. You won&apos;t be able to send
             more messages, but chat history will remain accessible until the
             trial period expires.
