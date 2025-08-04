@@ -68,6 +68,7 @@ export class NotificationService {
         // Parse JSON data field back to objects
         const notificationsWithParsedData = sortedNotifications.map(notif => ({
           ...notif,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           data: notif.data ? JSON.parse(notif.data as string) : undefined,
         }));
 
@@ -103,6 +104,7 @@ export class NotificationService {
         // Parse JSON data field back to objects
         const notificationsWithParsedData = sortedNotifications.map(notif => ({
           ...notif,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           data: notif.data ? JSON.parse(notif.data as string) : undefined,
         }));
 
@@ -175,6 +177,7 @@ export class NotificationService {
         // Parse JSON data field back to objects
         const notificationsWithParsedData = sortedNotifications.map(notif => ({
           ...notif,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           data: notif.data ? JSON.parse(notif.data as string) : undefined,
         }));
 
@@ -279,6 +282,7 @@ export class NotificationService {
         // Parse JSON data field back to objects
         const notificationsWithParsedData = sortedNotifications.map(notif => ({
           ...notif,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           data: notif.data ? JSON.parse(notif.data as string) : undefined,
         }));
 

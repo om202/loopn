@@ -90,7 +90,7 @@ export default function NotificationBell() {
     }
 
     const processRequests = async () => {
-      const requestsWithUsers = await Promise.all(
+      const requestsWithUsers: ChatRequestWithUser[] = await Promise.all(
         realtimeChatRequests.map(async request => {
           const userResult = await userService.getUserPresence(
             request.requesterId
@@ -272,13 +272,15 @@ export default function NotificationBell() {
       notification.data &&
       'conversationId' in notification.data
     ) {
-      router.push(createShortChatUrl(notification.data.conversationId));
+      const notificationData = notification.data as { conversationId: string };
+      router.push(createShortChatUrl(notificationData.conversationId));
 
       if (user) {
         if (notification.type === 'message') {
+          const messageData = notification.data as { conversationId: string };
           await notificationService.deleteNotificationsForConversation(
             user.userId,
-            notification.data.conversationId
+            messageData.conversationId
           );
         } else {
           await notificationService.markNotificationAsRead(notification.id);

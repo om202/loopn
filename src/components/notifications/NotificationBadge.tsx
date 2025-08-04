@@ -18,7 +18,8 @@ export default function NotificationBadge({
     .filter(n => n.type === 'message')
     .reduce((total, notif) => {
       if (notif.data && 'messageCount' in notif.data) {
-        return total + ((notif.data as any).messageCount || 1);
+        const messageData = notif.data as { messageCount: number };
+        return total + (messageData.messageCount || 1);
       }
       return total + 1;
     }, 0);
