@@ -182,12 +182,12 @@ export default function ChatHeader({
             />
 
             <div className='flex-1 min-w-0'>
-              <h1 className='text-sm sm:text-sm font-medium text-black truncate no-email-detection'>
+              <h1 className='text-base font-medium text-gray-900 truncate no-email-detection'>
                 {getUserDisplayName()}
               </h1>
               <div className='flex items-center gap-1 sm:gap-2 mt-0.5'>
                 {conversation.isConnected ? (
-                  <div className='flex items-center text-sm sm:text-sm text-green-600'>
+                  <div className='flex items-center text-sm text-green-600'>
                     <svg
                       className='w-2.5 h-2.5 sm:w-3 sm:h-3 mr-1'
                       fill='currentColor'
@@ -205,10 +205,20 @@ export default function ChatHeader({
                     <span className='sm:hidden'>Connected</span>
                   </div>
                 ) : (
-                  <div
-                    className={`flex items-center text-sm sm:text-sm ${getPresenceDisplay().color}`}
-                  >
-                    {getPresenceDisplay().text}
+                  <div className='flex items-center gap-2 text-sm'>
+                    <div
+                      className={`flex items-center ${getPresenceDisplay().color}`}
+                    >
+                      {getPresenceDisplay().text}
+                    </div>
+                    
+                    {/* Trial Chat Text Only */}
+                    {conversation.chatStatus === 'ACTIVE' && !!timeLeft && timeLeft !== 'Expired' && (
+                      <>
+                        <span className='text-gray-400'>•</span>
+                        <span className='text-blue-600'>Trial Chat</span>
+                      </>
+                    )}
                   </div>
                 )}
               </div>
@@ -220,7 +230,7 @@ export default function ChatHeader({
                 {/* Chat Ended State */}
                 {conversation.chatStatus === 'ENDED' && (
                   <div className='flex items-center gap-3 sm:gap-4 md:gap-6'>
-                    <div className='flex items-center gap-2 text-sm sm:text-sm text-gray-600'>
+                    <div className='flex items-center gap-2 text-base sm:text-base text-gray-600'>
                       <button
                         onClick={() => setShowChatEndedInfoDialog(true)}
                         className='flex items-center gap-1 text-orange-500 hover:text-orange-600 transition-colors p-1 rounded-full hover:bg-orange-50'
@@ -256,7 +266,7 @@ export default function ChatHeader({
                             height={16}
                             className='flex-shrink-0 sm:w-[18px] sm:h-[18px]'
                           />
-                          <span className='text-sm sm:text-sm font-medium'>
+                          <span className='text-base sm:text-base font-medium'>
                             <span className='hidden sm:inline'>Reconnect</span>
                             <span className='sm:hidden'>Reconnect</span>
                           </span>
@@ -270,27 +280,28 @@ export default function ChatHeader({
                 {conversation.chatStatus === 'ACTIVE' &&
                   !!timeLeft &&
                   timeLeft !== 'Expired' && (
-                    <div className='flex items-center gap-3 sm:gap-4 md:gap-6'>
-                      <div className='flex items-center gap-2 text-sm sm:text-sm text-gray-600'>
-                        <button
-                          onClick={() => setShowTrialInfoDialog(true)}
-                          className='flex items-center gap-1 text-gray-500 hover:text-blue-600 transition-colors p-1 rounded-full hover:bg-blue-50'
-                          title='Learn about trial chat period'
-                        >
-                          <Info className='w-4 h-4' />
-                        </button>
-                        <span className='font-medium'>Trial Chat</span>
-                        <span className='text-gray-500'>{timeLeft}</span>
+                    <div className='flex items-center gap-2 text-sm'>
+                      <button
+                        onClick={() => setShowTrialInfoDialog(true)}
+                        className='flex items-center text-white hover:bg-blue-600 bg-blue-500 rounded-full'
+                        title='Learn about trial chat period'
+                      >
+                        <Info className='w-4 h-4' />
+                      </button>
+                      <div className='flex items-center gap-2 text-gray-500 mr-3'>
+                        <span className='font-medium'>Time Left</span>
+                        <span className='bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full text-xs font-bold'>{timeLeft}</span>
+                        <span className='text-gray-500'>•</span>
                         <button
                           onClick={() => setShowEndChatDialog(true)}
                           className='text-red-500 hover:text-red-600 font-medium transition-colors border-b border-dotted border-red-300 hover:border-red-400'
                         >
-                          End Now
+                          End now
                         </button>
                       </div>
 
                       {/* Line Separator */}
-                      <div className='w-px h-6 bg-gray-300'></div>
+                      <div className='w-0.5 h-8 bg-gray-300 mr-3'></div>
 
                       {/* Connect Button */}
                       <button
@@ -301,11 +312,11 @@ export default function ChatHeader({
                         <Image
                           src='/connect-icon.svg'
                           alt='Connect'
-                          width={16}
-                          height={16}
+                          width={18}
+                          height={18}
                           className='flex-shrink-0 sm:w-[18px] sm:h-[18px]'
                         />
-                        <span className='text-sm sm:text-sm font-medium'>
+                        <span className='text-base sm:text-base font-medium'>
                           <span className='hidden sm:inline'>
                             {sendingConnectionRequest
                               ? 'Connecting...'
@@ -340,7 +351,7 @@ export default function ChatHeader({
           <h3 className='text-base font-medium text-gray-900 text-center mb-3'>
             End trial chat?
           </h3>
-          <p className='text-sm text-gray-600 text-center mb-4'>
+          <p className='text-base text-gray-600 text-center mb-4'>
             This will immediately end the chat. You won&apos;t be able to send
             more messages, but chat history will remain accessible until the
             trial period expires.
@@ -348,7 +359,7 @@ export default function ChatHeader({
           <div className='flex gap-2'>
             <button
               onClick={() => setShowEndChatDialog(false)}
-              className='flex-1 px-3 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none transition-colors'
+              className='flex-1 px-3 py-2 text-base font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none transition-colors'
             >
               Cancel
             </button>
@@ -357,7 +368,7 @@ export default function ChatHeader({
                 onEndChat();
                 setShowEndChatDialog(false);
               }}
-              className='flex-1 px-3 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 focus:outline-none transition-colors'
+              className='flex-1 px-3 py-2 text-base font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 focus:outline-none transition-colors'
             >
               End Chat
             </button>
@@ -376,7 +387,7 @@ export default function ChatHeader({
             Chat Ended
           </h3>
 
-          <div className='text-sm text-gray-600 space-y-3'>
+          <div className='text-base text-gray-600 space-y-3'>
             <p>
               <strong>What happened?</strong>
               <br />
@@ -413,7 +424,7 @@ export default function ChatHeader({
           <div className='mt-6'>
             <button
               onClick={() => setShowChatEndedInfoDialog(false)}
-              className='w-full px-4 py-2 text-sm font-medium text-white bg-orange-600 rounded-lg hover:bg-orange-700 focus:outline-none transition-colors'
+              className='w-full px-4 py-2 text-base font-medium text-white bg-orange-600 rounded-lg hover:bg-orange-700 focus:outline-none transition-colors'
             >
               Got it
             </button>
