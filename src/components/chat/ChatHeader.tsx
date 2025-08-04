@@ -217,8 +217,12 @@ export default function ChatHeader({
                       !!timeLeft &&
                       timeLeft !== 'Expired' && (
                         <>
-                          <span className='text-gray-400 hidden sm:inline'>•</span>
-                          <span className='text-blue-600 hidden sm:inline'>Trial Chat</span>
+                          <span className='text-gray-400 hidden sm:inline'>
+                            •
+                          </span>
+                          <span className='text-blue-600 hidden sm:inline'>
+                            Trial Chat
+                          </span>
                         </>
                       )}
                   </div>
@@ -297,12 +301,16 @@ export default function ChatHeader({
                         >
                           <Clock className='w-4 h-4 text-gray-500 sm:hidden flex-shrink-0' />
                           <Info className='w-3 sm:w-4 h-3 sm:h-4 text-blue-500 hidden sm:block' />
-                          <span className='font-medium hidden sm:inline'>Time Left</span>
+                          <span className='font-medium hidden sm:inline'>
+                            Time Left
+                          </span>
                         </button>
                         <span className='bg-gray-200 text-gray-700 px-1.5 sm:px-2 py-0.5 rounded-full text-xs font-bold whitespace-nowrap'>
                           {timeLeft}
                         </span>
-                        <span className='text-gray-500 hidden md:inline'>•</span>
+                        <span className='text-gray-500 hidden md:inline'>
+                          •
+                        </span>
                         <button
                           onClick={() => setShowEndChatDialog(true)}
                           className='text-red-500 hover:text-red-600 font-medium transition-colors border-b border-dotted border-red-300 hover:border-red-400 hidden md:inline whitespace-nowrap'
