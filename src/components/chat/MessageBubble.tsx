@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import Image from 'next/image';
 import type { Schema } from '../../../amplify/data/resource';
 import UserAvatar from '../UserAvatar';
@@ -38,6 +38,8 @@ interface MessageBubbleProps {
   showEmojiPicker: boolean;
   onEmojiPickerToggle: () => void;
   animationTrigger?: string;
+  onMessageActionsChange?: (messageId: string | null, isActive: boolean) => void;
+  isOtherMessageActive?: boolean;
 }
 
 const MessageTicks = ({ isOptimistic }: { isOptimistic: boolean }) => {
@@ -82,8 +84,75 @@ export default function MessageBubble({
   showEmojiPicker,
   onEmojiPickerToggle,
   animationTrigger,
+  onMessageActionsChange,
+  isOtherMessageActive = false,
 }: MessageBubbleProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [showActionsOnMobile, setShowActionsOnMobile] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const longPressTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const touchStartTimeRef = useRef<number>(0);
+
+  // Detect touch device
+  useEffect(() => {
+    setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
+  }, []);
+
+  // Long press handlers
+  const handleLongPressStart = useCallback(() => {
+    if (isTouchDevice) {
+      longPressTimerRef.current = setTimeout(() => {
+        setShowActionsOnMobile(true);
+        onMessageActionsChange?.(message.id, true);
+        // Provide haptic feedback if available
+        if (navigator.vibrate) {
+          navigator.vibrate(50);
+        }
+      }, 500); // 500ms long press
+    }
+  }, [isTouchDevice, onMessageActionsChange, message.id]);
+
+  const handleLongPressEnd = useCallback(() => {
+    if (longPressTimerRef.current) {
+      clearTimeout(longPressTimerRef.current);
+      longPressTimerRef.current = null;
+    }
+  }, []);
+
+  const handleTouchStart = useCallback(() => {
+    touchStartTimeRef.current = Date.now();
+    handleLongPressStart();
+  }, [handleLongPressStart]);
+
+  const handleTouchEnd = useCallback(() => {
+    handleLongPressEnd();
+    // Don't auto-hide on quick tap - let user click away to dismiss
+  }, [handleLongPressEnd]);
+
+  // Hide actions when clicking elsewhere
+  useEffect(() => {
+    const handleClickAway = (event: Event) => {
+      if (showActionsOnMobile) {
+        const target = event.target as Element;
+        const messageContainer = target.closest('[data-message-id="' + message.id + '"]');
+        // Only hide if clicking outside this specific message
+        if (!messageContainer) {
+          setShowActionsOnMobile(false);
+          onMessageActionsChange?.(null, false);
+        }
+      }
+    };
+
+    if (showActionsOnMobile) {
+      document.addEventListener('touchstart', handleClickAway);
+      document.addEventListener('click', handleClickAway);
+    }
+
+    return () => {
+      document.removeEventListener('touchstart', handleClickAway);
+      document.removeEventListener('click', handleClickAway);
+    };
+  }, [showActionsOnMobile, message.id, onMessageActionsChange]);
 
   const renderMessageContent = (
     content: string,
@@ -161,11 +230,19 @@ export default function MessageBubble({
 
   return (
     <div
-      className={`flex flex-col ${marginTop} ${marginBottom} ${
+      className={`group flex flex-col ${marginTop} ${marginBottom} ${
         isOwnMessage ? 'items-end' : 'items-start'
+      } transition-opacity duration-200 ${
+        isOtherMessageActive && !showActionsOnMobile ? 'opacity-30' : 'opacity-100'
       }`}
+      data-message-id={message.id}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      onTouchCancel={handleLongPressEnd}
     >
-      <div className='group relative flex items-center gap-2'>
+      <div 
+        className='relative flex items-center gap-2 max-w-full'
+      >
         {/* Avatar container - always takes up space for other users to maintain consistent alignment */}
         {!isOwnMessage && (
           <div className='flex-shrink-0 w-8 h-8'>
@@ -181,8 +258,8 @@ export default function MessageBubble({
         )}
 
         {/* Message content wrapper with relative positioning for actions */}
-        <div className='relative flex gap-2'>
-          <div className='relative max-w-xs sm:max-w-sm lg:max-w-lg'>
+        <div className={`relative flex gap-2 min-w-0 ${isTouchDevice && showActionsOnMobile ? 'bg-blue-50 rounded-lg px-2 py-1' : ''}`}>
+          <div className='relative max-w-[85vw] sm:max-w-sm md:max-w-md lg:max-w-lg'>
             {message.isDeleted ? (
               <div
                 className={`px-3 py-2 rounded-3xl border ${
@@ -191,10 +268,10 @@ export default function MessageBubble({
                     : 'bg-gray-50 text-gray-500 border-gray-300 rounded-bl-sm'
                 }`}
               >
-                <p className='text-sm italic'>Message deleted</p>
+                <p className='text-sm italic select-none'>Message deleted</p>
               </div>
             ) : messageIsEmojiOnly ? (
-              <div className='text-5xl leading-none'>
+              <div className='text-5xl leading-none select-none'>
                 {renderMessageContent(message.content, true)}
               </div>
             ) : (
@@ -236,7 +313,7 @@ export default function MessageBubble({
                 )}
 
                 <div className='relative'>
-                  <p className='text-sm font-medium leading-relaxed break-words pr-10'>
+                  <p className='text-sm font-medium leading-relaxed break-words pr-10 select-none'>
                     {renderMessageContent(message.content, false)}
                   </p>
                   {isOwnMessage && (
@@ -267,15 +344,17 @@ export default function MessageBubble({
 
           {onReplyToMessage && !message.isDeleted && (
             <div
-              className={`absolute top-1/2 -translate-y-6 ${
-                isOwnMessage ? 'right-full mr-3' : 'left-full ml-3'
-              } ${showEmojiPicker ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} transition-all duration-150 ease-out flex items-center gap-2 ${
+              className={`absolute ${
+                isTouchDevice 
+                  ? `bottom-full mb-2 ${isOwnMessage ? 'right-0' : 'left-0'}` 
+                  : `top-1/2 -translate-y-6 ${isOwnMessage ? 'right-full mr-3' : 'left-full ml-3'}`
+              } ${showEmojiPicker || (isTouchDevice && showActionsOnMobile) ? 'flex opacity-100' : isTouchDevice ? 'hidden' : 'hidden group-hover:flex group-hover:opacity-100'} transition-all duration-150 ease-out items-center gap-2 ${
                 isOwnMessage ? 'flex-row-reverse' : 'flex-row'
-              }`}
+              } z-10`}
             >
               <button
                 onClick={handleReplyClick}
-                className='w-8 h-8 bg-gray-200 hover:bg-gray-300 rounded-full transition-colors duration-150 flex items-center justify-center'
+                className={`${isTouchDevice ? 'w-10 h-10' : 'w-8 h-8'} bg-gray-200 hover:bg-gray-300 rounded-full transition-colors duration-150 flex items-center justify-center`}
                 title='Reply'
               >
                 <svg
@@ -296,7 +375,7 @@ export default function MessageBubble({
               {isOwnMessage && onDeleteMessage && !message.isDeleted && (
                 <button
                   onClick={handleDeleteClick}
-                  className='w-8 h-8 bg-gray-200 hover:bg-red-100 rounded-full transition-colors duration-150 flex items-center justify-center'
+                  className={`${isTouchDevice ? 'w-10 h-10' : 'w-8 h-8'} bg-gray-200 hover:bg-red-100 rounded-full transition-colors duration-150 flex items-center justify-center`}
                   title='Delete message'
                 >
                   <svg
@@ -319,7 +398,7 @@ export default function MessageBubble({
                 <button
                   onClick={onEmojiPickerToggle}
                   data-emoji-button
-                  className={`w-8 h-8 rounded-full transition-all duration-150 flex items-center justify-center ${
+                  className={`${isTouchDevice ? 'w-10 h-10' : 'w-8 h-8'} rounded-full transition-all duration-150 flex items-center justify-center ${
                     showEmojiPicker
                       ? 'bg-blue-500 text-white'
                       : 'bg-gray-200 text-gray-600'

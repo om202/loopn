@@ -34,7 +34,7 @@ export default function EmojiPicker({
   if (showFullPicker) {
     return (
       <div
-        className='absolute bottom-full mb-3 left-1/2 transform -translate-x-1/2 z-50'
+        className='absolute bottom-full mb-3 right-0 z-50'
         data-emoji-picker
       >
         <div className='rounded-xl overflow-hidden shadow-lg'>
@@ -54,7 +54,7 @@ export default function EmojiPicker({
     <div
       ref={pickerRef}
       data-emoji-picker
-      className='absolute bottom-full mb-2 left-1/2 p-2 py-1 transform -translate-x-1/4 bg-white border border-gray-200 rounded-full z-50 backdrop-blur-sm shadow-xs'
+      className='absolute bottom-full mb-2 right-0 p-2 py-1 bg-white border border-gray-200 rounded-full z-50 backdrop-blur-sm shadow-xs'
     >
       <div className='flex gap-1 items-center'>
         {QUICK_EMOJIS.map(emoji => (

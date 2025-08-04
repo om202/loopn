@@ -117,8 +117,8 @@ export default function MessageInput({
         </div>
       )}
 
-      <div className='flex-shrink-0 bg-white border-t border-gray-200 p-4 shadow-lg relative'>
-        <div className='max-w-5xl mx-auto'>
+      <div className='flex-shrink-0 bg-white border-t border-gray-200 p-2 sm:p-4 shadow-lg relative'>
+        <div className='w-full'>
           <form
             autoComplete='off'
             onSubmit={e => {
@@ -144,7 +144,7 @@ export default function MessageInput({
               <div className='absolute bottom-full right-0 mb-2 z-50'>
                 <div
                   ref={emojiPickerRef}
-                  className='rounded-lg overflow-hidden shadow-xl w-[350px]'
+                  className='rounded-lg overflow-hidden shadow-xl w-[min(350px,calc(100vw-2rem))]'
                 >
                   <EmojiPicker
                     onEmojiClick={handleEmojiClick}

@@ -288,7 +288,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   }
 
   return (
-    <div className='flex gap-2 lg:gap-4 h-[calc(100vh-5rem)]'>
+    <div className='flex lg:gap-4 h-[calc(100vh-5rem)] pb-20 lg:pb-0'>
       <DashboardSidebar
         activeSection={activeSection}
         onSectionChange={setActiveSection}
