@@ -18,8 +18,9 @@ import { userService } from '../../services/user.service';
 import ChatRequestDialog from '../ChatRequestDialog';
 import NotificationDropdown from './NotificationDropdown';
 import type {
-  Notification,
+  UINotification,
   NotificationFilter,
+  ChatRequestNotification,
   ChatRequestWithUser,
 } from './types';
 
@@ -35,7 +36,7 @@ export default function NotificationBell() {
   });
 
   const [, setChatRequests] = useState<ChatRequestWithUser[]>([]);
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [notifications, setNotifications] = useState<UINotification[]>([]);
   const [activeFilter] = useState<NotificationFilter>('all');
   const [isOpen, setIsOpen] = useState(false);
   const [decliningId, setDecliningId] = useState<string | null>(null);
@@ -69,7 +70,7 @@ export default function NotificationBell() {
 
   // Group message notifications by conversation to avoid spam
   const groupMessageNotifications = useCallback(
-    (notifications: Notification[]) => {
+    (notifications: UINotification[]) => {
       // This is now handled at the service level, so just return as-is
       // The service already groups message notifications by conversation
       return notifications;
@@ -166,7 +167,7 @@ export default function NotificationBell() {
           return true;
         });
 
-        const chatNotifications: Notification[] = [];
+        const chatNotifications: ChatRequestNotification[] = [];
         for (const request of requestsWithUsers) {
           const existingNotification = filteredNotifications.find(
             notif => notif.type === 'chat_request' && notif.id === request.id
@@ -271,7 +272,7 @@ export default function NotificationBell() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleNotificationClick = async (notification: Notification) => {
+  const handleNotificationClick = async (notification: UINotification) => {
     if (
       (notification.type === 'message' || notification.type === 'connection') &&
       notification.data &&
@@ -281,19 +282,23 @@ export default function NotificationBell() {
       router.push(createShortChatUrl(notificationData.conversationId));
 
       if (user) {
-        if (notification.type === 'message') {
-          // For message notifications, delete all message notifications for this conversation
-          const messageData = notification.data as { conversationId: string };
-          await notificationService.deleteNotificationsForConversation(
-            user.userId,
-            messageData.conversationId
-          );
-        } else if (notification.type === 'connection') {
-          // For connection notifications, delete this specific notification
-          await notificationService.deleteNotification(notification.id);
-        } else {
-          // For other types, just mark as read
-          await notificationService.markNotificationAsRead(notification.id);
+        // Only handle actual notifications (not chat request notifications) for database operations
+        const isActualNotification = 'userId' in notification;
+        if (isActualNotification) {
+          if (notification.type === 'message') {
+            // For message notifications, delete all message notifications for this conversation
+            const messageData = notification.data as { conversationId: string };
+            await notificationService.deleteNotificationsForConversation(
+              user.userId,
+              messageData.conversationId
+            );
+          } else if (notification.type === 'connection') {
+            // For connection notifications, delete this specific notification
+            await notificationService.deleteNotification(notification.id);
+          } else {
+            // For other types, just mark as read
+            await notificationService.markNotificationAsRead(notification.id);
+          }
         }
       }
 
@@ -330,7 +335,7 @@ export default function NotificationBell() {
         if (result.error) {
           // If API call failed, restore the notification
           setChatRequests(prev => [...prev, chatRequest]);
-          const chatNotification: Notification = {
+          const chatNotification: ChatRequestNotification = {
             id: chatRequest.id,
             type: 'chat_request',
             title:
@@ -348,7 +353,7 @@ export default function NotificationBell() {
         console.error('Error responding to chat request:', error);
         // Restore notification on error
         setChatRequests(prev => [...prev, chatRequest]);
-        const chatNotification: Notification = {
+        const chatNotification: ChatRequestNotification = {
           id: chatRequest.id,
           type: 'chat_request',
           title:
@@ -381,7 +386,7 @@ export default function NotificationBell() {
 
       if (result.error) {
         setChatRequests(prev => [...prev, chatRequest]);
-        const chatNotification: Notification = {
+        const chatNotification: ChatRequestNotification = {
           id: chatRequest.id,
           type: 'chat_request',
           title:
@@ -397,7 +402,7 @@ export default function NotificationBell() {
       }
     } catch {
       setChatRequests(prev => [...prev, chatRequest]);
-      const chatNotification: Notification = {
+      const chatNotification: ChatRequestNotification = {
         id: chatRequest.id,
         type: 'chat_request',
         title:

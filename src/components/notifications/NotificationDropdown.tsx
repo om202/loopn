@@ -5,7 +5,7 @@ import { useAuthenticator } from '@aws-amplify/ui-react';
 import { notificationService } from '../../services/notification.service';
 import NotificationItem from './NotificationItem';
 import type {
-  Notification,
+  UINotification,
   NotificationFilter,
   ChatRequestWithUser,
   MessageNotificationData,
@@ -13,11 +13,11 @@ import type {
 
 interface NotificationDropdownProps {
   isOpen: boolean;
-  notifications: Notification[];
+  notifications: UINotification[];
   activeFilter: NotificationFilter;
   error: string | null;
   decliningId: string | null;
-  onNotificationClick: (notification: Notification) => void;
+  onNotificationClick: (notification: UINotification) => void;
   onRespondToRequest: (
     chatRequestId: string,
     status: 'ACCEPTED' | 'REJECTED',

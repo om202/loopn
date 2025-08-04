@@ -14,15 +14,27 @@ export interface MessageNotificationData {
   messageCount: number;
 }
 
-export interface Notification {
+// Raw Amplify-generated type
+type AmplifyNotification = Schema['Notification']['type'];
+
+// Processed notification type with parsed data
+export interface Notification extends Omit<AmplifyNotification, 'data'> {
+  data?: ChatRequestWithUser | MessageNotificationData;
+}
+
+// Chat request notification - a virtual notification for displaying chat requests
+export interface ChatRequestNotification {
   id: string;
-  type: 'chat_request' | 'message' | 'connection' | 'system' | null | undefined;
+  type: 'chat_request';
   title: string;
   content: string;
   timestamp: string;
-  isRead: boolean | null;
-  data?: ChatRequestWithUser | MessageNotificationData;
+  isRead: boolean;
+  data: ChatRequestWithUser;
 }
+
+// Union type for all notifications used in the UI
+export type UINotification = Notification | ChatRequestNotification;
 
 export type NotificationFilter =
   | 'all'

@@ -2,8 +2,9 @@ import { generateClient } from 'aws-amplify/data';
 
 import type { Schema } from '../../amplify/data/resource';
 import { chatPresenceService } from './chat-presence.service';
+import type { Notification } from '../components/notifications/types';
 
-type Notification = Schema['Notification']['type'];
+type _AmplifyNotification = Schema['Notification']['type'];
 
 export class NotificationService {
   private client = generateClient<Schema>();
@@ -172,11 +173,12 @@ export class NotificationService {
         );
 
         // Parse JSON data field back to objects
-        const notificationsWithParsedData = sortedNotifications.map(notif => ({
-          ...notif,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          data: notif.data ? JSON.parse(notif.data as string) : undefined,
-        }));
+        const notificationsWithParsedData: Notification[] =
+          sortedNotifications.map(notif => ({
+            ...notif,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            data: notif.data ? JSON.parse(notif.data as string) : undefined,
+          }));
 
         return { data: notificationsWithParsedData, error: null };
       }
@@ -208,11 +210,12 @@ export class NotificationService {
         );
 
         // Parse JSON data field back to objects
-        const notificationsWithParsedData = sortedNotifications.map(notif => ({
-          ...notif,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          data: notif.data ? JSON.parse(notif.data as string) : undefined,
-        }));
+        const notificationsWithParsedData: Notification[] =
+          sortedNotifications.map(notif => ({
+            ...notif,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            data: notif.data ? JSON.parse(notif.data as string) : undefined,
+          }));
 
         return { data: notificationsWithParsedData, error: null };
       }
@@ -281,11 +284,12 @@ export class NotificationService {
         );
 
         // Parse JSON data field back to objects
-        const notificationsWithParsedData = sortedNotifications.map(notif => ({
-          ...notif,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          data: notif.data ? JSON.parse(notif.data as string) : undefined,
-        }));
+        const notificationsWithParsedData: Notification[] =
+          sortedNotifications.map(notif => ({
+            ...notif,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            data: notif.data ? JSON.parse(notif.data as string) : undefined,
+          }));
 
         return { data: notificationsWithParsedData, error: null };
       }
@@ -386,11 +390,12 @@ export class NotificationService {
         );
 
         // Parse JSON data field back to objects
-        const notificationsWithParsedData = sortedNotifications.map(notif => ({
-          ...notif,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          data: notif.data ? JSON.parse(notif.data as string) : undefined,
-        }));
+        const notificationsWithParsedData: Notification[] =
+          sortedNotifications.map(notif => ({
+            ...notif,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            data: notif.data ? JSON.parse(notif.data as string) : undefined,
+          }));
 
         onNext(notificationsWithParsedData);
       },

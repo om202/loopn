@@ -1,10 +1,10 @@
 'use client';
 
 import { MessageCircle } from 'lucide-react';
-import type { Notification } from './types';
+import type { UINotification } from './types';
 
 interface NotificationBadgeProps {
-  notifications: Notification[];
+  notifications: UINotification[];
 }
 
 export default function NotificationBadge({

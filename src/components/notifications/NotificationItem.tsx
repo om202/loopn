@@ -6,14 +6,14 @@ import { CheckCircle2 } from 'lucide-react';
 import { notificationService } from '../../services/notification.service';
 import UserAvatar from '../UserAvatar';
 import type {
-  Notification,
+  UINotification,
   ChatRequestWithUser,
   MessageNotificationData,
 } from './types';
 
 interface NotificationItemProps {
-  notification: Notification;
-  onNotificationClick: (notification: Notification) => void;
+  notification: UINotification;
+  onNotificationClick: (notification: UINotification) => void;
   onRespondToRequest: (
     chatRequestId: string,
     status: 'ACCEPTED' | 'REJECTED',
@@ -149,7 +149,7 @@ export default function NotificationItem({
           </div>
         ) : (
           <div className='flex-shrink-0'>
-            {getNotificationIcon(notification.type)}
+            {getNotificationIcon(notification.type || null)}
           </div>
         )}
 
