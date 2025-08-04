@@ -34,8 +34,14 @@ interface RealtimeContextType {
     callback: SubscriptionCallback
   ) => UnsubscribeFn;
 
-  // Chat request subscriptions
+  // Chat request subscriptions (incoming)
   subscribeToChatRequests: (
+    userId: string,
+    callback: SubscriptionCallback
+  ) => UnsubscribeFn;
+
+  // Sent chat request subscriptions (outgoing)
+  subscribeSentChatRequests: (
     userId: string,
     callback: SubscriptionCallback
   ) => UnsubscribeFn;
@@ -158,7 +164,7 @@ export function RealtimeProvider({ children }: RealtimeProviderProps) {
     );
   };
 
-  // Chat request subscriptions
+  // Chat request subscriptions (incoming) - only PENDING requests
   const subscribeToChatRequests = (
     userId: string,
     callback: SubscriptionCallback
@@ -168,9 +174,40 @@ export function RealtimeProvider({ children }: RealtimeProviderProps) {
         key: createSubscriptionKey.chatRequests(userId),
         query: () =>
           client.models.ChatRequest.observeQuery({
-            filter: { receiverId: { eq: userId } },
+            filter: {
+              receiverId: { eq: userId },
+              status: { eq: 'PENDING' },
+            },
           }),
-        variables: { filter: { receiverId: { eq: userId } } },
+        variables: {
+          filter: {
+            receiverId: { eq: userId },
+            status: { eq: 'PENDING' },
+          },
+        },
+      },
+      callback
+    );
+  };
+
+  // Sent chat request subscriptions (outgoing) - only PENDING requests
+  const subscribeSentChatRequests = (
+    userId: string,
+    callback: SubscriptionCallback
+  ): UnsubscribeFn => {
+    return subscriptionManager.subscribe(
+      {
+        key: createSubscriptionKey.sentChatRequests(userId),
+        query: () =>
+          client.models.ChatRequest.observeQuery({
+            filter: {
+              requesterId: { eq: userId },
+              status: { eq: 'PENDING' },
+            },
+          }),
+        variables: {
+          filter: { requesterId: { eq: userId }, status: { eq: 'PENDING' } },
+        },
       },
       callback
     );
@@ -232,6 +269,7 @@ export function RealtimeProvider({ children }: RealtimeProviderProps) {
     subscribeToNotifications,
     subscribeToReactions,
     subscribeToChatRequests,
+    subscribeSentChatRequests,
     subscribeToConversations,
     subscribeToOnlineUsers,
     getStats,

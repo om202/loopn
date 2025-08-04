@@ -225,6 +225,7 @@ export const createSubscriptionKey = {
   reactions: (messageIds: string[]) =>
     `reactions:${messageIds.sort().join(',')}`,
   chatRequests: (userId: string) => `chatRequests:${userId}`,
+  sentChatRequests: (userId: string) => `sentChatRequests:${userId}:PENDING`,
   conversations: (userId: string) => `conversations:${userId}`,
   onlineUsers: () => 'onlineUsers:global',
 };

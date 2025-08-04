@@ -13,6 +13,8 @@ import LoadingContainer from './LoadingContainer';
 import { useChatActions } from '../hooks/useChatActions';
 import { useUserCategorization } from '../hooks/useUserCategorization';
 import { useRealtimeOnlineUsers } from '../hooks/realtime';
+import { useChatRequests } from '../hooks/realtime/useChatRequests';
+import { useRealtime } from '../contexts/RealtimeContext';
 
 type UserPresence = Schema['UserPresence']['type'];
 type Conversation = Schema['Conversation']['type'];
@@ -25,18 +27,17 @@ type SidebarSection = 'online' | 'connections' | 'chat-trial';
 
 export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   const [allUsers, setAllUsers] = useState<UserPresence[]>([]);
-  const [pendingRequests, setPendingRequests] = useState<Set<string>>(
-    new Set()
-  );
+  // Remove local pending requests state - will use real-time hook instead
   const [existingConversations, setExistingConversations] = useState<
     Map<string, Conversation>
   >(new Map());
   const [error, setError] = useState<string | null>(null);
-  const [pendingRequestsLoaded, setPendingRequestsLoaded] = useState(false);
+  // Remove pendingRequestsLoaded - handled by real-time hook
   const [conversationsLoaded, setConversationsLoaded] = useState(false);
   const [activeSection, setActiveSection] = useState<SidebarSection>('online');
   const [currentTime, setCurrentTime] = useState(new Date());
   const { user } = useAuthenticator();
+  const { subscribeToConversations } = useRealtime();
 
   // Use our new realtime online users hook
   const {
@@ -45,6 +46,16 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
     error: onlineUsersError,
     isUserOnline,
   } = useRealtimeOnlineUsers({
+    enabled: !!user?.userId,
+  });
+
+  // Use unified chat requests hook
+  const {
+    pendingReceiverIds,
+    isLoadingSent: sentRequestsLoading,
+    error: sentRequestsError,
+  } = useChatRequests({
+    userId: user?.userId || '',
     enabled: !!user?.userId,
   });
 
@@ -149,63 +160,8 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
     onChatRequestSent,
   });
 
-  useEffect(() => {
-    if (!user) {
-      return;
-    }
-
-    // Reset loading state for new user
-    setPendingRequestsLoaded(false);
-    setConversationsLoaded(false);
-
-    let sentRequestsSubscription: any;
-
-    // Add delay and wait for authentication session to be fully established
-    const authDelay = setTimeout(async () => {
-      // Wait for auth session to be ready with retry logic
-      let authReady = false;
-      let retries = 0;
-      const maxRetries = 5;
-
-      while (!authReady && retries < maxRetries) {
-        authReady = await isAuthSessionReady();
-        if (!authReady) {
-          retries++;
-          console.log(`Waiting for auth session... (${retries}/${maxRetries})`);
-          await new Promise(resolve => setTimeout(resolve, 1000));
-        }
-      }
-
-      if (!authReady) {
-        console.error('Failed to establish auth session after retries');
-        setPendingRequestsLoaded(true);
-        return;
-      }
-
-      // Subscribe to sent chat requests for real-time updates
-      sentRequestsSubscription = chatService.observeSentChatRequests(
-        user.userId,
-        requests => {
-          const receiverIds = requests.map(req => req.receiverId);
-          setPendingRequests(new Set(receiverIds));
-          setPendingRequestsLoaded(true);
-        },
-        error => {
-          console.error('Error observing sent chat requests:', error);
-          setPendingRequestsLoaded(true);
-        }
-      );
-
-      // Note: Online users subscription moved to useRealtimeOnlineUsers hook
-    }, 500); // Initial delay before checking auth
-
-    return () => {
-      clearTimeout(authDelay);
-      if (sentRequestsSubscription) {
-        sentRequestsSubscription.unsubscribe();
-      }
-    };
-  }, [user]);
+  // Note: Chat requests are now handled by unified useChatRequests hook
+  // Note: Online users subscription is handled by useRealtimeOnlineUsers hook
 
   // Store conversation users separately
   const [conversationUsers, setConversationUsers] = useState<UserPresence[]>(
@@ -245,46 +201,38 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
       return;
     }
 
-    const subscription = chatService.observeConversations(
-      user.userId,
-      conversations => {
-        const conversationMap = new Map<string, Conversation>();
+    const subscription = subscribeToConversations(user.userId, data => {
+      const conversations = data.items || [];
+      const conversationMap = new Map<string, Conversation>();
 
-        // Sort conversations by creation date (newest first) and update mappings with latest data
-        const sortedConversations = conversations.sort((a, b) => {
-          const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
-          const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
-          return dateB - dateA; // Newest first
-        });
+      // Sort conversations by creation date (newest first) and update mappings with latest data
+      const sortedConversations = conversations.sort((a: any, b: any) => {
+        const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+        const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+        return dateB - dateA; // Newest first
+      });
 
-        // Update conversation mappings (newest conversation per user)
-        sortedConversations.forEach(conv => {
-          const otherUserId =
-            conv.participant1Id === user.userId
-              ? conv.participant2Id
-              : conv.participant1Id;
-          if (otherUserId && !conversationMap.has(otherUserId)) {
-            // Only set if we haven't seen this user yet (since we're going newest first)
-            conversationMap.set(otherUserId, conv);
-          }
-        });
+      // Update conversation mappings (newest conversation per user)
+      sortedConversations.forEach((conv: any) => {
+        const otherUserId =
+          conv.participant1Id === user.userId
+            ? conv.participant2Id
+            : conv.participant1Id;
+        if (otherUserId && !conversationMap.has(otherUserId)) {
+          // Only set if we haven't seen this user yet (since we're going newest first)
+          conversationMap.set(otherUserId, conv);
+        }
+      });
 
-        setExistingConversations(conversationMap);
-        // Only check reconnectable users occasionally to avoid excessive calls
-        // The interval will handle regular updates
-      },
-      error => {
-        console.error(
-          'Error observing conversation updates in dashboard:',
-          error
-        );
-      }
-    );
+      setExistingConversations(conversationMap);
+      // Only check reconnectable users occasionally to avoid excessive calls
+      // The interval will handle regular updates
+    });
 
     return () => {
-      subscription.unsubscribe();
+      subscription();
     };
-  }, [user?.userId]);
+  }, [user?.userId, subscribeToConversations]);
 
   // Timer to update countdown every second
   useEffect(() => {
@@ -311,23 +259,25 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   const handleChatAction = async (receiverId: string) => {
     const action = await chatActions.handleChatAction(
       receiverId,
-      pendingRequests
+      pendingReceiverIds
     );
     if (action === 'send-request') {
-      chatActions.handleSendChatRequest(receiverId, setPendingRequests);
+      // Note: Real-time updates handled by unified useChatRequests hook
+      chatActions.handleSendChatRequest(receiverId, () => {});
     }
   };
 
   const handleCancelChatRequest = (receiverId: string) => {
-    chatActions.handleCancelChatRequest(receiverId, setPendingRequests);
+    // Note: Real-time updates handled by unified useChatRequests hook
+    chatActions.handleCancelChatRequest(receiverId, () => {});
   };
 
-  if (error || onlineUsersError || chatActions.error) {
+  if (error || onlineUsersError || sentRequestsError || chatActions.error) {
     return (
       <div className='p-4 sm:p-6 text-red-600 bg-red-50 rounded-2xl border border-red-200 text-center'>
         <div className='text-xs sm:text-sm font-medium mb-1'>Error</div>
         <div className='text-xs sm:text-sm'>
-          {error || onlineUsersError || chatActions.error}
+          {error || onlineUsersError || sentRequestsError || chatActions.error}
         </div>
       </div>
     );
@@ -359,7 +309,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
           activeChatTrialUsers={userCategories.activeChatTrialUsers}
           endedChatTrialUsers={userCategories.endedChatTrialUsers}
           existingConversations={existingConversations}
-          pendingRequests={pendingRequests}
+          pendingRequests={pendingReceiverIds}
           onChatAction={handleChatAction}
           onCancelChatRequest={handleCancelChatRequest}
           canUserReconnect={userCategories.canUserReconnect}

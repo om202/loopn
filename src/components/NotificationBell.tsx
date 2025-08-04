@@ -14,6 +14,7 @@ import { chatService } from '../services/chat.service';
 import { messageService } from '../services/message.service';
 import { notificationService } from '../services/notification.service';
 import { soundService } from '../services/sound.service';
+import { useChatRequests } from '../hooks/realtime/useChatRequests';
 import { userService } from '../services/user.service';
 
 import ChatRequestDialog from './ChatRequestDialog';
@@ -51,6 +52,17 @@ type NotificationFilter =
   | 'system';
 
 export default function NotificationBell() {
+  // Use unified real-time chat requests
+  const { user } = useAuthenticator();
+  const {
+    incomingRequests: realtimeChatRequests,
+    isLoadingIncoming: chatRequestsLoading,
+    error: chatRequestsError,
+  } = useChatRequests({
+    userId: user?.userId || '',
+    enabled: !!user?.userId,
+  });
+
   const [chatRequests, setChatRequests] = useState<ChatRequestWithUser[]>([]);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [activeFilter, setActiveFilter] = useState<NotificationFilter>('all');
@@ -71,7 +83,6 @@ export default function NotificationBell() {
   const isInitialLoad = useRef(true);
   const previousRequestIdsRef = useRef<string[]>([]);
   const shownDialogRequestIds = useRef<Set<string>>(new Set());
-  const { user } = useAuthenticator();
   const router = useRouter();
   const pathname = usePathname();
 
@@ -127,153 +138,164 @@ export default function NotificationBell() {
     loadNotifications();
   }, [user]);
 
-  // Subscribe to chat requests (separate from message subscription)
+  // Process real-time chat requests from centralized system
   useEffect(() => {
-    if (!user) {
+    if (!realtimeChatRequests || chatRequestsLoading) {
       return;
     }
 
-    // Subscribe to incoming chat requests
-    const subscription = chatService.observeChatRequests(
-      user.userId,
-      async requests => {
-        // Fetch user details for each request
-        const requestsWithUsers = await Promise.all(
-          requests.map(async request => {
-            const userResult = await userService.getUserPresence(
-              request.requesterId
-            );
-            return {
-              ...request,
-              requesterEmail: userResult.data?.email || undefined,
-            };
-          })
+    // Fetch user details for each request
+    const processRequests = async () => {
+      const requestsWithUsers = await Promise.all(
+        realtimeChatRequests.map(async request => {
+          const userResult = await userService.getUserPresence(
+            request.requesterId
+          );
+          return {
+            ...request,
+            requesterEmail: userResult.data?.email || undefined,
+          };
+        })
+      );
+
+      console.log('[NotificationBell] Processing chat requests:', {
+        total: requestsWithUsers.length,
+        previousIds: previousRequestIdsRef.current,
+        currentIds: requestsWithUsers.map(r => r.id),
+        isInitialLoad: isInitialLoad.current,
+      });
+
+      // Check for new requests to show dialog (only after initial load)
+      if (!isInitialLoad.current) {
+        const currentRequestIds = new Set(requestsWithUsers.map(req => req.id));
+        const previousRequestIds = new Set(previousRequestIdsRef.current);
+
+        // Find truly new requests (not just reloaded ones)
+        const newRequests = requestsWithUsers.filter(
+          req => !previousRequestIds.has(req.id)
         );
 
-        // Check for new requests to show dialog (only after initial load)
-        if (!isInitialLoad.current) {
-          const newRequests = requestsWithUsers.filter(
-            req => !previousRequestIdsRef.current.includes(req.id)
+        console.log('[NotificationBell] New requests detected:', {
+          newRequests: newRequests.map(r => ({
+            id: r.id,
+            createdAt: r.createdAt,
+          })),
+          shownDialogIds: Array.from(shownDialogRequestIds.current),
+        });
+
+        // Show dialog for the first new request that hasn't been shown yet
+        const requestToShow = newRequests.find(
+          req => !shownDialogRequestIds.current.has(req.id)
+        );
+
+        // Show dialog for the request if there's one and no dialog is open
+        if (requestToShow && !showDialog) {
+          console.log(
+            '[NotificationBell] Showing dialog for request:',
+            requestToShow.id
+          );
+          // Immediately mark this request as shown to prevent duplicates
+          shownDialogRequestIds.current.add(requestToShow.id);
+          setDialogRequest(requestToShow);
+          setShowDialog(true);
+          // Play happy sound for new chat request
+          soundService.playHappySound();
+        }
+      } else {
+        // Mark initial load as complete
+        isInitialLoad.current = false;
+      }
+
+      setChatRequests(requestsWithUsers);
+
+      // Update the ref with current request IDs for next comparison
+      previousRequestIdsRef.current = requestsWithUsers.map(req => req.id);
+
+      // Clean up shown dialog IDs for requests that no longer exist (rejected/accepted)
+      const currentRequestIds = new Set(requestsWithUsers.map(req => req.id));
+      shownDialogRequestIds.current.forEach(requestId => {
+        if (!currentRequestIds.has(requestId)) {
+          shownDialogRequestIds.current.delete(requestId);
+          // If this is the currently shown dialog request, mark it as cancelled
+          // BUT only if it's not in a connected state AND we're not currently accepting it
+          // (which means it was actually cancelled/rejected, not accepted)
+          if (
+            dialogRequest &&
+            dialogRequest.id === requestId &&
+            showDialog &&
+            !showDialogConnected &&
+            acceptingRequestId !== requestId // Don't mark as cancelled if we're accepting it
+          ) {
+            setDialogRequestCancelled(true);
+          }
+        }
+      });
+
+      // Synchronize notifications with current chat requests
+      setNotifications(prevNotifications => {
+        // Get all current chat request IDs
+        const currentRequestIds = new Set(requestsWithUsers.map(req => req.id));
+
+        // Remove notifications for chat requests that are no longer PENDING
+        const filteredNotifications = prevNotifications.filter(notif => {
+          if (notif.type === 'chat_request') {
+            const requestId =
+              notif.id || (notif.data && 'id' in notif.data && notif.data.id);
+            return currentRequestIds.has(requestId as string);
+          }
+          // Keep all non-chat-request notifications
+          return true;
+        });
+
+        // Add new notifications for requests that don't have notifications yet
+        const chatNotifications: Notification[] = [];
+        for (const request of requestsWithUsers) {
+          // Check if notification for this chat request already exists in the filtered list
+          const existingNotification = filteredNotifications.find(
+            notif => notif.type === 'chat_request' && notif.id === request.id
           );
 
-          // Filter requests that were sent within the last minute and haven't been shown yet
-          const now = new Date();
-          const oneMinuteAgo = new Date(now.getTime() - 60 * 1000);
-          const recentRequest = newRequests.find(req => {
-            const requestTime = new Date(req.createdAt);
-            return (
-              requestTime >= oneMinuteAgo &&
-              !shownDialogRequestIds.current.has(req.id)
-            );
-          });
+          if (!existingNotification) {
+            const title =
+              request.requesterEmail || `User ${request.requesterId.slice(-4)}`;
+            const content = 'wants to chat with you';
 
-          // Show dialog for the most recent request if there's one and no dialog is open
-          if (recentRequest && !showDialog) {
-            // Immediately mark this request as shown to prevent duplicates
-            shownDialogRequestIds.current.add(recentRequest.id);
-            setDialogRequest(recentRequest);
-            setShowDialog(true);
-            // Play happy sound for new chat request
-            soundService.playHappySound();
+            chatNotifications.push({
+              id: request.id,
+              type: 'chat_request' as const,
+              title,
+              content,
+              timestamp: request.createdAt,
+              isRead: false,
+              data: request,
+            });
           }
-        } else {
-          // Mark initial load as complete
-          isInitialLoad.current = false;
         }
 
-        setChatRequests(requestsWithUsers);
-
-        // Update the ref with current request IDs for next comparison
-        previousRequestIdsRef.current = requestsWithUsers.map(req => req.id);
-
-        // Clean up shown dialog IDs for requests that no longer exist (rejected/accepted)
-        const currentRequestIds = new Set(requestsWithUsers.map(req => req.id));
-        shownDialogRequestIds.current.forEach(requestId => {
-          if (!currentRequestIds.has(requestId)) {
-            shownDialogRequestIds.current.delete(requestId);
-            // If this is the currently shown dialog request, mark it as cancelled
-            // BUT only if it's not in a connected state AND we're not currently accepting it
-            // (which means it was actually cancelled/rejected, not accepted)
-            if (
-              dialogRequest &&
-              dialogRequest.id === requestId &&
-              showDialog &&
-              !showDialogConnected &&
-              acceptingRequestId !== requestId // Don't mark as cancelled if we're accepting it
-            ) {
-              setDialogRequestCancelled(true);
-            }
-          }
+        const newNotifications = [
+          ...filteredNotifications,
+          ...chatNotifications,
+        ];
+        console.log('[NotificationBell] Updated notifications:', {
+          filtered: filteredNotifications.length,
+          newChat: chatNotifications.length,
+          total: newNotifications.length,
         });
 
-        // Synchronize notifications with current chat requests
-        setNotifications(prevNotifications => {
-          // Get all current chat request IDs
-          const currentRequestIds = new Set(
-            requestsWithUsers.map(req => req.id)
-          );
-
-          // Remove notifications for chat requests that are no longer PENDING
-          const filteredNotifications = prevNotifications.filter(notif => {
-            if (notif.type === 'chat_request') {
-              const requestId =
-                notif.id || (notif.data && 'id' in notif.data && notif.data.id);
-              return currentRequestIds.has(requestId as string);
-            }
-            // Keep all non-chat-request notifications
-            return true;
-          });
-
-          // Add new notifications for requests that don't have notifications yet
-          const chatNotifications: Notification[] = [];
-          for (const request of requestsWithUsers) {
-            // Check if notification for this chat request already exists
-            const existingNotification = filteredNotifications.find(
-              notif =>
-                notif.type === 'chat_request' &&
-                (notif.id === request.id ||
-                  (notif.data &&
-                    'id' in notif.data &&
-                    notif.data.id === request.id))
-            );
-
-            if (!existingNotification) {
-              const title =
-                request.requesterEmail ||
-                `User ${request.requesterId.slice(-4)}`;
-              const content = 'wants to chat with you';
-
-              chatNotifications.push({
-                id: request.id,
-                type: 'chat_request' as const,
-                title,
-                content,
-                timestamp: request.createdAt,
-                isRead: false,
-                data: request,
-              });
-            }
-          }
-
-          // Return synchronized notifications: existing non-chat-request + remaining chat-request + new chat-request
-          return [...filteredNotifications, ...chatNotifications];
-        });
-      },
-      error => {
-        setError('Failed to load notifications');
-      }
-    );
-
-    return () => {
-      subscription.unsubscribe();
+        // Return synchronized notifications: existing non-chat-request + remaining chat-request + new chat-request
+        return newNotifications;
+      });
     };
+
+    processRequests();
   }, [
-    user,
+    realtimeChatRequests,
+    chatRequestsLoading,
     showDialog,
     dialogRequest,
     showDialogConnected,
     acceptingRequestId,
-  ]); // Add missing dependencies
+  ]);
 
   // Subscribe to messages (separate from chat requests)
   useEffect(() => {

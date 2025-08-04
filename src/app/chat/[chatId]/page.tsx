@@ -9,6 +9,7 @@ import ChatWindow from '../../../components/chat/ChatWindow';
 import ProtectedRoute from '../../../components/protected-route';
 import { getConversationIdFromParam } from '../../../lib/url-utils';
 import { chatService } from '../../../services/chat.service';
+import { useRealtime } from '../../../contexts/RealtimeContext';
 
 type Conversation = Schema['Conversation']['type'];
 
@@ -24,6 +25,7 @@ export default function ChatPage({ params }: ChatPageProps) {
   const [error, setError] = useState<string | null>(null);
   const { user } = useAuthenticator();
   const router = useRouter();
+  const { subscribeToConversations } = useRealtime();
 
   const loadConversation = useCallback(async () => {
     try {
@@ -82,26 +84,21 @@ export default function ChatPage({ params }: ChatPageProps) {
       return;
     }
 
-    const subscription = chatService.observeConversations(
-      user.userId,
-      conversations => {
-        // Find the current conversation in the updated list
-        const updatedConversation = conversations.find(
-          conv => conv.id === conversation.id
-        );
-        if (updatedConversation) {
-          setConversation(updatedConversation);
-        }
-      },
-      error => {
-        console.error('Error observing conversation updates:', error);
+    const subscription = subscribeToConversations(user.userId, data => {
+      const conversations = data.items || [];
+      // Find the current conversation in the updated list
+      const updatedConversation = conversations.find(
+        (conv: any) => conv.id === conversation.id
+      );
+      if (updatedConversation) {
+        setConversation(updatedConversation);
       }
-    );
+    });
 
     return () => {
-      subscription.unsubscribe();
+      subscription();
     };
-  }, [user?.userId, conversation?.id]);
+  }, [user?.userId, conversation?.id, subscribeToConversations]);
 
   const handleChatEnded = () => {
     // Redirect back to dashboard when chat is ended
