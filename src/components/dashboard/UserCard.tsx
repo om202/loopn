@@ -133,11 +133,9 @@ export default function UserCard({
               >
                 {pendingRequests.has(userPresence.userId) ? (
                   <>
-                    <Trash2 className='w-4 lg:w-4 h-4 lg:h-4 text-red-600 flex-shrink-0' />
-                    <span className='text-red-600 hidden sm:inline'>
-                      Cancel Chat Request
+                    <span className='text-gray-600 sm:inline'>
+                      Cancel Request
                     </span>
-                    <span className='text-red-600 sm:hidden'>Cancel</span>
                   </>
                 ) : existingConversations.has(userPresence.userId) ? (
                   <>
