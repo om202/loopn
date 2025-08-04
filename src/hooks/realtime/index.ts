@@ -4,11 +4,7 @@ export {
   useRealtimePresence,
   useRealtimeOnlineUsers,
 } from './useRealtimePresence';
-export {
-  useRealtimeNotifications,
-  useRealtimeChatRequests,
-  type ChatRequestWithUser,
-} from './useRealtimeNotifications';
+// Note: useRealtimeChatRequests and useRealtimeNotifications removed - use useChatRequests instead
 export { useRealtimeReactions } from './useRealtimeReactions';
 export {
   useChatRequests,

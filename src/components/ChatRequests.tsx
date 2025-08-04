@@ -5,10 +5,7 @@ import { useState } from 'react';
 
 import type { Schema } from '../../amplify/data/resource';
 import { chatService } from '../services/chat.service';
-import {
-  useRealtimeChatRequests,
-  type ChatRequestWithUser,
-} from '../hooks/realtime';
+import { useChatRequests } from '../hooks/realtime';
 
 import UserAvatar from './UserAvatar';
 
@@ -24,30 +21,25 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
   const [localError, setLocalError] = useState<string | null>(null);
   const { user } = useAuthenticator();
 
-  // Use our new realtime chat requests hook
+  // Use the unified chat requests hook
   const {
-    chatRequests,
-    isLoading,
+    incomingRequests: chatRequests,
+    isLoadingIncoming: isLoading,
     error: chatRequestsError,
-    removeRequest,
-    addOptimisticRequest,
-  } = useRealtimeChatRequests({
+  } = useChatRequests({
     userId: user?.userId || '',
     enabled: !!user?.userId,
   });
 
   const error = chatRequestsError || localError;
 
-  // Note: Chat requests subscription logic moved to useRealtimeChatRequests hook
+  // Note: Using unified useChatRequests hook - real-time updates handled automatically
 
   const handleRespondToRequest = async (
     chatRequestId: string,
     status: 'ACCEPTED' | 'REJECTED',
     chatRequest: ChatRequest
   ) => {
-    // Optimistic update - immediately remove the request from UI
-    removeRequest(chatRequestId);
-
     if (status === 'ACCEPTED') {
       setAcceptingId(chatRequestId);
       // Immediately call success callback for optimistic UI
@@ -63,15 +55,11 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
       );
 
       if (result.error) {
-        // Revert optimistic update - add request back
-        addOptimisticRequest(chatRequest);
         setLocalError(result.error);
         // Note: we don't revert onRequestAccepted since it might have triggered navigation
       }
-      // On success, keep the optimistic update
+      // On success, the real-time subscription will automatically update the UI
     } catch {
-      // Revert optimistic update on any error
-      addOptimisticRequest(chatRequest);
       setLocalError('Failed to respond to chat request');
     }
 
