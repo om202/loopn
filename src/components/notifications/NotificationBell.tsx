@@ -73,7 +73,9 @@ export default function NotificationBell() {
     }
 
     const loadNotifications = async () => {
-      const result = await notificationService.getUnreadNotifications(user.userId);
+      const result = await notificationService.getUnreadNotifications(
+        user.userId
+      );
       if (result.data) {
         setNotifications(result.data);
       } else if (result.error) {
