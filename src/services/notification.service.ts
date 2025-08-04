@@ -151,6 +151,44 @@ export class NotificationService {
   }
 
   /**
+   * Get notifications for a specific conversation for a user
+   */
+  async getNotificationsForConversation(
+    userId: string,
+    conversationId: string
+  ) {
+    try {
+      const result = await this.client.models.Notification.list({
+        filter: {
+          userId: { eq: userId },
+          conversationId: { eq: conversationId },
+        },
+      });
+
+      if (result.data) {
+        // Sort by timestamp descending (newest first)
+        const sortedNotifications = result.data.sort(
+          (a, b) =>
+            new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+        );
+
+        // Parse JSON data field back to objects
+        const notificationsWithParsedData = sortedNotifications.map(notif => ({
+          ...notif,
+          data: notif.data ? JSON.parse(notif.data as string) : undefined,
+        }));
+
+        return { data: notificationsWithParsedData, error: null };
+      }
+
+      return { data: [], error: null };
+    } catch (error) {
+      console.error('Error fetching conversation notifications:', error);
+      return { data: [], error: 'Failed to fetch conversation notifications' };
+    }
+  }
+
+  /**
    * Delete all notifications for a specific conversation
    * (useful when user opens a chat to clear message notifications)
    */

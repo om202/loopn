@@ -154,7 +154,7 @@ export default function NotificationItem({
         )}
 
         <div className='flex-1 min-w-0'>
-          <div 
+          <div
             className={`${isClickable ? 'cursor-pointer' : ''}`}
             {...(isClickable && {
               onClick: () => onNotificationClick(notification),
@@ -168,17 +168,9 @@ export default function NotificationItem({
                 {formatTimeAgo(notification.timestamp)}
               </span>
             </div>
-                      <p className='text-sm text-gray-600 leading-normal'>
-            {notification.content}
-            {notification.type === 'message' && 
-             notification.data && 
-             'messageCount' in notification.data && 
-             (notification.data as any).messageCount > 1 && (
-              <span className='ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800'>
-                {(notification.data as any).messageCount} messages
-              </span>
-            )}
-          </p>
+            <p className='text-sm text-gray-600 leading-normal'>
+              {notification.content}
+            </p>
           </div>
 
           {notification.type === 'chat_request' &&

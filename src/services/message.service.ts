@@ -1,5 +1,7 @@
 import type { Schema } from '../../amplify/data/resource';
 import { client } from '../lib/amplify-config';
+import { notificationService } from './notification.service';
+import { userService } from './user.service';
 
 // Type definitions from schema
 type Message = Schema['Message']['type'];
@@ -52,6 +54,42 @@ export class MessageService {
         // Set participants to include both sender and receiver for authorization
         participants: [senderId, receiverId],
       });
+
+      // Create notification for the receiver (works for both online and offline users)
+      if (result.data) {
+        try {
+          // Get sender's information for notification
+          const senderResult = await userService.getUserPresence(senderId);
+          const senderEmail = senderResult.data?.email;
+          const senderName = senderEmail || `User ${senderId.slice(-4)}`;
+
+          // Truncate long messages for notification
+          const notificationContent =
+            content.length > 50 ? `${content.substring(0, 50)}...` : content;
+
+          const notificationData = {
+            conversationId,
+            message: result.data,
+            senderEmail,
+            messageCount: 1, // Individual message count
+          };
+
+          await notificationService.createNotification(
+            receiverId,
+            'message',
+            senderName,
+            notificationContent,
+            notificationData,
+            { conversationId }
+          );
+        } catch (notificationError) {
+          // Don't fail the message send if notification creation fails
+          console.error(
+            'Failed to create message notification:',
+            notificationError
+          );
+        }
+      }
 
       return {
         data: result.data,

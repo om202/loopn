@@ -73,30 +73,9 @@ export default function NotificationBell() {
     }
 
     const loadNotifications = async () => {
-      const result = await notificationService.getUnreadNotifications(
-        user.userId
-      );
+      const result = await notificationService.getUnreadNotifications(user.userId);
       if (result.data) {
-        const deduplicatedNotifications: Notification[] = [];
-        const seenConversations = new Set<string>();
-
-        for (const notif of result.data) {
-          if (
-            notif.type === 'message' &&
-            notif.data &&
-            'conversationId' in notif.data
-          ) {
-            const { conversationId } = notif.data;
-            if (!seenConversations.has(conversationId)) {
-              seenConversations.add(conversationId);
-              deduplicatedNotifications.push(notif);
-            }
-          } else {
-            deduplicatedNotifications.push(notif);
-          }
-        }
-
-        setNotifications(deduplicatedNotifications);
+        setNotifications(result.data);
       } else if (result.error) {
         setError(result.error);
       }
@@ -227,119 +206,40 @@ export default function NotificationBell() {
       async message => {
         const currentConversationId = getCurrentConversationId();
 
+        // Only play sound and refresh notifications if not in the current conversation
         if (currentConversationId !== message.conversationId) {
-          const senderResult = await userService.getUserPresence(
-            message.senderId
-          );
-          const senderEmail = senderResult.data?.email;
+          soundService.playBellSound();
 
-          setNotifications(prevNotifications => {
-            const existingNotificationIndex = prevNotifications.findIndex(
-              notif =>
-                notif.type === 'message' &&
-                notif.data &&
-                'conversationId' in notif.data &&
-                notif.data.conversationId === message.conversationId
+          // Add delay and retry logic to ensure server-side notification creation is completed
+          let result;
+          let retries = 0;
+          const maxRetries = 3;
+          let foundConversationNotification = false;
+
+          do {
+            await new Promise(resolve =>
+              setTimeout(resolve, retries === 0 ? 200 : 100)
+            );
+            result = await notificationService.getUnreadNotifications(
+              user.userId
             );
 
-            const title = senderEmail || `User ${message.senderId.slice(-4)}`;
-            const content =
-              message.content.length > 50
-                ? `${message.content.substring(0, 50)}...`
-                : message.content;
-
-            if (existingNotificationIndex >= 0) {
-              // Update existing notification with latest message and increment count
-              const existingNotification = prevNotifications[existingNotificationIndex];
-              const existingData = existingNotification.data as any;
-              const newMessageCount = (existingData?.messageCount || 1) + 1;
-
-              const updatedNotificationData = {
-                conversationId: message.conversationId,
-                message, // Latest message
-                senderEmail: senderEmail || undefined,
-                messageCount: newMessageCount,
-              };
-
-              const updatedNotification: Notification = {
-                ...existingNotification,
-                content, // Show latest message content
-                timestamp: message.timestamp || message.createdAt || new Date().toISOString(),
-                data: updatedNotificationData,
-              };
-
-              // Update database notification
-              notificationService
-                .deleteNotificationsForConversation(
-                  user.userId,
-                  message.conversationId
-                )
-                .then(() => {
-                  return notificationService.createNotification(
-                    user.userId,
-                    'message',
-                    title,
-                    content,
-                    updatedNotificationData,
-                    { conversationId: message.conversationId }
-                  );
-                })
-                .catch(error => {
-                  console.error('Error updating message notification:', error);
-                });
-
-              soundService.playBellSound();
-
-              // Move updated notification to top and remove old one
-              const newNotifications = [...prevNotifications];
-              newNotifications.splice(existingNotificationIndex, 1);
-              return [updatedNotification, ...newNotifications];
-            } else {
-              // Create new notification
-              const notificationData = {
-                conversationId: message.conversationId,
-                message,
-                senderEmail: senderEmail || undefined,
-                messageCount: 1,
-              };
-
-              const messageNotification: Notification = {
-                id: `message-${message.conversationId}`,
-                type: 'message',
-                title,
-                content,
-                timestamp:
-                  message.timestamp ||
-                  message.createdAt ||
-                  new Date().toISOString(),
-                isRead: false,
-                data: notificationData,
-              };
-
-              notificationService
-                .deleteNotificationsForConversation(
-                  user.userId,
-                  message.conversationId
-                )
-                .then(() => {
-                  return notificationService.createNotification(
-                    user.userId,
-                    'message',
-                    title,
-                    content,
-                    notificationData,
-                    { conversationId: message.conversationId }
-                  );
-                })
-                .catch(error => {
-                  console.error('Error creating message notification:', error);
-                });
-
-              soundService.playBellSound();
-
-              return [messageNotification, ...prevNotifications];
+            // Check if we found a notification for this conversation
+            if (result.data) {
+              foundConversationNotification = result.data.some(
+                notif =>
+                  notif.type === 'message' &&
+                  notif.data &&
+                  'conversationId' in notif.data &&
+                  notif.data.conversationId === message.conversationId
+              );
             }
-          });
+
+            retries++;
+          } while (!foundConversationNotification && retries < maxRetries);
+          if (result.data) {
+            setNotifications(result.data);
+          }
         }
       },
       error => {
@@ -538,16 +438,9 @@ export default function NotificationBell() {
     setNotifications(prev => prev.filter(notif => notif.id !== notificationId));
   };
 
-  // Calculate total message count for bell badge
+  // Simple notification count for bell badge
   const getTotalMessageCount = () => {
-    return notifications
-      .filter(n => n.type === 'message')
-      .reduce((total, notif) => {
-        if (notif.data && 'messageCount' in notif.data) {
-          return total + ((notif.data as any).messageCount || 1);
-        }
-        return total + 1;
-      }, 0) + notifications.filter(n => n.type !== 'message').length;
+    return notifications.length;
   };
 
   return (
