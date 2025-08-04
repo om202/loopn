@@ -6,7 +6,12 @@ export type UnsubscribeFn = () => void;
 
 // Subscription configuration
 export interface SubscriptionConfig {
-  query: () => { subscribe: (observer: { next: (data: unknown) => void; error: (error: Error) => void }) => { unsubscribe: () => void } };
+  query: () => {
+    subscribe: (observer: {
+      next: (data: unknown) => void;
+      error: (error: Error) => void;
+    }) => { unsubscribe: () => void };
+  };
   variables?: Record<string, unknown>;
   key: SubscriptionKey;
 }
