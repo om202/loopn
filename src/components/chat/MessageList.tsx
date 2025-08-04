@@ -247,9 +247,12 @@ export default function MessageList({
     );
   }, []);
 
-  const handleMessageActionsChange = useCallback((messageId: string | null, isActive: boolean) => {
-    setActiveMessageId(isActive ? messageId : null);
-  }, []);
+  const handleMessageActionsChange = useCallback(
+    (messageId: string | null, isActive: boolean) => {
+      setActiveMessageId(isActive ? messageId : null);
+    },
+    []
+  );
 
   useEffect(() => {
     const handleClickAway = (event: MouseEvent) => {
@@ -427,7 +430,10 @@ export default function MessageList({
           'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #f3f4f6 100%)',
       }}
     >
-      <div ref={containerRef} className='w-full px-2 sm:px-4 lg:px-16 xl:px-24 py-4 sm:py-6'>
+      <div
+        ref={containerRef}
+        className='w-full px-2 sm:px-4 lg:px-16 xl:px-24 py-4 sm:py-6'
+      >
         {/* Load More Messages Button/Indicator */}
         {hasMoreMessages ? (
           <div ref={loadMoreRef} className='flex justify-center py-4'>
@@ -565,7 +571,9 @@ export default function MessageList({
                 onEmojiPickerToggle={() => handleEmojiPickerToggle(message.id)}
                 animationTrigger={animationTriggers[message.id]}
                 onMessageActionsChange={handleMessageActionsChange}
-                isOtherMessageActive={activeMessageId !== null && activeMessageId !== message.id}
+                isOtherMessageActive={
+                  activeMessageId !== null && activeMessageId !== message.id
+                }
               />
             </React.Fragment>
           );

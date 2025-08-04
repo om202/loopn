@@ -87,7 +87,7 @@ export default function DashboardSidebar({
             >
               <Icon className='w-6 h-6 flex-shrink-0' />
               <span className='text-xs font-medium'>{label}</span>
-              
+
               {/* Count indicator for mobile */}
               {count > 0 && (
                 <span className='absolute -top-1 -right-1 bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center min-w-[20px]'>

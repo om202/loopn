@@ -38,7 +38,10 @@ interface MessageBubbleProps {
   showEmojiPicker: boolean;
   onEmojiPickerToggle: () => void;
   animationTrigger?: string;
-  onMessageActionsChange?: (messageId: string | null, isActive: boolean) => void;
+  onMessageActionsChange?: (
+    messageId: string | null,
+    isActive: boolean
+  ) => void;
   isOtherMessageActive?: boolean;
 }
 
@@ -134,7 +137,9 @@ export default function MessageBubble({
     const handleClickAway = (event: Event) => {
       if (showActionsOnMobile) {
         const target = event.target as Element;
-        const messageContainer = target.closest('[data-message-id="' + message.id + '"]');
+        const messageContainer = target.closest(
+          '[data-message-id="' + message.id + '"]'
+        );
         // Only hide if clicking outside this specific message
         if (!messageContainer) {
           setShowActionsOnMobile(false);
@@ -233,16 +238,16 @@ export default function MessageBubble({
       className={`group flex flex-col ${marginTop} ${marginBottom} ${
         isOwnMessage ? 'items-end' : 'items-start'
       } transition-opacity duration-200 ${
-        isOtherMessageActive && !showActionsOnMobile ? 'opacity-30' : 'opacity-100'
+        isOtherMessageActive && !showActionsOnMobile
+          ? 'opacity-30'
+          : 'opacity-100'
       }`}
       data-message-id={message.id}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
       onTouchCancel={handleLongPressEnd}
     >
-      <div 
-        className='relative flex items-center gap-2 max-w-full'
-      >
+      <div className='relative flex items-center gap-2 max-w-full'>
         {/* Avatar container - always takes up space for other users to maintain consistent alignment */}
         {!isOwnMessage && (
           <div className='flex-shrink-0 w-8 h-8'>
@@ -258,7 +263,9 @@ export default function MessageBubble({
         )}
 
         {/* Message content wrapper with relative positioning for actions */}
-        <div className={`relative flex gap-2 min-w-0 ${isTouchDevice && showActionsOnMobile ? 'bg-blue-50 rounded-lg px-2 py-1' : ''}`}>
+        <div
+          className={`relative flex gap-2 min-w-0 ${isTouchDevice && showActionsOnMobile ? 'bg-blue-50 rounded-lg px-2 py-1' : ''}`}
+        >
           <div className='relative max-w-[85vw] sm:max-w-sm md:max-w-md lg:max-w-lg'>
             {message.isDeleted ? (
               <div
@@ -345,8 +352,8 @@ export default function MessageBubble({
           {onReplyToMessage && !message.isDeleted && (
             <div
               className={`absolute ${
-                isTouchDevice 
-                  ? `bottom-full mb-2 ${isOwnMessage ? 'right-0' : 'left-0'}` 
+                isTouchDevice
+                  ? `bottom-full mb-2 ${isOwnMessage ? 'right-0' : 'left-0'}`
                   : `top-1/2 -translate-y-6 ${isOwnMessage ? 'right-full mr-3' : 'left-full ml-3'}`
               } ${showEmojiPicker || (isTouchDevice && showActionsOnMobile) ? 'flex opacity-100' : isTouchDevice ? 'hidden' : 'hidden group-hover:flex group-hover:opacity-100'} transition-all duration-150 ease-out items-center gap-2 ${
                 isOwnMessage ? 'flex-row-reverse' : 'flex-row'

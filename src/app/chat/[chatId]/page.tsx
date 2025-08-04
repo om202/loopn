@@ -105,7 +105,10 @@ export default function ChatPage({ params }: ChatPageProps) {
   if (error) {
     return (
       <ProtectedRoute>
-        <div className='min-h-screen bg-white flex items-center justify-center' style={{ minHeight: '100dvh' }}>
+        <div
+          className='min-h-screen bg-white flex items-center justify-center'
+          style={{ minHeight: '100dvh' }}
+        >
           <div className='text-center'>
             <h1 className='text-2xl font-bold text-gray-900 mb-4'>
               Chat Not Found
