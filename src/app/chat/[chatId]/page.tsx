@@ -30,8 +30,6 @@ export default function ChatPage({ params }: ChatPageProps) {
   const loadConversation = useCallback(async () => {
     try {
       setLoading(true);
-
-      // Handle both short IDs and full UUIDs
       const conversationId = getConversationIdFromParam(params.chatId);
 
       if (!conversationId) {
@@ -51,7 +49,6 @@ export default function ChatPage({ params }: ChatPageProps) {
         return;
       }
 
-      // Verify user is part of this conversation
       const conv = result.data;
       if (
         conv.participant1Id !== user?.userId &&
@@ -78,7 +75,6 @@ export default function ChatPage({ params }: ChatPageProps) {
     loadConversation();
   }, [user, loadConversation, router]);
 
-  // Subscribe to real-time conversation updates
   useEffect(() => {
     if (!user?.userId || !conversation?.id) {
       return;
@@ -88,7 +84,6 @@ export default function ChatPage({ params }: ChatPageProps) {
       user.userId,
       (data: unknown) => {
         const conversations = (data as { items?: Conversation[] }).items || [];
-        // Find the current conversation in the updated list
         const updatedConversation = conversations.find(
           (conv: { id: string }) => conv.id === conversation.id
         );
@@ -104,7 +99,6 @@ export default function ChatPage({ params }: ChatPageProps) {
   }, [user?.userId, conversation?.id, subscribeToConversations]);
 
   const handleChatEnded = () => {
-    // Redirect back to dashboard when chat is ended
     router.push('/dashboard');
   };
 
@@ -132,7 +126,6 @@ export default function ChatPage({ params }: ChatPageProps) {
   return (
     <ProtectedRoute>
       <div className='h-screen bg-white'>
-        {/* Main Chat Area - Full Width */}
         <div className='h-full flex flex-col'>
           <ChatWindow
             conversation={
