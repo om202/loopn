@@ -7,7 +7,11 @@ import {
   subscriptionManager,
   createSubscriptionKey,
 } from '@/lib/realtime/subscription-manager';
-import type { SubscriptionCallback, UnsubscribeFn } from '@/lib/realtime/types';
+import type {
+  SubscriptionCallback,
+  UnsubscribeFn,
+  ConnectionStatus,
+} from '@/lib/realtime/types';
 
 interface RealtimeContextType {
   // Message subscriptions
@@ -56,7 +60,12 @@ interface RealtimeContextType {
   subscribeToOnlineUsers: (callback: SubscriptionCallback) => UnsubscribeFn;
 
   // Get subscription statistics
-  getStats: () => { subscriptions: number; listeners: number };
+  getStats: () => {
+    activeSubscriptions: number;
+    subscriptionKeys: string[];
+    connectionStatus: ConnectionStatus;
+    totalCallbacks: number;
+  };
 }
 
 const RealtimeContext = createContext<RealtimeContextType | null>(null);
@@ -149,10 +158,11 @@ export function RealtimeProvider({ children }: RealtimeProviderProps) {
       },
       data => {
         // Filter reactions on the client side to only include relevant messages
-        if (data.items) {
+        const typedData = data as { items?: { messageId: string }[] };
+        if (typedData.items) {
           const filteredData = {
-            ...data,
-            items: data.items.filter((reaction: { messageId: string }) =>
+            ...typedData,
+            items: typedData.items.filter((reaction: { messageId: string }) =>
               messageIds.includes(reaction.messageId)
             ),
           };
@@ -186,9 +196,10 @@ export function RealtimeProvider({ children }: RealtimeProviderProps) {
       },
       // Filter for PENDING requests on the client side
       data => {
+        const typedData = data as { items?: { status: string }[] };
         const filteredData = {
-          ...data,
-          items: (data.items || []).filter(
+          ...typedData,
+          items: (typedData.items || []).filter(
             (request: { status: string }) => request.status === 'PENDING'
           ),
         };
@@ -217,9 +228,10 @@ export function RealtimeProvider({ children }: RealtimeProviderProps) {
       },
       // Filter for PENDING requests on the client side
       data => {
+        const typedData = data as { items?: { status: string }[] };
         const filteredData = {
-          ...data,
-          items: (data.items || []).filter(
+          ...typedData,
+          items: (typedData.items || []).filter(
             (request: { status: string }) => request.status === 'PENDING'
           ),
         };

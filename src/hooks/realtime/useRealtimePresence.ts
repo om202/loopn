@@ -42,7 +42,10 @@ export function useRealtimePresence({
     const unsubscribe = subscribeToPresence(userId, data => {
       try {
         // Handle both observeQuery format and individual presence format
-        const presenceData = data.items ? data.items[0] : data;
+        const typedData = data as { items?: UserPresence[] } | UserPresence;
+        const presenceData =
+          (typedData as { items?: UserPresence[] }).items?.[0] ||
+          (typedData as UserPresence);
 
         if (presenceData) {
           setPresence(presenceData);
@@ -121,7 +124,8 @@ export function useRealtimeOnlineUsers({
     const unsubscribe = subscribeToOnlineUsers(data => {
       try {
         // Handle observeQuery format
-        const users = data.items || [];
+        const typedData = data as { items?: UserPresence[] };
+        const users = typedData.items || [];
 
         // Filter only online users and sort by lastSeen (most recent first)
         const onlineUsers = users.filter(

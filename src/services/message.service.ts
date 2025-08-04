@@ -171,7 +171,8 @@ export class MessageService {
       next: data => {
         // Sort messages by timestamp (oldest first for chat display)
         // Create a new array to avoid mutating the original and ensure React detects changes
-        const sortedMessages = [...data.items].sort((a, b) => {
+        const typedData = data as { items: Message[] };
+        const sortedMessages = [...typedData.items].sort((a, b) => {
           const timestampA = a.timestamp ? new Date(a.timestamp).getTime() : 0;
           const timestampB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
           return timestampA - timestampB;

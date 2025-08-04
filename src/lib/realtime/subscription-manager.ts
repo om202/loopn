@@ -17,7 +17,7 @@ import type {
 class SubscriptionManager {
   private client = generateClient<Schema>();
   private subscriptions = new Map<SubscriptionKey, SubscriptionEntry>();
-  private eventListeners = new Map<keyof ManagerEvents, Set<() => void>>();
+  private eventListeners = new Map<string, Set<(...args: unknown[]) => void>>();
   private connectionStatus: ConnectionStatus = 'disconnected';
 
   /**
@@ -32,7 +32,7 @@ class SubscriptionManager {
     // If subscription already exists, just add the callback
     if (this.subscriptions.has(key)) {
       const entry = this.subscriptions.get(key)!;
-      entry.callbacks.add(callback);
+      (entry.callbacks as Set<SubscriptionCallback<T>>).add(callback);
 
       console.log(
         `[SubscriptionManager] Added callback to existing subscription: ${key}`
@@ -50,13 +50,13 @@ class SubscriptionManager {
 
       // Subscribe to the observable
       const subscription = observable.subscribe({
-        next: (data: T) => {
+        next: (data: unknown) => {
           const entry = this.subscriptions.get(key);
           if (entry) {
             // Notify all callbacks for this subscription
             entry.callbacks.forEach(cb => {
               try {
-                cb(data);
+                cb(data as T);
               } catch (error) {
                 console.error(
                   `[SubscriptionManager] Callback error for ${key}:`,
@@ -85,7 +85,7 @@ class SubscriptionManager {
       // Store subscription entry
       const entry: SubscriptionEntry = {
         subscription,
-        callbacks: new Set([callback]),
+        callbacks: new Set([callback]) as Set<SubscriptionCallback>,
         config,
       };
 
@@ -105,16 +105,16 @@ class SubscriptionManager {
   /**
    * Create unsubscribe function for a specific callback
    */
-  private createUnsubscribeFunction(
+  private createUnsubscribeFunction<T>(
     key: SubscriptionKey,
-    callback: SubscriptionCallback
+    callback: SubscriptionCallback<T>
   ): UnsubscribeFn {
     return () => {
       const entry = this.subscriptions.get(key);
       if (!entry) return;
 
       // Remove this specific callback
-      entry.callbacks.delete(callback);
+      (entry.callbacks as Set<SubscriptionCallback<T>>).delete(callback);
 
       console.log(
         `[SubscriptionManager] Removed callback from ${key}. Remaining: ${entry.callbacks.size}`
@@ -206,10 +206,14 @@ class SubscriptionManager {
       this.eventListeners.set(event, new Set());
     }
 
-    this.eventListeners.get(event)!.add(listener);
+    this.eventListeners
+      .get(event)!
+      .add(listener as (...args: unknown[]) => void);
 
     return () => {
-      this.eventListeners.get(event)?.delete(listener);
+      this.eventListeners
+        .get(event)
+        ?.delete(listener as (...args: unknown[]) => void);
     };
   }
 }

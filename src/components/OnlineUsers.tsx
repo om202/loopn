@@ -197,7 +197,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
     }
 
     const subscription = subscribeToConversations(user.userId, data => {
-      const conversations = data.items || [];
+      const conversations = (data as { items?: Conversation[] }).items || [];
       const conversationMap = new Map<string, Conversation>();
 
       // Sort conversations by creation date (newest first) and update mappings with latest data

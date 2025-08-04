@@ -712,7 +712,8 @@ export class ChatService {
     }).subscribe({
       next: data => {
         // Filter pending requests in JavaScript instead
-        const pendingRequests = data.items.filter(
+        const typedData = data as { items: ChatRequest[] };
+        const pendingRequests = typedData.items.filter(
           request => request.status === 'PENDING'
         );
         callback(pendingRequests);
@@ -737,7 +738,8 @@ export class ChatService {
     }).subscribe({
       next: data => {
         // Filter pending requests in JavaScript instead
-        const pendingRequests = data.items.filter(
+        const typedData = data as { items: ChatRequest[] };
+        const pendingRequests = typedData.items.filter(
           request => request.status === 'PENDING'
         );
         callback(pendingRequests);
@@ -763,7 +765,10 @@ export class ChatService {
         ],
       },
     }).subscribe({
-      next: data => callback(data.items),
+      next: data => {
+        const typedData = data as { items: Conversation[] };
+        callback(typedData.items);
+      },
       error: error => {
         if (onError) {
           onError(error);

@@ -77,7 +77,10 @@ export function useRealtimeMessages({
     const unsubscribe = subscribeToMessages(conversationId, data => {
       try {
         // Handle both observeQuery format and individual message format
-        const newMessages = data.items || [data];
+        const typedData = data as { items?: Message[] } | Message;
+        const newMessages = (typedData as { items?: Message[] }).items || [
+          typedData as Message,
+        ];
 
         // Sort messages by timestamp (oldest first for chat display)
         const sortedMessages = [...newMessages].sort((a, b) => {

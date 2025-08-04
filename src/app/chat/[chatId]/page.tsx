@@ -84,16 +84,19 @@ export default function ChatPage({ params }: ChatPageProps) {
       return;
     }
 
-    const subscription = subscribeToConversations(user.userId, data => {
-      const conversations = data.items || [];
-      // Find the current conversation in the updated list
-      const updatedConversation = conversations.find(
-        (conv: { id: string }) => conv.id === conversation.id
-      );
-      if (updatedConversation) {
-        setConversation(updatedConversation);
+    const subscription = subscribeToConversations(
+      user.userId,
+      (data: unknown) => {
+        const conversations = (data as { items?: Conversation[] }).items || [];
+        // Find the current conversation in the updated list
+        const updatedConversation = conversations.find(
+          (conv: { id: string }) => conv.id === conversation.id
+        );
+        if (updatedConversation) {
+          setConversation(updatedConversation);
+        }
       }
-    });
+    );
 
     return () => {
       subscription();

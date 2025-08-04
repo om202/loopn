@@ -276,11 +276,7 @@ export default function NotificationBell() {
 
     const messageSubscription = messageService.subscribeToNewMessages(
       user.userId,
-      async (message: {
-        conversationId: string;
-        senderId: string;
-        content: string;
-      }) => {
+      async message => {
         const currentConversationId = getCurrentConversationId();
 
         // Only show notification if user is not currently viewing this conversation
@@ -327,7 +323,10 @@ export default function NotificationBell() {
               type: 'message',
               title,
               content,
-              timestamp: message.timestamp || message.createdAt,
+              timestamp:
+                message.timestamp ||
+                message.createdAt ||
+                new Date().toISOString(),
               isRead: false,
               data: notificationData,
             };
@@ -544,12 +543,6 @@ export default function NotificationBell() {
     setIsOpen(false);
   };
 
-  const handleRemoveNotification = (notificationId: string) => {
-    setNotifications(prevNotifications =>
-      prevNotifications.filter(notif => notif.id !== notificationId)
-    );
-  };
-
   return (
     <>
       <ChatRequestDialog
@@ -602,7 +595,6 @@ export default function NotificationBell() {
           onRespondToRequest={handleRespondToRequest}
           onMarkAllAsRead={handleMarkAllAsRead}
           onError={setError}
-          onRemoveNotification={handleRemoveNotification}
         />
       </div>
     </>

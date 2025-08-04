@@ -109,7 +109,8 @@ export function useRealtimeReactions({
     const unsubscribe = subscribeToReactions(stableMessageIds, data => {
       try {
         // Handle the observeQuery format from AppSync
-        const reactions = data.items || [];
+        const typedData = data as { items?: MessageReaction[] };
+        const reactions = typedData.items || [];
 
         console.log(
           `[useRealtimeReactions] Received ${reactions.length} reactions update`

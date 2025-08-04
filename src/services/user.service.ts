@@ -134,9 +134,9 @@ export class UserService {
       // Remove the filter to listen to ALL presence changes (online and offline)
       // We'll filter client-side to only return online users
     }).subscribe({
-      next: data => {
+      next: ({ items }) => {
         // Filter for online users client-side
-        const onlineUsers = data.items.filter(user => user.isOnline === true);
+        const onlineUsers = items.filter(user => user.isOnline === true);
 
         // Only trigger callback if the set of online users actually changed
         const currentOnlineUserIds = new Set(onlineUsers.map(u => u.userId));
@@ -169,8 +169,8 @@ export class UserService {
         userId: { eq: userId },
       },
     }).subscribe({
-      next: data => {
-        const presence = data.items.length > 0 ? data.items[0] : null;
+      next: ({ items }) => {
+        const presence = items.length > 0 ? items[0] : null;
         callback(presence);
       },
       error: error => {
