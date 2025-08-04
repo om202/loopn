@@ -107,7 +107,7 @@ export default function HomePage() {
                 <div className='flex flex-col space-y-2 opacity-0 animate-[slideUpFade_0.5s_ease-out_0.5s_forwards]'>
                   <div className='flex items-center gap-2 mb-1'>
                     <div className='w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center'>
-                      <span className='text-white text-xs font-medium'>PM</span>
+                      <span className='text-white text-sm font-medium'>PM</span>
                     </div>
                     <div className='text-sm text-gray-600'>
                       Product Manager • Tech Startup
@@ -126,7 +126,7 @@ export default function HomePage() {
                       UX Designer • Design Agency
                     </div>
                     <div className='w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center'>
-                      <span className='text-white text-xs font-medium'>UX</span>
+                      <span className='text-white text-sm font-medium'>UX</span>
                     </div>
                   </div>
                   <div className='bg-blue-600 rounded-2xl rounded-tr-none px-4 py-3 shadow-sm text-white text-sm max-w-[85%]'>
@@ -139,7 +139,7 @@ export default function HomePage() {
                 <div className='flex flex-col space-y-2 opacity-0 animate-[slideUpFade_0.5s_ease-out_2.5s_forwards]'>
                   <div className='flex items-center gap-2 mb-1'>
                     <div className='w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center'>
-                      <span className='text-white text-xs font-medium'>PM</span>
+                      <span className='text-white text-sm font-medium'>PM</span>
                     </div>
                     <div className='text-sm text-gray-600'>
                       Product Manager • Tech Startup
@@ -157,7 +157,7 @@ export default function HomePage() {
                       UX Designer • Design Agency
                     </div>
                     <div className='w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center'>
-                      <span className='text-white text-xs font-medium'>UX</span>
+                      <span className='text-white text-sm font-medium'>UX</span>
                     </div>
                   </div>
                   <div className='bg-blue-600 rounded-2xl rounded-tr-none px-4 py-3 shadow-sm text-white text-sm max-w-[85%]'>

@@ -239,8 +239,8 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   if (error || onlineUsersError || sentRequestsError || chatActions.error) {
     return (
       <div className='p-4 sm:p-6 text-red-600 bg-red-50 rounded-2xl border border-red-200 text-center'>
-        <div className='text-xs sm:text-sm font-medium mb-1'>Error</div>
-        <div className='text-xs sm:text-sm'>
+        <div className='text-sm sm:text-sm font-medium mb-1'>Error</div>
+        <div className='text-sm sm:text-sm'>
           {error || onlineUsersError || sentRequestsError || chatActions.error}
         </div>
       </div>

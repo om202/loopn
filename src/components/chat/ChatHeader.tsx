@@ -182,12 +182,12 @@ export default function ChatHeader({
             />
 
             <div className='flex-1 min-w-0'>
-              <h1 className='text-xs sm:text-sm font-medium text-black truncate no-email-detection'>
+              <h1 className='text-sm sm:text-sm font-medium text-black truncate no-email-detection'>
                 {getUserDisplayName()}
               </h1>
               <div className='flex items-center gap-1 sm:gap-2 mt-0.5'>
                 {conversation.isConnected ? (
-                  <div className='flex items-center text-xs sm:text-sm text-green-600'>
+                  <div className='flex items-center text-sm sm:text-sm text-green-600'>
                     <svg
                       className='w-2.5 h-2.5 sm:w-3 sm:h-3 mr-1'
                       fill='currentColor'
@@ -206,7 +206,7 @@ export default function ChatHeader({
                   </div>
                 ) : (
                   <div
-                    className={`flex items-center text-xs sm:text-sm ${getPresenceDisplay().color}`}
+                    className={`flex items-center text-sm sm:text-sm ${getPresenceDisplay().color}`}
                   >
                     {getPresenceDisplay().text}
                   </div>
@@ -220,7 +220,7 @@ export default function ChatHeader({
                 {/* Chat Ended State */}
                 {conversation.chatStatus === 'ENDED' && (
                   <div className='flex items-center gap-3 sm:gap-4 md:gap-6'>
-                    <div className='flex items-center gap-2 text-xs sm:text-sm text-gray-600'>
+                    <div className='flex items-center gap-2 text-sm sm:text-sm text-gray-600'>
                       <button
                         onClick={() => setShowChatEndedInfoDialog(true)}
                         className='flex items-center gap-1 text-orange-500 hover:text-orange-600 transition-colors p-1 rounded-full hover:bg-orange-50'
@@ -256,7 +256,7 @@ export default function ChatHeader({
                             height={16}
                             className='flex-shrink-0 sm:w-[18px] sm:h-[18px]'
                           />
-                          <span className='text-xs sm:text-sm font-medium'>
+                          <span className='text-sm sm:text-sm font-medium'>
                             <span className='hidden sm:inline'>Reconnect</span>
                             <span className='sm:hidden'>Reconnect</span>
                           </span>
@@ -271,7 +271,7 @@ export default function ChatHeader({
                   !!timeLeft &&
                   timeLeft !== 'Expired' && (
                     <div className='flex items-center gap-3 sm:gap-4 md:gap-6'>
-                      <div className='flex items-center gap-2 text-xs sm:text-sm text-gray-600'>
+                      <div className='flex items-center gap-2 text-sm sm:text-sm text-gray-600'>
                         <button
                           onClick={() => setShowTrialInfoDialog(true)}
                           className='flex items-center gap-1 text-gray-500 hover:text-blue-600 transition-colors p-1 rounded-full hover:bg-blue-50'
@@ -305,7 +305,7 @@ export default function ChatHeader({
                           height={16}
                           className='flex-shrink-0 sm:w-[18px] sm:h-[18px]'
                         />
-                        <span className='text-xs sm:text-sm font-medium'>
+                        <span className='text-sm sm:text-sm font-medium'>
                           <span className='hidden sm:inline'>
                             {sendingConnectionRequest
                               ? 'Connecting...'

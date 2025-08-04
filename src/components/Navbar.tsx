@@ -94,14 +94,14 @@ export default function Navbar() {
                       <p className='mt-3 text-sm sm:text-base font-medium text-gray-800 truncate no-email-detection'>
                         {getUserEmail()}
                       </p>
-                      <p className='text-xs sm:text-sm text-gray-500'>
+                      <p className='text-sm sm:text-sm text-gray-500'>
                         Welcome
                       </p>
                     </div>
                     <div className='p-2'>
                       <button
                         onClick={handleSignOut}
-                        className='w-full text-left rounded-lg px-4 py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-3'
+                        className='w-full text-left rounded-lg px-4 py-2 text-sm sm:text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-3'
                         role='menuitem'
                         tabIndex={-1}
                         id='user-menu-item-2'

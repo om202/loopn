@@ -542,7 +542,7 @@ export default function MessageList({
                 <div className='flex items-center justify-center my-4 px-4'>
                   <div className='flex items-center w-full max-w-xs'>
                     <div className='flex-1 h-px bg-gray-300'></div>
-                    <div className='px-3 text-gray-500 text-xs font-medium'>
+                    <div className='px-3 text-gray-500 text-sm font-medium'>
                       New messages
                     </div>
                     <div className='flex-1 h-px bg-gray-300'></div>

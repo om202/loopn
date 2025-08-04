@@ -138,7 +138,7 @@ export default function MessageReactions({
             >
               <span>{group.emoji}</span>
               {group.count > 1 && (
-                <span className='ml-1 text-xs font-medium'>{group.count}</span>
+                <span className='ml-1 text-sm font-medium'>{group.count}</span>
               )}
             </button>
           );

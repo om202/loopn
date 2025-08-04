@@ -207,7 +207,7 @@ export default function MessageBubble({
                     } rounded-r-lg`}
                   >
                     <div
-                      className={`text-xs ${
+                      className={`text-sm ${
                         isOwnMessage ? 'text-blue-100' : 'text-gray-600'
                       } mb-1`}
                     >
@@ -219,7 +219,7 @@ export default function MessageBubble({
                           : 'You'}
                     </div>
                     <div
-                      className={`text-xs ${
+                      className={`text-sm ${
                         isOwnMessage ? 'text-blue-100' : 'text-gray-600'
                       }`}
                     >

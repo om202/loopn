@@ -160,7 +160,7 @@ export default function NotificationItem({
             <h4 className='text-sm font-semibold text-gray-800 truncate pr-2 no-email-detection'>
               {notification.title}
             </h4>
-            <span className='text-xs text-gray-500 flex-shrink-0 font-medium'>
+            <span className='text-sm text-gray-500 flex-shrink-0 font-medium'>
               {formatTimeAgo(notification.timestamp)}
             </span>
           </div>
