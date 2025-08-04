@@ -60,7 +60,6 @@ export default function NotificationBell() {
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Get current conversation ID if user is in a chat page
   const getCurrentConversationId = useCallback(() => {
     if (pathname?.startsWith('/chat/')) {
       const chatId = pathname.split('/chat/')[1];
@@ -69,7 +68,6 @@ export default function NotificationBell() {
     return null;
   }, [pathname]);
 
-  // Load existing notifications from database on mount
   useEffect(() => {
     if (!user) {
       return;
@@ -80,7 +78,6 @@ export default function NotificationBell() {
         user.userId
       );
       if (result.data) {
-        // Remove duplicates - keep only the latest notification per conversation for messages
         const deduplicatedNotifications: Notification[] = [];
         const seenConversations = new Set<string>();
 
@@ -96,7 +93,6 @@ export default function NotificationBell() {
               deduplicatedNotifications.push(notif);
             }
           } else {
-            // For non-message notifications, keep all
             deduplicatedNotifications.push(notif);
           }
         }
@@ -110,13 +106,11 @@ export default function NotificationBell() {
     loadNotifications();
   }, [user]);
 
-  // Process real-time chat requests from centralized system
   useEffect(() => {
     if (!realtimeChatRequests || chatRequestsLoading) {
       return;
     }
 
-    // Fetch user details for each request
     const processRequests = async () => {
       const requestsWithUsers = await Promise.all(
         realtimeChatRequests.map(async request => {
@@ -130,98 +124,60 @@ export default function NotificationBell() {
         })
       );
 
-      console.log('[NotificationBell] Processing chat requests:', {
-        total: requestsWithUsers.length,
-        previousIds: previousRequestIdsRef.current,
-        currentIds: requestsWithUsers.map(r => r.id),
-        isInitialLoad: isInitialLoad.current,
-      });
-
-      // Check for new requests to show dialog (only after initial load)
       if (!isInitialLoad.current) {
         const previousRequestIds = new Set(previousRequestIdsRef.current);
 
-        // Find truly new requests (not just reloaded ones)
         const newRequests = requestsWithUsers.filter(
           req => !previousRequestIds.has(req.id)
         );
 
-        console.log('[NotificationBell] New requests detected:', {
-          newRequests: newRequests.map(r => ({
-            id: r.id,
-            createdAt: r.createdAt,
-          })),
-          shownDialogIds: Array.from(shownDialogRequestIds.current),
-        });
-
-        // Show dialog for the first new request that hasn't been shown yet
         const requestToShow = newRequests.find(
           req => !shownDialogRequestIds.current.has(req.id)
         );
 
-        // Show dialog for the request if there's one and no dialog is open
         if (requestToShow && !showDialog) {
-          console.log(
-            '[NotificationBell] Showing dialog for request:',
-            requestToShow.id
-          );
-          // Immediately mark this request as shown to prevent duplicates
           shownDialogRequestIds.current.add(requestToShow.id);
           setDialogRequest(requestToShow);
           setShowDialog(true);
-          // Play happy sound for new chat request
           soundService.playHappySound();
         }
       } else {
-        // Mark initial load as complete
         isInitialLoad.current = false;
       }
 
       setChatRequests(requestsWithUsers);
 
-      // Update the ref with current request IDs for next comparison
       previousRequestIdsRef.current = requestsWithUsers.map(req => req.id);
 
-      // Clean up shown dialog IDs for requests that no longer exist (rejected/accepted)
       const currentRequestIds = new Set(requestsWithUsers.map(req => req.id));
       shownDialogRequestIds.current.forEach(requestId => {
         if (!currentRequestIds.has(requestId)) {
           shownDialogRequestIds.current.delete(requestId);
-          // If this is the currently shown dialog request, mark it as cancelled
-          // BUT only if it's not in a connected state AND we're not currently accepting it
-          // (which means it was actually cancelled/rejected, not accepted)
           if (
             dialogRequest &&
             dialogRequest.id === requestId &&
             showDialog &&
             !showDialogConnected &&
-            acceptingRequestId !== requestId // Don't mark as cancelled if we're accepting it
+            acceptingRequestId !== requestId
           ) {
             setDialogRequestCancelled(true);
           }
         }
       });
 
-      // Synchronize notifications with current chat requests
       setNotifications(prevNotifications => {
-        // Get all current chat request IDs
         const currentRequestIds = new Set(requestsWithUsers.map(req => req.id));
-
-        // Remove notifications for chat requests that are no longer PENDING
         const filteredNotifications = prevNotifications.filter(notif => {
           if (notif.type === 'chat_request') {
             const requestId =
               notif.id || (notif.data && 'id' in notif.data && notif.data.id);
             return currentRequestIds.has(requestId as string);
           }
-          // Keep all non-chat-request notifications
           return true;
         });
 
-        // Add new notifications for requests that don't have notifications yet
         const chatNotifications: Notification[] = [];
         for (const request of requestsWithUsers) {
-          // Check if notification for this chat request already exists in the filtered list
           const existingNotification = filteredNotifications.find(
             notif => notif.type === 'chat_request' && notif.id === request.id
           );
@@ -247,13 +203,7 @@ export default function NotificationBell() {
           ...filteredNotifications,
           ...chatNotifications,
         ];
-        console.log('[NotificationBell] Updated notifications:', {
-          filtered: filteredNotifications.length,
-          newChat: chatNotifications.length,
-          total: newNotifications.length,
-        });
 
-        // Return synchronized notifications: existing non-chat-request + remaining chat-request + new chat-request
         return newNotifications;
       });
     };
@@ -268,7 +218,6 @@ export default function NotificationBell() {
     acceptingRequestId,
   ]);
 
-  // Subscribe to messages (separate from chat requests)
   useEffect(() => {
     if (!user) {
       return;
@@ -279,17 +228,13 @@ export default function NotificationBell() {
       async message => {
         const currentConversationId = getCurrentConversationId();
 
-        // Only show notification if user is not currently viewing this conversation
         if (currentConversationId !== message.conversationId) {
-          // Get sender details
           const senderResult = await userService.getUserPresence(
             message.senderId
           );
           const senderEmail = senderResult.data?.email;
 
-          // Handle database operations and state update
           setNotifications(prevNotifications => {
-            // Find existing message notifications for this conversation
             const existingConversationNotifications = prevNotifications.filter(
               notif =>
                 notif.type === 'message' &&
@@ -298,12 +243,10 @@ export default function NotificationBell() {
                 notif.data.conversationId === message.conversationId
             );
 
-            // If we already have a notification for this conversation, don't create a duplicate
             if (existingConversationNotifications.length > 0) {
               return prevNotifications;
             }
 
-            // Create notification data
             const title = senderEmail || `User ${message.senderId.slice(-4)}`;
             const content =
               message.content.length > 50
@@ -317,7 +260,6 @@ export default function NotificationBell() {
               messageCount: 1,
             };
 
-            // Create new notification for local state
             const messageNotification: Notification = {
               id: `message-${message.conversationId}`,
               type: 'message',
@@ -331,7 +273,6 @@ export default function NotificationBell() {
               data: notificationData,
             };
 
-            // Clean up any existing database notifications for this conversation, then create new one
             notificationService
               .deleteNotificationsForConversation(
                 user.userId,
@@ -351,7 +292,6 @@ export default function NotificationBell() {
                 console.error('Error managing message notification:', error);
               });
 
-            // Play bell sound for new message notification
             soundService.playBellSound();
 
             return [messageNotification, ...prevNotifications];
@@ -368,7 +308,6 @@ export default function NotificationBell() {
     };
   }, [user, getCurrentConversationId]);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -389,10 +328,8 @@ export default function NotificationBell() {
       notification.data &&
       'conversationId' in notification.data
     ) {
-      // Navigate to the conversation
       router.push(createShortChatUrl(notification.data.conversationId));
 
-      // Delete notification from database
       if (user) {
         if (notification.type === 'message') {
           await notificationService.deleteNotificationsForConversation(
@@ -400,12 +337,10 @@ export default function NotificationBell() {
             notification.data.conversationId
           );
         } else {
-          // For connection notifications, mark as read
           await notificationService.markNotificationAsRead(notification.id);
         }
       }
 
-      // Remove the notification since user is now viewing the conversation
       setNotifications(prevNotifications =>
         prevNotifications.filter(notif => notif.id !== notification.id)
       );
@@ -419,15 +354,13 @@ export default function NotificationBell() {
     status: 'ACCEPTED' | 'REJECTED',
     chatRequest: ChatRequestWithUser
   ) => {
-    // If accepting, show the dialog confirmation instead of immediate processing
     if (status === 'ACCEPTED') {
-      setAcceptingRequestId(chatRequestId); // Track that we're accepting this request
+      setAcceptingRequestId(chatRequestId);
       setDialogRequest(chatRequest);
       setShowDialog(true);
       setShowDialogConnected(true);
-      setIsOpen(false); // Close the notification dropdown
+      setIsOpen(false);
 
-      // Perform the API call in the background (notification cleanup is handled automatically by the service)
       try {
         const result = await chatService.respondToChatRequest(
           chatRequestId,
@@ -435,11 +368,9 @@ export default function NotificationBell() {
         );
 
         if (result.data?.conversation?.id) {
-          // Store the conversation ID for the connected dialog
           setDialogConversationId(result.data.conversation.id);
         }
 
-        // Remove from local state after successful API call
         setChatRequests(prev => prev.filter(req => req.id !== chatRequestId));
         setNotifications(prev =>
           prev.filter(notif => notif.id !== chatRequestId)
@@ -447,16 +378,14 @@ export default function NotificationBell() {
       } catch (error) {
         console.error('Error responding to chat request:', error);
       } finally {
-        setAcceptingRequestId(null); // Clear accepting state
+        setAcceptingRequestId(null);
       }
 
       return;
     }
 
-    // For rejection, proceed with normal flow
     setDecliningId(chatRequestId);
 
-    // Optimistic update - immediately remove from both states
     setChatRequests(prev => prev.filter(req => req.id !== chatRequestId));
     setNotifications(prev => prev.filter(notif => notif.id !== chatRequestId));
 
@@ -467,7 +396,6 @@ export default function NotificationBell() {
       );
 
       if (result.error) {
-        // Revert optimistic update - add back to both states
         setChatRequests(prev => [...prev, chatRequest]);
         const chatNotification: Notification = {
           id: chatRequest.id,
@@ -483,9 +411,7 @@ export default function NotificationBell() {
         setNotifications(prev => [...prev, chatNotification]);
         setError(result.error);
       }
-      // On success, keep the optimistic update
     } catch {
-      // Revert optimistic update on any error
       setChatRequests(prev => [...prev, chatRequest]);
       const chatNotification: Notification = {
         id: chatRequest.id,
@@ -506,25 +432,21 @@ export default function NotificationBell() {
   };
 
   const handleDialogAccept = () => {
-    // Dialog handles the API call, we just clean up
     if (dialogRequest) {
       setChatRequests(prev => prev.filter(req => req.id !== dialogRequest.id));
       setNotifications(prev =>
         prev.filter(notif => notif.id !== dialogRequest.id)
       );
-      // Ensure this request won't show dialog again
       shownDialogRequestIds.current.add(dialogRequest.id);
     }
   };
 
   const handleDialogReject = () => {
-    // Dialog handles the API call, we just clean up
     if (dialogRequest) {
       setChatRequests(prev => prev.filter(req => req.id !== dialogRequest.id));
       setNotifications(prev =>
         prev.filter(notif => notif.id !== dialogRequest.id)
       );
-      // Ensure this request won't show dialog again
       shownDialogRequestIds.current.add(dialogRequest.id);
     }
   };
@@ -535,7 +457,7 @@ export default function NotificationBell() {
     setShowDialogConnected(false);
     setDialogConversationId(null);
     setDialogRequestCancelled(false);
-    setAcceptingRequestId(null); // Clear accepting state when dialog closes
+    setAcceptingRequestId(null);
   };
 
   const handleMarkAllAsRead = () => {
@@ -556,14 +478,12 @@ export default function NotificationBell() {
         requestCancelled={dialogRequestCancelled}
       />
       <div className='relative' ref={dropdownRef}>
-        {/* Combined Notification Badge + Bell Button */}
         <button
           onClick={() => setIsOpen(!isOpen)}
           className='flex items-center hover:opacity-80 focus:outline-none transition-opacity'
         >
           <span className='sr-only'>View notifications</span>
 
-          {/* Notification Badges */}
           <NotificationBadge notifications={notifications} />
 
           {/* Notification Bell */}
