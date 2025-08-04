@@ -60,7 +60,9 @@ export default function Navbar() {
                 className='sm:w-10 sm:h-10'
                 priority
               />
-              <h1 className='text-lg sm:text-xl font-semibold text-gray-800'>Loopn</h1>
+              <h1 className='text-lg sm:text-xl font-semibold text-gray-800'>
+                Loopn
+              </h1>
             </Link>
           </div>
 

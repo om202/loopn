@@ -70,9 +70,7 @@ export default function DashboardSectionContent({
             ) : (
               <div className='text-center py-6 lg:py-8 text-gray-500'>
                 <Globe className='w-6 lg:w-8 h-6 lg:h-8 mx-auto mb-2 text-gray-400' />
-                <p className='text-base'>
-                  No users online right now
-                </p>
+                <p className='text-base'>No users online right now</p>
               </div>
             )}
           </div>

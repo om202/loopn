@@ -359,9 +359,11 @@ export default function MessageBubble({
                 isOwnMessage ? 'flex-row-reverse' : 'flex-row'
               } z-10`}
             >
-              <div className={`${isTouchDevice && showActionsOnMobile ? 'bg-white/95 backdrop-blur-md border border-gray-200 rounded-full p-1.5 gap-1.5 shadow-sm' : 'gap-2'} flex items-center ${
-                isOwnMessage ? 'flex-row-reverse' : 'flex-row'
-              }`}>
+              <div
+                className={`${isTouchDevice && showActionsOnMobile ? 'bg-white/95 backdrop-blur-md border border-gray-200 rounded-full p-1.5 gap-1.5 shadow-sm' : 'gap-2'} flex items-center ${
+                  isOwnMessage ? 'flex-row-reverse' : 'flex-row'
+                }`}
+              >
                 <button
                   onClick={handleReplyClick}
                   className={`${isTouchDevice ? 'w-10 h-10' : 'w-8 h-8'} ${isTouchDevice && showActionsOnMobile ? 'bg-gray-50 hover:bg-gray-100 border border-gray-200' : 'bg-gray-200 hover:bg-gray-300'} rounded-full transition-colors duration-150 flex items-center justify-center`}
@@ -411,7 +413,7 @@ export default function MessageBubble({
                     className={`${isTouchDevice ? 'w-10 h-10' : 'w-8 h-8'} rounded-full transition-all duration-150 flex items-center justify-center ${
                       showEmojiPicker
                         ? 'bg-blue-500 text-white border border-blue-500'
-                        : isTouchDevice && showActionsOnMobile 
+                        : isTouchDevice && showActionsOnMobile
                           ? 'bg-gray-50 hover:bg-gray-100 text-gray-600 border border-gray-200'
                           : 'bg-gray-200 text-gray-600'
                     }`}
