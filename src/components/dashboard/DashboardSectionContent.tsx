@@ -1,6 +1,6 @@
 'use client';
 
-import { Globe, MessageCircle, Timer, Calendar } from 'lucide-react';
+import { Globe, MessageCircle, Timer, Users } from 'lucide-react';
 
 import type { Schema } from '../../../amplify/data/resource';
 
@@ -8,7 +8,7 @@ import UserCard from './UserCard';
 
 type UserPresence = Schema['UserPresence']['type'];
 type Conversation = Schema['Conversation']['type'];
-type SidebarSection = 'online' | 'connections' | 'chat-trial';
+type SidebarSection = 'all' | 'connections' | 'chat-trial';
 
 interface DashboardSectionContentProps {
   activeSection: SidebarSection;
@@ -37,6 +37,19 @@ export default function DashboardSectionContent({
   canUserReconnect,
   getReconnectTimeRemaining,
 }: DashboardSectionContentProps) {
+  // Combine all users for "All Chats" section
+  const allChatUsers = [
+    ...onlineUsers,
+    ...connectionUsers,
+    ...activeChatTrialUsers,
+    ...endedChatTrialUsers,
+  ];
+
+  // Remove duplicates based on userId
+  const uniqueAllChatUsers = allChatUsers.filter(
+    (user, index, array) =>
+      array.findIndex(u => u.userId === user.userId) === index
+  );
   // Helper function to render user cards
   const renderUserCard = (userPresence: UserPresence) => (
     <UserCard
@@ -52,120 +65,74 @@ export default function DashboardSectionContent({
     />
   );
 
-  switch (activeSection) {
-    case 'online':
-      return (
-        <div>
-          <div className='mb-6 lg:mb-8'>
-            <h2 className='text-lg lg:text-xl font-semibold text-gray-900 mb-1'>
-              Online Now
-            </h2>
-            <p className='text-base text-gray-600'>
-              All users currently online and available to chat
-            </p>
-          </div>
-          <div className='space-y-3'>
-            {onlineUsers.length > 0 ? (
-              onlineUsers.map(renderUserCard)
-            ) : (
-              <div className='text-center py-6 lg:py-8 text-gray-500'>
-                <Globe className='w-6 lg:w-8 h-6 lg:h-8 mx-auto mb-2 text-gray-400' />
-                <p className='text-base'>No users online right now</p>
-              </div>
-            )}
-          </div>
-        </div>
-      );
+  // Determine which users to show based on active section (filter)
+  const getUsersToShow = () => {
+    switch (activeSection) {
+      case 'connections':
+        return connectionUsers;
+      case 'chat-trial':
+        return [...activeChatTrialUsers, ...endedChatTrialUsers];
+      case 'all':
+      default:
+        return uniqueAllChatUsers;
+    }
+  };
 
-    case 'connections':
-      return (
-        <div>
-          <div className='mb-6 lg:mb-8'>
-            <h2 className='text-lg lg:text-xl font-semibold text-gray-900 mb-1'>
-              Connections
-            </h2>
-            <p className='text-base text-gray-600'>
-              Your permanent connections for ongoing conversations
-            </p>
-          </div>
-          <div className='space-y-3'>
-            {connectionUsers.length > 0 ? (
-              connectionUsers.map(renderUserCard)
-            ) : (
-              <div className='text-center py-6 lg:py-8 text-gray-500'>
-                <MessageCircle className='w-6 lg:w-8 h-6 lg:h-8 mx-auto mb-2 text-gray-400' />
-                <p className='text-base'>No connections yet</p>
-              </div>
-            )}
-          </div>
-        </div>
-      );
+  // Get section title and description
+  const getSectionInfo = () => {
+    switch (activeSection) {
+      case 'connections':
+        return {
+          title: 'Connections',
+          description: 'Your permanent connections for ongoing conversations',
+          emptyIcon: Users,
+          emptyMessage: 'No connections yet',
+        };
+      case 'chat-trial':
+        return {
+          title: 'Chat Trials',
+          description: 'Your active and ended chat trials',
+          emptyIcon: Timer,
+          emptyMessage: 'No chat trials yet',
+        };
+      case 'all':
+      default:
+        return {
+          title: 'Chats',
+          description: 'All your conversations and available users',
+          emptyIcon: MessageCircle,
+          emptyMessage: 'No chats available',
+        };
+    }
+  };
 
-    case 'chat-trial':
-      return (
-        <div>
-          <div className='mb-6 lg:mb-10'>
-            <h2 className='text-lg lg:text-xl font-semibold text-gray-900 mb-1'>
-              Chat Trials
-            </h2>
-            <p className='text-base text-gray-600'>
-              Manage your active and ended chat trials
-            </p>
-          </div>
+  const usersToShow = getUsersToShow();
+  const sectionInfo = getSectionInfo();
+  const {
+    title,
+    description,
+    emptyIcon: EmptyIcon,
+    emptyMessage,
+  } = sectionInfo;
 
-          {/* Active Chat Trials */}
-          <div className='mb-6 lg:mb-8'>
-            <div className='mb-4 lg:mb-6'>
-              <div className='flex items-center gap-2 lg:gap-3 py-2 px-3 lg:px-4 bg-gray-50 rounded-xl'>
-                <Timer className='w-4 lg:w-5 h-4 lg:h-5 text-gray-600 flex-shrink-0' />
-                <h3 className='text-sm lg:text-base text-gray-900 font-medium'>
-                  Active Chat Trials
-                </h3>
-                <span className='text-sm lg:text-sm bg-white text-gray-700 px-2 lg:px-3 py-1 rounded-full font-medium ml-auto'>
-                  {activeChatTrialUsers.length}
-                </span>
-              </div>
-            </div>
-            <div className='space-y-3'>
-              {activeChatTrialUsers.length > 0 ? (
-                activeChatTrialUsers.map(renderUserCard)
-              ) : (
-                <div className='text-center py-4 lg:py-6 text-gray-500'>
-                  <Timer className='w-6 lg:w-8 h-6 lg:h-8 mx-auto mb-2 text-gray-400' />
-                  <p className='text-base'>No active chat trials</p>
-                </div>
-              )}
-            </div>
+  return (
+    <div>
+      <div className='mb-8 lg:mb-10'>
+        <h2 className='text-2xl font-bold text-gray-900 mb-2'>
+          {title}
+        </h2>
+        <p className='text-base text-gray-600'>{description}</p>
+      </div>
+      <div className='space-y-3'>
+        {usersToShow.length > 0 ? (
+          usersToShow.map(renderUserCard)
+        ) : (
+          <div className='text-center py-6 lg:py-8 text-gray-500'>
+            <EmptyIcon className='w-6 lg:w-8 h-6 lg:h-8 mx-auto mb-2 text-gray-400' />
+            <p className='text-base'>{emptyMessage}</p>
           </div>
-
-          {/* Ended Chat Trials */}
-          <div className='mt-6 lg:mt-8'>
-            <div className='mb-4 lg:mb-6'>
-              <div className='flex items-center gap-2 lg:gap-3 py-2 px-3 lg:px-4 bg-gray-50 rounded-xl'>
-                <Calendar className='w-4 lg:w-5 h-4 lg:h-5 text-gray-600 flex-shrink-0' />
-                <h3 className='text-sm lg:text-base text-gray-900 font-medium'>
-                  Ended Chat Trials
-                </h3>
-                <span className='text-sm lg:text-sm bg-white text-gray-700 px-2 lg:px-3 py-1 rounded-full font-medium ml-auto'>
-                  {endedChatTrialUsers.length}
-                </span>
-              </div>
-            </div>
-            <div className='space-y-3'>
-              {endedChatTrialUsers.length > 0 ? (
-                endedChatTrialUsers.map(renderUserCard)
-              ) : (
-                <div className='text-center py-4 lg:py-6 text-gray-500'>
-                  <Calendar className='w-6 lg:w-8 h-6 lg:h-8 mx-auto mb-2 text-gray-400' />
-                  <p className='text-base'>No ended chat trials</p>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      );
-
-    default:
-      return null;
-  }
+        )}
+      </div>
+    </div>
+  );
 }

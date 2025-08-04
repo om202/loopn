@@ -308,7 +308,6 @@ export default function ChatHeader({
                         <span className='bg-gray-200 text-gray-700 px-1.5 sm:px-2 py-0.5 rounded-full text-sm font-bold whitespace-nowrap'>
                           {timeLeft}
                         </span>
-
                       </div>
 
                       {/* Line Separator - hidden on small screens */}

@@ -1,8 +1,8 @@
 'use client';
 
-import { Globe, MessageCircle, Timer } from 'lucide-react';
+import { Globe, MessageCircle, Timer, Users } from 'lucide-react';
 
-type SidebarSection = 'online' | 'connections' | 'chat-trial';
+type SidebarSection = 'all' | 'connections' | 'chat-trial';
 
 interface DashboardSidebarProps {
   activeSection: SidebarSection;
@@ -21,14 +21,14 @@ export default function DashboardSidebar({
 }: DashboardSidebarProps) {
   const sidebarItems = [
     {
-      id: 'online' as const,
-      icon: Globe,
-      label: 'Online Now',
-      count: onlineUsersCount,
+      id: 'all' as const,
+      icon: MessageCircle,
+      label: 'Chats',
+      count: onlineUsersCount + connectionsCount + chatTrialsCount,
     },
     {
       id: 'connections' as const,
-      icon: MessageCircle,
+      icon: Users,
       label: 'Connections',
       count: connectionsCount,
     },
@@ -45,10 +45,6 @@ export default function DashboardSidebar({
       {/* Desktop Sidebar */}
       <div className='hidden lg:block w-80 flex-shrink-0'>
         <div className='bg-white rounded-2xl border border-gray-200 p-6 h-full flex flex-col'>
-          <h2 className='text-lg font-semibold text-gray-900 mb-4'>
-            Dashboard
-          </h2>
-
           <nav className='space-y-2 flex-1 overflow-y-auto'>
             {sidebarItems.map(({ id, icon: Icon, label, count }) => (
               <button

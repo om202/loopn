@@ -23,7 +23,7 @@ interface OnlineUsersProps {
   onChatRequestSent: () => void;
 }
 
-type SidebarSection = 'online' | 'connections' | 'chat-trial';
+type SidebarSection = 'all' | 'connections' | 'chat-trial';
 
 export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   const [allUsers, setAllUsers] = useState<UserPresence[]>([]);
@@ -32,7 +32,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   >(new Map());
   const [error, setError] = useState<string | null>(null);
   const [, setConversationsLoaded] = useState(false);
-  const [activeSection, setActiveSection] = useState<SidebarSection>('online');
+  const [activeSection, setActiveSection] = useState<SidebarSection>('all');
   const [currentTime, setCurrentTime] = useState(new Date());
   const [optimisticPendingRequests, setOptimisticPendingRequests] = useState<
     Set<string>
