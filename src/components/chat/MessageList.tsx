@@ -512,13 +512,13 @@ export default function MessageList({
             }
           } else {
             if (prevTimeDiff > 60) {
-              marginTop = 'mt-6';
+              marginTop = 'mt-8';
             } else if (prevTimeDiff > 30) {
-              marginTop = 'mt-5';
+              marginTop = 'mt-7';
             } else if (prevTimeDiff > 10) {
-              marginTop = 'mt-4';
+              marginTop = 'mt-6';
             } else {
-              marginTop = 'mt-3';
+              marginTop = 'mt-5';
             }
           }
 
@@ -529,7 +529,7 @@ export default function MessageList({
               marginBottom = 'mb-1';
             }
           } else {
-            marginBottom = 'mb-2';
+            marginBottom = 'mb-3';
           }
 
           const showAvatar = !isOwnMessage && !isGroupedWithPrev;

@@ -355,38 +355,20 @@ export default function MessageBubble({
                 isTouchDevice
                   ? `bottom-full mb-2 ${isOwnMessage ? 'right-0' : 'left-0'}`
                   : `top-1/2 -translate-y-6 ${isOwnMessage ? 'right-full mr-3' : 'left-full ml-3'}`
-              } ${showEmojiPicker || (isTouchDevice && showActionsOnMobile) ? 'flex opacity-100' : isTouchDevice ? 'hidden' : 'hidden group-hover:flex group-hover:opacity-100'} transition-all duration-150 ease-out items-center gap-2 ${
+              } ${showEmojiPicker || (isTouchDevice && showActionsOnMobile) ? 'flex opacity-100' : isTouchDevice ? 'hidden' : 'hidden group-hover:flex group-hover:opacity-100'} transition-all duration-150 ease-out items-center ${
                 isOwnMessage ? 'flex-row-reverse' : 'flex-row'
               } z-10`}
             >
-              <button
-                onClick={handleReplyClick}
-                className={`${isTouchDevice ? 'w-10 h-10' : 'w-8 h-8'} bg-gray-200 hover:bg-gray-300 rounded-full transition-colors duration-150 flex items-center justify-center`}
-                title='Reply'
-              >
-                <svg
-                  className='w-4 h-4 text-gray-600'
-                  fill='none'
-                  stroke='currentColor'
-                  viewBox='0 0 24 24'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6'
-                  />
-                </svg>
-              </button>
-
-              {isOwnMessage && onDeleteMessage && !message.isDeleted && (
+              <div className={`${isTouchDevice && showActionsOnMobile ? 'bg-white/95 backdrop-blur-md border border-gray-200 rounded-full p-1.5 gap-1.5 shadow-sm' : 'gap-2'} flex items-center ${
+                isOwnMessage ? 'flex-row-reverse' : 'flex-row'
+              }`}>
                 <button
-                  onClick={handleDeleteClick}
-                  className={`${isTouchDevice ? 'w-10 h-10' : 'w-8 h-8'} bg-gray-200 hover:bg-red-100 rounded-full transition-colors duration-150 flex items-center justify-center`}
-                  title='Delete message'
+                  onClick={handleReplyClick}
+                  className={`${isTouchDevice ? 'w-10 h-10' : 'w-8 h-8'} ${isTouchDevice && showActionsOnMobile ? 'bg-gray-50 hover:bg-gray-100 border border-gray-200' : 'bg-gray-200 hover:bg-gray-300'} rounded-full transition-colors duration-150 flex items-center justify-center`}
+                  title='Reply'
                 >
                   <svg
-                    className='w-4 h-4 text-gray-600 hover:text-red-600'
+                    className='w-4 h-4 text-gray-600'
                     fill='none'
                     stroke='currentColor'
                     viewBox='0 0 24 24'
@@ -395,44 +377,68 @@ export default function MessageBubble({
                       strokeLinecap='round'
                       strokeLinejoin='round'
                       strokeWidth={2}
-                      d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16'
+                      d='M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6'
                     />
                   </svg>
                 </button>
-              )}
 
-              <div className='relative'>
-                <button
-                  onClick={onEmojiPickerToggle}
-                  data-emoji-button
-                  className={`${isTouchDevice ? 'w-10 h-10' : 'w-8 h-8'} rounded-full transition-all duration-150 flex items-center justify-center ${
-                    showEmojiPicker
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-gray-200 text-gray-600'
-                  }`}
-                  title='Add reaction'
-                >
-                  <svg
-                    className='w-4 h-4'
-                    fill='none'
-                    stroke='currentColor'
-                    viewBox='0 0 24 24'
+                {isOwnMessage && onDeleteMessage && !message.isDeleted && (
+                  <button
+                    onClick={handleDeleteClick}
+                    className={`${isTouchDevice ? 'w-10 h-10' : 'w-8 h-8'} ${isTouchDevice && showActionsOnMobile ? 'bg-gray-50 hover:bg-red-50 border border-gray-200' : 'bg-gray-200 hover:bg-red-100'} rounded-full transition-colors duration-150 flex items-center justify-center`}
+                    title='Delete message'
                   >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      strokeWidth={2}
-                      d='M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
-                    />
-                  </svg>
-                </button>
-                {showEmojiPicker && (
-                  <EmojiPicker
-                    isOpen={showEmojiPicker}
-                    onEmojiSelect={handleEmojiSelect}
-                    onClose={() => {}}
-                  />
+                    <svg
+                      className='w-4 h-4 text-gray-600 hover:text-red-600'
+                      fill='none'
+                      stroke='currentColor'
+                      viewBox='0 0 24 24'
+                    >
+                      <path
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        strokeWidth={2}
+                        d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16'
+                      />
+                    </svg>
+                  </button>
                 )}
+
+                <div className='relative'>
+                  <button
+                    onClick={onEmojiPickerToggle}
+                    data-emoji-button
+                    className={`${isTouchDevice ? 'w-10 h-10' : 'w-8 h-8'} rounded-full transition-all duration-150 flex items-center justify-center ${
+                      showEmojiPicker
+                        ? 'bg-blue-500 text-white border border-blue-500'
+                        : isTouchDevice && showActionsOnMobile 
+                          ? 'bg-gray-50 hover:bg-gray-100 text-gray-600 border border-gray-200'
+                          : 'bg-gray-200 text-gray-600'
+                    }`}
+                    title='Add reaction'
+                  >
+                    <svg
+                      className='w-4 h-4'
+                      fill='none'
+                      stroke='currentColor'
+                      viewBox='0 0 24 24'
+                    >
+                      <path
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        strokeWidth={2}
+                        d='M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
+                      />
+                    </svg>
+                  </button>
+                  {showEmojiPicker && (
+                    <EmojiPicker
+                      isOpen={showEmojiPicker}
+                      onEmojiSelect={handleEmojiSelect}
+                      onClose={() => {}}
+                    />
+                  )}
+                </div>
               </div>
             </div>
           )}
