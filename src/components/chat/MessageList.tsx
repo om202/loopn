@@ -17,7 +17,6 @@ import { useRealtimeReactions } from '../../hooks/realtime';
 
 type Message = Schema['Message']['type'];
 type UserPresence = Schema['UserPresence']['type'];
-type MessageReaction = Schema['MessageReaction']['type'];
 
 interface MessageListProps {
   messages: Message[];
@@ -71,7 +70,7 @@ export default function MessageList({
   const {
     messageReactions,
     isLoading: reactionsLoading,
-    error: reactionsError,
+
     getReactionsForMessage,
     addOptimisticReaction,
     removeOptimisticReaction,
@@ -90,7 +89,7 @@ export default function MessageList({
       if (!message) return;
 
       const participants = [message.senderId, message.receiverId];
-      const currentReactions = getReactionsForMessage(messageId);
+
       const optimisticReaction = {
         id: `temp-${Date.now()}-${Math.random()}`,
         messageId,
@@ -147,7 +146,6 @@ export default function MessageList({
     [
       messages,
       currentUserId,
-      getReactionsForMessage,
       addOptimisticReaction,
       removeOptimisticReaction,
       updateReactionsForMessage,
@@ -166,7 +164,14 @@ export default function MessageList({
           reaction.userId === currentUserId && reaction.emoji === emoji
       );
       let removedReactionId: string | null = null;
-      let addedReaction: any = null;
+      let addedReaction: {
+        id: string;
+        messageId: string;
+        userId: string;
+        emoji: string;
+        timestamp: string;
+        participants: string[];
+      } | null = null;
 
       if (existingReaction) {
         // Remove existing reaction optimistically

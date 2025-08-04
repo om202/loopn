@@ -22,7 +22,6 @@ import type {
   Notification,
   NotificationFilter,
   ChatRequestWithUser,
-  MessageNotificationData,
 } from './types';
 
 export default function NotificationBell() {
@@ -31,15 +30,14 @@ export default function NotificationBell() {
   const {
     incomingRequests: realtimeChatRequests,
     isLoadingIncoming: chatRequestsLoading,
-    error: chatRequestsError,
   } = useChatRequests({
     userId: user?.userId || '',
     enabled: !!user?.userId,
   });
 
-  const [chatRequests, setChatRequests] = useState<ChatRequestWithUser[]>([]);
+  const [, setChatRequests] = useState<ChatRequestWithUser[]>([]);
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [activeFilter, setActiveFilter] = useState<NotificationFilter>('all');
+  const [activeFilter] = useState<NotificationFilter>('all');
   const [isOpen, setIsOpen] = useState(false);
   const [decliningId, setDecliningId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -141,7 +139,6 @@ export default function NotificationBell() {
 
       // Check for new requests to show dialog (only after initial load)
       if (!isInitialLoad.current) {
-        const currentRequestIds = new Set(requestsWithUsers.map(req => req.id));
         const previousRequestIds = new Set(previousRequestIdsRef.current);
 
         // Find truly new requests (not just reloaded ones)
@@ -279,7 +276,11 @@ export default function NotificationBell() {
 
     const messageSubscription = messageService.subscribeToNewMessages(
       user.userId,
-      async (message: any) => {
+      async (message: {
+        conversationId: string;
+        senderId: string;
+        content: string;
+      }) => {
         const currentConversationId = getCurrentConversationId();
 
         // Only show notification if user is not currently viewing this conversation

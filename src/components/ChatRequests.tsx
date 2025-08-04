@@ -22,14 +22,11 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
   const { user } = useAuthenticator();
 
   // Use the unified chat requests hook
-  const {
-    incomingRequests: chatRequests,
-    isLoadingIncoming: isLoading,
-    error: chatRequestsError,
-  } = useChatRequests({
-    userId: user?.userId || '',
-    enabled: !!user?.userId,
-  });
+  const { incomingRequests: chatRequests, error: chatRequestsError } =
+    useChatRequests({
+      userId: user?.userId || '',
+      enabled: !!user?.userId,
+    });
 
   const error = chatRequestsError || localError;
 

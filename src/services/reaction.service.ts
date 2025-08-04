@@ -6,7 +6,6 @@ import type { Schema } from '../../amplify/data/resource';
 const client = generateClient<Schema>();
 
 type MessageReaction = Schema['MessageReaction']['type'];
-type Message = Schema['Message']['type'];
 
 type DataResult<T> = { data: T | null; error: string | null };
 type ListResult<T> = { data: T[]; error: string | null };

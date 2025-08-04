@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import type { Schema } from '../../../amplify/data/resource';
 import UserAvatar from '../UserAvatar';
@@ -102,25 +102,7 @@ export default function MessageBubble({
     });
   };
 
-  const formatMessageTime = (timestamp: string | null | undefined) => {
-    if (!timestamp) {
-      return 'Unknown time';
-    }
-    return new Date(timestamp).toLocaleTimeString([], {
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  };
-
   const messageIsEmojiOnly = isEmojiOnly(message.content);
-
-  const getSenderNameWithTime = () => {
-    const senderName = isOwnMessage
-      ? 'You'
-      : otherUserPresence?.email || `User ${message.senderId.slice(-4)}`;
-    const time = formatMessageTime(message.timestamp);
-    return `${senderName} · ${time}`;
-  };
 
   const repliedToMessage = message.replyToMessageId
     ? allMessages.find(msg => msg.id === message.replyToMessageId)

@@ -17,17 +17,17 @@ import type {
 class SubscriptionManager {
   private client = generateClient<Schema>();
   private subscriptions = new Map<SubscriptionKey, SubscriptionEntry>();
-  private eventListeners = new Map<keyof ManagerEvents, Set<Function>>();
+  private eventListeners = new Map<keyof ManagerEvents, Set<() => void>>();
   private connectionStatus: ConnectionStatus = 'disconnected';
 
   /**
    * Subscribe to a model's observeQuery with automatic deduplication
    */
-  subscribe<T = any>(
+  subscribe<T = unknown>(
     config: SubscriptionConfig,
     callback: SubscriptionCallback<T>
   ): UnsubscribeFn {
-    const { key, query, variables } = config;
+    const { key, query } = config;
 
     // If subscription already exists, just add the callback
     if (this.subscriptions.has(key)) {
@@ -50,7 +50,7 @@ class SubscriptionManager {
 
       // Subscribe to the observable
       const subscription = observable.subscribe({
-        next: (data: any) => {
+        next: (data: T) => {
           const entry = this.subscriptions.get(key);
           if (entry) {
             // Notify all callbacks for this subscription
@@ -66,7 +66,7 @@ class SubscriptionManager {
             });
           }
         },
-        error: (error: any) => {
+        error: (error: Error) => {
           console.error(
             `[SubscriptionManager] Subscription error for ${key}:`,
             error

@@ -14,8 +14,6 @@ export default function DeleteConfirmationDialog({
   isOpen,
   onConfirm,
   onCancel,
-  title = 'Delete Message',
-  message = 'Are you sure you want to delete this message? This action cannot be undone.',
 }: DeleteConfirmationDialogProps) {
   return (
     <DialogContainer isOpen={isOpen} onClose={onCancel} maxWidth='xs'>

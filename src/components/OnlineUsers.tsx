@@ -33,7 +33,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   >(new Map());
   const [error, setError] = useState<string | null>(null);
   // Remove pendingRequestsLoaded - handled by real-time hook
-  const [conversationsLoaded, setConversationsLoaded] = useState(false);
+  const [, setConversationsLoaded] = useState(false);
   const [activeSection, setActiveSection] = useState<SidebarSection>('online');
   const [currentTime, setCurrentTime] = useState(new Date());
   const { user } = useAuthenticator();
@@ -44,17 +44,12 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
     onlineUsers: allOnlineUsers,
     isLoading: onlineUsersLoading,
     error: onlineUsersError,
-    isUserOnline,
   } = useRealtimeOnlineUsers({
     enabled: !!user?.userId,
   });
 
   // Use unified chat requests hook
-  const {
-    pendingReceiverIds,
-    isLoadingSent: sentRequestsLoading,
-    error: sentRequestsError,
-  } = useChatRequests({
+  const { pendingReceiverIds, error: sentRequestsError } = useChatRequests({
     userId: user?.userId || '',
     enabled: !!user?.userId,
   });
@@ -206,14 +201,16 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
       const conversationMap = new Map<string, Conversation>();
 
       // Sort conversations by creation date (newest first) and update mappings with latest data
-      const sortedConversations = conversations.sort((a: any, b: any) => {
-        const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
-        const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
-        return dateB - dateA; // Newest first
-      });
+      const sortedConversations = conversations.sort(
+        (a: Conversation, b: Conversation) => {
+          const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+          const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+          return dateB - dateA; // Newest first
+        }
+      );
 
       // Update conversation mappings (newest conversation per user)
-      sortedConversations.forEach((conv: any) => {
+      sortedConversations.forEach((conv: Conversation) => {
         const otherUserId =
           conv.participant1Id === user.userId
             ? conv.participant2Id

@@ -7,7 +7,6 @@ import { useState, useEffect, useRef } from 'react';
 
 import { simplePresenceManager } from '../lib/presence-utils';
 
-import CircularIcon from './CircularIcon';
 import { NotificationBell } from './notifications';
 import UserAvatar from './UserAvatar';
 

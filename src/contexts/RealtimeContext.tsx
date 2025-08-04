@@ -56,7 +56,7 @@ interface RealtimeContextType {
   subscribeToOnlineUsers: (callback: SubscriptionCallback) => UnsubscribeFn;
 
   // Get subscription statistics
-  getStats: () => any;
+  getStats: () => { subscriptions: number; listeners: number };
 }
 
 const RealtimeContext = createContext<RealtimeContextType | null>(null);
@@ -152,7 +152,7 @@ export function RealtimeProvider({ children }: RealtimeProviderProps) {
         if (data.items) {
           const filteredData = {
             ...data,
-            items: data.items.filter((reaction: any) =>
+            items: data.items.filter((reaction: { messageId: string }) =>
               messageIds.includes(reaction.messageId)
             ),
           };
@@ -189,7 +189,7 @@ export function RealtimeProvider({ children }: RealtimeProviderProps) {
         const filteredData = {
           ...data,
           items: (data.items || []).filter(
-            (request: any) => request.status === 'PENDING'
+            (request: { status: string }) => request.status === 'PENDING'
           ),
         };
         callback(filteredData);
@@ -220,7 +220,7 @@ export function RealtimeProvider({ children }: RealtimeProviderProps) {
         const filteredData = {
           ...data,
           items: (data.items || []).filter(
-            (request: any) => request.status === 'PENDING'
+            (request: { status: string }) => request.status === 'PENDING'
           ),
         };
         callback(filteredData);

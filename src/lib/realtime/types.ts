@@ -1,19 +1,19 @@
 // Core types for the realtime subscription system
 
-export type SubscriptionCallback<T = any> = (data: T) => void;
+export type SubscriptionCallback<T = unknown> = (data: T) => void;
 export type SubscriptionKey = string;
 export type UnsubscribeFn = () => void;
 
 // Subscription configuration
 export interface SubscriptionConfig {
-  query: any;
-  variables?: any;
+  query: () => { subscribe: (observer: { next: (data: unknown) => void; error: (error: Error) => void }) => { unsubscribe: () => void } };
+  variables?: Record<string, unknown>;
   key: SubscriptionKey;
 }
 
 // Subscription registry entry
 export interface SubscriptionEntry {
-  subscription: any; // The actual AppSync subscription
+  subscription: { unsubscribe: () => void }; // The actual AppSync subscription
   callbacks: Set<SubscriptionCallback>;
   config: SubscriptionConfig;
 }
@@ -21,7 +21,7 @@ export interface SubscriptionEntry {
 // Error types
 export interface SubscriptionError {
   key: SubscriptionKey;
-  error: any;
+  error: Error;
   timestamp: Date;
 }
 

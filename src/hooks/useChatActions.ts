@@ -10,7 +10,7 @@ import { chatService } from '../services/chat.service';
 type Conversation = Schema['Conversation']['type'];
 
 interface UseChatActionsProps {
-  user: any;
+  user: { userId: string };
   existingConversations: Map<string, Conversation>;
   canUserReconnect: (userId: string) => boolean;
   onChatRequestSent: () => void;

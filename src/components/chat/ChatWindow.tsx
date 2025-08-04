@@ -6,7 +6,6 @@ import { useState, useEffect, useCallback } from 'react';
 import type { Schema } from '../../../amplify/data/resource';
 import { chatService } from '../../services/chat.service';
 import { messageService } from '../../services/message.service';
-import { userService } from '../../services/user.service';
 import { useRealtimeMessages, useRealtimePresence } from '../../hooks/realtime';
 import LoadingContainer from '../LoadingContainer';
 
@@ -16,7 +15,6 @@ import MessageList from './MessageList';
 
 type Message = Schema['Message']['type'];
 type Conversation = Schema['Conversation']['type'];
-type UserPresence = Schema['UserPresence']['type'];
 
 interface ChatWindowProps {
   conversation: Conversation;
@@ -44,7 +42,7 @@ export default function ChatWindow({
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [lastLoadWasOlderMessages, setLastLoadWasOlderMessages] =
     useState(false);
-  const [chatEnteredAt, setChatEnteredAt] = useState<Date>(new Date());
+  const [chatEnteredAt] = useState<Date>(new Date());
 
   const { user } = useAuthenticator();
 
@@ -52,7 +50,6 @@ export default function ChatWindow({
   const {
     messages,
     isInitializing,
-    isInitialLoadComplete: initialLoadComplete,
     hasActiveSession,
     shouldAutoScroll,
     unreadMessagesSnapshot,
@@ -67,10 +64,6 @@ export default function ChatWindow({
   const error = externalError || messageError || localError;
 
   // Check if there are unread messages from other users (for reply-based marking)
-  const hasUnreadMessages = messages.some(
-    msg =>
-      !msg.isRead && msg.senderId !== user?.userId && msg.senderId !== 'SYSTEM'
-  );
 
   // Get the other participant's ID
   const otherParticipantId =
@@ -79,14 +72,11 @@ export default function ChatWindow({
       : conversation.participant1Id;
 
   // Use our new realtime presence hook for the other participant
-  const {
-    presence: otherUserPresence,
-    isOnline: isOtherUserOnline,
-    error: presenceError,
-  } = useRealtimePresence({
-    userId: otherParticipantId || '',
-    enabled: !!otherParticipantId,
-  });
+  const { presence: otherUserPresence, error: presenceError } =
+    useRealtimePresence({
+      userId: otherParticipantId || '',
+      enabled: !!otherParticipantId,
+    });
 
   // Update error to include presence error
   const finalError = error || presenceError;
@@ -200,27 +190,8 @@ export default function ChatWindow({
     }
 
     const messageContent = newMessage.trim();
-    const tempId = `temp-${Date.now()}-${Math.random()}`;
-    const now = new Date().toISOString();
 
     // Create optimistic message
-    const optimisticMessage: Message = {
-      id: tempId,
-      conversationId: conversation.id,
-      senderId: user.userId,
-      receiverId: otherParticipantId,
-      content: messageContent,
-      sortKey: `${now}-${tempId}`,
-      messageType: 'TEXT',
-      timestamp: now,
-      isRead: false,
-      isEdited: false,
-      isDeleted: false,
-      replyToMessageId: replyToMessage?.id,
-      participants: [user.userId, otherParticipantId],
-      createdAt: now,
-      updatedAt: now,
-    };
 
     // Clear input immediately
     setNewMessage('');
@@ -245,7 +216,7 @@ export default function ChatWindow({
         // Mark unread messages from other users as read when user replies
         markUnreadMessagesAsRead();
       }
-    } catch (error) {
+    } catch {
       setLocalError('Failed to send message. Please try again.');
       setNewMessage(messageContent); // Restore message text on error
       setReplyToMessage(replyToMessage); // Restore reply state
@@ -325,7 +296,7 @@ export default function ChatWindow({
         setLocalError(result.error);
       }
       // Real-time subscription will handle UI updates
-    } catch (error) {
+    } catch {
       setLocalError('Failed to delete message. Please try again.');
     }
   };

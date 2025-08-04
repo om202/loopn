@@ -129,33 +129,42 @@ class SimplePresenceManager {
       this.hubUnsubscribe();
     }
 
-    this.hubUnsubscribe = Hub.listen('api', (data: any) => {
-      const { payload } = data;
+    this.hubUnsubscribe = Hub.listen(
+      'api',
+      (data: {
+        payload: { event: string; data: { connectionState: string } };
+      }) => {
+        const { payload } = data;
 
-      if (payload.event === CONNECTION_STATE_CHANGE) {
-        const connectionState = payload.data.connectionState as ConnectionState;
+        if (payload.event === CONNECTION_STATE_CHANGE) {
+          const connectionState = payload.data
+            .connectionState as ConnectionState;
 
-        switch (connectionState) {
-          case 'Disconnected':
-            // Only care about disconnections for tab close detection
-            if (this.currentUser && !this.isSigningOut) {
-              userService
-                .setUserOffline(this.currentUser.userId, this.currentUser.email)
-                .catch(error =>
-                  console.error(
-                    'Failed to set user offline on disconnect:',
-                    error
+          switch (connectionState) {
+            case 'Disconnected':
+              // Only care about disconnections for tab close detection
+              if (this.currentUser && !this.isSigningOut) {
+                userService
+                  .setUserOffline(
+                    this.currentUser.userId,
+                    this.currentUser.email
                   )
-                );
-            }
-            break;
+                  .catch(error =>
+                    console.error(
+                      'Failed to set user offline on disconnect:',
+                      error
+                    )
+                  );
+              }
+              break;
 
-          // Ignore all other connection states to prevent loops
-          default:
-            break;
+            // Ignore all other connection states to prevent loops
+            default:
+              break;
+          }
         }
       }
-    });
+    );
   }
 
   /**

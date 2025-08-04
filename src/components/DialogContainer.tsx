@@ -1,8 +1,7 @@
 'use client';
 
-import { useEffect, ReactNode } from 'react';
+import { useEffect, ReactNode, ReactElement } from 'react';
 import { createPortal } from 'react-dom';
-import type { ReactElement } from 'react';
 
 interface DialogContainerProps {
   isOpen: boolean;

@@ -50,36 +50,45 @@ export function useChatRequests({ userId, enabled }: UseChatRequestsProps) {
         const requests = data.items || [];
         // Convert and fetch user details for each request
         const requestsWithUsers = await Promise.all(
-          requests.map(async (request: any) => {
-            try {
-              const userResult = await userService.getUserPresence(
-                request.requesterId
-              );
-              return {
-                id: request.id,
-                requesterId: request.requesterId,
-                receiverId: request.receiverId,
-                status: request.status,
-                createdAt: request.createdAt,
-                updatedAt: request.updatedAt,
-                requesterEmail: userResult.data?.email || undefined,
-              };
-            } catch (userError) {
-              console.warn(
-                `Failed to fetch user details for requester ${request.requesterId}:`,
-                userError
-              );
-              return {
-                id: request.id,
-                requesterId: request.requesterId,
-                receiverId: request.receiverId,
-                status: request.status,
-                createdAt: request.createdAt,
-                updatedAt: request.updatedAt,
-                requesterEmail: undefined,
-              };
+          requests.map(
+            async (request: {
+              id: string;
+              requesterId: string;
+              recipientId: string;
+              status: string;
+              requestMessage?: string;
+              timestamp: string;
+            }) => {
+              try {
+                const userResult = await userService.getUserPresence(
+                  request.requesterId
+                );
+                return {
+                  id: request.id,
+                  requesterId: request.requesterId,
+                  receiverId: request.receiverId,
+                  status: request.status,
+                  createdAt: request.createdAt,
+                  updatedAt: request.updatedAt,
+                  requesterEmail: userResult.data?.email || undefined,
+                };
+              } catch (userError) {
+                console.warn(
+                  `Failed to fetch user details for requester ${request.requesterId}:`,
+                  userError
+                );
+                return {
+                  id: request.id,
+                  requesterId: request.requesterId,
+                  receiverId: request.receiverId,
+                  status: request.status,
+                  createdAt: request.createdAt,
+                  updatedAt: request.updatedAt,
+                  requesterEmail: undefined,
+                };
+              }
             }
-          })
+          )
         );
 
         console.log('[useChatRequests] Received incoming requests:', {
@@ -134,36 +143,45 @@ export function useChatRequests({ userId, enabled }: UseChatRequestsProps) {
         const requests = data.items || [];
         // Convert and fetch user details for each request
         const requestsWithUsers = await Promise.all(
-          requests.map(async (request: any) => {
-            try {
-              const userResult = await userService.getUserPresence(
-                request.receiverId
-              );
-              return {
-                id: request.id,
-                requesterId: request.requesterId,
-                receiverId: request.receiverId,
-                status: request.status,
-                createdAt: request.createdAt,
-                updatedAt: request.updatedAt,
-                receiverEmail: userResult.data?.email || undefined,
-              };
-            } catch (userError) {
-              console.warn(
-                `Failed to fetch user details for receiver ${request.receiverId}:`,
-                userError
-              );
-              return {
-                id: request.id,
-                requesterId: request.requesterId,
-                receiverId: request.receiverId,
-                status: request.status,
-                createdAt: request.createdAt,
-                updatedAt: request.updatedAt,
-                receiverEmail: undefined,
-              };
+          requests.map(
+            async (request: {
+              id: string;
+              requesterId: string;
+              receiverId: string;
+              status: string;
+              requestMessage?: string;
+              timestamp: string;
+            }) => {
+              try {
+                const userResult = await userService.getUserPresence(
+                  request.receiverId
+                );
+                return {
+                  id: request.id,
+                  requesterId: request.requesterId,
+                  receiverId: request.receiverId,
+                  status: request.status,
+                  createdAt: request.createdAt,
+                  updatedAt: request.updatedAt,
+                  receiverEmail: userResult.data?.email || undefined,
+                };
+              } catch (userError) {
+                console.warn(
+                  `Failed to fetch user details for receiver ${request.receiverId}:`,
+                  userError
+                );
+                return {
+                  id: request.id,
+                  requesterId: request.requesterId,
+                  receiverId: request.receiverId,
+                  status: request.status,
+                  createdAt: request.createdAt,
+                  updatedAt: request.updatedAt,
+                  receiverEmail: undefined,
+                };
+              }
             }
-          })
+          )
         );
 
         console.log('[useChatRequests] Received sent requests:', {

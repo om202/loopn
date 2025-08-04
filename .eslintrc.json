@@ -1,11 +1,6 @@
 {
-  "extends": [
-    "next/core-web-vitals",
-    "next/typescript"
-  ],
-  "plugins": [
-    "unused-imports"
-  ],
+  "extends": ["next/core-web-vitals", "next/typescript"],
+  "plugins": ["unused-imports"],
   "rules": {
     // Unused imports and variables - what you specifically wanted
     "unused-imports/no-unused-imports": "error",
@@ -17,28 +12,28 @@
         "caughtErrorsIgnorePattern": "^_"
       }
     ],
-    
+
     // Standard JavaScript/TypeScript practices
     "no-debugger": "error",
     "no-var": "error",
     "prefer-const": "error",
     "no-duplicate-imports": "error",
     "no-unreachable": "error",
-    
+
     // TypeScript standards (reasonable ones)
     "@typescript-eslint/no-explicit-any": "warn",
     "@typescript-eslint/prefer-as-const": "error",
-    
+
     // React standards (basic)
     "react/jsx-key": "error",
     "react/jsx-no-duplicate-props": "error",
     "react/jsx-no-undef": "error",
     "react/no-direct-mutation-state": "error",
-    
+
     // React Hooks standards
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
-    
+
     // Turn off overly strict rules
     "react/no-unescaped-entities": "off"
   }

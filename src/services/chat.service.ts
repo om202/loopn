@@ -16,8 +16,6 @@ type UserConnection = Schema['UserConnection']['type'];
 // type CreateUserConnectionInput = Schema['UserConnection']['createType'];
 // type UpdateUserConnectionInput = Schema['UserConnection']['updateType'];
 
-type ChatRestriction = Schema['ChatRestriction']['type'];
-
 // Result types
 type DataResult<T> = { data: T | null; error: string | null };
 type ListResult<T> = { data: T[]; error: string | null };

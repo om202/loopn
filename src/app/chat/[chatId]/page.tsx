@@ -88,7 +88,7 @@ export default function ChatPage({ params }: ChatPageProps) {
       const conversations = data.items || [];
       // Find the current conversation in the updated list
       const updatedConversation = conversations.find(
-        (conv: any) => conv.id === conversation.id
+        (conv: { id: string }) => conv.id === conversation.id
       );
       if (updatedConversation) {
         setConversation(updatedConversation);
