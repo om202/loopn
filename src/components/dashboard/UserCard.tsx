@@ -69,7 +69,7 @@ export default function UserCard({
             {getDisplayName(userPresence)}
           </div>
           <div
-            className={`text-xs lg:text-sm ${
+            className={`text-sm lg:text-sm ${
               existingConversations.has(userPresence.userId) &&
               existingConversations.get(userPresence.userId)?.chatStatus ===
                 'ENDED'
@@ -110,7 +110,7 @@ export default function UserCard({
                 userPresence.userId
               );
               return (
-                <div className='text-xs lg:text-sm text-right'>
+                <div className='text-sm lg:text-sm text-right'>
                   <div className='text-gray-500'>Can connect</div>
                   <div className='text-gray-500 flex items-center justify-end gap-1'>
                     <Clock className='w-3 h-3 text-gray-400 hover:text-gray-600 cursor-pointer transition-colors' />
@@ -129,7 +129,7 @@ export default function UserCard({
                     onChatAction(userPresence.userId);
                   }
                 }}
-                className='px-2 lg:px-3 py-1.5 text-xs lg:text-sm font-medium rounded-xl border transition-colors bg-white text-gray-700 border-gray-200 hover:bg-gray-50 hover:border-gray-300 flex items-center gap-1 lg:gap-2 flex-shrink-0'
+                className='px-2 lg:px-3 py-1.5 text-sm lg:text-sm font-medium rounded-xl border transition-colors bg-white text-gray-700 border-gray-200 hover:bg-gray-50 hover:border-gray-300 flex items-center gap-1 lg:gap-2 flex-shrink-0'
               >
                 {pendingRequests.has(userPresence.userId) ? (
                   <>

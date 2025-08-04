@@ -187,7 +187,7 @@ export default function ChatHeader({
               </h1>
               <div className='flex items-center gap-1 sm:gap-2 mt-0.5'>
                 {conversation.isConnected ? (
-                  <div className='flex items-center text-xs sm:text-sm text-green-600'>
+                  <div className='flex items-center text-sm sm:text-sm text-green-600'>
                     <svg
                       className='w-2.5 h-2.5 sm:w-3 sm:h-3 mr-1 flex-shrink-0'
                       fill='currentColor'
@@ -205,7 +205,7 @@ export default function ChatHeader({
                     <span className='sm:hidden'>Connected</span>
                   </div>
                 ) : (
-                  <div className='flex items-center gap-1 sm:gap-2 text-xs sm:text-sm'>
+                  <div className='flex items-center gap-1 sm:gap-2 text-sm sm:text-sm'>
                     <div
                       className={`flex items-center ${getPresenceDisplay().color}`}
                     >
@@ -236,7 +236,7 @@ export default function ChatHeader({
                 {/* Chat Ended State */}
                 {conversation.chatStatus === 'ENDED' && (
                   <div className='flex items-center gap-2 sm:gap-3 md:gap-4'>
-                    <div className='flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-gray-600'>
+                    <div className='flex items-center gap-1 sm:gap-2 text-sm sm:text-sm text-gray-600'>
                       <button
                         onClick={() => setShowChatEndedInfoDialog(true)}
                         className='flex items-center gap-1 text-orange-500 hover:text-orange-600 transition-colors p-1 rounded-full hover:bg-orange-50 flex-shrink-0'
@@ -250,7 +250,7 @@ export default function ChatHeader({
                       </span>
                       {reconnectionTime && (
                         <span
-                          className={`text-xs sm:text-sm ${
+                          className={`text-sm sm:text-sm ${
                             reconnectionTime === 'Can reconnect now'
                               ? 'text-orange-500 font-medium'
                               : 'text-orange-500'
@@ -292,7 +292,7 @@ export default function ChatHeader({
                 {conversation.chatStatus === 'ACTIVE' &&
                   !!timeLeft &&
                   timeLeft !== 'Expired' && (
-                    <div className='flex items-center gap-1 sm:gap-2 text-xs sm:text-sm'>
+                    <div className='flex items-center gap-1 sm:gap-2 text-sm sm:text-sm'>
                       <div className='flex items-center gap-1 sm:gap-2 text-gray-500 mr-1 sm:mr-2'>
                         <button
                           onClick={() => setShowTrialInfoDialog(true)}
@@ -305,7 +305,7 @@ export default function ChatHeader({
                             Time Left
                           </span>
                         </button>
-                        <span className='bg-gray-200 text-gray-700 px-1.5 sm:px-2 py-0.5 rounded-full text-xs font-bold whitespace-nowrap'>
+                        <span className='bg-gray-200 text-gray-700 px-1.5 sm:px-2 py-0.5 rounded-full text-sm font-bold whitespace-nowrap'>
                           {timeLeft}
                         </span>
                         <span className='text-gray-500 hidden md:inline'>

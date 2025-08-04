@@ -123,7 +123,7 @@ export default function DashboardSectionContent({
                 <h3 className='text-sm lg:text-base text-gray-900 font-medium'>
                   Active Chat Trials
                 </h3>
-                <span className='text-xs lg:text-sm bg-white text-gray-700 px-2 lg:px-3 py-1 rounded-full font-medium ml-auto'>
+                <span className='text-sm lg:text-sm bg-white text-gray-700 px-2 lg:px-3 py-1 rounded-full font-medium ml-auto'>
                   {activeChatTrialUsers.length}
                 </span>
               </div>
@@ -148,7 +148,7 @@ export default function DashboardSectionContent({
                 <h3 className='text-sm lg:text-base text-gray-900 font-medium'>
                   Ended Chat Trials
                 </h3>
-                <span className='text-xs lg:text-sm bg-white text-gray-700 px-2 lg:px-3 py-1 rounded-full font-medium ml-auto'>
+                <span className='text-sm lg:text-sm bg-white text-gray-700 px-2 lg:px-3 py-1 rounded-full font-medium ml-auto'>
                   {endedChatTrialUsers.length}
                 </span>
               </div>

@@ -86,11 +86,11 @@ export default function DashboardSidebar({
               title={label}
             >
               <Icon className='w-6 h-6 flex-shrink-0' />
-              <span className='text-xs font-medium'>{label}</span>
+              <span className='text-sm font-medium'>{label}</span>
 
               {/* Count indicator for mobile */}
               {count > 0 && (
-                <span className='absolute -top-1 -right-1 bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center min-w-[20px]'>
+                <span className='absolute -top-1 -right-1 bg-blue-500 text-white text-sm rounded-full w-5 h-5 flex items-center justify-center min-w-[20px]'>
                   {count > 99 ? '99+' : count}
                 </span>
               )}
