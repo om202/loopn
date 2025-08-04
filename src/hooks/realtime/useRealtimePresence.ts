@@ -16,9 +16,6 @@ interface UseRealtimePresenceReturn {
   error: string | null;
 }
 
-/**
- * Hook for subscribing to a specific user's presence status
- */
 export function useRealtimePresence({
   userId,
   enabled = true,
@@ -35,13 +32,8 @@ export function useRealtimePresence({
       return;
     }
 
-    console.log(
-      `[useRealtimePresence] Setting up presence subscription for user: ${userId}`
-    );
-
     const unsubscribe = subscribeToPresence(userId, data => {
       try {
-        // Handle both observeQuery format and individual presence format
         const typedData = data as { items?: UserPresence[] } | UserPresence;
         const presenceData =
           (typedData as { items?: UserPresence[] }).items?.[0] ||
@@ -51,7 +43,6 @@ export function useRealtimePresence({
           setPresence(presenceData);
           setError(null);
         } else {
-          // User might be offline or not found
           setPresence(null);
         }
       } catch (err) {
@@ -64,14 +55,10 @@ export function useRealtimePresence({
     });
 
     return () => {
-      console.log(
-        `[useRealtimePresence] Cleaning up presence subscription for: ${userId}`
-      );
       unsubscribe();
     };
   }, [userId, enabled, subscribeToPresence]);
 
-  // Derived state
   const isOnline = presence?.isOnline ?? false;
   const lastSeen = presence?.lastSeen ? new Date(presence.lastSeen) : null;
 
@@ -91,14 +78,10 @@ interface UseRealtimeOnlineUsersReturn {
   onlineUsers: UserPresence[];
   isLoading: boolean;
   error: string | null;
-  // Utility functions
   isUserOnline: (userId: string) => boolean;
   getUserPresence: (userId: string) => UserPresence | null;
 }
 
-/**
- * Hook for subscribing to all online users
- */
 export function useRealtimeOnlineUsers({
   enabled = true,
 }: UseRealtimeOnlineUsersProps = {}): UseRealtimeOnlineUsersReturn {
@@ -116,18 +99,12 @@ export function useRealtimeOnlineUsers({
       return;
     }
 
-    console.log(
-      '[useRealtimeOnlineUsers] Setting up online users subscription'
-    );
     setIsLoading(true);
 
     const unsubscribe = subscribeToOnlineUsers(data => {
       try {
-        // Handle observeQuery format
         const typedData = data as { items?: UserPresence[] };
         const users = typedData.items || [];
-
-        // Filter only online users and sort by lastSeen (most recent first)
         const onlineUsers = users.filter(
           (user: UserPresence) => user.isOnline === true
         );
@@ -136,7 +113,7 @@ export function useRealtimeOnlineUsers({
           (a: UserPresence, b: UserPresence) => {
             const lastSeenA = a.lastSeen ? new Date(a.lastSeen).getTime() : 0;
             const lastSeenB = b.lastSeen ? new Date(b.lastSeen).getTime() : 0;
-            return lastSeenB - lastSeenA; // Most recent first
+            return lastSeenB - lastSeenA;
           }
         );
 
@@ -154,14 +131,10 @@ export function useRealtimeOnlineUsers({
     });
 
     return () => {
-      console.log(
-        '[useRealtimeOnlineUsers] Cleaning up online users subscription'
-      );
       unsubscribe();
     };
   }, [enabled, subscribeToOnlineUsers]);
 
-  // Utility functions (memoized to prevent infinite loops)
   const isUserOnline = useCallback(
     (userId: string): boolean => {
       return onlineUsers.some(user => user.userId === userId && user.isOnline);
