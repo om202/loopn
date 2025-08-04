@@ -44,7 +44,6 @@ export function useRealtimeMessages({
   // Refs for subscription logic
   const isFirstLoadRef = useRef(true);
   const previousMessageIdsRef = useRef(new Set<string>());
-  const canPlaySoundsRef = useRef(false);
 
   // Reset function when conversation changes
   const resetState = useCallback(() => {
@@ -57,7 +56,6 @@ export function useRealtimeMessages({
     setError(null);
     isFirstLoadRef.current = true;
     previousMessageIdsRef.current = new Set();
-    canPlaySoundsRef.current = false;
   }, []);
 
   // Main subscription effect
@@ -69,6 +67,9 @@ export function useRealtimeMessages({
 
     setIsInitializing(true);
     resetState();
+
+    // Add a timestamp to track when the subscription started
+    const subscriptionStartTime = Date.now();
 
     const unsubscribe = subscribeToMessages(conversationId, data => {
       try {
@@ -84,6 +85,10 @@ export function useRealtimeMessages({
           const timestampB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
           return timestampA - timestampB;
         });
+
+        // Check if this is within the initial load period (first 2 seconds after subscription)
+        const isWithinInitialLoadPeriod =
+          Date.now() - subscriptionStartTime < 2000;
 
         if (isFirstLoadRef.current) {
           setMessages(sortedMessages);
@@ -114,11 +119,6 @@ export function useRealtimeMessages({
           setShouldAutoScroll(true);
 
           isFirstLoadRef.current = false;
-
-          // Enable sound playing after a short delay to avoid playing sounds for existing messages
-          setTimeout(() => {
-            canPlaySoundsRef.current = true;
-          }, 1000); // 1 second delay before enabling sounds
         } else {
           const currentMessageIds = new Set(sortedMessages.map(msg => msg.id));
           const newMessageIds = sortedMessages.filter(
@@ -127,7 +127,7 @@ export function useRealtimeMessages({
 
           // Play received sound for new messages from other users (not system or self)
           // Only play if we're past the initial load period
-          if (canPlaySoundsRef.current) {
+          if (!isWithinInitialLoadPeriod) {
             const newMessagesFromOthers = newMessageIds.filter(
               msg => msg.senderId !== userId && msg.senderId !== 'SYSTEM'
             );
