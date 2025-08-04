@@ -70,10 +70,6 @@ export function useRealtimeMessages({
     setIsInitializing(true);
     resetState();
 
-    console.log(
-      `[useRealtimeMessages] Setting up subscription for conversation: ${conversationId}`
-    );
-
     const unsubscribe = subscribeToMessages(conversationId, data => {
       try {
         // Handle both observeQuery format and individual message format
@@ -90,11 +86,6 @@ export function useRealtimeMessages({
         });
 
         if (isFirstLoadRef.current) {
-          console.log(
-            `[useRealtimeMessages] First load: ${sortedMessages.length} messages`
-          );
-
-          // First load: set all messages and complete initialization
           setMessages(sortedMessages);
           setInitialLoadComplete(true);
           setHasActiveSession(true);
@@ -129,11 +120,6 @@ export function useRealtimeMessages({
             canPlaySoundsRef.current = true;
           }, 1000); // 1 second delay before enabling sounds
         } else {
-          console.log(
-            `[useRealtimeMessages] Update: ${sortedMessages.length} messages`
-          );
-
-          // Subsequent updates: check for new messages from other users
           const currentMessageIds = new Set(sortedMessages.map(msg => msg.id));
           const newMessageIds = sortedMessages.filter(
             msg => !previousMessageIdsRef.current.has(msg.id)
@@ -147,9 +133,6 @@ export function useRealtimeMessages({
             );
 
             if (newMessagesFromOthers.length > 0) {
-              console.log(
-                `[useRealtimeMessages] Playing sound for ${newMessagesFromOthers.length} new messages`
-              );
               soundService.playReceivedSound();
             }
           }
@@ -170,9 +153,6 @@ export function useRealtimeMessages({
     });
 
     return () => {
-      console.log(
-        `[useRealtimeMessages] Cleaning up subscription for: ${conversationId}`
-      );
       unsubscribe();
     };
   }, [conversationId, userId, enabled, subscribeToMessages, resetState]);

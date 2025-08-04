@@ -64,9 +64,6 @@ export function useRealtimeReactions({
         return;
       }
 
-      console.log(
-        `[useRealtimeReactions] Loading reactions for ${messageIdsToLoad.length} new messages`
-      );
       setIsLoading(true);
 
       try {
@@ -102,19 +99,11 @@ export function useRealtimeReactions({
       return;
     }
 
-    console.log(
-      `[useRealtimeReactions] Setting up reactions subscription for ${stableMessageIds.length} messages`
-    );
-
     const unsubscribe = subscribeToReactions(stableMessageIds, data => {
       try {
         // Handle the observeQuery format from AppSync
         const typedData = data as { items?: MessageReaction[] };
         const reactions = typedData.items || [];
-
-        console.log(
-          `[useRealtimeReactions] Received ${reactions.length} reactions update`
-        );
 
         // Update all reactions for messages in this update
         setMessageReactions(prev => {
@@ -147,7 +136,6 @@ export function useRealtimeReactions({
     });
 
     return () => {
-      console.log('[useRealtimeReactions] Cleaning up reactions subscription');
       unsubscribe();
     };
   }, [stableMessageIds, currentUserId, enabled, subscribeToReactions]);
