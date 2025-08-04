@@ -60,7 +60,7 @@ export default function DashboardSectionContent({
             <h2 className='text-lg lg:text-xl font-semibold text-gray-900 mb-1'>
               Online Now
             </h2>
-            <p className='text-sm lg:text-base text-gray-600'>
+            <p className='text-base text-gray-600'>
               All users currently online and available to chat
             </p>
           </div>
@@ -70,7 +70,7 @@ export default function DashboardSectionContent({
             ) : (
               <div className='text-center py-6 lg:py-8 text-gray-500'>
                 <Globe className='w-6 lg:w-8 h-6 lg:h-8 mx-auto mb-2 text-gray-400' />
-                <p className='text-sm lg:text-base'>
+                <p className='text-base'>
                   No users online right now
                 </p>
               </div>
@@ -86,7 +86,7 @@ export default function DashboardSectionContent({
             <h2 className='text-lg lg:text-xl font-semibold text-gray-900 mb-1'>
               Connections
             </h2>
-            <p className='text-sm lg:text-base text-gray-600'>
+            <p className='text-base text-gray-600'>
               Your permanent connections for ongoing conversations
             </p>
           </div>
@@ -96,7 +96,7 @@ export default function DashboardSectionContent({
             ) : (
               <div className='text-center py-6 lg:py-8 text-gray-500'>
                 <MessageCircle className='w-6 lg:w-8 h-6 lg:h-8 mx-auto mb-2 text-gray-400' />
-                <p className='text-sm lg:text-base'>No connections yet</p>
+                <p className='text-base'>No connections yet</p>
               </div>
             )}
           </div>
@@ -110,7 +110,7 @@ export default function DashboardSectionContent({
             <h2 className='text-lg lg:text-xl font-semibold text-gray-900 mb-1'>
               Chat Trials
             </h2>
-            <p className='text-sm lg:text-base text-gray-600'>
+            <p className='text-base text-gray-600'>
               Manage your active and ended chat trials
             </p>
           </div>
@@ -134,7 +134,7 @@ export default function DashboardSectionContent({
               ) : (
                 <div className='text-center py-4 lg:py-6 text-gray-500'>
                   <Timer className='w-6 lg:w-8 h-6 lg:h-8 mx-auto mb-2 text-gray-400' />
-                  <p className='text-sm lg:text-base'>No active chat trials</p>
+                  <p className='text-base'>No active chat trials</p>
                 </div>
               )}
             </div>
@@ -159,7 +159,7 @@ export default function DashboardSectionContent({
               ) : (
                 <div className='text-center py-4 lg:py-6 text-gray-500'>
                   <Calendar className='w-6 lg:w-8 h-6 lg:h-8 mx-auto mb-2 text-gray-400' />
-                  <p className='text-sm lg:text-base'>No ended chat trials</p>
+                  <p className='text-base'>No ended chat trials</p>
                 </div>
               )}
             </div>
