@@ -36,6 +36,15 @@ export class NotificationService {
           console.log('Skipping notification - user is active in chat');
           return { data: null, error: null, skipped: true };
         }
+
+        // For message notifications, update existing notification instead of creating new one
+        return await this.createOrUpdateMessageNotification(
+          userId,
+          title,
+          content,
+          data,
+          options.conversationId
+        );
       }
 
       // Set expiration to 30 days from now
@@ -60,6 +69,88 @@ export class NotificationService {
     } catch (error) {
       console.error('Error creating notification:', error);
       return { data: null, error: 'Failed to create notification' };
+    }
+  }
+
+  /**
+   * Create or update a grouped message notification for a conversation
+   */
+  private async createOrUpdateMessageNotification(
+    userId: string,
+    title: string,
+    content: string,
+    data: unknown,
+    conversationId: string
+  ) {
+    try {
+      // Check if there's already a message notification for this conversation
+      const existingResult = await this.client.models.Notification.list({
+        filter: {
+          userId: { eq: userId },
+          type: { eq: 'message' },
+          conversationId: { eq: conversationId },
+        },
+      });
+
+      const messageData = data as {
+        conversationId: string;
+        message: unknown;
+        senderEmail?: string;
+        messageCount?: number;
+      };
+
+      if (existingResult.data && existingResult.data.length > 0) {
+        // Update existing notification with latest message and increment count
+        const existingNotification = existingResult.data[0];
+        const existingData = existingNotification.data
+          ? JSON.parse(existingNotification.data as string)
+          : {};
+        const newCount = (existingData.messageCount || 1) + 1;
+
+        const updatedData = {
+          ...messageData,
+          messageCount: newCount,
+        };
+
+        // Update content to show count if more than 1 message
+        const updatedContent =
+          newCount > 1 ? `${content} (+${newCount - 1} more)` : content;
+
+        const result = await this.client.models.Notification.update({
+          id: existingNotification.id,
+          title,
+          content: updatedContent,
+          timestamp: new Date().toISOString(),
+          isRead: false, // Reset to unread for new message
+          data: JSON.stringify(updatedData),
+        });
+
+        return { data: result.data, error: null };
+      } else {
+        // Create new notification
+        const expiresAt = new Date();
+        expiresAt.setDate(expiresAt.getDate() + 30);
+
+        const result = await this.client.models.Notification.create({
+          userId,
+          type: 'message',
+          title,
+          content,
+          timestamp: new Date().toISOString(),
+          isRead: false,
+          data: JSON.stringify({ ...messageData, messageCount: 1 }),
+          conversationId,
+          expiresAt: expiresAt.toISOString(),
+        });
+
+        return { data: result.data, error: null };
+      }
+    } catch (error) {
+      console.error('Error creating/updating message notification:', error);
+      return {
+        data: null,
+        error: 'Failed to create/update message notification',
+      };
     }
   }
 

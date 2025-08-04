@@ -67,6 +67,16 @@ export default function NotificationBell() {
     return null;
   }, [pathname]);
 
+  // Group message notifications by conversation to avoid spam
+  const groupMessageNotifications = useCallback(
+    (notifications: Notification[]) => {
+      // This is now handled at the service level, so just return as-is
+      // The service already groups message notifications by conversation
+      return notifications;
+    },
+    []
+  );
+
   useEffect(() => {
     if (!user) {
       return;
@@ -208,40 +218,9 @@ export default function NotificationBell() {
       async message => {
         const currentConversationId = getCurrentConversationId();
 
-        // Only play sound and refresh notifications if not in the current conversation
+        // Only play sound if not in the current conversation
         if (currentConversationId !== message.conversationId) {
           soundService.playBellSound();
-
-          // Add delay and retry logic to ensure server-side notification creation is completed
-          let result;
-          let retries = 0;
-          const maxRetries = 3;
-          let foundConversationNotification = false;
-
-          do {
-            await new Promise(resolve =>
-              setTimeout(resolve, retries === 0 ? 200 : 100)
-            );
-            result = await notificationService.getUnreadNotifications(
-              user.userId
-            );
-
-            // Check if we found a notification for this conversation
-            if (result.data) {
-              foundConversationNotification = result.data.some(
-                notif =>
-                  notif.type === 'message' &&
-                  notif.data &&
-                  'conversationId' in notif.data &&
-                  notif.data.conversationId === message.conversationId
-              );
-            }
-
-            retries++;
-          } while (!foundConversationNotification && retries < maxRetries);
-          if (result.data) {
-            setNotifications(result.data);
-          }
         }
       },
       error => {
@@ -253,6 +232,30 @@ export default function NotificationBell() {
       messageSubscription.unsubscribe();
     };
   }, [user, getCurrentConversationId]);
+
+  // Subscribe to real-time notification changes using AppSync
+  useEffect(() => {
+    if (!user) {
+      return;
+    }
+
+    const notificationSubscription =
+      notificationService.observeUserNotifications(
+        user.userId,
+        notifications => {
+          const groupedNotifications = groupMessageNotifications(notifications);
+          setNotifications(groupedNotifications);
+        },
+        error => {
+          console.error('Error observing notifications:', error);
+          setError('Failed to load notifications');
+        }
+      );
+
+    return () => {
+      notificationSubscription.unsubscribe();
+    };
+  }, [user, groupMessageNotifications]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -279,16 +282,22 @@ export default function NotificationBell() {
 
       if (user) {
         if (notification.type === 'message') {
+          // For message notifications, delete all message notifications for this conversation
           const messageData = notification.data as { conversationId: string };
           await notificationService.deleteNotificationsForConversation(
             user.userId,
             messageData.conversationId
           );
+        } else if (notification.type === 'connection') {
+          // For connection notifications, delete this specific notification
+          await notificationService.deleteNotification(notification.id);
         } else {
+          // For other types, just mark as read
           await notificationService.markNotificationAsRead(notification.id);
         }
       }
 
+      // Remove from UI immediately
       setNotifications(prevNotifications =>
         prevNotifications.filter(notif => notif.id !== notification.id)
       );
@@ -442,9 +451,20 @@ export default function NotificationBell() {
     setNotifications(prev => prev.filter(notif => notif.id !== notificationId));
   };
 
-  // Simple notification count for bell badge
+  // Calculate total message count including grouped message counts
   const getTotalMessageCount = () => {
-    return notifications.length;
+    return notifications.reduce((total, notification) => {
+      if (
+        notification.type === 'message' &&
+        notification.data &&
+        'messageCount' in notification.data
+      ) {
+        // For grouped message notifications, use the messageCount
+        return total + (notification.data.messageCount || 1);
+      }
+      // For other notification types, count as 1
+      return total + 1;
+    }, 0);
   };
 
   return (

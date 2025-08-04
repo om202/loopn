@@ -165,18 +165,25 @@ export class ChatService {
             ? receiverResult.data.email.split('@')[0]
             : `User ${chatRequestResult.data.receiverId.slice(-4)}`;
 
-          await notificationService.createNotification(
-            chatRequestResult.data.requesterId, // Send to the original requester
-            'connection',
-            'Chat Request Accepted!',
-            `${receiverName} accepted your chat request. You can now chat!`,
-            {
+          // Create the acceptance notification with shorter expiry (24 hours)
+          const expiresAt = new Date();
+          expiresAt.setDate(expiresAt.getDate() + 1); // 24 hours only
+
+          await client.models.Notification.create({
+            userId: chatRequestResult.data.requesterId,
+            type: 'connection',
+            title: 'Chat Request Accepted!',
+            content: `${receiverName} accepted your chat request. You can now chat!`,
+            timestamp: new Date().toISOString(),
+            isRead: false,
+            data: JSON.stringify({
               conversationId: conversation.id,
               acceptedByUserId: chatRequestResult.data.receiverId,
               acceptedByEmail: receiverResult.data?.email,
-            },
-            { conversationId: conversation.id }
-          );
+            }),
+            conversationId: conversation.id,
+            expiresAt: expiresAt.toISOString(), // Auto-delete after 24 hours
+          });
         }
       }
 

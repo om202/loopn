@@ -16,7 +16,7 @@ export interface MessageNotificationData {
 
 export interface Notification {
   id: string;
-  type: 'chat_request' | 'message' | 'connection' | 'system' | null;
+  type: 'chat_request' | 'message' | 'connection' | 'system' | null | undefined;
   title: string;
   content: string;
   timestamp: string;

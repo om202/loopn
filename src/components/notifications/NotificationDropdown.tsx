@@ -25,6 +25,7 @@ interface NotificationDropdownProps {
   ) => void;
   onRemoveNotification: (notificationId: string) => void;
   onMarkAllAsRead: () => void;
+
   onError: (error: string) => void;
 }
 
@@ -38,6 +39,7 @@ export default function NotificationDropdown({
   onRespondToRequest,
   onRemoveNotification,
   onMarkAllAsRead,
+
   onError,
 }: NotificationDropdownProps) {
   const { user } = useAuthenticator();
