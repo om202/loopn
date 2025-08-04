@@ -192,6 +192,9 @@ const schema = a
         status: a.enum(['ONLINE', 'OFFLINE', 'BUSY']),
         // For heartbeat mechanism
         lastHeartbeat: a.datetime(),
+        // Chat window activity tracking
+        activeChatId: a.id(), // Which conversation they're actively viewing (null if not in any chat)
+        lastChatActivity: a.datetime(), // Last time they were active in a chat window
         // TODO: Later add fields for AI matching:
         // - jobTitle: a.string()
         // - field: a.string()
@@ -202,6 +205,7 @@ const schema = a
       .authorization(allow => [allow.authenticated()])
       .secondaryIndexes(index => [
         index('status'),
+        index('activeChatId'), // Find users actively viewing a specific chat
         // TODO: Later add index for AI matching:
         // index('isAvailableForChat').sortKeys(['lastSeen'])
       ]),

@@ -1,6 +1,7 @@
 import { generateClient } from 'aws-amplify/data';
 
 import type { Schema } from '../../amplify/data/resource';
+import { chatPresenceService } from './chat-presence.service';
 
 type Notification = Schema['Notification']['type'];
 
@@ -23,6 +24,20 @@ export class NotificationService {
     }
   ) {
     try {
+      // For message notifications, check if user is actively in the chat
+      if (type === 'message' && options?.conversationId) {
+        const isUserActiveInChat = await chatPresenceService.isUserActiveInChat(
+          userId,
+          options.conversationId
+        );
+
+        if (isUserActiveInChat) {
+          // User is actively viewing this chat - don't create notification
+          console.log('Skipping notification - user is active in chat');
+          return { data: null, error: null, skipped: true };
+        }
+      }
+
       // Set expiration to 30 days from now
       const expiresAt = new Date();
       expiresAt.setDate(expiresAt.getDate() + 30);

@@ -6,6 +6,7 @@ import { useState, useEffect, useCallback } from 'react';
 import type { Schema } from '../../../amplify/data/resource';
 import { chatService } from '../../services/chat.service';
 import { messageService } from '../../services/message.service';
+import { chatPresenceService } from '../../services/chat-presence.service';
 import { useRealtimeMessages, useRealtimePresence } from '../../hooks/realtime';
 import LoadingContainer from '../LoadingContainer';
 
@@ -45,6 +46,26 @@ export default function ChatWindow({
   const [chatEnteredAt] = useState<Date>(new Date());
 
   const { user } = useAuthenticator();
+
+  // Initialize chat presence tracking
+  useEffect(() => {
+    if (user?.userId) {
+      chatPresenceService.initialize(user.userId);
+    }
+  }, [user?.userId]);
+
+  // Track when user enters/exits this chat
+  useEffect(() => {
+    if (conversation.id && user?.userId) {
+      // Enter chat presence
+      chatPresenceService.enterChat(conversation.id);
+
+      // Exit chat presence on cleanup
+      return () => {
+        chatPresenceService.exitChat();
+      };
+    }
+  }, [conversation.id, user?.userId]);
 
   // Use our new realtime messages hook
   const {
