@@ -308,15 +308,7 @@ export default function ChatHeader({
                         <span className='bg-gray-200 text-gray-700 px-1.5 sm:px-2 py-0.5 rounded-full text-sm font-bold whitespace-nowrap'>
                           {timeLeft}
                         </span>
-                        <span className='text-gray-500 hidden md:inline'>
-                          •
-                        </span>
-                        <button
-                          onClick={() => setShowEndChatDialog(true)}
-                          className='text-red-500 hover:text-red-600 font-medium transition-colors border-b border-dotted border-red-300 hover:border-red-400 hidden md:inline whitespace-nowrap'
-                        >
-                          End now
-                        </button>
+
                       </div>
 
                       {/* Line Separator - hidden on small screens */}
@@ -358,6 +350,7 @@ export default function ChatHeader({
       <TrialChatInfoDialog
         isOpen={showTrialInfoDialog}
         onClose={() => setShowTrialInfoDialog(false)}
+        onEndChat={onEndChat}
       />
 
       {/* End Chat Confirmation Dialog */}

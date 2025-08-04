@@ -5,11 +5,13 @@ import DialogContainer from './DialogContainer';
 interface TrialChatInfoDialogProps {
   isOpen: boolean;
   onClose: () => void;
+  onEndChat?: () => void;
 }
 
 export default function TrialChatInfoDialog({
   isOpen,
   onClose,
+  onEndChat,
 }: TrialChatInfoDialogProps) {
   return (
     <DialogContainer isOpen={isOpen} onClose={onClose} maxWidth='md'>
@@ -55,8 +57,19 @@ export default function TrialChatInfoDialog({
           </p>
         </div>
 
-        {/* Close button */}
-        <div className='mt-6'>
+        {/* Action buttons */}
+        <div className='mt-6 space-y-3'>
+          {onEndChat && (
+            <button
+              onClick={() => {
+                onEndChat();
+                onClose();
+              }}
+              className='w-full px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 focus:outline-none transition-colors'
+            >
+              End Chat Now
+            </button>
+          )}
           <button
             onClick={onClose}
             className='w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none transition-colors'
