@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useState, useEffect, useCallback } from 'react';
-import { Info } from 'lucide-react';
+import { Info, Clock } from 'lucide-react';
 
 import type { Schema } from '../../../amplify/data/resource';
 import UserAvatar from '../UserAvatar';
@@ -140,7 +140,7 @@ export default function ChatHeader({
       className='flex-shrink-0 bg-white border-b border-gray-200 relative z-10'
       style={{ boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.04)' }}
     >
-      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+      <div className='max-w-7xl mx-auto px-3 sm:px-4 lg:px-8'>
         <div className='py-2 sm:py-3'>
           <div className='flex items-center gap-2 sm:gap-3'>
             {/* Back Button */}
@@ -182,14 +182,14 @@ export default function ChatHeader({
             />
 
             <div className='flex-1 min-w-0'>
-              <h1 className='text-base font-medium text-gray-900 truncate no-email-detection'>
+              <h1 className='text-sm sm:text-base font-medium text-gray-900 truncate no-email-detection'>
                 {getUserDisplayName()}
               </h1>
               <div className='flex items-center gap-1 sm:gap-2 mt-0.5'>
                 {conversation.isConnected ? (
-                  <div className='flex items-center text-sm text-green-600'>
+                  <div className='flex items-center text-xs sm:text-sm text-green-600'>
                     <svg
-                      className='w-2.5 h-2.5 sm:w-3 sm:h-3 mr-1'
+                      className='w-2.5 h-2.5 sm:w-3 sm:h-3 mr-1 flex-shrink-0'
                       fill='currentColor'
                       viewBox='0 0 20 20'
                     >
@@ -205,7 +205,7 @@ export default function ChatHeader({
                     <span className='sm:hidden'>Connected</span>
                   </div>
                 ) : (
-                  <div className='flex items-center gap-2 text-sm'>
+                  <div className='flex items-center gap-1 sm:gap-2 text-xs sm:text-sm'>
                     <div
                       className={`flex items-center ${getPresenceDisplay().color}`}
                     >
@@ -217,8 +217,8 @@ export default function ChatHeader({
                       !!timeLeft &&
                       timeLeft !== 'Expired' && (
                         <>
-                          <span className='text-gray-400'>•</span>
-                          <span className='text-blue-600'>Trial Chat</span>
+                          <span className='text-gray-400 hidden sm:inline'>•</span>
+                          <span className='text-blue-600 hidden sm:inline'>Trial Chat</span>
                         </>
                       )}
                   </div>
@@ -231,25 +231,26 @@ export default function ChatHeader({
               <>
                 {/* Chat Ended State */}
                 {conversation.chatStatus === 'ENDED' && (
-                  <div className='flex items-center gap-3 sm:gap-4 md:gap-6'>
-                    <div className='flex items-center gap-2 text-base sm:text-base text-gray-600'>
+                  <div className='flex items-center gap-2 sm:gap-3 md:gap-4'>
+                    <div className='flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-gray-600'>
                       <button
                         onClick={() => setShowChatEndedInfoDialog(true)}
-                        className='flex items-center gap-1 text-orange-500 hover:text-orange-600 transition-colors p-1 rounded-full hover:bg-orange-50'
+                        className='flex items-center gap-1 text-orange-500 hover:text-orange-600 transition-colors p-1 rounded-full hover:bg-orange-50 flex-shrink-0'
                         title='Learn about ended chats'
                       >
-                        <Info className='w-4 h-4' />
+                        <Info className='w-3 sm:w-4 h-3 sm:h-4' />
                       </button>
-                      <span className='font-medium text-orange-600'>
-                        Chat Ended
+                      <span className='font-medium text-orange-600 whitespace-nowrap'>
+                        <span className='hidden sm:inline'>Chat Ended</span>
+                        <span className='sm:hidden'>Ended</span>
                       </span>
                       {reconnectionTime && (
                         <span
-                          className={
+                          className={`text-xs sm:text-sm ${
                             reconnectionTime === 'Can reconnect now'
                               ? 'text-orange-500 font-medium'
                               : 'text-orange-500'
-                          }
+                          } hidden md:inline`}
                         >
                           {reconnectionTime}
                         </span>
@@ -259,24 +260,23 @@ export default function ChatHeader({
                     {/* Show Reconnect button when restriction period ends */}
                     {reconnectionTime === 'Can reconnect now' && (
                       <>
-                        {/* Line Separator */}
-                        <div className='w-px h-6 bg-gray-300'></div>
+                        {/* Line Separator - hidden on small screens */}
+                        <div className='w-px h-4 sm:h-6 bg-gray-300 hidden sm:block'></div>
 
                         {/* Reconnect Button */}
                         <button
                           onClick={onReconnect}
-                          className='flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 sm:py-2.5 bg-orange-600 hover:bg-orange-700 text-white rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2'
+                          className='flex items-center gap-1 sm:gap-1.5 px-3 sm:px-3 lg:px-4 py-2 sm:py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 flex-shrink-0'
                         >
                           <Image
                             src='/connect-icon.svg'
                             alt='Reconnect'
                             width={16}
                             height={16}
-                            className='flex-shrink-0 sm:w-[18px] sm:h-[18px]'
+                            className='flex-shrink-0 sm:w-4 sm:h-4 lg:w-[18px] lg:h-[18px]'
                           />
-                          <span className='text-base sm:text-base font-medium'>
-                            <span className='hidden sm:inline'>Reconnect</span>
-                            <span className='sm:hidden'>Reconnect</span>
+                          <span className='text-sm sm:text-sm lg:text-base font-medium whitespace-nowrap'>
+                            Reconnect
                           </span>
                         </button>
                       </>
@@ -288,45 +288,46 @@ export default function ChatHeader({
                 {conversation.chatStatus === 'ACTIVE' &&
                   !!timeLeft &&
                   timeLeft !== 'Expired' && (
-                    <div className='flex items-center gap-2 text-sm'>
-                      <button
-                        onClick={() => setShowTrialInfoDialog(true)}
-                        className='flex items-center text-white hover:bg-blue-600 bg-blue-500 rounded-full'
-                        title='Learn about trial chat period'
-                      >
-                        <Info className='w-4 h-4' />
-                      </button>
-                      <div className='flex items-center gap-2 text-gray-500 mr-3'>
-                        <span className='font-medium'>Time Left</span>
-                        <span className='bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full text-xs font-bold'>
+                    <div className='flex items-center gap-1 sm:gap-2 text-xs sm:text-sm'>
+                      <div className='flex items-center gap-1 sm:gap-2 text-gray-500 mr-1 sm:mr-2'>
+                        <button
+                          onClick={() => setShowTrialInfoDialog(true)}
+                          className='flex items-center gap-1 hover:bg-gray-100 rounded-full p-1 transition-colors'
+                          title='Learn about trial chat period'
+                        >
+                          <Clock className='w-4 h-4 text-gray-500 sm:hidden flex-shrink-0' />
+                          <Info className='w-3 sm:w-4 h-3 sm:h-4 text-blue-500 hidden sm:block' />
+                          <span className='font-medium hidden sm:inline'>Time Left</span>
+                        </button>
+                        <span className='bg-gray-200 text-gray-700 px-1.5 sm:px-2 py-0.5 rounded-full text-xs font-bold whitespace-nowrap'>
                           {timeLeft}
                         </span>
-                        <span className='text-gray-500'>•</span>
+                        <span className='text-gray-500 hidden md:inline'>•</span>
                         <button
                           onClick={() => setShowEndChatDialog(true)}
-                          className='text-red-500 hover:text-red-600 font-medium transition-colors border-b border-dotted border-red-300 hover:border-red-400'
+                          className='text-red-500 hover:text-red-600 font-medium transition-colors border-b border-dotted border-red-300 hover:border-red-400 hidden md:inline whitespace-nowrap'
                         >
                           End now
                         </button>
                       </div>
 
-                      {/* Line Separator */}
-                      <div className='w-0.5 h-8 bg-gray-300 mr-3'></div>
+                      {/* Line Separator - hidden on small screens */}
+                      <div className='w-0.5 h-6 sm:h-8 bg-gray-300 mr-1 sm:mr-2 hidden sm:block'></div>
 
                       {/* Connect Button */}
                       <button
                         onClick={onSendConnectionRequest}
                         disabled={sendingConnectionRequest}
-                        className='flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 sm:py-2.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed'
+                        className='flex items-center gap-1 sm:gap-1.5 px-3 sm:px-3 lg:px-4 py-2 sm:py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed flex-shrink-0'
                       >
                         <Image
                           src='/connect-icon.svg'
                           alt='Connect'
-                          width={18}
-                          height={18}
-                          className='flex-shrink-0 sm:w-[18px] sm:h-[18px]'
+                          width={16}
+                          height={16}
+                          className='flex-shrink-0 sm:w-4 sm:h-4 lg:w-[18px] lg:h-[18px]'
                         />
-                        <span className='text-base sm:text-base font-medium'>
+                        <span className='text-sm sm:text-sm lg:text-base font-medium whitespace-nowrap'>
                           <span className='hidden sm:inline'>
                             {sendingConnectionRequest
                               ? 'Connecting...'
