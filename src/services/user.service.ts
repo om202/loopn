@@ -1,10 +1,7 @@
 import type { Schema } from '../../amplify/data/resource';
 import { client } from '../lib/amplify-config';
 
-// Type definitions from schema
 type UserPresence = Schema['UserPresence']['type'];
-
-// Result types
 type DataResult<T> = { data: T | null; error: string | null };
 type ListResult<T> = { data: T[]; error: string | null };
 
@@ -15,13 +12,11 @@ export class UserService {
     status: 'ONLINE' | 'OFFLINE' | 'BUSY'
   ): Promise<DataResult<UserPresence>> {
     try {
-      // Try to update existing presence record first
       const existingResult = await client.models.UserPresence.get({
         userId,
       });
 
       if (existingResult.data) {
-        // Update existing presence
         const result = await client.models.UserPresence.update({
           userId,
           email,
@@ -36,7 +31,6 @@ export class UserService {
         };
       }
 
-      // Create new presence record only if none exists
       const result = await client.models.UserPresence.create({
         userId,
         email,
@@ -123,7 +117,6 @@ export class UserService {
     return this.updateUserPresence(userId, email, 'BUSY');
   }
 
-  // Real-time subscription to presence changes
   observeOnlineUsers(
     callback: (users: UserPresence[]) => void,
     onError?: (error: Error) => void
@@ -131,17 +124,11 @@ export class UserService {
     let previousOnlineUserIds = new Set<string>();
 
     return client.models.UserPresence.observeQuery({
-      // Remove the filter to listen to ALL presence changes (online and offline)
-      // We'll filter client-side to only return online users
     }).subscribe({
       next: ({ items }) => {
-        // Filter for online users client-side
         const onlineUsers = items.filter(user => user.isOnline === true);
-
-        // Only trigger callback if the set of online users actually changed
         const currentOnlineUserIds = new Set(onlineUsers.map(u => u.userId));
 
-        // Compare sets to see if online users changed
         if (
           currentOnlineUserIds.size !== previousOnlineUserIds.size ||
           ![...currentOnlineUserIds].every(id => previousOnlineUserIds.has(id))
@@ -158,7 +145,6 @@ export class UserService {
     });
   }
 
-  // Subscribe to presence changes for specific users
   observeUserPresence(
     userId: string,
     callback: (presence: UserPresence | null) => void,
