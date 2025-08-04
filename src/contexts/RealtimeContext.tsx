@@ -164,7 +164,7 @@ export function RealtimeProvider({ children }: RealtimeProviderProps) {
     );
   };
 
-  // Chat request subscriptions (incoming) - only PENDING requests
+  // Chat request subscriptions (incoming) - all status changes for proper real-time updates
   const subscribeToChatRequests = (
     userId: string,
     callback: SubscriptionCallback
@@ -176,21 +176,28 @@ export function RealtimeProvider({ children }: RealtimeProviderProps) {
           client.models.ChatRequest.observeQuery({
             filter: {
               receiverId: { eq: userId },
-              status: { eq: 'PENDING' },
             },
           }),
         variables: {
           filter: {
             receiverId: { eq: userId },
-            status: { eq: 'PENDING' },
           },
         },
       },
-      callback
+      // Filter for PENDING requests on the client side
+      data => {
+        const filteredData = {
+          ...data,
+          items: (data.items || []).filter(
+            (request: any) => request.status === 'PENDING'
+          ),
+        };
+        callback(filteredData);
+      }
     );
   };
 
-  // Sent chat request subscriptions (outgoing) - only PENDING requests
+  // Sent chat request subscriptions (outgoing) - all status changes for proper real-time updates
   const subscribeSentChatRequests = (
     userId: string,
     callback: SubscriptionCallback
@@ -202,14 +209,22 @@ export function RealtimeProvider({ children }: RealtimeProviderProps) {
           client.models.ChatRequest.observeQuery({
             filter: {
               requesterId: { eq: userId },
-              status: { eq: 'PENDING' },
             },
           }),
         variables: {
-          filter: { requesterId: { eq: userId }, status: { eq: 'PENDING' } },
+          filter: { requesterId: { eq: userId } },
         },
       },
-      callback
+      // Filter for PENDING requests on the client side
+      data => {
+        const filteredData = {
+          ...data,
+          items: (data.items || []).filter(
+            (request: any) => request.status === 'PENDING'
+          ),
+        };
+        callback(filteredData);
+      }
     );
   };
 
