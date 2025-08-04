@@ -34,6 +34,9 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   const [, setConversationsLoaded] = useState(false);
   const [activeSection, setActiveSection] = useState<SidebarSection>('online');
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [optimisticPendingRequests, setOptimisticPendingRequests] = useState<
+    Set<string>
+  >(new Set());
   const { user } = useAuthenticator();
   const { subscribeToConversations } = useRealtime();
 
@@ -49,6 +52,15 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
     userId: user?.userId || '',
     enabled: !!user?.userId,
   });
+
+  // Combine real-time pending requests with optimistic updates
+  const combinedPendingRequests = useMemo(() => {
+    const combined = new Set([
+      ...pendingReceiverIds,
+      ...optimisticPendingRequests,
+    ]);
+    return combined;
+  }, [pendingReceiverIds, optimisticPendingRequests]);
 
   const onlineUsers = useMemo(() => {
     return allOnlineUsers.filter(u => u?.userId && u.userId !== user?.userId);
@@ -212,6 +224,24 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
     return () => clearInterval(timer);
   }, []);
 
+  // Clean up optimistic pending requests that are now reflected in real-time data
+  useEffect(() => {
+    setOptimisticPendingRequests(prev => {
+      const newOptimistic = new Set(prev);
+      let hasChanges = false;
+
+      // Remove any optimistic requests that are now in real-time data
+      prev.forEach(receiverId => {
+        if (pendingReceiverIds.has(receiverId)) {
+          newOptimistic.delete(receiverId);
+          hasChanges = true;
+        }
+      });
+
+      return hasChanges ? newOptimistic : prev;
+    });
+  }, [pendingReceiverIds]);
+
   useEffect(() => {
     const combinedUsers = [...onlineUsers];
     conversationUsers.forEach(userPresence => {
@@ -225,15 +255,21 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   const handleChatAction = async (receiverId: string) => {
     const action = await chatActions.handleChatAction(
       receiverId,
-      pendingReceiverIds
+      combinedPendingRequests
     );
     if (action === 'send-request') {
-      chatActions.handleSendChatRequest(receiverId, () => {});
+      chatActions.handleSendChatRequest(
+        receiverId,
+        setOptimisticPendingRequests
+      );
     }
   };
 
   const handleCancelChatRequest = (receiverId: string) => {
-    chatActions.handleCancelChatRequest(receiverId, () => {});
+    chatActions.handleCancelChatRequest(
+      receiverId,
+      setOptimisticPendingRequests
+    );
   };
 
   if (error || onlineUsersError || sentRequestsError || chatActions.error) {
@@ -272,7 +308,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
           activeChatTrialUsers={userCategories.activeChatTrialUsers}
           endedChatTrialUsers={userCategories.endedChatTrialUsers}
           existingConversations={existingConversations}
-          pendingRequests={pendingReceiverIds}
+          pendingRequests={combinedPendingRequests}
           onChatAction={handleChatAction}
           onCancelChatRequest={handleCancelChatRequest}
           canUserReconnect={userCategories.canUserReconnect}

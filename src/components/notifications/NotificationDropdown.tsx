@@ -23,6 +23,7 @@ interface NotificationDropdownProps {
     status: 'ACCEPTED' | 'REJECTED',
     chatRequest: ChatRequestWithUser
   ) => void;
+  onRemoveNotification: (notificationId: string) => void;
   onMarkAllAsRead: () => void;
   onError: (error: string) => void;
 }
@@ -35,6 +36,7 @@ export default function NotificationDropdown({
   decliningId,
   onNotificationClick,
   onRespondToRequest,
+  onRemoveNotification,
   onMarkAllAsRead,
   onError,
 }: NotificationDropdownProps) {
@@ -141,6 +143,7 @@ export default function NotificationDropdown({
                 notification={notification}
                 onNotificationClick={onNotificationClick}
                 onRespondToRequest={onRespondToRequest}
+                onRemoveNotification={onRemoveNotification}
                 decliningId={decliningId}
                 onError={onError}
               />

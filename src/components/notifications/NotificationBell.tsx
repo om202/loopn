@@ -356,9 +356,12 @@ export default function NotificationBell() {
   ) => {
     if (status === 'ACCEPTED') {
       setAcceptingRequestId(chatRequestId);
-      setDialogRequest(chatRequest);
-      setShowDialog(true);
-      setShowDialogConnected(true);
+
+      // Immediately remove from UI for better UX
+      setChatRequests(prev => prev.filter(req => req.id !== chatRequestId));
+      setNotifications(prev =>
+        prev.filter(notif => notif.id !== chatRequestId)
+      );
       setIsOpen(false);
 
       try {
@@ -367,16 +370,40 @@ export default function NotificationBell() {
           status
         );
 
-        if (result.data?.conversation?.id) {
-          setDialogConversationId(result.data.conversation.id);
+        if (result.error) {
+          // If API call failed, restore the notification
+          setChatRequests(prev => [...prev, chatRequest]);
+          const chatNotification: Notification = {
+            id: chatRequest.id,
+            type: 'chat_request',
+            title:
+              chatRequest.requesterEmail ||
+              `User ${chatRequest.requesterId.slice(-4)}`,
+            content: 'wants to chat with you',
+            timestamp: chatRequest.createdAt,
+            isRead: false,
+            data: chatRequest,
+          };
+          setNotifications(prev => [...prev, chatNotification]);
+          setError(result.error);
         }
-
-        setChatRequests(prev => prev.filter(req => req.id !== chatRequestId));
-        setNotifications(prev =>
-          prev.filter(notif => notif.id !== chatRequestId)
-        );
       } catch (error) {
         console.error('Error responding to chat request:', error);
+        // Restore notification on error
+        setChatRequests(prev => [...prev, chatRequest]);
+        const chatNotification: Notification = {
+          id: chatRequest.id,
+          type: 'chat_request',
+          title:
+            chatRequest.requesterEmail ||
+            `User ${chatRequest.requesterId.slice(-4)}`,
+          content: 'wants to chat with you',
+          timestamp: chatRequest.createdAt,
+          isRead: false,
+          data: chatRequest,
+        };
+        setNotifications(prev => [...prev, chatNotification]);
+        setError('Failed to respond to chat request');
       } finally {
         setAcceptingRequestId(null);
       }
@@ -433,21 +460,19 @@ export default function NotificationBell() {
 
   const handleDialogAccept = () => {
     if (dialogRequest) {
-      setChatRequests(prev => prev.filter(req => req.id !== dialogRequest.id));
-      setNotifications(prev =>
-        prev.filter(notif => notif.id !== dialogRequest.id)
-      );
+      // Set accepting ID to prevent the cancellation logic from triggering
+      setAcceptingRequestId(dialogRequest.id);
       shownDialogRequestIds.current.add(dialogRequest.id);
+      // The ChatRequestDialog handles the API call internally
+      // We just need to track that this request was processed
     }
   };
 
   const handleDialogReject = () => {
     if (dialogRequest) {
-      setChatRequests(prev => prev.filter(req => req.id !== dialogRequest.id));
-      setNotifications(prev =>
-        prev.filter(notif => notif.id !== dialogRequest.id)
-      );
       shownDialogRequestIds.current.add(dialogRequest.id);
+      // The ChatRequestDialog handles the API call internally
+      // We just need to track that this request was processed
     }
   };
 
@@ -463,6 +488,10 @@ export default function NotificationBell() {
   const handleMarkAllAsRead = () => {
     setNotifications([]);
     setIsOpen(false);
+  };
+
+  const handleRemoveNotification = (notificationId: string) => {
+    setNotifications(prev => prev.filter(notif => notif.id !== notificationId));
   };
 
   return (
@@ -513,6 +542,7 @@ export default function NotificationBell() {
           decliningId={decliningId}
           onNotificationClick={handleNotificationClick}
           onRespondToRequest={handleRespondToRequest}
+          onRemoveNotification={handleRemoveNotification}
           onMarkAllAsRead={handleMarkAllAsRead}
           onError={setError}
         />

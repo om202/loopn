@@ -1,6 +1,6 @@
 'use client';
 
-import { MessageCircle, CheckCircle2, Trash2 } from 'lucide-react';
+import { MessageCircle, CheckCircle2, Trash2, Clock } from 'lucide-react';
 
 import type { Schema } from '../../../amplify/data/resource';
 import { formatPresenceTime } from '../../lib/presence-utils';
@@ -110,8 +110,12 @@ export default function UserCard({
                 userPresence.userId
               );
               return (
-                <div className='text-sm text-orange-500'>
-                  Can connect in {timeRemaining}
+                <div className='text-sm text-right'>
+                  <div className='text-gray-500'>Can connect</div>
+                  <div className='text-gray-500 flex items-center justify-end gap-1'>
+                    <Clock className='w-3 h-3 text-gray-400 hover:text-gray-600 cursor-pointer transition-colors' />
+                    {timeRemaining}
+                  </div>
                 </div>
               );
             }
@@ -143,9 +147,27 @@ export default function UserCard({
                             const timeRemaining = getReconnectTimeRemaining(
                               userPresence.userId
                             );
-                            return timeRemaining
-                              ? `Can connect in ${timeRemaining}`
-                              : 'View';
+                            return timeRemaining ? (
+                              <div className='text-right'>
+                                <div>Can connect</div>
+                                <div className='flex items-center justify-end gap-1'>
+                                  {timeRemaining}
+                                  <Clock
+                                    className='w-3 h-3 text-gray-400 hover:text-gray-600 cursor-pointer transition-colors'
+                                    onClick={e => {
+                                      e.stopPropagation();
+                                      // Add your click handler here
+                                      console.log(
+                                        'Timer clicked for user:',
+                                        userPresence.userId
+                                      );
+                                    }}
+                                  />
+                                </div>
+                              </div>
+                            ) : (
+                              'View'
+                            );
                           })()
                       : 'Chat'}
                   </>

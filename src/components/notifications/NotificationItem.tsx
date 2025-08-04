@@ -19,6 +19,7 @@ interface NotificationItemProps {
     status: 'ACCEPTED' | 'REJECTED',
     chatRequest: ChatRequestWithUser
   ) => void;
+  onRemoveNotification: (notificationId: string) => void;
   decliningId: string | null;
   onError: (error: string) => void;
 }
@@ -108,6 +109,7 @@ export default function NotificationItem({
   notification,
   onNotificationClick,
   onRespondToRequest,
+  onRemoveNotification,
   decliningId,
   onError,
 }: NotificationItemProps) {
@@ -235,7 +237,7 @@ export default function NotificationItem({
                       );
                     }
                     // Remove from local state via parent callback
-                    onNotificationClick(notification);
+                    onRemoveNotification(notification.id);
                   } catch (error) {
                     console.error(
                       'Error marking message notification as read:',
@@ -269,7 +271,7 @@ export default function NotificationItem({
                       notification.id
                     );
                     // Remove from local state via parent callback
-                    onNotificationClick(notification);
+                    onRemoveNotification(notification.id);
                   } catch (error) {
                     console.error(
                       'Error marking connection notification as read:',
@@ -294,7 +296,7 @@ export default function NotificationItem({
                       notification.id
                     );
                     // Remove from local state via parent callback
-                    onNotificationClick(notification);
+                    onRemoveNotification(notification.id);
                   } catch (error) {
                     console.error('Error marking notification as read:', error);
                     onError('Failed to mark notification as read');
