@@ -211,14 +211,16 @@ export default function ChatHeader({
                     >
                       {getPresenceDisplay().text}
                     </div>
-                    
+
                     {/* Trial Chat Text Only */}
-                    {conversation.chatStatus === 'ACTIVE' && !!timeLeft && timeLeft !== 'Expired' && (
-                      <>
-                        <span className='text-gray-400'>•</span>
-                        <span className='text-blue-600'>Trial Chat</span>
-                      </>
-                    )}
+                    {conversation.chatStatus === 'ACTIVE' &&
+                      !!timeLeft &&
+                      timeLeft !== 'Expired' && (
+                        <>
+                          <span className='text-gray-400'>•</span>
+                          <span className='text-blue-600'>Trial Chat</span>
+                        </>
+                      )}
                   </div>
                 )}
               </div>
@@ -290,7 +292,9 @@ export default function ChatHeader({
                       </button>
                       <div className='flex items-center gap-2 text-gray-500 mr-3'>
                         <span className='font-medium'>Time Left</span>
-                        <span className='bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full text-xs font-bold'>{timeLeft}</span>
+                        <span className='bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full text-xs font-bold'>
+                          {timeLeft}
+                        </span>
                         <span className='text-gray-500'>•</span>
                         <button
                           onClick={() => setShowEndChatDialog(true)}

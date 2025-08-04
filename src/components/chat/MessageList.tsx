@@ -399,7 +399,7 @@ export default function MessageList({
         <div className='max-w-5xl mx-auto px-4 py-8'>
           <div className='flex flex-col items-center justify-center text-center py-20'>
             <div className='w-14 h-14 bg-gray-200 rounded-full flex items-center justify-center mb-3'>
-              <MessageCircle className='w-8 h-8 text-gray-600'/>
+              <MessageCircle className='w-8 h-8 text-gray-600' />
             </div>
             <h3 className='text-lg font-medium text-gray-900 mb-2'>
               No messages yet
