@@ -123,8 +123,7 @@ export class UserService {
   ) {
     let previousOnlineUserIds = new Set<string>();
 
-    return client.models.UserPresence.observeQuery({
-    }).subscribe({
+    return client.models.UserPresence.observeQuery({}).subscribe({
       next: ({ items }) => {
         const onlineUsers = items.filter(user => user.isOnline === true);
         const currentOnlineUserIds = new Set(onlineUsers.map(u => u.userId));
