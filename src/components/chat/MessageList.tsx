@@ -401,7 +401,7 @@ export default function MessageList({
             'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #f3f4f6 100%)',
         }}
       >
-        <div className='w-full px-2 sm:px-4 py-6 sm:py-8'>
+        <div className='w-full px-2 sm:px-4 lg:px-16 xl:px-24 py-6 sm:py-8'>
           <div className='flex flex-col items-center justify-center text-center py-20'>
             <div className='w-14 h-14 bg-gray-200 rounded-full flex items-center justify-center mb-3'>
               <MessageCircle className='w-8 h-8 text-gray-600' />
@@ -427,7 +427,7 @@ export default function MessageList({
           'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #f3f4f6 100%)',
       }}
     >
-      <div ref={containerRef} className='w-full px-2 sm:px-4 py-4 sm:py-6'>
+      <div ref={containerRef} className='w-full px-2 sm:px-4 lg:px-16 xl:px-24 py-4 sm:py-6'>
         {/* Load More Messages Button/Indicator */}
         {hasMoreMessages ? (
           <div ref={loadMoreRef} className='flex justify-center py-4'>

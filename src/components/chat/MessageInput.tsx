@@ -117,7 +117,7 @@ export default function MessageInput({
         </div>
       )}
 
-      <div className='flex-shrink-0 bg-white border-t border-gray-200 p-2 sm:p-4 shadow-lg relative'>
+      <div className='flex-shrink-0 bg-white border-t border-gray-200 p-2 sm:p-4 lg:px-16 xl:px-24 shadow-lg relative'>
         <div className='w-full'>
           <form
             autoComplete='off'
