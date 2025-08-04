@@ -5,6 +5,7 @@ import { Smile, X } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import type { Schema } from '../../../amplify/data/resource';
+import { convertEmoticonsToEmojis } from '../../lib/emoji-utils';
 
 type Message = Schema['Message']['type'];
 
@@ -72,10 +73,11 @@ export default function MessageInput({
   };
 
   const getRepliedToContent = (content: string) => {
+    const convertedContent = convertEmoticonsToEmojis(content);
     const maxLength = 60;
-    return content.length > maxLength
-      ? content.substring(0, maxLength) + '...'
-      : content;
+    return convertedContent.length > maxLength
+      ? convertedContent.substring(0, maxLength) + '...'
+      : convertedContent;
   };
 
   return (
@@ -99,7 +101,7 @@ export default function MessageInput({
               </svg>
               <span className='font-medium'>Replying to message</span>
             </div>
-            <div className='text-sm text-gray-800 bg-white rounded-lg px-3 py-2 border border-gray-200'>
+            <div className='text-base text-gray-800 bg-white rounded-lg px-3 py-2 border border-gray-200'>
               {getRepliedToContent(replyToMessage.content)}
             </div>
           </div>

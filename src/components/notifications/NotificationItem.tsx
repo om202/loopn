@@ -117,15 +117,11 @@ export default function NotificationItem({
 
   const isClickable =
     notification.type === 'message' || notification.type === 'connection';
-  const Component = isClickable ? 'button' : 'div';
 
   return (
-    <Component
+    <div
       key={notification.id}
       className='w-full text-left p-3 sm:p-4 hover:bg-gray-50 transition-colors'
-      {...(isClickable && {
-        onClick: () => onNotificationClick(notification),
-      })}
     >
       <div className='flex items-start gap-4'>
         {notification.type === 'chat_request' ? (
@@ -158,17 +154,32 @@ export default function NotificationItem({
         )}
 
         <div className='flex-1 min-w-0'>
-          <div className='flex items-start justify-between mb-1'>
-            <h4 className='text-sm font-semibold text-gray-800 truncate pr-2 no-email-detection'>
-              {notification.title}
-            </h4>
-            <span className='text-sm text-gray-500 flex-shrink-0 font-medium'>
-              {formatTimeAgo(notification.timestamp)}
-            </span>
-          </div>
-          <p className='text-sm text-gray-600 leading-normal'>
+          <div 
+            className={`${isClickable ? 'cursor-pointer' : ''}`}
+            {...(isClickable && {
+              onClick: () => onNotificationClick(notification),
+            })}
+          >
+            <div className='flex items-start justify-between mb-1'>
+              <h4 className='text-sm font-semibold text-gray-800 truncate pr-2 no-email-detection'>
+                {notification.title}
+              </h4>
+              <span className='text-sm text-gray-500 flex-shrink-0 font-medium'>
+                {formatTimeAgo(notification.timestamp)}
+              </span>
+            </div>
+                      <p className='text-sm text-gray-600 leading-normal'>
             {notification.content}
+            {notification.type === 'message' && 
+             notification.data && 
+             'messageCount' in notification.data && 
+             (notification.data as any).messageCount > 1 && (
+              <span className='ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800'>
+                {(notification.data as any).messageCount} messages
+              </span>
+            )}
           </p>
+          </div>
 
           {notification.type === 'chat_request' &&
           notification.data &&
@@ -310,6 +321,6 @@ export default function NotificationItem({
           )}
         </div>
       </div>
-    </Component>
+    </div>
   );
 }

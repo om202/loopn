@@ -14,7 +14,14 @@ export default function NotificationBadge({
     return null;
   }
 
-  const messageCount = notifications.filter(n => n.type === 'message').length;
+  const messageCount = notifications
+    .filter(n => n.type === 'message')
+    .reduce((total, notif) => {
+      if (notif.data && 'messageCount' in notif.data) {
+        return total + ((notif.data as any).messageCount || 1);
+      }
+      return total + 1;
+    }, 0);
   const otherCount = notifications.filter(n => n.type !== 'message').length;
   const badges = [];
 

@@ -234,7 +234,7 @@ export default function NotificationBell() {
           const senderEmail = senderResult.data?.email;
 
           setNotifications(prevNotifications => {
-            const existingConversationNotifications = prevNotifications.filter(
+            const existingNotificationIndex = prevNotifications.findIndex(
               notif =>
                 notif.type === 'message' &&
                 notif.data &&
@@ -242,58 +242,103 @@ export default function NotificationBell() {
                 notif.data.conversationId === message.conversationId
             );
 
-            if (existingConversationNotifications.length > 0) {
-              return prevNotifications;
-            }
-
             const title = senderEmail || `User ${message.senderId.slice(-4)}`;
             const content =
               message.content.length > 50
                 ? `${message.content.substring(0, 50)}...`
                 : message.content;
 
-            const notificationData = {
-              conversationId: message.conversationId,
-              message,
-              senderEmail: senderEmail || undefined,
-              messageCount: 1,
-            };
+            if (existingNotificationIndex >= 0) {
+              // Update existing notification with latest message and increment count
+              const existingNotification = prevNotifications[existingNotificationIndex];
+              const existingData = existingNotification.data as any;
+              const newMessageCount = (existingData?.messageCount || 1) + 1;
 
-            const messageNotification: Notification = {
-              id: `message-${message.conversationId}`,
-              type: 'message',
-              title,
-              content,
-              timestamp:
-                message.timestamp ||
-                message.createdAt ||
-                new Date().toISOString(),
-              isRead: false,
-              data: notificationData,
-            };
+              const updatedNotificationData = {
+                conversationId: message.conversationId,
+                message, // Latest message
+                senderEmail: senderEmail || undefined,
+                messageCount: newMessageCount,
+              };
 
-            notificationService
-              .deleteNotificationsForConversation(
-                user.userId,
-                message.conversationId
-              )
-              .then(() => {
-                return notificationService.createNotification(
+              const updatedNotification: Notification = {
+                ...existingNotification,
+                content, // Show latest message content
+                timestamp: message.timestamp || message.createdAt || new Date().toISOString(),
+                data: updatedNotificationData,
+              };
+
+              // Update database notification
+              notificationService
+                .deleteNotificationsForConversation(
                   user.userId,
-                  'message',
-                  title,
-                  content,
-                  notificationData,
-                  { conversationId: message.conversationId }
-                );
-              })
-              .catch(error => {
-                console.error('Error managing message notification:', error);
-              });
+                  message.conversationId
+                )
+                .then(() => {
+                  return notificationService.createNotification(
+                    user.userId,
+                    'message',
+                    title,
+                    content,
+                    updatedNotificationData,
+                    { conversationId: message.conversationId }
+                  );
+                })
+                .catch(error => {
+                  console.error('Error updating message notification:', error);
+                });
 
-            soundService.playBellSound();
+              soundService.playBellSound();
 
-            return [messageNotification, ...prevNotifications];
+              // Move updated notification to top and remove old one
+              const newNotifications = [...prevNotifications];
+              newNotifications.splice(existingNotificationIndex, 1);
+              return [updatedNotification, ...newNotifications];
+            } else {
+              // Create new notification
+              const notificationData = {
+                conversationId: message.conversationId,
+                message,
+                senderEmail: senderEmail || undefined,
+                messageCount: 1,
+              };
+
+              const messageNotification: Notification = {
+                id: `message-${message.conversationId}`,
+                type: 'message',
+                title,
+                content,
+                timestamp:
+                  message.timestamp ||
+                  message.createdAt ||
+                  new Date().toISOString(),
+                isRead: false,
+                data: notificationData,
+              };
+
+              notificationService
+                .deleteNotificationsForConversation(
+                  user.userId,
+                  message.conversationId
+                )
+                .then(() => {
+                  return notificationService.createNotification(
+                    user.userId,
+                    'message',
+                    title,
+                    content,
+                    notificationData,
+                    { conversationId: message.conversationId }
+                  );
+                })
+                .catch(error => {
+                  console.error('Error creating message notification:', error);
+                });
+
+              soundService.playBellSound();
+
+              return [messageNotification, ...prevNotifications];
+            }
           });
         }
       },
@@ -493,6 +538,18 @@ export default function NotificationBell() {
     setNotifications(prev => prev.filter(notif => notif.id !== notificationId));
   };
 
+  // Calculate total message count for bell badge
+  const getTotalMessageCount = () => {
+    return notifications
+      .filter(n => n.type === 'message')
+      .reduce((total, notif) => {
+        if (notif.data && 'messageCount' in notif.data) {
+          return total + ((notif.data as any).messageCount || 1);
+        }
+        return total + 1;
+      }, 0) + notifications.filter(n => n.type !== 'message').length;
+  };
+
   return (
     <>
       <ChatRequestDialog
@@ -531,7 +588,7 @@ export default function NotificationBell() {
             {/* Notification Count Badge */}
             {notifications.length > 0 && (
               <div className='absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1'>
-                {notifications.length > 99 ? '99+' : notifications.length}
+                {getTotalMessageCount() > 99 ? '99+' : getTotalMessageCount()}
               </div>
             )}
           </div>

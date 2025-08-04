@@ -12,6 +12,7 @@ import {
   isEmojiOnly,
   isEmoji,
   splitTextWithEmojis,
+  convertEmoticonsToEmojis,
 } from '../../lib/emoji-utils';
 
 type Message = Schema['Message']['type'];
@@ -112,10 +113,11 @@ export default function MessageBubble({
     : null;
 
   const getRepliedToContent = (content: string) => {
+    const convertedContent = convertEmoticonsToEmojis(content);
     const maxLength = 50;
-    return content.length > maxLength
-      ? content.substring(0, maxLength) + '...'
-      : content;
+    return convertedContent.length > maxLength
+      ? convertedContent.substring(0, maxLength) + '...'
+      : convertedContent;
   };
 
   const handleReplyClick = () => {
@@ -224,7 +226,7 @@ export default function MessageBubble({
                           : 'You'}
                     </div>
                     <div
-                      className={`text-sm ${
+                      className={`text-base ${
                         isOwnMessage ? 'text-blue-100' : 'text-gray-600'
                       }`}
                     >
