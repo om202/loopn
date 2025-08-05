@@ -441,10 +441,8 @@ export default function MessageList({
           </div>
         ) : (
           <div className='flex justify-center py-4'>
-            <div className='flex items-center space-x-2 text-slate-400'>
-              <div className='h-px bg-slate-300 w-8'></div>
+            <div className='text-slate-400'>
               <span className='text-sm'>End of messages</span>
-              <div className='h-px bg-slate-300 w-8'></div>
             </div>
           </div>
         )}
@@ -468,6 +466,41 @@ export default function MessageList({
 
           const shouldShowNewMessagesSeparator =
             chatEnteredAt && isFirstUnreadMessage;
+
+          // Check if we should show a date separator
+          const currentMessageDate = new Date(message.timestamp || Date.now());
+          const prevMessageDate = prevMessage 
+            ? new Date(prevMessage.timestamp || Date.now()) 
+            : null;
+          
+          const shouldShowDateSeparator = !prevMessageDate || 
+            currentMessageDate.toDateString() !== prevMessageDate.toDateString();
+
+          const getDateSeparatorText = (date: Date) => {
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+            
+            const timeString = date.toLocaleTimeString('en-US', {
+              hour: 'numeric',
+              minute: '2-digit',
+              hour12: true
+            });
+            
+            if (date.toDateString() === today.toDateString()) {
+              return `Today at ${timeString}`;
+            } else if (date.toDateString() === yesterday.toDateString()) {
+              return `Yesterday at ${timeString}`;
+            } else {
+              const dateString = date.toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+              });
+              return `${dateString} at ${timeString}`;
+            }
+          };
 
           const isPrevFromSameSender =
             prevMessage?.senderId === message.senderId;
@@ -526,14 +559,18 @@ export default function MessageList({
 
           return (
             <React.Fragment key={message.id}>
+              {shouldShowDateSeparator && (
+                <div className='flex items-center justify-center my-6 px-4'>
+                  <div className='text-slate-400 text-sm'>
+                    {getDateSeparatorText(currentMessageDate)}
+                  </div>
+                </div>
+              )}
+              
               {shouldShowNewMessagesSeparator && (
                 <div className='flex items-center justify-center my-4 px-4'>
-                  <div className='flex items-center w-full max-w-xs'>
-                    <div className='flex-1 h-px bg-slate-300'></div>
-                    <div className='px-3 text-slate-500 text-sm font-medium'>
-                      New messages
-                    </div>
-                    <div className='flex-1 h-px bg-slate-300'></div>
+                  <div className='text-slate-500 text-sm font-medium'>
+                    New messages
                   </div>
                 </div>
               )}
