@@ -205,9 +205,9 @@ function NewRequestDialog({
             <div className='text-center py-6'>
               <div className='mb-6'>
                 <div className='flex justify-center mb-3'>
-                  <div className='w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center'>
+                  <div className='w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center'>
                     <svg
-                      className='w-6 h-6 text-orange-600'
+                      className='w-6 h-6 text-slate-600'
                       fill='none'
                       stroke='currentColor'
                       viewBox='0 0 24 24'
@@ -221,7 +221,7 @@ function NewRequestDialog({
                     </svg>
                   </div>
                 </div>
-                <h3 className='text-xl font-medium text-orange-600 mb-2'>
+                <h3 className='text-xl font-medium text-slate-600 mb-2'>
                   Request Removed
                 </h3>
                 <p className='text-base text-slate-700'>
