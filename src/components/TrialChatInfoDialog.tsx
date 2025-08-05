@@ -18,22 +18,24 @@ export default function TrialChatInfoDialog({
       {/* Dialog content */}
       <div className='p-6'>
         {/* Title */}
-        <h3 className='text-lg font-medium text-slate-900 mb-6'>
-          Trial Chat
-        </h3>
+        <h3 className='text-lg font-medium text-slate-900 mb-6'>Trial Chat</h3>
 
         {/* Content */}
         <div className='text-sm text-slate-600 space-y-4 leading-relaxed'>
           <p>
-            You have 7 days to chat and get to know each other. Either person can send a connection request to continue chatting after the trial period.
+            You have 7 days to chat and get to know each other. Either person
+            can send a connection request to continue chatting after the trial
+            period.
           </p>
 
           <p>
-            If no connection is made, the chat expires after 7 days and all messages are deleted.
+            If no connection is made, the chat expires after 7 days and all
+            messages are deleted.
           </p>
 
           <p className='text-slate-500'>
-            Send a connection request if you want to keep chatting beyond the trial period.
+            Send a connection request if you want to keep chatting beyond the
+            trial period.
           </p>
         </div>
 

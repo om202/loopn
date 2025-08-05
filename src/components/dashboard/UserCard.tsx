@@ -114,7 +114,7 @@ export default function UserCard({
               );
               return (
                 <div className='text-sm lg:text-sm text-right'>
-                  <div className='text-slate-500'>Can connect</div>
+                  <div className='text-slate-500'>Reconnect in</div>
                   <div className='text-slate-500 flex items-center justify-end gap-1'>
                     <Clock className='w-3 h-3 text-slate-400 hover:text-slate-600 cursor-pointer transition-colors' />
                     {timeRemaining}
@@ -158,7 +158,7 @@ export default function UserCard({
                           );
                           return timeRemaining ? (
                             <div className='text-right'>
-                              <div className='hidden sm:block'>Can connect</div>
+                              <div className='hidden sm:block'>Reconnect in</div>
                               <div className='sm:hidden'>Wait</div>
                               <div className='flex items-center justify-end gap-1'>
                                 {timeRemaining}

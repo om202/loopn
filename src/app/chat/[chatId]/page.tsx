@@ -7,6 +7,7 @@ import { useState, useEffect, useCallback } from 'react';
 import type { Schema } from '../../../../amplify/data/resource';
 import ChatWindow from '../../../components/chat/ChatWindow';
 import ProtectedRoute from '../../../components/protected-route';
+import TrialEndedByOtherDialog from '../../../components/TrialEndedByOtherDialog';
 import { getConversationIdFromParam } from '../../../lib/url-utils';
 import { chatService } from '../../../services/chat.service';
 import { useRealtime } from '../../../contexts/RealtimeContext';
@@ -23,6 +24,7 @@ export default function ChatPage({ params }: ChatPageProps) {
   const [conversation, setConversation] = useState<Conversation | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showTrialEndedDialog, setShowTrialEndedDialog] = useState(false);
   const { user } = useAuthenticator();
   const router = useRouter();
   const { subscribeToConversations } = useRealtime();
@@ -88,6 +90,17 @@ export default function ChatPage({ params }: ChatPageProps) {
           (conv: { id: string }) => conv.id === conversation.id
         );
         if (updatedConversation) {
+          // Check if the chat trial was just ended by another user
+          const wasActive = conversation.chatStatus !== 'ENDED';
+          const isNowEnded = updatedConversation.chatStatus === 'ENDED';
+          const endedByOtherUser =
+            updatedConversation.endedByUserId &&
+            updatedConversation.endedByUserId !== user.userId;
+
+          if (wasActive && isNowEnded && endedByOtherUser) {
+            setShowTrialEndedDialog(true);
+          }
+
           setConversation(updatedConversation);
         }
       }
@@ -96,9 +109,20 @@ export default function ChatPage({ params }: ChatPageProps) {
     return () => {
       subscription();
     };
-  }, [user?.userId, conversation?.id, subscribeToConversations]);
+  }, [
+    user?.userId,
+    conversation?.id,
+    conversation?.chatStatus,
+    subscribeToConversations,
+  ]);
 
   const handleChatEnded = () => {
+    router.push('/dashboard');
+  };
+
+  const handleTrialEndedDialogClose = () => {
+    setShowTrialEndedDialog(false);
+    // Optionally redirect to dashboard after closing the dialog
     router.push('/dashboard');
   };
 
@@ -148,6 +172,12 @@ export default function ChatPage({ params }: ChatPageProps) {
           />
         </div>
       </div>
+
+      {/* Trial ended by other user dialog */}
+      <TrialEndedByOtherDialog
+        isOpen={showTrialEndedDialog}
+        onClose={handleTrialEndedDialogClose}
+      />
     </ProtectedRoute>
   );
 }

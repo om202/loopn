@@ -469,34 +469,36 @@ export default function MessageList({
 
           // Check if we should show a date separator
           const currentMessageDate = new Date(message.timestamp || Date.now());
-          const prevMessageDate = prevMessage 
-            ? new Date(prevMessage.timestamp || Date.now()) 
+          const prevMessageDate = prevMessage
+            ? new Date(prevMessage.timestamp || Date.now())
             : null;
-          
-          const shouldShowDateSeparator = !prevMessageDate || 
-            currentMessageDate.toDateString() !== prevMessageDate.toDateString();
+
+          const shouldShowDateSeparator =
+            !prevMessageDate ||
+            currentMessageDate.toDateString() !==
+              prevMessageDate.toDateString();
 
           const getDateSeparatorText = (date: Date) => {
             const today = new Date();
             const yesterday = new Date(today);
             yesterday.setDate(yesterday.getDate() - 1);
-            
+
             const timeString = date.toLocaleTimeString('en-US', {
               hour: 'numeric',
               minute: '2-digit',
-              hour12: true
+              hour12: true,
             });
-            
+
             if (date.toDateString() === today.toDateString()) {
               return `Today at ${timeString}`;
             } else if (date.toDateString() === yesterday.toDateString()) {
               return `Yesterday at ${timeString}`;
             } else {
-              const dateString = date.toLocaleDateString('en-US', { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
+              const dateString = date.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
               });
               return `${dateString} at ${timeString}`;
             }
@@ -566,7 +568,7 @@ export default function MessageList({
                   </div>
                 </div>
               )}
-              
+
               {shouldShowNewMessagesSeparator && (
                 <div className='flex items-center justify-center my-4 px-4'>
                   <div className='text-slate-500 text-sm font-medium'>
