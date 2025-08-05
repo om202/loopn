@@ -381,9 +381,9 @@ export class NotificationService {
     onError?: (error: unknown) => void
   ) {
     const subscription = this.client.models.Notification.observeQuery({
-      filter: { 
+      filter: {
         userId: { eq: userId },
-        isRead: { eq: false }
+        isRead: { eq: false },
       },
     }).subscribe({
       next: ({ items }) => {

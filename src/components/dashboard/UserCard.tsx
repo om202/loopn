@@ -158,7 +158,9 @@ export default function UserCard({
                           );
                           return timeRemaining ? (
                             <div className='text-right'>
-                              <div className='hidden sm:block'>Reconnect in</div>
+                              <div className='hidden sm:block'>
+                                Reconnect in
+                              </div>
                               <div className='sm:hidden'>Wait</div>
                               <div className='flex items-center justify-end gap-1'>
                                 {timeRemaining}
