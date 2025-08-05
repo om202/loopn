@@ -47,18 +47,6 @@ export default function ConfirmSignUpForm({
 
   return (
     <div className='w-full'>
-      <div className='text-center mb-6'>
-        <div className='w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-4'>
-          <Mail className='w-8 h-8 text-blue-600' />
-        </div>
-        <h2 className='text-xl lg:text-2xl font-bold text-slate-900 mb-2'>
-          Check your email
-        </h2>
-        <p className='text-slate-600 text-sm lg:text-base'>
-          We sent a verification code to
-        </p>
-        <p className='text-slate-900 font-medium text-sm lg:text-base'>{email}</p>
-      </div>
 
       <form onSubmit={handleSubmit} className='space-y-5'>
         {error && (

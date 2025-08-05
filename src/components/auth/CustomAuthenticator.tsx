@@ -26,11 +26,11 @@ export default function CustomAuthenticator() {
   const AuthHeader = () => (
     <div className='text-center mb-8'>
       <div className='flex items-center justify-center space-x-3 mb-6'>
-        <Image src='/loopn.svg' alt='Loopn' width={40} height={40} priority />
-        <h1 className='text-2xl font-bold text-slate-900'>Loopn</h1>
+        <Image src='/loopn.svg' alt='Loopn' width={32} height={32} priority />
+        <h1 className='text-xl font-bold text-slate-900'>Loopn</h1>
       </div>
-      <p className='text-slate-600 text-sm lg:text-base'>
-        {authState.view === 'signIn' && 'Sign in to your account or create a new one'}
+      <p className='text-slate-600 text-base'>
+        {authState.view === 'signIn' && 'Please sign in to continue'}
         {authState.view === 'signUp' && 'Create your account to get started'}
         {authState.view === 'confirmSignUp' && 'Confirm your email address'}
         {authState.view === 'forgotPassword' && 'Reset your password'}
@@ -97,10 +97,9 @@ export default function CustomAuthenticator() {
   return (
     <div className='min-h-screen bg-slate-50 flex items-center justify-center px-4 py-8'>
       <div className='w-full max-w-md'>
-        <AuthHeader />
-        
         {/* Main Auth Card */}
         <div className='bg-white rounded-2xl border border-slate-200 p-6 lg:p-8 shadow-sm'>
+          <AuthHeader />
           {renderCurrentView()}
         </div>
       </div>

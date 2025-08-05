@@ -30,14 +30,6 @@ export default function SignInForm({
 
   return (
     <div className='w-full'>
-      <div className='text-center mb-6'>
-        <h2 className='text-xl lg:text-2xl font-bold text-slate-900 mb-2'>
-          Welcome back
-        </h2>
-        <p className='text-slate-600 text-sm lg:text-base'>
-          Please sign in to your account
-        </p>
-      </div>
 
       <form onSubmit={handleSubmit} className='space-y-5'>
         {error && (

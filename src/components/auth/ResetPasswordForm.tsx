@@ -42,18 +42,6 @@ export default function ResetPasswordForm({
 
   return (
     <div className='w-full'>
-      <div className='text-center mb-6'>
-        <div className='w-16 h-16 bg-green-50 rounded-2xl flex items-center justify-center mx-auto mb-4'>
-          <CheckCircle className='w-8 h-8 text-green-600' />
-        </div>
-        <h2 className='text-xl lg:text-2xl font-bold text-slate-900 mb-2'>
-          Reset your password
-        </h2>
-        <p className='text-slate-600 text-sm lg:text-base'>
-          Enter the code sent to{' '}
-          <span className='font-medium text-slate-900'>{email}</span>
-        </p>
-      </div>
 
       <form onSubmit={handleSubmit} className='space-y-5'>
         {error && (
