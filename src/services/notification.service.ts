@@ -373,6 +373,7 @@ export class NotificationService {
 
   /**
    * Subscribe to notification changes (for real-time updates)
+   * Only returns unread notifications to match getUnreadNotifications behavior
    */
   observeUserNotifications(
     userId: string,
@@ -380,7 +381,10 @@ export class NotificationService {
     onError?: (error: unknown) => void
   ) {
     const subscription = this.client.models.Notification.observeQuery({
-      filter: { userId: { eq: userId } },
+      filter: { 
+        userId: { eq: userId },
+        isRead: { eq: false }
+      },
     }).subscribe({
       next: ({ items }) => {
         // Sort by timestamp descending (newest first)
