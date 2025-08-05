@@ -18,42 +18,22 @@ export default function TrialChatInfoDialog({
       {/* Dialog content */}
       <div className='p-6'>
         {/* Title */}
-        <h3 className='text-lg font-semibold text-slate-900 mb-4'>
-          Trial Chat Period
+        <h3 className='text-lg font-medium text-slate-900 mb-6'>
+          Trial Chat
         </h3>
 
         {/* Content */}
-        <div className='text-sm text-slate-600 space-y-3'>
+        <div className='text-sm text-slate-600 space-y-4 leading-relaxed'>
           <p>
-            <strong>What is a Trial Chat?</strong>
-            <br />
-            When someone accepts your chat request, you start with a 7-day trial
-            period to get to know each other.
+            You have 7 days to chat and get to know each other. Either person can send a connection request to continue chatting after the trial period.
           </p>
 
           <p>
-            <strong>During the trial period:</strong>
-            <br />
-            • You can chat freely for 7 days
-            <br />
-            • Either person can send a &ldquo;Connection Request&rdquo;
-            <br />
-            • If accepted, you can chat forever
-            <br />• You can end the chat early using &ldquo;End Now&rdquo;
+            If no connection is made, the chat expires after 7 days and all messages are deleted.
           </p>
 
-          <p>
-            <strong>After 7 days:</strong>
-            <br />
-            • If not connected, the chat expires automatically
-            <br />
-            • All messages and conversation data are deleted
-            <br />• You&rsquo;ll need to send a new chat request to reconnect
-          </p>
-
-          <p className='text-blue-600'>
-            💡 <strong>Tip:</strong> Send a connection request if you&rsquo;d
-            like to chat beyond the trial period!
+          <p className='text-slate-500'>
+            Send a connection request if you want to keep chatting beyond the trial period.
           </p>
         </div>
 
