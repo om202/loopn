@@ -2,11 +2,25 @@
 
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { Mail, Lock, User } from 'lucide-react';
+import { Mail, Lock, User, Check, X } from 'lucide-react';
 
 interface SignUpFormProps {
   onSwitchToSignIn: () => void;
   onSignUpSuccess: (email: string) => void;
+}
+
+// Password requirement component
+function PasswordRequirement({ met, text }: { met: boolean; text: string }) {
+  return (
+    <div className={`flex items-center gap-2 text-xs ${met ? 'text-green-600' : 'text-slate-500'}`}>
+      {met ? (
+        <Check className='w-3 h-3 text-green-600' />
+      ) : (
+        <X className='w-3 h-3 text-slate-400' />
+      )}
+      <span>{text}</span>
+    </div>
+  );
 }
 
 export default function SignUpForm({
@@ -20,11 +34,30 @@ export default function SignUpForm({
   const [familyName, setFamilyName] = useState('');
   const { handleSignUp, isLoading, error, clearError } = useAuth();
 
+  // Password validation state
+  const [passwordFocused, setPasswordFocused] = useState(false);
+  
+  // Real-time password validation
+  const passwordValidation = {
+    minLength: password.length >= 8,
+    hasUppercase: /[A-Z]/.test(password),
+    hasLowercase: /[a-z]/.test(password),
+    hasNumber: /\d/.test(password),
+    hasSymbol: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password),
+  };
+
+  const isPasswordValid = Object.values(passwordValidation).every(Boolean);
+  const showPasswordHints = passwordFocused && password.length > 0;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     clearError();
 
     if (!email || !password) {
+      return;
+    }
+
+    if (!isPasswordValid) {
       return;
     }
 
@@ -130,14 +163,48 @@ export default function SignUpForm({
               type='password'
               value={password}
               onChange={e => setPassword(e.target.value)}
-              className='w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors bg-white'
+              onFocus={() => setPasswordFocused(true)}
+              onBlur={() => setPasswordFocused(false)}
+              className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:border-transparent transition-colors bg-white ${
+                password.length > 0
+                  ? isPasswordValid
+                    ? 'border-green-200 focus:ring-green-500'
+                    : 'border-red-200 focus:ring-red-500'
+                  : 'border-slate-200 focus:ring-blue-500'
+              }`}
               placeholder='Create a password'
               required
             />
           </div>
-          <p className='text-xs text-slate-500 mt-2'>
-            Must be at least 8 characters with uppercase, lowercase, numbers, and symbols
-          </p>
+          
+          {/* Real-time password validation */}
+          {showPasswordHints && (
+            <div className='mt-3 p-3 bg-slate-50 rounded-lg border border-slate-200'>
+              <p className='text-sm font-medium text-slate-700 mb-2'>Password requirements:</p>
+              <div className='space-y-1'>
+                <PasswordRequirement 
+                  met={passwordValidation.minLength} 
+                  text="At least 8 characters" 
+                />
+                <PasswordRequirement 
+                  met={passwordValidation.hasUppercase} 
+                  text="One uppercase letter" 
+                />
+                <PasswordRequirement 
+                  met={passwordValidation.hasLowercase} 
+                  text="One lowercase letter" 
+                />
+                <PasswordRequirement 
+                  met={passwordValidation.hasNumber} 
+                  text="One number" 
+                />
+                <PasswordRequirement 
+                  met={passwordValidation.hasSymbol} 
+                  text="One special character" 
+                />
+              </div>
+            </div>
+          )}
         </div>
 
         <div>
@@ -177,6 +244,7 @@ export default function SignUpForm({
             !email ||
             !password ||
             !confirmPassword ||
+            !isPasswordValid ||
             password !== confirmPassword
           }
           className='w-full bg-blue-600 text-white py-3 px-4 rounded-xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium'
