@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CheckCircle2, Clock } from 'lucide-react';
+import { CheckCircle2, Clock, MessageCircle } from 'lucide-react';
 
 import type { Schema } from '../../../amplify/data/resource';
 import { formatPresenceTime } from '../../lib/presence-utils';
@@ -176,7 +176,10 @@ export default function UserCard({
                         })()
                       )
                     ) : (
-                      'Chat'
+                      <>
+                        <MessageCircle className='w-4 lg:w-4 h-4 lg:h-4 text-blue-600 flex-shrink-0' />
+                        Chat
+                      </>
                     )}
                   </>
                 ) : (
