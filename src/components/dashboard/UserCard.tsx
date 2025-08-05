@@ -81,7 +81,7 @@ export default function UserCard({
                   : userPresence.lastSeen &&
                       formatPresenceTime(userPresence.lastSeen) ===
                         'Recently active'
-                    ? 'text-blue-600'
+                    ? 'text-slate-500'
                     : 'text-slate-600'
             }`}
           >

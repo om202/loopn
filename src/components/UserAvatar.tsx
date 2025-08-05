@@ -90,7 +90,7 @@ export default function UserAvatar({
       case 'RECENTLY_ACTIVE':
         return (
           <div
-            className={`${indicatorSize} bg-blue-600 rounded-full border-2 border-white box-content`}
+            className={`${indicatorSize} bg-slate-400 rounded-full border-2 border-white box-content`}
           />
         );
       case 'OFFLINE':
