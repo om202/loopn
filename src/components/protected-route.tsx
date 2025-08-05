@@ -1,6 +1,6 @@
 'use client';
 
-import { useAuthenticator } from '@aws-amplify/ui-react';
+import { useAuth } from '@/contexts/AuthContext';
 import { useEffect } from 'react';
 
 import { simplePresenceManager } from '../lib/presence-utils';
@@ -10,10 +10,7 @@ interface ProtectedRouteProps {
 }
 
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const { user, authStatus } = useAuthenticator(context => [
-    context.user,
-    context.authStatus,
-  ]);
+  const { user, authStatus } = useAuth();
 
   useEffect(() => {
     if (authStatus === 'unauthenticated') {

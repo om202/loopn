@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import AmplifyProvider from './amplify-provider';
 import { RealtimeProvider } from '@/contexts/RealtimeContext';
+import { AuthProvider } from '@/contexts/AuthContext';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -71,7 +72,9 @@ export default function RootLayout({
       </head>
       <body className={`${inter.variable} antialiased`}>
         <AmplifyProvider>
-          <RealtimeProvider>{children}</RealtimeProvider>
+          <AuthProvider>
+            <RealtimeProvider>{children}</RealtimeProvider>
+          </AuthProvider>
         </AmplifyProvider>
       </body>
     </html>

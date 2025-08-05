@@ -1,6 +1,6 @@
 'use client';
 
-import { useAuthenticator } from '@aws-amplify/ui-react';
+import { useAuth } from '@/contexts/AuthContext';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
@@ -11,10 +11,7 @@ import { NotificationBell } from './notifications';
 import UserAvatar from './UserAvatar';
 
 export default function Navbar() {
-  const { signOut, user } = useAuthenticator(context => [
-    context.signOut,
-    context.user,
-  ]);
+  const { handleSignOut, user } = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -36,10 +33,10 @@ export default function Navbar() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleSignOut = async () => {
+  const handleSignOutClick = async () => {
     // Use the presence manager's setOffline method for proper cleanup
     await simplePresenceManager.setOffline();
-    signOut();
+    handleSignOut();
   };
 
   return (
@@ -108,7 +105,7 @@ export default function Navbar() {
                     </div>
                     <div className='p-2'>
                       <button
-                        onClick={handleSignOut}
+                        onClick={handleSignOutClick}
                         className='w-full text-left rounded-xl px-4 py-3 text-sm text-slate-700 hover:bg-slate-100 flex items-center gap-3 transition-colors'
                         role='menuitem'
                         tabIndex={-1}
