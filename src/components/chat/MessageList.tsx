@@ -389,7 +389,7 @@ export default function MessageList({
 
   if (messages.length === 0 && isInitializing) {
     return (
-      <div className='flex-1 overflow-y-auto bg-slate-50'>
+      <div className='flex-1 overflow-y-auto bg-white'>
         <div ref={messagesEndRef} />
       </div>
     );
@@ -397,14 +397,8 @@ export default function MessageList({
 
   if (messages.length === 0 && !isInitializing) {
     return (
-      <div
-        className='flex-1 overflow-y-auto'
-        style={{
-          background:
-            'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #f3f4f6 100%)',
-        }}
-      >
-        <div className='w-full px-4 sm:px-6 lg:px-20 xl:px-32 py-6 sm:py-8'>
+      <div className='flex-1 overflow-y-auto bg-white'>
+        <div className='w-full px-4 sm:px-6 lg:px-32 xl:px-48 py-6 sm:py-8'>
           <div className='flex flex-col items-center justify-center text-center py-20'>
             <div className='w-14 h-14 bg-slate-200 rounded-full flex items-center justify-center mb-3'>
               <MessageCircle className='w-8 h-8 text-slate-600' />
@@ -423,16 +417,10 @@ export default function MessageList({
   }
 
   return (
-    <div
-      className='flex-1 overflow-y-auto'
-      style={{
-        background:
-          'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #f3f4f6 100%)',
-      }}
-    >
+    <div className='flex-1 overflow-y-auto bg-white'>
       <div
         ref={containerRef}
-        className='w-full px-4 sm:px-6 lg:px-20 xl:px-32 py-4 sm:py-6'
+        className='w-full px-4 sm:px-6 lg:px-32 xl:px-48 py-4 sm:py-6'
       >
         {/* Load More Messages Button/Indicator */}
         {hasMoreMessages ? (

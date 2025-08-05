@@ -353,7 +353,7 @@ export default function ChatWindow({
   }
 
   return (
-    <div className='flex flex-col h-full bg-slate-100'>
+    <div className='flex flex-col h-full bg-white'>
       <ChatHeader
         conversation={conversation}
         otherParticipantId={otherParticipantId}

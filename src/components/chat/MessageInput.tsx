@@ -83,7 +83,7 @@ export default function MessageInput({
   return (
     <>
       {replyToMessage && (
-        <div className='bg-slate-50 border-t border-slate-200 px-4 sm:px-6 lg:px-20 xl:px-32 py-3'>
+        <div className='bg-slate-50 border-t border-slate-200 px-4 sm:px-6 lg:px-32 xl:px-48 py-3'>
           <div className='relative pr-8'>
             <div className='flex items-center text-sm text-slate-600 mb-3'>
               <svg
@@ -117,7 +117,7 @@ export default function MessageInput({
         </div>
       )}
 
-      <div className='flex-shrink-0 bg-white border-t border-slate-200 p-4 sm:p-6 lg:px-20 xl:px-32 shadow-lg relative'>
+      <div className='flex-shrink-0 bg-white border-t border-slate-200 p-4 sm:p-6 lg:px-32 xl:px-48 shadow-lg relative'>
         <div className='w-full'>
           <form
             autoComplete='off'

@@ -283,10 +283,10 @@ export default function MessageBubble({
               </div>
             ) : (
               <div
-                className={`px-3 py-2 rounded-3xl border ${
+                className={`px-3 py-2 rounded-3xl ${
                   isOwnMessage
-                    ? 'bg-blue-600 text-white border-blue-600 rounded-br-sm'
-                    : 'bg-white text-slate-900 border-slate-300 rounded-bl-sm'
+                    ? 'bg-blue-600 text-white border border-blue-600 rounded-br-sm'
+                    : 'bg-slate-200 text-slate-900 rounded-bl-sm'
                 }`}
               >
                 {repliedToMessage && (

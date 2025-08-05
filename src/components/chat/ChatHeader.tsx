@@ -305,7 +305,7 @@ export default function ChatHeader({
                             Time Left
                           </span>
                         </button>
-                        <span className='bg-slate-200 text-slate-700 px-1.5 sm:px-2 py-0.5 rounded-full text-sm font-bold whitespace-nowrap'>
+                        <span className='bg-slate-200 text-slate-800 px-1.5 sm:px-2 py-0.5 rounded-full text-sm font-bold whitespace-nowrap'>
                           {timeLeft}
                         </span>
                       </div>
