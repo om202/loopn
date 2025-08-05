@@ -18,7 +18,7 @@ export default function ResetPasswordForm({
   const [confirmationCode, setConfirmationCode] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const { handleConfirmResetPassword, isLoading, error, clearError } = useAuth();
+  const { handleConfirmResetPassword, handleResetPassword, isLoading, error, clearError } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,6 +38,11 @@ export default function ResetPasswordForm({
     if (!error) {
       onResetSuccess();
     }
+  };
+
+  const handleResendCode = async () => {
+    clearError();
+    await handleResetPassword(email);
   };
 
   return (
@@ -71,6 +76,19 @@ export default function ResetPasswordForm({
               maxLength={6}
               required
             />
+          </div>
+          <div className='flex justify-between items-center mt-2'>
+            <p className='text-xs text-slate-500'>
+              Code sent to <span className='font-medium'>{email}</span>
+            </p>
+            <button
+              type='button'
+              onClick={handleResendCode}
+              disabled={isLoading}
+              className='text-xs text-blue-600 hover:text-blue-700 font-medium transition-colors disabled:opacity-50'
+            >
+              Resend code
+            </button>
           </div>
         </div>
 
