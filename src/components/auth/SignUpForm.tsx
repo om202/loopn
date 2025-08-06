@@ -12,7 +12,9 @@ interface SignUpFormProps {
 // Password requirement component
 function PasswordRequirement({ met, text }: { met: boolean; text: string }) {
   return (
-    <div className={`flex items-center gap-2 text-xs ${met ? 'text-green-600' : 'text-slate-500'}`}>
+    <div
+      className={`flex items-center gap-2 text-xs ${met ? 'text-green-600' : 'text-slate-500'}`}
+    >
       {met ? (
         <Check className='w-3 h-3 text-green-600' />
       ) : (
@@ -36,7 +38,7 @@ export default function SignUpForm({
 
   // Password validation state
   const [passwordFocused, setPasswordFocused] = useState(false);
-  
+
   // Real-time password validation
   const passwordValidation = {
     minLength: password.length >= 8,
@@ -75,7 +77,6 @@ export default function SignUpForm({
 
   return (
     <div className='w-full'>
-
       <form onSubmit={handleSubmit} className='space-y-5'>
         {error && (
           <div className='p-4 text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl'>
@@ -176,31 +177,33 @@ export default function SignUpForm({
               required
             />
           </div>
-          
+
           {/* Real-time password validation */}
           {showPasswordHints && (
             <div className='mt-3 p-3 bg-slate-50 rounded-lg border border-slate-200'>
-              <p className='text-sm font-medium text-slate-700 mb-2'>Password requirements:</p>
+              <p className='text-sm font-medium text-slate-700 mb-2'>
+                Password requirements:
+              </p>
               <div className='space-y-1'>
-                <PasswordRequirement 
-                  met={passwordValidation.minLength} 
-                  text="At least 8 characters" 
+                <PasswordRequirement
+                  met={passwordValidation.minLength}
+                  text='At least 8 characters'
                 />
-                <PasswordRequirement 
-                  met={passwordValidation.hasUppercase} 
-                  text="One uppercase letter" 
+                <PasswordRequirement
+                  met={passwordValidation.hasUppercase}
+                  text='One uppercase letter'
                 />
-                <PasswordRequirement 
-                  met={passwordValidation.hasLowercase} 
-                  text="One lowercase letter" 
+                <PasswordRequirement
+                  met={passwordValidation.hasLowercase}
+                  text='One lowercase letter'
                 />
-                <PasswordRequirement 
-                  met={passwordValidation.hasNumber} 
-                  text="One number" 
+                <PasswordRequirement
+                  met={passwordValidation.hasNumber}
+                  text='One number'
                 />
-                <PasswordRequirement 
-                  met={passwordValidation.hasSymbol} 
-                  text="One special character" 
+                <PasswordRequirement
+                  met={passwordValidation.hasSymbol}
+                  text='One special character'
                 />
               </div>
             </div>
@@ -253,7 +256,9 @@ export default function SignUpForm({
         </button>
 
         <div className='text-center pt-2 border-t border-slate-100'>
-          <span className='text-sm text-slate-600'>Already have an account? </span>
+          <span className='text-sm text-slate-600'>
+            Already have an account?{' '}
+          </span>
           <button
             type='button'
             onClick={onSwitchToSignIn}

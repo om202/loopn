@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { Lock, Shield, CheckCircle } from 'lucide-react';
+import { Lock, Shield } from 'lucide-react';
 
 interface ResetPasswordFormProps {
   email: string;
@@ -18,7 +18,13 @@ export default function ResetPasswordForm({
   const [confirmationCode, setConfirmationCode] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const { handleConfirmResetPassword, handleResetPassword, isLoading, error, clearError } = useAuth();
+  const {
+    handleConfirmResetPassword,
+    handleResetPassword,
+    isLoading,
+    error,
+    clearError,
+  } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,7 +53,6 @@ export default function ResetPasswordForm({
 
   return (
     <div className='w-full'>
-
       <form onSubmit={handleSubmit} className='space-y-5'>
         {error && (
           <div className='p-4 text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl'>
@@ -114,7 +119,8 @@ export default function ResetPasswordForm({
             />
           </div>
           <p className='text-xs text-slate-500 mt-2'>
-            Must be at least 8 characters with uppercase, lowercase, numbers, and symbols
+            Must be at least 8 characters with uppercase, lowercase, numbers,
+            and symbols
           </p>
         </div>
 

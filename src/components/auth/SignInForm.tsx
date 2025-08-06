@@ -30,7 +30,6 @@ export default function SignInForm({
 
   return (
     <div className='w-full'>
-
       <form onSubmit={handleSubmit} className='space-y-5'>
         {error && (
           <div className='p-4 text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl'>
@@ -103,7 +102,9 @@ export default function SignInForm({
         </div>
 
         <div className='text-center pt-2 border-t border-slate-100'>
-          <span className='text-sm text-slate-600'>Don't have an account? </span>
+          <span className='text-sm text-slate-600'>
+            Don't have an account?{' '}
+          </span>
           <button
             type='button'
             onClick={onSwitchToSignUp}

@@ -18,6 +18,7 @@ export const auth = defineAuth({
       },
     },
   },
+  accountRecovery: 'EMAIL_ONLY',
   userAttributes: {
     email: {
       required: true,

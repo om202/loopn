@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { Mail, Shield } from 'lucide-react';
+import { Shield } from 'lucide-react';
 
 interface ConfirmSignUpFormProps {
   email: string;
@@ -47,7 +47,6 @@ export default function ConfirmSignUpForm({
 
   return (
     <div className='w-full'>
-
       <form onSubmit={handleSubmit} className='space-y-5'>
         {error && (
           <div className='p-4 text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl'>
@@ -91,7 +90,9 @@ export default function ConfirmSignUpForm({
         </button>
 
         <div className='text-center'>
-          <span className='text-sm text-slate-600'>Didn't receive the code? </span>
+          <span className='text-sm text-slate-600'>
+            Didn't receive the code?{' '}
+          </span>
           <button
             type='button'
             onClick={handleResendCode}
