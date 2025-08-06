@@ -89,6 +89,110 @@ async function getProfileSummaryFromStorage(
 
 export class UserProfileService {
   /**
+   * Check if current user has anonymous summary and generate if missing
+   * This should be called on login for existing users
+   */
+  static async ensureAnonymousSummaryExists(): Promise<void> {
+    try {
+      const user = await getCurrentUser();
+      if (!user) {
+        return;
+      }
+
+      // Check if we already have a cached summary
+      const cachedSummary = await getProfileSummaryFromStorage(user.userId);
+      if (cachedSummary) {
+        return; // Already have summary cached, no need to check again
+      }
+
+      // Ensure Amplify is ready before making API calls
+      await ensureAmplifyReady();
+
+      // Get user's current profile data
+      const userPresence = await getClient().models.UserPresence.get({
+        userId: user.userId,
+      });
+
+      if (!userPresence?.data) {
+        return; // No profile data, user needs to complete onboarding
+      }
+
+      // Check if anonymous summary exists
+      if (userPresence.data.anonymousSummary) {
+        // Summary exists, cache it for future use
+        await saveProfileSummaryToStorage(
+          user.userId,
+          userPresence.data.anonymousSummary
+        );
+        return;
+      }
+
+      // Check if user has completed onboarding but missing summary
+      if (
+        userPresence.data.isOnboardingComplete &&
+        userPresence.data.jobRole &&
+        userPresence.data.industry &&
+        userPresence.data.about
+      ) {
+        console.log('Generating missing anonymous summary for existing user');
+
+        // Generate AI summary
+        let anonymousSummary = '';
+        try {
+          const summaryResponse =
+            await getClient().queries.generateAnonymousSummary({
+              jobRole: userPresence.data.jobRole,
+              companyName: userPresence.data.companyName || '',
+              industry: userPresence.data.industry,
+              yearsOfExperience: userPresence.data.yearsOfExperience || 0,
+              education: userPresence.data.education || '',
+              about: userPresence.data.about,
+              interests:
+                userPresence.data.interests?.filter(
+                  (interest): interest is string => interest !== null
+                ) || [],
+            });
+
+          if (summaryResponse.data?.summary) {
+            anonymousSummary = summaryResponse.data.summary;
+          }
+        } catch (aiError) {
+          console.warn(
+            'AI summary generation failed, using fallback:',
+            aiError
+          );
+          // Create a simple fallback summary
+          anonymousSummary = `${userPresence.data.jobRole} with ${userPresence.data.yearsOfExperience || 0} years of experience in ${userPresence.data.industry}.`;
+          if (
+            userPresence.data.interests &&
+            userPresence.data.interests.length > 0
+          ) {
+            const validInterests = userPresence.data.interests.filter(
+              (interest): interest is string => interest !== null
+            );
+            if (validInterests.length > 0) {
+              anonymousSummary += ` Passionate about ${validInterests.slice(0, 2).join(' and ')}.`;
+            }
+          }
+        }
+
+        // Update user presence with the generated summary
+        await getClient().models.UserPresence.update({
+          userId: user.userId,
+          anonymousSummary: anonymousSummary,
+        });
+
+        // Cache the summary
+        await saveProfileSummaryToStorage(user.userId, anonymousSummary);
+
+        console.log('Anonymous summary generated and saved for existing user');
+      }
+    } catch (error) {
+      console.error('Error ensuring anonymous summary exists:', error);
+    }
+  }
+
+  /**
    * Get current user's profile information
    */
   static async getUserProfile(): Promise<UserProfile | null> {
