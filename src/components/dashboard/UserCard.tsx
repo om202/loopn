@@ -131,8 +131,6 @@ export default function UserCard({
                   ? formatPresenceTime(userPresence.lastSeen)
                   : 'Offline'}
           </div>
-
-
         </div>
 
         <div className='flex-shrink-0 flex items-center gap-2'>
