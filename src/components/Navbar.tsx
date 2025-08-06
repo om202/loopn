@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
 
 import { simplePresenceManager } from '../lib/presence-utils';
+import { UserProfileService } from '../services/user-profile.service';
 
 import { NotificationBell } from './notifications';
 import UserAvatar from './UserAvatar';
@@ -13,6 +14,8 @@ import UserAvatar from './UserAvatar';
 export default function Navbar() {
   const { handleSignOut, user } = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [userSummary, setUserSummary] = useState<string | null>(null);
+  const [loadingSummary, setLoadingSummary] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const getUserEmail = () => {
@@ -32,6 +35,35 @@ export default function Navbar() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  // Load current user's AI summary
+  useEffect(() => {
+    let mounted = true;
+
+    const loadUserSummary = async () => {
+      if (!user?.userId) return;
+
+      setLoadingSummary(true);
+      try {
+        const summary = await UserProfileService.getProfileSummary(user.userId);
+        if (mounted) {
+          setUserSummary(summary);
+        }
+      } catch (error) {
+        console.error('Error loading user summary:', error);
+      } finally {
+        if (mounted) {
+          setLoadingSummary(false);
+        }
+      }
+    };
+
+    loadUserSummary();
+
+    return () => {
+      mounted = false;
+    };
+  }, [user?.userId]);
 
   const handleSignOutClick = async () => {
     // Use the presence manager's setOffline method for proper cleanup
@@ -102,6 +134,25 @@ export default function Navbar() {
                       <p className='text-xs sm:text-sm text-slate-500'>
                         Welcome
                       </p>
+
+                      {/* AI Profile Summary */}
+                      {loadingSummary ? (
+                        <div className='mt-3 w-full flex items-center gap-2 text-sm text-slate-500'>
+                          <div className='w-2 h-2 bg-slate-300 rounded-full animate-pulse'></div>
+                          <span>Loading summary...</span>
+                        </div>
+                      ) : userSummary ? (
+                        <div className='mt-3 w-full'>
+                          <div className='text-sm bg-slate-50 rounded-lg p-3 border border-slate-100'>
+                            <p className='text-slate-700 mb-2 font-bold'>
+                              Anonymous Overview
+                            </p>
+                            <div className='text-slate-800 leading-relaxed text-left'>
+                              {userSummary}
+                            </div>
+                          </div>
+                        </div>
+                      ) : null}
                     </div>
                     <div className='p-2'>
                       <button

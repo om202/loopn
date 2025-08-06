@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CheckCircle2, Clock, MessageCircle } from 'lucide-react';
 
 import type { Schema } from '../../../amplify/data/resource';
 import { formatPresenceTime } from '../../lib/presence-utils';
+import { UserProfileService } from '../../services/user-profile.service';
 
 import DialogContainer from '../DialogContainer';
 import UserAvatar from '../UserAvatar';
@@ -41,7 +42,38 @@ export default function UserCard({
   getReconnectTimeRemaining,
 }: UserCardProps) {
   const [showCancelDialog, setShowCancelDialog] = useState(false);
+  const [profileSummary, setProfileSummary] = useState<string | null>(null);
+  const [loadingSummary, setLoadingSummary] = useState(false);
   const isOnline = onlineUsers.some(ou => ou.userId === userPresence.userId);
+
+  // Load profile summary when component mounts
+  useEffect(() => {
+    let mounted = true;
+
+    const loadProfileSummary = async () => {
+      setLoadingSummary(true);
+      try {
+        const summary = await UserProfileService.getProfileSummary(
+          userPresence.userId
+        );
+        if (mounted) {
+          setProfileSummary(summary);
+        }
+      } catch (error) {
+        console.error('Error loading profile summary:', error);
+      } finally {
+        if (mounted) {
+          setLoadingSummary(false);
+        }
+      }
+    };
+
+    loadProfileSummary();
+
+    return () => {
+      mounted = false;
+    };
+  }, [userPresence.userId]);
 
   return (
     <div
@@ -72,7 +104,7 @@ export default function UserCard({
             {getDisplayName(userPresence)}
           </div>
           <div
-            className={`text-sm lg:text-sm ${
+            className={`text-sm lg:text-sm mb-2 ${
               existingConversations.has(userPresence.userId) &&
               existingConversations.get(userPresence.userId)?.chatStatus ===
                 'ENDED'
@@ -98,6 +130,18 @@ export default function UserCard({
                   ? formatPresenceTime(userPresence.lastSeen)
                   : 'Offline'}
           </div>
+
+          {/* AI Profile Summary */}
+          {loadingSummary ? (
+            <div className='flex items-center gap-2 text-xs text-slate-400'>
+              <div className='w-2 h-2 bg-slate-300 rounded-full animate-pulse'></div>
+              <span>Loading profile...</span>
+            </div>
+          ) : profileSummary ? (
+            <div className='text-xs text-slate-600 leading-relaxed line-clamp-2 bg-slate-50 rounded-lg p-2 border border-slate-100'>
+              {profileSummary}
+            </div>
+          ) : null}
         </div>
 
         <div className='flex-shrink-0'>

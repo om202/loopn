@@ -5,6 +5,9 @@ import { getCurrentUser } from 'aws-amplify/auth';
 // Generate the client
 const client = generateClient<Schema>();
 
+// Constants for localStorage
+const PROFILE_SUMMARY_STORAGE_KEY_PREFIX = 'loopn_profile_summary_';
+
 export interface UserProfile {
   jobRole?: string;
   companyName?: string;
@@ -15,6 +18,60 @@ export interface UserProfile {
   interests?: string[];
   anonymousSummary?: string;
   isOnboardingComplete: boolean;
+}
+
+interface CachedProfileSummary {
+  summary: string;
+  timestamp: number;
+  userId: string;
+}
+
+// Helper function to get user-specific storage key
+function getProfileSummaryStorageKey(userId: string): string {
+  return `${PROFILE_SUMMARY_STORAGE_KEY_PREFIX}${userId}`;
+}
+
+// Helper function to save profile summary to localStorage
+async function saveProfileSummaryToStorage(
+  userId: string,
+  summary: string
+): Promise<void> {
+  try {
+    if (typeof window !== 'undefined') {
+      const cacheData: CachedProfileSummary = {
+        summary,
+        timestamp: Date.now(),
+        userId,
+      };
+      localStorage.setItem(
+        getProfileSummaryStorageKey(userId),
+        JSON.stringify(cacheData)
+      );
+    }
+  } catch (error) {
+    console.warn('Error saving profile summary to localStorage:', error);
+  }
+}
+
+// Helper function to get profile summary from localStorage
+async function getProfileSummaryFromStorage(
+  userId: string
+): Promise<string | null> {
+  try {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem(getProfileSummaryStorageKey(userId));
+      if (stored) {
+        const cacheData: CachedProfileSummary = JSON.parse(stored);
+        // Verify this cache belongs to the correct user
+        if (cacheData.userId === userId && cacheData.summary) {
+          return cacheData.summary;
+        }
+      }
+    }
+  } catch (error) {
+    console.warn('Error reading profile summary from localStorage:', error);
+  }
+  return null;
 }
 
 export class UserProfileService {
@@ -59,7 +116,7 @@ export class UserProfileService {
   }
 
   /**
-   * Get anonymous summary only
+   * Get anonymous summary only for current user
    */
   static async getAnonymousSummary(): Promise<string | null> {
     try {
@@ -69,5 +126,81 @@ export class UserProfileService {
       console.error('Error fetching anonymous summary:', error);
       return null;
     }
+  }
+
+  /**
+   * Get profile summary for any user with localStorage caching
+   * First checks localStorage, then API if not found
+   */
+  static async getProfileSummary(userId: string): Promise<string | null> {
+    try {
+      // First, try to get from localStorage
+      const cachedSummary = await getProfileSummaryFromStorage(userId);
+      if (cachedSummary) {
+        return cachedSummary;
+      }
+
+      // If not in cache, fetch from API
+      const userPresence = await client.models.UserPresence.get({
+        userId: userId,
+      });
+
+      if (userPresence?.data?.anonymousSummary) {
+        const summary = userPresence.data.anonymousSummary;
+        // Save to localStorage for future use
+        await saveProfileSummaryToStorage(userId, summary);
+        return summary;
+      }
+
+      return null;
+    } catch (error) {
+      console.error('Error fetching profile summary for user:', userId, error);
+      return null;
+    }
+  }
+
+  /**
+   * Get profile summaries for multiple users (bulk operation)
+   * Efficiently handles localStorage caching for multiple users
+   */
+  static async getProfileSummaries(
+    userIds: string[]
+  ): Promise<Map<string, string>> {
+    const summaryMap = new Map<string, string>();
+    const uncachedUserIds: string[] = [];
+
+    // First, check localStorage for all users
+    for (const userId of userIds) {
+      const cachedSummary = await getProfileSummaryFromStorage(userId);
+      if (cachedSummary) {
+        summaryMap.set(userId, cachedSummary);
+      } else {
+        uncachedUserIds.push(userId);
+      }
+    }
+
+    // If there are uncached users, fetch from API
+    if (uncachedUserIds.length > 0) {
+      try {
+        const promises = uncachedUserIds.map(async userId => {
+          const userPresence = await client.models.UserPresence.get({
+            userId: userId,
+          });
+
+          if (userPresence?.data?.anonymousSummary) {
+            const summary = userPresence.data.anonymousSummary;
+            summaryMap.set(userId, summary);
+            // Cache for future use
+            await saveProfileSummaryToStorage(userId, summary);
+          }
+        });
+
+        await Promise.all(promises);
+      } catch (error) {
+        console.error('Error fetching profile summaries from API:', error);
+      }
+    }
+
+    return summaryMap;
   }
 }

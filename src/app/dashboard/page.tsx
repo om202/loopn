@@ -3,7 +3,6 @@
 import Navbar from '../../components/Navbar';
 import OnlineUsers from '../../components/OnlineUsers';
 import ProtectedRoute from '../../components/protected-route';
-import AnonymousSummary from '../../components/dashboard/AnonymousSummary';
 
 export default function DashboardPage() {
   const handleChatRequestSent = () => {
@@ -17,9 +16,6 @@ export default function DashboardPage() {
 
         {/* Main Content Area */}
         <div className='flex-1 w-full px-2 sm:px-3 lg:px-6 py-2 sm:py-3 lg:py-4 min-h-0 space-y-4'>
-          {/* AI-Generated Anonymous Summary */}
-          <AnonymousSummary />
-
           {/* Online Users */}
           <OnlineUsers onChatRequestSent={handleChatRequestSent} />
         </div>
