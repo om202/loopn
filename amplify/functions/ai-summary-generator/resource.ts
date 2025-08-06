@@ -5,6 +5,6 @@ export const aiSummaryGenerator = defineFunction({
   entry: './handler.ts',
   timeoutSeconds: 60,
   environment: {
-    MODEL_ID: 'anthropic.claude-3-haiku-20240307-v1:0',
+    MODEL_ID: 'amazon.titan-text-lite-v1',
   },
 });

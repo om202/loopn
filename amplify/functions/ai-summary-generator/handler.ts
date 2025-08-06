@@ -36,36 +36,28 @@ Key Interests: ${interests.slice(0, 5).join(', ')}
 
 Generate a summary that highlights their professional profile without revealing personal details. Make it sound engaging and professional for networking purposes. Focus on their expertise, background, and interests.`;
 
-      // Invoke the model
-      const input: InvokeModelCommandInput = {
-        modelId: process.env.MODEL_ID,
-        contentType: 'application/json',
-        accept: 'application/json',
-        body: JSON.stringify({
-          anthropic_version: 'bedrock-2023-05-31',
-          messages: [
-            {
-              role: 'user',
-              content: [
-                {
-                  type: 'text',
-                  text: prompt,
-                },
-              ],
-            },
-          ],
-          max_tokens: 150,
-          temperature: 0.7,
-          top_p: 0.9,
-        }),
-      };
+             // Invoke the model (Amazon Titan Text Lite format)
+       const input: InvokeModelCommandInput = {
+         modelId: process.env.MODEL_ID,
+         contentType: 'application/json',
+         accept: 'application/json',
+         body: JSON.stringify({
+           inputText: prompt,
+           textGenerationConfig: {
+             maxTokenCount: 150,
+             temperature: 0.7,
+             topP: 0.9,
+             stopSequences: [],
+           },
+         }),
+       };
 
-      const command = new InvokeModelCommand(input);
-      const response = await client.send(command);
+       const command = new InvokeModelCommand(input);
+       const response = await client.send(command);
 
-      // Parse the response
-      const data = JSON.parse(Buffer.from(response.body).toString());
-      const summary = data.content[0].text.trim();
+       // Parse the response (Amazon Titan format)
+       const data = JSON.parse(Buffer.from(response.body).toString());
+       const summary = data.results[0].outputText.trim();
 
       return {
         summary,
