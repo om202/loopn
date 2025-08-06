@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { CheckCircle2, Clock, MessageCircle } from 'lucide-react';
+import { CheckCircle2, Clock, MessageCircle, Info } from 'lucide-react';
 
 import type { Schema } from '../../../amplify/data/resource';
 import { formatPresenceTime } from '../../lib/presence-utils';
@@ -42,6 +42,7 @@ export default function UserCard({
   getReconnectTimeRemaining,
 }: UserCardProps) {
   const [showCancelDialog, setShowCancelDialog] = useState(false);
+  const [showProfileDialog, setShowProfileDialog] = useState(false);
   const [profileSummary, setProfileSummary] = useState<string | null>(null);
   const [loadingSummary, setLoadingSummary] = useState(false);
   const isOnline = onlineUsers.some(ou => ou.userId === userPresence.userId);
@@ -131,20 +132,22 @@ export default function UserCard({
                   : 'Offline'}
           </div>
 
-          {/* AI Profile Summary */}
-          {loadingSummary ? (
-            <div className='flex items-center gap-2 text-xs text-slate-400'>
-              <div className='w-2 h-2 bg-slate-300 rounded-full animate-pulse'></div>
-              <span>Loading profile...</span>
-            </div>
-          ) : profileSummary ? (
-            <div className='text-xs text-slate-600 leading-relaxed line-clamp-2 bg-slate-50 rounded-lg p-2 border border-slate-100'>
-              {profileSummary}
-            </div>
-          ) : null}
+
         </div>
 
-        <div className='flex-shrink-0'>
+        <div className='flex-shrink-0 flex items-center gap-2'>
+          {/* Profile Summary Info Button */}
+          {(loadingSummary || profileSummary) && (
+            <button
+              onClick={() => setShowProfileDialog(true)}
+              className='px-2 lg:px-3 py-1.5 text-sm lg:text-sm font-medium rounded-xl border transition-colors bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:border-slate-300 flex items-center gap-1 lg:gap-2 flex-shrink-0'
+              disabled={loadingSummary}
+            >
+              <Info className='w-4 lg:w-4 h-4 lg:h-4 text-slate-600 flex-shrink-0' />
+              <span className='hidden sm:inline'>Profile</span>
+            </button>
+          )}
+
           {(() => {
             const conversation = existingConversations.get(userPresence.userId);
             const isEndedWithTimer =
@@ -239,6 +242,46 @@ export default function UserCard({
           })()}
         </div>
       </div>
+
+      {/* Profile Summary Dialog */}
+      <DialogContainer
+        isOpen={showProfileDialog}
+        onClose={() => setShowProfileDialog(false)}
+        maxWidth='md'
+      >
+        <div className='p-6'>
+          <h3 className='text-lg font-medium text-slate-900 mb-4'>
+            Profile Summary
+          </h3>
+          <div className='mb-4'>
+            <div className='text-sm text-slate-600 mb-2'>
+              {getDisplayName(userPresence)}
+            </div>
+            {loadingSummary ? (
+              <div className='flex items-center gap-2 text-sm text-slate-400'>
+                <div className='w-3 h-3 bg-slate-300 rounded-full animate-pulse'></div>
+                <span>Loading profile summary...</span>
+              </div>
+            ) : profileSummary ? (
+              <div className='text-sm text-slate-700 leading-relaxed bg-slate-50 rounded-lg p-4 border border-slate-100'>
+                {profileSummary}
+              </div>
+            ) : (
+              <div className='text-sm text-slate-500'>
+                No profile summary available.
+              </div>
+            )}
+          </div>
+          <div className='flex'>
+            <button
+              onClick={() => setShowProfileDialog(false)}
+              className='w-full px-4 py-2 text-sm font-medium text-slate-700 bg-slate-100 rounded-lg hover:bg-slate-200 focus:outline-none transition-colors'
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      </DialogContainer>
 
       {/* Cancel Request Confirmation Dialog */}
       <DialogContainer
