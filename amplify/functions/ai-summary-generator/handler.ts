@@ -36,28 +36,31 @@ Key Interests: ${interests.slice(0, 5).join(', ')}
 
 Generate a summary that highlights their professional profile without revealing personal details. Make it sound engaging and professional for networking purposes. Focus on their expertise, background, and interests.`;
 
-      // Invoke the model (Amazon Titan Text Lite format)
+      // Invoke the model (Claude format)
       const input: InvokeModelCommandInput = {
         modelId: process.env.MODEL_ID,
         contentType: 'application/json',
         accept: 'application/json',
         body: JSON.stringify({
-          inputText: prompt,
-          textGenerationConfig: {
-            maxTokenCount: 150,
-            temperature: 0.7,
-            topP: 0.9,
-            stopSequences: [],
-          },
+          anthropic_version: 'bedrock-2023-05-31',
+          max_tokens: 150,
+          temperature: 0.7,
+          top_p: 0.9,
+          messages: [
+            {
+              role: 'user',
+              content: prompt,
+            },
+          ],
         }),
       };
 
       const command = new InvokeModelCommand(input);
       const response = await client.send(command);
 
-      // Parse the response (Amazon Titan format)
+      // Parse the response (Claude format)
       const data = JSON.parse(Buffer.from(response.body).toString());
-      const summary = data.results[0].outputText.trim();
+      const summary = data.content[0].text.trim();
 
       return {
         summary,
