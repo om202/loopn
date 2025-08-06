@@ -45,15 +45,31 @@ export default function OnboardingPage() {
 
   // Load partial data from localStorage
   useEffect(() => {
-    const partialData = OnboardingService.getPartialOnboardingData();
-    if (partialData) {
-      setFormData(prev => ({ ...prev, ...partialData }));
-    }
+    const loadPartialData = async () => {
+      try {
+        const partialData = await OnboardingService.getPartialOnboardingData();
+        if (partialData) {
+          setFormData(prev => ({ ...prev, ...partialData }));
+        }
+      } catch (error) {
+        console.error('Error loading partial onboarding data:', error);
+      }
+    };
+    
+    loadPartialData();
   }, []);
 
   // Save partial data on form changes
   useEffect(() => {
-    OnboardingService.savePartialOnboardingData(formData);
+    const savePartialData = async () => {
+      try {
+        await OnboardingService.savePartialOnboardingData(formData);
+      } catch (error) {
+        console.error('Error saving partial onboarding data:', error);
+      }
+    };
+    
+    savePartialData();
   }, [formData]);
 
   const updateFormData = (

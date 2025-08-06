@@ -20,9 +20,20 @@ export interface UserOnboardingStatus {
   onboardingData?: OnboardingData;
 }
 
-const ONBOARDING_STORAGE_KEY = 'loopn_onboarding_status';
+const ONBOARDING_STORAGE_KEY_PREFIX = 'loopn_onboarding_status_';
 
 export class OnboardingService {
+  /**
+   * Get user-specific localStorage key
+   */
+  private static async getUserStorageKey(): Promise<string> {
+    const user = await getCurrentUser();
+    if (!user) {
+      throw new Error('User not authenticated');
+    }
+    return `${ONBOARDING_STORAGE_KEY_PREFIX}${user.userId}`;
+  }
+
   /**
    * Check if user has completed onboarding
    * First checks localStorage, then API if needed
@@ -30,7 +41,7 @@ export class OnboardingService {
   static async checkOnboardingStatus(): Promise<UserOnboardingStatus> {
     try {
       // First check localStorage
-      const cachedStatus = this.getOnboardingStatusFromStorage();
+      const cachedStatus = await this.getOnboardingStatusFromStorage();
       if (cachedStatus !== null) {
         return cachedStatus;
       }
@@ -65,7 +76,7 @@ export class OnboardingService {
         };
 
         // Cache the status
-        this.setOnboardingStatusInStorage(status);
+        await this.setOnboardingStatusInStorage(status);
         return status;
       }
 
@@ -74,7 +85,7 @@ export class OnboardingService {
         isOnboardingComplete: false,
       };
 
-      this.setOnboardingStatusInStorage(defaultStatus);
+      await this.setOnboardingStatusInStorage(defaultStatus);
       return defaultStatus;
     } catch (error) {
       console.error('Error checking onboarding status:', error);
@@ -112,7 +123,7 @@ export class OnboardingService {
         onboardingData: data,
       };
 
-      this.setOnboardingStatusInStorage(status);
+      await this.setOnboardingStatusInStorage(status);
     } catch (error) {
       console.error('Error completing onboarding:', error);
       throw error;
@@ -123,9 +134,9 @@ export class OnboardingService {
    * Save partial onboarding data to localStorage
    * This allows users to resume if they close the page
    */
-  static savePartialOnboardingData(data: Partial<OnboardingData>): void {
+  static async savePartialOnboardingData(data: Partial<OnboardingData>): Promise<void> {
     try {
-      const currentStatus = this.getOnboardingStatusFromStorage() || {
+      const currentStatus = (await this.getOnboardingStatusFromStorage()) || {
         isOnboardingComplete: false,
       };
 
@@ -137,7 +148,7 @@ export class OnboardingService {
         } as OnboardingData,
       };
 
-      this.setOnboardingStatusInStorage(updatedStatus);
+      await this.setOnboardingStatusInStorage(updatedStatus);
     } catch (error) {
       console.error('Error saving partial onboarding data:', error);
     }
@@ -146,9 +157,9 @@ export class OnboardingService {
   /**
    * Get partial onboarding data from localStorage
    */
-  static getPartialOnboardingData(): Partial<OnboardingData> | null {
+  static async getPartialOnboardingData(): Promise<Partial<OnboardingData> | null> {
     try {
-      const status = this.getOnboardingStatusFromStorage();
+      const status = await this.getOnboardingStatusFromStorage();
       return status?.onboardingData || null;
     } catch (error) {
       console.error('Error getting partial onboarding data:', error);
@@ -159,9 +170,10 @@ export class OnboardingService {
   /**
    * Clear onboarding data from localStorage
    */
-  static clearOnboardingData(): void {
+  static async clearOnboardingData(): Promise<void> {
     try {
-      localStorage.removeItem(ONBOARDING_STORAGE_KEY);
+      const storageKey = await this.getUserStorageKey();
+      localStorage.removeItem(storageKey);
     } catch (error) {
       console.error('Error clearing onboarding data:', error);
     }
@@ -171,16 +183,17 @@ export class OnboardingService {
    * Force refresh onboarding status from API
    */
   static async refreshOnboardingStatus(): Promise<UserOnboardingStatus> {
-    this.clearOnboardingData();
+    await this.clearOnboardingData();
     return this.checkOnboardingStatus();
   }
 
   // Private helper methods
-  private static getOnboardingStatusFromStorage(): UserOnboardingStatus | null {
+  private static async getOnboardingStatusFromStorage(): Promise<UserOnboardingStatus | null> {
     try {
       if (typeof window === 'undefined') return null;
 
-      const stored = localStorage.getItem(ONBOARDING_STORAGE_KEY);
+      const storageKey = await this.getUserStorageKey();
+      const stored = localStorage.getItem(storageKey);
       if (!stored) return null;
 
       return JSON.parse(stored);
@@ -190,13 +203,14 @@ export class OnboardingService {
     }
   }
 
-  private static setOnboardingStatusInStorage(
+  private static async setOnboardingStatusInStorage(
     status: UserOnboardingStatus
-  ): void {
+  ): Promise<void> {
     try {
       if (typeof window === 'undefined') return;
 
-      localStorage.setItem(ONBOARDING_STORAGE_KEY, JSON.stringify(status));
+      const storageKey = await this.getUserStorageKey();
+      localStorage.setItem(storageKey, JSON.stringify(status));
     } catch (error) {
       console.error('Error saving onboarding status to storage:', error);
     }
