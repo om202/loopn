@@ -7,7 +7,15 @@ import type { Notification } from '../components/notifications/types';
 type _AmplifyNotification = Schema['Notification']['type'];
 
 export class NotificationService {
-  private client = generateClient<Schema>();
+  private static client: ReturnType<typeof generateClient<Schema>> | null =
+    null;
+
+  private getClient() {
+    if (!NotificationService.client) {
+      NotificationService.client = generateClient<Schema>();
+    }
+    return NotificationService.client;
+  }
 
   /**
    * Create a new notification in the database
@@ -52,7 +60,7 @@ export class NotificationService {
       const expiresAt = new Date();
       expiresAt.setDate(expiresAt.getDate() + 30);
 
-      const result = await this.client.models.Notification.create({
+      const result = await this.getClient().models.Notification.create({
         userId,
         type,
         title,
@@ -85,7 +93,7 @@ export class NotificationService {
   ) {
     try {
       // Check if there's already a message notification for this conversation
-      const existingResult = await this.client.models.Notification.list({
+      const existingResult = await this.getClient().models.Notification.list({
         filter: {
           userId: { eq: userId },
           type: { eq: 'message' },
@@ -117,7 +125,7 @@ export class NotificationService {
         const updatedContent =
           newCount > 1 ? `${content} (+${newCount - 1} more)` : content;
 
-        const result = await this.client.models.Notification.update({
+        const result = await this.getClient().models.Notification.update({
           id: existingNotification.id,
           title,
           content: updatedContent,
@@ -132,7 +140,7 @@ export class NotificationService {
         const expiresAt = new Date();
         expiresAt.setDate(expiresAt.getDate() + 30);
 
-        const result = await this.client.models.Notification.create({
+        const result = await this.getClient().models.Notification.create({
           userId,
           type: 'message',
           title,
@@ -160,7 +168,7 @@ export class NotificationService {
    */
   async getUserNotifications(userId: string) {
     try {
-      const result = await this.client.models.Notification.list({
+      const result = await this.getClient().models.Notification.list({
         filter: { userId: { eq: userId } },
         // Note: We'll manually sort since Amplify query sorting is limited
       });
@@ -195,7 +203,7 @@ export class NotificationService {
    */
   async getUnreadNotifications(userId: string) {
     try {
-      const result = await this.client.models.Notification.list({
+      const result = await this.getClient().models.Notification.list({
         filter: {
           userId: { eq: userId },
           isRead: { eq: false },
@@ -232,7 +240,7 @@ export class NotificationService {
    */
   async markNotificationAsRead(notificationId: string) {
     try {
-      const result = await this.client.models.Notification.update({
+      const result = await this.getClient().models.Notification.update({
         id: notificationId,
         isRead: true,
         readAt: new Date().toISOString(),
@@ -250,7 +258,7 @@ export class NotificationService {
    */
   async deleteNotification(notificationId: string) {
     try {
-      const result = await this.client.models.Notification.delete({
+      const result = await this.getClient().models.Notification.delete({
         id: notificationId,
       });
 
@@ -269,7 +277,7 @@ export class NotificationService {
     conversationId: string
   ) {
     try {
-      const result = await this.client.models.Notification.list({
+      const result = await this.getClient().models.Notification.list({
         filter: {
           userId: { eq: userId },
           conversationId: { eq: conversationId },
@@ -311,7 +319,7 @@ export class NotificationService {
   ) {
     try {
       // First get notifications for this conversation
-      const result = await this.client.models.Notification.list({
+      const result = await this.getClient().models.Notification.list({
         filter: {
           userId: { eq: userId },
           conversationId: { eq: conversationId },
@@ -321,7 +329,7 @@ export class NotificationService {
       if (result.data && result.data.length > 0) {
         // Delete each notification
         const deletePromises = result.data.map(notif =>
-          this.client.models.Notification.delete({ id: notif.id })
+          this.getClient().models.Notification.delete({ id: notif.id })
         );
 
         await Promise.all(deletePromises);
@@ -346,7 +354,7 @@ export class NotificationService {
     chatRequestId: string
   ) {
     try {
-      const result = await this.client.models.Notification.list({
+      const result = await this.getClient().models.Notification.list({
         filter: {
           userId: { eq: userId },
           chatRequestId: { eq: chatRequestId },
@@ -355,7 +363,7 @@ export class NotificationService {
 
       if (result.data && result.data.length > 0) {
         const deletePromises = result.data.map(notif =>
-          this.client.models.Notification.delete({ id: notif.id })
+          this.getClient().models.Notification.delete({ id: notif.id })
         );
 
         await Promise.all(deletePromises);
@@ -380,33 +388,35 @@ export class NotificationService {
     onNext: (notifications: Notification[]) => void,
     onError?: (error: unknown) => void
   ) {
-    const subscription = this.client.models.Notification.observeQuery({
-      filter: {
-        userId: { eq: userId },
-        isRead: { eq: false },
-      },
-    }).subscribe({
-      next: ({ items }) => {
-        // Sort by timestamp descending (newest first)
-        const sortedNotifications = items.sort(
-          (a, b) =>
-            new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-        );
+    const subscription = this.getClient()
+      .models.Notification.observeQuery({
+        filter: {
+          userId: { eq: userId },
+          isRead: { eq: false },
+        },
+      })
+      .subscribe({
+        next: ({ items }) => {
+          // Sort by timestamp descending (newest first)
+          const sortedNotifications = items.sort(
+            (a, b) =>
+              new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+          );
 
-        // Parse JSON data field back to objects
-        const notificationsWithParsedData: Notification[] =
-          sortedNotifications.map(notif => ({
-            ...notif,
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            data: notif.data ? JSON.parse(notif.data as string) : undefined,
-          }));
+          // Parse JSON data field back to objects
+          const notificationsWithParsedData: Notification[] =
+            sortedNotifications.map(notif => ({
+              ...notif,
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              data: notif.data ? JSON.parse(notif.data as string) : undefined,
+            }));
 
-        onNext(notificationsWithParsedData);
-      },
-      error:
-        onError ||
-        (error => console.error('Error observing notifications:', error)),
-    });
+          onNext(notificationsWithParsedData);
+        },
+        error:
+          onError ||
+          (error => console.error('Error observing notifications:', error)),
+      });
 
     return subscription;
   }

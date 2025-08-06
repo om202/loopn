@@ -3,7 +3,14 @@
 import { generateClient } from 'aws-amplify/data';
 import type { Schema } from '../../amplify/data/resource';
 
-const client = generateClient<Schema>();
+let client: ReturnType<typeof generateClient<Schema>> | null = null;
+
+const getClient = () => {
+  if (!client) {
+    client = generateClient<Schema>();
+  }
+  return client;
+};
 
 type MessageReaction = Schema['MessageReaction']['type'];
 
@@ -35,7 +42,7 @@ export class ReactionService {
       }
 
       const timestamp = new Date();
-      const result = await client.models.MessageReaction.create({
+      const result = await getClient().models.MessageReaction.create({
         messageId,
         userId,
         emoji,
@@ -60,7 +67,7 @@ export class ReactionService {
     reactionId: string
   ): Promise<DataResult<MessageReaction>> {
     try {
-      const result = await client.models.MessageReaction.delete({
+      const result = await getClient().models.MessageReaction.delete({
         id: reactionId,
       });
 
@@ -81,7 +88,7 @@ export class ReactionService {
     messageId: string
   ): Promise<ListResult<MessageReaction>> {
     try {
-      const result = await client.models.MessageReaction.list({
+      const result = await getClient().models.MessageReaction.list({
         filter: {
           messageId: {
             eq: messageId,
@@ -114,7 +121,7 @@ export class ReactionService {
       }
 
       // Try using the OR filter syntax for AppSync
-      const result = await client.models.MessageReaction.list({
+      const result = await getClient().models.MessageReaction.list({
         filter: {
           or: messageIds.map(messageId => ({
             messageId: { eq: messageId },
@@ -254,8 +261,9 @@ export class ReactionService {
     onError?: (error: Error) => void
   ) {
     // Subscribe to new reactions
-    const createSubscription =
-      client.models.MessageReaction.onCreate().subscribe({
+    const createSubscription = getClient()
+      .models.MessageReaction.onCreate()
+      .subscribe({
         next: reaction => {
           // Only notify for reactions on messages we're watching
           if (messageIds.includes(reaction.messageId)) {
@@ -270,8 +278,9 @@ export class ReactionService {
       });
 
     // Subscribe to deleted reactions
-    const deleteSubscription =
-      client.models.MessageReaction.onDelete().subscribe({
+    const deleteSubscription = getClient()
+      .models.MessageReaction.onDelete()
+      .subscribe({
         next: reaction => {
           // Only notify for reactions on messages we're watching
           if (messageIds.includes(reaction.messageId)) {

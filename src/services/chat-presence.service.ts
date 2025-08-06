@@ -8,7 +8,15 @@ import type { Schema } from '../../amplify/data/resource';
  * Just tracks if user is actively in a chat window
  */
 class ChatPresenceService {
-  private client = generateClient<Schema>();
+  private static client: ReturnType<typeof generateClient<Schema>> | null =
+    null;
+
+  private getClient() {
+    if (!ChatPresenceService.client) {
+      ChatPresenceService.client = generateClient<Schema>();
+    }
+    return ChatPresenceService.client;
+  }
   private currentUserId: string | null = null;
   private currentChatId: string | null = null;
 
@@ -29,7 +37,7 @@ class ChatPresenceService {
     this.currentChatId = chatId;
 
     try {
-      await this.client.models.UserPresence.update({
+      await this.getClient().models.UserPresence.update({
         userId: this.currentUserId,
         activeChatId: chatId,
         lastChatActivity: new Date().toISOString(),
@@ -48,7 +56,7 @@ class ChatPresenceService {
     this.currentChatId = null;
 
     try {
-      await this.client.models.UserPresence.update({
+      await this.getClient().models.UserPresence.update({
         userId: this.currentUserId,
         activeChatId: null,
         lastChatActivity: new Date().toISOString(),
@@ -63,7 +71,7 @@ class ChatPresenceService {
    */
   async isUserActiveInChat(userId: string, chatId: string): Promise<boolean> {
     try {
-      const presence = await this.client.models.UserPresence.get({
+      const presence = await this.getClient().models.UserPresence.get({
         userId,
       });
 

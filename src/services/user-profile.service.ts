@@ -1,9 +1,22 @@
 import { generateClient } from 'aws-amplify/data';
 import type { Schema } from '@/../../amplify/data/resource';
 import { getCurrentUser } from 'aws-amplify/auth';
+import { amplifyInitialization } from '../lib/amplify-initialization';
 
-// Generate the client
-const client = generateClient<Schema>();
+// Lazy client generation
+let client: ReturnType<typeof generateClient<Schema>> | null = null;
+
+const getClient = () => {
+  if (!client) {
+    client = generateClient<Schema>();
+  }
+  return client;
+};
+
+// Helper function to ensure Amplify is ready before making API calls
+async function ensureAmplifyReady(): Promise<void> {
+  await amplifyInitialization.waitForReady();
+}
 
 // Constants for localStorage
 const PROFILE_SUMMARY_STORAGE_KEY_PREFIX = 'loopn_profile_summary_';
@@ -85,7 +98,7 @@ export class UserProfileService {
         throw new Error('User not authenticated');
       }
 
-      const userPresence = await client.models.UserPresence.get({
+      const userPresence = await getClient().models.UserPresence.get({
         userId: user.userId,
       });
 
@@ -140,8 +153,11 @@ export class UserProfileService {
         return cachedSummary;
       }
 
+      // Ensure Amplify is ready before making API calls
+      await ensureAmplifyReady();
+
       // If not in cache, fetch from API
-      const userPresence = await client.models.UserPresence.get({
+      const userPresence = await getClient().models.UserPresence.get({
         userId: userId,
       });
 
@@ -183,7 +199,7 @@ export class UserProfileService {
     if (uncachedUserIds.length > 0) {
       try {
         const promises = uncachedUserIds.map(async userId => {
-          const userPresence = await client.models.UserPresence.get({
+          const userPresence = await getClient().models.UserPresence.get({
             userId: userId,
           });
 

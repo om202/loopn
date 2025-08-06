@@ -36,11 +36,13 @@ export default function ProtectedRoute({
         return;
       }
 
-      // Initialize simple presence management
-      simplePresenceManager.initialize(
-        user.userId,
-        user.signInDetails?.loginId || ''
-      );
+      // Initialize simple presence management with delay to ensure auth is ready
+      setTimeout(() => {
+        simplePresenceManager.initialize(
+          user.userId,
+          user.signInDetails?.loginId || ''
+        );
+      }, 2000); // 2 second delay
 
       return () => {
         // Cleanup will be handled when auth status changes
@@ -53,7 +55,7 @@ export default function ProtectedRoute({
   }
 
   if (authStatus === 'configuring') {
-    return children; // Show the page immediately, let components handle their own loading
+    return null; // Wait for auth to complete before showing components
   }
 
   if (authStatus === 'authenticated' && user) {

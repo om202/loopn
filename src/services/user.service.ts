@@ -1,5 +1,5 @@
 import type { Schema } from '../../amplify/data/resource';
-import { client } from '../lib/amplify-config';
+import { getClient } from '../lib/amplify-config';
 
 type UserPresence = Schema['UserPresence']['type'];
 type DataResult<T> = { data: T | null; error: string | null };
@@ -12,12 +12,12 @@ export class UserService {
     status: 'ONLINE' | 'OFFLINE' | 'BUSY'
   ): Promise<DataResult<UserPresence>> {
     try {
-      const existingResult = await client.models.UserPresence.get({
+      const existingResult = await getClient().models.UserPresence.get({
         userId,
       });
 
       if (existingResult.data) {
-        const result = await client.models.UserPresence.update({
+        const result = await getClient().models.UserPresence.update({
           userId,
           email,
           status,
@@ -31,7 +31,7 @@ export class UserService {
         };
       }
 
-      const result = await client.models.UserPresence.create({
+      const result = await getClient().models.UserPresence.create({
         userId,
         email,
         status,
@@ -56,7 +56,7 @@ export class UserService {
 
   async getUserPresence(userId: string): Promise<DataResult<UserPresence>> {
     try {
-      const result = await client.models.UserPresence.get({ userId });
+      const result = await getClient().models.UserPresence.get({ userId });
       return {
         data: result.data,
         error: null,
@@ -74,7 +74,7 @@ export class UserService {
 
   async getOnlineUsers(): Promise<ListResult<UserPresence>> {
     try {
-      const result = await client.models.UserPresence.list({
+      const result = await getClient().models.UserPresence.list({
         filter: {
           status: { eq: 'ONLINE' },
           isOnline: { eq: true },
@@ -123,25 +123,29 @@ export class UserService {
   ) {
     let previousOnlineUserIds = new Set<string>();
 
-    return client.models.UserPresence.observeQuery({}).subscribe({
-      next: ({ items }) => {
-        const onlineUsers = items.filter(user => user.isOnline === true);
-        const currentOnlineUserIds = new Set(onlineUsers.map(u => u.userId));
+    return getClient()
+      .models.UserPresence.observeQuery({})
+      .subscribe({
+        next: ({ items }) => {
+          const onlineUsers = items.filter(user => user.isOnline === true);
+          const currentOnlineUserIds = new Set(onlineUsers.map(u => u.userId));
 
-        if (
-          currentOnlineUserIds.size !== previousOnlineUserIds.size ||
-          ![...currentOnlineUserIds].every(id => previousOnlineUserIds.has(id))
-        ) {
-          previousOnlineUserIds = currentOnlineUserIds;
-          callback(onlineUsers);
-        }
-      },
-      error: error => {
-        if (onError) {
-          onError(error);
-        }
-      },
-    });
+          if (
+            currentOnlineUserIds.size !== previousOnlineUserIds.size ||
+            ![...currentOnlineUserIds].every(id =>
+              previousOnlineUserIds.has(id)
+            )
+          ) {
+            previousOnlineUserIds = currentOnlineUserIds;
+            callback(onlineUsers);
+          }
+        },
+        error: error => {
+          if (onError) {
+            onError(error);
+          }
+        },
+      });
   }
 
   observeUserPresence(
@@ -149,21 +153,23 @@ export class UserService {
     callback: (presence: UserPresence | null) => void,
     onError?: (error: Error) => void
   ) {
-    return client.models.UserPresence.observeQuery({
-      filter: {
-        userId: { eq: userId },
-      },
-    }).subscribe({
-      next: ({ items }) => {
-        const presence = items.length > 0 ? items[0] : null;
-        callback(presence);
-      },
-      error: error => {
-        if (onError) {
-          onError(error);
-        }
-      },
-    });
+    return getClient()
+      .models.UserPresence.observeQuery({
+        filter: {
+          userId: { eq: userId },
+        },
+      })
+      .subscribe({
+        next: ({ items }) => {
+          const presence = items.length > 0 ? items[0] : null;
+          callback(presence);
+        },
+        error: error => {
+          if (onError) {
+            onError(error);
+          }
+        },
+      });
   }
 }
 

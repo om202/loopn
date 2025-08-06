@@ -1,8 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useEffect } from 'react';
-import { generateClient } from 'aws-amplify/data';
-import type { Schema } from '../../amplify/data/resource';
+import { getClient } from '@/lib/amplify-config';
 import {
   subscriptionManager,
   createSubscriptionKey,
@@ -75,7 +74,7 @@ interface RealtimeProviderProps {
 }
 
 export function RealtimeProvider({ children }: RealtimeProviderProps) {
-  const client = generateClient<Schema>();
+  const client = getClient();
 
   // Cleanup on unmount
   useEffect(() => {

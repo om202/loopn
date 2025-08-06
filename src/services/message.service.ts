@@ -1,5 +1,5 @@
 import type { Schema } from '../../amplify/data/resource';
-import { client } from '../lib/amplify-config';
+import { getClient } from '../lib/amplify-config';
 import { notificationService } from './notification.service';
 import { userService } from './user.service';
 
@@ -21,7 +21,7 @@ export class MessageService {
   ): Promise<DataResult<Message>> {
     try {
       // Get conversation to determine receiverId
-      const conversationResult = await client.models.Conversation.get({
+      const conversationResult = await getClient().models.Conversation.get({
         id: conversationId,
       });
 
@@ -42,7 +42,7 @@ export class MessageService {
       const sortKey = `${timestamp.toISOString()}_${crypto.randomUUID()}`;
 
       // Create the message with proper authorization
-      const result = await client.models.Message.create({
+      const result = await getClient().models.Message.create({
         conversationId,
         senderId,
         receiverId,
@@ -110,7 +110,7 @@ export class MessageService {
     nextToken?: string
   ): Promise<ListResult<Message> & { nextToken?: string }> {
     try {
-      const result = await client.models.Message.list({
+      const result = await getClient().models.Message.list({
         filter: {
           conversationId: { eq: conversationId },
         },
@@ -154,7 +154,7 @@ export class MessageService {
 
   async markMessageAsRead(messageId: string): Promise<DataResult<Message>> {
     try {
-      const result = await client.models.Message.update({
+      const result = await getClient().models.Message.update({
         id: messageId,
         isRead: true,
         readAt: new Date().toISOString(),
@@ -177,7 +177,7 @@ export class MessageService {
 
   async deleteMessage(messageId: string): Promise<DataResult<void>> {
     try {
-      await client.models.Message.update({
+      await getClient().models.Message.update({
         id: messageId,
         isDeleted: true,
         deletedAt: new Date().toISOString(),
@@ -201,28 +201,34 @@ export class MessageService {
     callback: (messages: Message[]) => void,
     onError?: (error: Error) => void
   ) {
-    return client.models.Message.observeQuery({
-      filter: {
-        conversationId: { eq: conversationId },
-      },
-    }).subscribe({
-      next: data => {
-        // Sort messages by timestamp (oldest first for chat display)
-        // Create a new array to avoid mutating the original and ensure React detects changes
-        const typedData = data as { items: Message[] };
-        const sortedMessages = [...typedData.items].sort((a, b) => {
-          const timestampA = a.timestamp ? new Date(a.timestamp).getTime() : 0;
-          const timestampB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
-          return timestampA - timestampB;
-        });
-        callback(sortedMessages);
-      },
-      error: error => {
-        if (onError) {
-          onError(error);
-        }
-      },
-    });
+    return getClient()
+      .models.Message.observeQuery({
+        filter: {
+          conversationId: { eq: conversationId },
+        },
+      })
+      .subscribe({
+        next: data => {
+          // Sort messages by timestamp (oldest first for chat display)
+          // Create a new array to avoid mutating the original and ensure React detects changes
+          const typedData = data as { items: Message[] };
+          const sortedMessages = [...typedData.items].sort((a, b) => {
+            const timestampA = a.timestamp
+              ? new Date(a.timestamp).getTime()
+              : 0;
+            const timestampB = b.timestamp
+              ? new Date(b.timestamp).getTime()
+              : 0;
+            return timestampA - timestampB;
+          });
+          callback(sortedMessages);
+        },
+        error: error => {
+          if (onError) {
+            onError(error);
+          }
+        },
+      });
   }
 
   // Subscribe to new messages across all conversations for a user
@@ -231,19 +237,21 @@ export class MessageService {
     callback: (message: Message) => void,
     onError?: (error: Error) => void
   ) {
-    return client.models.Message.onCreate().subscribe({
-      next: message => {
-        // Only notify for messages not sent by the current user
-        if (message.senderId !== userId) {
-          callback(message);
-        }
-      },
-      error: error => {
-        if (onError) {
-          onError(error);
-        }
-      },
-    });
+    return getClient()
+      .models.Message.onCreate()
+      .subscribe({
+        next: message => {
+          // Only notify for messages not sent by the current user
+          if (message.senderId !== userId) {
+            callback(message);
+          }
+        },
+        error: error => {
+          if (onError) {
+            onError(error);
+          }
+        },
+      });
   }
 }
 

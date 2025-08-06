@@ -8,4 +8,12 @@ import outputs from '../../amplify_outputs.json';
 // Configure for both server and client
 Amplify.configure(outputs, { ssr: true });
 
-export const client = generateClient<Schema>();
+// Lazy client generation
+let client: ReturnType<typeof generateClient<Schema>> | null = null;
+
+export const getClient = () => {
+  if (!client) {
+    client = generateClient<Schema>();
+  }
+  return client;
+};

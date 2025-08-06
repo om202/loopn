@@ -1,9 +1,7 @@
 import { generateClient } from 'aws-amplify/data';
 import type { Schema } from '@/../../amplify/data/resource';
 import { getCurrentUser } from 'aws-amplify/auth';
-
-// Generate the client
-const client = generateClient<Schema>();
+import { amplifyInitialization } from '../lib/amplify-initialization';
 
 export interface OnboardingData {
   jobRole: string;
@@ -46,12 +44,16 @@ export class OnboardingService {
         return cachedStatus;
       }
 
+      // Ensure Amplify is ready before making API calls
+      await amplifyInitialization.waitForReady();
+
       // If not in localStorage, check API
       const user = await getCurrentUser();
       if (!user) {
         throw new Error('User not authenticated');
       }
 
+      const client = generateClient<Schema>();
       const userPresence = await client.models.UserPresence.get({
         userId: user.userId,
       });
@@ -98,10 +100,15 @@ export class OnboardingService {
    */
   static async completeOnboarding(data: OnboardingData): Promise<void> {
     try {
+      // Ensure Amplify is ready before making API calls
+      await amplifyInitialization.waitForReady();
+
       const user = await getCurrentUser();
       if (!user) {
         throw new Error('User not authenticated');
       }
+
+      const client = generateClient<Schema>();
 
       // Generate AI summary in the background
       let anonymousSummary = '';

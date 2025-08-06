@@ -94,7 +94,9 @@ export default function NotificationBell() {
       }
     };
 
-    loadNotifications();
+    // Add delay to ensure auth is fully ready
+    const timeoutId = setTimeout(loadNotifications, 1500);
+    return () => clearTimeout(timeoutId);
   }, [user]);
 
   useEffect(() => {
@@ -214,24 +216,29 @@ export default function NotificationBell() {
       return;
     }
 
-    const messageSubscription = messageService.subscribeToNewMessages(
-      user.userId,
-      async message => {
-        const currentConversationId = getCurrentConversationId();
+    // Add delay to ensure auth is fully ready
+    const timeoutId = setTimeout(() => {
+      const messageSubscription = messageService.subscribeToNewMessages(
+        user.userId,
+        async message => {
+          const currentConversationId = getCurrentConversationId();
 
-        // Only play sound if not in the current conversation
-        if (currentConversationId !== message.conversationId) {
-          soundService.playBellSound();
+          // Only play sound if not in the current conversation
+          if (currentConversationId !== message.conversationId) {
+            soundService.playBellSound();
+          }
+        },
+        error => {
+          console.error('Error subscribing to messages:', error);
         }
-      },
-      error => {
-        console.error('Error subscribing to messages:', error);
-      }
-    );
+      );
 
-    return () => {
-      messageSubscription.unsubscribe();
-    };
+      return () => {
+        messageSubscription.unsubscribe();
+      };
+    }, 1500);
+
+    return () => clearTimeout(timeoutId);
   }, [user, getCurrentConversationId]);
 
   // Subscribe to real-time notification changes using AppSync
@@ -240,22 +247,28 @@ export default function NotificationBell() {
       return;
     }
 
-    const notificationSubscription =
-      notificationService.observeUserNotifications(
-        user.userId,
-        notifications => {
-          const groupedNotifications = groupMessageNotifications(notifications);
-          setNotifications(groupedNotifications);
-        },
-        error => {
-          console.error('Error observing notifications:', error);
-          setError('Failed to load notifications');
-        }
-      );
+    // Add delay to ensure auth is fully ready
+    const timeoutId = setTimeout(() => {
+      const notificationSubscription =
+        notificationService.observeUserNotifications(
+          user.userId,
+          notifications => {
+            const groupedNotifications =
+              groupMessageNotifications(notifications);
+            setNotifications(groupedNotifications);
+          },
+          error => {
+            console.error('Error observing notifications:', error);
+            setError('Failed to load notifications');
+          }
+        );
 
-    return () => {
-      notificationSubscription.unsubscribe();
-    };
+      return () => {
+        notificationSubscription.unsubscribe();
+      };
+    }, 1500);
+
+    return () => clearTimeout(timeoutId);
   }, [user, groupMessageNotifications]);
 
   useEffect(() => {

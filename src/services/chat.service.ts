@@ -1,5 +1,5 @@
 import type { Schema } from '../../amplify/data/resource';
-import { client } from '../lib/amplify-config';
+import { getClient } from '../lib/amplify-config';
 import { notificationService } from './notification.service';
 import { userService } from './user.service';
 
@@ -51,7 +51,7 @@ export class ChatService {
 
       const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
 
-      const result = await client.models.ChatRequest.create({
+      const result = await getClient().models.ChatRequest.create({
         requesterId,
         receiverId,
         status: 'PENDING',
@@ -99,7 +99,7 @@ export class ChatService {
   > {
     try {
       // First get the chat request to get participant IDs
-      const chatRequestResult = await client.models.ChatRequest.get({
+      const chatRequestResult = await getClient().models.ChatRequest.get({
         id: chatRequestId,
       });
 
@@ -111,7 +111,7 @@ export class ChatService {
       }
 
       // Update the chat request status
-      const result = await client.models.ChatRequest.update({
+      const result = await getClient().models.ChatRequest.update({
         id: chatRequestId,
         status,
         respondedAt: new Date().toISOString(),
@@ -169,7 +169,7 @@ export class ChatService {
           const expiresAt = new Date();
           expiresAt.setDate(expiresAt.getDate() + 1); // 24 hours only
 
-          await client.models.Notification.create({
+          await getClient().models.Notification.create({
             userId: chatRequestResult.data.requesterId,
             type: 'connection',
             title: 'Chat Request Accepted!',
@@ -211,7 +211,7 @@ export class ChatService {
   ): Promise<DataResult<boolean>> {
     try {
       // Find the pending chat request between these users
-      const result = await client.models.ChatRequest.list({
+      const result = await getClient().models.ChatRequest.list({
         filter: {
           requesterId: { eq: requesterId },
           receiverId: { eq: receiverId },
@@ -228,7 +228,7 @@ export class ChatService {
 
       // Update the first matching request to REJECTED status
       const chatRequest = result.data[0];
-      const updateResult = await client.models.ChatRequest.update({
+      const updateResult = await getClient().models.ChatRequest.update({
         id: chatRequest.id,
         status: 'REJECTED', // Use REJECTED to mark as cancelled
         respondedAt: new Date().toISOString(),
@@ -272,7 +272,7 @@ export class ChatService {
     userId: string
   ): Promise<ListResult<ChatRequest>> {
     try {
-      const result = await client.models.ChatRequest.list({
+      const result = await getClient().models.ChatRequest.list({
         filter: {
           receiverId: { eq: userId },
           status: { eq: 'PENDING' },
@@ -296,7 +296,7 @@ export class ChatService {
 
   async getSentChatRequests(userId: string): Promise<ListResult<ChatRequest>> {
     try {
-      const result = await client.models.ChatRequest.list({
+      const result = await getClient().models.ChatRequest.list({
         filter: {
           requesterId: { eq: userId },
           status: { eq: 'PENDING' },
@@ -323,7 +323,7 @@ export class ChatService {
     receiverId: string
   ): Promise<DataResult<boolean>> {
     try {
-      const result = await client.models.ChatRequest.list({
+      const result = await getClient().models.ChatRequest.list({
         filter: {
           requesterId: { eq: requesterId },
           receiverId: { eq: receiverId },
@@ -349,7 +349,7 @@ export class ChatService {
   async clearStuckPendingRequests(userId: string): Promise<DataResult<number>> {
     try {
       // Get all pending sent requests for this user
-      const sentResult = await client.models.ChatRequest.list({
+      const sentResult = await getClient().models.ChatRequest.list({
         filter: {
           requesterId: { eq: userId },
           status: { eq: 'PENDING' },
@@ -372,7 +372,7 @@ export class ChatService {
 
       // Update stuck requests to EXPIRED status
       const updatePromises = stuckRequests.map(request =>
-        client.models.ChatRequest.update({
+        getClient().models.ChatRequest.update({
           id: request.id,
           status: 'REJECTED', // Use REJECTED to clear them
           respondedAt: new Date().toISOString(),
@@ -406,7 +406,7 @@ export class ChatService {
       const now = new Date();
       const probationEndsAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000); // 7 days
 
-      const result = await client.models.Conversation.create({
+      const result = await getClient().models.Conversation.create({
         participant1Id,
         participant2Id,
         isConnected: false,
@@ -436,7 +436,7 @@ export class ChatService {
     userId: string
   ): Promise<ListResult<Conversation>> {
     try {
-      const result = await client.models.Conversation.list({
+      const result = await getClient().models.Conversation.list({
         filter: {
           or: [
             { participant1Id: { eq: userId } },
@@ -466,7 +466,7 @@ export class ChatService {
   ): Promise<DataResult<Conversation>> {
     try {
       // First get the conversation to know the participants
-      const conversationResult = await client.models.Conversation.get({
+      const conversationResult = await getClient().models.Conversation.get({
         id: conversationId,
       });
 
@@ -480,7 +480,7 @@ export class ChatService {
       const conversation = conversationResult.data;
 
       // Update conversation to ended status
-      const result = await client.models.Conversation.update({
+      const result = await getClient().models.Conversation.update({
         id: conversationId,
         chatStatus: 'ENDED',
         endedAt: new Date().toISOString(),
@@ -492,7 +492,7 @@ export class ChatService {
       // TODO: when deploying change to 2 weeks (14 * 24 * 60 * 60 * 1000)
       const restrictionEnds = new Date(now.getTime() + 3 * 60 * 1000); // 3 minutes for testing
 
-      await client.models.ChatRestriction.create({
+      await getClient().models.ChatRestriction.create({
         user1Id: conversation.participant1Id,
         user2Id: conversation.participant2Id,
         endedConversationId: conversationId,
@@ -519,7 +519,7 @@ export class ChatService {
     try {
       const newProbationEnd = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
-      const result = await client.models.Conversation.update({
+      const result = await getClient().models.Conversation.update({
         id: conversationId,
         probationEndsAt: newProbationEnd.toISOString(),
       });
@@ -543,7 +543,7 @@ export class ChatService {
     conversationId: string
   ): Promise<DataResult<Conversation>> {
     try {
-      const result = await client.models.Conversation.get({
+      const result = await getClient().models.Conversation.get({
         id: conversationId,
       });
 
@@ -566,7 +566,7 @@ export class ChatService {
   ): Promise<DataResult<Conversation>> {
     try {
       // Try to find conversation where user1 is participant1 and user2 is participant2
-      let result = await client.models.Conversation.list({
+      let result = await getClient().models.Conversation.list({
         filter: {
           participant1Id: { eq: user1Id },
           participant2Id: { eq: user2Id },
@@ -576,7 +576,7 @@ export class ChatService {
 
       // If not found, try the opposite
       if (!result.data || result.data.length === 0) {
-        result = await client.models.Conversation.list({
+        result = await getClient().models.Conversation.list({
           filter: {
             participant1Id: { eq: user2Id },
             participant2Id: { eq: user1Id },
@@ -611,7 +611,7 @@ export class ChatService {
     conversationId: string
   ): Promise<DataResult<UserConnection>> {
     try {
-      const result = await client.models.UserConnection.create({
+      const result = await getClient().models.UserConnection.create({
         requesterId,
         receiverId,
         conversationId,
@@ -638,7 +638,7 @@ export class ChatService {
     status: 'ACCEPTED' | 'REJECTED'
   ): Promise<DataResult<UserConnection>> {
     try {
-      const result = await client.models.UserConnection.update({
+      const result = await getClient().models.UserConnection.update({
         id: connectionId,
         status,
         respondedAt: new Date().toISOString(),
@@ -670,7 +670,7 @@ export class ChatService {
 
       // Check if there's an active restriction between these users
       // We need to check both directions since restrictions can be created with either user as user1
-      const restriction1 = await client.models.ChatRestriction.list({
+      const restriction1 = await getClient().models.ChatRestriction.list({
         filter: {
           user1Id: { eq: user1Id },
           user2Id: { eq: user2Id },
@@ -678,7 +678,7 @@ export class ChatService {
         },
       });
 
-      const restriction2 = await client.models.ChatRestriction.list({
+      const restriction2 = await getClient().models.ChatRestriction.list({
         filter: {
           user1Id: { eq: user2Id },
           user2Id: { eq: user1Id },
@@ -712,25 +712,27 @@ export class ChatService {
     callback: (requests: ChatRequest[]) => void,
     onError?: (error: Error) => void
   ) {
-    return client.models.ChatRequest.observeQuery({
-      filter: {
-        receiverId: { eq: userId },
-      },
-    }).subscribe({
-      next: data => {
-        // Filter pending requests in JavaScript instead
-        const typedData = data as { items: ChatRequest[] };
-        const pendingRequests = typedData.items.filter(
-          request => request.status === 'PENDING'
-        );
-        callback(pendingRequests);
-      },
-      error: error => {
-        if (onError) {
-          onError(error);
-        }
-      },
-    });
+    return getClient()
+      .models.ChatRequest.observeQuery({
+        filter: {
+          receiverId: { eq: userId },
+        },
+      })
+      .subscribe({
+        next: data => {
+          // Filter pending requests in JavaScript instead
+          const typedData = data as { items: ChatRequest[] };
+          const pendingRequests = typedData.items.filter(
+            request => request.status === 'PENDING'
+          );
+          callback(pendingRequests);
+        },
+        error: error => {
+          if (onError) {
+            onError(error);
+          }
+        },
+      });
   }
 
   observeSentChatRequests(
@@ -738,25 +740,27 @@ export class ChatService {
     callback: (requests: ChatRequest[]) => void,
     onError?: (error: Error) => void
   ) {
-    return client.models.ChatRequest.observeQuery({
-      filter: {
-        requesterId: { eq: userId },
-      },
-    }).subscribe({
-      next: data => {
-        // Filter pending requests in JavaScript instead
-        const typedData = data as { items: ChatRequest[] };
-        const pendingRequests = typedData.items.filter(
-          request => request.status === 'PENDING'
-        );
-        callback(pendingRequests);
-      },
-      error: error => {
-        if (onError) {
-          onError(error);
-        }
-      },
-    });
+    return getClient()
+      .models.ChatRequest.observeQuery({
+        filter: {
+          requesterId: { eq: userId },
+        },
+      })
+      .subscribe({
+        next: data => {
+          // Filter pending requests in JavaScript instead
+          const typedData = data as { items: ChatRequest[] };
+          const pendingRequests = typedData.items.filter(
+            request => request.status === 'PENDING'
+          );
+          callback(pendingRequests);
+        },
+        error: error => {
+          if (onError) {
+            onError(error);
+          }
+        },
+      });
   }
 
   observeConversations(
@@ -764,24 +768,26 @@ export class ChatService {
     callback: (conversations: Conversation[]) => void,
     onError?: (error: Error) => void
   ) {
-    return client.models.Conversation.observeQuery({
-      filter: {
-        or: [
-          { participant1Id: { eq: userId } },
-          { participant2Id: { eq: userId } },
-        ],
-      },
-    }).subscribe({
-      next: data => {
-        const typedData = data as { items: Conversation[] };
-        callback(typedData.items);
-      },
-      error: error => {
-        if (onError) {
-          onError(error);
-        }
-      },
-    });
+    return getClient()
+      .models.Conversation.observeQuery({
+        filter: {
+          or: [
+            { participant1Id: { eq: userId } },
+            { participant2Id: { eq: userId } },
+          ],
+        },
+      })
+      .subscribe({
+        next: data => {
+          const typedData = data as { items: Conversation[] };
+          callback(typedData.items);
+        },
+        error: error => {
+          if (onError) {
+            onError(error);
+          }
+        },
+      });
   }
 }
 

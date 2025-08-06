@@ -98,12 +98,17 @@ class SimplePresenceManager {
     if (!this.currentUser) return;
 
     // Set user online initially (only if not signing out)
+    // Add a small delay to ensure auth is fully ready
     if (!this.isSigningOut) {
-      userService
-        .setUserOnline(this.currentUser.userId, this.currentUser.email)
-        .catch(error =>
-          console.error('Failed to set user online during setup:', error)
-        );
+      setTimeout(() => {
+        if (!this.isSigningOut && this.isInitialized) {
+          userService
+            .setUserOnline(this.currentUser!.userId, this.currentUser!.email)
+            .catch(error =>
+              console.error('Failed to set user online during setup:', error)
+            );
+        }
+      }, 1000); // 1 second delay
     }
 
     // Listen to AppSync connection state changes
