@@ -103,7 +103,29 @@ export class OnboardingService {
         throw new Error('User not authenticated');
       }
 
-      // Update user presence with onboarding data
+      // Generate AI summary in the background
+      let anonymousSummary = '';
+      try {
+        const summaryResponse = await client.queries.generateAnonymousSummary({
+          jobRole: data.jobRole,
+          companyName: data.companyName,
+          industry: data.industry,
+          yearsOfExperience: data.yearsOfExperience,
+          education: data.education,
+          about: data.about,
+          interests: data.interests,
+        });
+
+        if (summaryResponse.data?.summary) {
+          anonymousSummary = summaryResponse.data.summary;
+        }
+      } catch (aiError) {
+        console.warn('AI summary generation failed, using fallback:', aiError);
+        // Create a simple fallback summary
+        anonymousSummary = `${data.jobRole} with ${data.yearsOfExperience} years of experience in ${data.industry}. Passionate about ${data.interests.slice(0, 2).join(' and ')}.`;
+      }
+
+      // Update user presence with onboarding data and AI summary
       await client.models.UserPresence.update({
         userId: user.userId,
         jobRole: data.jobRole,
@@ -115,6 +137,7 @@ export class OnboardingService {
         interests: data.interests,
         isOnboardingComplete: true,
         onboardingCompletedAt: new Date().toISOString(),
+        anonymousSummary: anonymousSummary,
       });
 
       // Update localStorage
@@ -134,7 +157,9 @@ export class OnboardingService {
    * Save partial onboarding data to localStorage
    * This allows users to resume if they close the page
    */
-  static async savePartialOnboardingData(data: Partial<OnboardingData>): Promise<void> {
+  static async savePartialOnboardingData(
+    data: Partial<OnboardingData>
+  ): Promise<void> {
     try {
       const currentStatus = (await this.getOnboardingStatusFromStorage()) || {
         isOnboardingComplete: false,

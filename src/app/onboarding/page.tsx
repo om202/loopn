@@ -38,7 +38,10 @@ export default function OnboardingPage() {
   useEffect(() => {
     if (authStatus === 'unauthenticated') {
       router.replace('/auth');
-    } else if (authStatus === 'authenticated' && onboardingStatus?.isOnboardingComplete) {
+    } else if (
+      authStatus === 'authenticated' &&
+      onboardingStatus?.isOnboardingComplete
+    ) {
       router.replace('/dashboard');
     }
   }, [authStatus, onboardingStatus, router]);
@@ -55,7 +58,7 @@ export default function OnboardingPage() {
         console.error('Error loading partial onboarding data:', error);
       }
     };
-    
+
     loadPartialData();
   }, []);
 
@@ -68,7 +71,7 @@ export default function OnboardingPage() {
         console.error('Error saving partial onboarding data:', error);
       }
     };
-    
+
     savePartialData();
   }, [formData]);
 
@@ -147,7 +150,10 @@ export default function OnboardingPage() {
     return <LoadingContainer />;
   }
 
-  if (authStatus === 'unauthenticated' || (authStatus === 'authenticated' && onboardingStatus?.isOnboardingComplete)) {
+  if (
+    authStatus === 'unauthenticated' ||
+    (authStatus === 'authenticated' && onboardingStatus?.isOnboardingComplete)
+  ) {
     return null; // Will redirect via useEffect
   }
 
