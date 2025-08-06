@@ -128,7 +128,7 @@ export default function ChatPage({ params }: ChatPageProps) {
 
   if (error) {
     return (
-      <ProtectedRoute>
+      <ProtectedRoute requireOnboarding={true}>
         <div
           className='min-h-screen bg-white flex items-center justify-center'
           style={{ minHeight: '100dvh' }}
@@ -151,7 +151,7 @@ export default function ChatPage({ params }: ChatPageProps) {
   }
 
   return (
-    <ProtectedRoute>
+    <ProtectedRoute requireOnboarding={true}>
       <div className='h-screen bg-white' style={{ height: '100dvh' }}>
         <div className='h-full flex flex-col'>
           <ChatWindow

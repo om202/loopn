@@ -5,14 +5,23 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useEffect } from 'react';
 
 export default function AuthPage() {
-  const { authStatus } = useAuth();
+  const { authStatus, onboardingStatus } = useAuth();
 
   useEffect(() => {
-    // Redirect to dashboard if authenticated
+    // Redirect based on auth and onboarding status
     if (authStatus === 'authenticated') {
-      window.location.href = '/dashboard';
+      if (onboardingStatus === null) {
+        // Still loading onboarding status, wait
+        return;
+      }
+
+      if (!onboardingStatus.isOnboardingComplete) {
+        window.location.href = '/onboarding';
+      } else {
+        window.location.href = '/dashboard';
+      }
     }
-  }, [authStatus]);
+  }, [authStatus, onboardingStatus]);
 
   // Don't render anything if user is authenticated (redirecting)
   if (authStatus === 'authenticated') {

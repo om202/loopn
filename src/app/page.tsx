@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import LoadingContainer from '../components/LoadingContainer';
 
 export default function RootPage() {
-  const { authStatus } = useAuth();
+  const { authStatus, onboardingStatus } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
@@ -23,15 +23,28 @@ export default function RootPage() {
     } else {
       // First launch - redirect based on auth status
       if (authStatus === 'authenticated') {
-        router.replace('/dashboard');
+        // Check onboarding status before redirecting
+        if (onboardingStatus === null) {
+          // Still loading onboarding status, wait
+          return;
+        }
+
+        if (!onboardingStatus.isOnboardingComplete) {
+          router.replace('/onboarding');
+        } else {
+          router.replace('/dashboard');
+        }
       } else if (authStatus === 'unauthenticated') {
         router.replace('/home');
       }
     }
-  }, [authStatus, router]);
+  }, [authStatus, onboardingStatus, router]);
 
-  // Show loading while auth is configuring
-  if (authStatus === 'configuring') {
+  // Show loading while auth is configuring or onboarding status is loading
+  if (
+    authStatus === 'configuring' ||
+    (authStatus === 'authenticated' && onboardingStatus === null)
+  ) {
     return (
       <div className='min-h-screen'>
         <LoadingContainer />

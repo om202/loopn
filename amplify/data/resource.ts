@@ -195,9 +195,17 @@ const schema = a
         // Chat window activity tracking
         activeChatId: a.id(), // Which conversation they're actively viewing (null if not in any chat)
         lastChatActivity: a.datetime(), // Last time they were active in a chat window
+        // User onboarding fields
+        jobRole: a.string(),
+        companyName: a.string(),
+        industry: a.string(),
+        yearsOfExperience: a.integer(),
+        education: a.string(),
+        about: a.string(),
+        interests: a.string().array(),
+        isOnboardingComplete: a.boolean().default(false),
+        onboardingCompletedAt: a.datetime(),
         // TODO: Later add fields for AI matching:
-        // - jobTitle: a.string()
-        // - field: a.string()
         // - aiGeneratedDescription: a.string()
         // - isAvailableForChat: a.boolean()
       })

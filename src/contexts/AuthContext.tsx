@@ -18,6 +18,10 @@ import {
   getCurrentUser,
   AuthUser,
 } from 'aws-amplify/auth';
+import {
+  OnboardingService,
+  UserOnboardingStatus,
+} from '@/services/onboarding.service';
 
 // Auth Types
 export type AuthStatus = 'configuring' | 'authenticated' | 'unauthenticated';
@@ -27,6 +31,7 @@ export interface AuthState {
   authStatus: AuthStatus;
   isLoading: boolean;
   error: string | null;
+  onboardingStatus: UserOnboardingStatus | null;
 }
 
 export interface AuthContextType extends AuthState {
@@ -59,6 +64,10 @@ export interface AuthContextType extends AuthState {
 
   // Error handling
   clearError: () => void;
+
+  // Onboarding
+  checkOnboardingStatus: () => Promise<void>;
+  refreshOnboardingStatus: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -73,12 +82,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
     authStatus: 'configuring',
     isLoading: false,
     error: null,
+    onboardingStatus: null,
   });
 
   // Check current auth status on mount
   useEffect(() => {
     checkAuthStatus();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const checkAuthStatus = async () => {
     try {
@@ -91,11 +101,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
           user,
           authStatus: 'authenticated',
         }));
+
+        // Check onboarding status after authentication
+        await checkOnboardingStatus();
       } else {
         setAuthState(prev => ({
           ...prev,
           user: null,
           authStatus: 'unauthenticated',
+          onboardingStatus: null,
         }));
       }
     } catch {
@@ -103,7 +117,37 @@ export function AuthProvider({ children }: AuthProviderProps) {
         ...prev,
         user: null,
         authStatus: 'unauthenticated',
+        onboardingStatus: null,
       }));
+    }
+  };
+
+  const checkOnboardingStatus = async () => {
+    try {
+      const onboardingStatus = await OnboardingService.checkOnboardingStatus();
+      setAuthState(prev => ({
+        ...prev,
+        onboardingStatus,
+      }));
+    } catch (error) {
+      console.error('Error checking onboarding status:', error);
+      setAuthState(prev => ({
+        ...prev,
+        onboardingStatus: { isOnboardingComplete: false },
+      }));
+    }
+  };
+
+  const refreshOnboardingStatus = async () => {
+    try {
+      const onboardingStatus =
+        await OnboardingService.refreshOnboardingStatus();
+      setAuthState(prev => ({
+        ...prev,
+        onboardingStatus,
+      }));
+    } catch (error) {
+      console.error('Error refreshing onboarding status:', error);
     }
   };
 
@@ -129,7 +173,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       });
 
       if (signInResult.isSignedIn) {
-        await checkAuthStatus(); // Refresh auth state
+        await checkAuthStatus(); // Refresh auth state and check onboarding
       } else {
         // Handle additional sign-in steps if needed
         setError('Sign-in requires additional steps');
@@ -281,6 +325,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         ...prev,
         user: null,
         authStatus: 'unauthenticated',
+        onboardingStatus: null,
       }));
     } catch (err) {
       console.error('Sign out error:', err);
@@ -305,6 +350,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     handleConfirmResetPassword,
     handleSignOut,
     clearError,
+    checkOnboardingStatus,
+    refreshOnboardingStatus,
   };
 
   return (
