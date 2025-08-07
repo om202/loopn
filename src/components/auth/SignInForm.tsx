@@ -42,7 +42,7 @@ export default function SignInForm({
         <div>
           <label
             htmlFor='email'
-            className='block text-sm font-medium text-black mb-3'
+            className='block text-sm font-medium text-slate-900 mb-3'
           >
             Email address
           </label>
@@ -65,7 +65,7 @@ export default function SignInForm({
         <div>
           <label
             htmlFor='password'
-            className='block text-sm font-medium text-black mb-3'
+            className='block text-sm font-medium text-slate-900 mb-3'
           >
             Password
           </label>
@@ -104,7 +104,7 @@ export default function SignInForm({
         </div>
 
         <div className='text-center pt-2 border-t border-slate-200'>
-          <span className='text-sm text-black'>
+          <span className='text-sm text-slate-900'>
             Don't have an account?{' '}
           </span>
           <button

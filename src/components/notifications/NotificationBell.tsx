@@ -507,7 +507,7 @@ export default function NotificationBell() {
           {/* Notification Bell */}
           <div className='p-1.5 w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-100 transition-colors flex items-center justify-center'>
             <svg
-              className='h-6 w-6 text-black'
+              className='h-6 w-6 text-slate-900'
               fill='none'
               stroke='currentColor'
               viewBox='0 0 24 24'

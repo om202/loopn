@@ -286,7 +286,7 @@ export default function MessageBubble({
                 className={`px-3 py-2 rounded-3xl ${
                   isOwnMessage
                     ? 'bg-blue-600 text-white border border-blue-600 rounded-br-sm'
-                    : 'bg-slate-100 text-black rounded-bl-sm'
+                    : 'bg-slate-100 text-slate-900 rounded-bl-sm'
                 }`}
               >
                 {repliedToMessage && (
@@ -299,7 +299,7 @@ export default function MessageBubble({
                   >
                     <div
                       className={`text-sm ${
-                        isOwnMessage ? 'text-blue-100' : 'text-black'
+                        isOwnMessage ? 'text-blue-100' : 'text-slate-900'
                       } mb-1`}
                     >
                       Replying to{' '}
@@ -311,7 +311,7 @@ export default function MessageBubble({
                     </div>
                     <div
                       className={`text-base ${
-                        isOwnMessage ? 'text-blue-100' : 'text-black'
+                        isOwnMessage ? 'text-blue-100' : 'text-slate-900'
                       }`}
                     >
                       {getRepliedToContent(repliedToMessage.content)}
@@ -370,7 +370,7 @@ export default function MessageBubble({
                   title='Reply'
                 >
                   <svg
-                    className='w-4 h-4 text-black'
+                    className='w-4 h-4 text-slate-900'
                     fill='none'
                     stroke='currentColor'
                     viewBox='0 0 24 24'
@@ -391,7 +391,7 @@ export default function MessageBubble({
                     title='Delete message'
                   >
                     <svg
-                      className='w-4 h-4 text-black hover:text-red-500'
+                      className='w-4 h-4 text-slate-900 hover:text-red-500'
                       fill='none'
                       stroke='currentColor'
                       viewBox='0 0 24 24'
@@ -414,8 +414,8 @@ export default function MessageBubble({
                       showEmojiPicker
                         ? 'bg-blue-600 text-white border border-blue-600'
                         : isTouchDevice && showActionsOnMobile
-                          ? 'bg-slate-100 hover:bg-slate-100 text-black border border-slate-200'
-                          : 'bg-slate-100 text-black'
+                          ? 'bg-slate-100 hover:bg-slate-100 text-slate-900 border border-slate-200'
+                          : 'bg-slate-100 text-slate-900'
                     }`}
                     title='Add reaction'
                   >

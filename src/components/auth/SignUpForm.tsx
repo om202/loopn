@@ -91,7 +91,7 @@ export default function SignUpForm({
           <div>
             <label
               htmlFor='givenName'
-              className='block text-sm font-medium text-black mb-3'
+              className='block text-sm font-medium text-slate-900 mb-3'
             >
               First name
             </label>
@@ -113,7 +113,7 @@ export default function SignUpForm({
           <div>
             <label
               htmlFor='familyName'
-              className='block text-sm font-medium text-black mb-3'
+              className='block text-sm font-medium text-slate-900 mb-3'
             >
               Last name
             </label>
@@ -131,7 +131,7 @@ export default function SignUpForm({
         <div>
           <label
             htmlFor='email'
-            className='block text-sm font-medium text-black mb-3'
+            className='block text-sm font-medium text-slate-900 mb-3'
           >
             Email address
           </label>
@@ -154,7 +154,7 @@ export default function SignUpForm({
         <div>
           <label
             htmlFor='password'
-            className='block text-sm font-medium text-black mb-3'
+            className='block text-sm font-medium text-slate-900 mb-3'
           >
             Password
           </label>
@@ -184,7 +184,7 @@ export default function SignUpForm({
           {/* Real-time password validation */}
           {showPasswordHints && (
             <div className='mt-3 p-3 bg-slate-100 rounded-lg border border-slate-200'>
-              <p className='text-sm font-medium text-black mb-2'>
+              <p className='text-sm font-medium text-slate-900 mb-2'>
                 Password requirements:
               </p>
               <div className='space-y-1'>
@@ -216,7 +216,7 @@ export default function SignUpForm({
         <div>
           <label
             htmlFor='confirmPassword'
-            className='block text-sm font-medium text-black mb-3'
+            className='block text-sm font-medium text-slate-900 mb-3'
           >
             Confirm password
           </label>
@@ -252,7 +252,7 @@ export default function SignUpForm({
         </button>
 
         <div className='text-center pt-2 border-t border-slate-200'>
-          <span className='text-sm text-black'>
+          <span className='text-sm text-slate-900'>
             Already have an account?{' '}
           </span>
           <button
