@@ -127,7 +127,7 @@ function ConnectedDialog({
           {/* OK Button */}
           <button
             onClick={handleOk}
-            className='flex-1 px-4 py-2 bg-white text-slate-900 text-sm font-medium rounded-2xl border border-slate-200 hover:bg-slate-50 transition-colors'
+            className='flex-1 px-4 py-2 bg-white text-slate-900 text-sm font-medium rounded-2xl border border-slate-200 hover:bg-slate-100 transition-colors'
           >
             Later
           </button>
@@ -233,7 +233,7 @@ function NewRequestDialog({
             {/* OK Button */}
             <button
               onClick={onClose}
-              className='w-full px-4 py-2 bg-white text-slate-900 text-sm font-medium rounded-2xl border border-slate-200 hover:bg-slate-50 transition-colors'
+              className='w-full px-4 py-2 bg-white text-slate-900 text-sm font-medium rounded-2xl border border-slate-200 hover:bg-slate-100 transition-colors'
             >
               OK
             </button>
@@ -274,7 +274,7 @@ function NewRequestDialog({
             {/* OK Button */}
             <button
               onClick={handleOk}
-              className='w-full px-4 py-2 bg-white text-slate-900 text-sm font-medium rounded-2xl border border-slate-200 hover:bg-slate-50 transition-colors'
+              className='w-full px-4 py-2 bg-white text-slate-900 text-sm font-medium rounded-2xl border border-slate-200 hover:bg-slate-100 transition-colors'
             >
               OK
             </button>
@@ -318,7 +318,7 @@ function NewRequestDialog({
               {/* Reject Button */}
               <button
                 onClick={() => handleResponse('REJECTED')}
-                className='flex-1 px-4 py-3 bg-slate-100 text-slate-900 text-base font-medium rounded-2xl hover:bg-slate-200 transition-colors'
+                className='flex-1 px-4 py-3 bg-slate-100 text-slate-900 text-base font-medium rounded-2xl hover:bg-slate-100 transition-colors'
               >
                 Reject
               </button>

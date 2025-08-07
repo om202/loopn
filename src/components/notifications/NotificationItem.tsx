@@ -121,7 +121,7 @@ export default function NotificationItem({
   return (
     <div
       key={notification.id}
-      className='w-full text-left p-3 sm:p-4 hover:bg-slate-50 transition-colors'
+      className='w-full text-left p-3 sm:p-4 hover:bg-slate-100 transition-colors'
     >
       <div className='flex items-start gap-4'>
         {notification.type === 'chat_request' ? (
@@ -190,7 +190,7 @@ export default function NotificationItem({
                       );
                     }}
                     disabled={decliningId === notification.id}
-                    className='px-3 py-1.5 text-sm font-semibold text-slate-900 bg-slate-100 rounded-lg hover:bg-slate-200 disabled:opacity-50 transition-colors'
+                    className='px-3 py-1.5 text-sm font-semibold text-slate-900 bg-slate-100 rounded-lg hover:bg-slate-100 disabled:opacity-50 transition-colors'
                   >
                     {decliningId === notification.id
                       ? 'Declining...'
@@ -249,7 +249,7 @@ export default function NotificationItem({
                     onError('Failed to mark notification as read');
                   }
                 }}
-                className='px-3 py-1.5 text-sm font-semibold text-slate-900 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors'
+                className='px-3 py-1.5 text-sm font-semibold text-slate-900 bg-slate-100 rounded-lg hover:bg-slate-100 transition-colors'
               >
                 Mark as Read
               </button>
@@ -283,7 +283,7 @@ export default function NotificationItem({
                     onError('Failed to mark notification as read');
                   }
                 }}
-                className='px-3 py-1.5 text-sm font-semibold text-slate-900 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors'
+                className='px-3 py-1.5 text-sm font-semibold text-slate-900 bg-slate-100 rounded-lg hover:bg-slate-100 transition-colors'
               >
                 Mark as Read
               </button>
@@ -305,7 +305,7 @@ export default function NotificationItem({
                     onError('Failed to mark notification as read');
                   }
                 }}
-                className='px-3 py-1.5 text-sm font-semibold text-slate-900 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors'
+                className='px-3 py-1.5 text-sm font-semibold text-slate-900 bg-slate-100 rounded-lg hover:bg-slate-100 transition-colors'
               >
                 Mark as Read
               </button>

@@ -164,7 +164,7 @@ export default function OnboardingPage() {
       .filter(word => word.length > 0).length || 0;
 
   return (
-    <div className='min-h-screen bg-gray-50 py-8 px-4'>
+    <div className='min-h-screen bg-slate-100 py-8 px-4'>
       <div className='max-w-2xl mx-auto'>
         {/* Header */}
         <div className='text-center mb-8'>
@@ -185,7 +185,7 @@ export default function OnboardingPage() {
                 className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
                   step <= currentStep
                     ? 'bg-blue-600 text-white'
-                    : 'bg-gray-200 text-gray-600'
+                    : 'bg-slate-100 text-gray-600'
                 }`}
               >
                 {step}
@@ -193,7 +193,7 @@ export default function OnboardingPage() {
               {step < 3 && (
                 <div
                   className={`w-16 h-1 mx-2 ${
-                    step < currentStep ? 'bg-blue-600' : 'bg-gray-200'
+                    step < currentStep ? 'bg-blue-600' : 'bg-slate-100'
                   }`}
                 />
               )}
@@ -360,7 +360,7 @@ export default function OnboardingPage() {
                     className={`px-3 py-2 rounded-full text-sm font-medium transition-colors ${
                       formData.interests?.includes(interest)
                         ? 'bg-blue-600 text-white'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        : 'bg-slate-100 text-gray-700 hover:bg-slate-100'
                     }`}
                   >
                     {interest}
@@ -395,8 +395,8 @@ export default function OnboardingPage() {
               disabled={currentStep === 1}
               className={`px-6 py-2 rounded-md font-medium ${
                 currentStep === 1
-                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  ? 'bg-slate-100 text-gray-400 cursor-not-allowed'
+                  : 'bg-slate-100 text-gray-700 hover:bg-slate-100'
               }`}
             >
               Previous
@@ -409,7 +409,7 @@ export default function OnboardingPage() {
                 className={`px-6 py-2 rounded-md font-medium ${
                   validateStep(currentStep)
                     ? 'bg-blue-600 text-white hover:bg-blue-700'
-                    : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                    : 'bg-slate-100 text-gray-400 cursor-not-allowed'
                 }`}
               >
                 Next
@@ -421,7 +421,7 @@ export default function OnboardingPage() {
                 className={`px-6 py-2 rounded-md font-medium ${
                   validateStep(3) && !isLoading
                     ? 'bg-green-600 text-white hover:bg-green-700'
-                    : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                    : 'bg-slate-100 text-gray-400 cursor-not-allowed'
                 }`}
               >
                 {isLoading ? 'Completing...' : 'Complete Setup'}

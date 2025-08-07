@@ -155,7 +155,7 @@ export default function NotificationDropdown({
       </div>
 
       {getFilteredNotifications().length > 0 && (
-        <div className='p-2 border-t border-slate-200 bg-slate-50'>
+        <div className='p-2 border-t border-slate-200 bg-slate-100'>
           <button
             onClick={handleMarkAllAsRead}
             className='w-full text-center text-sm text-blue-600 hover:text-blue-800 font-medium py-2 rounded-2xl hover:bg-slate-100 transition-colors'

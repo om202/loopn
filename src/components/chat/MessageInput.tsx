@@ -83,7 +83,7 @@ export default function MessageInput({
   return (
     <>
       {replyToMessage && (
-        <div className='bg-slate-50 border-t border-slate-200 px-4 sm:px-6 lg:px-32 xl:px-48 py-3'>
+        <div className='bg-slate-100 border-t border-slate-200 px-4 sm:px-6 lg:px-32 xl:px-48 py-3'>
           <div className='relative pr-8'>
             <div className='flex items-center text-sm text-slate-900 mb-3'>
               <svg
@@ -107,7 +107,7 @@ export default function MessageInput({
             {onCancelReply && (
               <button
                 onClick={onCancelReply}
-                className='absolute top-0 right-0 p-1 text-slate-500 hover:text-slate-900 transition-colors rounded-full hover:bg-slate-200'
+                className='absolute top-0 right-0 p-1 text-slate-500 hover:text-slate-900 transition-colors rounded-full hover:bg-slate-100'
                 title='Cancel reply'
               >
                 <X className='w-4 h-4' />
@@ -197,7 +197,7 @@ export default function MessageInput({
                     WebkitAppearance: 'none',
                     MozAppearance: 'textfield',
                   }}
-                  className='w-full px-5 py-3 pr-14 border border-slate-200 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent text-base font-medium bg-slate-50 hover:bg-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed placeholder-slate-500'
+                  className='w-full px-5 py-3 pr-14 border border-slate-200 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent text-base font-medium bg-slate-100 hover:bg-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed placeholder-slate-500'
                 />
                 <button
                   type='button'

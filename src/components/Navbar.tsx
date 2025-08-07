@@ -138,12 +138,12 @@ export default function Navbar() {
                       {/* AI Profile Summary */}
                       {loadingSummary ? (
                         <div className='mt-3 w-full flex items-center gap-2 text-sm text-slate-500'>
-                          <div className='w-2 h-2 bg-slate-300 rounded-full animate-pulse'></div>
+                          <div className='w-2 h-2 bg-slate-100 rounded-full animate-pulse'></div>
                           <span>Loading summary...</span>
                         </div>
                       ) : userSummary ? (
                         <div className='mt-3 w-full'>
-                          <div className='text-sm bg-slate-50 rounded-lg p-3 border border-slate-200'>
+                          <div className='text-sm bg-slate-100 rounded-lg p-3 border border-slate-200'>
                             <p className='text-slate-900 mb-2 font-bold'>
                               Anonymous Overview
                             </p>

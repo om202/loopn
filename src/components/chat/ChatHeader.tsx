@@ -241,7 +241,7 @@ export default function ChatHeader({
                     <div className='flex items-center gap-1 sm:gap-2 text-sm sm:text-sm text-slate-900'>
                       <button
                         onClick={() => setShowChatEndedInfoDialog(true)}
-                        className='flex items-center gap-1 text-slate-500 hover:text-slate-900 transition-colors p-1 rounded-full hover:bg-slate-50 flex-shrink-0'
+                        className='flex items-center gap-1 text-slate-500 hover:text-slate-900 transition-colors p-1 rounded-full hover:bg-slate-100 flex-shrink-0'
                         title='Learn about ended chats'
                       >
                         <Info className='w-3 sm:w-4 h-3 sm:h-4' />
@@ -267,12 +267,12 @@ export default function ChatHeader({
                     {reconnectionTime === 'Can reconnect now' && (
                       <>
                         {/* Line Separator - hidden on small screens */}
-                        <div className='w-px h-4 sm:h-6 bg-slate-300 hidden sm:block'></div>
+                        <div className='w-px h-4 sm:h-6 bg-slate-100 hidden sm:block'></div>
 
                         {/* Reconnect Button */}
                         <button
                           onClick={onReconnect}
-                          className='flex items-center gap-1 sm:gap-1.5 px-3 sm:px-3 lg:px-4 py-2 sm:py-2 bg-slate-600 hover:bg-slate-700 text-white rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 flex-shrink-0'
+                          className='flex items-center gap-1 sm:gap-1.5 px-3 sm:px-3 lg:px-4 py-2 sm:py-2 bg-slate-500 hover:bg-slate-500 text-white rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 flex-shrink-0'
                         >
                           <Image
                             src='/connect-icon.svg'
@@ -313,7 +313,7 @@ export default function ChatHeader({
                       </div>
 
                       {/* Line Separator - hidden on small screens */}
-                      <div className='w-0.5 h-6 sm:h-8 bg-slate-300 mr-1 sm:mr-2 hidden sm:block'></div>
+                      <div className='w-0.5 h-6 sm:h-8 bg-slate-100 mr-1 sm:mr-2 hidden sm:block'></div>
 
                       {/* Connect Button */}
                       <button
@@ -372,7 +372,7 @@ export default function ChatHeader({
           <div className='flex gap-2'>
             <button
               onClick={() => setShowEndChatDialog(false)}
-              className='flex-1 px-3 py-2 text-base font-medium text-slate-900 bg-slate-100 rounded-lg hover:bg-slate-200 focus:outline-none transition-colors'
+              className='flex-1 px-3 py-2 text-base font-medium text-slate-900 bg-slate-100 rounded-lg hover:bg-slate-100 focus:outline-none transition-colors'
             >
               Cancel
             </button>
@@ -437,7 +437,7 @@ export default function ChatHeader({
           <div className='mt-6'>
             <button
               onClick={() => setShowChatEndedInfoDialog(false)}
-              className='w-full px-4 py-2 text-base font-medium text-white bg-slate-600 rounded-lg hover:bg-slate-700 focus:outline-none transition-colors'
+              className='w-full px-4 py-2 text-base font-medium text-white bg-slate-500 rounded-lg hover:bg-slate-500 focus:outline-none transition-colors'
             >
               Got it
             </button>

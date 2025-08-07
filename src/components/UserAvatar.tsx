@@ -90,19 +90,19 @@ export default function UserAvatar({
       case 'RECENTLY_ACTIVE':
         return (
           <div
-            className={`${indicatorSize} bg-slate-400 rounded-full border-2 border-white box-content`}
+            className={`${indicatorSize} bg-slate-500 rounded-full border-2 border-white box-content`}
           />
         );
       case 'OFFLINE':
         return (
           <div
-            className={`${indicatorSize} bg-slate-400 rounded-full border-2 border-white box-content`}
+            className={`${indicatorSize} bg-slate-500 rounded-full border-2 border-white box-content`}
           />
         );
       default:
         return (
           <div
-            className={`${indicatorSize} bg-slate-400 rounded-full border-2 border-white box-content`}
+            className={`${indicatorSize} bg-slate-500 rounded-full border-2 border-white box-content`}
           />
         );
     }

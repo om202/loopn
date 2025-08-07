@@ -183,7 +183,7 @@ export default function SignUpForm({
 
           {/* Real-time password validation */}
           {showPasswordHints && (
-            <div className='mt-3 p-3 bg-slate-50 rounded-lg border border-slate-200'>
+            <div className='mt-3 p-3 bg-slate-100 rounded-lg border border-slate-200'>
               <p className='text-sm font-medium text-slate-900 mb-2'>
                 Password requirements:
               </p>

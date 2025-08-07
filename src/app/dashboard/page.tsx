@@ -11,7 +11,7 @@ export default function DashboardPage() {
 
   return (
     <ProtectedRoute requireOnboarding={true}>
-      <div className='h-screen sm:bg-slate-50 flex flex-col overflow-hidden'>
+      <div className='h-screen sm:bg-slate-100 flex flex-col overflow-hidden'>
         <Navbar />
 
         {/* Main Content Area */}
