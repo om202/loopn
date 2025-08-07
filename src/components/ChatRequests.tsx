@@ -84,13 +84,13 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
   };
 
   if (error) {
-    return <div className='p-4 text-red-600 bg-red-50 rounded-lg'>{error}</div>;
+    return <div className='p-4 text-red-500 bg-red-100 rounded-lg'>{error}</div>;
   }
 
   return (
     <div className='bg-white rounded-xl shadow-sm border border-slate-200'>
       <div className='p-4 border-b border-slate-200'>
-        <div className='flex items-center gap-2 text-slate-900'>
+        <div className='flex items-center gap-2 text-black'>
           <span className='font-medium'>
             Chat Requests ({chatRequests.length})
           </span>
@@ -121,7 +121,7 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
           {chatRequests.map(request => (
             <div
               key={request.id}
-              className='flex items-center justify-between p-3 rounded-lg border border-slate-200 hover:border-blue-200 hover:bg-blue-50/30 transition-all'
+              className='flex items-center justify-between p-3 rounded-lg border border-slate-200 hover:border-blue-200 hover:bg-blue-100/30 transition-all'
             >
               <div className='flex items-center gap-3'>
                 <UserAvatar
@@ -130,7 +130,7 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
                   size='md'
                 />
                 <div>
-                  <div className='font-medium text-slate-900 text-sm no-email-detection'>
+                  <div className='font-medium text-black text-sm no-email-detection'>
                     {request.requesterEmail ||
                       `User ${request.requesterId.slice(-4)}`}
                   </div>
@@ -148,7 +148,7 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
                   disabled={
                     decliningId === request.id || acceptingId === request.id
                   }
-                  className='px-3 py-2 bg-slate-100 text-slate-900 text-sm font-medium rounded-lg hover:bg-slate-100 disabled:opacity-50 transition-colors'
+                  className='px-3 py-2 bg-slate-100 text-black text-sm font-medium rounded-lg hover:bg-slate-100 disabled:opacity-50 transition-colors'
                 >
                   {decliningId === request.id ? 'Declining...' : 'Decline'}
                 </button>
@@ -159,7 +159,7 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
                   disabled={
                     acceptingId === request.id || decliningId === request.id
                   }
-                  className='px-3 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors'
+                  className='px-3 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-600 disabled:opacity-50 transition-colors'
                 >
                   {acceptingId === request.id ? 'Accepting...' : 'Accept'}
                 </button>

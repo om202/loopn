@@ -204,7 +204,7 @@ export default function OnboardingPage() {
         {/* Form content */}
         <div className='bg-white rounded-lg shadow-sm p-6'>
           {error && (
-            <div className='bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-6'>
+            <div className='bg-red-100 border border-red-200 text-red-700 px-4 py-3 rounded mb-6'>
               {error}
             </div>
           )}
@@ -408,7 +408,7 @@ export default function OnboardingPage() {
                 disabled={!validateStep(currentStep)}
                 className={`px-6 py-2 rounded-md font-medium ${
                   validateStep(currentStep)
-                    ? 'bg-blue-600 text-white hover:bg-blue-700'
+                    ? 'bg-blue-600 text-white hover:bg-blue-600'
                     : 'bg-slate-100 text-gray-400 cursor-not-allowed'
                 }`}
               >

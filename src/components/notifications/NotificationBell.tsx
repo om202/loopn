@@ -507,7 +507,7 @@ export default function NotificationBell() {
           {/* Notification Bell */}
           <div className='p-1.5 w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-100 transition-colors flex items-center justify-center'>
             <svg
-              className='h-6 w-6 text-slate-900'
+              className='h-6 w-6 text-black'
               fill='none'
               stroke='currentColor'
               viewBox='0 0 24 24'
@@ -522,7 +522,7 @@ export default function NotificationBell() {
 
             {/* Notification Count Badge */}
             {notifications.length > 0 && (
-              <div className='absolute -top-1 -right-1 bg-red-500 text-white text-sm font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1'>
+              <div className='absolute -top-1 -right-1 bg-red-600 text-white text-sm font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1'>
                 {getTotalMessageCount() > 99 ? '99+' : getTotalMessageCount()}
               </div>
             )}

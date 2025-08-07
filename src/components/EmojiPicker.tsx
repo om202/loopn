@@ -67,7 +67,7 @@ export default function EmojiPicker({
           onClick={() => setShowFullPicker(true)}
           className='h-8 w-8 rounded-full transition-all duration-150 ease-out flex items-center justify-center focus:outline-none hover:bg-slate-100 bg-slate-100'
         >
-          <span className='text-xl text-slate-900'>+</span>
+          <span className='text-xl text-black'>+</span>
         </button>
       </div>
     </div>

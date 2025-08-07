@@ -118,8 +118,8 @@ export default function DashboardSectionContent({
   return (
     <div>
       <div className='mb-8 lg:mb-10'>
-        <h2 className='text-2xl font-bold text-slate-900 mb-2'>{title}</h2>
-        <p className='text-base text-slate-900'>{description}</p>
+        <h2 className='text-2xl font-bold text-black mb-2'>{title}</h2>
+        <p className='text-base text-black'>{description}</p>
       </div>
       <div className='space-y-3'>
         {usersToShow.length > 0 ? (

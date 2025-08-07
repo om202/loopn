@@ -27,9 +27,9 @@ export default function CustomAuthenticator() {
     <div className='text-center mb-8'>
       <div className='flex items-center justify-center space-x-3 mb-6'>
         <Image src='/loopn.svg' alt='Loopn' width={48} height={48} priority />
-        <h1 className='text-3xl font-bold text-slate-900'>Loopn</h1>
+        <h1 className='text-3xl font-bold text-black'>Loopn</h1>
       </div>
-      <p className='text-slate-900 text-base'>
+      <p className='text-black text-base'>
         {authState.view === 'signIn' && 'Please sign in to continue'}
         {authState.view === 'signUp' && 'Create your account to get started'}
         {authState.view === 'confirmSignUp' && 'Confirm your email address'}

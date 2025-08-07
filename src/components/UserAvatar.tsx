@@ -84,7 +84,7 @@ export default function UserAvatar({
       case 'BUSY':
         return (
           <div
-            className={`${indicatorSize} bg-red-500 rounded-full border-2 border-white box-content`}
+            className={`${indicatorSize} bg-red-600 rounded-full border-2 border-white box-content`}
           />
         );
       case 'RECENTLY_ACTIVE':

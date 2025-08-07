@@ -18,10 +18,10 @@ export default function TrialChatInfoDialog({
       {/* Dialog content */}
       <div className='p-6'>
         {/* Title */}
-        <h3 className='text-lg font-medium text-slate-900 mb-6'>Trial Chat</h3>
+        <h3 className='text-lg font-medium text-black mb-6'>Trial Chat</h3>
 
         {/* Content */}
-        <div className='text-sm text-slate-900 space-y-4 leading-relaxed'>
+        <div className='text-sm text-black space-y-4 leading-relaxed'>
           <p>
             You have 7 days to chat and get to know each other. Either person
             can send a connection request to continue chatting after the trial
@@ -47,14 +47,14 @@ export default function TrialChatInfoDialog({
                 onEndChat();
                 onClose();
               }}
-              className='w-full px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 focus:outline-none transition-colors'
+              className='w-full px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-600 focus:outline-none transition-colors'
             >
               End Chat Now
             </button>
           )}
           <button
             onClick={onClose}
-            className='w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none transition-colors'
+            className='w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-600 focus:outline-none transition-colors'
           >
             Got it
           </button>

@@ -102,7 +102,7 @@ export default function NotificationDropdown({
       aria-labelledby='user-menu-button'
     >
       <div className='p-3 sm:p-4 border-b border-slate-200'>
-        <h3 className='text-base sm:text-lg font-semibold text-slate-900'>
+        <h3 className='text-base sm:text-lg font-semibold text-black'>
           Notifications
         </h3>
       </div>
@@ -110,7 +110,7 @@ export default function NotificationDropdown({
       {/* Content */}
       <div className='max-h-[60vh] overflow-y-auto'>
         {error && (
-          <div className='p-3 sm:p-4 text-red-700 bg-red-50 m-3 sm:m-4 rounded-2xl'>
+          <div className='p-3 sm:p-4 text-red-700 bg-red-100 m-3 sm:m-4 rounded-2xl'>
             {error}
           </div>
         )}
@@ -132,7 +132,7 @@ export default function NotificationDropdown({
                 />
               </svg>
             </div>
-            <h4 className='text-base font-medium text-slate-900'>
+            <h4 className='text-base font-medium text-black'>
               You&apos;re all caught up
             </h4>
             <p className='text-sm text-slate-500 mt-1'>No new notifications</p>

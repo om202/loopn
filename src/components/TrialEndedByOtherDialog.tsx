@@ -16,12 +16,12 @@ export default function TrialEndedByOtherDialog({
       {/* Dialog content */}
       <div className='p-6'>
         {/* Title */}
-        <h3 className='text-lg font-medium text-slate-900 mb-6'>
+        <h3 className='text-lg font-medium text-black mb-6'>
           Chat Trial Ended
         </h3>
 
         {/* Content */}
-        <div className='text-sm text-slate-900 space-y-4 leading-relaxed'>
+        <div className='text-sm text-black space-y-4 leading-relaxed'>
           <p>
             The chat trial has been ended by the other user. You can no longer
             send messages in this conversation.
@@ -32,7 +32,7 @@ export default function TrialEndedByOtherDialog({
         <div className='mt-6'>
           <button
             onClick={onClose}
-            className='w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none transition-colors'
+            className='w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-600 focus:outline-none transition-colors'
           >
             OK
           </button>

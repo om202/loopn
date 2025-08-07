@@ -55,7 +55,7 @@ export default function ResetPasswordForm({
     <div className='w-full'>
       <form onSubmit={handleSubmit} className='space-y-5'>
         {error && (
-          <div className='p-4 text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl'>
+          <div className='p-4 text-sm text-red-500 bg-red-100 border border-red-200 rounded-xl'>
             {error}
           </div>
         )}
@@ -63,7 +63,7 @@ export default function ResetPasswordForm({
         <div>
           <label
             htmlFor='confirmationCode'
-            className='block text-sm font-medium text-slate-900 mb-3'
+            className='block text-sm font-medium text-black mb-3'
           >
             Verification code
           </label>
@@ -100,7 +100,7 @@ export default function ResetPasswordForm({
         <div>
           <label
             htmlFor='newPassword'
-            className='block text-sm font-medium text-slate-900 mb-3'
+            className='block text-sm font-medium text-black mb-3'
           >
             New password
           </label>
@@ -127,7 +127,7 @@ export default function ResetPasswordForm({
         <div>
           <label
             htmlFor='confirmPassword'
-            className='block text-sm font-medium text-slate-900 mb-3'
+            className='block text-sm font-medium text-black mb-3'
           >
             Confirm new password
           </label>
@@ -163,7 +163,7 @@ export default function ResetPasswordForm({
             !confirmPassword ||
             newPassword !== confirmPassword
           }
-          className='w-full bg-blue-600 text-white py-3 px-4 rounded-xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium'
+          className='w-full bg-blue-600 text-white py-3 px-4 rounded-xl hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium'
         >
           {isLoading ? 'Resetting password...' : 'Reset Password'}
         </button>

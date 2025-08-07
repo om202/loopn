@@ -85,7 +85,7 @@ export default function MessageInput({
       {replyToMessage && (
         <div className='bg-slate-100 border-t border-slate-200 px-4 sm:px-6 lg:px-32 xl:px-48 py-3'>
           <div className='relative pr-8'>
-            <div className='flex items-center text-sm text-slate-900 mb-3'>
+            <div className='flex items-center text-sm text-black mb-3'>
               <svg
                 className='w-4 h-4 mr-2 text-blue-600'
                 fill='none'
@@ -101,13 +101,13 @@ export default function MessageInput({
               </svg>
               <span className='font-medium'>Replying to message</span>
             </div>
-            <div className='text-base text-slate-900 bg-white rounded-lg px-4 py-3 border border-slate-200'>
+            <div className='text-base text-black bg-white rounded-lg px-4 py-3 border border-slate-200'>
               {getRepliedToContent(replyToMessage.content)}
             </div>
             {onCancelReply && (
               <button
                 onClick={onCancelReply}
-                className='absolute top-0 right-0 p-1 text-slate-500 hover:text-slate-900 transition-colors rounded-full hover:bg-slate-100'
+                className='absolute top-0 right-0 p-1 text-slate-500 hover:text-black transition-colors rounded-full hover:bg-slate-100'
                 title='Cancel reply'
               >
                 <X className='w-4 h-4' />
@@ -203,8 +203,8 @@ export default function MessageInput({
                   type='button'
                   onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                   disabled={disabled}
-                  className={`absolute right-2 top-1/2 transform -translate-y-1/2 text-slate-500 hover:text-slate-900 transition-all duration-200 p-2 rounded-full hover:bg-slate-100 focus:outline-none disabled:opacity-50 ${
-                    showEmojiPicker ? 'text-blue-600 bg-blue-50' : ''
+                  className={`absolute right-2 top-1/2 transform -translate-y-1/2 text-slate-500 hover:text-black transition-all duration-200 p-2 rounded-full hover:bg-slate-100 focus:outline-none disabled:opacity-50 ${
+                    showEmojiPicker ? 'text-blue-600 bg-blue-100' : ''
                   }`}
                 >
                   <Smile className='w-6 h-6' />
@@ -213,7 +213,7 @@ export default function MessageInput({
               <button
                 onClick={handleSend}
                 disabled={disabled}
-                className='flex items-center justify-center w-12 h-12 bg-blue-600 text-white rounded-full hover:bg-blue-700 focus:bg-blue-700 transition-all duration-200 shadow-sm hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none'
+                className='flex items-center justify-center w-12 h-12 bg-blue-600 text-white rounded-full hover:bg-blue-600 focus:bg-blue-600 transition-all duration-200 shadow-sm hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none'
               >
                 <Image
                   src='/send_icon.svg'

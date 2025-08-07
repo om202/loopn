@@ -82,7 +82,7 @@ export default function SignUpForm({
     <div className='w-full'>
       <form onSubmit={handleSubmit} className='space-y-5'>
         {error && (
-          <div className='p-4 text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl'>
+          <div className='p-4 text-sm text-red-500 bg-red-100 border border-red-200 rounded-xl'>
             {error}
           </div>
         )}
@@ -91,7 +91,7 @@ export default function SignUpForm({
           <div>
             <label
               htmlFor='givenName'
-              className='block text-sm font-medium text-slate-900 mb-3'
+              className='block text-sm font-medium text-black mb-3'
             >
               First name
             </label>
@@ -113,7 +113,7 @@ export default function SignUpForm({
           <div>
             <label
               htmlFor='familyName'
-              className='block text-sm font-medium text-slate-900 mb-3'
+              className='block text-sm font-medium text-black mb-3'
             >
               Last name
             </label>
@@ -131,7 +131,7 @@ export default function SignUpForm({
         <div>
           <label
             htmlFor='email'
-            className='block text-sm font-medium text-slate-900 mb-3'
+            className='block text-sm font-medium text-black mb-3'
           >
             Email address
           </label>
@@ -154,7 +154,7 @@ export default function SignUpForm({
         <div>
           <label
             htmlFor='password'
-            className='block text-sm font-medium text-slate-900 mb-3'
+            className='block text-sm font-medium text-black mb-3'
           >
             Password
           </label>
@@ -184,7 +184,7 @@ export default function SignUpForm({
           {/* Real-time password validation */}
           {showPasswordHints && (
             <div className='mt-3 p-3 bg-slate-100 rounded-lg border border-slate-200'>
-              <p className='text-sm font-medium text-slate-900 mb-2'>
+              <p className='text-sm font-medium text-black mb-2'>
                 Password requirements:
               </p>
               <div className='space-y-1'>
@@ -216,7 +216,7 @@ export default function SignUpForm({
         <div>
           <label
             htmlFor='confirmPassword'
-            className='block text-sm font-medium text-slate-900 mb-3'
+            className='block text-sm font-medium text-black mb-3'
           >
             Confirm password
           </label>
@@ -246,13 +246,13 @@ export default function SignUpForm({
         <button
           type='submit'
           disabled={isLoading}
-          className='w-full bg-blue-600 text-white py-3 px-4 rounded-xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium'
+          className='w-full bg-blue-600 text-white py-3 px-4 rounded-xl hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium'
         >
           {isLoading ? 'Creating account...' : 'Create Account'}
         </button>
 
         <div className='text-center pt-2 border-t border-slate-200'>
-          <span className='text-sm text-slate-900'>
+          <span className='text-sm text-black'>
             Already have an account?{' '}
           </span>
           <button
