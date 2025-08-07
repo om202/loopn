@@ -82,7 +82,7 @@ export default function SignUpForm({
     <div className='w-full'>
       <form onSubmit={handleSubmit} className='space-y-5'>
         {error && (
-          <div className='p-4 text-sm text-red-500 bg-red-100 border border-red-200 rounded-xl'>
+          <div className='p-4 text-sm text-b_red-500 bg-b_red-100 border border-b_red-200 rounded-xl'>
             {error}
           </div>
         )}
@@ -173,7 +173,7 @@ export default function SignUpForm({
                 password.length > 0
                   ? isPasswordValid
                     ? 'border-green-200 focus:ring-green-500'
-                    : 'border-red-200 focus:ring-red-500'
+                    : 'border-b_red-200 focus:ring-b_red-500'
                   : 'border-slate-200 focus:ring-brand-500'
               }`}
               placeholder='Create a password'
@@ -231,7 +231,7 @@ export default function SignUpForm({
               onChange={e => setConfirmPassword(e.target.value)}
               className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:border-transparent transition-colors bg-white ${
                 confirmPassword && password !== confirmPassword
-                  ? 'border-red-200 focus:ring-red-500'
+                  ? 'border-b_red-200 focus:ring-b_red-500'
                   : 'border-slate-200 focus:ring-brand-500'
               }`}
               placeholder='Confirm your password'
@@ -239,7 +239,7 @@ export default function SignUpForm({
             />
           </div>
           {confirmPassword && password !== confirmPassword && (
-            <p className='text-xs text-red-500 mt-2'>Passwords do not match</p>
+            <p className='text-xs text-b_red-500 mt-2'>Passwords do not match</p>
           )}
         </div>
 

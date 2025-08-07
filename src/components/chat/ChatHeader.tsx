@@ -52,7 +52,7 @@ export default function ChatHeader({
     if (otherUserPresence.status === 'BUSY') {
       return {
         text: 'Busy',
-        color: 'text-red-500',
+        color: 'text-b_red-500',
       };
     }
 
@@ -381,7 +381,7 @@ export default function ChatHeader({
                 onEndChat();
                 setShowEndChatDialog(false);
               }}
-              className='flex-1 px-3 py-2 text-base font-medium text-white bg-red-600 rounded-lg hover:bg-red-600 focus:outline-none transition-colors'
+              className='flex-1 px-3 py-2 text-base font-medium text-white bg-b_red-600 rounded-lg hover:bg-b_red-600 focus:outline-none transition-colors'
             >
               End Chat
             </button>

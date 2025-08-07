@@ -110,7 +110,7 @@ export default function NotificationDropdown({
       {/* Content */}
       <div className='max-h-[60vh] overflow-y-auto'>
         {error && (
-          <div className='p-3 sm:p-4 text-red-700 bg-red-100 m-3 sm:m-4 rounded-2xl'>
+          <div className='p-3 sm:p-4 text-b_red-700 bg-b_red-100 m-3 sm:m-4 rounded-2xl'>
             {error}
           </div>
         )}

@@ -31,7 +31,7 @@ export default function NotificationBadge({
     badges.push(
       <div
         key='message'
-        className='flex items-center gap-2 bg-white text-red-500 rounded-2xl rounded-br-sm px-4 py-1.5 border border-red-300 min-h-[28px]'
+        className='flex items-center gap-2 bg-white text-b_red-500 rounded-2xl rounded-br-sm px-4 py-1.5 border border-b_red-300 min-h-[28px]'
       >
         <MessageCircle className='w-5 h-5 flex-shrink-0' />
         <span className='text-base font-bold leading-none'>
@@ -46,7 +46,7 @@ export default function NotificationBadge({
     badges.push(
       <div
         key='other'
-        className='flex items-center gap-2 bg-white text-red-500 rounded-2xl rounded-br-sm px-4 py-1.5 border border-red-300 min-h-[28px]'
+        className='flex items-center gap-2 bg-white text-b_red-500 rounded-2xl rounded-br-sm px-4 py-1.5 border border-b_red-300 min-h-[28px]'
       >
         <svg
           className='w-5 h-5 flex-shrink-0'

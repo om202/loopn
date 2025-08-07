@@ -204,7 +204,7 @@ export default function OnboardingPage() {
         {/* Form content */}
         <div className='bg-white rounded-lg shadow-sm p-6'>
           {error && (
-            <div className='bg-red-100 border border-red-200 text-red-700 px-4 py-3 rounded mb-6'>
+            <div className='bg-b_red-100 border border-b_red-200 text-b_red-700 px-4 py-3 rounded mb-6'>
               {error}
             </div>
           )}
@@ -327,12 +327,12 @@ export default function OnboardingPage() {
                 />
                 <div className='flex justify-between text-sm mt-2'>
                   <span
-                    className={`${wordCount < 12 ? 'text-red-500' : 'text-green-500'}`}
+                    className={`${wordCount < 12 ? 'text-b_red-500' : 'text-green-500'}`}
                   >
                     {wordCount} words (minimum 12)
                   </span>
                   <span
-                    className={`${wordCount > 80 ? 'text-red-500' : 'text-gray-500'}`}
+                    className={`${wordCount > 80 ? 'text-b_red-500' : 'text-gray-500'}`}
                   >
                     {wordCount}/80 words
                   </span>

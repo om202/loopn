@@ -522,7 +522,7 @@ export default function NotificationBell() {
 
             {/* Notification Count Badge */}
             {notifications.length > 0 && (
-              <div className='absolute -top-1 -right-1 bg-red-600 text-white text-sm font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1'>
+              <div className='absolute -top-1 -right-1 bg-b_red-600 text-white text-sm font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1'>
                 {getTotalMessageCount() > 99 ? '99+' : getTotalMessageCount()}
               </div>
             )}

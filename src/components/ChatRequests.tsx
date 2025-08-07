@@ -84,7 +84,7 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
   };
 
   if (error) {
-    return <div className='p-4 text-red-500 bg-red-100 rounded-lg'>{error}</div>;
+    return <div className='p-4 text-b_red-500 bg-b_red-100 rounded-lg'>{error}</div>;
   }
 
   return (

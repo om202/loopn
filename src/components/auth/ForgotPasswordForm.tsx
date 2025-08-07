@@ -36,7 +36,7 @@ export default function ForgotPasswordForm({
     <div className='w-full'>
       <form onSubmit={handleSubmit} className='space-y-5'>
         {error && (
-          <div className='p-4 text-sm text-red-500 bg-red-100 border border-red-200 rounded-xl'>
+          <div className='p-4 text-sm text-b_red-500 bg-b_red-100 border border-b_red-200 rounded-xl'>
             {error}
           </div>
         )}

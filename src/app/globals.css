@@ -13,6 +13,19 @@
   --color-brand-800: oklch(0.380 0.180 235);
   --color-brand-900: oklch(0.320 0.150 235);
   --color-brand-950: oklch(0.250 0.110 235);
+  
+  /* Custom red colors - exact same OKLCH as brand blue, only hue changed */
+  --color-b_red-50: oklch(0.980 0.015 50);
+  --color-b_red-100: oklch(0.950 0.035 50);
+  --color-b_red-200: oklch(0.900 0.070 50);
+  --color-b_red-300: oklch(0.830 0.120 50);
+  --color-b_red-400: oklch(0.740 0.170 50);
+  --color-b_red-500: oklch(0.640 0.220 50);
+  --color-b_red-600: oklch(0.550 0.240 50);
+  --color-b_red-700: oklch(0.460 0.210 50);
+  --color-b_red-800: oklch(0.380 0.180 50);
+  --color-b_red-900: oklch(0.320 0.150 50);
+  --color-b_red-950: oklch(0.250 0.110 50);
 }
 
 body {

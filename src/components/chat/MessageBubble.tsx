@@ -387,11 +387,11 @@ export default function MessageBubble({
                 {isOwnMessage && onDeleteMessage && !message.isDeleted && (
                   <button
                     onClick={handleDeleteClick}
-                    className={`${isTouchDevice ? 'w-10 h-10' : 'w-8 h-8'} ${isTouchDevice && showActionsOnMobile ? 'bg-slate-100 hover:bg-red-100 border border-slate-200' : 'bg-slate-100 hover:bg-red-100'} rounded-full transition-colors duration-150 flex items-center justify-center`}
+                    className={`${isTouchDevice ? 'w-10 h-10' : 'w-8 h-8'} ${isTouchDevice && showActionsOnMobile ? 'bg-slate-100 hover:bg-b_red-100 border border-slate-200' : 'bg-slate-100 hover:bg-b_red-100'} rounded-full transition-colors duration-150 flex items-center justify-center`}
                     title='Delete message'
                   >
                     <svg
-                      className='w-4 h-4 text-slate-900 hover:text-red-500'
+                      className='w-4 h-4 text-slate-900 hover:text-b_red-500'
                       fill='none'
                       stroke='currentColor'
                       viewBox='0 0 24 24'

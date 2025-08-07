@@ -399,10 +399,10 @@ export default function ChatWindow({
 
       {finalError || externalError ? (
         <div className='flex-shrink-0 mx-4 mb-4'>
-          <div className='bg-red-100 border border-red-200 rounded-lg p-4 shadow-sm'>
+          <div className='bg-b_red-100 border border-b_red-200 rounded-lg p-4 shadow-sm'>
             <div className='flex items-start'>
               <svg
-                className='h-5 w-5 text-red-500 mt-0.5 mr-3 flex-shrink-0'
+                className='h-5 w-5 text-b_red-500 mt-0.5 mr-3 flex-shrink-0'
                 fill='currentColor'
                 viewBox='0 0 20 20'
               >
@@ -412,7 +412,7 @@ export default function ChatWindow({
                   clipRule='evenodd'
                 />
               </svg>
-              <p className='text-sm text-red-800 font-medium'>
+              <p className='text-sm text-b_red-800 font-medium'>
                 {finalError || externalError}
               </p>
             </div>

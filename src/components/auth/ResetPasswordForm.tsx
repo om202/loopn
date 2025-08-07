@@ -55,7 +55,7 @@ export default function ResetPasswordForm({
     <div className='w-full'>
       <form onSubmit={handleSubmit} className='space-y-5'>
         {error && (
-          <div className='p-4 text-sm text-red-500 bg-red-100 border border-red-200 rounded-xl'>
+          <div className='p-4 text-sm text-b_red-500 bg-b_red-100 border border-b_red-200 rounded-xl'>
             {error}
           </div>
         )}
@@ -142,7 +142,7 @@ export default function ResetPasswordForm({
               onChange={e => setConfirmPassword(e.target.value)}
               className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:border-transparent transition-colors bg-white ${
                 confirmPassword && newPassword !== confirmPassword
-                  ? 'border-red-200 focus:ring-red-500'
+                  ? 'border-b_red-200 focus:ring-b_red-500'
                   : 'border-slate-200 focus:ring-brand-500'
               }`}
               placeholder='Confirm new password'
@@ -150,7 +150,7 @@ export default function ResetPasswordForm({
             />
           </div>
           {confirmPassword && newPassword !== confirmPassword && (
-            <p className='text-xs text-red-500 mt-2'>Passwords do not match</p>
+            <p className='text-xs text-b_red-500 mt-2'>Passwords do not match</p>
           )}
         </div>
 
