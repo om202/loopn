@@ -90,7 +90,7 @@ export default function ResetPasswordForm({
               type='button'
               onClick={handleResendCode}
               disabled={isLoading}
-              className='text-xs text-brand-600 hover:text-brand-700 font-medium transition-colors disabled:opacity-50'
+              className='text-xs text-brand-500 hover:text-brand-700 font-medium transition-colors disabled:opacity-50'
             >
               Resend code
             </button>
@@ -163,7 +163,7 @@ export default function ResetPasswordForm({
             !confirmPassword ||
             newPassword !== confirmPassword
           }
-          className='w-full bg-brand-600 text-white py-3 px-4 rounded-xl hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium'
+          className='w-full bg-brand-500 text-white py-3 px-4 rounded-xl hover:bg-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium'
         >
           {isLoading ? 'Resetting password...' : 'Reset Password'}
         </button>
@@ -172,7 +172,7 @@ export default function ResetPasswordForm({
           <button
             type='button'
             onClick={onSwitchToSignIn}
-            className='text-sm text-brand-600 hover:text-brand-700 font-medium transition-colors'
+            className='text-sm text-brand-500 hover:text-brand-700 font-medium transition-colors'
           >
             Back to sign in
           </button>

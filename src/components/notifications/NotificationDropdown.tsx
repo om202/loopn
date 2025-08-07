@@ -158,7 +158,7 @@ export default function NotificationDropdown({
         <div className='p-2 border-t border-slate-200 bg-slate-100'>
           <button
             onClick={handleMarkAllAsRead}
-            className='w-full text-center text-sm text-brand-600 hover:text-brand-800 font-medium py-2 rounded-2xl hover:bg-slate-100 transition-colors'
+            className='w-full text-center text-sm text-brand-500 hover:text-brand-700 font-medium py-2 rounded-2xl hover:bg-slate-100 transition-colors'
           >
             Mark all as read
           </button>

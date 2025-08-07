@@ -27,7 +27,7 @@ export default function LoadingContainer({
       case 'pulse':
         return (
           <div
-            className={`${getSizeClasses().replace('border-[3px]', '').replace('border-[5px]', '')} bg-brand-600 rounded-full animate-pulse`}
+            className={`${getSizeClasses().replace('border-[3px]', '').replace('border-[5px]', '')} bg-brand-500 rounded-full animate-pulse`}
           />
         );
       case 'dots':
@@ -36,15 +36,15 @@ export default function LoadingContainer({
         return (
           <div className='flex space-x-2'>
             <div
-              className={`${dotSize} bg-brand-600 rounded-full animate-bounce`}
+              className={`${dotSize} bg-brand-500 rounded-full animate-bounce`}
               style={{ animationDelay: '0ms' }}
             />
             <div
-              className={`${dotSize} bg-brand-600 rounded-full animate-bounce`}
+              className={`${dotSize} bg-brand-500 rounded-full animate-bounce`}
               style={{ animationDelay: '150ms' }}
             />
             <div
-              className={`${dotSize} bg-brand-600 rounded-full animate-bounce`}
+              className={`${dotSize} bg-brand-500 rounded-full animate-bounce`}
               style={{ animationDelay: '300ms' }}
             />
           </div>

@@ -1,18 +1,18 @@
 @import 'tailwindcss';
 
 @theme {
-  /* Custom brand colors - Apple Blue (#007AFF) */
-  --color-brand-50: oklch(0.975 0.020 235.15);
-  --color-brand-100: oklch(0.945 0.045 235.25);
-  --color-brand-200: oklch(0.890 0.085 235.35);
-  --color-brand-300: oklch(0.820 0.135 235.45);
-  --color-brand-400: oklch(0.730 0.185 235.55);
-  --color-brand-500: oklch(0.630 0.225 235.65);
-  --color-brand-600: oklch(0.540 0.235 235.75);
-  --color-brand-700: oklch(0.450 0.215 235.85);
-  --color-brand-800: oklch(0.370 0.185 235.95);
-  --color-brand-900: oklch(0.310 0.155 236.05);
-  --color-brand-950: oklch(0.240 0.115 236.15);
+  /* Custom brand colors - Clean Apple Blue (#007AFF) */
+  --color-brand-50: oklch(0.980 0.015 235);
+  --color-brand-100: oklch(0.950 0.035 235);
+  --color-brand-200: oklch(0.900 0.070 235);
+  --color-brand-300: oklch(0.830 0.120 235);
+  --color-brand-400: oklch(0.740 0.170 235);
+  --color-brand-500: oklch(0.640 0.220 235);
+  --color-brand-500: oklch(0.550 0.240 235);
+  --color-brand-700: oklch(0.460 0.210 235);
+  --color-brand-800: oklch(0.380 0.180 235);
+  --color-brand-900: oklch(0.320 0.150 235);
+  --color-brand-950: oklch(0.250 0.110 235);
 }
 
 body {

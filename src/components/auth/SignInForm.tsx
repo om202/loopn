@@ -88,7 +88,7 @@ export default function SignInForm({
         <button
           type='submit'
           disabled={isLoading}
-          className='w-full bg-brand-600 text-white py-3 px-4 rounded-xl hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium'
+          className='w-full bg-brand-500 text-white py-3 px-4 rounded-xl hover:bg-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium'
         >
           {isLoading ? 'Signing in...' : 'Sign In'}
         </button>
@@ -97,7 +97,7 @@ export default function SignInForm({
           <button
             type='button'
             onClick={onSwitchToForgotPassword}
-            className='text-sm text-brand-600 hover:text-brand-700 transition-colors'
+            className='text-sm text-brand-500 hover:text-brand-700 transition-colors'
           >
             Forgot your password?
           </button>
@@ -110,7 +110,7 @@ export default function SignInForm({
           <button
             type='button'
             onClick={onSwitchToSignUp}
-            className='text-sm text-brand-600 hover:text-brand-700 font-medium transition-colors'
+            className='text-sm text-brand-500 hover:text-brand-700 font-medium transition-colors'
           >
             Sign up
           </button>

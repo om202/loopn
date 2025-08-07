@@ -110,7 +110,7 @@ export default function UserCard({
               existingConversations.get(userPresence.userId)?.chatStatus ===
                 'ENDED'
                 ? canUserReconnect(userPresence.userId)
-                  ? 'text-brand-600'
+                  ? 'text-brand-500'
                   : 'text-slate-500'
                 : isOnline
                   ? 'text-green-500'
@@ -177,7 +177,7 @@ export default function UserCard({
                     onChatAction(userPresence.userId);
                   }
                 }}
-                className='px-2.5 py-2 text-sm font-medium rounded-xl border transition-colors bg-white text-brand-600 border-slate-200 hover:bg-brand-100 hover:border-slate-200 flex items-center gap-1.5 flex-shrink-0 min-w-[44px] justify-center'
+                className='px-2.5 py-2 text-sm font-medium rounded-xl border transition-colors bg-white text-brand-500 border-slate-200 hover:bg-brand-100 hover:border-slate-200 flex items-center gap-1.5 flex-shrink-0 min-w-[44px] justify-center'
               >
                 {pendingRequests.has(userPresence.userId) ? (
                   <>
@@ -225,7 +225,7 @@ export default function UserCard({
                       )
                     ) : (
                       <>
-                        <MessageCircle className='w-4 h-4 text-brand-600 flex-shrink-0' />
+                        <MessageCircle className='w-4 h-4 text-brand-500 flex-shrink-0' />
                         <span className='hidden min-[400px]:inline'>Chat</span>
                       </>
                     )}
@@ -274,7 +274,7 @@ export default function UserCard({
           <div className='flex'>
             <button
               onClick={() => setShowProfileDialog(false)}
-              className='w-full px-4 py-2 text-sm font-medium text-white bg-brand-600 border border-slate-200 rounded-lg focus:outline-none transition-colors'
+              className='w-full px-4 py-2 text-sm font-medium text-white bg-brand-500 border border-slate-200 rounded-lg focus:outline-none transition-colors'
             >
               OK
             </button>

@@ -62,7 +62,7 @@ export default function HomePage() {
             </div>
             <div className='flex items-center'>
               <Link href={authLink}>
-                <button className='bg-brand-600 hover:bg-brand-600 text-white px-6 py-2.5 rounded-lg font-medium transition-colors flex items-center gap-2'>
+                <button className='bg-brand-500 hover:bg-brand-500 text-white px-6 py-2.5 rounded-lg font-medium transition-colors flex items-center gap-2'>
                   <LogIn className='w-4 h-4' />
                   {authText}
                 </button>
@@ -80,7 +80,7 @@ export default function HomePage() {
             <div className='text-center lg:text-left'>
               <h1 className='text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-semibold text-slate-900 mb-6 leading-tight'>
                 Connect and Grow{' '}
-                <span className='text-brand-600'>Professionally</span>
+                <span className='text-brand-500'>Professionally</span>
               </h1>
               <p className='text-base sm:text-lg text-slate-900 mb-8 leading-relaxed'>
                 Join a community where meaningful connections happen naturally.
@@ -91,7 +91,7 @@ export default function HomePage() {
               {/* CTA Buttons */}
               <div className='flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mt-20 mb-6'>
                 <Link href={authLink} className='w-full sm:w-auto'>
-                  <button className='w-full bg-brand-600 hover:bg-brand-600 text-white px-10 py-4 rounded-lg text-lg font-medium transition-all duration-200 flex items-center justify-center gap-2'>
+                  <button className='w-full bg-brand-500 hover:bg-brand-500 text-white px-10 py-4 rounded-lg text-lg font-medium transition-all duration-200 flex items-center justify-center gap-2'>
                     <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' />
                     {ctaText}
                   </button>
@@ -106,7 +106,7 @@ export default function HomePage() {
                 {/* First message - Product Manager */}
                 <div className='flex flex-col space-y-2 opacity-0 animate-[slideUpFade_0.5s_ease-out_0.5s_forwards]'>
                   <div className='flex items-center gap-2 mb-1'>
-                    <div className='w-8 h-8 bg-brand-600 rounded-full flex items-center justify-center'>
+                    <div className='w-8 h-8 bg-brand-500 rounded-full flex items-center justify-center'>
                       <span className='text-white text-sm font-medium'>PM</span>
                     </div>
                     <div className='text-sm text-slate-900'>
@@ -125,11 +125,11 @@ export default function HomePage() {
                     <div className='text-sm text-slate-900'>
                       UX Designer • Design Agency
                     </div>
-                    <div className='w-8 h-8 bg-brand-600 rounded-full flex items-center justify-center'>
+                    <div className='w-8 h-8 bg-brand-500 rounded-full flex items-center justify-center'>
                       <span className='text-white text-sm font-medium'>UX</span>
                     </div>
                   </div>
-                  <div className='bg-brand-600 rounded-2xl rounded-tr-none px-4 py-3 shadow-sm text-white text-sm max-w-[85%]'>
+                  <div className='bg-brand-500 rounded-2xl rounded-tr-none px-4 py-3 shadow-sm text-white text-sm max-w-[85%]'>
                     Always excited to meet new people in the industry. What
                     brings you here?
                   </div>
@@ -138,7 +138,7 @@ export default function HomePage() {
                 {/* Third message - Product Manager */}
                 <div className='flex flex-col space-y-2 opacity-0 animate-[slideUpFade_0.5s_ease-out_2.5s_forwards]'>
                   <div className='flex items-center gap-2 mb-1'>
-                    <div className='w-8 h-8 bg-brand-600 rounded-full flex items-center justify-center'>
+                    <div className='w-8 h-8 bg-brand-500 rounded-full flex items-center justify-center'>
                       <span className='text-white text-sm font-medium'>PM</span>
                     </div>
                     <div className='text-sm text-slate-900'>
@@ -156,11 +156,11 @@ export default function HomePage() {
                     <div className='text-sm text-slate-900'>
                       UX Designer • Design Agency
                     </div>
-                    <div className='w-8 h-8 bg-brand-600 rounded-full flex items-center justify-center'>
+                    <div className='w-8 h-8 bg-brand-500 rounded-full flex items-center justify-center'>
                       <span className='text-white text-sm font-medium'>UX</span>
                     </div>
                   </div>
-                  <div className='bg-brand-600 rounded-2xl rounded-tr-none px-4 py-3 shadow-sm text-white text-sm max-w-[85%]'>
+                  <div className='bg-brand-500 rounded-2xl rounded-tr-none px-4 py-3 shadow-sm text-white text-sm max-w-[85%]'>
                     Perfect! I&apos;d love to discuss user research best
                     practices.
                   </div>
@@ -184,7 +184,7 @@ export default function HomePage() {
           <div className='text-center max-w-3xl mx-auto mb-12 relative'>
             <h2 className='text-2xl sm:text-3xl lg:text-4xl font-medium text-slate-900 mb-4'>
               Experience the future of{' '}
-              <span className='text-brand-600'>professional networking</span>
+              <span className='text-brand-500'>professional networking</span>
             </h2>
             <p className='text-base text-slate-900'>
               Loopn removes barriers from networking, letting you connect based
@@ -197,7 +197,7 @@ export default function HomePage() {
             {/* Feature 1 - Smart Matching */}
             <div className='bg-white rounded-lg p-5 border border-slate-200 h-full'>
               <div className='w-10 h-10 bg-brand-100 rounded-lg flex items-center justify-center mb-3'>
-                <User className='w-5 h-5 text-brand-600' />
+                <User className='w-5 h-5 text-brand-500' />
               </div>
               <h3 className='text-lg font-medium text-slate-900 mb-2'>
                 Smart Matching
@@ -208,15 +208,15 @@ export default function HomePage() {
               </p>
               <ul className='space-y-2'>
                 <li className='flex items-center gap-2 text-sm text-slate-900'>
-                  <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' />
+                  <CheckCircle className='w-4 h-4 text-brand-500 flex-shrink-0' />
                   <span>AI-powered matching</span>
                 </li>
                 <li className='flex items-center gap-2 text-sm text-slate-900'>
-                  <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' />
+                  <CheckCircle className='w-4 h-4 text-brand-500 flex-shrink-0' />
                   <span>Industry focus</span>
                 </li>
                 <li className='flex items-center gap-2 text-sm text-slate-900'>
-                  <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' />
+                  <CheckCircle className='w-4 h-4 text-brand-500 flex-shrink-0' />
                   <span>Goal alignment</span>
                 </li>
               </ul>
@@ -225,7 +225,7 @@ export default function HomePage() {
             {/* Feature 2 - Real-time Chat */}
             <div className='bg-white rounded-lg p-5 border border-slate-200 h-full'>
               <div className='w-10 h-10 bg-brand-100 rounded-lg flex items-center justify-center mb-3'>
-                <Zap className='w-5 h-5 text-brand-600' />
+                <Zap className='w-5 h-5 text-brand-500' />
               </div>
               <h3 className='text-lg font-medium text-slate-900 mb-2'>
                 Instant Connections
@@ -235,15 +235,15 @@ export default function HomePage() {
               </p>
               <ul className='space-y-2'>
                 <li className='flex items-center gap-2 text-sm text-slate-900'>
-                  <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' />
+                  <CheckCircle className='w-4 h-4 text-brand-500 flex-shrink-0' />
                   <span>Real-time messaging</span>
                 </li>
                 <li className='flex items-center gap-2 text-sm text-slate-900'>
-                  <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' />
+                  <CheckCircle className='w-4 h-4 text-brand-500 flex-shrink-0' />
                   <span>Professional topics</span>
                 </li>
                 <li className='flex items-center gap-2 text-sm text-slate-900'>
-                  <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' />
+                  <CheckCircle className='w-4 h-4 text-brand-500 flex-shrink-0' />
                   <span>Meaningful discussions</span>
                 </li>
               </ul>
@@ -252,7 +252,7 @@ export default function HomePage() {
             {/* Feature 3 - Quality Network */}
             <div className='bg-white rounded-lg p-5 border border-slate-200 h-full'>
               <div className='w-10 h-10 bg-brand-100 rounded-lg flex items-center justify-center mb-3'>
-                <MessageCircle className='w-5 h-5 text-brand-600' />
+                <MessageCircle className='w-5 h-5 text-brand-500' />
               </div>
               <h3 className='text-lg font-medium text-slate-900 mb-2'>
                 Quality Conversations
@@ -263,15 +263,15 @@ export default function HomePage() {
               </p>
               <ul className='space-y-2'>
                 <li className='flex items-center gap-2 text-sm text-slate-900'>
-                  <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' />
+                  <CheckCircle className='w-4 h-4 text-brand-500 flex-shrink-0' />
                   <span>Verified professionals</span>
                 </li>
                 <li className='flex items-center gap-2 text-sm text-slate-900'>
-                  <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' />
+                  <CheckCircle className='w-4 h-4 text-brand-500 flex-shrink-0' />
                   <span>Privacy focused</span>
                 </li>
                 <li className='flex items-center gap-2 text-sm text-slate-900'>
-                  <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' />
+                  <CheckCircle className='w-4 h-4 text-brand-500 flex-shrink-0' />
                   <span>Meaningful connections</span>
                 </li>
               </ul>
@@ -281,7 +281,7 @@ export default function HomePage() {
           {/* Bottom CTA */}
           <div className='text-center mt-28'>
             <Link href={authLink}>
-              <button className='inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-600 text-white px-10 py-4 rounded-lg text-lg font-medium transition-all duration-200 group'>
+              <button className='inline-flex items-center gap-2 bg-brand-500 hover:bg-brand-500 text-white px-10 py-4 rounded-lg text-lg font-medium transition-all duration-200 group'>
                 {ctaText}
                 <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' />
               </button>
@@ -302,7 +302,7 @@ export default function HomePage() {
           <div className='text-center max-w-3xl mx-auto mb-12'>
             <h2 className='text-2xl sm:text-3xl lg:text-4xl font-medium text-slate-900 mb-4'>
               Your journey to meaningful{' '}
-              <span className='text-brand-600'>connections</span>
+              <span className='text-brand-500'>connections</span>
             </h2>
             <p className='text-base text-slate-900'>
               A simple three-step process to start building your professional
@@ -316,7 +316,7 @@ export default function HomePage() {
             <div className='relative'>
               <div className='bg-white rounded-lg p-5 border border-slate-200 relative h-full'>
                 {/* Step number */}
-                <div className='absolute -top-2.5 right-3 w-7 h-7 bg-brand-600 rounded-full flex items-center justify-center text-white font-medium text-sm'>
+                <div className='absolute -top-2.5 right-3 w-7 h-7 bg-brand-500 rounded-full flex items-center justify-center text-white font-medium text-sm'>
                   1
                 </div>
                 {/* Content */}
@@ -334,7 +334,7 @@ export default function HomePage() {
             <div className='relative'>
               <div className='bg-white rounded-lg p-5 border border-slate-200 relative h-full'>
                 {/* Step number */}
-                <div className='absolute -top-2.5 right-3 w-7 h-7 bg-brand-600 rounded-full flex items-center justify-center text-white font-medium text-sm'>
+                <div className='absolute -top-2.5 right-3 w-7 h-7 bg-brand-500 rounded-full flex items-center justify-center text-white font-medium text-sm'>
                   2
                 </div>
                 {/* Content */}
@@ -352,7 +352,7 @@ export default function HomePage() {
             <div className='relative'>
               <div className='bg-white rounded-lg p-5 border border-slate-200 relative h-full'>
                 {/* Step number */}
-                <div className='absolute -top-2.5 right-3 w-7 h-7 bg-brand-600 rounded-full flex items-center justify-center text-white font-medium text-sm'>
+                <div className='absolute -top-2.5 right-3 w-7 h-7 bg-brand-500 rounded-full flex items-center justify-center text-white font-medium text-sm'>
                   3
                 </div>
                 {/* Content */}
@@ -398,7 +398,7 @@ export default function HomePage() {
               </blockquote>
               <div className='flex items-center gap-3'>
                 <div className='w-8 h-8 bg-brand-100 rounded-lg flex items-center justify-center'>
-                  <User className='w-4 h-4 text-brand-600' />
+                  <User className='w-4 h-4 text-brand-500' />
                 </div>
                 <div>
                   <p className='font-medium text-slate-900 text-sm'>
@@ -425,7 +425,7 @@ export default function HomePage() {
               </blockquote>
               <div className='flex items-center gap-3'>
                 <div className='w-8 h-8 bg-brand-100 rounded-lg flex items-center justify-center'>
-                  <User className='w-4 h-4 text-brand-600' />
+                  <User className='w-4 h-4 text-brand-500' />
                 </div>
                 <div>
                   <p className='font-medium text-slate-900 text-sm'>
@@ -452,7 +452,7 @@ export default function HomePage() {
               </blockquote>
               <div className='flex items-center gap-3'>
                 <div className='w-8 h-8 bg-brand-100 rounded-lg flex items-center justify-center'>
-                  <User className='w-4 h-4 text-brand-600' />
+                  <User className='w-4 h-4 text-brand-500' />
                 </div>
                 <div>
                   <p className='font-medium text-slate-900 text-sm'>

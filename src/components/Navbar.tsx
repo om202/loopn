@@ -105,7 +105,7 @@ export default function Navbar() {
                 {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
                 <div
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className='p-1.5 rounded-full hover:bg-slate-100 cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-600 transition-colors'
+                  className='p-1.5 rounded-full hover:bg-slate-100 cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 transition-colors'
                 >
                   <span className='sr-only'>Open user menu</span>
                   <div className='sm:hidden'>

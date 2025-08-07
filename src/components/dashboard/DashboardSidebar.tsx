@@ -77,7 +77,7 @@ export default function DashboardSidebar({
                 onClick={() => onSectionChange(id)}
                 className={`relative flex-1 flex flex-col items-center justify-center gap-1.5 px-3 py-3 rounded-xl transition-all duration-200 min-h-[56px] ${
                   activeSection === id
-                    ? 'text-brand-600 bg-white shadow-sm'
+                    ? 'text-brand-500 bg-white shadow-sm'
                     : 'text-slate-500 hover:text-slate-700 hover:bg-white/50'
                 }`}
                 title={label}
@@ -87,7 +87,7 @@ export default function DashboardSidebar({
 
                 {/* Count indicator for mobile */}
                 {count > 0 && (
-                  <span className='absolute -top-1 -right-1 bg-brand-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center min-w-[20px] font-semibold shadow-sm'>
+                  <span className='absolute -top-1 -right-1 bg-brand-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center min-w-[20px] font-semibold shadow-sm'>
                     {count > 99 ? '99+' : count}
                   </span>
                 )}
