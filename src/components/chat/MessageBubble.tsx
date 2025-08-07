@@ -271,8 +271,8 @@ export default function MessageBubble({
               <div
                 className={`px-3 py-2 rounded-3xl border ${
                   isOwnMessage
-                    ? 'bg-slate-100 text-slate-500 border-slate-200 rounded-br-sm'
-                    : 'bg-slate-100 text-slate-500 border-slate-200 rounded-bl-sm'
+                    ? 'bg-zinc-100 text-zinc-500 border-zinc-200 rounded-br-sm'
+                    : 'bg-zinc-100 text-zinc-500 border-zinc-200 rounded-bl-sm'
                 }`}
               >
                 <p className='text-sm italic select-none'>Message deleted</p>
@@ -286,7 +286,7 @@ export default function MessageBubble({
                 className={`px-3 py-2 rounded-3xl ${
                   isOwnMessage
                     ? 'bg-brand-500 text-white border border-brand-500 rounded-br-sm'
-                    : 'bg-slate-100 text-slate-900 rounded-bl-sm'
+                    : 'bg-zinc-100 text-zinc-900 rounded-bl-sm'
                 }`}
               >
                 {repliedToMessage && (
@@ -294,12 +294,12 @@ export default function MessageBubble({
                     className={`mb-2 pt-2 pb-2 border-l-2 pl-3 pr-3 ${
                       isOwnMessage
                         ? 'border-brand-300 bg-brand-500 bg-opacity-20'
-                        : 'border-slate-400 bg-slate-100'
+                        : 'border-zinc-400 bg-zinc-100'
                     } rounded-r-lg`}
                   >
                     <div
                       className={`text-sm ${
-                        isOwnMessage ? 'text-brand-100' : 'text-slate-900'
+                        isOwnMessage ? 'text-brand-100' : 'text-zinc-900'
                       } mb-1`}
                     >
                       Replying to{' '}
@@ -311,7 +311,7 @@ export default function MessageBubble({
                     </div>
                     <div
                       className={`text-base ${
-                        isOwnMessage ? 'text-brand-100' : 'text-slate-900'
+                        isOwnMessage ? 'text-brand-100' : 'text-zinc-900'
                       }`}
                     >
                       {getRepliedToContent(repliedToMessage.content)}
@@ -360,17 +360,17 @@ export default function MessageBubble({
               } z-10`}
             >
               <div
-                className={`${isTouchDevice && showActionsOnMobile ? 'bg-white/95 backdrop-blur-md border border-slate-200 rounded-full p-1.5 gap-1.5 shadow-sm' : 'gap-2'} flex items-center ${
+                className={`${isTouchDevice && showActionsOnMobile ? 'bg-white/95 backdrop-blur-md border border-zinc-200 rounded-full p-1.5 gap-1.5 shadow-sm' : 'gap-2'} flex items-center ${
                   isOwnMessage ? 'flex-row-reverse' : 'flex-row'
                 }`}
               >
                 <button
                   onClick={handleReplyClick}
-                  className={`${isTouchDevice ? 'w-10 h-10' : 'w-8 h-8'} ${isTouchDevice && showActionsOnMobile ? 'bg-slate-100 hover:bg-slate-100 border border-slate-200' : 'bg-slate-100 hover:bg-slate-100'} rounded-full transition-colors duration-150 flex items-center justify-center`}
+                  className={`${isTouchDevice ? 'w-10 h-10' : 'w-8 h-8'} ${isTouchDevice && showActionsOnMobile ? 'bg-zinc-100 hover:bg-zinc-100 border border-zinc-200' : 'bg-zinc-100 hover:bg-zinc-100'} rounded-full transition-colors duration-150 flex items-center justify-center`}
                   title='Reply'
                 >
                   <svg
-                    className='w-4 h-4 text-slate-900'
+                    className='w-4 h-4 text-zinc-900'
                     fill='none'
                     stroke='currentColor'
                     viewBox='0 0 24 24'
@@ -387,11 +387,11 @@ export default function MessageBubble({
                 {isOwnMessage && onDeleteMessage && !message.isDeleted && (
                   <button
                     onClick={handleDeleteClick}
-                    className={`${isTouchDevice ? 'w-10 h-10' : 'w-8 h-8'} ${isTouchDevice && showActionsOnMobile ? 'bg-slate-100 hover:bg-b_red-100 border border-slate-200' : 'bg-slate-100 hover:bg-b_red-100'} rounded-full transition-colors duration-150 flex items-center justify-center`}
+                    className={`${isTouchDevice ? 'w-10 h-10' : 'w-8 h-8'} ${isTouchDevice && showActionsOnMobile ? 'bg-zinc-100 hover:bg-b_red-100 border border-zinc-200' : 'bg-zinc-100 hover:bg-b_red-100'} rounded-full transition-colors duration-150 flex items-center justify-center`}
                     title='Delete message'
                   >
                     <svg
-                      className='w-4 h-4 text-slate-900 hover:text-b_red-500'
+                      className='w-4 h-4 text-zinc-900 hover:text-b_red-500'
                       fill='none'
                       stroke='currentColor'
                       viewBox='0 0 24 24'
@@ -414,8 +414,8 @@ export default function MessageBubble({
                       showEmojiPicker
                         ? 'bg-brand-500 text-white border border-brand-500'
                         : isTouchDevice && showActionsOnMobile
-                          ? 'bg-slate-100 hover:bg-slate-100 text-slate-900 border border-slate-200'
-                          : 'bg-slate-100 text-slate-900'
+                          ? 'bg-zinc-100 hover:bg-zinc-100 text-zinc-900 border border-zinc-200'
+                          : 'bg-zinc-100 text-zinc-900'
                     }`}
                     title='Add reaction'
                   >

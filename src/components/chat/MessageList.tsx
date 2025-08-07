@@ -400,13 +400,13 @@ export default function MessageList({
       <div className='flex-1 overflow-y-auto bg-white'>
         <div className='w-full px-4 sm:px-6 lg:px-32 xl:px-48 py-6 sm:py-8'>
           <div className='flex flex-col items-center justify-center text-center py-20'>
-            <div className='w-14 h-14 bg-slate-100 rounded-full flex items-center justify-center mb-3'>
-              <MessageCircle className='w-8 h-8 text-slate-900' />
+            <div className='w-14 h-14 bg-zinc-100 rounded-full flex items-center justify-center mb-3'>
+              <MessageCircle className='w-8 h-8 text-zinc-900' />
             </div>
-            <h3 className='text-lg font-medium text-slate-900 mb-2'>
+            <h3 className='text-lg font-medium text-zinc-900 mb-2'>
               No messages yet
             </h3>
-            <p className='text-base text-slate-500 max-w-sm'>
+            <p className='text-base text-zinc-500 max-w-sm'>
               Send your first message to begin chatting.
             </p>
           </div>
@@ -426,8 +426,8 @@ export default function MessageList({
         {hasMoreMessages ? (
           <div ref={loadMoreRef} className='flex justify-center py-4'>
             {isLoadingMore ? (
-              <div className='flex items-center space-x-2 text-slate-500'>
-                <div className='animate-spin h-4 w-4 border-2 border-slate-400 border-t-transparent rounded-full'></div>
+              <div className='flex items-center space-x-2 text-zinc-500'>
+                <div className='animate-spin h-4 w-4 border-2 border-zinc-400 border-t-transparent rounded-full'></div>
                 <span className='text-sm'>Loading older messages...</span>
               </div>
             ) : (
@@ -441,7 +441,7 @@ export default function MessageList({
           </div>
         ) : (
           <div className='flex justify-center py-4'>
-            <div className='text-slate-500'>
+            <div className='text-zinc-500'>
               <span className='text-sm'>End of messages</span>
             </div>
           </div>
@@ -563,7 +563,7 @@ export default function MessageList({
             <React.Fragment key={message.id}>
               {shouldShowDateSeparator && (
                 <div className='flex items-center justify-center my-6 px-4'>
-                  <div className='text-slate-500 text-sm'>
+                  <div className='text-zinc-500 text-sm'>
                     {getDateSeparatorText(currentMessageDate)}
                   </div>
                 </div>
@@ -571,7 +571,7 @@ export default function MessageList({
 
               {shouldShowNewMessagesSeparator && (
                 <div className='flex items-center justify-center my-4 px-4'>
-                  <div className='text-slate-500 text-sm font-medium'>
+                  <div className='text-zinc-500 text-sm font-medium'>
                     New messages
                   </div>
                 </div>

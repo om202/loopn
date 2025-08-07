@@ -46,7 +46,7 @@ const getNotificationIcon = (type: string | null) => {
     case 'message':
       return (
         <svg
-          className='w-4 h-4 text-slate-500'
+          className='w-4 h-4 text-zinc-500'
           fill='currentColor'
           viewBox='0 0 20 20'
         >
@@ -62,7 +62,7 @@ const getNotificationIcon = (type: string | null) => {
     case 'system':
       return (
         <svg
-          className='w-4 h-4 text-slate-500'
+          className='w-4 h-4 text-zinc-500'
           fill='currentColor'
           viewBox='0 0 20 20'
         >
@@ -76,7 +76,7 @@ const getNotificationIcon = (type: string | null) => {
     default:
       return (
         <svg
-          className='w-4 h-4 text-slate-500'
+          className='w-4 h-4 text-zinc-500'
           fill='currentColor'
           viewBox='0 0 20 20'
         >
@@ -121,7 +121,7 @@ export default function NotificationItem({
   return (
     <div
       key={notification.id}
-      className='w-full text-left p-3 sm:p-4 hover:bg-slate-100 transition-colors'
+      className='w-full text-left p-3 sm:p-4 hover:bg-zinc-100 transition-colors'
     >
       <div className='flex items-start gap-4'>
         {notification.type === 'chat_request' ? (
@@ -161,14 +161,14 @@ export default function NotificationItem({
             })}
           >
             <div className='flex items-start justify-between mb-1'>
-              <h4 className='text-sm font-semibold text-slate-900 truncate pr-2 no-email-detection'>
+              <h4 className='text-sm font-semibold text-zinc-900 truncate pr-2 no-email-detection'>
                 {notification.title}
               </h4>
-              <span className='text-sm text-slate-500 flex-shrink-0 font-medium'>
+              <span className='text-sm text-zinc-500 flex-shrink-0 font-medium'>
                 {formatTimeAgo(notification.timestamp)}
               </span>
             </div>
-            <p className='text-sm text-slate-900 leading-normal'>
+            <p className='text-sm text-zinc-900 leading-normal'>
               {notification.content}
             </p>
           </div>
@@ -190,7 +190,7 @@ export default function NotificationItem({
                       );
                     }}
                     disabled={decliningId === notification.id}
-                    className='px-3 py-1.5 text-sm font-semibold text-slate-900 bg-slate-100 rounded-lg hover:bg-slate-100 disabled:opacity-50 transition-colors'
+                    className='px-3 py-1.5 text-sm font-semibold text-zinc-900 bg-zinc-100 rounded-lg hover:bg-zinc-100 disabled:opacity-50 transition-colors'
                   >
                     {decliningId === notification.id
                       ? 'Declining...'
@@ -249,7 +249,7 @@ export default function NotificationItem({
                     onError('Failed to mark notification as read');
                   }
                 }}
-                className='px-3 py-1.5 text-sm font-semibold text-slate-900 bg-slate-100 rounded-lg hover:bg-slate-100 transition-colors'
+                className='px-3 py-1.5 text-sm font-semibold text-zinc-900 bg-zinc-100 rounded-lg hover:bg-zinc-100 transition-colors'
               >
                 Mark as Read
               </button>
@@ -283,7 +283,7 @@ export default function NotificationItem({
                     onError('Failed to mark notification as read');
                   }
                 }}
-                className='px-3 py-1.5 text-sm font-semibold text-slate-900 bg-slate-100 rounded-lg hover:bg-slate-100 transition-colors'
+                className='px-3 py-1.5 text-sm font-semibold text-zinc-900 bg-zinc-100 rounded-lg hover:bg-zinc-100 transition-colors'
               >
                 Mark as Read
               </button>
@@ -305,7 +305,7 @@ export default function NotificationItem({
                     onError('Failed to mark notification as read');
                   }
                 }}
-                className='px-3 py-1.5 text-sm font-semibold text-slate-900 bg-slate-100 rounded-lg hover:bg-slate-100 transition-colors'
+                className='px-3 py-1.5 text-sm font-semibold text-zinc-900 bg-zinc-100 rounded-lg hover:bg-zinc-100 transition-colors'
               >
                 Mark as Read
               </button>

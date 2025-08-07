@@ -72,7 +72,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className='bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-40'>
+    <nav className='bg-white/95 backdrop-blur-md border-b border-zinc-200 sticky top-0 z-40'>
       <div className='w-full px-3 sm:px-4 lg:px-6'>
         <div className='flex items-center justify-between h-14 sm:h-16'>
           {/* Logo */}
@@ -89,7 +89,7 @@ export default function Navbar() {
                 className='sm:w-10 sm:h-10'
                 priority
               />
-              <h1 className='text-lg sm:text-xl font-semibold text-slate-900'>
+              <h1 className='text-lg sm:text-xl font-semibold text-zinc-900'>
                 Loopn
               </h1>
             </Link>
@@ -105,7 +105,7 @@ export default function Navbar() {
                 {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
                 <div
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className='p-1.5 rounded-full hover:bg-slate-100 cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 transition-colors'
+                  className='p-1.5 rounded-full hover:bg-zinc-100 cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 transition-colors'
                 >
                   <span className='sr-only'>Open user menu</span>
                   <div className='sm:hidden'>
@@ -119,35 +119,35 @@ export default function Navbar() {
 
               {isDropdownOpen && (
                 <div
-                  className='origin-top-right absolute right-0 mt-2 w-72 sm:w-80 rounded-2xl shadow-sm bg-white/95 backdrop-blur-md border border-slate-200 focus:outline-none z-50'
+                  className='origin-top-right absolute right-0 mt-2 w-72 sm:w-80 rounded-2xl shadow-sm bg-white/95 backdrop-blur-md border border-zinc-200 focus:outline-none z-50'
                   role='menu'
                   aria-orientation='vertical'
                   aria-labelledby='user-menu-button'
                   tabIndex={-1}
                 >
                   <div className='py-1' role='none'>
-                    <div className='flex flex-col items-center px-4 py-4 sm:py-5 border-b border-slate-200'>
+                    <div className='flex flex-col items-center px-4 py-4 sm:py-5 border-b border-zinc-200'>
                       <UserAvatar email={getUserEmail()} size='lg' />
-                      <p className='mt-3 text-sm sm:text-base font-medium text-slate-900 truncate no-email-detection max-w-full px-2'>
+                      <p className='mt-3 text-sm sm:text-base font-medium text-zinc-900 truncate no-email-detection max-w-full px-2'>
                         {getUserEmail()}
                       </p>
-                      <p className='text-xs sm:text-sm text-slate-500'>
+                      <p className='text-xs sm:text-sm text-zinc-500'>
                         Welcome
                       </p>
 
                       {/* AI Profile Summary */}
                       {loadingSummary ? (
-                        <div className='mt-3 w-full flex items-center gap-2 text-sm text-slate-500'>
-                          <div className='w-2 h-2 bg-slate-100 rounded-full animate-pulse'></div>
+                        <div className='mt-3 w-full flex items-center gap-2 text-sm text-zinc-500'>
+                          <div className='w-2 h-2 bg-zinc-100 rounded-full animate-pulse'></div>
                           <span>Loading summary...</span>
                         </div>
                       ) : userSummary ? (
                         <div className='mt-3 w-full'>
-                          <div className='text-sm bg-slate-100 rounded-lg p-3 border border-slate-200'>
-                            <p className='text-slate-900 mb-2 font-bold'>
+                          <div className='text-sm bg-zinc-100 rounded-lg p-3 border border-zinc-200'>
+                            <p className='text-zinc-900 mb-2 font-bold'>
                               Anonymous Overview
                             </p>
-                            <div className='text-slate-900 leading-relaxed text-left'>
+                            <div className='text-zinc-900 leading-relaxed text-left'>
                               {userSummary}
                             </div>
                           </div>
@@ -157,14 +157,14 @@ export default function Navbar() {
                     <div className='p-2'>
                       <button
                         onClick={handleSignOutClick}
-                        className='w-full text-left rounded-xl px-4 py-3 text-sm text-slate-900 hover:bg-slate-100 flex items-center gap-3 transition-colors'
+                        className='w-full text-left rounded-xl px-4 py-3 text-sm text-zinc-900 hover:bg-zinc-100 flex items-center gap-3 transition-colors'
                         role='menuitem'
                         tabIndex={-1}
                         id='user-menu-item-2'
                       >
                         <svg
                           xmlns='http://www.w3.org/2000/svg'
-                          className='h-5 w-5 text-slate-500'
+                          className='h-5 w-5 text-zinc-500'
                           fill='none'
                           viewBox='0 0 24 24'
                           stroke='currentColor'

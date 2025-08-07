@@ -88,9 +88,9 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
   }
 
   return (
-    <div className='bg-white rounded-xl shadow-sm border border-slate-200'>
-      <div className='p-4 border-b border-slate-200'>
-        <div className='flex items-center gap-2 text-slate-900'>
+    <div className='bg-white rounded-xl shadow-sm border border-zinc-200'>
+      <div className='p-4 border-b border-zinc-200'>
+        <div className='flex items-center gap-2 text-zinc-900'>
           <span className='font-medium'>
             Chat Requests ({chatRequests.length})
           </span>
@@ -98,10 +98,10 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
       </div>
 
       {chatRequests.length === 0 ? (
-        <div className='p-8 text-center text-slate-500'>
+        <div className='p-8 text-center text-zinc-500'>
           <div className='w-12 h-12 mx-auto mb-3 flex items-center justify-center'>
             <svg
-              className='w-8 h-8 text-slate-500'
+              className='w-8 h-8 text-zinc-500'
               fill='none'
               stroke='currentColor'
               viewBox='0 0 24 24'
@@ -121,7 +121,7 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
           {chatRequests.map(request => (
             <div
               key={request.id}
-              className='flex items-center justify-between p-3 rounded-lg border border-slate-200 hover:border-brand-200 hover:bg-brand-100/30 transition-all'
+              className='flex items-center justify-between p-3 rounded-lg border border-zinc-200 hover:border-brand-200 hover:bg-brand-100/30 transition-all'
             >
               <div className='flex items-center gap-3'>
                 <UserAvatar
@@ -130,11 +130,11 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
                   size='md'
                 />
                 <div>
-                  <div className='font-medium text-slate-900 text-sm no-email-detection'>
+                  <div className='font-medium text-zinc-900 text-sm no-email-detection'>
                     {request.requesterEmail ||
                       `User ${request.requesterId.slice(-4)}`}
                   </div>
-                  <div className='text-sm text-slate-500'>
+                  <div className='text-sm text-zinc-500'>
                     Wants to chat • {formatTimeAgo(request.createdAt)}
                   </div>
                 </div>
@@ -148,7 +148,7 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
                   disabled={
                     decliningId === request.id || acceptingId === request.id
                   }
-                  className='px-3 py-2 bg-slate-100 text-slate-900 text-sm font-medium rounded-lg hover:bg-slate-100 disabled:opacity-50 transition-colors'
+                  className='px-3 py-2 bg-zinc-100 text-zinc-900 text-sm font-medium rounded-lg hover:bg-zinc-100 disabled:opacity-50 transition-colors'
                 >
                   {decliningId === request.id ? 'Declining...' : 'Decline'}
                 </button>

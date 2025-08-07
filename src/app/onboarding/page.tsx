@@ -164,14 +164,14 @@ export default function OnboardingPage() {
       .filter(word => word.length > 0).length || 0;
 
   return (
-    <div className='min-h-screen bg-slate-100 py-8 px-4'>
+    <div className='min-h-screen bg-zinc-100 py-8 px-4'>
       <div className='max-w-2xl mx-auto'>
         {/* Header */}
         <div className='text-center mb-8'>
-          <h1 className='text-3xl font-bold text-gray-900 mb-2'>
+          <h1 className='text-3xl font-bold text-zinc-900 mb-2'>
             Welcome to Loopn!
           </h1>
-          <p className='text-gray-600'>
+          <p className='text-zinc-600'>
             Let's set up your profile to connect you with the right
             professionals
           </p>
@@ -185,7 +185,7 @@ export default function OnboardingPage() {
                 className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
                   step <= currentStep
                     ? 'bg-brand-500 text-white'
-                    : 'bg-slate-100 text-gray-600'
+                    : 'bg-zinc-100 text-zinc-600'
                 }`}
               >
                 {step}
@@ -193,7 +193,7 @@ export default function OnboardingPage() {
               {step < 3 && (
                 <div
                   className={`w-16 h-1 mx-2 ${
-                    step < currentStep ? 'bg-brand-500' : 'bg-slate-100'
+                    step < currentStep ? 'bg-brand-500' : 'bg-zinc-100'
                   }`}
                 />
               )}
@@ -212,12 +212,12 @@ export default function OnboardingPage() {
           {/* Step 1: Professional Information */}
           {currentStep === 1 && (
             <div className='space-y-6'>
-              <h2 className='text-xl font-semibold text-gray-900 mb-4'>
+              <h2 className='text-xl font-semibold text-zinc-900 mb-4'>
                 Professional Information
               </h2>
 
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>
+                <label className='block text-sm font-medium text-zinc-700 mb-2'>
                   Job Role *
                 </label>
                 <input
@@ -225,12 +225,12 @@ export default function OnboardingPage() {
                   value={formData.jobRole}
                   onChange={e => updateFormData('jobRole', e.target.value)}
                   placeholder='e.g., Software Engineer, Product Manager'
-                  className='w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500'
+                  className='w-full px-3 py-2 border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500'
                 />
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>
+                <label className='block text-sm font-medium text-zinc-700 mb-2'>
                   Company Name *
                 </label>
                 <input
@@ -238,18 +238,18 @@ export default function OnboardingPage() {
                   value={formData.companyName}
                   onChange={e => updateFormData('companyName', e.target.value)}
                   placeholder='e.g., Google, Microsoft, Startup Inc'
-                  className='w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500'
+                  className='w-full px-3 py-2 border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500'
                 />
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>
+                <label className='block text-sm font-medium text-zinc-700 mb-2'>
                   Industry *
                 </label>
                 <select
                   value={formData.industry}
                   onChange={e => updateFormData('industry', e.target.value)}
-                  className='w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500'
+                  className='w-full px-3 py-2 border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500'
                 >
                   <option value=''>Select an industry</option>
                   {INDUSTRY_OPTIONS.map(industry => (
@@ -261,7 +261,7 @@ export default function OnboardingPage() {
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>
+                <label className='block text-sm font-medium text-zinc-700 mb-2'>
                   Years of Experience
                 </label>
                 <select
@@ -272,7 +272,7 @@ export default function OnboardingPage() {
                       parseInt(e.target.value)
                     )
                   }
-                  className='w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500'
+                  className='w-full px-3 py-2 border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500'
                 >
                   {YEARS_OF_EXPERIENCE_OPTIONS.map(option => (
                     <option key={option.value} value={option.value}>
@@ -283,13 +283,13 @@ export default function OnboardingPage() {
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>
+                <label className='block text-sm font-medium text-zinc-700 mb-2'>
                   Education
                 </label>
                 <select
                   value={formData.education}
                   onChange={e => updateFormData('education', e.target.value)}
-                  className='w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500'
+                  className='w-full px-3 py-2 border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500'
                 >
                   <option value=''>Select education level</option>
                   {EDUCATION_OPTIONS.map(education => (
@@ -305,15 +305,15 @@ export default function OnboardingPage() {
           {/* Step 2: About Section */}
           {currentStep === 2 && (
             <div className='space-y-6'>
-              <h2 className='text-xl font-semibold text-gray-900 mb-4'>
+              <h2 className='text-xl font-semibold text-zinc-900 mb-4'>
                 About You
               </h2>
 
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>
+                <label className='block text-sm font-medium text-zinc-700 mb-2'>
                   Tell us about yourself *
                 </label>
-                <p className='text-sm text-gray-500 mb-3'>
+                <p className='text-sm text-zinc-500 mb-3'>
                   Share your professional background, what you're passionate
                   about, or what you're looking to connect with others about.
                   (Minimum 12 words, maximum 80 words)
@@ -323,7 +323,7 @@ export default function OnboardingPage() {
                   onChange={e => updateFormData('about', e.target.value)}
                   placeholder="I'm a passionate software engineer with experience in React and Node.js. I love building user-friendly applications and am always eager to learn new technologies. Looking to connect with other developers and share knowledge about frontend development..."
                   rows={4}
-                  className='w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500'
+                  className='w-full px-3 py-2 border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500'
                 />
                 <div className='flex justify-between text-sm mt-2'>
                   <span
@@ -332,7 +332,7 @@ export default function OnboardingPage() {
                     {wordCount} words (minimum 12)
                   </span>
                   <span
-                    className={`${wordCount > 80 ? 'text-b_red-500' : 'text-gray-500'}`}
+                    className={`${wordCount > 80 ? 'text-b_red-500' : 'text-zinc-500'}`}
                   >
                     {wordCount}/80 words
                   </span>
@@ -344,10 +344,10 @@ export default function OnboardingPage() {
           {/* Step 3: Interests */}
           {currentStep === 3 && (
             <div className='space-y-6'>
-              <h2 className='text-xl font-semibold text-gray-900 mb-4'>
+              <h2 className='text-xl font-semibold text-zinc-900 mb-4'>
                 Your Interests
               </h2>
-              <p className='text-sm text-gray-600 mb-4'>
+              <p className='text-sm text-zinc-600 mb-4'>
                 Select topics you're interested in to help us connect you with
                 like-minded professionals.
               </p>
@@ -360,7 +360,7 @@ export default function OnboardingPage() {
                     className={`px-3 py-2 rounded-full text-sm font-medium transition-colors ${
                       formData.interests?.includes(interest)
                         ? 'bg-brand-500 text-white'
-                        : 'bg-slate-100 text-gray-700 hover:bg-slate-100'
+                        : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-100'
                     }`}
                   >
                     {interest}
@@ -370,7 +370,7 @@ export default function OnboardingPage() {
 
               {formData.interests && formData.interests.length > 0 && (
                 <div className='mt-4'>
-                  <p className='text-sm text-gray-600 mb-2'>
+                  <p className='text-sm text-zinc-600 mb-2'>
                     Selected interests ({formData.interests.length}):
                   </p>
                   <div className='flex flex-wrap gap-2'>
@@ -395,8 +395,8 @@ export default function OnboardingPage() {
               disabled={currentStep === 1}
               className={`px-6 py-2 rounded-md font-medium ${
                 currentStep === 1
-                  ? 'bg-slate-100 text-gray-400 cursor-not-allowed'
-                  : 'bg-slate-100 text-gray-700 hover:bg-slate-100'
+                  ? 'bg-zinc-100 text-zinc-400 cursor-not-allowed'
+                  : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-100'
               }`}
             >
               Previous
@@ -409,7 +409,7 @@ export default function OnboardingPage() {
                 className={`px-6 py-2 rounded-md font-medium ${
                   validateStep(currentStep)
                     ? 'bg-brand-500 text-white hover:bg-brand-500'
-                    : 'bg-slate-100 text-gray-400 cursor-not-allowed'
+                    : 'bg-zinc-100 text-zinc-400 cursor-not-allowed'
                 }`}
               >
                 Next
@@ -421,7 +421,7 @@ export default function OnboardingPage() {
                 className={`px-6 py-2 rounded-md font-medium ${
                   validateStep(3) && !isLoading
                     ? 'bg-green-600 text-white hover:bg-green-700'
-                    : 'bg-slate-100 text-gray-400 cursor-not-allowed'
+                    : 'bg-zinc-100 text-zinc-400 cursor-not-allowed'
                 }`}
               >
                 {isLoading ? 'Completing...' : 'Complete Setup'}

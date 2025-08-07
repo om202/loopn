@@ -83,9 +83,9 @@ export default function MessageInput({
   return (
     <>
       {replyToMessage && (
-        <div className='bg-slate-100 border-t border-slate-200 px-4 sm:px-6 lg:px-32 xl:px-48 py-3'>
+        <div className='bg-zinc-100 border-t border-zinc-200 px-4 sm:px-6 lg:px-32 xl:px-48 py-3'>
           <div className='relative pr-8'>
-            <div className='flex items-center text-sm text-slate-900 mb-3'>
+            <div className='flex items-center text-sm text-zinc-900 mb-3'>
               <svg
                 className='w-4 h-4 mr-2 text-brand-500'
                 fill='none'
@@ -101,13 +101,13 @@ export default function MessageInput({
               </svg>
               <span className='font-medium'>Replying to message</span>
             </div>
-            <div className='text-base text-slate-900 bg-white rounded-lg px-4 py-3 border border-slate-200'>
+            <div className='text-base text-zinc-900 bg-white rounded-lg px-4 py-3 border border-zinc-200'>
               {getRepliedToContent(replyToMessage.content)}
             </div>
             {onCancelReply && (
               <button
                 onClick={onCancelReply}
-                className='absolute top-0 right-0 p-1 text-slate-500 hover:text-slate-900 transition-colors rounded-full hover:bg-slate-100'
+                className='absolute top-0 right-0 p-1 text-zinc-500 hover:text-zinc-900 transition-colors rounded-full hover:bg-zinc-100'
                 title='Cancel reply'
               >
                 <X className='w-4 h-4' />
@@ -117,7 +117,7 @@ export default function MessageInput({
         </div>
       )}
 
-      <div className='flex-shrink-0 bg-white border-t border-slate-200 p-4 sm:p-6 lg:px-32 xl:px-48 shadow-sm relative'>
+      <div className='flex-shrink-0 bg-white border-t border-zinc-200 p-4 sm:p-6 lg:px-32 xl:px-48 shadow-sm relative'>
         <div className='w-full'>
           <form
             autoComplete='off'
@@ -197,13 +197,13 @@ export default function MessageInput({
                     WebkitAppearance: 'none',
                     MozAppearance: 'textfield',
                   }}
-                  className='w-full px-5 py-3 pr-14 border border-slate-200 rounded-full focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent text-base font-medium bg-slate-100 hover:bg-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed placeholder-slate-500'
+                  className='w-full px-5 py-3 pr-14 border border-zinc-200 rounded-full focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent text-base font-medium bg-zinc-100 hover:bg-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed placeholder-zinc-500'
                 />
                 <button
                   type='button'
                   onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                   disabled={disabled}
-                  className={`absolute right-2 top-1/2 transform -translate-y-1/2 text-slate-500 hover:text-slate-900 transition-all duration-200 p-2 rounded-full hover:bg-slate-100 focus:outline-none disabled:opacity-50 ${
+                  className={`absolute right-2 top-1/2 transform -translate-y-1/2 text-zinc-500 hover:text-zinc-900 transition-all duration-200 p-2 rounded-full hover:bg-zinc-100 focus:outline-none disabled:opacity-50 ${
                     showEmojiPicker ? 'text-brand-500 bg-brand-100' : ''
                   }`}
                 >

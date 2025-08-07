@@ -51,23 +51,23 @@ export default function EmojiPicker({
     <div
       ref={pickerRef}
       data-emoji-picker
-      className='absolute bottom-full mb-2 right-0 p-2 py-1 bg-white border border-slate-200 rounded-full z-50 backdrop-blur-sm shadow-xs'
+      className='absolute bottom-full mb-2 right-0 p-2 py-1 bg-white border border-zinc-200 rounded-full z-50 backdrop-blur-sm shadow-xs'
     >
       <div className='flex gap-1 items-center'>
         {QUICK_EMOJIS.map(emoji => (
           <button
             key={emoji}
             onClick={() => handleEmojiSelect(emoji)}
-            className='h-8 w-8 rounded-full transition-all duration-150 ease-out flex items-center justify-center focus:outline-none hover:bg-slate-100'
+            className='h-8 w-8 rounded-full transition-all duration-150 ease-out flex items-center justify-center focus:outline-none hover:bg-zinc-100'
           >
             <span className='text-2xl'>{emoji}</span>
           </button>
         ))}
         <button
           onClick={() => setShowFullPicker(true)}
-          className='h-8 w-8 rounded-full transition-all duration-150 ease-out flex items-center justify-center focus:outline-none hover:bg-slate-100 bg-slate-100'
+          className='h-8 w-8 rounded-full transition-all duration-150 ease-out flex items-center justify-center focus:outline-none hover:bg-zinc-100 bg-zinc-100'
         >
-          <span className='text-xl text-slate-900'>+</span>
+          <span className='text-xl text-zinc-900'>+</span>
         </button>
       </div>
     </div>

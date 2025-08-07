@@ -44,7 +44,7 @@ export default function DashboardSidebar({
     <>
       {/* Desktop Sidebar */}
       <div className='hidden lg:block w-80 flex-shrink-0'>
-        <div className='bg-white rounded-2xl border border-slate-200 p-6 h-full flex flex-col'>
+        <div className='bg-white rounded-2xl border border-zinc-200 p-6 h-full flex flex-col'>
           <nav className='space-y-2 flex-1 overflow-y-auto'>
             {sidebarItems.map(({ id, icon: Icon, label, count }) => (
               <button
@@ -53,12 +53,12 @@ export default function DashboardSidebar({
                 className={`relative w-full flex items-center justify-start gap-3 px-3 py-2.5 rounded-xl text-left border transition-all duration-200 ${
                   activeSection === id
                     ? 'bg-brand-100 text-brand-700 border-transparent'
-                    : 'bg-white text-slate-900 border-slate-200 hover:bg-slate-100'
+                    : 'bg-white text-zinc-900 border-zinc-200 hover:bg-zinc-100'
                 }`}
               >
                 <Icon className='w-5 h-5 flex-shrink-0' />
                 <span className='font-medium text-base'>{label}</span>
-                <span className='ml-auto text-base text-slate-900 font-medium mr-2'>
+                <span className='ml-auto text-base text-zinc-900 font-medium mr-2'>
                   {count}
                 </span>
               </button>
@@ -68,9 +68,9 @@ export default function DashboardSidebar({
       </div>
 
       {/* Mobile Bottom Bar */}
-      <div className='lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-200 px-4 py-3'>
+      <div className='lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-zinc-200 px-4 py-3'>
         <nav className='flex justify-center items-stretch'>
-          <div className='flex bg-slate-50 rounded-2xl p-1 gap-1 max-w-xs w-full'>
+          <div className='flex bg-zinc-50 rounded-2xl p-1 gap-1 max-w-xs w-full'>
             {sidebarItems.map(({ id, icon: Icon, label, count }) => (
               <button
                 key={id}
@@ -78,7 +78,7 @@ export default function DashboardSidebar({
                 className={`relative flex-1 flex flex-col items-center justify-center gap-1.5 px-3 py-3 rounded-xl transition-all duration-200 min-h-[56px] ${
                   activeSection === id
                     ? 'text-brand-500 bg-white shadow-sm'
-                    : 'text-slate-500 hover:text-slate-700 hover:bg-white/50'
+                    : 'text-zinc-500 hover:text-zinc-700 hover:bg-white/50'
                 }`}
                 title={label}
               >

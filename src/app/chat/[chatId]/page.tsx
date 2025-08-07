@@ -134,10 +134,10 @@ export default function ChatPage({ params }: ChatPageProps) {
           style={{ minHeight: '100dvh' }}
         >
           <div className='text-center'>
-            <h1 className='text-2xl font-bold text-slate-900 mb-4'>
+            <h1 className='text-2xl font-bold text-zinc-900 mb-4'>
               Chat Not Found
             </h1>
-            <p className='text-slate-900 mb-4'>{error}</p>
+            <p className='text-zinc-900 mb-4'>{error}</p>
             <button
               onClick={() => router.push('/dashboard')}
               className='px-4 py-2 bg-brand-500 text-white rounded-lg hover:bg-brand-500'

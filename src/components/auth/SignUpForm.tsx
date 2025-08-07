@@ -13,12 +13,12 @@ interface SignUpFormProps {
 function PasswordRequirement({ met, text }: { met: boolean; text: string }) {
   return (
     <div
-      className={`flex items-center gap-2 text-xs ${met ? 'text-green-600' : 'text-slate-500'}`}
+      className={`flex items-center gap-2 text-xs ${met ? 'text-green-600' : 'text-zinc-500'}`}
     >
       {met ? (
         <Check className='w-3 h-3 text-green-600' />
       ) : (
-        <X className='w-3 h-3 text-slate-500' />
+        <X className='w-3 h-3 text-zinc-500' />
       )}
       <span>{text}</span>
     </div>
@@ -91,20 +91,20 @@ export default function SignUpForm({
           <div>
             <label
               htmlFor='givenName'
-              className='block text-sm font-medium text-slate-900 mb-3'
+              className='block text-sm font-medium text-zinc-900 mb-3'
             >
               First name
             </label>
             <div className='relative'>
               <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-                <User className='h-5 w-5 text-slate-500' />
+                <User className='h-5 w-5 text-zinc-500' />
               </div>
               <input
                 id='givenName'
                 type='text'
                 value={givenName}
                 onChange={e => setGivenName(e.target.value)}
-                className='w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white'
+                className='w-full pl-10 pr-4 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white'
                 placeholder='First'
               />
             </div>
@@ -113,7 +113,7 @@ export default function SignUpForm({
           <div>
             <label
               htmlFor='familyName'
-              className='block text-sm font-medium text-slate-900 mb-3'
+              className='block text-sm font-medium text-zinc-900 mb-3'
             >
               Last name
             </label>
@@ -122,7 +122,7 @@ export default function SignUpForm({
               type='text'
               value={familyName}
               onChange={e => setFamilyName(e.target.value)}
-              className='w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white'
+              className='w-full px-4 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white'
               placeholder='Last'
             />
           </div>
@@ -131,20 +131,20 @@ export default function SignUpForm({
         <div>
           <label
             htmlFor='email'
-            className='block text-sm font-medium text-slate-900 mb-3'
+            className='block text-sm font-medium text-zinc-900 mb-3'
           >
             Email address
           </label>
           <div className='relative'>
             <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-              <Mail className='h-5 w-5 text-slate-500' />
+              <Mail className='h-5 w-5 text-zinc-500' />
             </div>
             <input
               id='email'
               type='email'
               value={email}
               onChange={e => setEmail(e.target.value)}
-              className='w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white'
+              className='w-full pl-10 pr-4 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white'
               placeholder='Enter your email'
               required
             />
@@ -154,13 +154,13 @@ export default function SignUpForm({
         <div>
           <label
             htmlFor='password'
-            className='block text-sm font-medium text-slate-900 mb-3'
+            className='block text-sm font-medium text-zinc-900 mb-3'
           >
             Password
           </label>
           <div className='relative'>
             <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-              <Lock className='h-5 w-5 text-slate-500' />
+              <Lock className='h-5 w-5 text-zinc-500' />
             </div>
             <input
               id='password'
@@ -174,7 +174,7 @@ export default function SignUpForm({
                   ? isPasswordValid
                     ? 'border-green-200 focus:ring-green-500'
                     : 'border-b_red-200 focus:ring-b_red-500'
-                  : 'border-slate-200 focus:ring-brand-500'
+                  : 'border-zinc-200 focus:ring-brand-500'
               }`}
               placeholder='Create a password'
               required
@@ -183,8 +183,8 @@ export default function SignUpForm({
 
           {/* Real-time password validation */}
           {showPasswordHints && (
-            <div className='mt-3 p-3 bg-slate-100 rounded-lg border border-slate-200'>
-              <p className='text-sm font-medium text-slate-900 mb-2'>
+            <div className='mt-3 p-3 bg-zinc-100 rounded-lg border border-zinc-200'>
+              <p className='text-sm font-medium text-zinc-900 mb-2'>
                 Password requirements:
               </p>
               <div className='space-y-1'>
@@ -216,13 +216,13 @@ export default function SignUpForm({
         <div>
           <label
             htmlFor='confirmPassword'
-            className='block text-sm font-medium text-slate-900 mb-3'
+            className='block text-sm font-medium text-zinc-900 mb-3'
           >
             Confirm password
           </label>
           <div className='relative'>
             <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-              <Lock className='h-5 w-5 text-slate-500' />
+              <Lock className='h-5 w-5 text-zinc-500' />
             </div>
             <input
               id='confirmPassword'
@@ -232,7 +232,7 @@ export default function SignUpForm({
               className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:border-transparent transition-colors bg-white ${
                 confirmPassword && password !== confirmPassword
                   ? 'border-b_red-200 focus:ring-b_red-500'
-                  : 'border-slate-200 focus:ring-brand-500'
+                  : 'border-zinc-200 focus:ring-brand-500'
               }`}
               placeholder='Confirm your password'
               required
@@ -251,8 +251,8 @@ export default function SignUpForm({
           {isLoading ? 'Creating account...' : 'Create Account'}
         </button>
 
-        <div className='text-center pt-2 border-t border-slate-200'>
-          <span className='text-sm text-slate-900'>
+        <div className='text-center pt-2 border-t border-zinc-200'>
+          <span className='text-sm text-zinc-900'>
             Already have an account?{' '}
           </span>
           <button

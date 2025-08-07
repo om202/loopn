@@ -57,26 +57,26 @@ export default function ConfirmSignUpForm({
         <div>
           <label
             htmlFor='confirmationCode'
-            className='block text-sm font-medium text-slate-900 mb-3'
+            className='block text-sm font-medium text-zinc-900 mb-3'
           >
             Verification code
           </label>
           <div className='relative'>
             <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-              <Shield className='h-5 w-5 text-slate-500' />
+              <Shield className='h-5 w-5 text-zinc-500' />
             </div>
             <input
               id='confirmationCode'
               type='text'
               value={confirmationCode}
               onChange={e => setConfirmationCode(e.target.value)}
-              className='w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white text-center text-lg tracking-widest'
+              className='w-full pl-10 pr-4 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white text-center text-lg tracking-widest'
               placeholder='000000'
               maxLength={6}
               required
             />
           </div>
-          <p className='text-xs text-slate-500 mt-2 text-center'>
+          <p className='text-xs text-zinc-500 mt-2 text-center'>
             Enter the 6-digit code from your email
           </p>
         </div>
@@ -90,7 +90,7 @@ export default function ConfirmSignUpForm({
         </button>
 
         <div className='text-center'>
-          <span className='text-sm text-slate-900'>
+          <span className='text-sm text-zinc-900'>
             Didn't receive the code?{' '}
           </span>
           <button
@@ -103,7 +103,7 @@ export default function ConfirmSignUpForm({
           </button>
         </div>
 
-        <div className='text-center pt-2 border-t border-slate-200'>
+        <div className='text-center pt-2 border-t border-zinc-200'>
           <button
             type='button'
             onClick={onSwitchToSignIn}

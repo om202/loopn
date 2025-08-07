@@ -96,13 +96,13 @@ export default function NotificationDropdown({
 
   return (
     <div
-      className='origin-top-right absolute right-0 mt-2 w-80 sm:w-96 max-w-[calc(100vw-2rem)] rounded-2xl shadow-sm bg-white border border-slate-200 focus:outline-none z-20'
+      className='origin-top-right absolute right-0 mt-2 w-80 sm:w-96 max-w-[calc(100vw-2rem)] rounded-2xl shadow-sm bg-white border border-zinc-200 focus:outline-none z-20'
       role='menu'
       aria-orientation='vertical'
       aria-labelledby='user-menu-button'
     >
-      <div className='p-3 sm:p-4 border-b border-slate-200'>
-        <h3 className='text-base sm:text-lg font-semibold text-slate-900'>
+      <div className='p-3 sm:p-4 border-b border-zinc-200'>
+        <h3 className='text-base sm:text-lg font-semibold text-zinc-900'>
           Notifications
         </h3>
       </div>
@@ -116,10 +116,10 @@ export default function NotificationDropdown({
         )}
 
         {getFilteredNotifications().length === 0 ? (
-          <div className='py-12 sm:py-16 text-center text-slate-500'>
-            <div className='w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-full flex items-center justify-center'>
+          <div className='py-12 sm:py-16 text-center text-zinc-500'>
+            <div className='w-16 h-16 mx-auto mb-4 bg-zinc-100 rounded-full flex items-center justify-center'>
               <svg
-                className='w-8 h-8 text-slate-500'
+                className='w-8 h-8 text-zinc-500'
                 fill='none'
                 stroke='currentColor'
                 viewBox='0 0 24 24'
@@ -132,13 +132,13 @@ export default function NotificationDropdown({
                 />
               </svg>
             </div>
-            <h4 className='text-base font-medium text-slate-900'>
+            <h4 className='text-base font-medium text-zinc-900'>
               You&apos;re all caught up
             </h4>
-            <p className='text-sm text-slate-500 mt-1'>No new notifications</p>
+            <p className='text-sm text-zinc-500 mt-1'>No new notifications</p>
           </div>
         ) : (
-          <div className='divide-y divide-slate-100'>
+          <div className='divide-y divide-zinc-100'>
             {getFilteredNotifications().map(notification => (
               <NotificationItem
                 key={notification.id}
@@ -155,10 +155,10 @@ export default function NotificationDropdown({
       </div>
 
       {getFilteredNotifications().length > 0 && (
-        <div className='p-2 border-t border-slate-200 bg-slate-100'>
+        <div className='p-2 border-t border-zinc-200 bg-zinc-100'>
           <button
             onClick={handleMarkAllAsRead}
-            className='w-full text-center text-sm text-brand-500 hover:text-brand-700 font-medium py-2 rounded-2xl hover:bg-slate-100 transition-colors'
+            className='w-full text-center text-sm text-brand-500 hover:text-brand-700 font-medium py-2 rounded-2xl hover:bg-zinc-100 transition-colors'
           >
             Mark all as read
           </button>

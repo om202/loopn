@@ -49,14 +49,14 @@ export default function DialogContainer({
     <div className='fixed inset-0 z-50 overflow-y-auto'>
       {/* Background overlay */}
       <div
-        className='fixed inset-0 bg-white/30 transition-opacity'
+        className='fixed inset-0 bg-white/24 transition-opacity'
         onClick={onClose}
       />
 
       {/* Dialog container */}
       <div className='flex min-h-full items-center justify-center p-4'>
         <div
-          className={`relative w-full ${maxWidthClasses[maxWidth]} transform overflow-hidden rounded-xl bg-white border border-slate-200 shadow-sm transition-all`}
+          className={`relative w-full ${maxWidthClasses[maxWidth]} transform overflow-hidden rounded-xl bg-white border border-zinc-200 shadow-sm transition-all`}
         >
           {children}
         </div>

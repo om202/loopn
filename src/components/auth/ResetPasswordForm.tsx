@@ -63,27 +63,27 @@ export default function ResetPasswordForm({
         <div>
           <label
             htmlFor='confirmationCode'
-            className='block text-sm font-medium text-slate-900 mb-3'
+            className='block text-sm font-medium text-zinc-900 mb-3'
           >
             Verification code
           </label>
           <div className='relative'>
             <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-              <Shield className='h-5 w-5 text-slate-500' />
+              <Shield className='h-5 w-5 text-zinc-500' />
             </div>
             <input
               id='confirmationCode'
               type='text'
               value={confirmationCode}
               onChange={e => setConfirmationCode(e.target.value)}
-              className='w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white text-center text-lg tracking-widest'
+              className='w-full pl-10 pr-4 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white text-center text-lg tracking-widest'
               placeholder='000000'
               maxLength={6}
               required
             />
           </div>
           <div className='flex justify-between items-center mt-2'>
-            <p className='text-xs text-slate-500'>
+            <p className='text-xs text-zinc-500'>
               Code sent to <span className='font-medium'>{email}</span>
             </p>
             <button
@@ -100,25 +100,25 @@ export default function ResetPasswordForm({
         <div>
           <label
             htmlFor='newPassword'
-            className='block text-sm font-medium text-slate-900 mb-3'
+            className='block text-sm font-medium text-zinc-900 mb-3'
           >
             New password
           </label>
           <div className='relative'>
             <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-              <Lock className='h-5 w-5 text-slate-500' />
+              <Lock className='h-5 w-5 text-zinc-500' />
             </div>
             <input
               id='newPassword'
               type='password'
               value={newPassword}
               onChange={e => setNewPassword(e.target.value)}
-              className='w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white'
+              className='w-full pl-10 pr-4 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white'
               placeholder='Enter new password'
               required
             />
           </div>
-          <p className='text-xs text-slate-500 mt-2'>
+          <p className='text-xs text-zinc-500 mt-2'>
             Must be at least 8 characters with uppercase, lowercase, numbers,
             and symbols
           </p>
@@ -127,13 +127,13 @@ export default function ResetPasswordForm({
         <div>
           <label
             htmlFor='confirmPassword'
-            className='block text-sm font-medium text-slate-900 mb-3'
+            className='block text-sm font-medium text-zinc-900 mb-3'
           >
             Confirm new password
           </label>
           <div className='relative'>
             <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-              <Lock className='h-5 w-5 text-slate-500' />
+              <Lock className='h-5 w-5 text-zinc-500' />
             </div>
             <input
               id='confirmPassword'
@@ -143,7 +143,7 @@ export default function ResetPasswordForm({
               className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:border-transparent transition-colors bg-white ${
                 confirmPassword && newPassword !== confirmPassword
                   ? 'border-b_red-200 focus:ring-b_red-500'
-                  : 'border-slate-200 focus:ring-brand-500'
+                  : 'border-zinc-200 focus:ring-brand-500'
               }`}
               placeholder='Confirm new password'
               required
@@ -168,7 +168,7 @@ export default function ResetPasswordForm({
           {isLoading ? 'Resetting password...' : 'Reset Password'}
         </button>
 
-        <div className='text-center pt-2 border-t border-slate-200'>
+        <div className='text-center pt-2 border-t border-zinc-200'>
           <button
             type='button'
             onClick={onSwitchToSignIn}

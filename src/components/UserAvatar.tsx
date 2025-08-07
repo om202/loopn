@@ -28,7 +28,7 @@ export default function UserAvatar({
   };
 
   const getAvatarColors = () => {
-    // Use gray and light colors for anonymous users
+    // Use slate and light colors for anonymous users
     if (!email && !userId) {
       return ['#E5E7EB', '#D1D5DB', '#9CA3AF', '#6B7280', '#F3F4F6'];
     }
@@ -90,19 +90,19 @@ export default function UserAvatar({
       case 'RECENTLY_ACTIVE':
         return (
           <div
-            className={`${indicatorSize} bg-slate-500 rounded-full border-2 border-white box-content`}
+            className={`${indicatorSize} bg-zinc-500 rounded-full border-2 border-white box-content`}
           />
         );
       case 'OFFLINE':
         return (
           <div
-            className={`${indicatorSize} bg-slate-500 rounded-full border-2 border-white box-content`}
+            className={`${indicatorSize} bg-zinc-500 rounded-full border-2 border-white box-content`}
           />
         );
       default:
         return (
           <div
-            className={`${indicatorSize} bg-slate-500 rounded-full border-2 border-white box-content`}
+            className={`${indicatorSize} bg-zinc-500 rounded-full border-2 border-white box-content`}
           />
         );
     }
