@@ -56,14 +56,17 @@ export default function SignUpForm({
     clearError();
 
     if (!email || !password) {
+      console.warn('Email and password are required');
       return;
     }
 
     if (!isPasswordValid) {
+      console.warn('Password does not meet requirements');
       return;
     }
 
     if (password !== confirmPassword) {
+      console.warn('Passwords do not match');
       return;
     }
 
@@ -242,14 +245,7 @@ export default function SignUpForm({
 
         <button
           type='submit'
-          disabled={
-            isLoading ||
-            !email ||
-            !password ||
-            !confirmPassword ||
-            !isPasswordValid ||
-            password !== confirmPassword
-          }
+          disabled={isLoading}
           className='w-full bg-blue-600 text-white py-3 px-4 rounded-xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium'
         >
           {isLoading ? 'Creating account...' : 'Create Account'}

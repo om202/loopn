@@ -26,8 +26,8 @@ export default function CustomAuthenticator() {
   const AuthHeader = () => (
     <div className='text-center mb-8'>
       <div className='flex items-center justify-center space-x-3 mb-6'>
-        <Image src='/loopn.svg' alt='Loopn' width={32} height={32} priority />
-        <h1 className='text-xl font-bold text-slate-900'>Loopn</h1>
+        <Image src='/loopn.svg' alt='Loopn' width={48} height={48} priority />
+        <h1 className='text-3xl font-bold text-slate-900'>Loopn</h1>
       </div>
       <p className='text-slate-600 text-base'>
         {authState.view === 'signIn' && 'Please sign in to continue'}
