@@ -239,7 +239,9 @@ export default function SignUpForm({
             />
           </div>
           {confirmPassword && password !== confirmPassword && (
-            <p className='text-xs text-b_red-500 mt-2'>Passwords do not match</p>
+            <p className='text-xs text-b_red-500 mt-2'>
+              Passwords do not match
+            </p>
           )}
         </div>
 

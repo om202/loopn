@@ -104,9 +104,7 @@ export default function SignInForm({
         </div>
 
         <div className='text-center pt-2 border-t border-zinc-200'>
-          <span className='text-sm text-zinc-900'>
-            Don't have an account?{' '}
-          </span>
+          <span className='text-sm text-zinc-900'>Don't have an account? </span>
           <button
             type='button'
             onClick={onSwitchToSignUp}

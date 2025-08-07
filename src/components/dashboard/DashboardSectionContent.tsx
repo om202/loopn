@@ -118,7 +118,9 @@ export default function DashboardSectionContent({
   return (
     <div>
       <div className='mb-6 sm:mb-8 lg:mb-10'>
-        <h2 className='text-xl sm:text-2xl font-bold text-zinc-900 mb-2'>{title}</h2>
+        <h2 className='text-xl sm:text-2xl font-bold text-zinc-900 mb-2'>
+          {title}
+        </h2>
         <p className='text-sm sm:text-base text-zinc-900'>{description}</p>
       </div>
       <div className='space-y-2.5 sm:space-y-3'>

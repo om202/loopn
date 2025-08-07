@@ -68,9 +68,7 @@ export default function ChatHeader({
     if (otherUserPresence.lastSeen) {
       const presenceText = formatPresenceTime(otherUserPresence.lastSeen);
       const color =
-        presenceText === 'Recently active'
-          ? 'text-zinc-500'
-          : 'text-zinc-500';
+        presenceText === 'Recently active' ? 'text-zinc-500' : 'text-zinc-500';
       return {
         text: presenceText,
         color,

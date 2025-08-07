@@ -150,7 +150,9 @@ export default function ResetPasswordForm({
             />
           </div>
           {confirmPassword && newPassword !== confirmPassword && (
-            <p className='text-xs text-b_red-500 mt-2'>Passwords do not match</p>
+            <p className='text-xs text-b_red-500 mt-2'>
+              Passwords do not match
+            </p>
           )}
         </div>
 

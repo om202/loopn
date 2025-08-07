@@ -159,10 +159,14 @@ export default function UserCard({
               );
               return (
                 <div className='text-sm text-right min-w-[70px]'>
-                  <div className='text-zinc-500 hidden min-[400px]:block'>Reconnect in</div>
+                  <div className='text-zinc-500 hidden min-[400px]:block'>
+                    Reconnect in
+                  </div>
                   <div className='text-zinc-500 flex items-center justify-end gap-1'>
                     <Clock className='w-3 h-3 text-zinc-500 hover:text-zinc-900 cursor-pointer transition-colors' />
-                    <span className='text-xs min-[400px]:text-sm'>{timeRemaining}</span>
+                    <span className='text-xs min-[400px]:text-sm'>
+                      {timeRemaining}
+                    </span>
                   </div>
                 </div>
               );
@@ -182,7 +186,9 @@ export default function UserCard({
                 {pendingRequests.has(userPresence.userId) ? (
                   <>
                     <span className='text-zinc-600 text-sm min-[400px]:inline'>
-                      <span className='hidden min-[400px]:inline'>Cancel Request</span>
+                      <span className='hidden min-[400px]:inline'>
+                        Cancel Request
+                      </span>
                       <span className='min-[400px]:hidden'>Cancel</span>
                     </span>
                   </>
@@ -193,7 +199,9 @@ export default function UserCard({
                       canUserReconnect(userPresence.userId) ? (
                         <>
                           <span className='text-sm'>
-                            <span className='hidden min-[400px]:inline'>Send Request</span>
+                            <span className='hidden min-[400px]:inline'>
+                              Send Request
+                            </span>
                             <span className='min-[400px]:hidden'>Request</span>
                           </span>
                         </>
@@ -207,7 +215,9 @@ export default function UserCard({
                               <div className='hidden min-[400px]:block text-xs'>
                                 Reconnect in
                               </div>
-                              <div className='min-[400px]:hidden text-xs'>Wait</div>
+                              <div className='min-[400px]:hidden text-xs'>
+                                Wait
+                              </div>
                               <div className='flex items-center justify-end gap-1'>
                                 <span className='text-xs'>{timeRemaining}</span>
                                 <Clock
