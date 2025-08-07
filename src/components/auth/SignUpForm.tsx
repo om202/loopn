@@ -104,7 +104,7 @@ export default function SignUpForm({
                 type='text'
                 value={givenName}
                 onChange={e => setGivenName(e.target.value)}
-                className='w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors bg-white'
+                className='w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white'
                 placeholder='First'
               />
             </div>
@@ -122,7 +122,7 @@ export default function SignUpForm({
               type='text'
               value={familyName}
               onChange={e => setFamilyName(e.target.value)}
-              className='w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors bg-white'
+              className='w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white'
               placeholder='Last'
             />
           </div>
@@ -144,7 +144,7 @@ export default function SignUpForm({
               type='email'
               value={email}
               onChange={e => setEmail(e.target.value)}
-              className='w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors bg-white'
+              className='w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white'
               placeholder='Enter your email'
               required
             />
@@ -174,7 +174,7 @@ export default function SignUpForm({
                   ? isPasswordValid
                     ? 'border-green-200 focus:ring-green-500'
                     : 'border-red-200 focus:ring-red-500'
-                  : 'border-slate-200 focus:ring-blue-500'
+                  : 'border-slate-200 focus:ring-brand-500'
               }`}
               placeholder='Create a password'
               required
@@ -232,7 +232,7 @@ export default function SignUpForm({
               className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:border-transparent transition-colors bg-white ${
                 confirmPassword && password !== confirmPassword
                   ? 'border-red-200 focus:ring-red-500'
-                  : 'border-slate-200 focus:ring-blue-500'
+                  : 'border-slate-200 focus:ring-brand-500'
               }`}
               placeholder='Confirm your password'
               required
@@ -246,7 +246,7 @@ export default function SignUpForm({
         <button
           type='submit'
           disabled={isLoading}
-          className='w-full bg-blue-600 text-white py-3 px-4 rounded-xl hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium'
+          className='w-full bg-brand-600 text-white py-3 px-4 rounded-xl hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium'
         >
           {isLoading ? 'Creating account...' : 'Create Account'}
         </button>
@@ -258,7 +258,7 @@ export default function SignUpForm({
           <button
             type='button'
             onClick={onSwitchToSignIn}
-            className='text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors'
+            className='text-sm text-brand-600 hover:text-brand-700 font-medium transition-colors'
           >
             Sign in
           </button>

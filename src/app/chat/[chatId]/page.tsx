@@ -140,7 +140,7 @@ export default function ChatPage({ params }: ChatPageProps) {
             <p className='text-slate-900 mb-4'>{error}</p>
             <button
               onClick={() => router.push('/dashboard')}
-              className='px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-600'
+              className='px-4 py-2 bg-brand-600 text-white rounded-lg hover:bg-brand-600'
             >
               Back to Dashboard
             </button>

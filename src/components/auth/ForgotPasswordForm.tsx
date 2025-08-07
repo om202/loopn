@@ -57,7 +57,7 @@ export default function ForgotPasswordForm({
               type='email'
               value={email}
               onChange={e => setEmail(e.target.value)}
-              className='w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors bg-white'
+              className='w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white'
               placeholder='Enter your email'
               required
             />
@@ -67,7 +67,7 @@ export default function ForgotPasswordForm({
         <button
           type='submit'
           disabled={isLoading || !email}
-          className='w-full bg-blue-600 text-white py-3 px-4 rounded-xl hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium'
+          className='w-full bg-brand-600 text-white py-3 px-4 rounded-xl hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium'
         >
           {isLoading ? 'Sending reset code...' : 'Send Reset Code'}
         </button>
@@ -76,7 +76,7 @@ export default function ForgotPasswordForm({
           <button
             type='button'
             onClick={onSwitchToSignIn}
-            className='text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors flex items-center justify-center gap-2 mx-auto'
+            className='text-sm text-brand-600 hover:text-brand-700 font-medium transition-colors flex items-center justify-center gap-2 mx-auto'
           >
             <ArrowLeft className='w-4 h-4' />
             Back to sign in

@@ -76,7 +76,7 @@ export default function ResetPasswordForm({
               type='text'
               value={confirmationCode}
               onChange={e => setConfirmationCode(e.target.value)}
-              className='w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors bg-white text-center text-lg tracking-widest'
+              className='w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white text-center text-lg tracking-widest'
               placeholder='000000'
               maxLength={6}
               required
@@ -90,7 +90,7 @@ export default function ResetPasswordForm({
               type='button'
               onClick={handleResendCode}
               disabled={isLoading}
-              className='text-xs text-blue-600 hover:text-blue-700 font-medium transition-colors disabled:opacity-50'
+              className='text-xs text-brand-600 hover:text-brand-700 font-medium transition-colors disabled:opacity-50'
             >
               Resend code
             </button>
@@ -113,7 +113,7 @@ export default function ResetPasswordForm({
               type='password'
               value={newPassword}
               onChange={e => setNewPassword(e.target.value)}
-              className='w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors bg-white'
+              className='w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white'
               placeholder='Enter new password'
               required
             />
@@ -143,7 +143,7 @@ export default function ResetPasswordForm({
               className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:border-transparent transition-colors bg-white ${
                 confirmPassword && newPassword !== confirmPassword
                   ? 'border-red-200 focus:ring-red-500'
-                  : 'border-slate-200 focus:ring-blue-500'
+                  : 'border-slate-200 focus:ring-brand-500'
               }`}
               placeholder='Confirm new password'
               required
@@ -163,7 +163,7 @@ export default function ResetPasswordForm({
             !confirmPassword ||
             newPassword !== confirmPassword
           }
-          className='w-full bg-blue-600 text-white py-3 px-4 rounded-xl hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium'
+          className='w-full bg-brand-600 text-white py-3 px-4 rounded-xl hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium'
         >
           {isLoading ? 'Resetting password...' : 'Reset Password'}
         </button>
@@ -172,7 +172,7 @@ export default function ResetPasswordForm({
           <button
             type='button'
             onClick={onSwitchToSignIn}
-            className='text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors'
+            className='text-sm text-brand-600 hover:text-brand-700 font-medium transition-colors'
           >
             Back to sign in
           </button>
