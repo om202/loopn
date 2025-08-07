@@ -117,17 +117,17 @@ export default function DashboardSectionContent({
 
   return (
     <div>
-      <div className='mb-8 lg:mb-10'>
-        <h2 className='text-2xl font-bold text-slate-900 mb-2'>{title}</h2>
-        <p className='text-base text-slate-900'>{description}</p>
+      <div className='mb-6 sm:mb-8 lg:mb-10'>
+        <h2 className='text-xl sm:text-2xl font-bold text-slate-900 mb-2'>{title}</h2>
+        <p className='text-sm sm:text-base text-slate-900'>{description}</p>
       </div>
-      <div className='space-y-3'>
+      <div className='space-y-2.5 sm:space-y-3'>
         {usersToShow.length > 0 ? (
           usersToShow.map(renderUserCard)
         ) : (
           <div className='text-center py-6 lg:py-8 text-slate-500'>
             <EmptyIcon className='w-6 lg:w-8 h-6 lg:h-8 mx-auto mb-2 text-slate-500' />
-            <p className='text-base'>{emptyMessage}</p>
+            <p className='text-sm sm:text-base'>{emptyMessage}</p>
           </div>
         )}
       </div>

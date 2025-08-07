@@ -79,9 +79,9 @@ export default function UserCard({
   return (
     <div
       key={userPresence.userId}
-      className='bg-white rounded-2xl border border-slate-200 px-3 lg:px-4 py-3 lg:py-4 group transition-all duration-200'
+      className='bg-white rounded-2xl border border-slate-200 px-3 py-3 group transition-all duration-200'
     >
-      <div className='flex items-center gap-3 lg:gap-4'>
+      <div className='flex items-center gap-3'>
         <div className='flex-shrink-0'>
           <UserAvatar
             email={userPresence.email}
@@ -101,11 +101,11 @@ export default function UserCard({
         </div>
 
         <div className='flex-1 min-w-0'>
-          <div className='font-medium text-slate-900 text-sm lg:text-base mb-1 truncate no-email-detection'>
+          <div className='font-medium text-slate-900 text-sm mb-1 truncate no-email-detection'>
             {getDisplayName(userPresence)}
           </div>
           <div
-            className={`text-sm lg:text-sm mb-2 ${
+            className={`text-sm mb-1.5 ${
               existingConversations.has(userPresence.userId) &&
               existingConversations.get(userPresence.userId)?.chatStatus ===
                 'ENDED'
@@ -133,16 +133,16 @@ export default function UserCard({
           </div>
         </div>
 
-        <div className='flex-shrink-0 flex items-center gap-2'>
+        <div className='flex-shrink-0 flex items-center gap-1.5'>
           {/* Profile Summary Info Button */}
           {(loadingSummary || profileSummary) && (
             <button
               onClick={() => setShowProfileDialog(true)}
-              className='px-2 lg:px-3 py-1.5 text-sm lg:text-sm font-medium rounded-xl border transition-colors bg-white text-slate-900 border-slate-200 hover:bg-slate-100 hover:border-slate-200 flex items-center gap-1 lg:gap-2 flex-shrink-0'
+              className='px-2.5 py-2 text-sm font-medium rounded-xl border transition-colors bg-white text-slate-900 border-slate-200 hover:bg-slate-100 hover:border-slate-200 flex items-center gap-1.5 flex-shrink-0 min-w-[44px] justify-center'
               disabled={loadingSummary}
             >
-              <Info className='w-4 lg:w-4 h-4 lg:h-4 text-slate-900 flex-shrink-0' />
-              <span className='hidden sm:inline'>Profile</span>
+              <Info className='w-4 h-4 text-slate-900 flex-shrink-0' />
+              <span className='hidden min-[400px]:inline'>Profile</span>
             </button>
           )}
 
@@ -158,11 +158,11 @@ export default function UserCard({
                 userPresence.userId
               );
               return (
-                <div className='text-sm lg:text-sm text-right'>
-                  <div className='text-slate-500'>Reconnect in</div>
+                <div className='text-sm text-right min-w-[70px]'>
+                  <div className='text-slate-500 hidden min-[400px]:block'>Reconnect in</div>
                   <div className='text-slate-500 flex items-center justify-end gap-1'>
                     <Clock className='w-3 h-3 text-slate-500 hover:text-slate-900 cursor-pointer transition-colors' />
-                    {timeRemaining}
+                    <span className='text-xs min-[400px]:text-sm'>{timeRemaining}</span>
                   </div>
                 </div>
               );
@@ -177,12 +177,13 @@ export default function UserCard({
                     onChatAction(userPresence.userId);
                   }
                 }}
-                className='px-2 lg:px-3 py-1.5 text-sm lg:text-sm font-medium rounded-xl border transition-colors bg-white text-blue-600 border-slate-200 hover:bg-blue-100 hover:border-slate-200 flex items-center gap-1 lg:gap-2 flex-shrink-0'
+                className='px-2.5 py-2 text-sm font-medium rounded-xl border transition-colors bg-white text-blue-600 border-slate-200 hover:bg-blue-100 hover:border-slate-200 flex items-center gap-1.5 flex-shrink-0 min-w-[44px] justify-center'
               >
                 {pendingRequests.has(userPresence.userId) ? (
                   <>
-                    <span className='text-gray-600 text-sm sm:inline'>
-                      Cancel Request
+                    <span className='text-gray-600 text-sm min-[400px]:inline'>
+                      <span className='hidden min-[400px]:inline'>Cancel Request</span>
+                      <span className='min-[400px]:hidden'>Cancel</span>
                     </span>
                   </>
                 ) : existingConversations.has(userPresence.userId) ? (
@@ -191,10 +192,10 @@ export default function UserCard({
                       ?.chatStatus === 'ENDED' ? (
                       canUserReconnect(userPresence.userId) ? (
                         <>
-                          <span className='hidden text-sm sm:inline'>
-                            Send Chat Request
+                          <span className='text-sm'>
+                            <span className='hidden min-[400px]:inline'>Send Request</span>
+                            <span className='min-[400px]:hidden'>Request</span>
                           </span>
-                          <span className='sm:hidden'>Request</span>
                         </>
                       ) : (
                         (() => {
@@ -203,14 +204,14 @@ export default function UserCard({
                           );
                           return timeRemaining ? (
                             <div className='text-right'>
-                              <div className='hidden sm:block'>
+                              <div className='hidden min-[400px]:block text-xs'>
                                 Reconnect in
                               </div>
-                              <div className='sm:hidden'>Wait</div>
+                              <div className='min-[400px]:hidden text-xs'>Wait</div>
                               <div className='flex items-center justify-end gap-1'>
-                                {timeRemaining}
+                                <span className='text-xs'>{timeRemaining}</span>
                                 <Clock
-                                  className='w-4 h-4 text-slate-500 hover:text-slate-900 cursor-pointer transition-colors'
+                                  className='w-3 h-3 text-slate-500 hover:text-slate-900 cursor-pointer transition-colors'
                                   onClick={e => {
                                     e.stopPropagation();
                                   }}
@@ -224,15 +225,15 @@ export default function UserCard({
                       )
                     ) : (
                       <>
-                        <MessageCircle className='w-4 lg:w-4 h-4 lg:h-4 text-blue-600 flex-shrink-0' />
-                        Chat
+                        <MessageCircle className='w-4 h-4 text-blue-600 flex-shrink-0' />
+                        <span className='hidden min-[400px]:inline'>Chat</span>
                       </>
                     )}
                   </>
                 ) : (
                   <>
-                    <CheckCircle2 className='w-4 lg:w-4 h-4 lg:h-4 text-slate-900 flex-shrink-0' />
-                    Start
+                    <CheckCircle2 className='w-4 h-4 text-slate-900 flex-shrink-0' />
+                    <span className='hidden min-[400px]:inline'>Start</span>
                   </>
                 )}
               </button>

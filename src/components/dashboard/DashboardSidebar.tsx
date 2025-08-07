@@ -68,30 +68,32 @@ export default function DashboardSidebar({
       </div>
 
       {/* Mobile Bottom Bar */}
-      <div className='lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-200 px-4 py-2'>
-        <nav className='flex justify-around items-center max-w-sm mx-auto'>
-          {sidebarItems.map(({ id, icon: Icon, label, count }) => (
-            <button
-              key={id}
-              onClick={() => onSectionChange(id)}
-              className={`relative flex flex-col items-center justify-center gap-1 px-3 py-2.5 rounded-xl transition-all duration-200 ${
-                activeSection === id
-                  ? 'text-blue-600 bg-blue-100'
-                  : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'
-              }`}
-              title={label}
-            >
-              <Icon className='w-5 h-5 flex-shrink-0' />
-              <span className='text-xs font-medium'>{label}</span>
+      <div className='lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-200 px-4 py-3'>
+        <nav className='flex justify-center items-stretch'>
+          <div className='flex bg-slate-50 rounded-2xl p-1 gap-1 max-w-xs w-full'>
+            {sidebarItems.map(({ id, icon: Icon, label, count }) => (
+              <button
+                key={id}
+                onClick={() => onSectionChange(id)}
+                className={`relative flex-1 flex flex-col items-center justify-center gap-1.5 px-3 py-3 rounded-xl transition-all duration-200 min-h-[56px] ${
+                  activeSection === id
+                    ? 'text-blue-600 bg-white shadow-sm'
+                    : 'text-slate-500 hover:text-slate-700 hover:bg-white/50'
+                }`}
+                title={label}
+              >
+                <Icon className='w-5 h-5 flex-shrink-0' />
+                <span className='text-sm font-medium leading-none'>{label}</span>
 
-              {/* Count indicator for mobile */}
-              {count > 0 && (
-                <span className='absolute -top-0.5 -right-0.5 bg-blue-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center min-w-[16px] font-semibold'>
-                  {count > 99 ? '99+' : count}
-                </span>
-              )}
-            </button>
-          ))}
+                {/* Count indicator for mobile */}
+                {count > 0 && (
+                  <span className='absolute -top-1 -right-1 bg-blue-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center min-w-[20px] font-semibold shadow-sm'>
+                    {count > 99 ? '99+' : count}
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
         </nav>
       </div>
     </>

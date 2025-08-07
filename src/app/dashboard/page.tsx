@@ -15,7 +15,7 @@ export default function DashboardPage() {
         <Navbar />
 
         {/* Main Content Area */}
-        <div className='flex-1 w-full px-2 sm:px-3 lg:px-6 py-2 sm:py-3 lg:py-4 min-h-0 space-y-4'>
+        <div className='flex-1 w-full px-1 sm:px-3 lg:px-6 py-1 sm:py-3 lg:py-4 min-h-0 space-y-2 sm:space-y-4'>
           {/* Online Users */}
           <OnlineUsers onChatRequestSent={handleChatRequestSent} />
         </div>
