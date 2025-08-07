@@ -272,7 +272,7 @@ export default function ChatHeader({
                         {/* Reconnect Button */}
                         <button
                           onClick={onReconnect}
-                          className='flex items-center gap-1 sm:gap-1.5 px-3 sm:px-3 lg:px-4 py-2 sm:py-2 bg-zinc-500 hover:bg-zinc-500 text-white rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 flex-shrink-0'
+                          className='flex items-center gap-1 sm:gap-1.5 px-3 sm:px-3 lg:px-4 py-2 sm:py-2 bg-zinc-500 hover:bg-zinc-500 text-white rounded-lg shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 flex-shrink-0'
                         >
                           <Image
                             src='/connect-icon.svg'
@@ -319,7 +319,7 @@ export default function ChatHeader({
                       <button
                         onClick={onSendConnectionRequest}
                         disabled={sendingConnectionRequest}
-                        className='flex items-center gap-1 sm:gap-1.5 px-3 sm:px-3 lg:px-4 py-2 sm:py-2 bg-brand-500 hover:bg-brand-500 disabled:bg-brand-500 text-white rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:cursor-not-allowed flex-shrink-0'
+                        className='flex items-center gap-1 sm:gap-1.5 px-3 sm:px-3 lg:px-4 py-2 sm:py-2 bg-brand-500 hover:bg-brand-500 disabled:bg-brand-500 text-white rounded-lg shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:cursor-not-allowed flex-shrink-0'
                       >
                         <Image
                           src='/connect-icon.svg'

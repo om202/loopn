@@ -360,7 +360,7 @@ export default function MessageBubble({
               } z-10`}
             >
               <div
-                className={`${isTouchDevice && showActionsOnMobile ? 'bg-white/95 backdrop-blur-md border border-zinc-200 rounded-full p-1.5 gap-1.5 shadow-sm' : 'gap-2'} flex items-center ${
+                className={`${isTouchDevice && showActionsOnMobile ? 'bg-white/95 backdrop-blur-md border border-zinc-200 rounded-full p-1.5 gap-1.5 shadow-lg' : 'gap-2'} flex items-center ${
                   isOwnMessage ? 'flex-row-reverse' : 'flex-row'
                 }`}
               >

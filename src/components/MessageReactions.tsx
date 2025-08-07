@@ -129,7 +129,7 @@ export default function MessageReactions({
             <button
               key={group.emoji}
               onClick={() => onToggleReaction(group.emoji)}
-              className={`inline-flex items-center justify-center min-w-[24px] h-6 px-0.5 rounded-full transition-all duration-150 shadow-sm ${
+              className={`inline-flex items-center justify-center min-w-[24px] h-6 px-0.5 rounded-full transition-all duration-150 shadow-lg ${
                 group.hasCurrentUser
                   ? 'bg-white border border-zinc-200'
                   : 'bg-white border border-zinc-50'

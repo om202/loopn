@@ -96,7 +96,7 @@ export default function NotificationDropdown({
 
   return (
     <div
-      className='origin-top-right absolute right-0 mt-2 w-80 sm:w-96 max-w-[calc(100vw-2rem)] rounded-2xl shadow-sm bg-white border border-zinc-200 focus:outline-none z-20'
+      className='origin-top-right absolute right-0 mt-2 w-80 sm:w-96 max-w-[calc(100vw-2rem)] rounded-2xl shadow-lg bg-white border border-zinc-200 focus:outline-none z-20'
       role='menu'
       aria-orientation='vertical'
       aria-labelledby='user-menu-button'

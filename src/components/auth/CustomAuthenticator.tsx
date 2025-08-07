@@ -98,7 +98,7 @@ export default function CustomAuthenticator() {
     <div className='min-h-screen bg-zinc-100 flex items-center justify-center px-4 py-8'>
       <div className='w-full max-w-md'>
         {/* Main Auth Card */}
-        <div className='bg-white rounded-2xl border border-zinc-200 p-6 lg:p-8 shadow-sm'>
+        <div className='bg-white rounded-2xl border border-zinc-200 p-6 lg:p-8 shadow-lg'>
           <AuthHeader />
           {renderCurrentView()}
         </div>

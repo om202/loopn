@@ -399,7 +399,7 @@ export default function ChatWindow({
 
       {finalError || externalError ? (
         <div className='flex-shrink-0 mx-4 mb-4'>
-          <div className='bg-b_red-100 border border-b_red-200 rounded-lg p-4 shadow-sm'>
+          <div className='bg-b_red-100 border border-b_red-200 rounded-lg p-4 shadow-lg'>
             <div className='flex items-start'>
               <svg
                 className='h-5 w-5 text-b_red-500 mt-0.5 mr-3 flex-shrink-0'

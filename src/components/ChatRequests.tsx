@@ -88,7 +88,7 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
   }
 
   return (
-    <div className='bg-white rounded-xl shadow-sm border border-zinc-200'>
+    <div className='bg-white rounded-xl shadow-lg border border-zinc-200'>
       <div className='p-4 border-b border-zinc-200'>
         <div className='flex items-center gap-2 text-zinc-900'>
           <span className='font-medium'>

@@ -113,7 +113,7 @@ export default function HomePage() {
                       Product Manager • Tech Startup
                     </div>
                   </div>
-                  <div className='bg-white rounded-2xl rounded-tl-none px-4 py-3 shadow-sm border border-zinc-200 text-zinc-900 text-sm max-w-[85%]'>
+                  <div className='bg-white rounded-2xl rounded-tl-none px-4 py-3 shadow-lg border border-zinc-200 text-zinc-900 text-sm max-w-[85%]'>
                     Hey! Noticed we&apos;re both in product. Would love to
                     connect!
                   </div>
@@ -129,7 +129,7 @@ export default function HomePage() {
                       <span className='text-white text-sm font-medium'>UX</span>
                     </div>
                   </div>
-                  <div className='bg-brand-500 rounded-2xl rounded-tr-none px-4 py-3 shadow-sm text-white text-sm max-w-[85%]'>
+                  <div className='bg-brand-500 rounded-2xl rounded-tr-none px-4 py-3 shadow-lg text-white text-sm max-w-[85%]'>
                     Always excited to meet new people in the industry. What
                     brings you here?
                   </div>
@@ -145,7 +145,7 @@ export default function HomePage() {
                       Product Manager • Tech Startup
                     </div>
                   </div>
-                  <div className='bg-white rounded-2xl rounded-tl-none px-4 py-3 shadow-sm border border-zinc-200 text-zinc-900 text-sm max-w-[85%]'>
+                  <div className='bg-white rounded-2xl rounded-tl-none px-4 py-3 shadow-lg border border-zinc-200 text-zinc-900 text-sm max-w-[85%]'>
                     Looking to connect with designers to improve our product UX.
                   </div>
                 </div>
@@ -160,7 +160,7 @@ export default function HomePage() {
                       <span className='text-white text-sm font-medium'>UX</span>
                     </div>
                   </div>
-                  <div className='bg-brand-500 rounded-2xl rounded-tr-none px-4 py-3 shadow-sm text-white text-sm max-w-[85%]'>
+                  <div className='bg-brand-500 rounded-2xl rounded-tr-none px-4 py-3 shadow-lg text-white text-sm max-w-[85%]'>
                     Perfect! I&apos;d love to discuss user research best
                     practices.
                   </div>
