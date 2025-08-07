@@ -34,7 +34,7 @@ export default function EmojiPicker({
   if (showFullPicker) {
     return (
       <div className='absolute bottom-full mb-3 right-0 z-50' data-emoji-picker>
-        <div className='rounded-xl overflow-hidden shadow-lg'>
+        <div className='rounded-xl overflow-hidden shadow-sm'>
           <EmojiPickerReact
             onEmojiClick={handleFullEmojiClick}
             autoFocusSearch={false}

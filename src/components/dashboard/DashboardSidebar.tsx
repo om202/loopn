@@ -68,7 +68,7 @@ export default function DashboardSidebar({
       </div>
 
       {/* Mobile Bottom Bar */}
-      <div className='lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-100 px-4 py-2'>
+      <div className='lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-200 px-4 py-2'>
         <nav className='flex justify-around items-center max-w-sm mx-auto'>
           {sidebarItems.map(({ id, icon: Icon, label, count }) => (
             <button

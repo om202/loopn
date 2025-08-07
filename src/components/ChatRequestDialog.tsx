@@ -106,7 +106,7 @@ function ConnectedDialog({
             id='dontShowAgain'
             checked={dontShowAgain}
             onChange={e => setDontShowAgain(e.target.checked)}
-            className='w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-600'
+            className='w-4 h-4 text-blue-600 border-slate-200 rounded focus:ring-blue-600'
           />
           <label htmlFor='dontShowAgain' className='text-sm text-slate-600'>
             Don&apos;t show this confirmation again
@@ -127,7 +127,7 @@ function ConnectedDialog({
           {/* OK Button */}
           <button
             onClick={handleOk}
-            className='flex-1 px-4 py-2 bg-white text-slate-700 text-sm font-medium rounded-2xl border border-slate-300 hover:bg-slate-50 transition-colors'
+            className='flex-1 px-4 py-2 bg-white text-slate-700 text-sm font-medium rounded-2xl border border-slate-200 hover:bg-slate-50 transition-colors'
           >
             Later
           </button>
@@ -233,7 +233,7 @@ function NewRequestDialog({
             {/* OK Button */}
             <button
               onClick={onClose}
-              className='w-full px-4 py-2 bg-white text-slate-700 text-sm font-medium rounded-2xl border border-slate-300 hover:bg-slate-50 transition-colors'
+              className='w-full px-4 py-2 bg-white text-slate-700 text-sm font-medium rounded-2xl border border-slate-200 hover:bg-slate-50 transition-colors'
             >
               OK
             </button>
@@ -264,7 +264,7 @@ function NewRequestDialog({
                 id='dontShowAgain'
                 checked={dontShowAgain}
                 onChange={e => setDontShowAgain(e.target.checked)}
-                className='w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-600'
+                className='w-4 h-4 text-blue-600 border-slate-200 rounded focus:ring-blue-600'
               />
               <label htmlFor='dontShowAgain' className='text-sm text-slate-600'>
                 Don&apos;t show this confirmation again
@@ -274,7 +274,7 @@ function NewRequestDialog({
             {/* OK Button */}
             <button
               onClick={handleOk}
-              className='w-full px-4 py-2 bg-white text-slate-700 text-sm font-medium rounded-2xl border border-slate-300 hover:bg-slate-50 transition-colors'
+              className='w-full px-4 py-2 bg-white text-slate-700 text-sm font-medium rounded-2xl border border-slate-200 hover:bg-slate-50 transition-colors'
             >
               OK
             </button>

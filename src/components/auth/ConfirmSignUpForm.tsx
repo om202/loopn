@@ -103,7 +103,7 @@ export default function ConfirmSignUpForm({
           </button>
         </div>
 
-        <div className='text-center pt-2 border-t border-slate-100'>
+        <div className='text-center pt-2 border-t border-slate-200'>
           <button
             type='button'
             onClick={onSwitchToSignIn}

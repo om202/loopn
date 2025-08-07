@@ -202,7 +202,7 @@ export default function OnboardingPage() {
         </div>
 
         {/* Form content */}
-        <div className='bg-white rounded-lg shadow-md p-6'>
+        <div className='bg-white rounded-lg shadow-sm p-6'>
           {error && (
             <div className='bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-6'>
               {error}

@@ -119,7 +119,7 @@ export default function Navbar() {
 
               {isDropdownOpen && (
                 <div
-                  className='origin-top-right absolute right-0 mt-2 w-72 sm:w-80 rounded-2xl shadow-xl bg-white/95 backdrop-blur-md border border-slate-200 focus:outline-none z-50'
+                  className='origin-top-right absolute right-0 mt-2 w-72 sm:w-80 rounded-2xl shadow-sm bg-white/95 backdrop-blur-md border border-slate-200 focus:outline-none z-50'
                   role='menu'
                   aria-orientation='vertical'
                   aria-labelledby='user-menu-button'
@@ -143,7 +143,7 @@ export default function Navbar() {
                         </div>
                       ) : userSummary ? (
                         <div className='mt-3 w-full'>
-                          <div className='text-sm bg-slate-50 rounded-lg p-3 border border-slate-100'>
+                          <div className='text-sm bg-slate-50 rounded-lg p-3 border border-slate-200'>
                             <p className='text-slate-700 mb-2 font-bold'>
                               Anonymous Overview
                             </p>

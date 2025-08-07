@@ -103,7 +103,7 @@ export default function SignInForm({
           </button>
         </div>
 
-        <div className='text-center pt-2 border-t border-slate-100'>
+        <div className='text-center pt-2 border-t border-slate-200'>
           <span className='text-sm text-slate-600'>
             Don't have an account?{' '}
           </span>

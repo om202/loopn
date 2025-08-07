@@ -272,7 +272,7 @@ export default function MessageBubble({
                 className={`px-3 py-2 rounded-3xl border ${
                   isOwnMessage
                     ? 'bg-slate-100 text-slate-500 border-slate-200 rounded-br-sm'
-                    : 'bg-slate-50 text-slate-500 border-slate-300 rounded-bl-sm'
+                    : 'bg-slate-50 text-slate-500 border-slate-200 rounded-bl-sm'
                 }`}
               >
                 <p className='text-sm italic select-none'>Message deleted</p>

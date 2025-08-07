@@ -138,7 +138,7 @@ export default function UserCard({
           {(loadingSummary || profileSummary) && (
             <button
               onClick={() => setShowProfileDialog(true)}
-              className='px-2 lg:px-3 py-1.5 text-sm lg:text-sm font-medium rounded-xl border transition-colors bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:border-slate-300 flex items-center gap-1 lg:gap-2 flex-shrink-0'
+              className='px-2 lg:px-3 py-1.5 text-sm lg:text-sm font-medium rounded-xl border transition-colors bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:border-slate-200 flex items-center gap-1 lg:gap-2 flex-shrink-0'
               disabled={loadingSummary}
             >
               <Info className='w-4 lg:w-4 h-4 lg:h-4 text-slate-600 flex-shrink-0' />
@@ -177,7 +177,7 @@ export default function UserCard({
                     onChatAction(userPresence.userId);
                   }
                 }}
-                className='px-2 lg:px-3 py-1.5 text-sm lg:text-sm font-medium rounded-xl border transition-colors bg-white text-blue-600 border-slate-200 hover:bg-blue-50 hover:border-slate-300 flex items-center gap-1 lg:gap-2 flex-shrink-0'
+                className='px-2 lg:px-3 py-1.5 text-sm lg:text-sm font-medium rounded-xl border transition-colors bg-white text-blue-600 border-slate-200 hover:bg-blue-50 hover:border-slate-200 flex items-center gap-1 lg:gap-2 flex-shrink-0'
               >
                 {pendingRequests.has(userPresence.userId) ? (
                   <>
@@ -261,7 +261,7 @@ export default function UserCard({
                 <span>Loading profile summary...</span>
               </div>
             ) : profileSummary ? (
-              <div className='text-sm text-slate-700 leading-relaxed bg-slate-50 rounded-lg p-4 border border-slate-100'>
+              <div className='text-sm text-slate-700 leading-relaxed bg-slate-50 rounded-lg p-4 border border-slate-200'>
                 {profileSummary}
               </div>
             ) : (

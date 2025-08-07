@@ -117,7 +117,7 @@ export default function MessageInput({
         </div>
       )}
 
-      <div className='flex-shrink-0 bg-white border-t border-slate-200 p-4 sm:p-6 lg:px-32 xl:px-48 shadow-lg relative'>
+      <div className='flex-shrink-0 bg-white border-t border-slate-200 p-4 sm:p-6 lg:px-32 xl:px-48 shadow-sm relative'>
         <div className='w-full'>
           <form
             autoComplete='off'
@@ -144,7 +144,7 @@ export default function MessageInput({
               <div className='absolute bottom-full right-0 mb-2 z-50'>
                 <div
                   ref={emojiPickerRef}
-                  className='rounded-lg overflow-hidden shadow-xl w-[min(350px,calc(100vw-2rem))]'
+                  className='rounded-lg overflow-hidden shadow-sm w-[min(350px,calc(100vw-2rem))]'
                 >
                   <EmojiPicker
                     onEmojiClick={handleEmojiClick}
@@ -197,7 +197,7 @@ export default function MessageInput({
                     WebkitAppearance: 'none',
                     MozAppearance: 'textfield',
                   }}
-                  className='w-full px-5 py-3 pr-14 border border-slate-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent text-base font-medium bg-slate-50 hover:bg-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed placeholder-slate-500'
+                  className='w-full px-5 py-3 pr-14 border border-slate-200 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent text-base font-medium bg-slate-50 hover:bg-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed placeholder-slate-500'
                 />
                 <button
                   type='button'
@@ -213,7 +213,7 @@ export default function MessageInput({
               <button
                 onClick={handleSend}
                 disabled={disabled}
-                className='flex items-center justify-center w-12 h-12 bg-blue-600 text-white rounded-full hover:bg-blue-700 focus:bg-blue-700 transition-all duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none'
+                className='flex items-center justify-center w-12 h-12 bg-blue-600 text-white rounded-full hover:bg-blue-700 focus:bg-blue-700 transition-all duration-200 shadow-sm hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none'
               >
                 <Image
                   src='/send_icon.svg'

@@ -251,7 +251,7 @@ export default function SignUpForm({
           {isLoading ? 'Creating account...' : 'Create Account'}
         </button>
 
-        <div className='text-center pt-2 border-t border-slate-100'>
+        <div className='text-center pt-2 border-t border-slate-200'>
           <span className='text-sm text-slate-600'>
             Already have an account?{' '}
           </span>

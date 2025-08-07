@@ -88,8 +88,8 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
   }
 
   return (
-    <div className='bg-white rounded-xl shadow-sm border border-slate-100'>
-      <div className='p-4 border-b border-slate-100'>
+    <div className='bg-white rounded-xl shadow-sm border border-slate-200'>
+      <div className='p-4 border-b border-slate-200'>
         <div className='flex items-center gap-2 text-slate-900'>
           <span className='font-medium'>
             Chat Requests ({chatRequests.length})
@@ -121,7 +121,7 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
           {chatRequests.map(request => (
             <div
               key={request.id}
-              className='flex items-center justify-between p-3 rounded-lg border border-slate-100 hover:border-blue-200 hover:bg-blue-50/30 transition-all'
+              className='flex items-center justify-between p-3 rounded-lg border border-slate-200 hover:border-blue-200 hover:bg-blue-50/30 transition-all'
             >
               <div className='flex items-center gap-3'>
                 <UserAvatar
