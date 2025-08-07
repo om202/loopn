@@ -121,7 +121,7 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
           {chatRequests.map(request => (
             <div
               key={request.id}
-              className='flex items-center justify-between p-3 rounded-lg border border-slate-200 hover:border-blue-200 hover:bg-brand-100/30 transition-all'
+              className='flex items-center justify-between p-3 rounded-lg border border-slate-200 hover:border-brand-200 hover:bg-brand-100/30 transition-all'
             >
               <div className='flex items-center gap-3'>
                 <UserAvatar
