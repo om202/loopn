@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { CheckCircle2, Clock, MessageCircle, Info } from 'lucide-react';
+import { CheckCircle2, Clock, MessageCircle, User } from 'lucide-react';
 
 import type { Schema } from '../../../amplify/data/resource';
 import { formatPresenceTime } from '../../lib/presence-utils';
@@ -141,7 +141,7 @@ export default function UserCard({
               className='px-2.5 py-2 text-sm font-medium rounded-xl border transition-colors bg-white text-zinc-900 border-zinc-200 hover:bg-zinc-100 hover:border-zinc-200 flex items-center gap-1.5 flex-shrink-0 min-w-[44px] justify-center'
               disabled={loadingSummary}
             >
-              <Info className='w-4 h-4 text-zinc-900 flex-shrink-0' />
+              <User className='w-4 h-4 text-zinc-900 flex-shrink-0' />
               <span className='hidden min-[400px]:inline'>Profile</span>
             </button>
           )}
