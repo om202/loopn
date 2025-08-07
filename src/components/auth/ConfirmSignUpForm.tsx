@@ -57,13 +57,13 @@ export default function ConfirmSignUpForm({
         <div>
           <label
             htmlFor='confirmationCode'
-            className='block text-sm font-medium text-slate-700 mb-3'
+            className='block text-sm font-medium text-slate-900 mb-3'
           >
             Verification code
           </label>
           <div className='relative'>
             <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-              <Shield className='h-5 w-5 text-slate-400' />
+              <Shield className='h-5 w-5 text-slate-500' />
             </div>
             <input
               id='confirmationCode'
@@ -90,7 +90,7 @@ export default function ConfirmSignUpForm({
         </button>
 
         <div className='text-center'>
-          <span className='text-sm text-slate-600'>
+          <span className='text-sm text-slate-900'>
             Didn't receive the code?{' '}
           </span>
           <button

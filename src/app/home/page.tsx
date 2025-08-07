@@ -82,7 +82,7 @@ export default function HomePage() {
                 Connect and Grow{' '}
                 <span className='text-blue-600'>Professionally</span>
               </h1>
-              <p className='text-base sm:text-lg text-slate-600 mb-8 leading-relaxed'>
+              <p className='text-base sm:text-lg text-slate-900 mb-8 leading-relaxed'>
                 Join a community where meaningful connections happen naturally.
                 Build your professional network through smart matching and
                 genuine conversations.
@@ -109,11 +109,11 @@ export default function HomePage() {
                     <div className='w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center'>
                       <span className='text-white text-sm font-medium'>PM</span>
                     </div>
-                    <div className='text-sm text-slate-600'>
+                    <div className='text-sm text-slate-900'>
                       Product Manager • Tech Startup
                     </div>
                   </div>
-                  <div className='bg-white rounded-2xl rounded-tl-none px-4 py-3 shadow-sm border border-slate-200 text-slate-600 text-sm max-w-[85%]'>
+                  <div className='bg-white rounded-2xl rounded-tl-none px-4 py-3 shadow-sm border border-slate-200 text-slate-900 text-sm max-w-[85%]'>
                     Hey! Noticed we&apos;re both in product. Would love to
                     connect!
                   </div>
@@ -122,7 +122,7 @@ export default function HomePage() {
                 {/* Second message - UX Designer */}
                 <div className='flex flex-col items-end space-y-2 opacity-0 animate-[slideUpFade_0.5s_ease-out_1.5s_forwards]'>
                   <div className='flex items-center gap-2 mb-1'>
-                    <div className='text-sm text-slate-600'>
+                    <div className='text-sm text-slate-900'>
                       UX Designer • Design Agency
                     </div>
                     <div className='w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center'>
@@ -141,11 +141,11 @@ export default function HomePage() {
                     <div className='w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center'>
                       <span className='text-white text-sm font-medium'>PM</span>
                     </div>
-                    <div className='text-sm text-slate-600'>
+                    <div className='text-sm text-slate-900'>
                       Product Manager • Tech Startup
                     </div>
                   </div>
-                  <div className='bg-white rounded-2xl rounded-tl-none px-4 py-3 shadow-sm border border-slate-200 text-slate-600 text-sm max-w-[85%]'>
+                  <div className='bg-white rounded-2xl rounded-tl-none px-4 py-3 shadow-sm border border-slate-200 text-slate-900 text-sm max-w-[85%]'>
                     Looking to connect with designers to improve our product UX.
                   </div>
                 </div>
@@ -153,7 +153,7 @@ export default function HomePage() {
                 {/* Fourth message - UX Designer */}
                 <div className='flex flex-col items-end space-y-2 opacity-0 animate-[slideUpFade_0.5s_ease-out_3.5s_forwards]'>
                   <div className='flex items-center gap-2 mb-1'>
-                    <div className='text-sm text-slate-600'>
+                    <div className='text-sm text-slate-900'>
                       UX Designer • Design Agency
                     </div>
                     <div className='w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center'>
@@ -186,7 +186,7 @@ export default function HomePage() {
               Experience the future of{' '}
               <span className='text-blue-600'>professional networking</span>
             </h2>
-            <p className='text-base text-slate-600'>
+            <p className='text-base text-slate-900'>
               Loopn removes barriers from networking, letting you connect based
               on what truly matters - your expertise and goals.
             </p>
@@ -202,20 +202,20 @@ export default function HomePage() {
               <h3 className='text-lg font-medium text-slate-900 mb-2'>
                 Smart Matching
               </h3>
-              <p className='text-sm text-slate-600 mb-3'>
+              <p className='text-sm text-slate-900 mb-3'>
                 Connect with professionals who complement your skills and share
                 your interests.
               </p>
               <ul className='space-y-2'>
-                <li className='flex items-center gap-2 text-sm text-slate-600'>
+                <li className='flex items-center gap-2 text-sm text-slate-900'>
                   <CheckCircle className='w-4 h-4 text-blue-600 flex-shrink-0' />
                   <span>AI-powered matching</span>
                 </li>
-                <li className='flex items-center gap-2 text-sm text-slate-600'>
+                <li className='flex items-center gap-2 text-sm text-slate-900'>
                   <CheckCircle className='w-4 h-4 text-blue-600 flex-shrink-0' />
                   <span>Industry focus</span>
                 </li>
-                <li className='flex items-center gap-2 text-sm text-slate-600'>
+                <li className='flex items-center gap-2 text-sm text-slate-900'>
                   <CheckCircle className='w-4 h-4 text-blue-600 flex-shrink-0' />
                   <span>Goal alignment</span>
                 </li>
@@ -230,19 +230,19 @@ export default function HomePage() {
               <h3 className='text-lg font-medium text-slate-900 mb-2'>
                 Instant Connections
               </h3>
-              <p className='text-sm text-slate-600 mb-3'>
+              <p className='text-sm text-slate-900 mb-3'>
                 Start conversations immediately when you find the right match.
               </p>
               <ul className='space-y-2'>
-                <li className='flex items-center gap-2 text-sm text-slate-600'>
+                <li className='flex items-center gap-2 text-sm text-slate-900'>
                   <CheckCircle className='w-4 h-4 text-blue-600 flex-shrink-0' />
                   <span>Real-time messaging</span>
                 </li>
-                <li className='flex items-center gap-2 text-sm text-slate-600'>
+                <li className='flex items-center gap-2 text-sm text-slate-900'>
                   <CheckCircle className='w-4 h-4 text-blue-600 flex-shrink-0' />
                   <span>Professional topics</span>
                 </li>
-                <li className='flex items-center gap-2 text-sm text-slate-600'>
+                <li className='flex items-center gap-2 text-sm text-slate-900'>
                   <CheckCircle className='w-4 h-4 text-blue-600 flex-shrink-0' />
                   <span>Meaningful discussions</span>
                 </li>
@@ -257,20 +257,20 @@ export default function HomePage() {
               <h3 className='text-lg font-medium text-slate-900 mb-2'>
                 Quality Conversations
               </h3>
-              <p className='text-sm text-slate-600 mb-3'>
+              <p className='text-sm text-slate-900 mb-3'>
                 Build lasting professional relationships through genuine
                 interactions.
               </p>
               <ul className='space-y-2'>
-                <li className='flex items-center gap-2 text-sm text-slate-600'>
+                <li className='flex items-center gap-2 text-sm text-slate-900'>
                   <CheckCircle className='w-4 h-4 text-blue-600 flex-shrink-0' />
                   <span>Verified professionals</span>
                 </li>
-                <li className='flex items-center gap-2 text-sm text-slate-600'>
+                <li className='flex items-center gap-2 text-sm text-slate-900'>
                   <CheckCircle className='w-4 h-4 text-blue-600 flex-shrink-0' />
                   <span>Privacy focused</span>
                 </li>
-                <li className='flex items-center gap-2 text-sm text-slate-600'>
+                <li className='flex items-center gap-2 text-sm text-slate-900'>
                   <CheckCircle className='w-4 h-4 text-blue-600 flex-shrink-0' />
                   <span>Meaningful connections</span>
                 </li>
@@ -304,7 +304,7 @@ export default function HomePage() {
               Your journey to meaningful{' '}
               <span className='text-blue-600'>connections</span>
             </h2>
-            <p className='text-base text-slate-600'>
+            <p className='text-base text-slate-900'>
               A simple three-step process to start building your professional
               network.
             </p>
@@ -323,7 +323,7 @@ export default function HomePage() {
                 <h3 className='text-lg font-medium text-slate-900 mb-2'>
                   Create Your Profile
                 </h3>
-                <p className='text-sm text-slate-600'>
+                <p className='text-sm text-slate-900'>
                   Build your professional identity with your expertise and
                   goals. Focus on what matters for meaningful connections.
                 </p>
@@ -341,7 +341,7 @@ export default function HomePage() {
                 <h3 className='text-lg font-medium text-slate-900 mb-2'>
                   Get Matched
                 </h3>
-                <p className='text-sm text-slate-600'>
+                <p className='text-sm text-slate-900'>
                   Our smart algorithm connects you with professionals who share
                   your interests and complement your expertise.
                 </p>
@@ -359,7 +359,7 @@ export default function HomePage() {
                 <h3 className='text-lg font-medium text-slate-900 mb-2'>
                   Start Connecting
                 </h3>
-                <p className='text-sm text-slate-600'>
+                <p className='text-sm text-slate-900'>
                   Have meaningful conversations with professionals that match
                   your career interests and goals.
                 </p>
@@ -376,7 +376,7 @@ export default function HomePage() {
             <h2 className='text-2xl sm:text-3xl lg:text-4xl font-medium text-slate-900 mb-3'>
               Professionals love Loopn
             </h2>
-            <p className='text-base text-slate-600 max-w-3xl mx-auto'>
+            <p className='text-base text-slate-900 max-w-3xl mx-auto'>
               Join thousands who have transformed their networking experience
             </p>
           </div>
@@ -391,7 +391,7 @@ export default function HomePage() {
                   />
                 ))}
               </div>
-              <blockquote className='text-slate-700 mb-3 text-sm'>
+              <blockquote className='text-slate-900 mb-3 text-sm'>
                 &quot;Loopn made networking feel natural again. I&apos;ve made
                 genuine connections through honest conversations about shared
                 professional interests.&quot;
@@ -418,7 +418,7 @@ export default function HomePage() {
                   />
                 ))}
               </div>
-              <blockquote className='text-slate-700 mb-3 text-sm'>
+              <blockquote className='text-slate-900 mb-3 text-sm'>
                 &quot;The smart matching is brilliant. I found a mentor through
                 professional conversations who&apos;s now become a valuable
                 connection in my career.&quot;
@@ -445,7 +445,7 @@ export default function HomePage() {
                   />
                 ))}
               </div>
-              <blockquote className='text-slate-700 mb-3 text-sm'>
+              <blockquote className='text-slate-900 mb-3 text-sm'>
                 &quot;Finally, a platform where expertise matters more than
                 titles. The conversations are meaningful and focused on
                 professional growth.&quot;
@@ -474,7 +474,7 @@ export default function HomePage() {
               <Image src='/loopn.svg' alt='Loopn' width={32} height={32} />
               <span className='text-xl font-bold text-slate-900'>Loopn</span>
             </div>
-            <p className='text-slate-600 text-center max-w-md mb-3 text-sm'>
+            <p className='text-slate-900 text-center max-w-md mb-3 text-sm'>
               Loopn is the professional networking platform that helps you build
               meaningful connections through smart matching and genuine
               conversations.

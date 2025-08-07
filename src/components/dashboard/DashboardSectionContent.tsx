@@ -119,14 +119,14 @@ export default function DashboardSectionContent({
     <div>
       <div className='mb-8 lg:mb-10'>
         <h2 className='text-2xl font-bold text-slate-900 mb-2'>{title}</h2>
-        <p className='text-base text-slate-600'>{description}</p>
+        <p className='text-base text-slate-900'>{description}</p>
       </div>
       <div className='space-y-3'>
         {usersToShow.length > 0 ? (
           usersToShow.map(renderUserCard)
         ) : (
           <div className='text-center py-6 lg:py-8 text-slate-500'>
-            <EmptyIcon className='w-6 lg:w-8 h-6 lg:h-8 mx-auto mb-2 text-slate-400' />
+            <EmptyIcon className='w-6 lg:w-8 h-6 lg:h-8 mx-auto mb-2 text-slate-500' />
             <p className='text-base'>{emptyMessage}</p>
           </div>
         )}

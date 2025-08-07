@@ -102,7 +102,7 @@ export default function NotificationDropdown({
       aria-labelledby='user-menu-button'
     >
       <div className='p-3 sm:p-4 border-b border-slate-200'>
-        <h3 className='text-base sm:text-lg font-semibold text-slate-800'>
+        <h3 className='text-base sm:text-lg font-semibold text-slate-900'>
           Notifications
         </h3>
       </div>
@@ -119,7 +119,7 @@ export default function NotificationDropdown({
           <div className='py-12 sm:py-16 text-center text-slate-500'>
             <div className='w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-full flex items-center justify-center'>
               <svg
-                className='w-8 h-8 text-slate-400'
+                className='w-8 h-8 text-slate-500'
                 fill='none'
                 stroke='currentColor'
                 viewBox='0 0 24 24'
@@ -132,7 +132,7 @@ export default function NotificationDropdown({
                 />
               </svg>
             </div>
-            <h4 className='text-base font-medium text-slate-800'>
+            <h4 className='text-base font-medium text-slate-900'>
               You&apos;re all caught up
             </h4>
             <p className='text-sm text-slate-500 mt-1'>No new notifications</p>

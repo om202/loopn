@@ -21,7 +21,7 @@ export default function TrialEndedByOtherDialog({
         </h3>
 
         {/* Content */}
-        <div className='text-sm text-slate-600 space-y-4 leading-relaxed'>
+        <div className='text-sm text-slate-900 space-y-4 leading-relaxed'>
           <p>
             The chat trial has been ended by the other user. You can no longer
             send messages in this conversation.

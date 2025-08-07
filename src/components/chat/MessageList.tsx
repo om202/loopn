@@ -401,7 +401,7 @@ export default function MessageList({
         <div className='w-full px-4 sm:px-6 lg:px-32 xl:px-48 py-6 sm:py-8'>
           <div className='flex flex-col items-center justify-center text-center py-20'>
             <div className='w-14 h-14 bg-slate-200 rounded-full flex items-center justify-center mb-3'>
-              <MessageCircle className='w-8 h-8 text-slate-600' />
+              <MessageCircle className='w-8 h-8 text-slate-900' />
             </div>
             <h3 className='text-lg font-medium text-slate-900 mb-2'>
               No messages yet
@@ -441,7 +441,7 @@ export default function MessageList({
           </div>
         ) : (
           <div className='flex justify-center py-4'>
-            <div className='text-slate-400'>
+            <div className='text-slate-500'>
               <span className='text-sm'>End of messages</span>
             </div>
           </div>
@@ -563,7 +563,7 @@ export default function MessageList({
             <React.Fragment key={message.id}>
               {shouldShowDateSeparator && (
                 <div className='flex items-center justify-center my-6 px-4'>
-                  <div className='text-slate-400 text-sm'>
+                  <div className='text-slate-500 text-sm'>
                     {getDateSeparatorText(currentMessageDate)}
                   </div>
                 </div>

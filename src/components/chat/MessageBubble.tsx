@@ -299,7 +299,7 @@ export default function MessageBubble({
                   >
                     <div
                       className={`text-sm ${
-                        isOwnMessage ? 'text-blue-100' : 'text-slate-600'
+                        isOwnMessage ? 'text-blue-100' : 'text-slate-900'
                       } mb-1`}
                     >
                       Replying to{' '}
@@ -311,7 +311,7 @@ export default function MessageBubble({
                     </div>
                     <div
                       className={`text-base ${
-                        isOwnMessage ? 'text-blue-100' : 'text-slate-600'
+                        isOwnMessage ? 'text-blue-100' : 'text-slate-900'
                       }`}
                     >
                       {getRepliedToContent(repliedToMessage.content)}
@@ -370,7 +370,7 @@ export default function MessageBubble({
                   title='Reply'
                 >
                   <svg
-                    className='w-4 h-4 text-slate-600'
+                    className='w-4 h-4 text-slate-900'
                     fill='none'
                     stroke='currentColor'
                     viewBox='0 0 24 24'
@@ -391,7 +391,7 @@ export default function MessageBubble({
                     title='Delete message'
                   >
                     <svg
-                      className='w-4 h-4 text-slate-600 hover:text-red-600'
+                      className='w-4 h-4 text-slate-900 hover:text-red-600'
                       fill='none'
                       stroke='currentColor'
                       viewBox='0 0 24 24'
@@ -414,8 +414,8 @@ export default function MessageBubble({
                       showEmojiPicker
                         ? 'bg-blue-600 text-white border border-blue-600'
                         : isTouchDevice && showActionsOnMobile
-                          ? 'bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200'
-                          : 'bg-slate-200 text-slate-600'
+                          ? 'bg-slate-50 hover:bg-slate-100 text-slate-900 border border-slate-200'
+                          : 'bg-slate-200 text-slate-900'
                     }`}
                     title='Add reaction'
                   >
