@@ -225,7 +225,7 @@ export default function OnboardingPage() {
                   value={formData.jobRole}
                   onChange={e => updateFormData('jobRole', e.target.value)}
                   placeholder='e.g., Software Engineer, Product Manager'
-                  className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500'
+                  className='w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500'
                 />
               </div>
 
@@ -238,7 +238,7 @@ export default function OnboardingPage() {
                   value={formData.companyName}
                   onChange={e => updateFormData('companyName', e.target.value)}
                   placeholder='e.g., Google, Microsoft, Startup Inc'
-                  className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500'
+                  className='w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500'
                 />
               </div>
 
@@ -249,7 +249,7 @@ export default function OnboardingPage() {
                 <select
                   value={formData.industry}
                   onChange={e => updateFormData('industry', e.target.value)}
-                  className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500'
+                  className='w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500'
                 >
                   <option value=''>Select an industry</option>
                   {INDUSTRY_OPTIONS.map(industry => (
@@ -272,7 +272,7 @@ export default function OnboardingPage() {
                       parseInt(e.target.value)
                     )
                   }
-                  className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500'
+                  className='w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500'
                 >
                   {YEARS_OF_EXPERIENCE_OPTIONS.map(option => (
                     <option key={option.value} value={option.value}>
@@ -289,7 +289,7 @@ export default function OnboardingPage() {
                 <select
                   value={formData.education}
                   onChange={e => updateFormData('education', e.target.value)}
-                  className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500'
+                  className='w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500'
                 >
                   <option value=''>Select education level</option>
                   {EDUCATION_OPTIONS.map(education => (
@@ -323,7 +323,7 @@ export default function OnboardingPage() {
                   onChange={e => updateFormData('about', e.target.value)}
                   placeholder="I'm a passionate software engineer with experience in React and Node.js. I love building user-friendly applications and am always eager to learn new technologies. Looking to connect with other developers and share knowledge about frontend development..."
                   rows={4}
-                  className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500'
+                  className='w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500'
                 />
                 <div className='flex justify-between text-sm mt-2'>
                   <span
