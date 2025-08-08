@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { CheckCircle2, Clock, MessageCircle, User } from 'lucide-react';
+import { CheckCircle2, Clock, MessageCircle, MoreHorizontal, User } from 'lucide-react';
 
 import type { Schema } from '../../../amplify/data/resource';
 import { formatPresenceTime } from '../../lib/presence-utils';
@@ -22,6 +22,8 @@ interface UserCardProps {
   onCancelChatRequest: (userId: string) => void;
   canUserReconnect: (userId: string) => boolean;
   getReconnectTimeRemaining: (userId: string) => string | null;
+  onOpenProfileSidebar?: (user: UserPresence) => void;
+  isProfileSidebarOpen?: boolean;
 }
 
 const getDisplayName = (userPresence: UserPresence) => {
@@ -40,6 +42,8 @@ export default function UserCard({
   onCancelChatRequest,
   canUserReconnect,
   getReconnectTimeRemaining,
+  onOpenProfileSidebar,
+  isProfileSidebarOpen,
 }: UserCardProps) {
   const [showCancelDialog, setShowCancelDialog] = useState(false);
   const [showProfileDialog, setShowProfileDialog] = useState(false);
@@ -134,16 +138,34 @@ export default function UserCard({
         </div>
 
         <div className='flex-shrink-0 flex items-center gap-1.5'>
-          {/* Profile Summary Info Button */}
+          {/* Profile Summary Trigger - Mobile shows dialog, Desktop shows sidebar */}
           {(loadingSummary || profileSummary) && (
-            <button
-              onClick={() => setShowProfileDialog(true)}
-              className='px-2.5 py-2 text-sm font-medium rounded-xl border transition-colors bg-white text-zinc-900 border-zinc-200 hover:bg-zinc-100 hover:border-zinc-200 flex items-center gap-1.5 flex-shrink-0 min-w-[44px] justify-center'
-              disabled={loadingSummary}
-            >
-              <User className='w-4 h-4 text-zinc-900 flex-shrink-0' />
-              <span className='hidden min-[400px]:inline'>Profile</span>
-            </button>
+            <>
+              {/* Mobile: existing Profile dialog button */}
+              <button
+                onClick={() => setShowProfileDialog(true)}
+                className='md:hidden px-2.5 py-2 text-sm font-medium rounded-xl border transition-colors bg-white text-zinc-900 border-zinc-200 hover:bg-zinc-100 hover:border-zinc-200 flex items-center gap-1.5 flex-shrink-0 min-w-[44px] justify-center'
+                disabled={loadingSummary}
+              >
+                <User className='w-4 h-4 text-zinc-900 flex-shrink-0' />
+                <span className='hidden min-[400px]:inline'>Profile</span>
+              </button>
+
+              {/* Desktop: three dots opens sidebar via parent */}
+              <button
+                onClick={() => onOpenProfileSidebar?.(userPresence)}
+                className={`hidden md:flex px-2.5 py-2 rounded-xl border transition-colors text-zinc-900 items-center justify-center min-w-[44px] ${
+                  isProfileSidebarOpen
+                    ? 'bg-zinc-100 border-zinc-200'
+                    : 'bg-white border-zinc-200 hover:bg-zinc-100 hover:border-zinc-200'
+                }`}
+                disabled={loadingSummary}
+                aria-label='Open profile sidebar'
+                aria-pressed={isProfileSidebarOpen}
+              >
+                <MoreHorizontal className='w-5 h-5 text-zinc-900' />
+              </button>
+            </>
           )}
 
           {(() => {
@@ -291,6 +313,8 @@ export default function UserCard({
           </div>
         </div>
       </DialogContainer>
+
+      {/* Sidebar rendering moved to parent to allow push layout */}
 
       {/* Cancel Request Confirmation Dialog */}
       <DialogContainer

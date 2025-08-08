@@ -3,6 +3,8 @@
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { fetchAuthSession } from 'aws-amplify/auth';
 import { useState, useEffect, useCallback, useMemo } from 'react';
+import UserAvatar from './UserAvatar';
+import { formatPresenceTime } from '../lib/presence-utils';
 
 import type { Schema } from '../../amplify/data/resource';
 import { chatService } from '../services/chat.service';
@@ -30,6 +32,9 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   const [existingConversations, setExistingConversations] = useState<
     Map<string, Conversation>
   >(new Map());
+  const [profileSidebarUser, setProfileSidebarUser] = useState<UserPresence | null>(null);
+  const [profileSidebarSummary, setProfileSidebarSummary] = useState<string | null>(null);
+  const [profileSidebarLoading, setProfileSidebarLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [, setConversationsLoaded] = useState(false);
   const [activeSection, setActiveSection] = useState<SidebarSection>('all');
@@ -272,6 +277,31 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
     );
   };
 
+  const handleOpenProfileSidebar = async (userPresence: UserPresence) => {
+    // Toggle behavior: if open, close. If closed, open for this user and load summary.
+    if (profileSidebarUser) {
+      setProfileSidebarUser(null);
+      setProfileSidebarSummary(null);
+      setProfileSidebarLoading(false);
+      return;
+    }
+
+    setProfileSidebarUser(userPresence);
+    setProfileSidebarLoading(true);
+    setProfileSidebarSummary(null);
+    try {
+      const { UserProfileService } = await import('../services/user-profile.service');
+      const summary = await UserProfileService.getProfileSummary(userPresence.userId);
+      setProfileSidebarSummary(summary);
+    } catch (e) {
+      console.error('Failed to load profile summary for sidebar', e);
+    } finally {
+      setProfileSidebarLoading(false);
+    }
+  };
+
+
+
   if (error || onlineUsersError || sentRequestsError || chatActions.error) {
     return (
       <div className='p-4 sm:p-6 text-b_red-500 bg-b_red-100 rounded-2xl border border-b_red-200 text-center'>
@@ -314,9 +344,62 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
             onCancelChatRequest={handleCancelChatRequest}
             canUserReconnect={userCategories.canUserReconnect}
             getReconnectTimeRemaining={userCategories.getReconnectTimeRemaining}
+            onOpenProfileSidebar={handleOpenProfileSidebar}
+            isProfileSidebarOpen={!!profileSidebarUser}
           />
         </div>
       </div>
+
+      {/* Right push sidebar: desktop only */}
+      {profileSidebarUser && (
+        <div className='hidden md:flex w-[320px] xl:w-[332px] flex-shrink-0'>
+          <div className='bg-white rounded-2xl border border-zinc-200 w-full h-full flex flex-col'>
+            <div className='p-6 flex justify-center'>
+              <div className='flex flex-col items-center text-center'>
+                <UserAvatar
+                  email={profileSidebarUser.email}
+                  userId={profileSidebarUser.userId}
+                  size='lg'
+                  showStatus
+                  status={(onlineUsers.find(u => u.userId === profileSidebarUser.userId)) ? profileSidebarUser.status : (
+                    profileSidebarUser.lastSeen && formatPresenceTime(profileSidebarUser.lastSeen) === 'Recently active' ? 'RECENTLY_ACTIVE' : 'OFFLINE'
+                  )}
+                />
+                <div className='mt-3'>
+                  <div className='font-medium text-zinc-900 text-base'>
+                    {profileSidebarUser.email || `User${profileSidebarUser.userId.slice(-4)}`}
+                  </div>
+                  <div className='text-sm text-zinc-500 mt-1'>
+                    {(onlineUsers.find(u => u.userId === profileSidebarUser.userId))
+                      ? 'Online now'
+                      : (profileSidebarUser.lastSeen
+                        ? formatPresenceTime(profileSidebarUser.lastSeen)
+                        : 'Offline')}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className='flex-1 flex justify-center overflow-y-auto'>
+              <div className='p-6 w-full max-w-sm'>
+                {profileSidebarLoading ? (
+                  <div className='flex flex-col items-center gap-3 text-sm text-zinc-500'>
+                    <div className='w-4 h-4 bg-zinc-100 rounded-full animate-pulse'></div>
+                    <span className='text-center'>Loading profile summary...</span>
+                  </div>
+                ) : profileSidebarSummary ? (
+                  <div className='text-sm text-zinc-900 leading-relaxed bg-zinc-100 rounded-lg p-4 border border-zinc-200'>
+                    {profileSidebarSummary}
+                  </div>
+                ) : (
+                  <div className='text-sm text-zinc-500 text-center'>
+                    No profile summary available.
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

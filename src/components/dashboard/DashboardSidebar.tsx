@@ -43,7 +43,7 @@ export default function DashboardSidebar({
   return (
     <>
       {/* Desktop Sidebar */}
-      <div className='hidden lg:block w-80 flex-shrink-0'>
+      <div className='hidden lg:block w-68 flex-shrink-0'>
         <div className='bg-white rounded-2xl border border-zinc-200 p-6 h-full flex flex-col'>
           <nav className='space-y-2 flex-1 overflow-y-auto'>
             {sidebarItems.map(({ id, icon: Icon, label, count }) => (

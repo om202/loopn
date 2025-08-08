@@ -742,7 +742,7 @@ export default function HomePage() {
                 <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' />
               </button>
             </Link>
-                         <button className='w-full sm:w-auto bg-white hover:bg-zinc-50 text-zinc-700 px-10 py-4 rounded-xl text-lg font-bold border border-zinc-200 transition-all duration-300 flex items-center justify-center gap-3'>
+            <button className='w-full sm:w-auto bg-white hover:bg-zinc-50 text-zinc-700 px-10 py-4 rounded-xl text-lg font-bold border border-zinc-200 transition-all duration-300 flex items-center justify-center gap-3'>
               <MessageCircle className='w-5 h-5' />
               Learn more
             </button>
