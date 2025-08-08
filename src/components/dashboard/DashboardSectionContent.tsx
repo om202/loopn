@@ -1,6 +1,6 @@
 'use client';
 
-import { MessageCircle, Timer, Users } from 'lucide-react';
+import { MessageCircle, Users } from 'lucide-react';
 
 import type { Schema } from '../../../amplify/data/resource';
 
@@ -82,8 +82,6 @@ export default function DashboardSectionContent({
     switch (activeSection) {
       case 'connections':
         return connectionUsers;
-      case 'chat-trial':
-        return [...activeChatTrialUsers, ...endedChatTrialUsers];
       case 'all':
       default:
         return uniqueAllChatUsers;
@@ -100,18 +98,11 @@ export default function DashboardSectionContent({
           emptyIcon: Users,
           emptyMessage: 'No connections yet',
         };
-      case 'chat-trial':
-        return {
-          title: 'Chat Trials',
-          description: 'Your active and ended chat trials',
-          emptyIcon: Timer,
-          emptyMessage: 'No chat trials yet',
-        };
       case 'all':
       default:
         return {
           title: 'Chats',
-          description: 'All your conversations and available users',
+          description: 'All your conversations, trials, and available users',
           emptyIcon: MessageCircle,
           emptyMessage: 'No chats available',
         };

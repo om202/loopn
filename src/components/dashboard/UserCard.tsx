@@ -129,8 +129,18 @@ export default function UserCard({
         </div>
 
         <div className='flex-1 min-w-0'>
-          <div className='font-medium text-zinc-900 text-sm mb-1 truncate no-email-detection'>
-            {getDisplayName(userPresence)}
+          <div className='flex items-center gap-2 mb-1'>
+            <div className='font-medium text-zinc-900 text-sm truncate no-email-detection'>
+              {getDisplayName(userPresence)}
+            </div>
+                        {/* Trial indicator */}
+            {existingConversations.has(userPresence.userId) && 
+             !existingConversations.get(userPresence.userId)?.isConnected && (
+              <span className='px-2 py-0.5 text-xs font-medium border border-zinc-300 text-zinc-600 rounded-full flex-shrink-0 flex items-center gap-1'>
+                <Clock className='w-3 h-3' />
+                Trial
+              </span>
+            )}
           </div>
           <div
             className={`text-sm mb-1.5 ${

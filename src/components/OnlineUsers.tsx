@@ -25,7 +25,7 @@ interface OnlineUsersProps {
   onChatRequestSent: () => void;
 }
 
-type SidebarSection = 'all' | 'connections' | 'chat-trial';
+type SidebarSection = 'all' | 'connections';
 
 export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   const [allUsers, setAllUsers] = useState<UserPresence[]>([]);
@@ -412,10 +412,6 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
         onSectionChange={setActiveSection}
         onlineUsersCount={userCategories.onlineUsers.length}
         connectionsCount={userCategories.connectionUsers.length}
-        chatTrialsCount={
-          userCategories.activeChatTrialUsers.length +
-          userCategories.endedChatTrialUsers.length
-        }
       />
 
       <div className='flex-1 bg-white sm:rounded-2xl sm:border sm:border-zinc-200 p-2 sm:p-4 lg:p-6 ultra-compact overflow-hidden flex flex-col min-h-0'>

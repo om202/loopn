@@ -1,15 +1,14 @@
 'use client';
 
-import { MessageCircle, Timer, Users } from 'lucide-react';
+import { MessageCircle, Users } from 'lucide-react';
 
-type SidebarSection = 'all' | 'connections' | 'chat-trial';
+type SidebarSection = 'all' | 'connections';
 
 interface DashboardSidebarProps {
   activeSection: SidebarSection;
   onSectionChange: (section: SidebarSection) => void;
   onlineUsersCount: number;
   connectionsCount: number;
-  chatTrialsCount: number;
 }
 
 export default function DashboardSidebar({
@@ -17,26 +16,19 @@ export default function DashboardSidebar({
   onSectionChange,
   onlineUsersCount,
   connectionsCount,
-  chatTrialsCount,
 }: DashboardSidebarProps) {
   const sidebarItems = [
     {
       id: 'all' as const,
       icon: MessageCircle,
       label: 'Chats',
-      count: onlineUsersCount + connectionsCount + chatTrialsCount,
+      count: onlineUsersCount + connectionsCount,
     },
     {
       id: 'connections' as const,
       icon: Users,
       label: 'Connections',
       count: connectionsCount,
-    },
-    {
-      id: 'chat-trial' as const,
-      icon: Timer,
-      label: 'Chat Trials',
-      count: chatTrialsCount,
     },
   ];
 
