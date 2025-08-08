@@ -1,6 +1,6 @@
 'use client';
 
-import { MessageCircle, Users } from 'lucide-react';
+import { MessageCircle, Sparkles, Users } from 'lucide-react';
 
 import type { Schema } from '../../../amplify/data/resource';
 
@@ -8,7 +8,7 @@ import UserCard from './UserCard';
 
 type UserPresence = Schema['UserPresence']['type'];
 type Conversation = Schema['Conversation']['type'];
-type SidebarSection = 'all' | 'connections' | 'chat-trial';
+type SidebarSection = 'all' | 'connections' | 'suggested';
 
 interface DashboardSectionContentProps {
   activeSection: SidebarSection;
@@ -16,6 +16,7 @@ interface DashboardSectionContentProps {
   connectionUsers: UserPresence[];
   activeChatTrialUsers: UserPresence[];
   endedChatTrialUsers: UserPresence[];
+  suggestedUsers: UserPresence[];
   existingConversations: Map<string, Conversation>;
   pendingRequests: Set<string>;
   onChatAction: (userId: string) => void;
@@ -34,6 +35,7 @@ export default function DashboardSectionContent({
   connectionUsers,
   activeChatTrialUsers,
   endedChatTrialUsers,
+  suggestedUsers,
   existingConversations,
   pendingRequests,
   onChatAction,
@@ -82,6 +84,8 @@ export default function DashboardSectionContent({
     switch (activeSection) {
       case 'connections':
         return connectionUsers;
+      case 'suggested':
+        return suggestedUsers;
       case 'all':
       default:
         return uniqueAllChatUsers;
@@ -97,6 +101,13 @@ export default function DashboardSectionContent({
           description: 'Your permanent connections for ongoing conversations',
           emptyIcon: Users,
           emptyMessage: 'No connections yet',
+        };
+      case 'suggested':
+        return {
+          title: 'Suggested Users',
+          description: 'Discover new people to connect with',
+          emptyIcon: Sparkles,
+          emptyMessage: 'No suggestions available',
         };
       case 'all':
       default:

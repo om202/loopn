@@ -3,6 +3,7 @@
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { fetchAuthSession } from 'aws-amplify/auth';
 import { useState, useEffect, useCallback, useMemo } from 'react';
+import { CheckCircle2, Clock, MessageCircle } from 'lucide-react';
 import UserAvatar from './UserAvatar';
 import { formatPresenceTime } from '../lib/presence-utils';
 
@@ -25,7 +26,7 @@ interface OnlineUsersProps {
   onChatRequestSent: () => void;
 }
 
-type SidebarSection = 'all' | 'connections';
+type SidebarSection = 'all' | 'connections' | 'suggested';
 
 export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   const [allUsers, setAllUsers] = useState<UserPresence[]>([]);
@@ -41,7 +42,8 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   const [profileSidebarOpen, setProfileSidebarOpen] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [, setConversationsLoaded] = useState(false);
-  const [activeSection, setActiveSection] = useState<SidebarSection>('all');
+  const [activeSection, setActiveSection] =
+    useState<SidebarSection>('suggested');
   const [currentTime, setCurrentTime] = useState(new Date());
   const [optimisticPendingRequests, setOptimisticPendingRequests] = useState<
     Set<string>
@@ -207,6 +209,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   const [conversationUsers, setConversationUsers] = useState<UserPresence[]>(
     []
   );
+  const [suggestedUsers, setSuggestedUsers] = useState<UserPresence[]>([]);
 
   useEffect(() => {
     if (!user) {
@@ -290,6 +293,33 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
       return hasChanges ? newOptimistic : prev;
     });
   }, [pendingReceiverIds]);
+
+  // Load all users for suggested section
+  useEffect(() => {
+    if (!user) {
+      return;
+    }
+
+    const loadSuggestedUsers = async () => {
+      try {
+        const result = await userService.getAllUsers();
+        if (result.error) {
+          console.error('Error loading suggested users:', result.error);
+          return;
+        }
+
+        // Filter out current user and remove duplicates
+        const filteredUsers = (result.data || []).filter(
+          u => u?.userId && u.userId !== user.userId
+        );
+        setSuggestedUsers(filteredUsers);
+      } catch (error) {
+        console.error('Error loading suggested users:', error);
+      }
+    };
+
+    loadSuggestedUsers();
+  }, [user]);
 
   useEffect(() => {
     const combinedUsers = [...onlineUsers];
@@ -412,6 +442,11 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
         onSectionChange={setActiveSection}
         onlineUsersCount={userCategories.onlineUsers.length}
         connectionsCount={userCategories.connectionUsers.length}
+        chatTrialsCount={
+          userCategories.activeChatTrialUsers.length +
+          userCategories.endedChatTrialUsers.length
+        }
+        suggestedUsersCount={suggestedUsers.length}
       />
 
       <div className='flex-1 bg-white sm:rounded-2xl sm:border sm:border-zinc-200 p-2 sm:p-4 lg:p-6 ultra-compact overflow-hidden flex flex-col min-h-0'>
@@ -422,6 +457,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
             connectionUsers={userCategories.connectionUsers}
             activeChatTrialUsers={userCategories.activeChatTrialUsers}
             endedChatTrialUsers={userCategories.endedChatTrialUsers}
+            suggestedUsers={suggestedUsers}
             existingConversations={existingConversations}
             pendingRequests={combinedPendingRequests}
             onChatAction={handleChatAction}
@@ -440,7 +476,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
       {profileSidebarOpen && profileSidebarUser && (
         <div className='hidden md:flex w-[320px] xl:w-[332px] flex-shrink-0'>
           <div className='bg-white rounded-2xl border border-zinc-200 w-full h-full flex flex-col'>
-            <div className='p-6 flex justify-center'>
+            <div className='p-6 pb-3 flex justify-center'>
               <div className='flex flex-col items-center text-center'>
                 <UserAvatar
                   email={profileSidebarUser.email}
@@ -460,9 +496,19 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
                   }
                 />
                 <div className='mt-3'>
-                  <div className='font-medium text-zinc-900 text-base'>
-                    {profileSidebarUser.email ||
-                      `User${profileSidebarUser.userId.slice(-4)}`}
+                  <div className='flex items-center justify-center gap-2 mb-2'>
+                    <div className='font-medium text-zinc-900 text-base'>
+                      {profileSidebarUser.email ||
+                        `User${profileSidebarUser.userId.slice(-4)}`}
+                    </div>
+                    {/* Trial indicator */}
+                    {existingConversations.has(profileSidebarUser.userId) && 
+                     !existingConversations.get(profileSidebarUser.userId)?.isConnected && (
+                      <span className='px-2 py-0.5 text-xs font-medium border border-zinc-300 text-zinc-600 rounded-full flex-shrink-0 flex items-center gap-1'>
+                        <Clock className='w-3 h-3' />
+                        Trial
+                      </span>
+                    )}
                   </div>
                   <div className='text-sm text-zinc-500 mt-1'>
                     {onlineUsers.find(
@@ -476,8 +522,88 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
                 </div>
               </div>
             </div>
+            
+            {/* Action buttons section */}
+            <div className='px-6 pb-4'>
+              <div className='flex gap-2 justify-center'>
+                {(() => {
+                  const conversation = existingConversations.get(profileSidebarUser.userId);
+                  const isEndedWithTimer =
+                    conversation?.chatStatus === 'ENDED' &&
+                    !userCategories.canUserReconnect(profileSidebarUser.userId) &&
+                    userCategories.getReconnectTimeRemaining(profileSidebarUser.userId);
+
+                  if (isEndedWithTimer) {
+                    const timeRemaining = userCategories.getReconnectTimeRemaining(
+                      profileSidebarUser.userId
+                    );
+                    return (
+                      <div className='text-sm text-center'>
+                        <div className='text-zinc-500 mb-1'>
+                          Reconnect in
+                        </div>
+                        <div className='text-zinc-500 flex items-center justify-center gap-1'>
+                          <Clock className='w-3 h-3 text-zinc-500' />
+                          <span className='text-sm'>
+                            {timeRemaining}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <button
+                      onClick={() => {
+                        if (combinedPendingRequests.has(profileSidebarUser.userId)) {
+                          // Handle cancel request - you might want to add a confirmation
+                          handleCancelChatRequest(profileSidebarUser.userId);
+                        } else {
+                          handleChatAction(profileSidebarUser.userId);
+                        }
+                      }}
+                      className='px-4 py-2.5 text-sm font-medium rounded-xl border transition-colors bg-white text-brand-500 border-zinc-200 hover:bg-brand-100 hover:border-zinc-200 flex items-center gap-2'
+                    >
+                      {combinedPendingRequests.has(profileSidebarUser.userId) ? (
+                        <>
+                          <span className='text-zinc-600'>Cancel Request</span>
+                        </>
+                      ) : existingConversations.has(profileSidebarUser.userId) ? (
+                        <>
+                          {existingConversations.get(profileSidebarUser.userId)
+                            ?.chatStatus === 'ENDED' ? (
+                            userCategories.canUserReconnect(profileSidebarUser.userId) ? (
+                              <>
+                                <MessageCircle className='w-4 h-4' />
+                                <span>Send Request</span>
+                              </>
+                            ) : (
+                              <>
+                                <MessageCircle className='w-4 h-4' />
+                                <span>View Chat</span>
+                              </>
+                            )
+                          ) : (
+                            <>
+                              <MessageCircle className='w-4 h-4' />
+                              <span>Resume Chat</span>
+                            </>
+                          )}
+                        </>
+                      ) : (
+                        <>
+                          <CheckCircle2 className='w-4 h-4' />
+                          <span>Start Trial</span>
+                        </>
+                      )}
+                    </button>
+                  );
+                })()}
+              </div>
+            </div>
+            
             <div className='flex-1 flex justify-center overflow-y-auto'>
-              <div className='p-6 w-full max-w-sm'>
+              <div className='pt-3 px-6 pb-6 w-full max-w-sm'>
                 {profileSidebarLoading ? (
                   <div className='flex flex-col items-center gap-3 text-sm text-zinc-500'>
                     <div className='w-4 h-4 bg-zinc-100 rounded-full animate-pulse'></div>

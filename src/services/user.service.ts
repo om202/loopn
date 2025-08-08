@@ -96,6 +96,23 @@ export class UserService {
     }
   }
 
+  async getAllUsers(): Promise<ListResult<UserPresence>> {
+    try {
+      const result = await getClient().models.UserPresence.list();
+
+      return {
+        data: result.data || [],
+        error: null,
+      };
+    } catch (error) {
+      return {
+        data: [],
+        error:
+          error instanceof Error ? error.message : 'Failed to fetch all users',
+      };
+    }
+  }
+
   async setUserOffline(
     userId: string,
     email: string
