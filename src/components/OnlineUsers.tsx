@@ -32,8 +32,11 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   const [existingConversations, setExistingConversations] = useState<
     Map<string, Conversation>
   >(new Map());
-  const [profileSidebarUser, setProfileSidebarUser] = useState<UserPresence | null>(null);
-  const [profileSidebarSummary, setProfileSidebarSummary] = useState<string | null>(null);
+  const [profileSidebarUser, setProfileSidebarUser] =
+    useState<UserPresence | null>(null);
+  const [profileSidebarSummary, setProfileSidebarSummary] = useState<
+    string | null
+  >(null);
   const [profileSidebarLoading, setProfileSidebarLoading] = useState(false);
   const [profileSidebarOpen, setProfileSidebarOpen] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -93,11 +96,15 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
       setProfileSidebarUser(firstUser);
       setProfileSidebarLoading(true);
       setProfileSidebarSummary(null);
-      
+
       const loadSummary = async () => {
         try {
-          const { UserProfileService } = await import('../services/user-profile.service');
-          const summary = await UserProfileService.getProfileSummary(firstUser.userId);
+          const { UserProfileService } = await import(
+            '../services/user-profile.service'
+          );
+          const summary = await UserProfileService.getProfileSummary(
+            firstUser.userId
+          );
           setProfileSidebarSummary(summary);
         } catch (e) {
           console.error('Failed to load profile summary for sidebar', e);
@@ -105,7 +112,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
           setProfileSidebarLoading(false);
         }
       };
-      
+
       loadSummary();
     }
   }, [profileSidebarOpen, profileSidebarUser, allUsers]);
@@ -339,8 +346,12 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
     setProfileSidebarLoading(true);
     setProfileSidebarSummary(null);
     try {
-      const { UserProfileService } = await import('../services/user-profile.service');
-      const summary = await UserProfileService.getProfileSummary(userPresence.userId);
+      const { UserProfileService } = await import(
+        '../services/user-profile.service'
+      );
+      const summary = await UserProfileService.getProfileSummary(
+        userPresence.userId
+      );
       setProfileSidebarSummary(summary);
     } catch (e) {
       console.error('Failed to load profile summary for sidebar', e);
@@ -348,8 +359,6 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
       setProfileSidebarLoading(false);
     }
   };
-
-
 
   if (error || onlineUsersError || sentRequestsError || chatActions.error) {
     return (
@@ -410,20 +419,31 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
                   userId={profileSidebarUser.userId}
                   size='lg'
                   showStatus
-                  status={(onlineUsers.find(u => u.userId === profileSidebarUser.userId)) ? profileSidebarUser.status : (
-                    profileSidebarUser.lastSeen && formatPresenceTime(profileSidebarUser.lastSeen) === 'Recently active' ? 'RECENTLY_ACTIVE' : 'OFFLINE'
-                  )}
+                  status={
+                    onlineUsers.find(
+                      u => u.userId === profileSidebarUser.userId
+                    )
+                      ? profileSidebarUser.status
+                      : profileSidebarUser.lastSeen &&
+                          formatPresenceTime(profileSidebarUser.lastSeen) ===
+                            'Recently active'
+                        ? 'RECENTLY_ACTIVE'
+                        : 'OFFLINE'
+                  }
                 />
                 <div className='mt-3'>
                   <div className='font-medium text-zinc-900 text-base'>
-                    {profileSidebarUser.email || `User${profileSidebarUser.userId.slice(-4)}`}
+                    {profileSidebarUser.email ||
+                      `User${profileSidebarUser.userId.slice(-4)}`}
                   </div>
                   <div className='text-sm text-zinc-500 mt-1'>
-                    {(onlineUsers.find(u => u.userId === profileSidebarUser.userId))
+                    {onlineUsers.find(
+                      u => u.userId === profileSidebarUser.userId
+                    )
                       ? 'Online now'
-                      : (profileSidebarUser.lastSeen
+                      : profileSidebarUser.lastSeen
                         ? formatPresenceTime(profileSidebarUser.lastSeen)
-                        : 'Offline')}
+                        : 'Offline'}
                   </div>
                 </div>
               </div>
@@ -433,7 +453,9 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
                 {profileSidebarLoading ? (
                   <div className='flex flex-col items-center gap-3 text-sm text-zinc-500'>
                     <div className='w-4 h-4 bg-zinc-100 rounded-full animate-pulse'></div>
-                    <span className='text-center'>Loading profile summary...</span>
+                    <span className='text-center'>
+                      Loading profile summary...
+                    </span>
                   </div>
                 ) : profileSidebarSummary ? (
                   <div className='text-sm text-zinc-900 leading-relaxed bg-zinc-100 rounded-lg p-4 border border-zinc-200'>
