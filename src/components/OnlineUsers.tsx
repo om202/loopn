@@ -35,6 +35,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   const [profileSidebarUser, setProfileSidebarUser] = useState<UserPresence | null>(null);
   const [profileSidebarSummary, setProfileSidebarSummary] = useState<string | null>(null);
   const [profileSidebarLoading, setProfileSidebarLoading] = useState(false);
+  const [profileSidebarOpen, setProfileSidebarOpen] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [, setConversationsLoaded] = useState(false);
   const [activeSection, setActiveSection] = useState<SidebarSection>('all');
@@ -72,6 +73,42 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   }, [allOnlineUsers, user?.userId]);
 
   const initialLoading = onlineUsersLoading;
+
+  // Persist and restore sidebar open/close state only (not the selected user)
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('dashboard.profileSidebarOpen');
+      if (stored === 'true') {
+        setProfileSidebarOpen(true);
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  // Auto-select first user when sidebar is restored and users are available
+  useEffect(() => {
+    if (profileSidebarOpen && !profileSidebarUser && allUsers.length > 0) {
+      const firstUser = allUsers[0];
+      setProfileSidebarUser(firstUser);
+      setProfileSidebarLoading(true);
+      setProfileSidebarSummary(null);
+      
+      const loadSummary = async () => {
+        try {
+          const { UserProfileService } = await import('../services/user-profile.service');
+          const summary = await UserProfileService.getProfileSummary(firstUser.userId);
+          setProfileSidebarSummary(summary);
+        } catch (e) {
+          console.error('Failed to load profile summary for sidebar', e);
+        } finally {
+          setProfileSidebarLoading(false);
+        }
+      };
+      
+      loadSummary();
+    }
+  }, [profileSidebarOpen, profileSidebarUser, allUsers]);
 
   const isAuthSessionReady = async (): Promise<boolean> => {
     try {
@@ -278,14 +315,26 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   };
 
   const handleOpenProfileSidebar = async (userPresence: UserPresence) => {
-    // Toggle behavior: if open, close. If closed, open for this user and load summary.
-    if (profileSidebarUser) {
+    // Toggle open/close and persist only the open state; selection is ephemeral
+    if (profileSidebarOpen) {
+      setProfileSidebarOpen(false);
+      try {
+        localStorage.setItem('dashboard.profileSidebarOpen', 'false');
+      } catch {
+        // ignore
+      }
       setProfileSidebarUser(null);
       setProfileSidebarSummary(null);
       setProfileSidebarLoading(false);
       return;
     }
 
+    setProfileSidebarOpen(true);
+    try {
+      localStorage.setItem('dashboard.profileSidebarOpen', 'true');
+    } catch {
+      // ignore
+    }
     setProfileSidebarUser(userPresence);
     setProfileSidebarLoading(true);
     setProfileSidebarSummary(null);
@@ -345,13 +394,13 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
             canUserReconnect={userCategories.canUserReconnect}
             getReconnectTimeRemaining={userCategories.getReconnectTimeRemaining}
             onOpenProfileSidebar={handleOpenProfileSidebar}
-            isProfileSidebarOpen={!!profileSidebarUser}
+            isProfileSidebarOpen={profileSidebarOpen}
           />
         </div>
       </div>
 
       {/* Right push sidebar: desktop only */}
-      {profileSidebarUser && (
+      {profileSidebarOpen && profileSidebarUser && (
         <div className='hidden md:flex w-[320px] xl:w-[332px] flex-shrink-0'>
           <div className='bg-white rounded-2xl border border-zinc-200 w-full h-full flex flex-col'>
             <div className='p-6 flex justify-center'>
