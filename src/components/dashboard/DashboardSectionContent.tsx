@@ -23,7 +23,9 @@ interface DashboardSectionContentProps {
   canUserReconnect: (userId: string) => boolean;
   getReconnectTimeRemaining: (userId: string) => string | null;
   onOpenProfileSidebar?: (user: UserPresence) => void;
+  onUserCardClick?: (user: UserPresence) => void;
   isProfileSidebarOpen?: boolean;
+  selectedUserId?: string;
 }
 
 export default function DashboardSectionContent({
@@ -39,7 +41,9 @@ export default function DashboardSectionContent({
   canUserReconnect,
   getReconnectTimeRemaining,
   onOpenProfileSidebar,
+  onUserCardClick,
   isProfileSidebarOpen,
+  selectedUserId,
 }: DashboardSectionContentProps) {
   // Combine all users for "All Chats" section
   const allChatUsers = [
@@ -67,7 +71,9 @@ export default function DashboardSectionContent({
       canUserReconnect={canUserReconnect}
       getReconnectTimeRemaining={getReconnectTimeRemaining}
       onOpenProfileSidebar={onOpenProfileSidebar}
+      onUserCardClick={onUserCardClick}
       isProfileSidebarOpen={isProfileSidebarOpen}
+      selectedUserId={selectedUserId}
     />
   );
 

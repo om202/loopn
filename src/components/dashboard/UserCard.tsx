@@ -29,7 +29,9 @@ interface UserCardProps {
   canUserReconnect: (userId: string) => boolean;
   getReconnectTimeRemaining: (userId: string) => string | null;
   onOpenProfileSidebar?: (user: UserPresence) => void;
+  onUserCardClick?: (user: UserPresence) => void;
   isProfileSidebarOpen?: boolean;
+  selectedUserId?: string;
 }
 
 const getDisplayName = (userPresence: UserPresence) => {
@@ -49,13 +51,16 @@ export default function UserCard({
   canUserReconnect,
   getReconnectTimeRemaining,
   onOpenProfileSidebar,
+  onUserCardClick,
   isProfileSidebarOpen,
+  selectedUserId,
 }: UserCardProps) {
   const [showCancelDialog, setShowCancelDialog] = useState(false);
   const [showProfileDialog, setShowProfileDialog] = useState(false);
   const [profileSummary, setProfileSummary] = useState<string | null>(null);
   const [loadingSummary, setLoadingSummary] = useState(false);
   const isOnline = onlineUsers.some(ou => ou.userId === userPresence.userId);
+  const isSelected = selectedUserId === userPresence.userId;
 
   // Load profile summary when component mounts
   useEffect(() => {
@@ -86,10 +91,23 @@ export default function UserCard({
     };
   }, [userPresence.userId]);
 
+  const handleCardClick = (e: React.MouseEvent) => {
+    // Don't trigger card click if clicking on buttons
+    if ((e.target as HTMLElement).closest('button')) {
+      return;
+    }
+    onUserCardClick?.(userPresence);
+  };
+
   return (
     <div
       key={userPresence.userId}
-      className='bg-white rounded-2xl border border-zinc-200 px-3 py-3 group transition-all duration-200'
+      onClick={handleCardClick}
+      className={`rounded-2xl border px-3 py-3 group transition-all duration-200 cursor-pointer ${
+        isSelected
+          ? 'bg-brand-50 border-brand-200'
+          : 'bg-white border-zinc-200 hover:bg-zinc-50'
+      }`}
     >
       <div className='flex items-center gap-3'>
         <div className='flex-shrink-0'>

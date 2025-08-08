@@ -360,6 +360,36 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
     }
   };
 
+  const handleUserCardClick = async (userPresence: UserPresence) => {
+    // If sidebar is not open, open it
+    if (!profileSidebarOpen) {
+      setProfileSidebarOpen(true);
+      try {
+        localStorage.setItem('dashboard.profileSidebarOpen', 'true');
+      } catch {
+        // ignore
+      }
+    }
+
+    // Always update the selected user and load their profile
+    setProfileSidebarUser(userPresence);
+    setProfileSidebarLoading(true);
+    setProfileSidebarSummary(null);
+    try {
+      const { UserProfileService } = await import(
+        '../services/user-profile.service'
+      );
+      const summary = await UserProfileService.getProfileSummary(
+        userPresence.userId
+      );
+      setProfileSidebarSummary(summary);
+    } catch (e) {
+      console.error('Failed to load profile summary for sidebar', e);
+    } finally {
+      setProfileSidebarLoading(false);
+    }
+  };
+
   if (error || onlineUsersError || sentRequestsError || chatActions.error) {
     return (
       <div className='p-4 sm:p-6 text-b_red-500 bg-b_red-100 rounded-2xl border border-b_red-200 text-center'>
@@ -403,7 +433,9 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
             canUserReconnect={userCategories.canUserReconnect}
             getReconnectTimeRemaining={userCategories.getReconnectTimeRemaining}
             onOpenProfileSidebar={handleOpenProfileSidebar}
+            onUserCardClick={handleUserCardClick}
             isProfileSidebarOpen={profileSidebarOpen}
+            selectedUserId={profileSidebarUser?.userId}
           />
         </div>
       </div>
