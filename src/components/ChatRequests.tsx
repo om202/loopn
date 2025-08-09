@@ -100,8 +100,8 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
       </div>
 
       {chatRequests.length === 0 ? (
-        <div className='p-8 text-center text-zinc-500'>
-          <div className='w-12 h-12 mx-auto mb-3 flex items-center justify-center'>
+        <div className='flex flex-col items-center justify-center text-center p-8'>
+          <div className='w-16 h-16 mx-auto mb-4 bg-zinc-100 rounded-full flex items-center justify-center'>
             <svg
               className='w-8 h-8 text-zinc-500'
               fill='none'
@@ -116,7 +116,12 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
               />
             </svg>
           </div>
-          <p>No chat requests</p>
+          <h3 className='text-lg font-medium text-zinc-900 mb-2'>
+            No chat requests
+          </h3>
+          <p className='text-zinc-500'>
+            Incoming requests will appear here
+          </p>
         </div>
       ) : (
         <div className='p-4 space-y-3'>

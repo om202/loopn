@@ -502,7 +502,7 @@ export default function OnlineUsers({
 
       {/* Right push sidebar: desktop only */}
       {profileSidebarOpen && profileSidebarUser && (
-        <div className='hidden md:flex w-[320px] xl:w-[332px] flex-shrink-0'>
+        <div className='hidden md:flex w-[340px] xl:w-[350px] flex-shrink-0'>
           <div className='bg-white rounded-2xl border border-zinc-200 w-full h-full flex flex-col relative'>
             {/* Trial indicator - top right corner */}
             {existingConversations.has(profileSidebarUser.userId) &&
@@ -515,7 +515,8 @@ export default function OnlineUsers({
                   </span>
                 </div>
               )}
-            <div className='p-6 pb-3 flex justify-center'>
+
+            <div className='p-6 pb-4 flex justify-center'>
               <div className='flex flex-col items-center text-center'>
                 <UserAvatar
                   email={profileSidebarUser.email}
@@ -534,14 +535,14 @@ export default function OnlineUsers({
                         : 'OFFLINE'
                   }
                 />
-                <div className='mt-3'>
-                  <div className='mb-2'>
+                <div className='mt-4'>
+                  <div className='mb-1'>
                     <div className='font-medium text-zinc-900 text-base'>
                       {profileSidebarUser.email ||
                         `User${profileSidebarUser.userId.slice(-4)}`}
                     </div>
                   </div>
-                  <div className='text-sm text-zinc-500 mt-1'>
+                  <div className='text-sm text-zinc-500'>
                     {onlineUsers.find(
                       u => u.userId === profileSidebarUser.userId
                     )
@@ -555,8 +556,8 @@ export default function OnlineUsers({
             </div>
 
             {/* Action buttons section */}
-            <div className='px-6 pb-4 pt-4'>
-              <div className='flex gap-2 justify-center'>
+            <div className='px-6 pb-6'>
+              <div className='w-full'>
                 {(() => {
                   const conversation = existingConversations.get(
                     profileSidebarUser.userId
@@ -576,11 +577,11 @@ export default function OnlineUsers({
                         profileSidebarUser.userId
                       );
                     return (
-                      <div className='text-sm text-center'>
+                      <div className='text-sm text-center p-3 bg-zinc-50 rounded-xl border border-zinc-200'>
                         <div className='text-zinc-500 mb-1'>Reconnect in</div>
-                        <div className='text-zinc-500 flex items-center justify-center gap-1'>
-                          <Clock className='w-3 h-3 text-zinc-500' />
-                          <span className='text-sm'>{timeRemaining}</span>
+                        <div className='text-zinc-600 flex items-center justify-center gap-1'>
+                          <Clock className='w-3 h-3' />
+                          <span className='font-medium'>{timeRemaining}</span>
                         </div>
                       </div>
                     );
@@ -592,13 +593,12 @@ export default function OnlineUsers({
                         if (
                           combinedPendingRequests.has(profileSidebarUser.userId)
                         ) {
-                          // Handle cancel request - you might want to add a confirmation
                           handleCancelChatRequest(profileSidebarUser.userId);
                         } else {
                           handleChatAction(profileSidebarUser.userId);
                         }
                       }}
-                      className='px-4 py-2.5 text-sm font-medium rounded-xl border transition-colors bg-white text-brand-500 border-zinc-200 hover:bg-brand-100 hover:border-zinc-200 flex items-center gap-2'
+                      className='w-full px-4 py-2.5 text-sm font-medium rounded-xl border transition-colors bg-white text-brand-500 border-zinc-200 hover:bg-brand-100 hover:border-zinc-200 flex items-center justify-center gap-2'
                     >
                       {combinedPendingRequests.has(
                         profileSidebarUser.userId
@@ -654,11 +654,14 @@ export default function OnlineUsers({
                     </span>
                   </div>
                 ) : profileSidebarSummary ? (
-                  <div className='text-[15px] text-zinc-900 leading-relaxed rounded-lg px-3 py-2 border border-zinc-200'>
-                    {profileSidebarSummary}
+                  <div className='text-sm text-zinc-900 leading-relaxed rounded-lg px-3 py-2 bg-zinc-50'>
+                    <div className='mb-2 font-medium'>Anonymous Overview</div>
+                    <div>
+                      {profileSidebarSummary}
+                    </div>
                   </div>
                 ) : (
-                  <div className='text-sm text-zinc-900 leading-relaxed rounded-lg border px-3 py-2 border-zinc-200 text-center'>
+                  <div className='text-sm text-zinc-900 leading-relaxed rounded-lg px-3 py-2 bg-zinc-50 text-center'>
                     No profile summary available.
                   </div>
                 )}

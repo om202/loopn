@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Settings, LogOut } from 'lucide-react';
+import { LogOut } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { simplePresenceManager } from '@/lib/presence-utils';
 import { UserProfileService } from '@/services/user-profile.service';
@@ -53,65 +53,57 @@ export default function AccountContent() {
   return (
     <div className='h-full flex flex-col'>
       {/* Header */}
-      <div className='mb-8'>
-        <div className='flex items-center gap-3 mb-2'>
-          <h1 className='text-2xl font-bold text-zinc-900'>Account</h1>
+      <div className='mb-6 flex items-start justify-between'>
+        <div>
+          <h2 className='text-2xl font-bold text-zinc-900 mb-1'>Account</h2>
+          <p className='text-sm text-zinc-500'>
+            Manage your account and profile information
+          </p>
         </div>
-        <p className='text-zinc-600'>
-          Manage your account and profile information
-        </p>
+        
+        {/* Sign Out Button */}
+        <button
+          onClick={handleSignOutClick}
+          className='flex items-center gap-2 px-4 py-2.5 text-red-600 hover:bg-red-50 rounded-lg border border-red-200'
+        >
+          <LogOut className='w-4 h-4' />
+          <span className='text-sm font-medium'>Sign Out</span>
+        </button>
       </div>
 
-      {/* Main Profile Card - Similar to navbar dropdown but expanded */}
-      <div className='bg-white border border-zinc-200 rounded-2xl p-6 mb-6'>
-        <div className='flex flex-col items-center text-center'>
-          <UserAvatar email={getUserEmail()} size='xl' />
-          <div className='mt-4'>
-            <h3 className='text-lg font-semibold text-zinc-900 mb-1'>
+      {/* Profile Section */}
+      <div className='bg-white border border-zinc-200 rounded-2xl p-5 mb-4'>
+        <div className='flex items-center gap-4'>
+          <UserAvatar email={getUserEmail()} size='lg' />
+          <div className='flex-1'>
+            <h3 className='font-semibold text-zinc-900 mb-1'>
               {getUserEmail()}
             </h3>
-            <p className='text-sm text-zinc-500'>Welcome to Loopn</p>
+            <p className='text-sm text-zinc-500'>You</p>
           </div>
         </div>
 
         {/* AI Profile Summary */}
-        <div className='mt-6'>
+        <div className='mt-5 pt-5 border-t border-zinc-100'>
           <div className='flex items-center gap-2 mb-3'>
-            <Settings className='w-4 h-4 text-zinc-600' />
-            <h4 className='font-medium text-zinc-900'>Anonymous Overview</h4>
+            <h4 className='text-sm font-medium text-zinc-900'>Anonymous Overview</h4>
           </div>
 
           {loadingSummary ? (
             <div className='flex items-center gap-2 text-sm text-zinc-500'>
-              <div className='w-3 h-3 bg-zinc-100 rounded-full animate-pulse'></div>
-              <span>Loading profile summary...</span>
+              <div className='w-3 h-3 bg-zinc-200 rounded-full animate-pulse'></div>
+              <span>Loading...</span>
             </div>
           ) : userSummary ? (
-            <div className='bg-zinc-50 rounded-lg p-4 border border-zinc-200'>
-              <div className='text-sm text-zinc-900 leading-relaxed'>
-                {userSummary}
-              </div>
+            <div className='bg-zinc-50 rounded-lg p-3 text-sm text-zinc-700 leading-relaxed'>
+              {userSummary}
             </div>
           ) : (
-            <div className='bg-zinc-50 rounded-lg p-4 border border-zinc-200'>
-              <p className='text-sm text-zinc-500 italic'>
-                No profile summary available yet. Start chatting with others to
-                generate your anonymous overview!
-              </p>
+            <div className='bg-zinc-50 rounded-lg p-3 text-sm text-zinc-500'>
+              No profile summary available yet. Start chatting with others to generate your anonymous overview!
             </div>
           )}
         </div>
-      </div>
-
-      {/* Sign Out Section */}
-      <div className='mt-auto'>
-        <button
-          onClick={handleSignOutClick}
-          className='w-full flex items-center gap-3 p-4 text-b_red-600 hover:bg-b_red-50 rounded-lg transition-colors border border-b_red-200'
-        >
-          <LogOut className='w-5 h-5' />
-          <span className='font-medium'>Sign Out</span>
-        </button>
       </div>
     </div>
   );

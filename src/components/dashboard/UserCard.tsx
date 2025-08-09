@@ -130,7 +130,7 @@ export default function UserCard({
 
         <div className='flex-1 min-w-0'>
           <div className='flex items-center gap-2 mb-1'>
-            <div className='font-medium text-zinc-900 text-base truncate no-email-detection'>
+            <div className='text-zinc-900 truncate no-email-detection'>
               {getDisplayName(userPresence)}
             </div>
             {/* Trial indicator */}

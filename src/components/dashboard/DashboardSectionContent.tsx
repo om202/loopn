@@ -98,14 +98,14 @@ export default function DashboardSectionContent({
       case 'connections':
         return {
           title: 'Connections',
-          description: 'Your permanent connections',
+          description: 'Your connections',
           emptyIcon: Users,
           emptyMessage: 'No connections yet',
         };
       case 'suggested':
         return {
           title: 'Suggested',
-          description: 'Discover new people to connect with',
+          description: 'Find and connect with new people',
           emptyIcon: Sparkles,
           emptyMessage: 'No suggestions available',
         };
@@ -113,7 +113,7 @@ export default function DashboardSectionContent({
       default:
         return {
           title: 'Chats',
-          description: 'All your conversations',
+          description: 'Your conversations',
           emptyIcon: MessageCircle,
           emptyMessage: 'No chats available',
         };
@@ -135,15 +135,26 @@ export default function DashboardSectionContent({
         <h2 className='text-xl sm:text-2xl font-bold text-zinc-900 mb-1'>
           {title}
         </h2>
-        <p className='text-sm sm:text-base text-zinc-500'>{description}</p>
+        <p className='text-sm text-zinc-500'>{description}</p>
       </div>
       <div className='space-y-2.5 sm:space-y-3'>
         {usersToShow.length > 0 ? (
           usersToShow.map(renderUserCard)
         ) : (
-          <div className='text-center py-6 lg:py-8 text-zinc-500'>
-            <EmptyIcon className='w-6 lg:w-8 h-6 lg:h-8 mx-auto mb-2 text-zinc-500' />
-            <p className='text-sm sm:text-base'>{emptyMessage}</p>
+          <div className='flex flex-col items-center justify-center h-full text-center'>
+            <div className='w-16 h-16 mx-auto mb-4 bg-zinc-100 rounded-full flex items-center justify-center'>
+              <EmptyIcon className='w-8 h-8 text-zinc-500' />
+            </div>
+            <h3 className='text-lg font-medium text-zinc-900 mb-2'>
+              {emptyMessage}
+            </h3>
+            <p className='text-zinc-500'>
+              {activeSection === 'connections' 
+                ? 'Start chatting to build connections'
+                : activeSection === 'suggested'
+                ? 'Check back later for new suggestions'
+                : 'No conversations yet'}
+            </p>
           </div>
         )}
       </div>

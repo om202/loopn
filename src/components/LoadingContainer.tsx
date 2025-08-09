@@ -14,11 +14,11 @@ export default function LoadingContainer({
   const getSizeClasses = () => {
     switch (size) {
       case 'sm':
-        return 'w-6 h-6 border-[3px]';
+        return 'w-6 h-6 border-[4px]';
       case 'lg':
-        return 'w-12 h-12 border-[5px]';
+        return 'w-10 h-10 border-[4px]';
       default:
-        return 'w-10 h-10 border-[3px]';
+        return 'w-8 h-8 border-[4px]';
     }
   };
 

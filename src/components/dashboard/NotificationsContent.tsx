@@ -384,7 +384,7 @@ export default function NotificationsContent() {
     <div className='h-full flex flex-col'>
       {/* Header */}
       <div className='mb-6'>
-        <div className='flex items-center justify-between mb-2'>
+        <div className='flex items-center justify-between mb-1'>
           <div className='flex items-center gap-3'>
             <h1 className='text-2xl font-bold text-zinc-900'>Notifications</h1>
           </div>
@@ -397,7 +397,7 @@ export default function NotificationsContent() {
             </button>
           )}
         </div>
-        <p className='text-zinc-600'>Stay updated with your latest activity</p>
+        <p className='text-zinc-600 text-sm'>Keep up with your latest activity</p>
       </div>
 
       {/* Content */}
@@ -411,7 +411,7 @@ export default function NotificationsContent() {
         {isLoading ? (
           <LoadingContainer size='lg' variant='spin' />
         ) : getFilteredNotifications().length === 0 ? (
-          <div className='flex flex-col items-center justify-center h-full text-center'>
+          <div className='flex flex-col items-center justify-center min-h-full text-center'>
             <div className='w-16 h-16 mx-auto mb-4 bg-zinc-100 rounded-full flex items-center justify-center'>
               <Bell className='w-8 h-8 text-zinc-500' />
             </div>

@@ -400,13 +400,13 @@ export default function MessageList({
       <div className='flex-1 overflow-y-auto bg-white'>
         <div className='w-full px-4 sm:px-6 lg:px-32 xl:px-48 py-6 sm:py-8'>
           <div className='flex flex-col items-center justify-center text-center py-20'>
-            <div className='w-14 h-14 bg-zinc-100 rounded-full flex items-center justify-center mb-3'>
-              <MessageCircle className='w-8 h-8 text-zinc-900' />
+            <div className='w-16 h-16 bg-zinc-100 rounded-full flex items-center justify-center mb-4'>
+              <MessageCircle className='w-8 h-8 text-zinc-500' />
             </div>
             <h3 className='text-lg font-medium text-zinc-900 mb-2'>
               No messages yet
             </h3>
-            <p className='text-base text-zinc-500 max-w-sm'>
+            <p className='text-zinc-500 max-w-sm'>
               Send your first message to begin chatting.
             </p>
           </div>
