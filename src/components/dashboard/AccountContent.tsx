@@ -107,7 +107,7 @@ export default function AccountContent() {
       <div className='mt-auto'>
         <button
           onClick={handleSignOutClick}
-          className='w-full flex items-center gap-3 p-4 text-red-600 hover:bg-red-50 rounded-lg transition-colors border border-red-200'
+          className='w-full flex items-center gap-3 p-4 text-b_red-600 hover:bg-b_red-50 rounded-lg transition-colors border border-b_red-200'
         >
           <LogOut className='w-5 h-5' />
           <span className='font-medium'>Sign Out</span>

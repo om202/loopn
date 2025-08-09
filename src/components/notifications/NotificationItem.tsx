@@ -121,11 +121,11 @@ export default function NotificationItem({
   return (
     <div
       key={notification.id}
-      className='w-full text-left p-3 sm:p-4 hover:bg-zinc-100 transition-colors'
+      className='w-full bg-white border border-zinc-200 rounded-2xl px-3 py-3 hover:bg-zinc-50 transition-all duration-200'
     >
-      <div className='flex items-start gap-4'>
+      <div className='flex items-start gap-3'>
         {notification.type === 'chat_request' ? (
-          <div className='relative flex-shrink-0'>
+          <div className='flex-shrink-0'>
             <UserAvatar
               email={(notification.data as ChatRequestWithUser)?.requesterEmail}
               userId={(notification.data as ChatRequestWithUser)?.requesterId}
@@ -135,7 +135,7 @@ export default function NotificationItem({
         ) : notification.type === 'message' &&
           notification.data &&
           'senderEmail' in notification.data ? (
-          <div className='relative flex-shrink-0'>
+          <div className='flex-shrink-0'>
             <UserAvatar
               email={
                 (notification.data as MessageNotificationData)?.senderEmail
@@ -144,11 +144,11 @@ export default function NotificationItem({
                 (notification.data as MessageNotificationData)?.message
                   ?.senderId
               }
-              size='sm'
+              size='md'
             />
           </div>
         ) : (
-          <div className='flex-shrink-0'>
+          <div className='flex-shrink-0 w-10 h-10 bg-zinc-100 rounded-full flex items-center justify-center'>
             {getNotificationIcon(notification.type || null)}
           </div>
         )}
@@ -161,16 +161,20 @@ export default function NotificationItem({
             })}
           >
             <div className='flex items-start justify-between mb-1'>
-              <h4 className='text-sm font-semibold text-zinc-900 truncate pr-2 no-email-detection'>
-                {notification.title}
-              </h4>
-              <span className='text-sm text-zinc-500 flex-shrink-0 font-medium'>
-                {formatTimeAgo(notification.timestamp)}
-              </span>
+              <div className='flex-1 min-w-0'>
+                <h4 className='text-sm font-medium text-zinc-900 truncate no-email-detection'>
+                  {notification.title}
+                </h4>
+                <p className='text-sm text-zinc-700 mb-1.5'>
+                  {notification.content}
+                </p>
+              </div>
+              <div className='flex flex-col items-end ml-2'>
+                <span className='text-sm text-zinc-500 font-medium'>
+                  {formatTimeAgo(notification.timestamp)}
+                </span>
+              </div>
             </div>
-            <p className='text-sm text-zinc-900 leading-normal'>
-              {notification.content}
-            </p>
           </div>
 
           {notification.type === 'chat_request' &&
@@ -179,7 +183,7 @@ export default function NotificationItem({
             (() => {
               const chatRequestData = notification.data as ChatRequestWithUser;
               return (
-                <div className='flex items-center gap-2 mt-3'>
+                <div className='flex items-center gap-1.5 mt-3'>
                   <button
                     onClick={e => {
                       e.stopPropagation();
@@ -190,7 +194,7 @@ export default function NotificationItem({
                       );
                     }}
                     disabled={decliningId === notification.id}
-                    className='px-3 py-1.5 text-sm font-semibold text-zinc-900 bg-zinc-100 rounded-lg hover:bg-zinc-100 disabled:opacity-50 transition-colors'
+                    className='px-2.5 py-2 text-sm font-medium text-zinc-900 bg-white border border-zinc-200 rounded-xl hover:bg-zinc-100 disabled:opacity-50 transition-colors'
                   >
                     {decliningId === notification.id
                       ? 'Declining...'
@@ -206,21 +210,21 @@ export default function NotificationItem({
                       );
                     }}
                     disabled={decliningId === notification.id}
-                    className='px-3 py-1.5 bg-brand-500 text-white text-sm font-semibold rounded-lg hover:bg-brand-500 disabled:opacity-50 transition-colors'
+                    className='px-2.5 py-2 bg-brand-500 text-white text-sm font-medium rounded-xl hover:bg-brand-600 disabled:opacity-50 transition-colors border border-brand-500'
                   >
-                    Confirm
+                    Accept
                   </button>
                 </div>
               );
             })()
           ) : notification.type === 'message' ? (
-            <div className='flex items-center gap-2 mt-3'>
+            <div className='flex items-center gap-1.5 mt-3'>
               <button
                 onClick={e => {
                   e.stopPropagation();
                   onNotificationClick(notification);
                 }}
-                className='px-3 py-1.5 bg-brand-500 text-white text-sm font-semibold rounded-lg hover:bg-brand-500 transition-colors'
+                className='px-2.5 py-2 bg-brand-500 text-white text-sm font-medium rounded-xl hover:bg-brand-600 transition-colors border border-brand-500'
               >
                 Reply
               </button>
@@ -249,19 +253,19 @@ export default function NotificationItem({
                     onError('Failed to mark notification as read');
                   }
                 }}
-                className='px-3 py-1.5 text-sm font-semibold text-zinc-900 bg-zinc-100 rounded-lg hover:bg-zinc-100 transition-colors'
+                className='px-2.5 py-2 text-sm font-medium text-zinc-900 bg-white border border-zinc-200 rounded-xl hover:bg-zinc-100 transition-colors'
               >
                 Mark as Read
               </button>
             </div>
           ) : notification.type === 'connection' ? (
-            <div className='flex items-center gap-2 mt-3'>
+            <div className='flex items-center gap-1.5 mt-3'>
               <button
                 onClick={e => {
                   e.stopPropagation();
                   onNotificationClick(notification);
                 }}
-                className='px-3 py-1.5 bg-green-500 text-white text-sm font-semibold rounded-lg hover:bg-green-500 transition-colors'
+                className='px-2.5 py-2 bg-green-500 text-white text-sm font-medium rounded-xl hover:bg-green-600 transition-colors border border-green-500'
               >
                 Start Chat
               </button>
@@ -283,13 +287,13 @@ export default function NotificationItem({
                     onError('Failed to mark notification as read');
                   }
                 }}
-                className='px-3 py-1.5 text-sm font-semibold text-zinc-900 bg-zinc-100 rounded-lg hover:bg-zinc-100 transition-colors'
+                className='px-2.5 py-2 text-sm font-medium text-zinc-900 bg-white border border-zinc-200 rounded-xl hover:bg-zinc-100 transition-colors'
               >
                 Mark as Read
               </button>
             </div>
           ) : (
-            <div className='flex items-center gap-2 mt-3'>
+            <div className='flex items-center gap-1.5 mt-3'>
               <button
                 onClick={async e => {
                   e.stopPropagation();
@@ -305,7 +309,7 @@ export default function NotificationItem({
                     onError('Failed to mark notification as read');
                   }
                 }}
-                className='px-3 py-1.5 text-sm font-semibold text-zinc-900 bg-zinc-100 rounded-lg hover:bg-zinc-100 transition-colors'
+                className='px-2.5 py-2 text-sm font-medium text-zinc-900 bg-white border border-zinc-200 rounded-xl hover:bg-zinc-100 transition-colors'
               >
                 Mark as Read
               </button>

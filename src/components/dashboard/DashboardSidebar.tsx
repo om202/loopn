@@ -1,12 +1,15 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { MessageCircle, Sparkles, Users } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useAuthenticator } from '@aws-amplify/ui-react';
 
-import { NotificationBell } from '../notifications';
 import UserAvatar from '../UserAvatar';
+import { notificationService } from '../../services/notification.service';
+import { useChatRequests } from '../../hooks/realtime/useChatRequests';
+import type { UINotification } from '../notifications/types';
 
 type SidebarSection = 'all' | 'connections' | 'suggested' | 'notifications' | 'account';
 
@@ -27,10 +30,116 @@ export default function DashboardSidebar({
   chatTrialsCount,
   suggestedUsersCount,
 }: DashboardSidebarProps) {
+  const { user } = useAuthenticator();
+  const [notificationCount, setNotificationCount] = useState(0);
+  
+  const {
+    incomingRequests: realtimeChatRequests,
+    isLoadingIncoming: chatRequestsLoading,
+  } = useChatRequests({
+    userId: user?.userId || '',
+    enabled: !!user?.userId,
+  });
+
   const getUserEmail = () => {
-    // For demo purposes, using a placeholder email
-    return 'user@example.com';
+    return user?.signInDetails?.loginId || 'user@example.com';
   };
+
+  // Simple notification count tracking (lightweight)
+  useEffect(() => {
+    if (!user) {
+      setNotificationCount(0);
+      return;
+    }
+
+    // Just get the count, don't store all notification data
+    const getNotificationCount = async () => {
+      try {
+        const result = await notificationService.getUnreadNotifications(user.userId);
+        if (result.data) {
+          const count = result.data.reduce((total, notification) => {
+            if (
+              notification.type === 'message' &&
+              notification.data &&
+              'messageCount' in notification.data
+            ) {
+              return total + (notification.data.messageCount || 1);
+            }
+            return total + 1;
+          }, 0);
+          setNotificationCount(count);
+        }
+      } catch (error) {
+        console.error('Error getting notification count:', error);
+      }
+    };
+
+    // Lightweight subscription just for count updates
+    const notificationSubscription = 
+      notificationService.observeUserNotifications(
+        user.userId,
+        (notifications) => {
+          const count = notifications.reduce((total, notification) => {
+            if (
+              notification.type === 'message' &&
+              notification.data &&
+              'messageCount' in notification.data
+            ) {
+              return total + (notification.data.messageCount || 1);
+            }
+            return total + 1;
+          }, 0);
+          setNotificationCount(count);
+        },
+        (error) => {
+          console.error('Error observing notification count:', error);
+        }
+      );
+
+    const timeoutId = setTimeout(getNotificationCount, 500); // Faster initial load
+
+    return () => {
+      clearTimeout(timeoutId);
+      notificationSubscription.unsubscribe();
+    };
+  }, [user]);
+
+  // Update count when chat requests change
+  useEffect(() => {
+    if (!user) return;
+    
+    // Recalculate total count including chat requests
+    const updateTotalCount = async () => {
+      try {
+        const result = await notificationService.getUnreadNotifications(user.userId);
+        let count = 0;
+        
+        if (result.data) {
+          count = result.data.reduce((total, notification) => {
+            if (
+              notification.type === 'message' &&
+              notification.data &&
+              'messageCount' in notification.data
+            ) {
+              return total + (notification.data.messageCount || 1);
+            }
+            return total + 1;
+          }, 0);
+        }
+        
+        // Add chat requests
+        if (realtimeChatRequests && !chatRequestsLoading) {
+          count += realtimeChatRequests.length;
+        }
+        
+        setNotificationCount(count);
+      } catch (error) {
+        console.error('Error updating notification count:', error);
+      }
+    };
+    
+    updateTotalCount();
+  }, [user, realtimeChatRequests, chatRequestsLoading]);
 
   const sidebarItems = [
     {
@@ -55,7 +164,7 @@ export default function DashboardSidebar({
       id: 'notifications' as const,
       icon: 'NotificationBell',
       label: 'Notifications',
-      count: 0,
+      count: notificationCount,
     },
     {
       id: 'account' as const,
@@ -116,8 +225,12 @@ export default function DashboardSidebar({
                 )}
                 <span className='font-medium text-base'>{label}</span>
                 {count > 0 && (
-                  <span className='ml-auto text-sm text-zinc-500 font-medium bg-zinc-100 px-2 py-0.5 rounded-full min-w-[20px] text-center'>
-                    {count}
+                  <span className={`ml-auto text-sm font-medium px-2 py-0.5 rounded-full min-w-[20px] text-center ${
+                    id === 'notifications' 
+                      ? 'bg-b_red-500 text-white' 
+                      : 'text-zinc-500 bg-zinc-100'
+                  }`}>
+                    {count > 99 ? '99+' : count}
                   </span>
                 )}
               </button>
@@ -129,28 +242,44 @@ export default function DashboardSidebar({
       </div>
 
       {/* Mobile Bottom Bar */}
-      <div className='lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-zinc-200 px-4 py-3'>
+      <div className='lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-zinc-200 px-2 py-3'>
         <nav className='flex justify-center items-stretch'>
-          <div className='flex bg-zinc-50 rounded-2xl p-1 gap-1 max-w-xs w-full'>
-            {sidebarItems.map(({ id, icon: Icon, label, count }) => (
+          <div className='flex bg-zinc-50 rounded-2xl p-1 gap-0.5 w-full max-w-lg'>
+            {sidebarItems.map(({ id, icon, label, count }) => (
               <button
                 key={id}
                 onClick={() => onSectionChange(id)}
-                className={`relative flex-1 flex flex-col items-center justify-center gap-1.5 px-3 py-3 rounded-xl transition-all duration-200 min-h-[56px] ${
+                className={`relative flex-1 flex flex-col items-center justify-center gap-1 px-1 py-2.5 rounded-xl transition-all duration-200 min-h-[52px] ${
                   activeSection === id
                     ? 'text-brand-500 bg-white shadow-lg'
                     : 'text-zinc-500 hover:text-zinc-700 hover:bg-white/50'
                 }`}
                 title={label}
               >
-                <Icon className='w-5 h-5 flex-shrink-0' />
-                <span className='text-sm font-medium leading-none'>
+                {icon === 'NotificationBell' ? (
+                  <div className='w-4 h-4 flex-shrink-0 flex items-center justify-center'>
+                    <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                      <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9' />
+                    </svg>
+                  </div>
+                ) : icon === 'UserAvatar' ? (
+                  <div className='w-4 h-4 flex-shrink-0 flex items-center justify-center'>
+                    <UserAvatar email={getUserEmail()} size='xs' />
+                  </div>
+                ) : (
+                  React.createElement(icon, { className: 'w-4 h-4 flex-shrink-0' })
+                )}
+                <span className='text-xs font-medium leading-none'>
                   {label}
                 </span>
 
                 {/* Count indicator for mobile */}
                 {count > 0 && (
-                  <span className='absolute -top-1 -right-1 bg-brand-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center min-w-[20px] font-semibold shadow-lg'>
+                  <span className={`absolute -top-1 -right-1 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center min-w-[20px] font-semibold shadow-lg ${
+                    id === 'notifications' 
+                      ? 'bg-b_red-500' 
+                      : 'bg-brand-500'
+                  }`}>
                     {count > 99 ? '99+' : count}
                   </span>
                 )}

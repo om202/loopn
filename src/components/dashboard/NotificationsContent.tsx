@@ -17,6 +17,7 @@ import { useChatRequests } from '../../hooks/realtime/useChatRequests';
 import { userService } from '../../services/user.service';
 
 import NotificationItem from '../notifications/NotificationItem';
+import LoadingContainer from '../LoadingContainer';
 import type {
   UINotification,
   NotificationFilter,
@@ -39,6 +40,7 @@ export default function NotificationsContent() {
   const [decliningId, setDecliningId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [acceptingRequestId, setAcceptingRequestId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const router = useRouter();
   const pathname = usePathname();
@@ -72,9 +74,10 @@ export default function NotificationsContent() {
       } else if (result.error) {
         setError(result.error);
       }
+      setIsLoading(false);
     };
 
-    const timeoutId = setTimeout(loadNotifications, 1500);
+    const timeoutId = setTimeout(loadNotifications, 100);
     return () => clearTimeout(timeoutId);
   }, [user]);
 
@@ -165,7 +168,7 @@ export default function NotificationsContent() {
       return () => {
         messageSubscription.unsubscribe();
       };
-    }, 1500);
+    }, 100);
 
     return () => clearTimeout(timeoutId);
   }, [user, getCurrentConversationId]);
@@ -193,7 +196,7 @@ export default function NotificationsContent() {
       return () => {
         notificationSubscription.unsubscribe();
       };
-    }, 1500);
+    }, 100);
 
     return () => clearTimeout(timeoutId);
   }, [user, groupMessageNotifications]);
@@ -392,13 +395,18 @@ export default function NotificationsContent() {
     <div className='h-full flex flex-col'>
       {/* Header */}
       <div className='mb-6'>
-        <div className='flex items-center gap-3 mb-2'>
-          <Bell className='w-6 h-6 text-brand-600' />
-          <h1 className='text-2xl font-semibold text-zinc-900'>Notifications</h1>
-          {notifications.length > 0 && (
-            <span className='bg-b_red-600 text-white text-sm font-medium px-2 py-1 rounded-full'>
-              {getTotalMessageCount() > 99 ? '99+' : getTotalMessageCount()}
-            </span>
+        <div className='flex items-center justify-between mb-2'>
+          <div className='flex items-center gap-3'>
+            <Bell className='w-6 h-6 text-brand-600' />
+            <h1 className='text-2xl font-semibold text-zinc-900'>Notifications</h1>
+          </div>
+          {getFilteredNotifications().length > 0 && (
+            <button
+              onClick={handleMarkAllAsRead}
+              className='text-sm text-brand-500 hover:text-brand-700 font-medium py-2 px-3 rounded-lg hover:bg-brand-50 transition-colors'
+            >
+              Mark all as read
+            </button>
           )}
         </div>
         <p className='text-zinc-600'>Stay updated with your latest activity</p>
@@ -412,7 +420,9 @@ export default function NotificationsContent() {
           </div>
         )}
 
-        {getFilteredNotifications().length === 0 ? (
+        {isLoading ? (
+          <LoadingContainer size="lg" variant="spin" />
+        ) : getFilteredNotifications().length === 0 ? (
           <div className='flex flex-col items-center justify-center h-full text-center'>
             <div className='w-16 h-16 mx-auto mb-4 bg-zinc-100 rounded-full flex items-center justify-center'>
               <Bell className='w-8 h-8 text-zinc-500' />
@@ -423,7 +433,7 @@ export default function NotificationsContent() {
             <p className='text-zinc-500'>No new notifications</p>
           </div>
         ) : (
-          <div className='space-y-2'>
+          <div className='space-y-4'>
             {getFilteredNotifications().map(notification => (
               <NotificationItem
                 key={notification.id}
@@ -439,16 +449,7 @@ export default function NotificationsContent() {
         )}
       </div>
 
-      {getFilteredNotifications().length > 0 && (
-        <div className='mt-6 pt-4 border-t border-zinc-200'>
-          <button
-            onClick={handleMarkAllAsRead}
-            className='w-full text-center text-sm text-brand-500 hover:text-brand-700 font-medium py-2 rounded-2xl hover:bg-zinc-100 transition-colors'
-          >
-            Mark all as read
-          </button>
-        </div>
-      )}
+
     </div>
   );
 }
