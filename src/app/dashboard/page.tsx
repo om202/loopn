@@ -2,10 +2,16 @@
 
 import OnlineUsers from '../../components/OnlineUsers';
 import ProtectedRoute from '../../components/protected-route';
+import SearchUser from '../../components/SearchUser';
 
 export default function DashboardPage() {
   const handleChatRequestSent = () => {
     console.info('Chat request sent');
+  };
+
+  const handleProfessionalRequest = (request: string) => {
+    console.log('AI Professional Request:', request);
+    // TODO: Implement AI professional matching logic
   };
 
   return (
@@ -15,6 +21,11 @@ export default function DashboardPage() {
         <div className='flex-1 w-full px-1 sm:px-3 lg:px-6 py-1 sm:py-3 lg:py-4 min-h-0 space-y-2 sm:space-y-4'>
           {/* Online Users */}
           <OnlineUsers onChatRequestSent={handleChatRequestSent} />
+        </div>
+
+        {/* AI Professional Match Bar - Bottom */}
+        <div className='w-full bg-white border-t border-zinc-200 px-2 sm:px-4 py-3 sm:py-4'>
+          <SearchUser onProfessionalRequest={handleProfessionalRequest} />
         </div>
       </div>
     </ProtectedRoute>
