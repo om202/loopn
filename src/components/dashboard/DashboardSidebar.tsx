@@ -185,7 +185,7 @@ export default function DashboardSidebar({
   return (
     <>
       {/* Desktop Sidebar */}
-      <div className='hidden lg:block w-72 flex-shrink-0'>
+      <div className='hidden lg:block w-64 flex-shrink-0'>
         <div className='bg-white rounded-2xl border border-zinc-200 p-6 h-full flex flex-col'>
           {/* Logo at top */}
           <div className='mb-6'>

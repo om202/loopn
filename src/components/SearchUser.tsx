@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Search } from 'lucide-react';
+import { Search, Sparkles } from 'lucide-react';
 
 interface SearchUserProps {
   onProfessionalRequest?: (request: string) => void;
@@ -21,9 +21,9 @@ export default function SearchUser({ onProfessionalRequest }: SearchUserProps) {
   };
 
   return (
-    <div className='w-[70%] mx-auto'>
-      <form 
-        onSubmit={handleSubmit} 
+    <div className='max-w-2xl mx-auto'>
+      <form
+        onSubmit={handleSubmit}
         className='relative'
         autoComplete='off'
         data-form-type='other'
@@ -39,9 +39,10 @@ export default function SearchUser({ onProfessionalRequest }: SearchUserProps) {
           tabIndex={-1}
           aria-hidden='true'
         />
+        <Sparkles className='absolute left-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-brand-500 z-10' />
         <input
           type='text'
-          placeholder='What kind of professional you want to meet?'
+          placeholder='Who would you like to meet?'
           value={query}
           onChange={e => setQuery(e.target.value)}
           disabled={isProcessing}
@@ -60,12 +61,11 @@ export default function SearchUser({ onProfessionalRequest }: SearchUserProps) {
           data-enable-grammarly='false'
           name='professional-request-input'
           id='professional-request-input'
-          className='w-full pl-4 pr-12 py-3 border border-zinc-200 rounded-full focus:outline-none focus:ring-2 focus:ring-brand-500 bg-zinc-100 hover:bg-white transition-colors placeholder-zinc-500'
+          className='w-full pl-12 pr-12 py-3 border border-zinc-200 rounded-full focus:outline-none focus:ring-2 focus:ring-brand-500 bg-zinc-100 hover:bg-white transition-colors placeholder-zinc-500'
         />
         <button
           type='submit'
-          disabled={!query.trim() || isProcessing}
-          className='absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-brand-500 text-white rounded-full hover:bg-brand-600 disabled:opacity-50 flex items-center justify-center'
+          className='absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-brand-500 text-white rounded-full hover:bg-brand-600 flex items-center justify-center'
         >
           {isProcessing ? (
             <div className='w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin' />

@@ -18,6 +18,7 @@ import {
   AccountContent,
 } from './dashboard';
 import LoadingContainer from './LoadingContainer';
+import SearchUser from './SearchUser';
 import { useChatActions } from '../hooks/useChatActions';
 import { useUserCategorization } from '../hooks/useUserCategorization';
 import { useRealtimeOnlineUsers } from '../hooks/realtime';
@@ -29,6 +30,7 @@ type Conversation = Schema['Conversation']['type'];
 
 interface OnlineUsersProps {
   onChatRequestSent: () => void;
+  onProfessionalRequest?: (request: string) => void;
 }
 
 type SidebarSection =
@@ -38,7 +40,10 @@ type SidebarSection =
   | 'notifications'
   | 'account';
 
-export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
+export default function OnlineUsers({
+  onChatRequestSent,
+  onProfessionalRequest,
+}: OnlineUsersProps) {
   const [allUsers, setAllUsers] = useState<UserPresence[]>([]);
   const [existingConversations, setExistingConversations] = useState<
     Map<string, Conversation>
@@ -460,6 +465,11 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
       />
 
       <div className='flex-1 bg-white sm:rounded-2xl sm:border sm:border-zinc-200 p-2 sm:p-4 lg:p-6 ultra-compact overflow-hidden flex flex-col min-h-0'>
+        {/* Search User - Always visible at top */}
+        <div className='flex-shrink-0 mb-4 sm:mb-6'>
+          <SearchUser onProfessionalRequest={onProfessionalRequest} />
+        </div>
+
         <div className='overflow-y-auto flex-1'>
           {activeSection === 'notifications' ? (
             <NotificationsContent />
@@ -616,7 +626,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
                           ) : (
                             <>
                               <MessageCircle className='w-4 h-4' />
-                              <span>Resume Chat</span>
+                              <span>Chat</span>
                             </>
                           )}
                         </>
