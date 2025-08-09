@@ -11,7 +11,12 @@ import type { Schema } from '../../amplify/data/resource';
 import { chatService } from '../services/chat.service';
 import { userService } from '../services/user.service';
 
-import { DashboardSidebar, DashboardSectionContent, NotificationsContent, AccountContent } from './dashboard';
+import {
+  DashboardSidebar,
+  DashboardSectionContent,
+  NotificationsContent,
+  AccountContent,
+} from './dashboard';
 import LoadingContainer from './LoadingContainer';
 import { useChatActions } from '../hooks/useChatActions';
 import { useUserCategorization } from '../hooks/useUserCategorization';
@@ -26,7 +31,12 @@ interface OnlineUsersProps {
   onChatRequestSent: () => void;
 }
 
-type SidebarSection = 'all' | 'connections' | 'suggested' | 'notifications' | 'account';
+type SidebarSection =
+  | 'all'
+  | 'connections'
+  | 'suggested'
+  | 'notifications'
+  | 'account';
 
 export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   const [allUsers, setAllUsers] = useState<UserPresence[]>([]);
@@ -468,7 +478,9 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
               onChatAction={handleChatAction}
               onCancelChatRequest={handleCancelChatRequest}
               canUserReconnect={userCategories.canUserReconnect}
-              getReconnectTimeRemaining={userCategories.getReconnectTimeRemaining}
+              getReconnectTimeRemaining={
+                userCategories.getReconnectTimeRemaining
+              }
               onOpenProfileSidebar={handleOpenProfileSidebar}
               onUserCardClick={handleUserCardClick}
               isProfileSidebarOpen={profileSidebarOpen}
@@ -508,13 +520,14 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
                         `User${profileSidebarUser.userId.slice(-4)}`}
                     </div>
                     {/* Trial indicator */}
-                    {existingConversations.has(profileSidebarUser.userId) && 
-                     !existingConversations.get(profileSidebarUser.userId)?.isConnected && (
-                      <span className='px-2 py-0.5 text-xs font-medium border border-zinc-300 text-zinc-600 rounded-full flex-shrink-0 flex items-center gap-1'>
-                        <Clock className='w-3 h-3' />
-                        Trial
-                      </span>
-                    )}
+                    {existingConversations.has(profileSidebarUser.userId) &&
+                      !existingConversations.get(profileSidebarUser.userId)
+                        ?.isConnected && (
+                        <span className='px-2 py-0.5 text-xs font-medium border border-zinc-300 text-zinc-600 rounded-full flex-shrink-0 flex items-center gap-1'>
+                          <Clock className='w-3 h-3' />
+                          Trial
+                        </span>
+                      )}
                   </div>
                   <div className='text-sm text-zinc-500 mt-1'>
                     {onlineUsers.find(
@@ -528,31 +541,34 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
                 </div>
               </div>
             </div>
-            
+
             {/* Action buttons section */}
             <div className='px-6 pb-4'>
               <div className='flex gap-2 justify-center'>
                 {(() => {
-                  const conversation = existingConversations.get(profileSidebarUser.userId);
+                  const conversation = existingConversations.get(
+                    profileSidebarUser.userId
+                  );
                   const isEndedWithTimer =
                     conversation?.chatStatus === 'ENDED' &&
-                    !userCategories.canUserReconnect(profileSidebarUser.userId) &&
-                    userCategories.getReconnectTimeRemaining(profileSidebarUser.userId);
-
-                  if (isEndedWithTimer) {
-                    const timeRemaining = userCategories.getReconnectTimeRemaining(
+                    !userCategories.canUserReconnect(
+                      profileSidebarUser.userId
+                    ) &&
+                    userCategories.getReconnectTimeRemaining(
                       profileSidebarUser.userId
                     );
+
+                  if (isEndedWithTimer) {
+                    const timeRemaining =
+                      userCategories.getReconnectTimeRemaining(
+                        profileSidebarUser.userId
+                      );
                     return (
                       <div className='text-sm text-center'>
-                        <div className='text-zinc-500 mb-1'>
-                          Reconnect in
-                        </div>
+                        <div className='text-zinc-500 mb-1'>Reconnect in</div>
                         <div className='text-zinc-500 flex items-center justify-center gap-1'>
                           <Clock className='w-3 h-3 text-zinc-500' />
-                          <span className='text-sm'>
-                            {timeRemaining}
-                          </span>
+                          <span className='text-sm'>{timeRemaining}</span>
                         </div>
                       </div>
                     );
@@ -561,7 +577,9 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
                   return (
                     <button
                       onClick={() => {
-                        if (combinedPendingRequests.has(profileSidebarUser.userId)) {
+                        if (
+                          combinedPendingRequests.has(profileSidebarUser.userId)
+                        ) {
                           // Handle cancel request - you might want to add a confirmation
                           handleCancelChatRequest(profileSidebarUser.userId);
                         } else {
@@ -570,15 +588,21 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
                       }}
                       className='px-4 py-2.5 text-sm font-medium rounded-xl border transition-colors bg-white text-brand-500 border-zinc-200 hover:bg-brand-100 hover:border-zinc-200 flex items-center gap-2'
                     >
-                      {combinedPendingRequests.has(profileSidebarUser.userId) ? (
+                      {combinedPendingRequests.has(
+                        profileSidebarUser.userId
+                      ) ? (
                         <>
                           <span className='text-zinc-600'>Cancel Request</span>
                         </>
-                      ) : existingConversations.has(profileSidebarUser.userId) ? (
+                      ) : existingConversations.has(
+                          profileSidebarUser.userId
+                        ) ? (
                         <>
                           {existingConversations.get(profileSidebarUser.userId)
                             ?.chatStatus === 'ENDED' ? (
-                            userCategories.canUserReconnect(profileSidebarUser.userId) ? (
+                            userCategories.canUserReconnect(
+                              profileSidebarUser.userId
+                            ) ? (
                               <>
                                 <MessageCircle className='w-4 h-4' />
                                 <span>Send Request</span>
@@ -607,7 +631,7 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
                 })()}
               </div>
             </div>
-            
+
             <div className='flex-1 flex justify-center overflow-y-auto'>
               <div className='pt-3 px-6 pb-6 w-full max-w-sm'>
                 {profileSidebarLoading ? (

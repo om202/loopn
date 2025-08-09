@@ -262,14 +262,18 @@ export default function UserCard({
                     ) : (
                       <>
                         <MessageCircle className='w-4 h-4 text-brand-500 flex-shrink-0' />
-                        <span className='hidden min-[400px]:inline'>Resume Chat</span>
+                        <span className='hidden min-[400px]:inline'>
+                          Resume Chat
+                        </span>
                       </>
                     )}
                   </>
                 ) : (
                   <>
                     <CheckCircle2 className='w-4 h-4 text-brand-500 flex-shrink-0' />
-                    <span className='hidden min-[400px]:inline'>Start Trial</span>
+                    <span className='hidden min-[400px]:inline'>
+                      Start Trial
+                    </span>
                   </>
                 )}
               </button>

@@ -39,7 +39,7 @@ export default function NotificationsContent() {
   const [activeFilter] = useState<NotificationFilter>('all');
   const [decliningId, setDecliningId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [acceptingRequestId, setAcceptingRequestId] = useState<string | null>(null);
+  const [, setAcceptingRequestId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const router = useRouter();
@@ -378,18 +378,7 @@ export default function NotificationsContent() {
     return notifications.filter(notif => notif.type === activeFilter);
   };
 
-  const getTotalMessageCount = () => {
-    return notifications.reduce((total, notification) => {
-      if (
-        notification.type === 'message' &&
-        notification.data &&
-        'messageCount' in notification.data
-      ) {
-        return total + (notification.data.messageCount || 1);
-      }
-      return total + 1;
-    }, 0);
-  };
+  // Removed unused getTotalMessageCount function
 
   return (
     <div className='h-full flex flex-col'>
@@ -397,8 +386,7 @@ export default function NotificationsContent() {
       <div className='mb-6'>
         <div className='flex items-center justify-between mb-2'>
           <div className='flex items-center gap-3'>
-            <Bell className='w-6 h-6 text-brand-600' />
-            <h1 className='text-2xl font-semibold text-zinc-900'>Notifications</h1>
+            <h1 className='text-2xl font-bold text-zinc-900'>Notifications</h1>
           </div>
           {getFilteredNotifications().length > 0 && (
             <button
@@ -421,7 +409,7 @@ export default function NotificationsContent() {
         )}
 
         {isLoading ? (
-          <LoadingContainer size="lg" variant="spin" />
+          <LoadingContainer size='lg' variant='spin' />
         ) : getFilteredNotifications().length === 0 ? (
           <div className='flex flex-col items-center justify-center h-full text-center'>
             <div className='w-16 h-16 mx-auto mb-4 bg-zinc-100 rounded-full flex items-center justify-center'>
@@ -448,8 +436,6 @@ export default function NotificationsContent() {
           </div>
         )}
       </div>
-
-
     </div>
   );
 }

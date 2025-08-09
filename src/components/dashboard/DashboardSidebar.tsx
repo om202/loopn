@@ -9,9 +9,13 @@ import { useAuthenticator } from '@aws-amplify/ui-react';
 import UserAvatar from '../UserAvatar';
 import { notificationService } from '../../services/notification.service';
 import { useChatRequests } from '../../hooks/realtime/useChatRequests';
-import type { UINotification } from '../notifications/types';
 
-type SidebarSection = 'all' | 'connections' | 'suggested' | 'notifications' | 'account';
+type SidebarSection =
+  | 'all'
+  | 'connections'
+  | 'suggested'
+  | 'notifications'
+  | 'account';
 
 interface DashboardSidebarProps {
   activeSection: SidebarSection;
@@ -32,7 +36,7 @@ export default function DashboardSidebar({
 }: DashboardSidebarProps) {
   const { user } = useAuthenticator();
   const [notificationCount, setNotificationCount] = useState(0);
-  
+
   const {
     incomingRequests: realtimeChatRequests,
     isLoadingIncoming: chatRequestsLoading,
@@ -55,7 +59,9 @@ export default function DashboardSidebar({
     // Just get the count, don't store all notification data
     const getNotificationCount = async () => {
       try {
-        const result = await notificationService.getUnreadNotifications(user.userId);
+        const result = await notificationService.getUnreadNotifications(
+          user.userId
+        );
         if (result.data) {
           const count = result.data.reduce((total, notification) => {
             if (
@@ -75,10 +81,10 @@ export default function DashboardSidebar({
     };
 
     // Lightweight subscription just for count updates
-    const notificationSubscription = 
+    const notificationSubscription =
       notificationService.observeUserNotifications(
         user.userId,
-        (notifications) => {
+        notifications => {
           const count = notifications.reduce((total, notification) => {
             if (
               notification.type === 'message' &&
@@ -91,7 +97,7 @@ export default function DashboardSidebar({
           }, 0);
           setNotificationCount(count);
         },
-        (error) => {
+        error => {
           console.error('Error observing notification count:', error);
         }
       );
@@ -107,13 +113,15 @@ export default function DashboardSidebar({
   // Update count when chat requests change
   useEffect(() => {
     if (!user) return;
-    
+
     // Recalculate total count including chat requests
     const updateTotalCount = async () => {
       try {
-        const result = await notificationService.getUnreadNotifications(user.userId);
+        const result = await notificationService.getUnreadNotifications(
+          user.userId
+        );
         let count = 0;
-        
+
         if (result.data) {
           count = result.data.reduce((total, notification) => {
             if (
@@ -126,18 +134,18 @@ export default function DashboardSidebar({
             return total + 1;
           }, 0);
         }
-        
+
         // Add chat requests
         if (realtimeChatRequests && !chatRequestsLoading) {
           count += realtimeChatRequests.length;
         }
-        
+
         setNotificationCount(count);
       } catch (error) {
         console.error('Error updating notification count:', error);
       }
     };
-    
+
     updateTotalCount();
   }, [user, realtimeChatRequests, chatRequestsLoading]);
 
@@ -188,13 +196,11 @@ export default function DashboardSidebar({
               <Image
                 src='/loopn.svg'
                 alt='Loopn'
-                width={28}
-                height={28}
+                width={32}
+                height={32}
                 priority
               />
-              <h1 className='text-lg font-semibold text-zinc-900'>
-                Loopn
-              </h1>
+              <h1 className='text-2xl font-bold text-zinc-900'>Loopn</h1>
             </Link>
           </div>
 
@@ -212,8 +218,18 @@ export default function DashboardSidebar({
               >
                 {icon === 'NotificationBell' ? (
                   <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
-                    <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                      <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9' />
+                    <svg
+                      className='w-5 h-5'
+                      fill='none'
+                      stroke='currentColor'
+                      viewBox='0 0 24 24'
+                    >
+                      <path
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        strokeWidth={2}
+                        d='M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9'
+                      />
                     </svg>
                   </div>
                 ) : icon === 'UserAvatar' ? (
@@ -221,23 +237,25 @@ export default function DashboardSidebar({
                     <UserAvatar email={getUserEmail()} size='xs' />
                   </div>
                 ) : (
-                  React.createElement(icon, { className: 'w-5 h-5 flex-shrink-0' })
+                  React.createElement(icon, {
+                    className: 'w-5 h-5 flex-shrink-0',
+                  })
                 )}
                 <span className='font-medium text-base'>{label}</span>
                 {count > 0 && (
-                  <span className={`ml-auto text-sm font-medium px-2 py-0.5 rounded-full min-w-[20px] text-center ${
-                    id === 'notifications' 
-                      ? 'bg-b_red-500 text-white' 
-                      : 'text-zinc-500 bg-zinc-100'
-                  }`}>
+                  <span
+                    className={`ml-auto text-sm font-medium px-2 py-0.5 rounded-full min-w-[20px] text-center ${
+                      id === 'notifications'
+                        ? 'bg-b_red-500 text-white'
+                        : 'text-zinc-500 bg-zinc-100'
+                    }`}
+                  >
                     {count > 99 ? '99+' : count}
                   </span>
                 )}
               </button>
             ))}
           </nav>
-
-
         </div>
       </div>
 
@@ -258,8 +276,18 @@ export default function DashboardSidebar({
               >
                 {icon === 'NotificationBell' ? (
                   <div className='w-4 h-4 flex-shrink-0 flex items-center justify-center'>
-                    <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                      <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9' />
+                    <svg
+                      className='w-4 h-4'
+                      fill='none'
+                      stroke='currentColor'
+                      viewBox='0 0 24 24'
+                    >
+                      <path
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        strokeWidth={2}
+                        d='M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9'
+                      />
                     </svg>
                   </div>
                 ) : icon === 'UserAvatar' ? (
@@ -267,7 +295,9 @@ export default function DashboardSidebar({
                     <UserAvatar email={getUserEmail()} size='xs' />
                   </div>
                 ) : (
-                  React.createElement(icon, { className: 'w-4 h-4 flex-shrink-0' })
+                  React.createElement(icon, {
+                    className: 'w-4 h-4 flex-shrink-0',
+                  })
                 )}
                 <span className='text-xs font-medium leading-none'>
                   {label}
@@ -275,11 +305,11 @@ export default function DashboardSidebar({
 
                 {/* Count indicator for mobile */}
                 {count > 0 && (
-                  <span className={`absolute -top-1 -right-1 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center min-w-[20px] font-semibold shadow-lg ${
-                    id === 'notifications' 
-                      ? 'bg-b_red-500' 
-                      : 'bg-brand-500'
-                  }`}>
+                  <span
+                    className={`absolute -top-1 -right-1 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center min-w-[20px] font-semibold shadow-lg ${
+                      id === 'notifications' ? 'bg-b_red-500' : 'bg-brand-500'
+                    }`}
+                  >
                     {count > 99 ? '99+' : count}
                   </span>
                 )}
