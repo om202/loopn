@@ -644,8 +644,8 @@ export default function OnlineUsers({
               </div>
             </div>
 
-            <div className='flex-1 flex justify-center overflow-y-auto'>
-              <div className='pt-3 px-6 pb-6 w-full max-w-sm'>
+            <div className='flex-1 overflow-y-auto'>
+              <div className='px-6'>
                 {profileSidebarLoading ? (
                   <div className='flex flex-col items-center gap-3 text-sm text-zinc-500'>
                     <div className='w-4 h-4 bg-zinc-100 rounded-full animate-pulse'></div>
@@ -654,8 +654,8 @@ export default function OnlineUsers({
                     </span>
                   </div>
                 ) : profileSidebarSummary ? (
-                  <div className='text-sm text-zinc-900 leading-relaxed rounded-lg px-3 py-2 bg-zinc-50'>
-                    <div className='mb-2 font-medium'>Anonymous Overview</div>
+                  <div className='text-sm text-zinc-900 leading-relaxed rounded-lg px-3 py-2 bg-zinc-100'>
+                    <div className='mb-2 font-semibold'>Anonymous Summary</div>
                     <div>{profileSidebarSummary}</div>
                   </div>
                 ) : (

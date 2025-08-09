@@ -1,18 +1,14 @@
 'use client';
 
 import { useAuthenticator } from '@aws-amplify/ui-react';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
 import { Bell } from 'lucide-react';
 
-import {
-  createShortChatUrl,
-  getConversationIdFromParam,
-} from '../../lib/url-utils';
+import { createShortChatUrl } from '../../lib/url-utils';
 import { chatService } from '../../services/chat.service';
 import { messageService } from '../../services/message.service';
 import { notificationService } from '../../services/notification.service';
-import { soundService } from '../../services/sound.service';
 import { useChatRequests } from '../../hooks/realtime/useChatRequests';
 import { userService } from '../../services/user.service';
 
@@ -43,15 +39,6 @@ export default function NotificationsContent() {
   const [isLoading, setIsLoading] = useState(true);
 
   const router = useRouter();
-  const pathname = usePathname();
-
-  const getCurrentConversationId = useCallback(() => {
-    if (pathname?.startsWith('/chat/')) {
-      const chatId = pathname.split('/chat/')[1];
-      return getConversationIdFromParam(chatId);
-    }
-    return null;
-  }, [pathname]);
 
   const groupMessageNotifications = useCallback(
     (notifications: UINotification[]) => {
@@ -153,12 +140,9 @@ export default function NotificationsContent() {
     const timeoutId = setTimeout(() => {
       const messageSubscription = messageService.subscribeToNewMessages(
         user.userId,
-        async message => {
-          const currentConversationId = getCurrentConversationId();
-
-          if (currentConversationId !== message.conversationId) {
-            soundService.playBellSound();
-          }
+        async () => {
+          // Sound disabled for notifications
+          // No sound will play when receiving notifications
         },
         error => {
           console.error('Error subscribing to messages:', error);
@@ -171,7 +155,7 @@ export default function NotificationsContent() {
     }, 100);
 
     return () => clearTimeout(timeoutId);
-  }, [user, getCurrentConversationId]);
+  }, [user]);
 
   useEffect(() => {
     if (!user) {

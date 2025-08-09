@@ -292,7 +292,7 @@ export default function UserCard({
           {/* Desktop: three dots opens sidebar via parent */}
           <button
             onClick={() => onOpenProfileSidebar?.(userPresence)}
-            className={`hidden md:flex px-2.5 py-2 rounded-xl border transition-colors text-zinc-900 items-center justify-center min-w-[44px] ${
+            className={`hidden md:flex p-2 text-sm font-medium rounded-full border transition-colors text-zinc-900 items-center justify-center w-[40px] h-[40px] ${
               isProfileSidebarOpen
                 ? 'bg-zinc-100 border-zinc-200'
                 : 'bg-white border-zinc-200 hover:bg-zinc-100 hover:border-zinc-200'

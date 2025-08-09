@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { LogOut } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { simplePresenceManager } from '@/lib/presence-utils';
 import { UserProfileService } from '@/services/user-profile.service';
@@ -53,7 +52,7 @@ export default function AccountContent() {
   return (
     <div className='h-full flex flex-col'>
       {/* Header */}
-      <div className='mb-6 flex items-start justify-between'>
+      <div className='mb-12 flex items-start justify-between'>
         <div>
           <h2 className='text-2xl font-bold text-zinc-900 mb-1'>Account</h2>
           <p className='text-sm text-zinc-500'>
@@ -64,17 +63,16 @@ export default function AccountContent() {
         {/* Sign Out Button */}
         <button
           onClick={handleSignOutClick}
-          className='flex items-center gap-2 px-4 py-2.5 text-red-600 hover:bg-red-50 rounded-lg border border-red-200'
+          className='flex items-center gap-2 px-4 py-2.5 text-b_red-600 hover:bg-b_red-50 rounded-lg border border-b_red-200'
         >
-          <LogOut className='w-4 h-4' />
-          <span className='text-sm font-medium'>Sign Out</span>
+          <span className='text-sm font-medium'>Log Out</span>
         </button>
       </div>
 
       {/* Profile Section */}
-      <div className='bg-white border border-zinc-200 rounded-2xl p-5 mb-4'>
-        <div className='flex items-center gap-4'>
-          <UserAvatar email={getUserEmail()} size='lg' />
+      <div className='max-w-2xl'>
+        <div className='flex items-center gap-2'>
+          <UserAvatar email={getUserEmail()} size='md' />
           <div className='flex-1'>
             <h3 className='font-semibold text-zinc-900 mb-1'>
               {getUserEmail()}

@@ -39,7 +39,7 @@ export default function SearchUser({ onProfessionalRequest }: SearchUserProps) {
           tabIndex={-1}
           aria-hidden='true'
         />
-        <Sparkles className='absolute left-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-brand-500 z-10' />
+        <Sparkles className='absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-500 z-10' />
         <input
           type='text'
           placeholder='Who would you like to meet?'
@@ -61,7 +61,7 @@ export default function SearchUser({ onProfessionalRequest }: SearchUserProps) {
           data-enable-grammarly='false'
           name='professional-request-input'
           id='professional-request-input'
-          className='w-full pl-10 pr-10 py-3 border border-zinc-200 rounded-full focus:outline-none focus:ring-1 focus:ring-brand-200 focus:bg-white bg-zinc-100 hover:bg-white transition-colors placeholder-zinc-500'
+          className='w-full pl-10 pr-10 py-3 rounded-full focus:outline-none focus:ring-1 focus:ring-brand-200 focus:bg-white bg-zinc-100 hover:bg-brand-50 transition-colors placeholder-zinc-500'
         />
         <button
           type='submit'

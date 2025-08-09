@@ -242,9 +242,9 @@ export default function DashboardSidebar({
                   <span className='font-medium text-sm flex-1'>{label}</span>
                   {count > 0 && (
                     <span
-                      className={`text-xs font-semibold px-2 py-0.5 rounded-full min-w-[18px] text-center ${
+                      className={`text-xs font-semibold flex items-center justify-center h-5 w-5 rounded-full text-center ${
                         id === 'notifications'
-                          ? 'bg-red-500 text-white'
+                          ? 'bg-b_red-500 text-white'
                           : activeSection === id
                             ? 'bg-brand-200 text-brand-800'
                             : 'bg-zinc-200 text-zinc-600'
@@ -325,8 +325,8 @@ export default function DashboardSidebar({
                   {/* Count indicator for mobile */}
                   {count > 0 && (
                     <span
-                      className={`absolute -top-0.5 -right-0.5 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center min-w-[16px] font-bold shadow-lg ${
-                        id === 'notifications' ? 'bg-red-500' : 'bg-brand-500'
+                      className={`absolute -top-0.5 -right-0.5 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center font-bold shadow-sm ${
+                        id === 'notifications' ? 'bg-b_red-500' : 'bg-brand-500'
                       }`}
                     >
                       {count > 9 ? '9+' : count}
