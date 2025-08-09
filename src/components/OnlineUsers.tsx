@@ -656,9 +656,7 @@ export default function OnlineUsers({
                 ) : profileSidebarSummary ? (
                   <div className='text-sm text-zinc-900 leading-relaxed rounded-lg px-3 py-2 bg-zinc-50'>
                     <div className='mb-2 font-medium'>Anonymous Overview</div>
-                    <div>
-                      {profileSidebarSummary}
-                    </div>
+                    <div>{profileSidebarSummary}</div>
                   </div>
                 ) : (
                   <div className='text-sm text-zinc-900 leading-relaxed rounded-lg px-3 py-2 bg-zinc-50 text-center'>

@@ -60,7 +60,7 @@ export default function AccountContent() {
             Manage your account and profile information
           </p>
         </div>
-        
+
         {/* Sign Out Button */}
         <button
           onClick={handleSignOutClick}
@@ -86,7 +86,9 @@ export default function AccountContent() {
         {/* AI Profile Summary */}
         <div className='mt-5 pt-5 border-t border-zinc-100'>
           <div className='flex items-center gap-2 mb-3'>
-            <h4 className='text-sm font-medium text-zinc-900'>Anonymous Overview</h4>
+            <h4 className='text-sm font-medium text-zinc-900'>
+              Anonymous Overview
+            </h4>
           </div>
 
           {loadingSummary ? (
@@ -100,7 +102,8 @@ export default function AccountContent() {
             </div>
           ) : (
             <div className='bg-zinc-50 rounded-lg p-3 text-sm text-zinc-500'>
-              No profile summary available yet. Start chatting with others to generate your anonymous overview!
+              No profile summary available yet. Start chatting with others to
+              generate your anonymous overview!
             </div>
           )}
         </div>

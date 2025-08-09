@@ -149,11 +149,11 @@ export default function DashboardSectionContent({
               {emptyMessage}
             </h3>
             <p className='text-zinc-500'>
-              {activeSection === 'connections' 
+              {activeSection === 'connections'
                 ? 'Start chatting to build connections'
                 : activeSection === 'suggested'
-                ? 'Check back later for new suggestions'
-                : 'No conversations yet'}
+                  ? 'Check back later for new suggestions'
+                  : 'No conversations yet'}
             </p>
           </div>
         )}

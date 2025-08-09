@@ -245,7 +245,7 @@ export default function DashboardSidebar({
                       className={`text-xs font-semibold px-2 py-0.5 rounded-full min-w-[18px] text-center ${
                         id === 'notifications'
                           ? 'bg-red-500 text-white'
-                          : activeSection === id 
+                          : activeSection === id
                             ? 'bg-brand-200 text-brand-800'
                             : 'bg-zinc-200 text-zinc-600'
                       }`}
@@ -271,7 +271,9 @@ export default function DashboardSidebar({
               <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
                 <UserAvatar email={getUserEmail()} size='xs' />
               </div>
-              <span className='font-medium text-sm flex-1'>{accountItem.label}</span>
+              <span className='font-medium text-sm flex-1'>
+                {accountItem.label}
+              </span>
             </button>
           </div>
         </div>
@@ -281,56 +283,58 @@ export default function DashboardSidebar({
       <div className='lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-zinc-200'>
         <nav className='flex justify-center items-stretch px-4 py-2'>
           <div className='flex bg-zinc-50 rounded-2xl p-1 gap-0.5 w-full max-w-md'>
-            {[...sidebarItems, accountItem].map(({ id, icon, label, count }) => (
-              <button
-                key={id}
-                onClick={() => onSectionChange(id)}
-                className={`relative flex-1 flex flex-col items-center justify-center gap-1 px-2 py-3 rounded-xl border ${
-                  activeSection === id
-                    ? 'text-brand-600 bg-white shadow-sm border-brand-100'
-                    : 'text-zinc-500 hover:text-zinc-700 hover:bg-white/60 border-transparent'
-                }`}
-                title={label}
-              >
-                <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
-                  {icon === 'NotificationBell' ? (
-                    <svg
-                      className='w-5 h-5'
-                      fill='none'
-                      stroke='currentColor'
-                      viewBox='0 0 24 24'
-                    >
-                      <path
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        strokeWidth={2}
-                        d='M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9'
-                      />
-                    </svg>
-                  ) : icon === 'UserAvatar' ? (
-                    <UserAvatar email={getUserEmail()} size='xs' />
-                  ) : (
-                    React.createElement(icon, {
-                      className: 'w-5 h-5',
-                    })
-                  )}
-                </div>
-                <span className='text-xs font-medium leading-tight text-center'>
-                  {label}
-                </span>
-
-                {/* Count indicator for mobile */}
-                {count > 0 && (
-                  <span
-                    className={`absolute -top-0.5 -right-0.5 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center min-w-[16px] font-bold shadow-lg ${
-                      id === 'notifications' ? 'bg-red-500' : 'bg-brand-500'
-                    }`}
-                  >
-                    {count > 9 ? '9+' : count}
+            {[...sidebarItems, accountItem].map(
+              ({ id, icon, label, count }) => (
+                <button
+                  key={id}
+                  onClick={() => onSectionChange(id)}
+                  className={`relative flex-1 flex flex-col items-center justify-center gap-1 px-2 py-3 rounded-xl border ${
+                    activeSection === id
+                      ? 'text-brand-600 bg-white shadow-sm border-brand-100'
+                      : 'text-zinc-500 hover:text-zinc-700 hover:bg-white/60 border-transparent'
+                  }`}
+                  title={label}
+                >
+                  <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
+                    {icon === 'NotificationBell' ? (
+                      <svg
+                        className='w-5 h-5'
+                        fill='none'
+                        stroke='currentColor'
+                        viewBox='0 0 24 24'
+                      >
+                        <path
+                          strokeLinecap='round'
+                          strokeLinejoin='round'
+                          strokeWidth={2}
+                          d='M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9'
+                        />
+                      </svg>
+                    ) : icon === 'UserAvatar' ? (
+                      <UserAvatar email={getUserEmail()} size='xs' />
+                    ) : (
+                      React.createElement(icon, {
+                        className: 'w-5 h-5',
+                      })
+                    )}
+                  </div>
+                  <span className='text-xs font-medium leading-tight text-center'>
+                    {label}
                   </span>
-                )}
-              </button>
-            ))}
+
+                  {/* Count indicator for mobile */}
+                  {count > 0 && (
+                    <span
+                      className={`absolute -top-0.5 -right-0.5 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center min-w-[16px] font-bold shadow-lg ${
+                        id === 'notifications' ? 'bg-red-500' : 'bg-brand-500'
+                      }`}
+                    >
+                      {count > 9 ? '9+' : count}
+                    </span>
+                  )}
+                </button>
+              )
+            )}
           </div>
         </nav>
       </div>

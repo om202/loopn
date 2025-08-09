@@ -397,7 +397,9 @@ export default function NotificationsContent() {
             </button>
           )}
         </div>
-        <p className='text-zinc-600 text-sm'>Keep up with your latest activity</p>
+        <p className='text-zinc-600 text-sm'>
+          Keep up with your latest activity
+        </p>
       </div>
 
       {/* Content */}
