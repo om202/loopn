@@ -104,7 +104,7 @@ export default function DashboardSectionContent({
         };
       case 'suggested':
         return {
-          title: 'Suggested Users',
+          title: 'Suggested',
           description: 'Discover new people to connect with',
           emptyIcon: Sparkles,
           emptyMessage: 'No suggestions available',
@@ -132,10 +132,10 @@ export default function DashboardSectionContent({
   return (
     <div>
       <div className='mb-6 sm:mb-8 lg:mb-10'>
-        <h2 className='text-xl sm:text-2xl font-bold text-zinc-900 mb-2'>
+        <h2 className='text-xl sm:text-2xl font-bold text-zinc-900 mb-1'>
           {title}
         </h2>
-        <p className='text-sm sm:text-base text-zinc-900'>{description}</p>
+        <p className='text-sm sm:text-base text-zinc-500'>{description}</p>
       </div>
       <div className='space-y-2.5 sm:space-y-3'>
         {usersToShow.length > 0 ? (

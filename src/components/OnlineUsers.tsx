@@ -509,7 +509,7 @@ export default function OnlineUsers({
               !existingConversations.get(profileSidebarUser.userId)
                 ?.isConnected && (
                 <div className='absolute top-4 right-4 z-10'>
-                  <span className='px-2 py-0.5 text-xs font-medium border border-zinc-300 text-zinc-600 rounded-full flex-shrink-0 flex items-center gap-1'>
+                  <span className='px-1.5 py-0.5 text-xs border border-zinc-200 text-zinc-500 rounded-full flex-shrink-0 flex items-center gap-1'>
                     <Clock className='w-3 h-3' />
                     Trial
                   </span>

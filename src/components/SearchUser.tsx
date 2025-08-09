@@ -21,7 +21,7 @@ export default function SearchUser({ onProfessionalRequest }: SearchUserProps) {
   };
 
   return (
-    <div className='max-w-2xl mx-auto'>
+    <div className='max-w-md mx-auto'>
       <form
         onSubmit={handleSubmit}
         className='relative'
@@ -61,7 +61,7 @@ export default function SearchUser({ onProfessionalRequest }: SearchUserProps) {
           data-enable-grammarly='false'
           name='professional-request-input'
           id='professional-request-input'
-          className='w-full pl-12 pr-12 py-3 border border-zinc-200 rounded-full focus:outline-none focus:ring-2 focus:ring-brand-500 bg-zinc-100 hover:bg-white transition-colors placeholder-zinc-500'
+          className='w-full pl-10 pr-10 py-3 border border-zinc-200 rounded-full focus:outline-none focus:ring-1 focus:ring-brand-200 focus:bg-white bg-zinc-100 hover:bg-white transition-colors placeholder-zinc-500'
         />
         <button
           type='submit'
