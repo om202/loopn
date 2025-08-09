@@ -98,7 +98,7 @@ export default function DashboardSectionContent({
       case 'connections':
         return {
           title: 'Connections',
-          description: 'Your permanent connections for ongoing conversations',
+          description: 'Your permanent connections',
           emptyIcon: Users,
           emptyMessage: 'No connections yet',
         };
@@ -113,7 +113,7 @@ export default function DashboardSectionContent({
       default:
         return {
           title: 'Chats',
-          description: 'All your conversations, trials, and available users',
+          description: 'All your conversations',
           emptyIcon: MessageCircle,
           emptyMessage: 'No chats available',
         };

@@ -262,9 +262,7 @@ export default function UserCard({
                     ) : (
                       <>
                         <MessageCircle className='w-4 h-4 text-brand-500 flex-shrink-0' />
-                        <span className='hidden min-[400px]:inline'>
-                          Chat
-                        </span>
+                        <span className='hidden min-[400px]:inline'>Chat</span>
                       </>
                     )}
                   </>
