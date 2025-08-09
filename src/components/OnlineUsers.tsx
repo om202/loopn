@@ -11,7 +11,7 @@ import type { Schema } from '../../amplify/data/resource';
 import { chatService } from '../services/chat.service';
 import { userService } from '../services/user.service';
 
-import { DashboardSidebar, DashboardSectionContent } from './dashboard';
+import { DashboardSidebar, DashboardSectionContent, NotificationsContent, AccountContent } from './dashboard';
 import LoadingContainer from './LoadingContainer';
 import { useChatActions } from '../hooks/useChatActions';
 import { useUserCategorization } from '../hooks/useUserCategorization';
@@ -26,7 +26,7 @@ interface OnlineUsersProps {
   onChatRequestSent: () => void;
 }
 
-type SidebarSection = 'all' | 'connections' | 'suggested';
+type SidebarSection = 'all' | 'connections' | 'suggested' | 'notifications' | 'account';
 
 export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
   const [allUsers, setAllUsers] = useState<UserPresence[]>([]);
@@ -451,24 +451,30 @@ export default function OnlineUsers({ onChatRequestSent }: OnlineUsersProps) {
 
       <div className='flex-1 bg-white sm:rounded-2xl sm:border sm:border-zinc-200 p-2 sm:p-4 lg:p-6 ultra-compact overflow-hidden flex flex-col min-h-0'>
         <div className='overflow-y-auto flex-1'>
-          <DashboardSectionContent
-            activeSection={activeSection}
-            onlineUsers={userCategories.onlineUsers}
-            connectionUsers={userCategories.connectionUsers}
-            activeChatTrialUsers={userCategories.activeChatTrialUsers}
-            endedChatTrialUsers={userCategories.endedChatTrialUsers}
-            suggestedUsers={suggestedUsers}
-            existingConversations={existingConversations}
-            pendingRequests={combinedPendingRequests}
-            onChatAction={handleChatAction}
-            onCancelChatRequest={handleCancelChatRequest}
-            canUserReconnect={userCategories.canUserReconnect}
-            getReconnectTimeRemaining={userCategories.getReconnectTimeRemaining}
-            onOpenProfileSidebar={handleOpenProfileSidebar}
-            onUserCardClick={handleUserCardClick}
-            isProfileSidebarOpen={profileSidebarOpen}
-            selectedUserId={profileSidebarUser?.userId}
-          />
+          {activeSection === 'notifications' ? (
+            <NotificationsContent />
+          ) : activeSection === 'account' ? (
+            <AccountContent />
+          ) : (
+            <DashboardSectionContent
+              activeSection={activeSection}
+              onlineUsers={userCategories.onlineUsers}
+              connectionUsers={userCategories.connectionUsers}
+              activeChatTrialUsers={userCategories.activeChatTrialUsers}
+              endedChatTrialUsers={userCategories.endedChatTrialUsers}
+              suggestedUsers={suggestedUsers}
+              existingConversations={existingConversations}
+              pendingRequests={combinedPendingRequests}
+              onChatAction={handleChatAction}
+              onCancelChatRequest={handleCancelChatRequest}
+              canUserReconnect={userCategories.canUserReconnect}
+              getReconnectTimeRemaining={userCategories.getReconnectTimeRemaining}
+              onOpenProfileSidebar={handleOpenProfileSidebar}
+              onUserCardClick={handleUserCardClick}
+              isProfileSidebarOpen={profileSidebarOpen}
+              selectedUserId={profileSidebarUser?.userId}
+            />
+          )}
         </div>
       </div>
 

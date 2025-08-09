@@ -5,7 +5,7 @@ import Avatar from 'boring-avatars';
 interface UserAvatarProps {
   email?: string | null;
   userId?: string;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   showStatus?: boolean;
   status?: string | null;
   className?: string;
@@ -38,10 +38,14 @@ export default function UserAvatar({
 
   const getAvatarSize = () => {
     switch (size) {
+      case 'xs':
+        return 20; // w-5 h-5
       case 'sm':
         return 32; // w-8 h-8
       case 'lg':
         return 48; // w-12 h-12
+      case 'xl':
+        return 64; // w-16 h-16
       default:
         return 40; // w-10 h-10
     }
@@ -49,6 +53,11 @@ export default function UserAvatar({
 
   const getIndicatorSizeAndPosition = () => {
     switch (size) {
+      case 'xs':
+        return {
+          size: 'w-1.5 h-1.5',
+          position: '-bottom-0 -right-0',
+        };
       case 'sm':
         return {
           size: 'w-2.5 h-2.5',
@@ -57,6 +66,11 @@ export default function UserAvatar({
       case 'lg':
         return {
           size: 'w-3.5 h-3.5',
+          position: '-bottom-0 -right-0',
+        };
+      case 'xl':
+        return {
+          size: 'w-4 h-4',
           position: '-bottom-0 -right-0',
         };
       default: // md

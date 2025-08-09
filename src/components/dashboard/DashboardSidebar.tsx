@@ -1,8 +1,14 @@
 'use client';
 
+import React from 'react';
 import { MessageCircle, Sparkles, Users } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
 
-type SidebarSection = 'all' | 'connections' | 'suggested';
+import { NotificationBell } from '../notifications';
+import UserAvatar from '../UserAvatar';
+
+type SidebarSection = 'all' | 'connections' | 'suggested' | 'notifications' | 'account';
 
 interface DashboardSidebarProps {
   activeSection: SidebarSection;
@@ -21,6 +27,11 @@ export default function DashboardSidebar({
   chatTrialsCount,
   suggestedUsersCount,
 }: DashboardSidebarProps) {
+  const getUserEmail = () => {
+    // For demo purposes, using a placeholder email
+    return 'user@example.com';
+  };
+
   const sidebarItems = [
     {
       id: 'suggested' as const,
@@ -40,32 +51,80 @@ export default function DashboardSidebar({
       label: 'Connections',
       count: connectionsCount,
     },
+    {
+      id: 'notifications' as const,
+      icon: 'NotificationBell',
+      label: 'Notifications',
+      count: 0,
+    },
+    {
+      id: 'account' as const,
+      icon: 'UserAvatar',
+      label: 'Your Account',
+      count: 0,
+    },
   ];
 
   return (
     <>
       {/* Desktop Sidebar */}
-      <div className='hidden lg:block w-68 flex-shrink-0'>
+      <div className='hidden lg:block w-72 flex-shrink-0'>
         <div className='bg-white rounded-2xl border border-zinc-200 p-6 h-full flex flex-col'>
+          {/* Logo at top */}
+          <div className='mb-6'>
+            <Link
+              href='/?stay=true'
+              className='flex items-center space-x-2 hover:opacity-80 transition-opacity'
+            >
+              <Image
+                src='/loopn.svg'
+                alt='Loopn'
+                width={28}
+                height={28}
+                priority
+              />
+              <h1 className='text-lg font-semibold text-zinc-900'>
+                Loopn
+              </h1>
+            </Link>
+          </div>
+
+          {/* Navigation items */}
           <nav className='space-y-2 flex-1 overflow-y-auto'>
-            {sidebarItems.map(({ id, icon: Icon, label, count }) => (
+            {sidebarItems.map(({ id, icon, label, count }) => (
               <button
                 key={id}
                 onClick={() => onSectionChange(id)}
-                className={`relative w-full flex items-center justify-start gap-3 px-3 py-2.5 rounded-xl text-left border transition-all duration-200 ${
+                className={`relative w-full flex items-center justify-start gap-3 px-4 py-3 rounded-xl text-left transition-all duration-200 ${
                   activeSection === id
-                    ? 'bg-brand-100 text-brand-700 border-transparent'
-                    : 'bg-white text-zinc-900 border-zinc-200 hover:bg-zinc-100'
+                    ? 'bg-brand-100 text-brand-700'
+                    : 'text-zinc-900 hover:bg-zinc-50'
                 }`}
               >
-                <Icon className='w-5 h-5 flex-shrink-0' />
+                {icon === 'NotificationBell' ? (
+                  <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
+                    <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                      <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9' />
+                    </svg>
+                  </div>
+                ) : icon === 'UserAvatar' ? (
+                  <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
+                    <UserAvatar email={getUserEmail()} size='xs' />
+                  </div>
+                ) : (
+                  React.createElement(icon, { className: 'w-5 h-5 flex-shrink-0' })
+                )}
                 <span className='font-medium text-base'>{label}</span>
-                <span className='ml-auto text-base text-zinc-900 font-medium mr-2'>
-                  {count}
-                </span>
+                {count > 0 && (
+                  <span className='ml-auto text-sm text-zinc-500 font-medium bg-zinc-100 px-2 py-0.5 rounded-full min-w-[20px] text-center'>
+                    {count}
+                  </span>
+                )}
               </button>
             ))}
           </nav>
+
+
         </div>
       </div>
 
