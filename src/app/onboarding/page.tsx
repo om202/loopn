@@ -9,7 +9,6 @@ import {
   OnboardingData,
 } from '@/services/onboarding.service';
 import {
-  INTERESTS_DATA,
   INTERESTS_GROUPS,
   INDUSTRY_OPTIONS,
   EDUCATION_OPTIONS,
@@ -106,15 +105,14 @@ export default function OnboardingPage() {
           formData.companyName &&
           formData.industry
         );
-      case 2:
-        {
-          const words = (formData.about || '')
-            .trim()
-            .split(/\s+/)
-            .filter(Boolean);
-          const wordCount = words.length;
-          return wordCount >= 24 && wordCount <= 80;
-        }
+      case 2: {
+        const words = (formData.about || '')
+          .trim()
+          .split(/\s+/)
+          .filter(Boolean);
+        const wordCount = words.length;
+        return wordCount >= 24 && wordCount <= 80;
+      }
       case 3:
         return (formData.interests?.length || 0) > 0;
       default:
@@ -180,7 +178,11 @@ export default function OnboardingPage() {
     const current = formData.skills || [];
     const next = [...current];
     for (const s of normalized) {
-      if (s.length > 0 && s.length <= 40 && !next.some(x => x.toLowerCase() === s.toLowerCase())) {
+      if (
+        s.length > 0 &&
+        s.length <= 40 &&
+        !next.some(x => x.toLowerCase() === s.toLowerCase())
+      ) {
         next.push(s);
       }
     }
@@ -191,7 +193,9 @@ export default function OnboardingPage() {
     const current = formData.skills || [];
     updateFormData(
       'skills',
-      current.filter(s => s.toLowerCase() !== skill.toLowerCase()) as unknown as OnboardingData['skills']
+      current.filter(
+        s => s.toLowerCase() !== skill.toLowerCase()
+      ) as unknown as OnboardingData['skills']
     );
   };
 
@@ -213,12 +217,16 @@ export default function OnboardingPage() {
         {/* Header */}
         <div className='text-center mb-8'>
           <div className='flex items-center justify-center space-x-3 mb-3'>
-            <Image src='/loopn.svg' alt='Loopn' width={48} height={48} priority />
+            <Image
+              src='/loopn.svg'
+              alt='Loopn'
+              width={48}
+              height={48}
+              priority
+            />
             <h1 className='text-3xl font-bold text-zinc-900'>Loopn</h1>
           </div>
-          <p className='text-zinc-900 text-base'>
-            Let's set up your profile
-          </p>
+          <p className='text-zinc-900 text-base'>Let's set up your profile</p>
         </div>
 
         {/* Progress indicator moved inside card */}
@@ -251,7 +259,11 @@ export default function OnboardingPage() {
               {['Profile', 'Use Loopn', 'Interests'].map((label, i) => (
                 <div
                   key={label}
-                  className={i + 1 === currentStep ? 'text-zinc-900 font-medium' : 'text-zinc-500'}
+                  className={
+                    i + 1 === currentStep
+                      ? 'text-zinc-900 font-medium'
+                      : 'text-zinc-500'
+                  }
                 >
                   {label}
                 </div>
@@ -370,7 +382,8 @@ export default function OnboardingPage() {
                   Key skills
                 </label>
                 <p className='text-sm text-zinc-500 mb-3'>
-                  Add what you&apos;re good at. Type a skill and press Enter (or comma).
+                  Add what you&apos;re good at. Type a skill and press Enter (or
+                  comma).
                 </p>
                 <div className='flex flex-wrap gap-2 mb-3'>
                   {(formData.skills || []).map(skill => (
@@ -408,10 +421,14 @@ export default function OnboardingPage() {
                 <div className='text-sm text-zinc-500 mb-3'>
                   <ul className='list-disc pl-5 space-y-1'>
                     <li>What you want (mentorship, collabs, clients)</li>
-                    <li>Who you want to meet (founders, designers, local pros)</li>
+                    <li>
+                      Who you want to meet (founders, designers, local pros)
+                    </li>
                     <li>How you’ll engage (intros, project help, long-term)</li>
                   </ul>
-                  <div className='text-xs mt-2'>No skills here — add above.</div>
+                  <div className='text-xs mt-2'>
+                    No skills here — add above.
+                  </div>
                 </div>
                 <textarea
                   value={formData.about}
@@ -446,8 +463,6 @@ export default function OnboardingPage() {
                 Select topics you're interested in to help us connect you with
                 like-minded professionals.
               </p>
-
-              
 
               <div className='space-y-6'>
                 {INTERESTS_GROUPS.map((group, idx) => (
@@ -494,8 +509,6 @@ export default function OnboardingPage() {
                   </div>
                 </div>
               )}
-
-
             </div>
           )}
 

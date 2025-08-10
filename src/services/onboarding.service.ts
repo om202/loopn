@@ -134,7 +134,9 @@ export class OnboardingService {
         console.warn('AI summary generation failed, using fallback:', aiError);
         // Create a simple fallback summary
         const skillsSnippet = (data.skills || []).slice(0, 2).join(' and ');
-        const interestsSnippet = (data.interests || []).slice(0, 2).join(' and ');
+        const interestsSnippet = (data.interests || [])
+          .slice(0, 2)
+          .join(' and ');
         anonymousSummary = `${data.jobRole} with ${data.yearsOfExperience} years of experience in ${data.industry}. Skills include ${skillsSnippet || 'N/A'}. Interested in ${interestsSnippet || 'varied topics'}.`;
       }
 
