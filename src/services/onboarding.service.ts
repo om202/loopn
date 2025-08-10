@@ -11,6 +11,7 @@ export interface OnboardingData {
   education: string;
   about: string;
   interests: string[];
+  skills: string[];
 }
 
 export interface UserOnboardingStatus {
@@ -73,6 +74,9 @@ export class OnboardingService {
                 interests: (userPresence.data.interests || []).filter(
                   (interest): interest is string => interest !== null
                 ),
+                skills: (userPresence.data.skills || []).filter(
+                  (skill): skill is string => skill !== null
+                ),
               }
             : undefined,
         };
@@ -129,7 +133,9 @@ export class OnboardingService {
       } catch (aiError) {
         console.warn('AI summary generation failed, using fallback:', aiError);
         // Create a simple fallback summary
-        anonymousSummary = `${data.jobRole} with ${data.yearsOfExperience} years of experience in ${data.industry}. Passionate about ${data.interests.slice(0, 2).join(' and ')}.`;
+        const skillsSnippet = (data.skills || []).slice(0, 2).join(' and ');
+        const interestsSnippet = (data.interests || []).slice(0, 2).join(' and ');
+        anonymousSummary = `${data.jobRole} with ${data.yearsOfExperience} years of experience in ${data.industry}. Skills include ${skillsSnippet || 'N/A'}. Interested in ${interestsSnippet || 'varied topics'}.`;
       }
 
       // Update user presence with onboarding data and AI summary
@@ -142,6 +148,7 @@ export class OnboardingService {
         education: data.education,
         about: data.about,
         interests: data.interests,
+        skills: data.skills,
         isOnboardingComplete: true,
         onboardingCompletedAt: new Date().toISOString(),
         anonymousSummary: anonymousSummary,

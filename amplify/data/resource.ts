@@ -204,6 +204,7 @@ const schema = a
         education: a.string(),
         about: a.string(),
         interests: a.string().array(),
+        skills: a.string().array(),
         isOnboardingComplete: a.boolean().default(false),
         onboardingCompletedAt: a.datetime(),
         anonymousSummary: a.string(),

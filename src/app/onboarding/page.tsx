@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import {
@@ -9,6 +10,7 @@ import {
 } from '@/services/onboarding.service';
 import {
   INTERESTS_DATA,
+  INTERESTS_GROUPS,
   INDUSTRY_OPTIONS,
   EDUCATION_OPTIONS,
   YEARS_OF_EXPERIENCE_OPTIONS,
@@ -22,6 +24,7 @@ export default function OnboardingPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [skillInput, setSkillInput] = useState('');
 
   // Form data
   const [formData, setFormData] = useState<Partial<OnboardingData>>({
@@ -32,6 +35,7 @@ export default function OnboardingPage() {
     education: '',
     about: '',
     interests: [],
+    skills: [],
   });
 
   // Redirect if not authenticated or already completed onboarding
@@ -103,11 +107,14 @@ export default function OnboardingPage() {
           formData.industry
         );
       case 2:
-        return !!(
-          formData.about &&
-          formData.about.trim().split(' ').length >= 12 &&
-          formData.about.length <= 600
-        );
+        {
+          const words = (formData.about || '')
+            .trim()
+            .split(/\s+/)
+            .filter(Boolean);
+          const wordCount = words.length;
+          return wordCount >= 24 && wordCount <= 80;
+        }
       case 3:
         return (formData.interests?.length || 0) > 0;
       default:
@@ -163,48 +170,96 @@ export default function OnboardingPage() {
       .split(' ')
       .filter(word => word.length > 0).length || 0;
 
+  // Skills helpers
+  const addSkill = (raw: string) => {
+    const normalized = raw
+      .split(',')
+      .map(s => s.trim())
+      .filter(Boolean);
+    if (normalized.length === 0) return;
+    const current = formData.skills || [];
+    const next = [...current];
+    for (const s of normalized) {
+      if (s.length > 0 && s.length <= 40 && !next.some(x => x.toLowerCase() === s.toLowerCase())) {
+        next.push(s);
+      }
+    }
+    updateFormData('skills', next as unknown as OnboardingData['skills']);
+  };
+
+  const removeSkill = (skill: string) => {
+    const current = formData.skills || [];
+    updateFormData(
+      'skills',
+      current.filter(s => s.toLowerCase() !== skill.toLowerCase()) as unknown as OnboardingData['skills']
+    );
+  };
+
+  const handleSkillKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' || e.key === ',') {
+      e.preventDefault();
+      if (skillInput.trim()) {
+        addSkill(skillInput);
+        setSkillInput('');
+      }
+    }
+  };
+
+  // Removed suggestions; free-form skills entry only
+
   return (
-    <div className='min-h-screen bg-zinc-100 py-8 px-4'>
+    <div className='min-h-screen bg-zinc-100 py-8 px-3 sm:px-4'>
       <div className='max-w-2xl mx-auto'>
         {/* Header */}
         <div className='text-center mb-8'>
-          <h1 className='text-3xl font-bold text-zinc-900 mb-2'>
-            Welcome to Loopn!
-          </h1>
-          <p className='text-zinc-600'>
-            Let's set up your profile to connect you with the right
-            professionals
+          <div className='flex items-center justify-center space-x-3 mb-3'>
+            <Image src='/loopn.svg' alt='Loopn' width={48} height={48} priority />
+            <h1 className='text-3xl font-bold text-zinc-900'>Loopn</h1>
+          </div>
+          <p className='text-zinc-900 text-base'>
+            Let's set up your profile
           </p>
         </div>
 
-        {/* Progress indicator */}
-        <div className='flex items-center justify-center mb-8'>
-          {[1, 2, 3].map(step => (
-            <div key={step} className='flex items-center'>
-              <div
-                className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
-                  step <= currentStep
-                    ? 'bg-brand-500 text-white'
-                    : 'bg-zinc-100 text-zinc-600'
-                }`}
-              >
-                {step}
-              </div>
-              {step < 3 && (
-                <div
-                  className={`w-16 h-1 mx-2 ${
-                    step < currentStep ? 'bg-brand-500' : 'bg-zinc-100'
-                  }`}
-                />
-              )}
-            </div>
-          ))}
-        </div>
+        {/* Progress indicator moved inside card */}
 
         {/* Form content */}
-        <div className='bg-white rounded-lg shadow-lg p-6'>
+        <div className='bg-white rounded-2xl border border-zinc-200 p-4 sm:p-6 lg:p-8'>
+          {/* Stepper */}
+          <div className='mb-8 sm:mb-10'>
+            <div className='relative'>
+              {/* Solid connector line between steps (center-aligned) */}
+              <div className='absolute left-5 right-5 top-1/2 -translate-y-1/2 border-t border-zinc-200 z-0' />
+              <div className='grid grid-cols-3 items-center'>
+                {[1, 2, 3].map(step => (
+                  <div key={step} className='flex justify-center'>
+                    <div
+                      className={`relative z-10 w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold border ${
+                        step <= currentStep
+                          ? 'bg-brand-500 text-white border-brand-500'
+                          : 'bg-white text-zinc-600 border-zinc-200'
+                      }`}
+                    >
+                      {step}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            {/* Labels */}
+            <div className='mt-3 grid grid-cols-3 text-center text-xs sm:text-sm'>
+              {['Profile', 'Use Loopn', 'Interests'].map((label, i) => (
+                <div
+                  key={label}
+                  className={i + 1 === currentStep ? 'text-zinc-900 font-medium' : 'text-zinc-500'}
+                >
+                  {label}
+                </div>
+              ))}
+            </div>
+          </div>
           {error && (
-            <div className='bg-b_red-100 border border-b_red-200 text-b_red-700 px-4 py-3 rounded mb-6'>
+            <div className='bg-b_red-100 border border-b_red-200 text-b_red-700 px-4 py-3 rounded-2xl mb-6'>
               {error}
             </div>
           )}
@@ -217,7 +272,7 @@ export default function OnboardingPage() {
               </h2>
 
               <div>
-                <label className='block text-sm font-medium text-zinc-700 mb-2'>
+                <label className='block text-sm font-medium text-zinc-700 mb-3'>
                   Job Role *
                 </label>
                 <input
@@ -225,12 +280,12 @@ export default function OnboardingPage() {
                   value={formData.jobRole}
                   onChange={e => updateFormData('jobRole', e.target.value)}
                   placeholder='e.g., Software Engineer, Product Manager'
-                  className='w-full px-3 py-2 border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500'
+                  className='w-full px-3 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                 />
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-zinc-700 mb-2'>
+                <label className='block text-sm font-medium text-zinc-700 mb-3'>
                   Company Name *
                 </label>
                 <input
@@ -238,18 +293,18 @@ export default function OnboardingPage() {
                   value={formData.companyName}
                   onChange={e => updateFormData('companyName', e.target.value)}
                   placeholder='e.g., Google, Microsoft, Startup Inc'
-                  className='w-full px-3 py-2 border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500'
+                  className='w-full px-3 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                 />
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-zinc-700 mb-2'>
+                <label className='block text-sm font-medium text-zinc-700 mb-3'>
                   Industry *
                 </label>
                 <select
                   value={formData.industry}
                   onChange={e => updateFormData('industry', e.target.value)}
-                  className='w-full px-3 py-2 border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500'
+                  className='w-full px-3 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                 >
                   <option value=''>Select an industry</option>
                   {INDUSTRY_OPTIONS.map(industry => (
@@ -261,7 +316,7 @@ export default function OnboardingPage() {
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-zinc-700 mb-2'>
+                <label className='block text-sm font-medium text-zinc-700 mb-3'>
                   Years of Experience
                 </label>
                 <select
@@ -272,7 +327,7 @@ export default function OnboardingPage() {
                       parseInt(e.target.value)
                     )
                   }
-                  className='w-full px-3 py-2 border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500'
+                  className='w-full px-3 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                 >
                   {YEARS_OF_EXPERIENCE_OPTIONS.map(option => (
                     <option key={option.value} value={option.value}>
@@ -283,13 +338,13 @@ export default function OnboardingPage() {
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-zinc-700 mb-2'>
+                <label className='block text-sm font-medium text-zinc-700 mb-3'>
                   Education
                 </label>
                 <select
                   value={formData.education}
                   onChange={e => updateFormData('education', e.target.value)}
-                  className='w-full px-3 py-2 border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500'
+                  className='w-full px-3 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                 >
                   <option value=''>Select education level</option>
                   {EDUCATION_OPTIONS.map(education => (
@@ -309,27 +364,67 @@ export default function OnboardingPage() {
                 About You
               </h2>
 
+              {/* Skills Section (moved above About) */}
               <div>
-                <label className='block text-sm font-medium text-zinc-700 mb-2'>
-                  Tell us about yourself *
+                <label className='block text-sm font-medium text-zinc-700 mb-3'>
+                  Key skills
                 </label>
                 <p className='text-sm text-zinc-500 mb-3'>
-                  Share your professional background, what you're passionate
-                  about, or what you're looking to connect with others about.
-                  (Minimum 12 words, maximum 80 words)
+                  Add what you&apos;re good at. Type a skill and press Enter (or comma).
                 </p>
+                <div className='flex flex-wrap gap-2 mb-3'>
+                  {(formData.skills || []).map(skill => (
+                    <span
+                      key={skill}
+                      className='inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-brand-50 text-brand-700 border border-brand-200'
+                    >
+                      {skill}
+                      <button
+                        type='button'
+                        onClick={() => removeSkill(skill)}
+                        className='ml-1 text-brand-700 hover:text-brand-900'
+                        aria-label={`Remove ${skill}`}
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                </div>
+                <input
+                  type='text'
+                  value={skillInput}
+                  onChange={e => setSkillInput(e.target.value)}
+                  onKeyDown={handleSkillKeyDown}
+                  placeholder='ReactJS, AI Expert, Marriage Law, Public Speaking'
+                  className='w-full px-3 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+                />
+              </div>
+
+              {/* About Section */}
+              <div>
+                <label className='block text-sm font-medium text-zinc-700 mb-3'>
+                  How do you want to use Loopn? *
+                </label>
+                <div className='text-sm text-zinc-500 mb-3'>
+                  <ul className='list-disc pl-5 space-y-1'>
+                    <li>What you want (mentorship, collabs, clients)</li>
+                    <li>Who you want to meet (founders, designers, local pros)</li>
+                    <li>How you’ll engage (intros, project help, long-term)</li>
+                  </ul>
+                  <div className='text-xs mt-2'>No skills here — add above.</div>
+                </div>
                 <textarea
                   value={formData.about}
                   onChange={e => updateFormData('about', e.target.value)}
-                  placeholder="I'm a passionate software engineer with experience in React and Node.js. I love building user-friendly applications and am always eager to learn new technologies. Looking to connect with other developers and share knowledge about frontend development..."
+                  placeholder="I'm here to find collaborators for side projects and swap ideas on product strategy. Looking to meet founders and PMs for partnerships and knowledge sharing. Open to quick intros and follow-up chats."
                   rows={4}
-                  className='w-full px-3 py-2 border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500'
+                  className='w-full px-3 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                 />
                 <div className='flex justify-between text-sm mt-2'>
                   <span
-                    className={`${wordCount < 12 ? 'text-b_red-500' : 'text-green-500'}`}
+                    className={`${wordCount < 24 ? 'text-b_red-500' : 'text-green-500'}`}
                   >
-                    {wordCount} words (minimum 12)
+                    {wordCount} words (minimum 24)
                   </span>
                   <span
                     className={`${wordCount > 80 ? 'text-b_red-500' : 'text-zinc-500'}`}
@@ -352,24 +447,38 @@ export default function OnboardingPage() {
                 like-minded professionals.
               </p>
 
-              <div className='grid grid-cols-2 md:grid-cols-3 gap-2'>
-                {INTERESTS_DATA.map(interest => (
-                  <button
-                    key={interest}
-                    onClick={() => toggleInterest(interest)}
-                    className={`px-3 py-2 rounded-full text-sm font-medium transition-colors ${
-                      formData.interests?.includes(interest)
-                        ? 'bg-brand-500 text-white'
-                        : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-100'
-                    }`}
+              
+
+              <div className='space-y-6'>
+                {INTERESTS_GROUPS.map((group, idx) => (
+                  <div
+                    key={group.title}
+                    className={`${idx !== 0 ? 'pt-4 mt-4 border-t border-zinc-200' : ''}`}
                   >
-                    {interest}
-                  </button>
+                    <div className='text-sm font-medium text-zinc-900 mb-2'>
+                      {group.title}
+                    </div>
+                    <div className='grid grid-cols-2 md:grid-cols-3 gap-2'>
+                      {group.items.map(interest => (
+                        <button
+                          key={interest}
+                          onClick={() => toggleInterest(interest)}
+                          className={`px-3 py-1.5 rounded-xl text-xs transition-colors border ${
+                            formData.interests?.includes(interest)
+                              ? 'bg-brand-500 text-white border-brand-500'
+                              : 'bg-white text-zinc-700 border-zinc-200 hover:bg-brand-50'
+                          }`}
+                        >
+                          {interest}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 ))}
               </div>
 
               {formData.interests && formData.interests.length > 0 && (
-                <div className='mt-4'>
+                <div className='mt-6'>
                   <p className='text-sm text-zinc-600 mb-2'>
                     Selected interests ({formData.interests.length}):
                   </p>
@@ -377,7 +486,7 @@ export default function OnboardingPage() {
                     {formData.interests.map(interest => (
                       <span
                         key={interest}
-                        className='px-2 py-1 bg-brand-100 text-brand-700 text-xs rounded-full'
+                        className='px-2 py-1 bg-brand-50 text-brand-700 border border-brand-200 text-sm rounded-full'
                       >
                         {interest}
                       </span>
@@ -385,6 +494,8 @@ export default function OnboardingPage() {
                   </div>
                 </div>
               )}
+
+
             </div>
           )}
 
@@ -393,11 +504,7 @@ export default function OnboardingPage() {
             <button
               onClick={prevStep}
               disabled={currentStep === 1}
-              className={`px-6 py-2 rounded-md font-medium ${
-                currentStep === 1
-                  ? 'bg-zinc-100 text-zinc-400 cursor-not-allowed'
-                  : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-100'
-              }`}
+              className={`px-6 py-3 rounded-xl font-medium border bg-white text-zinc-900 border-zinc-200 hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-brand-500 disabled:opacity-50 disabled:cursor-not-allowed`}
             >
               Previous
             </button>
@@ -406,11 +513,7 @@ export default function OnboardingPage() {
               <button
                 onClick={nextStep}
                 disabled={!validateStep(currentStep)}
-                className={`px-6 py-2 rounded-md font-medium ${
-                  validateStep(currentStep)
-                    ? 'bg-brand-500 text-white hover:bg-brand-500'
-                    : 'bg-zinc-100 text-zinc-400 cursor-not-allowed'
-                }`}
+                className='px-6 py-3 rounded-xl font-medium bg-brand-500 text-white hover:bg-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed'
               >
                 Next
               </button>
@@ -418,11 +521,7 @@ export default function OnboardingPage() {
               <button
                 onClick={handleComplete}
                 disabled={!validateStep(3) || isLoading}
-                className={`px-6 py-2 rounded-md font-medium ${
-                  validateStep(3) && !isLoading
-                    ? 'bg-green-600 text-white hover:bg-green-700'
-                    : 'bg-zinc-100 text-zinc-400 cursor-not-allowed'
-                }`}
+                className='px-6 py-3 rounded-xl font-medium bg-brand-500 text-white hover:bg-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed'
               >
                 {isLoading ? 'Completing...' : 'Complete Setup'}
               </button>
