@@ -50,8 +50,8 @@ export default function OnlineUsers({
   >(new Map());
   const [profileSidebarUser, setProfileSidebarUser] =
     useState<UserPresence | null>(null);
-  const [profileSidebarSummary, setProfileSidebarSummary] = useState<
-    string | null
+  const [profileSidebarFullProfile, setProfileSidebarFullProfile] = useState<
+    Schema['UserProfile']['type'] | null
   >(null);
   const [profileSidebarUserProfile, setProfileSidebarUserProfile] = useState<{
     fullName?: string;
@@ -118,18 +118,18 @@ export default function OnlineUsers({
       const firstUser = allUsers[0];
       setProfileSidebarUser(firstUser);
       setProfileSidebarLoading(true);
-      setProfileSidebarSummary(null);
+      setProfileSidebarFullProfile(null);
 
-      const loadSummary = async () => {
+      const loadProfile = async () => {
         try {
           const { UserProfileService } = await import(
             '../services/user-profile.service'
           );
-          const [summary, profileResult] = await Promise.all([
-            UserProfileService.getProfileSummary(firstUser.userId),
+          const [profileDetails, profileResult] = await Promise.all([
+            UserProfileService.getProfileDetails(firstUser.userId),
             new UserProfileService().getUserProfile(firstUser.userId),
           ]);
-          setProfileSidebarSummary(summary);
+          setProfileSidebarFullProfile(profileDetails);
           setProfileSidebarUserProfile(
             profileResult.data
               ? {
@@ -149,7 +149,7 @@ export default function OnlineUsers({
         }
       };
 
-      loadSummary();
+      loadProfile();
     }
   }, [profileSidebarOpen, profileSidebarUser, allUsers]);
 
@@ -395,7 +395,7 @@ export default function OnlineUsers({
         // ignore
       }
       setProfileSidebarUser(null);
-      setProfileSidebarSummary(null);
+      setProfileSidebarFullProfile(null);
       setProfileSidebarLoading(false);
       return;
     }
@@ -408,17 +408,17 @@ export default function OnlineUsers({
     }
     setProfileSidebarUser(userPresence);
     setProfileSidebarLoading(true);
-    setProfileSidebarSummary(null);
+    setProfileSidebarFullProfile(null);
     setProfileSidebarUserProfile(null);
     try {
       const { UserProfileService } = await import(
         '../services/user-profile.service'
       );
-      const [summary, profileResult] = await Promise.all([
-        UserProfileService.getProfileSummary(userPresence.userId),
+      const [profileDetails, profileResult] = await Promise.all([
+        UserProfileService.getProfileDetails(userPresence.userId),
         new UserProfileService().getUserProfile(userPresence.userId),
       ]);
-      setProfileSidebarSummary(summary);
+      setProfileSidebarFullProfile(profileDetails);
       setProfileSidebarUserProfile(
         profileResult.data
           ? {
@@ -451,17 +451,17 @@ export default function OnlineUsers({
     // Always update the selected user and load their profile
     setProfileSidebarUser(userPresence);
     setProfileSidebarLoading(true);
-    setProfileSidebarSummary(null);
+    setProfileSidebarFullProfile(null);
     setProfileSidebarUserProfile(null);
     try {
       const { UserProfileService } = await import(
         '../services/user-profile.service'
       );
-      const [summary, profileResult] = await Promise.all([
-        UserProfileService.getProfileSummary(userPresence.userId),
+      const [profileDetails, profileResult] = await Promise.all([
+        UserProfileService.getProfileDetails(userPresence.userId),
         new UserProfileService().getUserProfile(userPresence.userId),
       ]);
-      setProfileSidebarSummary(summary);
+      setProfileSidebarFullProfile(profileDetails);
       setProfileSidebarUserProfile(
         profileResult.data
           ? {
@@ -702,17 +702,70 @@ export default function OnlineUsers({
                   <div className='flex flex-col items-center gap-3 text-sm text-zinc-500'>
                     <div className='w-4 h-4 bg-zinc-100 rounded-full animate-pulse'></div>
                     <span className='text-center'>
-                      Loading profile summary...
+                      Loading profile details...
                     </span>
                   </div>
-                ) : profileSidebarSummary ? (
-                  <div className='text-sm text-zinc-900 leading-relaxed rounded-lg px-3 py-2 bg-zinc-100'>
-                    <div className='mb-2 font-semibold'>Anonymous Summary</div>
-                    <div>{profileSidebarSummary}</div>
+                ) : profileSidebarFullProfile ? (
+                  <div className='text-sm text-zinc-900 leading-relaxed rounded-lg px-3 py-2 bg-zinc-100 space-y-3'>
+                    <div className='mb-2 font-semibold'>Profile Details</div>
+                    {profileSidebarFullProfile.fullName && (
+                      <div>
+                        <span className='text-xs font-medium text-zinc-500'>Name:</span>
+                        <p className='text-sm text-zinc-700'>{profileSidebarFullProfile.fullName}</p>
+                      </div>
+                    )}
+                    {profileSidebarFullProfile.jobRole && (
+                      <div>
+                        <span className='text-xs font-medium text-zinc-500'>Role:</span>
+                        <p className='text-sm text-zinc-700'>{profileSidebarFullProfile.jobRole}</p>
+                      </div>
+                    )}
+                    {profileSidebarFullProfile.companyName && (
+                      <div>
+                        <span className='text-xs font-medium text-zinc-500'>Company:</span>
+                        <p className='text-sm text-zinc-700'>{profileSidebarFullProfile.companyName}</p>
+                      </div>
+                    )}
+                    {profileSidebarFullProfile.industry && (
+                      <div>
+                        <span className='text-xs font-medium text-zinc-500'>Industry:</span>
+                        <p className='text-sm text-zinc-700'>{profileSidebarFullProfile.industry}</p>
+                      </div>
+                    )}
+                    {profileSidebarFullProfile.yearsOfExperience !== null && profileSidebarFullProfile.yearsOfExperience !== undefined && (
+                      <div>
+                        <span className='text-xs font-medium text-zinc-500'>Experience:</span>
+                        <p className='text-sm text-zinc-700'>{profileSidebarFullProfile.yearsOfExperience} years</p>
+                      </div>
+                    )}
+                    {profileSidebarFullProfile.education && (
+                      <div>
+                        <span className='text-xs font-medium text-zinc-500'>Education:</span>
+                        <p className='text-sm text-zinc-700'>{profileSidebarFullProfile.education}</p>
+                      </div>
+                    )}
+                    {profileSidebarFullProfile.about && (
+                      <div>
+                        <span className='text-xs font-medium text-zinc-500'>About:</span>
+                        <p className='text-sm text-zinc-700'>{profileSidebarFullProfile.about}</p>
+                      </div>
+                    )}
+                    {profileSidebarFullProfile.interests && profileSidebarFullProfile.interests.length > 0 && (
+                      <div>
+                        <span className='text-xs font-medium text-zinc-500'>Interests:</span>
+                        <p className='text-sm text-zinc-700'>{profileSidebarFullProfile.interests.join(', ')}</p>
+                      </div>
+                    )}
+                    {profileSidebarFullProfile.skills && profileSidebarFullProfile.skills.length > 0 && (
+                      <div>
+                        <span className='text-xs font-medium text-zinc-500'>Skills:</span>
+                        <p className='text-sm text-zinc-700'>{profileSidebarFullProfile.skills.join(', ')}</p>
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <div className='text-sm text-zinc-900 leading-relaxed rounded-lg px-3 py-2 bg-zinc-50 text-center'>
-                    No profile summary available.
+                    No profile details available.
                   </div>
                 )}
               </div>

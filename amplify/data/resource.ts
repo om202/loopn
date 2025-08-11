@@ -1,6 +1,5 @@
 import { type ClientSchema, a, defineData } from '@aws-amplify/backend';
 import { presenceCleanup } from '../functions/presence-cleanup/resource';
-import { aiSummaryGenerator } from '../functions/ai-summary-generator/resource';
 
 /*== LOOPN CHAT APP SCHEMA ==============================================
 This schema implements the Loopn user story:
@@ -205,7 +204,7 @@ const schema = a
         // Onboarding status
         isOnboardingComplete: a.boolean().default(false),
         onboardingCompletedAt: a.datetime(),
-        anonymousSummary: a.string(),
+
         // TODO: Later add fields for AI matching:
         // - aiGeneratedDescription: a.string()
         // - isAvailableForChat: a.boolean()
@@ -269,27 +268,7 @@ const schema = a
         index('userId').sortKeys(['timestamp']),
       ]),
 
-    // AI Summary Generation function
-    generateAnonymousSummary: a
-      .query()
-      .arguments({
-        jobRole: a.string().required(),
-        companyName: a.string().required(),
-        industry: a.string().required(),
-        yearsOfExperience: a.integer().required(),
-        education: a.string().required(),
-        about: a.string().required(),
-        interests: a.string().array().required(),
-      })
-      .returns(
-        a.customType({
-          summary: a.string().required(),
-          success: a.boolean().required(),
-          error: a.string(),
-        })
-      )
-      .handler(a.handler.function(aiSummaryGenerator))
-      .authorization(allow => [allow.authenticated()]),
+
   })
   .authorization(allow => [allow.resource(presenceCleanup)]);
 

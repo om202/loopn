@@ -176,33 +176,7 @@ export class OnboardingService {
         console.log('No profile picture file provided during onboarding');
       }
 
-      // Generate AI summary in the background
-      let anonymousSummary = '';
-      try {
-        const summaryResponse = await client.queries.generateAnonymousSummary({
-          jobRole: data.jobRole,
-          companyName: data.companyName,
-          industry: data.industry,
-          yearsOfExperience: data.yearsOfExperience,
-          education: data.education,
-          about: data.about,
-          interests: data.interests,
-        });
-
-        if (summaryResponse.data?.summary) {
-          anonymousSummary = summaryResponse.data.summary;
-        }
-      } catch (aiError) {
-        console.warn('AI summary generation failed, using fallback:', aiError);
-        // Create a simple fallback summary
-        const skillsSnippet = (data.skills || []).slice(0, 2).join(' and ');
-        const interestsSnippet = (data.interests || [])
-          .slice(0, 2)
-          .join(' and ');
-        anonymousSummary = `${data.jobRole} with ${data.yearsOfExperience} years of experience in ${data.industry}. Skills include ${skillsSnippet || 'N/A'}. Interested in ${interestsSnippet || 'varied topics'}.`;
-      }
-
-      // Create user profile with onboarding data and AI summary
+      // Create user profile with onboarding data
       await userProfileService.createUserProfile(
         user.userId,
         user.signInDetails?.loginId || '',
@@ -220,14 +194,6 @@ export class OnboardingService {
           hasProfilePicture: hasProfilePicture,
         }
       );
-
-      // Update the profile with AI summary
-      if (anonymousSummary) {
-        await userProfileService.updateAnonymousSummary(
-          user.userId,
-          anonymousSummary
-        );
-      }
 
       // Update localStorage
       const status: UserOnboardingStatus = {

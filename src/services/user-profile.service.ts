@@ -21,25 +21,16 @@ export interface ProfileData {
 
 export class UserProfileService {
   /**
-   * Get anonymous summary for a user (static method for easy access)
+   * Get user profile details for display (replaces anonymous summary)
    */
-  static async getProfileSummary(userId: string): Promise<string | null> {
+  static async getProfileDetails(userId: string): Promise<UserProfile | null> {
     try {
       const result = await getClient().models.UserProfile.get({ userId });
-      return result.data?.anonymousSummary || null;
+      return result.data || null;
     } catch (error) {
-      console.error('Error getting profile summary:', error);
+      console.error('Error getting profile details:', error);
       return null;
     }
-  }
-
-  /**
-   * Ensure anonymous summary exists for current user (static method)
-   */
-  static async ensureAnonymousSummaryExists(): Promise<void> {
-    // This method exists for compatibility with AuthContext
-    // Implementation can be added later if needed
-    console.log('ensureAnonymousSummaryExists called');
   }
 
   /**
@@ -268,33 +259,7 @@ export class UserProfileService {
     }
   }
 
-  /**
-   * Update anonymous summary
-   */
-  async updateAnonymousSummary(
-    userId: string,
-    anonymousSummary: string
-  ): Promise<DataResult<UserProfile>> {
-    try {
-      const result = await getClient().models.UserProfile.update({
-        userId,
-        anonymousSummary,
-      });
 
-      return {
-        data: result.data,
-        error: null,
-      };
-    } catch (error) {
-      return {
-        data: null,
-        error:
-          error instanceof Error
-            ? error.message
-            : 'Failed to update anonymous summary',
-      };
-    }
-  }
 }
 
 export const userProfileService = new UserProfileService();

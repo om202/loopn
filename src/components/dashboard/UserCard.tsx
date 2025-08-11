@@ -66,8 +66,8 @@ export default function UserCard({
 }: UserCardProps) {
   const [showCancelDialog, setShowCancelDialog] = useState(false);
   const [showProfileDialog, setShowProfileDialog] = useState(false);
-  const [profileSummary, setProfileSummary] = useState<string | null>(null);
-  const [loadingSummary, setLoadingSummary] = useState(false);
+  const [fullProfile, setFullProfile] = useState<Schema['UserProfile']['type'] | null>(null);
+  const [loadingProfile, setLoadingProfile] = useState(false);
   const [userProfile, setUserProfile] = useState<{
     fullName?: string;
     email?: string;
@@ -82,16 +82,16 @@ export default function UserCard({
     let mounted = true;
 
     const loadProfileData = async () => {
-      setLoadingSummary(true);
+      setLoadingProfile(true);
       try {
-        // Get both summary and full profile
-        const [summary, profileResult] = await Promise.all([
-          UserProfileService.getProfileSummary(userPresence.userId),
+        // Get both full profile details and basic profile data
+        const [profileDetails, profileResult] = await Promise.all([
+          UserProfileService.getProfileDetails(userPresence.userId),
           new UserProfileService().getUserProfile(userPresence.userId),
         ]);
 
         if (mounted) {
-          setProfileSummary(summary);
+          setFullProfile(profileDetails);
           setUserProfile(
             profileResult.data
               ? {
@@ -109,7 +109,7 @@ export default function UserCard({
         console.error('Error loading profile data:', error);
       } finally {
         if (mounted) {
-          setLoadingSummary(false);
+          setLoadingProfile(false);
         }
       }
     };
@@ -315,7 +315,7 @@ export default function UserCard({
           <button
             onClick={() => setShowProfileDialog(true)}
             className='md:hidden px-2.5 py-2 text-sm font-medium rounded-xl border transition-colors bg-white text-zinc-900 border-zinc-200 hover:bg-zinc-100 hover:border-zinc-200 flex items-center gap-1.5 flex-shrink-0 min-w-[44px] justify-center'
-            disabled={loadingSummary}
+            disabled={loadingProfile}
           >
             <User className='w-4 h-4 text-zinc-900 flex-shrink-0' />
             <span className='hidden min-[400px]:inline'>Profile</span>
@@ -329,7 +329,7 @@ export default function UserCard({
                 ? 'bg-zinc-100 border-zinc-200'
                 : 'bg-white border-zinc-200 hover:bg-zinc-100 hover:border-zinc-200'
             }`}
-            disabled={loadingSummary}
+            disabled={loadingProfile}
             aria-label='Open profile sidebar'
             aria-pressed={isProfileSidebarOpen}
           >
@@ -352,18 +352,72 @@ export default function UserCard({
             <div className='text-sm text-zinc-500 mb-2'>
               {getDisplayName(userPresence, userProfile)}
             </div>
-            {loadingSummary ? (
+            {loadingProfile ? (
               <div className='flex items-center gap-2 text-sm text-zinc-500'>
                 <div className='w-3 h-3 bg-zinc-100 rounded-full animate-pulse'></div>
-                <span>Loading profile summary...</span>
+                <span>Loading profile details...</span>
               </div>
-            ) : profileSummary ? (
-              <div className='text-sm text-zinc-900 leading-relaxed bg-zinc-100 rounded-lg p-4 border border-zinc-200'>
-                {profileSummary}
+            ) : fullProfile ? (
+              <div className='text-sm text-zinc-900 leading-relaxed bg-zinc-100 rounded-lg p-4 border border-zinc-200 space-y-3'>
+                <div className='font-semibold mb-2'>Profile Details</div>
+                {fullProfile.fullName && (
+                  <div>
+                    <span className='text-xs font-medium text-zinc-500'>Name:</span>
+                    <p className='text-sm text-zinc-700'>{fullProfile.fullName}</p>
+                  </div>
+                )}
+                {fullProfile.jobRole && (
+                  <div>
+                    <span className='text-xs font-medium text-zinc-500'>Role:</span>
+                    <p className='text-sm text-zinc-700'>{fullProfile.jobRole}</p>
+                  </div>
+                )}
+                {fullProfile.companyName && (
+                  <div>
+                    <span className='text-xs font-medium text-zinc-500'>Company:</span>
+                    <p className='text-sm text-zinc-700'>{fullProfile.companyName}</p>
+                  </div>
+                )}
+                {fullProfile.industry && (
+                  <div>
+                    <span className='text-xs font-medium text-zinc-500'>Industry:</span>
+                    <p className='text-sm text-zinc-700'>{fullProfile.industry}</p>
+                  </div>
+                )}
+                {fullProfile.yearsOfExperience !== null && fullProfile.yearsOfExperience !== undefined && (
+                  <div>
+                    <span className='text-xs font-medium text-zinc-500'>Experience:</span>
+                    <p className='text-sm text-zinc-700'>{fullProfile.yearsOfExperience} years</p>
+                  </div>
+                )}
+                {fullProfile.education && (
+                  <div>
+                    <span className='text-xs font-medium text-zinc-500'>Education:</span>
+                    <p className='text-sm text-zinc-700'>{fullProfile.education}</p>
+                  </div>
+                )}
+                {fullProfile.about && (
+                  <div>
+                    <span className='text-xs font-medium text-zinc-500'>About:</span>
+                    <p className='text-sm text-zinc-700'>{fullProfile.about}</p>
+                  </div>
+                )}
+                {fullProfile.interests && fullProfile.interests.length > 0 && (
+                  <div>
+                    <span className='text-xs font-medium text-zinc-500'>Interests:</span>
+                    <p className='text-sm text-zinc-700'>{fullProfile.interests.join(', ')}</p>
+                  </div>
+                )}
+                {fullProfile.skills && fullProfile.skills.length > 0 && (
+                  <div>
+                    <span className='text-xs font-medium text-zinc-500'>Skills:</span>
+                    <p className='text-sm text-zinc-700'>{fullProfile.skills.join(', ')}</p>
+                  </div>
+                )}
               </div>
             ) : (
               <div className='text-sm text-zinc-500'>
-                No profile summary available.
+                No profile details available.
               </div>
             )}
           </div>

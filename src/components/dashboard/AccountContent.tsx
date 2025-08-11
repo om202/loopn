@@ -5,11 +5,14 @@ import { useAuth } from '@/contexts/AuthContext';
 import { simplePresenceManager } from '@/lib/presence-utils';
 import { UserProfileService } from '@/services/user-profile.service';
 import UserAvatar from '../UserAvatar';
+import type { Schema } from '../../../amplify/data/resource';
+
+type UserProfile = Schema['UserProfile']['type'];
 
 export default function AccountContent() {
   const { handleSignOut, user, onboardingStatus } = useAuth();
-  const [userSummary, setUserSummary] = useState<string | null>(null);
-  const [loadingSummary, setLoadingSummary] = useState(false);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [loadingProfile, setLoadingProfile] = useState(false);
 
   const getUserEmail = () => {
     return user?.signInDetails?.loginId || '';
@@ -20,29 +23,29 @@ export default function AccountContent() {
     handleSignOut();
   };
 
-  // Load current user's AI summary
+  // Load current user's profile details
   useEffect(() => {
     let mounted = true;
 
-    const loadUserSummary = async () => {
+    const loadUserProfile = async () => {
       if (!user?.userId) return;
 
-      setLoadingSummary(true);
+      setLoadingProfile(true);
       try {
-        const summary = await UserProfileService.getProfileSummary(user.userId);
+        const profile = await UserProfileService.getProfileDetails(user.userId);
         if (mounted) {
-          setUserSummary(summary);
+          setUserProfile(profile);
         }
       } catch (error) {
-        console.error('Error loading user summary:', error);
+        console.error('Error loading user profile:', error);
       } finally {
         if (mounted) {
-          setLoadingSummary(false);
+          setLoadingProfile(false);
         }
       }
     };
 
-    loadUserSummary();
+    loadUserProfile();
 
     return () => {
       mounted = false;
@@ -91,27 +94,79 @@ export default function AccountContent() {
           </div>
         </div>
 
-        {/* AI Profile Summary */}
+        {/* Profile Details */}
         <div className='mt-5 pt-5 border-t border-zinc-100'>
           <div className='flex items-center gap-2 mb-3'>
             <h4 className='text-sm font-medium text-zinc-900'>
-              Anonymous Overview
+              Profile Details
             </h4>
           </div>
 
-          {loadingSummary ? (
+          {loadingProfile ? (
             <div className='flex items-center gap-2 text-sm text-zinc-500'>
               <div className='w-3 h-3 bg-zinc-200 rounded-full animate-pulse'></div>
               <span>Loading...</span>
             </div>
-          ) : userSummary ? (
-            <div className='bg-zinc-50 rounded-lg p-3 text-sm text-zinc-700 leading-relaxed'>
-              {userSummary}
+          ) : userProfile ? (
+            <div className='bg-zinc-50 rounded-lg p-4 space-y-3'>
+              {userProfile.fullName && (
+                <div>
+                  <span className='text-xs font-medium text-zinc-500'>Name:</span>
+                  <p className='text-sm text-zinc-700'>{userProfile.fullName}</p>
+                </div>
+              )}
+              {userProfile.jobRole && (
+                <div>
+                  <span className='text-xs font-medium text-zinc-500'>Role:</span>
+                  <p className='text-sm text-zinc-700'>{userProfile.jobRole}</p>
+                </div>
+              )}
+              {userProfile.companyName && (
+                <div>
+                  <span className='text-xs font-medium text-zinc-500'>Company:</span>
+                  <p className='text-sm text-zinc-700'>{userProfile.companyName}</p>
+                </div>
+              )}
+              {userProfile.industry && (
+                <div>
+                  <span className='text-xs font-medium text-zinc-500'>Industry:</span>
+                  <p className='text-sm text-zinc-700'>{userProfile.industry}</p>
+                </div>
+              )}
+              {userProfile.yearsOfExperience !== null && userProfile.yearsOfExperience !== undefined && (
+                <div>
+                  <span className='text-xs font-medium text-zinc-500'>Experience:</span>
+                  <p className='text-sm text-zinc-700'>{userProfile.yearsOfExperience} years</p>
+                </div>
+              )}
+              {userProfile.education && (
+                <div>
+                  <span className='text-xs font-medium text-zinc-500'>Education:</span>
+                  <p className='text-sm text-zinc-700'>{userProfile.education}</p>
+                </div>
+              )}
+              {userProfile.about && (
+                <div>
+                  <span className='text-xs font-medium text-zinc-500'>About:</span>
+                  <p className='text-sm text-zinc-700'>{userProfile.about}</p>
+                </div>
+              )}
+              {userProfile.interests && userProfile.interests.length > 0 && (
+                <div>
+                  <span className='text-xs font-medium text-zinc-500'>Interests:</span>
+                  <p className='text-sm text-zinc-700'>{userProfile.interests.join(', ')}</p>
+                </div>
+              )}
+              {userProfile.skills && userProfile.skills.length > 0 && (
+                <div>
+                  <span className='text-xs font-medium text-zinc-500'>Skills:</span>
+                  <p className='text-sm text-zinc-700'>{userProfile.skills.join(', ')}</p>
+                </div>
+              )}
             </div>
           ) : (
             <div className='bg-zinc-50 rounded-lg p-3 text-sm text-zinc-500'>
-              No profile summary available yet. Start chatting with others to
-              generate your anonymous overview!
+              No profile details available yet.
             </div>
           )}
         </div>
