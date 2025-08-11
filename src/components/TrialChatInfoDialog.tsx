@@ -47,14 +47,14 @@ export default function TrialChatInfoDialog({
                 onEndChat();
                 onClose();
               }}
-              className='w-full px-4 py-2 text-sm font-medium text-white bg-b_red-600 rounded-lg hover:bg-b_red-600 focus:outline-none transition-colors'
+              className='w-full px-4 py-2 text-sm font-medium text-b_red-600 bg-white border border-b_red-600 rounded-lg hover:bg-b_red-50 focus:outline-none transition-colors'
             >
               End Chat Now
             </button>
           )}
           <button
             onClick={onClose}
-            className='w-full px-4 py-2 text-sm font-medium text-white bg-brand-500 rounded-lg hover:bg-brand-500 focus:outline-none transition-colors'
+            className='w-full px-4 py-2 text-sm font-medium text-brand-500 bg-white border border-brand-500 rounded-lg hover:bg-brand-50 focus:outline-none transition-colors'
           >
             Got it
           </button>
