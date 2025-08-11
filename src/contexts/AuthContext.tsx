@@ -22,7 +22,6 @@ import {
   OnboardingService,
   UserOnboardingStatus,
 } from '@/services/onboarding.service';
-import { UserProfileService } from '@/services/user-profile.service';
 
 // Auth Types
 export type AuthStatus = 'configuring' | 'authenticated' | 'unauthenticated';
@@ -105,11 +104,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
         // Check onboarding status after authentication
         await checkOnboardingStatus();
-
-        // Ensure anonymous summary exists for existing users (background task)
-        UserProfileService.ensureAnonymousSummaryExists().catch(error => {
-          console.warn('Background anonymous summary check failed:', error);
-        });
       } else {
         setAuthState(prev => ({
           ...prev,
@@ -180,11 +174,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       if (signInResult.isSignedIn) {
         await checkAuthStatus(); // Refresh auth state and check onboarding
-
-        // Ensure anonymous summary exists for existing users (background task)
-        UserProfileService.ensureAnonymousSummaryExists().catch(error => {
-          console.warn('Background anonymous summary check failed:', error);
-        });
       } else {
         // Handle additional sign-in steps if needed
         setError('Sign-in requires additional steps');
