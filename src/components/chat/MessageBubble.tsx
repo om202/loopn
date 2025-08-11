@@ -16,14 +16,12 @@ import {
 } from '../../lib/emoji-utils';
 
 type Message = Schema['Message']['type'];
-type UserPresence = Schema['UserPresence']['type'];
 type MessageReaction = Schema['MessageReaction']['type'];
 
 interface MessageBubbleProps {
   message: Message;
   isOwnMessage: boolean;
   showAvatar: boolean;
-  otherUserPresence: UserPresence | null;
   otherParticipantId: string;
   marginTop: string;
   marginBottom: string;
@@ -72,7 +70,6 @@ const MessageTicks = ({ isOptimistic }: { isOptimistic: boolean }) => {
 export default function MessageBubble({
   message,
   isOwnMessage,
-  otherUserPresence,
   otherParticipantId,
   marginTop,
   marginBottom,
@@ -253,7 +250,6 @@ export default function MessageBubble({
           <div className='flex-shrink-0 w-8 h-8'>
             {showSenderName && (
               <UserAvatar
-                email={otherUserPresence?.email}
                 userId={otherParticipantId}
                 size='sm'
                 showStatus={false}

@@ -127,8 +127,19 @@ export default function NotificationItem({
         {notification.type === 'chat_request' ? (
           <div className='flex-shrink-0'>
             <UserAvatar
-              email={(notification.data as ChatRequestWithUser)?.requesterEmail}
+              email={
+                (notification.data as ChatRequestWithUser)?.requesterProfile
+                  ?.email
+              }
               userId={(notification.data as ChatRequestWithUser)?.requesterId}
+              profilePictureUrl={
+                (notification.data as ChatRequestWithUser)?.requesterProfile
+                  ?.profilePictureUrl
+              }
+              hasProfilePicture={
+                (notification.data as ChatRequestWithUser)?.requesterProfile
+                  ?.hasProfilePicture
+              }
               size='md'
             />
           </div>
@@ -138,11 +149,21 @@ export default function NotificationItem({
           <div className='flex-shrink-0'>
             <UserAvatar
               email={
+                (notification.data as MessageNotificationData)?.senderProfile
+                  ?.email ||
                 (notification.data as MessageNotificationData)?.senderEmail
               }
               userId={
                 (notification.data as MessageNotificationData)?.message
                   ?.senderId
+              }
+              profilePictureUrl={
+                (notification.data as MessageNotificationData)?.senderProfile
+                  ?.profilePictureUrl
+              }
+              hasProfilePicture={
+                (notification.data as MessageNotificationData)?.senderProfile
+                  ?.hasProfilePicture
               }
               size='md'
             />

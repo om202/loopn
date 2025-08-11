@@ -5,6 +5,12 @@ type Message = Schema['Message']['type'];
 
 export interface ChatRequestWithUser extends ChatRequest {
   requesterEmail?: string;
+  requesterProfile?: {
+    fullName?: string;
+    email?: string;
+    profilePictureUrl?: string;
+    hasProfilePicture?: boolean;
+  };
 }
 
 export interface MessageNotificationData {
@@ -12,6 +18,12 @@ export interface MessageNotificationData {
   message: Message;
   senderEmail?: string;
   messageCount: number;
+  senderProfile?: {
+    fullName?: string;
+    email?: string;
+    profilePictureUrl?: string;
+    hasProfilePicture?: boolean;
+  };
 }
 
 // Raw Amplify-generated type

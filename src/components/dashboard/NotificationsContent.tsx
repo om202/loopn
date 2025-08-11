@@ -9,6 +9,7 @@ import { createShortChatUrl } from '../../lib/url-utils';
 import { chatService } from '../../services/chat.service';
 import { messageService } from '../../services/message.service';
 import { notificationService } from '../../services/notification.service';
+import { UserProfileService } from '../../services/user-profile.service';
 import { useChatRequests } from '../../hooks/realtime/useChatRequests';
 
 import NotificationItem from '../notifications/NotificationItem';
@@ -19,6 +20,22 @@ import type {
   ChatRequestNotification,
   ChatRequestWithUser,
 } from '../notifications/types';
+
+const getDisplayName = (
+  userProfile?: { fullName?: string; email?: string } | null,
+  userId?: string
+) => {
+  // Try to get full name from profile first
+  if (userProfile?.fullName) {
+    return userProfile.fullName;
+  }
+  // Fall back to email if available
+  if (userProfile?.email) {
+    return userProfile.email;
+  }
+  // Last resort: User + last 4 chars of userId
+  return userId ? `User ${userId.slice(-4)}` : 'Unknown User';
+};
 
 export default function NotificationsContent() {
   const { user } = useAuthenticator();
@@ -75,10 +92,25 @@ export default function NotificationsContent() {
     const processRequests = async () => {
       const requestsWithUsers: ChatRequestWithUser[] = await Promise.all(
         realtimeChatRequests.map(async request => {
-          // Note: Email moved to UserProfile table
+          // Fetch user profile for real name and avatar
+          const profileResult = await new UserProfileService().getUserProfile(
+            request.requesterId
+          );
+          const requesterProfile = profileResult.data
+            ? {
+                fullName: profileResult.data.fullName || undefined,
+                email: profileResult.data.email || undefined,
+                profilePictureUrl:
+                  profileResult.data.profilePictureUrl || undefined,
+                hasProfilePicture:
+                  profileResult.data.hasProfilePicture || false,
+              }
+            : undefined;
+
           return {
             ...request,
             requesterEmail: undefined, // Email moved to UserProfile
+            requesterProfile,
           };
         })
       );
@@ -101,8 +133,10 @@ export default function NotificationsContent() {
           );
 
           if (!existingNotification) {
-            const title =
-              request.requesterEmail || `User ${request.requesterId.slice(-4)}`;
+            const title = getDisplayName(
+              request.requesterProfile,
+              request.requesterId
+            );
             const content = 'wants to chat with you';
 
             chatNotifications.push({
@@ -236,9 +270,10 @@ export default function NotificationsContent() {
           const chatNotification: ChatRequestNotification = {
             id: chatRequest.id,
             type: 'chat_request',
-            title:
-              chatRequest.requesterEmail ||
-              `User ${chatRequest.requesterId.slice(-4)}`,
+            title: getDisplayName(
+              chatRequest.requesterProfile,
+              chatRequest.requesterId
+            ),
             content: 'wants to chat with you',
             timestamp: chatRequest.createdAt,
             isRead: false,
@@ -252,9 +287,10 @@ export default function NotificationsContent() {
         const chatNotification: ChatRequestNotification = {
           id: chatRequest.id,
           type: 'chat_request',
-          title:
-            chatRequest.requesterEmail ||
-            `User ${chatRequest.requesterId.slice(-4)}`,
+          title: getDisplayName(
+            chatRequest.requesterProfile,
+            chatRequest.requesterId
+          ),
           content: 'wants to chat with you',
           timestamp: chatRequest.createdAt,
           isRead: false,
@@ -282,9 +318,10 @@ export default function NotificationsContent() {
         const chatNotification: ChatRequestNotification = {
           id: chatRequest.id,
           type: 'chat_request',
-          title:
-            chatRequest.requesterEmail ||
-            `User ${chatRequest.requesterId.slice(-4)}`,
+          title: getDisplayName(
+            chatRequest.requesterProfile,
+            chatRequest.requesterId
+          ),
           content: 'wants to chat with you',
           timestamp: chatRequest.createdAt,
           isRead: false,
@@ -297,9 +334,10 @@ export default function NotificationsContent() {
       const chatNotification: ChatRequestNotification = {
         id: chatRequest.id,
         type: 'chat_request',
-        title:
-          chatRequest.requesterEmail ||
-          `User ${chatRequest.requesterId.slice(-4)}`,
+        title: getDisplayName(
+          chatRequest.requesterProfile,
+          chatRequest.requesterId
+        ),
         content: 'wants to chat with you',
         timestamp: chatRequest.createdAt,
         isRead: false,

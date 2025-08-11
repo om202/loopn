@@ -446,7 +446,8 @@ export default function UserCard({
 
                 {/* Skills & Interests Section */}
                 {((fullProfile.skills && fullProfile.skills.length > 0) ||
-                  (fullProfile.interests && fullProfile.interests.length > 0)) && (
+                  (fullProfile.interests &&
+                    fullProfile.interests.length > 0)) && (
                   <div>
                     <h4 className='text-sm font-semibold text-zinc-900 mb-3 border-b border-zinc-100 pb-2'>
                       Skills & Interests
@@ -469,23 +470,24 @@ export default function UserCard({
                           </dd>
                         </div>
                       )}
-                      {fullProfile.interests && fullProfile.interests.length > 0 && (
-                        <div>
-                          <dt className='text-xs font-medium text-zinc-500 mb-2'>
-                            Interests
-                          </dt>
-                          <dd className='flex flex-wrap gap-2'>
-                            {fullProfile.interests.map((interest, index) => (
-                              <span
-                                key={index}
-                                className='px-2 py-1 text-xs bg-green-50 text-green-700 rounded-md border border-green-100'
-                              >
-                                {interest}
-                              </span>
-                            ))}
-                          </dd>
-                        </div>
-                      )}
+                      {fullProfile.interests &&
+                        fullProfile.interests.length > 0 && (
+                          <div>
+                            <dt className='text-xs font-medium text-zinc-500 mb-2'>
+                              Interests
+                            </dt>
+                            <dd className='flex flex-wrap gap-2'>
+                              {fullProfile.interests.map((interest, index) => (
+                                <span
+                                  key={index}
+                                  className='px-2 py-1 text-xs bg-green-50 text-green-700 rounded-md border border-green-100'
+                                >
+                                  {interest}
+                                </span>
+                              ))}
+                            </dd>
+                          </div>
+                        )}
                     </div>
                   </div>
                 )}

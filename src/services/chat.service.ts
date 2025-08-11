@@ -1,7 +1,7 @@
 import type { Schema } from '../../amplify/data/resource';
 import { getClient } from '../lib/amplify-config';
 import { notificationService } from './notification.service';
-import { userPresenceService } from './user.service';
+import { UserProfileService } from './user-profile.service';
 
 // Type definitions from schema
 type ChatRequest = Schema['ChatRequest']['type'];
@@ -19,6 +19,22 @@ type UserConnection = Schema['UserConnection']['type'];
 // Result types
 type DataResult<T> = { data: T | null; error: string | null };
 type ListResult<T> = { data: T[]; error: string | null };
+
+const getDisplayName = (
+  userProfile?: { fullName?: string; email?: string } | null,
+  userId?: string
+) => {
+  // Try to get full name from profile first
+  if (userProfile?.fullName) {
+    return userProfile.fullName;
+  }
+  // Fall back to email if available
+  if (userProfile?.email) {
+    return userProfile.email;
+  }
+  // Last resort: User + last 4 chars of userId
+  return userId ? `User ${userId.slice(-4)}` : 'Unknown User';
+};
 
 export class ChatService {
   // ===== CHAT REQUESTS =====
@@ -60,12 +76,17 @@ export class ChatService {
 
       // Create a notification for the receiver (especially important for offline users)
       if (result.data) {
-        // Get requester's information for a more personalized notification
-        const requesterResult =
-          await userPresenceService.getUserPresence(requesterId);
-        const requesterName = requesterResult.data?.email
-          ? requesterResult.data.email.split('@')[0]
-          : `User ${requesterId.slice(-4)}`;
+        // Get requester's profile information for a more personalized notification
+        const requesterProfileResult =
+          await new UserProfileService().getUserProfile(requesterId);
+        const requesterProfile = requesterProfileResult.data
+          ? {
+              fullName: requesterProfileResult.data.fullName || undefined,
+              email: requesterProfileResult.data.email || undefined,
+            }
+          : null;
+
+        const requesterName = getDisplayName(requesterProfile, requesterId);
 
         await notificationService.createNotification(
           receiverId,
@@ -158,13 +179,22 @@ export class ChatService {
 
         // Create a notification for the requester (sender) that their request was accepted
         if (conversation) {
-          // Get receiver's information for a personalized notification
-          const receiverResult = await userPresenceService.getUserPresence(
+          // Get receiver's profile information for a personalized notification
+          const receiverProfileResult =
+            await new UserProfileService().getUserProfile(
+              chatRequestResult.data.receiverId
+            );
+          const receiverProfile = receiverProfileResult.data
+            ? {
+                fullName: receiverProfileResult.data.fullName || undefined,
+                email: receiverProfileResult.data.email || undefined,
+              }
+            : null;
+
+          const receiverName = getDisplayName(
+            receiverProfile,
             chatRequestResult.data.receiverId
           );
-          const receiverName = receiverResult.data?.email
-            ? receiverResult.data.email.split('@')[0]
-            : `User ${chatRequestResult.data.receiverId.slice(-4)}`;
 
           // Create the acceptance notification with shorter expiry (24 hours)
           const expiresAt = new Date();
@@ -180,7 +210,7 @@ export class ChatService {
             data: JSON.stringify({
               conversationId: conversation.id,
               acceptedByUserId: chatRequestResult.data.receiverId,
-              acceptedByEmail: receiverResult.data?.email,
+              acceptedByEmail: receiverProfile?.email,
             }),
             conversationId: conversation.id,
             expiresAt: expiresAt.toISOString(), // Auto-delete after 24 hours

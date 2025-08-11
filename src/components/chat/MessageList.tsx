@@ -17,12 +17,10 @@ import { useRealtimeReactions } from '../../hooks/realtime';
 import { MessageCircle } from 'lucide-react';
 
 type Message = Schema['Message']['type'];
-type UserPresence = Schema['UserPresence']['type'];
 
 interface MessageListProps {
   messages: Message[];
   currentUserId: string;
-  otherUserPresence: UserPresence | null;
   otherParticipantId: string;
   isInitializing: boolean;
   onReplyToMessage?: (message: Message) => void;
@@ -39,7 +37,6 @@ interface MessageListProps {
 export default function MessageList({
   messages,
   currentUserId,
-  otherUserPresence,
   otherParticipantId,
   isInitializing,
   onReplyToMessage,
@@ -582,7 +579,6 @@ export default function MessageList({
                 message={message}
                 isOwnMessage={isOwnMessage}
                 showAvatar={showAvatar}
-                otherUserPresence={otherUserPresence}
                 otherParticipantId={otherParticipantId}
                 marginTop={marginTop}
                 marginBottom={marginBottom}

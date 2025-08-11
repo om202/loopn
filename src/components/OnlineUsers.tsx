@@ -747,14 +747,17 @@ export default function OnlineUsers({
                               </dd>
                             </div>
                           )}
-                          {profileSidebarFullProfile.yearsOfExperience !== null &&
-                            profileSidebarFullProfile.yearsOfExperience !== undefined && (
+                          {profileSidebarFullProfile.yearsOfExperience !==
+                            null &&
+                            profileSidebarFullProfile.yearsOfExperience !==
+                              undefined && (
                               <div>
                                 <dt className='text-xs font-medium text-zinc-500 mb-1'>
                                   Experience
                                 </dt>
                                 <dd className='text-sm text-zinc-900'>
-                                  {profileSidebarFullProfile.yearsOfExperience} years
+                                  {profileSidebarFullProfile.yearsOfExperience}{' '}
+                                  years
                                 </dd>
                               </div>
                             )}
@@ -791,47 +794,55 @@ export default function OnlineUsers({
                     )}
 
                     {/* Skills & Interests Section */}
-                    {((profileSidebarFullProfile.skills && profileSidebarFullProfile.skills.length > 0) ||
-                      (profileSidebarFullProfile.interests && profileSidebarFullProfile.interests.length > 0)) && (
+                    {((profileSidebarFullProfile.skills &&
+                      profileSidebarFullProfile.skills.length > 0) ||
+                      (profileSidebarFullProfile.interests &&
+                        profileSidebarFullProfile.interests.length > 0)) && (
                       <div>
                         <h4 className='text-sm font-semibold text-zinc-900 mb-3 border-b border-zinc-100 pb-2'>
                           Skills & Interests
                         </h4>
                         <div className='space-y-3'>
-                          {profileSidebarFullProfile.skills && profileSidebarFullProfile.skills.length > 0 && (
-                            <div>
-                              <dt className='text-xs font-medium text-zinc-500 mb-2'>
-                                Skills
-                              </dt>
-                              <dd className='flex flex-wrap gap-2'>
-                                {profileSidebarFullProfile.skills.map((skill, index) => (
-                                  <span
-                                    key={index}
-                                    className='px-2 py-1 text-xs bg-blue-50 text-blue-700 rounded-md border border-blue-100'
-                                  >
-                                    {skill}
-                                  </span>
-                                ))}
-                              </dd>
-                            </div>
-                          )}
-                          {profileSidebarFullProfile.interests && profileSidebarFullProfile.interests.length > 0 && (
-                            <div>
-                              <dt className='text-xs font-medium text-zinc-500 mb-2'>
-                                Interests
-                              </dt>
-                              <dd className='flex flex-wrap gap-2'>
-                                {profileSidebarFullProfile.interests.map((interest, index) => (
-                                  <span
-                                    key={index}
-                                    className='px-2 py-1 text-xs bg-green-50 text-green-700 rounded-md border border-green-100'
-                                  >
-                                    {interest}
-                                  </span>
-                                ))}
-                              </dd>
-                            </div>
-                          )}
+                          {profileSidebarFullProfile.skills &&
+                            profileSidebarFullProfile.skills.length > 0 && (
+                              <div>
+                                <dt className='text-xs font-medium text-zinc-500 mb-2'>
+                                  Skills
+                                </dt>
+                                <dd className='flex flex-wrap gap-2'>
+                                  {profileSidebarFullProfile.skills.map(
+                                    (skill, index) => (
+                                      <span
+                                        key={index}
+                                        className='px-2 py-1 text-xs bg-blue-50 text-blue-700 rounded-md border border-blue-100'
+                                      >
+                                        {skill}
+                                      </span>
+                                    )
+                                  )}
+                                </dd>
+                              </div>
+                            )}
+                          {profileSidebarFullProfile.interests &&
+                            profileSidebarFullProfile.interests.length > 0 && (
+                              <div>
+                                <dt className='text-xs font-medium text-zinc-500 mb-2'>
+                                  Interests
+                                </dt>
+                                <dd className='flex flex-wrap gap-2'>
+                                  {profileSidebarFullProfile.interests.map(
+                                    (interest, index) => (
+                                      <span
+                                        key={index}
+                                        className='px-2 py-1 text-xs bg-green-50 text-green-700 rounded-md border border-green-100'
+                                      >
+                                        {interest}
+                                      </span>
+                                    )
+                                  )}
+                                </dd>
+                              </div>
+                            )}
                         </div>
                       </div>
                     )}

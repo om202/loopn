@@ -96,7 +96,6 @@ export default function AccountContent() {
 
         {/* Profile Details */}
         <div className='mt-5 pt-5 border-t border-zinc-100'>
-
           {loadingProfile ? (
             <div className='flex items-center gap-2 text-sm text-zinc-500'>
               <div className='w-3 h-3 bg-zinc-200 rounded-full animate-pulse'></div>
@@ -189,7 +188,8 @@ export default function AccountContent() {
 
               {/* Skills & Interests Section */}
               {((userProfile.skills && userProfile.skills.length > 0) ||
-                (userProfile.interests && userProfile.interests.length > 0)) && (
+                (userProfile.interests &&
+                  userProfile.interests.length > 0)) && (
                 <div>
                   <h5 className='text-sm font-semibold text-zinc-900 mb-4 border-b border-zinc-100 pb-2'>
                     Skills & Interests
@@ -212,23 +212,24 @@ export default function AccountContent() {
                         </dd>
                       </div>
                     )}
-                    {userProfile.interests && userProfile.interests.length > 0 && (
-                      <div>
-                        <dt className='text-xs font-medium text-zinc-500 mb-2'>
-                          Interests
-                        </dt>
-                        <dd className='flex flex-wrap gap-2'>
-                          {userProfile.interests.map((interest, index) => (
-                            <span
-                              key={index}
-                              className='px-3 py-1.5 text-xs bg-green-50 text-green-700 rounded-md border border-green-100'
-                            >
-                              {interest}
-                            </span>
-                          ))}
-                        </dd>
-                      </div>
-                    )}
+                    {userProfile.interests &&
+                      userProfile.interests.length > 0 && (
+                        <div>
+                          <dt className='text-xs font-medium text-zinc-500 mb-2'>
+                            Interests
+                          </dt>
+                          <dd className='flex flex-wrap gap-2'>
+                            {userProfile.interests.map((interest, index) => (
+                              <span
+                                key={index}
+                                className='px-3 py-1.5 text-xs bg-green-50 text-green-700 rounded-md border border-green-100'
+                              >
+                                {interest}
+                              </span>
+                            ))}
+                          </dd>
+                        </div>
+                      )}
                   </div>
                 </div>
               )}
@@ -240,7 +241,7 @@ export default function AccountContent() {
           )}
         </div>
       </div>
-      
+
       {/* Bottom spacing */}
       <div className='pb-8'></div>
     </div>

@@ -197,11 +197,7 @@ export default function HomePage() {
                 <div className='bg-zinc-50 rounded-t-3xl px-6 py-4 border-b border-zinc-200'>
                   <div className='flex items-center justify-between'>
                     <div className='flex items-center gap-3'>
-                      <UserAvatar
-                        email='uxdesigner-d45'
-                        size='md'
-                        variant='beam'
-                      />
+                      <UserAvatar email='uxdesigner-d45' size='md' />
                       <div>
                         <p className='font-semibold text-zinc-900'>
                           uxdesigner-d45
@@ -218,11 +214,7 @@ export default function HomePage() {
                   {/* First message - Other user */}
                   <div className='flex flex-col space-y-2 opacity-0 animate-[slideUpFade_0.6s_ease-out_0.8s_forwards]'>
                     <div className='flex items-center gap-2 mb-1'>
-                      <UserAvatar
-                        email='productmanager-e16'
-                        size='sm'
-                        variant='beam'
-                      />
+                      <UserAvatar email='productmanager-e16' size='sm' />
                       <div className='text-xs text-zinc-600'>
                         productmanager-e16
                       </div>
@@ -244,11 +236,7 @@ export default function HomePage() {
                   {/* Third message - Other user */}
                   <div className='flex flex-col space-y-2 opacity-0 animate-[slideUpFade_0.6s_ease-out_2.4s_forwards]'>
                     <div className='flex items-center gap-2 mb-1'>
-                      <UserAvatar
-                        email='productmanager-e16'
-                        size='sm'
-                        variant='beam'
-                      />
+                      <UserAvatar email='productmanager-e16' size='sm' />
                       <div className='text-xs text-zinc-600'>
                         productmanager-e16
                       </div>
@@ -269,11 +257,7 @@ export default function HomePage() {
 
                   {/* Typing indicator */}
                   <div className='flex items-center gap-2 opacity-0 animate-[fadeInUp_0.6s_ease-out_4s_forwards]'>
-                    <UserAvatar
-                      email='productmanager-e16'
-                      size='sm'
-                      variant='beam'
-                    />
+                    <UserAvatar email='productmanager-e16' size='sm' />
                     <div className='bg-zinc-100 rounded-2xl px-4 py-3 shadow-sm'>
                       <div className='flex space-x-1'>
                         <div className='w-2 h-2 bg-zinc-400 rounded-full animate-bounce'></div>
@@ -622,11 +606,7 @@ export default function HomePage() {
                 professional interests.&quot;
               </blockquote>
               <div className='flex items-center gap-4'>
-                <UserAvatar
-                  email='softwareengineer-a7f'
-                  size='lg'
-                  variant='beam'
-                />
+                <UserAvatar email='softwareengineer-a7f' size='lg' />
                 <div>
                   <p className='font-bold text-zinc-900'>Sarah Johnson</p>
                   <p className='text-zinc-600 text-sm'>
@@ -652,11 +632,7 @@ export default function HomePage() {
                 connection in my career.&quot;
               </blockquote>
               <div className='flex items-center gap-4'>
-                <UserAvatar
-                  email='productmanager-b82'
-                  size='lg'
-                  variant='beam'
-                />
+                <UserAvatar email='productmanager-b82' size='lg' />
                 <div>
                   <p className='font-bold text-zinc-900'>Michael Chen</p>
                   <p className='text-zinc-600 text-sm'>
@@ -682,7 +658,7 @@ export default function HomePage() {
                 professional growth.&quot;
               </blockquote>
               <div className='flex items-center gap-4'>
-                <UserAvatar email='uxdesigner-c93' size='lg' variant='beam' />
+                <UserAvatar email='uxdesigner-c93' size='lg' />
                 <div>
                   <p className='font-bold text-zinc-900'>Emily Rodriguez</p>
                   <p className='text-zinc-600 text-sm'>

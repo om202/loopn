@@ -1,7 +1,7 @@
 import type { Schema } from '../../amplify/data/resource';
 import { getClient } from '../lib/amplify-config';
 import { notificationService } from './notification.service';
-import { userPresenceService } from './user.service';
+import { UserProfileService } from './user-profile.service';
 
 // Type definitions from schema
 type Message = Schema['Message']['type'];
@@ -11,6 +11,22 @@ type Message = Schema['Message']['type'];
 // Result types
 type DataResult<T> = { data: T | null; error: string | null };
 type ListResult<T> = { data: T[]; error: string | null };
+
+const getDisplayName = (
+  userProfile?: { fullName?: string; email?: string } | null,
+  userId?: string
+) => {
+  // Try to get full name from profile first
+  if (userProfile?.fullName) {
+    return userProfile.fullName;
+  }
+  // Fall back to email if available
+  if (userProfile?.email) {
+    return userProfile.email;
+  }
+  // Last resort: User + last 4 chars of userId
+  return userId ? `User ${userId.slice(-4)}` : 'Unknown User';
+};
 
 export class MessageService {
   async sendMessage(
@@ -58,11 +74,17 @@ export class MessageService {
       // Create notification for the receiver (works for both online and offline users)
       if (result.data) {
         try {
-          // Get sender's information for notification
-          const senderResult =
-            await userPresenceService.getUserPresence(senderId);
-          const senderEmail = senderResult.data?.email;
-          const senderName = senderEmail || `User ${senderId.slice(-4)}`;
+          // Get sender's profile information for notification
+          const senderProfileResult =
+            await new UserProfileService().getUserProfile(senderId);
+          const senderProfile = senderProfileResult.data
+            ? {
+                fullName: senderProfileResult.data.fullName || undefined,
+                email: senderProfileResult.data.email || undefined,
+              }
+            : null;
+
+          const senderName = getDisplayName(senderProfile, senderId);
 
           // Truncate long messages for notification
           const notificationContent =
@@ -71,8 +93,18 @@ export class MessageService {
           const notificationData = {
             conversationId,
             message: result.data,
-            senderEmail,
+            senderEmail: senderProfile?.email,
             messageCount: 1, // Individual message count
+            senderProfile: senderProfile
+              ? {
+                  fullName: senderProfile.fullName,
+                  email: senderProfile.email,
+                  profilePictureUrl:
+                    senderProfileResult.data?.profilePictureUrl,
+                  hasProfilePicture:
+                    senderProfileResult.data?.hasProfilePicture || false,
+                }
+              : null,
           };
 
           await notificationService.createNotification(

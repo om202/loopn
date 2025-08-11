@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import type { Schema } from '../../../amplify/data/resource';
 import { useRealtime } from '../../contexts/RealtimeContext';
-import { userPresenceService } from '../../services/user.service';
+import { UserProfileService } from '../../services/user-profile.service';
 
 export interface ChatRequestWithUser {
   id: string;
@@ -47,9 +47,10 @@ export function useChatRequests({ userId, enabled }: UseChatRequestsProps) {
         const requestsWithUsers = await Promise.all(
           requests.map(async request => {
             try {
-              const userResult = await userPresenceService.getUserPresence(
-                request.requesterId
-              );
+              const profileResult =
+                await new UserProfileService().getUserProfile(
+                  request.requesterId
+                );
               return {
                 id: request.id,
                 requesterId: request.requesterId,
@@ -57,7 +58,7 @@ export function useChatRequests({ userId, enabled }: UseChatRequestsProps) {
                 status: request.status,
                 createdAt: request.createdAt,
                 updatedAt: request.updatedAt,
-                requesterEmail: userResult.data?.email || undefined,
+                requesterEmail: profileResult.data?.email || undefined,
               };
             } catch (userError) {
               console.warn(
@@ -112,9 +113,10 @@ export function useChatRequests({ userId, enabled }: UseChatRequestsProps) {
         const requestsWithUsers = await Promise.all(
           requests.map(async request => {
             try {
-              const userResult = await userPresenceService.getUserPresence(
-                request.receiverId
-              );
+              const profileResult =
+                await new UserProfileService().getUserProfile(
+                  request.receiverId
+                );
               return {
                 id: request.id,
                 requesterId: request.requesterId,
@@ -122,7 +124,7 @@ export function useChatRequests({ userId, enabled }: UseChatRequestsProps) {
                 status: request.status,
                 createdAt: request.createdAt,
                 updatedAt: request.updatedAt,
-                receiverEmail: userResult.data?.email || undefined,
+                receiverEmail: profileResult.data?.email || undefined,
               };
             } catch (userError) {
               console.warn(

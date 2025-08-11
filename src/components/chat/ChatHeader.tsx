@@ -9,6 +9,7 @@ import UserAvatar from '../UserAvatar';
 import TrialChatInfoDialog from '../TrialChatInfoDialog';
 import DialogContainer from '../DialogContainer';
 import { formatPresenceTime } from '../../lib/presence-utils';
+import { UserProfileService } from '../../services/user-profile.service';
 
 type Conversation = Schema['Conversation']['type'];
 type UserPresence = Schema['UserPresence']['type'];
@@ -25,6 +26,22 @@ interface ChatHeaderProps {
   onBack: () => void;
 }
 
+const getDisplayName = (
+  userProfile?: { fullName?: string; email?: string } | null,
+  userId?: string
+) => {
+  // Try to get full name from profile first
+  if (userProfile?.fullName) {
+    return userProfile.fullName;
+  }
+  // Fall back to email if available
+  if (userProfile?.email) {
+    return userProfile.email;
+  }
+  // Last resort: User + last 4 chars of userId
+  return userId ? `User ${userId.slice(-4)}` : 'Unknown User';
+};
+
 export default function ChatHeader({
   conversation,
   otherParticipantId,
@@ -40,6 +57,12 @@ export default function ChatHeader({
   const [showEndChatDialog, setShowEndChatDialog] = useState(false);
   const [showChatEndedInfoDialog, setShowChatEndedInfoDialog] = useState(false);
   const [reconnectionTime, setReconnectionTime] = useState<string | null>(null);
+  const [userProfile, setUserProfile] = useState<{
+    fullName?: string;
+    email?: string;
+    profilePictureUrl?: string;
+    hasProfilePicture?: boolean;
+  } | null>(null);
   const getPresenceDisplay = () => {
     if (!otherUserPresence) {
       return {
@@ -82,8 +105,39 @@ export default function ChatHeader({
     };
   };
 
+  // Load profile data when component mounts
+  useEffect(() => {
+    let mounted = true;
+
+    const loadProfileData = async () => {
+      try {
+        const profileResult = await new UserProfileService().getUserProfile(
+          otherParticipantId
+        );
+
+        if (mounted && profileResult.data) {
+          setUserProfile({
+            fullName: profileResult.data.fullName || undefined,
+            email: profileResult.data.email || undefined,
+            profilePictureUrl:
+              profileResult.data.profilePictureUrl || undefined,
+            hasProfilePicture: profileResult.data.hasProfilePicture || false,
+          });
+        }
+      } catch (error) {
+        console.error('Error loading profile data:', error);
+      }
+    };
+
+    loadProfileData();
+
+    return () => {
+      mounted = false;
+    };
+  }, [otherParticipantId]);
+
   const getUserDisplayName = () => {
-    return otherUserPresence?.email || `User ${otherParticipantId.slice(-4)}`;
+    return getDisplayName(userProfile, otherParticipantId);
   };
 
   const getReconnectionTimeLeft = useCallback(() => {
@@ -165,8 +219,10 @@ export default function ChatHeader({
 
             {/* User Avatar */}
             <UserAvatar
-              email={otherUserPresence?.email}
+              email={userProfile?.email}
               userId={otherParticipantId}
+              profilePictureUrl={userProfile?.profilePictureUrl}
+              hasProfilePicture={userProfile?.hasProfilePicture}
               size='md'
               showStatus
               status={

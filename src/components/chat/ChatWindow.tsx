@@ -369,7 +369,6 @@ export default function ChatWindow({
       <MessageList
         messages={messages}
         currentUserId={user?.userId || ''}
-        otherUserPresence={otherUserPresence}
         otherParticipantId={otherParticipantId}
         isInitializing={isInitializing}
         onReplyToMessage={handleReplyToMessage}
