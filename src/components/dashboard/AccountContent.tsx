@@ -18,6 +18,30 @@ export default function AccountContent() {
     return user?.signInDetails?.loginId || '';
   };
 
+  const getUserDisplayName = () => {
+    let name = '';
+    
+    // Try to get full name from onboarding data first
+    if (onboardingStatus?.onboardingData?.fullName) {
+      name = onboardingStatus.onboardingData.fullName;
+    }
+    // Try to get full name from loaded user profile
+    else if (userProfile?.fullName) {
+      name = userProfile.fullName;
+    }
+    // Fall back to email if available
+    else if (user?.signInDetails?.loginId) {
+      name = user.signInDetails.loginId;
+    }
+    // Last resort: just show "You"
+    else {
+      return 'You';
+    }
+    
+    // Add "(You)" to indicate it's the current user
+    return `${name} (You)`;
+  };
+
   const handleSignOutClick = async () => {
     await simplePresenceManager.setOffline();
     handleSignOut();
@@ -88,9 +112,9 @@ export default function AccountContent() {
           />
           <div className='flex-1'>
             <h3 className='font-semibold text-zinc-900 mb-1'>
-              {getUserEmail()}
+              {getUserDisplayName()}
             </h3>
-            <p className='text-sm text-zinc-500'>You</p>
+            <p className='text-sm text-zinc-500'>{getUserEmail()}</p>
           </div>
         </div>
 
@@ -204,7 +228,7 @@ export default function AccountContent() {
                           {userProfile.skills.map((skill, index) => (
                             <span
                               key={index}
-                              className='px-3 py-1.5 text-xs bg-blue-50 text-blue-700 rounded-md border border-blue-100'
+                              className='px-3 py-1.5 text-xs bg-brand-50 text-brand-700 rounded-md border border-brand-100'
                             >
                               {skill}
                             </span>

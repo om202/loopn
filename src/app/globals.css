@@ -26,6 +26,19 @@
   --color-b_red-800: oklch(0.38 0.18 50);
   --color-b_red-900: oklch(0.32 0.15 50);
   --color-b_red-950: oklch(0.25 0.11 50);
+
+  /* Custom green colors - exact same OKLCH as brand blue, only hue changed */
+  --color-b_green-50: oklch(0.98 0.015 150);
+  --color-b_green-100: oklch(0.95 0.035 150);
+  --color-b_green-200: oklch(0.9 0.07 150);
+  --color-b_green-300: oklch(0.83 0.12 150);
+  --color-b_green-400: oklch(0.74 0.17 150);
+  --color-b_green-500: oklch(0.64 0.22 150);
+  --color-b_green-600: oklch(0.55 0.24 150);
+  --color-b_green-700: oklch(0.46 0.21 150);
+  --color-b_green-800: oklch(0.38 0.18 150);
+  --color-b_green-900: oklch(0.32 0.15 150);
+  --color-b_green-950: oklch(0.25 0.11 150);
 }
 
 body {

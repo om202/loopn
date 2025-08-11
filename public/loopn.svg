@@ -4,8 +4,8 @@
   <circle cx="110" cy="110" r="80" fill="#D9D9D9" />
 
   <!-- Left brand blue circle (brand-500) -->
-  <circle cx="75" cy="110" r="35" fill="#1C7AFF" />
+  <circle cx="75" cy="110" r="35" fill="#0099fc" />
 
   <!-- Right brand blue circle (brand-500) -->
-  <circle cx="145" cy="110" r="35" fill="#1C7AFF" />
+  <circle cx="145" cy="110" r="35" fill="#0099fc" />
 </svg> 

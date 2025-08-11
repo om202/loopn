@@ -462,7 +462,7 @@ export default function UserCard({
                             {fullProfile.skills.map((skill, index) => (
                               <span
                                 key={index}
-                                className='px-2 py-1 text-xs bg-blue-50 text-blue-700 rounded-md border border-blue-100'
+                                className='px-2 py-1 text-xs bg-brand-50 text-brand-700 rounded-md border border-brand-100'
                               >
                                 {skill}
                               </span>

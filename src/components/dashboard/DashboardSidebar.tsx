@@ -51,6 +51,19 @@ export default function DashboardSidebar({
     return user?.signInDetails?.loginId || 'user@example.com';
   };
 
+  const getUserDisplayName = () => {
+    // Try to get full name from onboarding data first
+    if (onboardingStatus?.onboardingData?.fullName) {
+      return onboardingStatus.onboardingData.fullName;
+    }
+    // Fall back to email if available
+    if (user?.signInDetails?.loginId) {
+      return user.signInDetails.loginId;
+    }
+    // Last resort: generic name
+    return 'Your Account';
+  };
+
   // Simple notification count tracking (lightweight)
   useEffect(() => {
     if (!user) {
@@ -181,7 +194,7 @@ export default function DashboardSidebar({
   const accountItem = {
     id: 'account' as const,
     icon: 'UserAvatar',
-    label: 'Your Account',
+    label: getUserDisplayName(),
     count: 0,
   };
 
