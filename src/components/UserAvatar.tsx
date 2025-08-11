@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import Avatar from 'boring-avatars';
+import { User } from 'lucide-react';
 import { getUrl } from 'aws-amplify/storage';
 
 interface UserAvatarProps {
@@ -14,8 +14,6 @@ interface UserAvatarProps {
   showStatus?: boolean;
   status?: string | null;
   className?: string;
-  variant?: 'marble' | 'beam' | 'pixel' | 'sunset' | 'ring' | 'bauhaus';
-  colors?: string[];
 }
 
 export default function UserAvatar({
@@ -27,21 +25,8 @@ export default function UserAvatar({
   showStatus = false,
   status,
   className = '',
-  variant = 'beam',
-  colors = ['#92A1C6', '#146A7C', '#F0AB3D', '#C271B4', '#C20D90'],
 }: UserAvatarProps) {
-  const getUserIdentifier = () => {
-    return email || userId || 'anonymous-user';
-  };
 
-  const getAvatarColors = () => {
-    // Use slate and light colors for anonymous users
-    if (!email && !userId) {
-      return ['#E5E7EB', '#D1D5DB', '#9CA3AF', '#6B7280', '#F3F4F6'];
-    }
-    // Use default colorful palette for actual users
-    return colors;
-  };
 
   const getAvatarSize = () => {
     switch (size) {
@@ -54,7 +39,7 @@ export default function UserAvatar({
       case 'xl':
         return 64; // w-16 h-16
       default:
-        return 40; // w-10 h-10
+        return 48; // w-10 h-10
     }
   };
 
@@ -183,12 +168,9 @@ export default function UserAvatar({
             onError={() => setImageError(true)}
           />
         ) : (
-          <Avatar
-            size={getAvatarSize()}
-            name={getUserIdentifier()}
-            variant={variant}
-            colors={getAvatarColors()}
-          />
+          <div className='bg-gray-100 w-full h-full flex items-center justify-center'>
+            <User className='w-3/5 h-3/5 text-gray-400' />
+          </div>
         )}
       </div>
       {showStatus === true && (
