@@ -8,6 +8,7 @@ import EmojiPicker from '../EmojiPicker';
 import MessageReactions from '../MessageReactions';
 import DeleteConfirmationDialog from '../DeleteConfirmationDialog';
 import { soundService } from '../../services/sound.service';
+import { UserProfileService } from '../../services/user-profile.service';
 import {
   isEmojiOnly,
   isEmoji,
@@ -91,12 +92,50 @@ export default function MessageBubble({
   const [showActionsOnMobile, setShowActionsOnMobile] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
   const longPressTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const [userProfile, setUserProfile] = useState<{
+    fullName?: string;
+    email?: string;
+    profilePictureUrl?: string;
+    hasProfilePicture?: boolean;
+  } | null>(null);
   const touchStartTimeRef = useRef<number>(0);
 
   // Detect touch device
   useEffect(() => {
     setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
   }, []);
+
+  // Load profile data for other participant's avatar
+  useEffect(() => {
+    let mounted = true;
+
+    const loadProfileData = async () => {
+      if (!otherParticipantId || isOwnMessage) {
+        return;
+      }
+
+      try {
+        const profileResult = await new UserProfileService().getUserProfile(otherParticipantId);
+        
+        if (mounted && profileResult.data) {
+          setUserProfile({
+            fullName: profileResult.data.fullName || undefined,
+            email: profileResult.data.email || undefined,
+            profilePictureUrl: profileResult.data.profilePictureUrl || undefined,
+            hasProfilePicture: profileResult.data.hasProfilePicture || false,
+          });
+        }
+      } catch (error) {
+        console.error('Error loading profile data for message bubble:', error);
+      }
+    };
+
+    loadProfileData();
+
+    return () => {
+      mounted = false;
+    };
+  }, [otherParticipantId, isOwnMessage]);
 
   // Long press handlers
   const handleLongPressStart = useCallback(() => {
@@ -250,7 +289,10 @@ export default function MessageBubble({
           <div className='flex-shrink-0 w-8 h-8'>
             {showSenderName && (
               <UserAvatar
+                email={userProfile?.email}
                 userId={otherParticipantId}
+                profilePictureUrl={userProfile?.profilePictureUrl}
+                hasProfilePicture={userProfile?.hasProfilePicture || false}
                 size='sm'
                 showStatus={false}
               />

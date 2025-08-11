@@ -2,8 +2,10 @@
 
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { CheckCircle2 } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 import { notificationService } from '../../services/notification.service';
+import { UserProfileService } from '../../services/user-profile.service';
 import UserAvatar from '../UserAvatar';
 import type {
   UINotification,
@@ -114,9 +116,53 @@ export default function NotificationItem({
   onError,
 }: NotificationItemProps) {
   const { user } = useAuthenticator();
+  const [userProfile, setUserProfile] = useState<{
+    fullName?: string;
+    email?: string;
+    profilePictureUrl?: string;
+    hasProfilePicture?: boolean;
+  } | null>(null);
 
   const isClickable =
     notification.type === 'message' || notification.type === 'connection';
+
+  // Load profile data for user avatar - similar to UserCard
+  useEffect(() => {
+    let mounted = true;
+
+    const loadProfileData = async () => {
+      // Only load for chat_request notifications where we need user profile data
+      if (notification.type !== 'chat_request' || !notification.data || !('requesterId' in notification.data)) {
+        return;
+      }
+
+      const chatRequestData = notification.data as ChatRequestWithUser;
+      const userId = chatRequestData.requesterId;
+      
+      if (!userId) return;
+
+      try {
+        const profileResult = await new UserProfileService().getUserProfile(userId);
+        
+        if (mounted && profileResult.data) {
+          setUserProfile({
+            fullName: profileResult.data.fullName || undefined,
+            email: profileResult.data.email || undefined,
+            profilePictureUrl: profileResult.data.profilePictureUrl || undefined,
+            hasProfilePicture: profileResult.data.hasProfilePicture || false,
+          });
+        }
+      } catch (error) {
+        console.error('Error loading profile data for notification:', error);
+      }
+    };
+
+    loadProfileData();
+
+    return () => {
+      mounted = false;
+    };
+  }, [notification.type, notification.data]);
 
   return (
     <div
@@ -128,17 +174,21 @@ export default function NotificationItem({
           <div className='flex-shrink-0'>
             <UserAvatar
               email={
+                userProfile?.email ||
                 (notification.data as ChatRequestWithUser)?.requesterProfile
                   ?.email
               }
               userId={(notification.data as ChatRequestWithUser)?.requesterId}
               profilePictureUrl={
+                userProfile?.profilePictureUrl ||
                 (notification.data as ChatRequestWithUser)?.requesterProfile
                   ?.profilePictureUrl
               }
               hasProfilePicture={
+                userProfile?.hasProfilePicture ||
                 (notification.data as ChatRequestWithUser)?.requesterProfile
-                  ?.hasProfilePicture
+                  ?.hasProfilePicture ||
+                false
               }
               size='md'
             />
