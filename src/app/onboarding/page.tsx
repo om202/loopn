@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import {
@@ -17,7 +18,7 @@ import {
 import LoadingContainer from '@/components/LoadingContainer';
 
 export default function OnboardingPage() {
-  const { authStatus, onboardingStatus } = useAuth();
+  const { authStatus, onboardingStatus, handleSignOut } = useAuth();
   const router = useRouter();
 
   const [currentStep, setCurrentStep] = useState(1);
@@ -27,6 +28,7 @@ export default function OnboardingPage() {
 
   // Form data
   const [formData, setFormData] = useState<Partial<OnboardingData>>({
+    fullName: '',
     jobRole: '',
     companyName: '',
     industry: '',
@@ -101,6 +103,7 @@ export default function OnboardingPage() {
     switch (step) {
       case 1:
         return !!(
+          formData.fullName &&
           formData.jobRole &&
           formData.companyName &&
           formData.industry
@@ -214,25 +217,34 @@ export default function OnboardingPage() {
   return (
     <div className='min-h-screen bg-zinc-100 py-8 px-3 sm:px-4'>
       <div className='max-w-2xl mx-auto'>
-        {/* Header */}
-        <div className='text-center mb-8'>
-          <div className='flex items-center justify-center space-x-3 mb-3'>
-            <Image
-              src='/loopn.svg'
-              alt='Loopn'
-              width={48}
-              height={48}
-              priority
-            />
-            <h1 className='text-3xl font-bold text-zinc-900'>Loopn</h1>
-          </div>
-          <p className='text-zinc-900 text-base'>Let's set up your profile</p>
-        </div>
-
-        {/* Progress indicator moved inside card */}
-
-        {/* Form content */}
+        {/* Main content card */}
         <div className='bg-white rounded-2xl border border-zinc-200 p-4 sm:p-6 lg:p-8'>
+          {/* Sign Out Button - Top Right of Card */}
+          <div className='flex justify-end mb-6'>
+            <button
+              onClick={handleSignOut}
+              className='text-sm text-zinc-600 hover:text-b_red-600 transition-colors'
+            >
+              Sign Out
+            </button>
+          </div>
+
+          {/* Header - Logo and Title */}
+          <div className='text-center mb-8'>
+            <Link href='/home' className='inline-block'>
+              <div className='flex items-center justify-center space-x-3 mb-3 cursor-pointer hover:opacity-80 transition-opacity'>
+                <Image
+                  src='/loopn.svg'
+                  alt='Loopn'
+                  width={48}
+                  height={48}
+                  priority
+                />
+                <h1 className='text-3xl font-bold text-zinc-900'>Loopn</h1>
+              </div>
+            </Link>
+            <p className='text-zinc-900 text-base mb-6'>Let's set up your profile</p>
+          </div>
           {/* Stepper */}
           <div className='mb-8 sm:mb-10'>
             <div className='relative'>
@@ -280,12 +292,25 @@ export default function OnboardingPage() {
           {currentStep === 1 && (
             <div className='space-y-6'>
               <h2 className='text-xl font-semibold text-zinc-900 mb-4'>
-                Professional Information
+                 Profile
               </h2>
 
               <div>
                 <label className='block text-sm font-medium text-zinc-700 mb-3'>
-                  Job Role *
+                  Full Name *
+                </label>
+                <input
+                  type='text'
+                  value={formData.fullName}
+                  onChange={e => updateFormData('fullName', e.target.value)}
+                  placeholder='e.g., John Smith'
+                  className='w-full px-3 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+                />
+              </div>
+
+              <div>
+                <label className='block text-sm font-medium text-zinc-700 mb-3'>
+                  Title *
                 </label>
                 <input
                   type='text'
@@ -298,7 +323,7 @@ export default function OnboardingPage() {
 
               <div>
                 <label className='block text-sm font-medium text-zinc-700 mb-3'>
-                  Company Name *
+                  Company *
                 </label>
                 <input
                   type='text'

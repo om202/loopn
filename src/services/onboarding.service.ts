@@ -4,6 +4,7 @@ import { getCurrentUser } from 'aws-amplify/auth';
 import { amplifyInitialization } from '../lib/amplify-initialization';
 
 export interface OnboardingData {
+  fullName: string;
   jobRole: string;
   companyName: string;
   industry: string;
@@ -143,6 +144,7 @@ export class OnboardingService {
       // Update user presence with onboarding data and AI summary
       await client.models.UserPresence.update({
         userId: user.userId,
+        fullName: data.fullName,
         jobRole: data.jobRole,
         companyName: data.companyName,
         industry: data.industry,

@@ -198,10 +198,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   };
 
   // Sign Up
-  const handleSignUp = async (
-    email: string,
-    password: string
-  ) => {
+  const handleSignUp = async (email: string, password: string) => {
     try {
       setLoading(true);
       setError(null);

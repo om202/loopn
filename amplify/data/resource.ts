@@ -197,6 +197,7 @@ const schema = a
         activeChatId: a.id(), // Which conversation they're actively viewing (null if not in any chat)
         lastChatActivity: a.datetime(), // Last time they were active in a chat window
         // User onboarding fields
+        fullName: a.string(),
         jobRole: a.string(),
         companyName: a.string(),
         industry: a.string(),

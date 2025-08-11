@@ -36,7 +36,7 @@ export default function SignUpForm({
 
   // Password validation state
   const [passwordFocused, setPasswordFocused] = useState(false);
-  
+
   // Password visibility state
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -82,14 +82,27 @@ export default function SignUpForm({
 
   return (
     <div className='w-full'>
+      {/* Sign in prompt at the top */}
+      <div className='text-center mb-6 p-4 bg-zinc-50 rounded-xl border border-zinc-200'>
+        <span className='text-sm text-zinc-700 mr-3 font-medium'>Already have an account?</span>
+        <button
+          type='button'
+          onClick={() => {
+            clearError();
+            onSwitchToSignIn();
+          }}
+          className='text-sm text-brand-500 hover:text-brand-700 transition-colors'
+        >
+          Sign in
+        </button>
+      </div>
+
       <form onSubmit={handleSubmit} className='space-y-5'>
         {error && (
           <div className='p-4 text-sm text-b_red-500 bg-b_red-100 border border-b_red-200 rounded-xl'>
             {error}
           </div>
         )}
-
-
 
         <div>
           <label
@@ -238,18 +251,7 @@ export default function SignUpForm({
           {isLoading ? 'Creating account...' : 'Create Account'}
         </button>
 
-        <div className='text-center pt-2 border-t border-zinc-200'>
-          <span className='text-sm text-zinc-900'>
-            Already have an account?{' '}
-          </span>
-          <button
-            type='button'
-            onClick={onSwitchToSignIn}
-            className='text-sm text-brand-500 hover:text-brand-700 font-medium transition-colors'
-          >
-            Sign in
-          </button>
-        </div>
+
       </form>
     </div>
   );

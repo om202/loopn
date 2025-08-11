@@ -22,6 +22,7 @@ async function ensureAmplifyReady(): Promise<void> {
 const PROFILE_SUMMARY_STORAGE_KEY_PREFIX = 'loopn_profile_summary_';
 
 export interface UserProfile {
+  fullName?: string;
   jobRole?: string;
   companyName?: string;
   industry?: string;
@@ -208,6 +209,7 @@ export class UserProfileService {
 
       if (userPresence?.data) {
         return {
+          fullName: userPresence.data.fullName || undefined,
           jobRole: userPresence.data.jobRole || undefined,
           companyName: userPresence.data.companyName || undefined,
           industry: userPresence.data.industry || undefined,

@@ -33,6 +33,21 @@ export default function SignInForm({
 
   return (
     <div className='w-full'>
+      {/* Sign up prompt at the top */}
+      <div className='text-center mb-6 p-4 bg-zinc-50 rounded-xl border border-zinc-200'>
+        <span className='text-sm text-zinc-700 mr-3 font-medium'>New to Loopn?</span>
+        <button
+          type='button'
+          onClick={() => {
+            clearError();
+            onSwitchToSignUp();
+          }}
+          className='text-sm text-brand-500 hover:text-brand-700 transition-colors'
+        >
+          Create an account
+        </button>
+      </div>
+
       <form onSubmit={handleSubmit} className='space-y-5'>
         {error && (
           <div className='p-4 text-sm text-b_red-500 bg-b_red-100 border border-b_red-200 rounded-xl'>
@@ -112,17 +127,6 @@ export default function SignInForm({
             className='text-sm text-brand-500 hover:text-brand-700 transition-colors'
           >
             Forgot your password?
-          </button>
-        </div>
-
-        <div className='text-center pt-2 border-t border-zinc-200'>
-          <span className='text-sm text-zinc-900'>Don't have an account? </span>
-          <button
-            type='button'
-            onClick={onSwitchToSignUp}
-            className='text-sm text-brand-500 hover:text-brand-700 font-medium transition-colors'
-          >
-            Sign up
           </button>
         </div>
       </form>
