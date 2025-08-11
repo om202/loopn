@@ -2,7 +2,7 @@
 
 import { CONNECTION_STATE_CHANGE, ConnectionState } from 'aws-amplify/api';
 import { Hub } from 'aws-amplify/utils';
-import { userService } from '../services/user.service';
+import { userPresenceService } from '../services/user.service';
 
 /**
  * Formats the time since last activity into user-friendly status buckets
@@ -82,9 +82,8 @@ class SimplePresenceManager {
     this.isSigningOut = true; // Mark that we're in signout process
 
     try {
-      await userService.setUserOffline(
-        this.currentUser.userId,
-        this.currentUser.email
+      await userPresenceService.setUserOffline(
+        this.currentUser.userId
       );
     } catch (error) {
       console.error('Failed to set user offline:', error);
@@ -102,8 +101,8 @@ class SimplePresenceManager {
     if (!this.isSigningOut) {
       setTimeout(() => {
         if (!this.isSigningOut && this.isInitialized) {
-          userService
-            .setUserOnline(this.currentUser!.userId, this.currentUser!.email)
+          userPresenceService
+            .setUserOnline(this.currentUser!.userId)
             .catch(error =>
               console.error('Failed to set user online during setup:', error)
             );
@@ -149,12 +148,9 @@ class SimplePresenceManager {
             case 'Disconnected':
               // Only care about disconnections for tab close detection
               if (this.currentUser && !this.isSigningOut) {
-                userService
-                  .setUserOffline(
-                    this.currentUser.userId,
-                    this.currentUser.email
-                  )
-                  .catch(error =>
+                userPresenceService
+                  .setUserOffline(this.currentUser.userId)
+                  .catch((error: unknown) =>
                     console.error(
                       'Failed to set user offline on disconnect:',
                       error
@@ -183,8 +179,8 @@ class SimplePresenceManager {
         // Page became hidden - start timer to set offline
         this.visibilityTimeout = setTimeout(() => {
           if (this.currentUser) {
-            userService
-              .setUserOffline(this.currentUser.userId, this.currentUser.email)
+            userPresenceService
+              .setUserOffline(this.currentUser.userId)
               .catch(error =>
                 console.error('Failed to set user offline when hidden:', error)
               );
@@ -199,8 +195,8 @@ class SimplePresenceManager {
 
         // Set user back online when they return to tab (only if not signing out)
         if (!this.isSigningOut) {
-          userService
-            .setUserOnline(this.currentUser.userId, this.currentUser.email)
+          userPresenceService
+            .setUserOnline(this.currentUser.userId)
             .catch(error =>
               console.error(
                 'Failed to set user online after visibility change:',
@@ -225,8 +221,8 @@ class SimplePresenceManager {
     const handlePageHide = () => {
       if (this.currentUser && !this.isSigningOut) {
         // Best effort attempt to set offline
-        userService
-          .setUserOffline(this.currentUser.userId, this.currentUser.email)
+        userPresenceService
+          .setUserOffline(this.currentUser.userId)
           .catch(() => {
             // Ignore errors - server timeout will handle it
           });
@@ -245,8 +241,8 @@ class SimplePresenceManager {
     this.heartbeatInterval = setInterval(() => {
       if (this.currentUser && !this.isSigningOut && !document.hidden) {
         // Send heartbeat - updates lastSeen timestamp
-        userService
-          .setUserOnline(this.currentUser.userId, this.currentUser.email)
+        userPresenceService
+          .setUserOnline(this.currentUser.userId)
           .catch(error => {
             console.error('Heartbeat failed:', error);
           });

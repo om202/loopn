@@ -5,10 +5,13 @@ type UserPresence = Schema['UserPresence']['type'];
 type DataResult<T> = { data: T | null; error: string | null };
 type ListResult<T> = { data: T[]; error: string | null };
 
-export class UserService {
+/**
+ * UserPresenceService - Handles only online/offline status and chat activity
+ * For profile data, use UserProfileService instead
+ */
+export class UserPresenceService {
   async updateUserPresence(
     userId: string,
-    email: string,
     status: 'ONLINE' | 'OFFLINE' | 'BUSY'
   ): Promise<DataResult<UserPresence>> {
     try {
@@ -19,10 +22,10 @@ export class UserService {
       if (existingResult.data) {
         const result = await getClient().models.UserPresence.update({
           userId,
-          email,
           status,
           isOnline: status === 'ONLINE',
           lastSeen: new Date().toISOString(),
+          lastHeartbeat: new Date().toISOString(),
         });
 
         return {
@@ -33,10 +36,10 @@ export class UserService {
 
       const result = await getClient().models.UserPresence.create({
         userId,
-        email,
         status,
         isOnline: status === 'ONLINE',
         lastSeen: new Date().toISOString(),
+        lastHeartbeat: new Date().toISOString(),
       });
 
       return {
@@ -113,25 +116,45 @@ export class UserService {
     }
   }
 
-  async setUserOffline(
-    userId: string,
-    email: string
-  ): Promise<DataResult<UserPresence>> {
-    return this.updateUserPresence(userId, email, 'OFFLINE');
+  async setUserOffline(userId: string): Promise<DataResult<UserPresence>> {
+    return this.updateUserPresence(userId, 'OFFLINE');
   }
 
-  async setUserOnline(
-    userId: string,
-    email: string
-  ): Promise<DataResult<UserPresence>> {
-    return this.updateUserPresence(userId, email, 'ONLINE');
+  async setUserOnline(userId: string): Promise<DataResult<UserPresence>> {
+    return this.updateUserPresence(userId, 'ONLINE');
   }
 
-  async setUserBusy(
+  async setUserBusy(userId: string): Promise<DataResult<UserPresence>> {
+    return this.updateUserPresence(userId, 'BUSY');
+  }
+
+  /**
+   * Update user's active chat
+   */
+  async updateActiveChat(
     userId: string,
-    email: string
+    activeChatId?: string
   ): Promise<DataResult<UserPresence>> {
-    return this.updateUserPresence(userId, email, 'BUSY');
+    try {
+      const result = await getClient().models.UserPresence.update({
+        userId,
+        activeChatId: activeChatId || null,
+        lastChatActivity: new Date().toISOString(),
+      });
+
+      return {
+        data: result.data,
+        error: null,
+      };
+    } catch (error) {
+      return {
+        data: null,
+        error:
+          error instanceof Error
+            ? error.message
+            : 'Failed to update active chat',
+      };
+    }
   }
 
   observeOnlineUsers(
@@ -190,4 +213,4 @@ export class UserService {
   }
 }
 
-export const userService = new UserService();
+export const userPresenceService = new UserPresenceService();

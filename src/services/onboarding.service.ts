@@ -3,6 +3,7 @@ import type { Schema } from '@/../../amplify/data/resource';
 import { getCurrentUser } from 'aws-amplify/auth';
 import { uploadData } from 'aws-amplify/storage';
 import { amplifyInitialization } from '../lib/amplify-initialization';
+import { userProfileService } from './user-profile.service';
 
 export interface OnboardingData {
   fullName: string;
@@ -58,29 +59,29 @@ export class OnboardingService {
         throw new Error('User not authenticated');
       }
 
-      const client = generateClient<Schema>();
-      const userPresence = await client.models.UserPresence.get({
-        userId: user.userId,
-      });
+      const userProfileResult = await userProfileService.getUserProfile(user.userId);
 
-      if (userPresence?.data) {
-        const isComplete = userPresence.data.isOnboardingComplete || false;
+      if (userProfileResult.data) {
+        const userProfile = userProfileResult.data;
+        const isComplete = userProfile.isOnboardingComplete || false;
         const status: UserOnboardingStatus = {
           isOnboardingComplete: isComplete,
           onboardingData: isComplete
             ? {
-                jobRole: userPresence.data.jobRole || '',
-                companyName: userPresence.data.companyName || '',
-                industry: userPresence.data.industry || '',
-                yearsOfExperience: userPresence.data.yearsOfExperience || 0,
-                education: userPresence.data.education || '',
-                about: userPresence.data.about || '',
-                interests: (userPresence.data.interests || []).filter(
-                  (interest): interest is string => interest !== null
+                fullName: userProfile.fullName || '',
+                jobRole: userProfile.jobRole || '',
+                companyName: userProfile.companyName || '',
+                industry: userProfile.industry || '',
+                yearsOfExperience: userProfile.yearsOfExperience || 0,
+                education: userProfile.education || '',
+                about: userProfile.about || '',
+                interests: (userProfile.interests || []).filter(
+                  (interest: string | null): interest is string => interest !== null
                 ),
-                skills: (userPresence.data.skills || []).filter(
-                  (skill): skill is string => skill !== null
+                skills: (userProfile.skills || []).filter(
+                  (skill: string | null): skill is string => skill !== null
                 ),
+                profilePictureUrl: userProfile.profilePictureUrl || undefined,
               }
             : undefined,
         };
@@ -171,9 +172,8 @@ export class OnboardingService {
         anonymousSummary = `${data.jobRole} with ${data.yearsOfExperience} years of experience in ${data.industry}. Skills include ${skillsSnippet || 'N/A'}. Interested in ${interestsSnippet || 'varied topics'}.`;
       }
 
-      // Update user presence with onboarding data and AI summary
-      await client.models.UserPresence.update({
-        userId: user.userId,
+      // Create user profile with onboarding data and AI summary
+      await userProfileService.createUserProfile(user.userId, user.signInDetails?.loginId || '', {
         fullName: data.fullName,
         jobRole: data.jobRole,
         companyName: data.companyName,
@@ -183,12 +183,14 @@ export class OnboardingService {
         about: data.about,
         interests: data.interests,
         skills: data.skills,
-        isOnboardingComplete: true,
-        onboardingCompletedAt: new Date().toISOString(),
-        anonymousSummary: anonymousSummary,
         profilePictureUrl: profilePictureUrl,
         hasProfilePicture: hasProfilePicture,
       });
+
+      // Update the profile with AI summary
+      if (anonymousSummary) {
+        await userProfileService.updateAnonymousSummary(user.userId, anonymousSummary);
+      }
 
       // Update localStorage
       const status: UserOnboardingStatus = {

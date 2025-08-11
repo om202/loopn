@@ -183,20 +183,12 @@ const schema = a
         index('userId').sortKeys(['timestamp']),
       ]),
 
-    // User online presence - simplified status
-    UserPresence: a
+    // User profile data - all profile and onboarding information
+    UserProfile: a
       .model({
         userId: a.string().required(),
-        email: a.string(), // Made nullable to handle existing records
-        isOnline: a.boolean().default(false),
-        lastSeen: a.datetime(),
-        status: a.enum(['ONLINE', 'OFFLINE', 'BUSY']),
-        // For heartbeat mechanism
-        lastHeartbeat: a.datetime(),
-        // Chat window activity tracking
-        activeChatId: a.id(), // Which conversation they're actively viewing (null if not in any chat)
-        lastChatActivity: a.datetime(), // Last time they were active in a chat window
-        // User onboarding fields
+        email: a.string(),
+        // Profile information
         fullName: a.string(),
         jobRole: a.string(),
         companyName: a.string(),
@@ -206,13 +198,14 @@ const schema = a
         about: a.string(),
         interests: a.string().array(),
         skills: a.string().array(),
-        isOnboardingComplete: a.boolean().default(false),
-        onboardingCompletedAt: a.datetime(),
-        anonymousSummary: a.string(),
         // Profile picture fields
         profilePictureUrl: a.string(), // S3 URL for uploaded profile picture
         profilePictureThumbnailUrl: a.string(), // Optimized thumbnail version
         hasProfilePicture: a.boolean().default(false), // Quick check for avatar display
+        // Onboarding status
+        isOnboardingComplete: a.boolean().default(false),
+        onboardingCompletedAt: a.datetime(),
+        anonymousSummary: a.string(),
         // TODO: Later add fields for AI matching:
         // - aiGeneratedDescription: a.string()
         // - isAvailableForChat: a.boolean()
@@ -220,10 +213,31 @@ const schema = a
       .identifier(['userId'])
       .authorization(allow => [allow.authenticated()])
       .secondaryIndexes(index => [
-        index('status'),
-        index('activeChatId'), // Find users actively viewing a specific chat
+        index('industry'), // For matching by industry
+        index('onboardingCompletedAt'), // For finding completed profiles by date
         // TODO: Later add index for AI matching:
         // index('isAvailableForChat').sortKeys(['lastSeen'])
+      ]),
+
+    // User presence - only online/offline status and chat activity
+    UserPresence: a
+      .model({
+        userId: a.string().required(),
+        // Presence status
+        isOnline: a.boolean().default(false),
+        status: a.enum(['ONLINE', 'OFFLINE', 'BUSY']),
+        lastSeen: a.datetime(),
+        lastHeartbeat: a.datetime(),
+        // Chat window activity tracking
+        activeChatId: a.id(), // Which conversation they're actively viewing (null if not in any chat)
+        lastChatActivity: a.datetime(), // Last time they were active in a chat window
+      })
+      .identifier(['userId'])
+      .authorization(allow => [allow.authenticated()])
+      .secondaryIndexes(index => [
+        index('status'),
+        index('activeChatId'), // Find users actively viewing a specific chat
+        index('lastSeen'), // For finding recently active users
       ]),
 
     // Notification system for persistent notification storage
