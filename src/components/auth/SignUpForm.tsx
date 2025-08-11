@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { Mail, Lock, User, Check, X } from 'lucide-react';
+import { Mail, Lock, Check, X } from 'lucide-react';
 
 interface SignUpFormProps {
   onSwitchToSignIn: () => void;
@@ -32,8 +32,6 @@ export default function SignUpForm({
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [givenName, setGivenName] = useState('');
-  const [familyName, setFamilyName] = useState('');
   const { handleSignUp, isLoading, error, clearError } = useAuth();
 
   // Password validation state
@@ -70,7 +68,7 @@ export default function SignUpForm({
       return;
     }
 
-    await handleSignUp(email, password, givenName, familyName);
+    await handleSignUp(email, password);
 
     // If successful, go to confirmation
     if (!error) {
@@ -87,46 +85,7 @@ export default function SignUpForm({
           </div>
         )}
 
-        <div className='grid grid-cols-2 gap-4'>
-          <div>
-            <label
-              htmlFor='givenName'
-              className='block text-sm font-medium text-zinc-900 mb-3'
-            >
-              First name
-            </label>
-            <div className='relative'>
-              <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-                <User className='h-5 w-5 text-zinc-500' />
-              </div>
-              <input
-                id='givenName'
-                type='text'
-                value={givenName}
-                onChange={e => setGivenName(e.target.value)}
-                className='w-full pl-10 pr-4 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white'
-                placeholder='First'
-              />
-            </div>
-          </div>
 
-          <div>
-            <label
-              htmlFor='familyName'
-              className='block text-sm font-medium text-zinc-900 mb-3'
-            >
-              Last name
-            </label>
-            <input
-              id='familyName'
-              type='text'
-              value={familyName}
-              onChange={e => setFamilyName(e.target.value)}
-              className='w-full px-4 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white'
-              placeholder='Last'
-            />
-          </div>
-        </div>
 
         <div>
           <label

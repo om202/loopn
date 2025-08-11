@@ -200,24 +200,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
   // Sign Up
   const handleSignUp = async (
     email: string,
-    password: string,
-    givenName?: string,
-    familyName?: string
+    password: string
   ) => {
     try {
       setLoading(true);
       setError(null);
 
-      const attributes: Record<string, string> = {};
-      if (givenName) attributes.given_name = givenName;
-      if (familyName) attributes.family_name = familyName;
-
       const signUpResult = await signUp({
         username: email,
         password,
-        options: {
-          userAttributes: attributes,
-        },
       });
 
       console.log('Sign up result:', signUpResult);

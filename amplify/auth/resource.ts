@@ -24,13 +24,5 @@ export const auth = defineAuth({
       required: true,
       mutable: true,
     },
-    givenName: {
-      required: false,
-      mutable: true,
-    },
-    familyName: {
-      required: false,
-      mutable: true,
-    },
   },
 });
