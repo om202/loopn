@@ -360,100 +360,138 @@ export default function UserCard({
                 <span>Loading profile details...</span>
               </div>
             ) : fullProfile ? (
-              <div className='text-sm text-zinc-900 leading-relaxed bg-zinc-100 rounded-lg p-4 border border-zinc-200 space-y-3'>
-                <div className='font-semibold mb-2'>Profile Details</div>
-                {fullProfile.fullName && (
+              <div className='space-y-5'>
+                {/* Professional Info Section */}
+                {(fullProfile.jobRole ||
+                  fullProfile.companyName ||
+                  fullProfile.industry ||
+                  fullProfile.yearsOfExperience !== null) && (
                   <div>
-                    <span className='text-xs font-medium text-zinc-500'>
-                      Name:
-                    </span>
-                    <p className='text-sm text-zinc-700'>
-                      {fullProfile.fullName}
-                    </p>
-                  </div>
-                )}
-                {fullProfile.jobRole && (
-                  <div>
-                    <span className='text-xs font-medium text-zinc-500'>
-                      Role:
-                    </span>
-                    <p className='text-sm text-zinc-700'>
-                      {fullProfile.jobRole}
-                    </p>
-                  </div>
-                )}
-                {fullProfile.companyName && (
-                  <div>
-                    <span className='text-xs font-medium text-zinc-500'>
-                      Company:
-                    </span>
-                    <p className='text-sm text-zinc-700'>
-                      {fullProfile.companyName}
-                    </p>
-                  </div>
-                )}
-                {fullProfile.industry && (
-                  <div>
-                    <span className='text-xs font-medium text-zinc-500'>
-                      Industry:
-                    </span>
-                    <p className='text-sm text-zinc-700'>
-                      {fullProfile.industry}
-                    </p>
-                  </div>
-                )}
-                {fullProfile.yearsOfExperience !== null &&
-                  fullProfile.yearsOfExperience !== undefined && (
-                    <div>
-                      <span className='text-xs font-medium text-zinc-500'>
-                        Experience:
-                      </span>
-                      <p className='text-sm text-zinc-700'>
-                        {fullProfile.yearsOfExperience} years
-                      </p>
+                    <h4 className='text-sm font-semibold text-zinc-900 mb-3 border-b border-zinc-100 pb-2'>
+                      Profile Details
+                    </h4>
+                    <div className='space-y-3'>
+                      {fullProfile.jobRole && (
+                        <div>
+                          <dt className='text-xs font-medium text-zinc-500 mb-1'>
+                            Role
+                          </dt>
+                          <dd className='text-sm text-zinc-900'>
+                            {fullProfile.jobRole}
+                          </dd>
+                        </div>
+                      )}
+                      {fullProfile.companyName && (
+                        <div>
+                          <dt className='text-xs font-medium text-zinc-500 mb-1'>
+                            Company
+                          </dt>
+                          <dd className='text-sm text-zinc-900'>
+                            {fullProfile.companyName}
+                          </dd>
+                        </div>
+                      )}
+                      {fullProfile.industry && (
+                        <div>
+                          <dt className='text-xs font-medium text-zinc-500 mb-1'>
+                            Industry
+                          </dt>
+                          <dd className='text-sm text-zinc-900'>
+                            {fullProfile.industry}
+                          </dd>
+                        </div>
+                      )}
+                      {fullProfile.yearsOfExperience !== null &&
+                        fullProfile.yearsOfExperience !== undefined && (
+                          <div>
+                            <dt className='text-xs font-medium text-zinc-500 mb-1'>
+                              Experience
+                            </dt>
+                            <dd className='text-sm text-zinc-900'>
+                              {fullProfile.yearsOfExperience} years
+                            </dd>
+                          </div>
+                        )}
                     </div>
-                  )}
+                  </div>
+                )}
+
+                {/* Education Section */}
                 {fullProfile.education && (
                   <div>
-                    <span className='text-xs font-medium text-zinc-500'>
-                      Education:
-                    </span>
-                    <p className='text-sm text-zinc-700'>
-                      {fullProfile.education}
-                    </p>
+                    <h4 className='text-sm font-semibold text-zinc-900 mb-3 border-b border-zinc-100 pb-2'>
+                      Education
+                    </h4>
+                    <div>
+                      <dd className='text-sm text-zinc-900'>
+                        {fullProfile.education}
+                      </dd>
+                    </div>
                   </div>
                 )}
+
+                {/* About Section */}
                 {fullProfile.about && (
                   <div>
-                    <span className='text-xs font-medium text-zinc-500'>
-                      About:
-                    </span>
-                    <p className='text-sm text-zinc-700'>{fullProfile.about}</p>
+                    <h4 className='text-sm font-semibold text-zinc-900 mb-3 border-b border-zinc-100 pb-2'>
+                      About
+                    </h4>
+                    <div>
+                      <dd className='text-sm text-zinc-900 leading-relaxed'>
+                        {fullProfile.about}
+                      </dd>
+                    </div>
                   </div>
                 )}
-                {fullProfile.interests && fullProfile.interests.length > 0 && (
+
+                {/* Skills & Interests Section */}
+                {((fullProfile.skills && fullProfile.skills.length > 0) ||
+                  (fullProfile.interests && fullProfile.interests.length > 0)) && (
                   <div>
-                    <span className='text-xs font-medium text-zinc-500'>
-                      Interests:
-                    </span>
-                    <p className='text-sm text-zinc-700'>
-                      {fullProfile.interests.join(', ')}
-                    </p>
-                  </div>
-                )}
-                {fullProfile.skills && fullProfile.skills.length > 0 && (
-                  <div>
-                    <span className='text-xs font-medium text-zinc-500'>
-                      Skills:
-                    </span>
-                    <p className='text-sm text-zinc-700'>
-                      {fullProfile.skills.join(', ')}
-                    </p>
+                    <h4 className='text-sm font-semibold text-zinc-900 mb-3 border-b border-zinc-100 pb-2'>
+                      Skills & Interests
+                    </h4>
+                    <div className='space-y-3'>
+                      {fullProfile.skills && fullProfile.skills.length > 0 && (
+                        <div>
+                          <dt className='text-xs font-medium text-zinc-500 mb-2'>
+                            Skills
+                          </dt>
+                          <dd className='flex flex-wrap gap-2'>
+                            {fullProfile.skills.map((skill, index) => (
+                              <span
+                                key={index}
+                                className='px-2 py-1 text-xs bg-blue-50 text-blue-700 rounded-md border border-blue-100'
+                              >
+                                {skill}
+                              </span>
+                            ))}
+                          </dd>
+                        </div>
+                      )}
+                      {fullProfile.interests && fullProfile.interests.length > 0 && (
+                        <div>
+                          <dt className='text-xs font-medium text-zinc-500 mb-2'>
+                            Interests
+                          </dt>
+                          <dd className='flex flex-wrap gap-2'>
+                            {fullProfile.interests.map((interest, index) => (
+                              <span
+                                key={index}
+                                className='px-2 py-1 text-xs bg-green-50 text-green-700 rounded-md border border-green-100'
+                              >
+                                {interest}
+                              </span>
+                            ))}
+                          </dd>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
             ) : (
-              <div className='text-sm text-zinc-500'>
+              <div className='text-sm text-zinc-500 text-center py-4'>
                 No profile details available.
               </div>
             )}
