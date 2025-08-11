@@ -78,7 +78,9 @@ export default function AccountContent() {
             profilePictureUrl={
               onboardingStatus?.onboardingData?.profilePictureUrl
             }
-            hasProfilePicture={!!onboardingStatus?.onboardingData?.profilePictureUrl}
+            hasProfilePicture={
+              !!onboardingStatus?.onboardingData?.profilePictureUrl
+            }
             size='md'
           />
           <div className='flex-1'>

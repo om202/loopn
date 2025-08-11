@@ -277,7 +277,9 @@ export default function DashboardSidebar({
                   profilePictureUrl={
                     onboardingStatus?.onboardingData?.profilePictureUrl
                   }
-                  hasProfilePicture={!!onboardingStatus?.onboardingData?.profilePictureUrl}
+                  hasProfilePicture={
+                    !!onboardingStatus?.onboardingData?.profilePictureUrl
+                  }
                   size='xs'
                 />
               </div>
@@ -327,7 +329,9 @@ export default function DashboardSidebar({
                         profilePictureUrl={
                           onboardingStatus?.onboardingData?.profilePictureUrl
                         }
-                        hasProfilePicture={!!onboardingStatus?.onboardingData?.profilePictureUrl}
+                        hasProfilePicture={
+                          !!onboardingStatus?.onboardingData?.profilePictureUrl
+                        }
                         size='xs'
                       />
                     ) : (

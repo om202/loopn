@@ -11,6 +11,12 @@ const nextConfig = {
         pathname: '/**',
       },
     ],
+    // Optimize images for better caching and performance
+    formats: ['image/webp', 'image/avif'],
+    deviceSizes: [16, 32, 48, 64, 96, 128],
+    imageSizes: [16, 32, 48, 64, 96, 128],
+    // Cache optimized images for 1 year
+    minimumCacheTTL: 31536000,
   },
   async rewrites() {
     return [

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { User } from 'lucide-react';
-import { getUrl } from 'aws-amplify/storage';
+import { imageUrlCache } from '@/lib/image-cache';
 
 interface UserAvatarProps {
   email?: string | null;
@@ -26,8 +26,6 @@ export default function UserAvatar({
   status,
   className = '',
 }: UserAvatarProps) {
-
-
   const getAvatarSize = () => {
     switch (size) {
       case 'xs':
@@ -116,26 +114,36 @@ export default function UserAvatar({
 
   const [imageError, setImageError] = useState(false);
   const [resolvedImageUrl, setResolvedImageUrl] = useState<string | null>(null);
+  const [isLoadingUrl, setIsLoadingUrl] = useState(false);
 
-  // Convert S3 key to displayable URL
+  // Convert S3 key to displayable URL using cache
   useEffect(() => {
     const resolveImageUrl = async () => {
       if (profilePictureUrl && hasProfilePicture) {
+        setIsLoadingUrl(true);
+        const startTime = Date.now();
+        
         try {
-          // Check if it's already a full URL
-          if (profilePictureUrl.startsWith('http')) {
-            setResolvedImageUrl(profilePictureUrl);
+          const url = await imageUrlCache.getResolvedUrl(profilePictureUrl);
+          const duration = Date.now() - startTime;
+          
+          // Log cache performance (you can remove this later)
+          if (duration < 10) {
+            console.log(`🚀 Avatar loaded from cache in ${duration}ms:`, profilePictureUrl);
           } else {
-            // Convert S3 key to URL
-            const result = await getUrl({ key: profilePictureUrl });
-            setResolvedImageUrl(result.url.toString());
+            console.log(`📡 Avatar resolved from AWS in ${duration}ms:`, profilePictureUrl);
           }
+          
+          setResolvedImageUrl(url);
         } catch (error) {
           console.error('Error resolving profile picture URL:', error);
           setResolvedImageUrl(null);
+        } finally {
+          setIsLoadingUrl(false);
         }
       } else {
         setResolvedImageUrl(null);
+        setIsLoadingUrl(false);
       }
     };
 
@@ -143,7 +151,9 @@ export default function UserAvatar({
   }, [profilePictureUrl, hasProfilePicture]);
 
   const shouldShowProfileImage =
-    hasProfilePicture && resolvedImageUrl && !imageError;
+    hasProfilePicture && resolvedImageUrl && !imageError && !isLoadingUrl;
+
+  const shouldShowLoadingState = hasProfilePicture && isLoadingUrl;
 
   return (
     <div className={`relative ${className} cursor-pointer`}>
@@ -166,7 +176,14 @@ export default function UserAvatar({
               height: '100%',
             }}
             onError={() => setImageError(true)}
+            priority={size === 'lg' || size === 'xl'} // Prioritize larger avatars
           />
+        ) : shouldShowLoadingState ? (
+          <div className='bg-gray-100 w-full h-full flex items-center justify-center'>
+            <div className='animate-pulse'>
+              <User className='w-3/5 h-3/5 text-gray-300' />
+            </div>
+          </div>
         ) : (
           <div className='bg-gray-100 w-full h-full flex items-center justify-center'>
             <User className='w-3/5 h-3/5 text-gray-400' />
