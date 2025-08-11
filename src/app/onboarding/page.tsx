@@ -27,7 +27,6 @@ export default function OnboardingPage() {
   const [error, setError] = useState('');
   const [skillInput, setSkillInput] = useState('');
 
-
   // Form data
   const [formData, setFormData] = useState<Partial<OnboardingData>>({
     fullName: '',
@@ -42,7 +41,7 @@ export default function OnboardingPage() {
     profilePictureFile: undefined,
   });
 
-    // Handle authentication and onboarding status
+  // Handle authentication and onboarding status
   useEffect(() => {
     if (authStatus === 'unauthenticated') {
       router.replace('/auth');
@@ -163,7 +162,7 @@ export default function OnboardingPage() {
     return <LoadingContainer />;
   }
 
-    if (
+  if (
     authStatus === 'unauthenticated' ||
     (authStatus === 'authenticated' && onboardingStatus?.isOnboardingComplete)
   ) {

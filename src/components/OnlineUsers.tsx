@@ -130,12 +130,18 @@ export default function OnlineUsers({
             new UserProfileService().getUserProfile(firstUser.userId),
           ]);
           setProfileSidebarSummary(summary);
-          setProfileSidebarUserProfile(profileResult.data ? {
-            fullName: profileResult.data.fullName || undefined,
-            email: profileResult.data.email || undefined,
-            profilePictureUrl: profileResult.data.profilePictureUrl || undefined,
-            hasProfilePicture: profileResult.data.hasProfilePicture || false,
-          } : null);
+          setProfileSidebarUserProfile(
+            profileResult.data
+              ? {
+                  fullName: profileResult.data.fullName || undefined,
+                  email: profileResult.data.email || undefined,
+                  profilePictureUrl:
+                    profileResult.data.profilePictureUrl || undefined,
+                  hasProfilePicture:
+                    profileResult.data.hasProfilePicture || false,
+                }
+              : null
+          );
         } catch (e) {
           console.error('Failed to load profile summary for sidebar', e);
         } finally {
@@ -413,12 +419,17 @@ export default function OnlineUsers({
         new UserProfileService().getUserProfile(userPresence.userId),
       ]);
       setProfileSidebarSummary(summary);
-      setProfileSidebarUserProfile(profileResult.data ? {
-        fullName: profileResult.data.fullName || undefined,
-        email: profileResult.data.email || undefined,
-        profilePictureUrl: profileResult.data.profilePictureUrl || undefined,
-        hasProfilePicture: profileResult.data.hasProfilePicture || false,
-      } : null);
+      setProfileSidebarUserProfile(
+        profileResult.data
+          ? {
+              fullName: profileResult.data.fullName || undefined,
+              email: profileResult.data.email || undefined,
+              profilePictureUrl:
+                profileResult.data.profilePictureUrl || undefined,
+              hasProfilePicture: profileResult.data.hasProfilePicture || false,
+            }
+          : null
+      );
     } catch (e) {
       console.error('Failed to load profile summary for sidebar', e);
     } finally {
@@ -451,12 +462,17 @@ export default function OnlineUsers({
         new UserProfileService().getUserProfile(userPresence.userId),
       ]);
       setProfileSidebarSummary(summary);
-      setProfileSidebarUserProfile(profileResult.data ? {
-        fullName: profileResult.data.fullName || undefined,
-        email: profileResult.data.email || undefined,
-        profilePictureUrl: profileResult.data.profilePictureUrl || undefined,
-        hasProfilePicture: profileResult.data.hasProfilePicture || false,
-      } : null);
+      setProfileSidebarUserProfile(
+        profileResult.data
+          ? {
+              fullName: profileResult.data.fullName || undefined,
+              email: profileResult.data.email || undefined,
+              profilePictureUrl:
+                profileResult.data.profilePictureUrl || undefined,
+              hasProfilePicture: profileResult.data.hasProfilePicture || false,
+            }
+          : null
+      );
     } catch (e) {
       console.error('Failed to load profile summary for sidebar', e);
     } finally {
@@ -550,8 +566,12 @@ export default function OnlineUsers({
                 <UserAvatar
                   email={profileSidebarUserProfile?.email}
                   userId={profileSidebarUser.userId}
-                  profilePictureUrl={profileSidebarUserProfile?.profilePictureUrl}
-                  hasProfilePicture={profileSidebarUserProfile?.hasProfilePicture}
+                  profilePictureUrl={
+                    profileSidebarUserProfile?.profilePictureUrl
+                  }
+                  hasProfilePicture={
+                    profileSidebarUserProfile?.hasProfilePicture
+                  }
                   size='lg'
                   showStatus
                   status={
@@ -569,9 +589,9 @@ export default function OnlineUsers({
                 <div className='mt-4'>
                   <div className='mb-1'>
                     <div className='font-medium text-zinc-900 text-base'>
-                      {profileSidebarUserProfile?.fullName || 
-                       profileSidebarUserProfile?.email || 
-                       `User${profileSidebarUser.userId.slice(-4)}`}
+                      {profileSidebarUserProfile?.fullName ||
+                        profileSidebarUserProfile?.email ||
+                        `User${profileSidebarUser.userId.slice(-4)}`}
                     </div>
                   </div>
                   <div className='text-sm text-zinc-500'>

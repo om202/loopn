@@ -92,12 +92,18 @@ export default function UserCard({
 
         if (mounted) {
           setProfileSummary(summary);
-          setUserProfile(profileResult.data ? {
-            fullName: profileResult.data.fullName || undefined,
-            email: profileResult.data.email || undefined,
-            profilePictureUrl: profileResult.data.profilePictureUrl || undefined,
-            hasProfilePicture: profileResult.data.hasProfilePicture || false,
-          } : null);
+          setUserProfile(
+            profileResult.data
+              ? {
+                  fullName: profileResult.data.fullName || undefined,
+                  email: profileResult.data.email || undefined,
+                  profilePictureUrl:
+                    profileResult.data.profilePictureUrl || undefined,
+                  hasProfilePicture:
+                    profileResult.data.hasProfilePicture || false,
+                }
+              : null
+          );
         }
       } catch (error) {
         console.error('Error loading profile data:', error);
