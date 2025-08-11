@@ -19,29 +19,33 @@ const backend = defineBackend({
 });
 
 // Add IAM permissions for Bedrock access
-backend.vectorSearch.resources.lambda.addToRolePolicy({
-  effect: 'Allow',
-  actions: ['bedrock:InvokeModel', 'bedrock:InvokeModelWithResponseStream'],
-  resources: [
-    'arn:aws:bedrock:*::foundation-model/amazon.titan-embed-text-v2:0',
-    'arn:aws:bedrock:*::foundation-model/amazon.titan-embed-text-v1',
-  ],
-});
+backend.vectorSearch.resources.lambda.addToRolePolicy(
+  new PolicyStatement({
+    effect: Effect.ALLOW,
+    actions: ['bedrock:InvokeModel', 'bedrock:InvokeModelWithResponseStream'],
+    resources: [
+      'arn:aws:bedrock:*::foundation-model/amazon.titan-embed-text-v2:0',
+      'arn:aws:bedrock:*::foundation-model/amazon.titan-embed-text-v1',
+    ],
+  })
+);
 
 // Grant permissions to interact with data models
-backend.vectorSearch.resources.lambda.addToRolePolicy({
-  effect: 'Allow',
-  actions: [
-    'dynamodb:Query',
-    'dynamodb:GetItem',
-    'dynamodb:Scan',
-    'dynamodb:UpdateItem',
-  ],
-  resources: [
-    backend.data.resources.tables['UserProfile'].tableArn,
-    `${backend.data.resources.tables['UserProfile'].tableArn}/index/*`,
-  ],
-});
+backend.vectorSearch.resources.lambda.addToRolePolicy(
+  new PolicyStatement({
+    effect: Effect.ALLOW,
+    actions: [
+      'dynamodb:Query',
+      'dynamodb:GetItem',
+      'dynamodb:Scan',
+      'dynamodb:UpdateItem',
+    ],
+    resources: [
+      backend.data.resources.tables['UserProfile'].tableArn,
+      `${backend.data.resources.tables['UserProfile'].tableArn}/index/*`,
+    ],
+  })
+);
 
 // Pass the table name as environment variable
 backend.vectorSearch.addEnvironment(
