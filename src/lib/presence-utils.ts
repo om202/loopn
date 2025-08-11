@@ -82,9 +82,7 @@ class SimplePresenceManager {
     this.isSigningOut = true; // Mark that we're in signout process
 
     try {
-      await userPresenceService.setUserOffline(
-        this.currentUser.userId
-      );
+      await userPresenceService.setUserOffline(this.currentUser.userId);
     } catch (error) {
       console.error('Failed to set user offline:', error);
     }

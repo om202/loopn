@@ -61,7 +61,8 @@ export class ChatService {
       // Create a notification for the receiver (especially important for offline users)
       if (result.data) {
         // Get requester's information for a more personalized notification
-        const requesterResult = await userPresenceService.getUserPresence(requesterId);
+        const requesterResult =
+          await userPresenceService.getUserPresence(requesterId);
         const requesterName = requesterResult.data?.email
           ? requesterResult.data.email.split('@')[0]
           : `User ${requesterId.slice(-4)}`;

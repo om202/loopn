@@ -59,7 +59,8 @@ export class MessageService {
       if (result.data) {
         try {
           // Get sender's information for notification
-          const senderResult = await userPresenceService.getUserPresence(senderId);
+          const senderResult =
+            await userPresenceService.getUserPresence(senderId);
           const senderEmail = senderResult.data?.email;
           const senderName = senderEmail || `User ${senderId.slice(-4)}`;
 

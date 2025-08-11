@@ -59,7 +59,9 @@ export class OnboardingService {
         throw new Error('User not authenticated');
       }
 
-      const userProfileResult = await userProfileService.getUserProfile(user.userId);
+      const userProfileResult = await userProfileService.getUserProfile(
+        user.userId
+      );
 
       if (userProfileResult.data) {
         const userProfile = userProfileResult.data;
@@ -76,7 +78,8 @@ export class OnboardingService {
                 education: userProfile.education || '',
                 about: userProfile.about || '',
                 interests: (userProfile.interests || []).filter(
-                  (interest: string | null): interest is string => interest !== null
+                  (interest: string | null): interest is string =>
+                    interest !== null
                 ),
                 skills: (userProfile.skills || []).filter(
                   (skill: string | null): skill is string => skill !== null
@@ -173,23 +176,30 @@ export class OnboardingService {
       }
 
       // Create user profile with onboarding data and AI summary
-      await userProfileService.createUserProfile(user.userId, user.signInDetails?.loginId || '', {
-        fullName: data.fullName,
-        jobRole: data.jobRole,
-        companyName: data.companyName,
-        industry: data.industry,
-        yearsOfExperience: data.yearsOfExperience,
-        education: data.education,
-        about: data.about,
-        interests: data.interests,
-        skills: data.skills,
-        profilePictureUrl: profilePictureUrl,
-        hasProfilePicture: hasProfilePicture,
-      });
+      await userProfileService.createUserProfile(
+        user.userId,
+        user.signInDetails?.loginId || '',
+        {
+          fullName: data.fullName,
+          jobRole: data.jobRole,
+          companyName: data.companyName,
+          industry: data.industry,
+          yearsOfExperience: data.yearsOfExperience,
+          education: data.education,
+          about: data.about,
+          interests: data.interests,
+          skills: data.skills,
+          profilePictureUrl: profilePictureUrl,
+          hasProfilePicture: hasProfilePicture,
+        }
+      );
 
       // Update the profile with AI summary
       if (anonymousSummary) {
-        await userProfileService.updateAnonymousSummary(user.userId, anonymousSummary);
+        await userProfileService.updateAnonymousSummary(
+          user.userId,
+          anonymousSummary
+        );
       }
 
       // Update localStorage
