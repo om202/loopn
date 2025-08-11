@@ -15,6 +15,10 @@ import { UserProfileService } from '../../services/user-profile.service';
 
 import DialogContainer from '../DialogContainer';
 import UserAvatar from '../UserAvatar';
+import {
+  ShimmerProvider,
+  ProfileDetails_Shimmer,
+} from '../ShimmerLoader/exports';
 
 type UserPresence = Schema['UserPresence']['type'];
 type Conversation = Schema['Conversation']['type'];
@@ -355,10 +359,9 @@ export default function UserCard({
               {getDisplayName(userPresence, userProfile)}
             </div>
             {loadingProfile ? (
-              <div className='flex items-center gap-2 text-sm text-zinc-500'>
-                <div className='w-3 h-3 bg-zinc-100 rounded-full animate-pulse'></div>
-                <span>Loading profile details...</span>
-              </div>
+              <ShimmerProvider>
+                <ProfileDetails_Shimmer />
+              </ShimmerProvider>
             ) : fullProfile ? (
               <div className='space-y-5'>
                 {/* Professional Info Section */}

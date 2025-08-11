@@ -132,23 +132,30 @@ export default function NotificationItem({
 
     const loadProfileData = async () => {
       // Only load for chat_request notifications where we need user profile data
-      if (notification.type !== 'chat_request' || !notification.data || !('requesterId' in notification.data)) {
+      if (
+        notification.type !== 'chat_request' ||
+        !notification.data ||
+        !('requesterId' in notification.data)
+      ) {
         return;
       }
 
       const chatRequestData = notification.data as ChatRequestWithUser;
       const userId = chatRequestData.requesterId;
-      
+
       if (!userId) return;
 
       try {
-        const profileResult = await new UserProfileService().getUserProfile(userId);
-        
+        const profileResult = await new UserProfileService().getUserProfile(
+          userId
+        );
+
         if (mounted && profileResult.data) {
           setUserProfile({
             fullName: profileResult.data.fullName || undefined,
             email: profileResult.data.email || undefined,
-            profilePictureUrl: profileResult.data.profilePictureUrl || undefined,
+            profilePictureUrl:
+              profileResult.data.profilePictureUrl || undefined,
             hasProfilePicture: profileResult.data.hasProfilePicture || false,
           });
         }

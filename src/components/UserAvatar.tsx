@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { User } from 'lucide-react';
 import { imageUrlCache } from '@/lib/image-cache';
+import { ShimmerProvider, Skeleton } from './ShimmerLoader/exports';
 
 interface UserAvatarProps {
   email?: string | null;
@@ -115,12 +116,15 @@ export default function UserAvatar({
   const [imageError, setImageError] = useState(false);
   const [resolvedImageUrl, setResolvedImageUrl] = useState<string | null>(null);
   const [isLoadingUrl, setIsLoadingUrl] = useState(false);
+  const [isImageLoading, setIsImageLoading] = useState(true);
 
   // Convert S3 key to displayable URL using cache
   useEffect(() => {
     const resolveImageUrl = async () => {
       if (profilePictureUrl && hasProfilePicture) {
         setIsLoadingUrl(true);
+        setIsImageLoading(true);
+        setImageError(false);
         const startTime = Date.now();
 
         try {
@@ -144,12 +148,14 @@ export default function UserAvatar({
         } catch (error) {
           console.error('Error resolving profile picture URL:', error);
           setResolvedImageUrl(null);
+          setIsImageLoading(false);
         } finally {
           setIsLoadingUrl(false);
         }
       } else {
         setResolvedImageUrl(null);
         setIsLoadingUrl(false);
+        setIsImageLoading(false);
       }
     };
 
@@ -157,9 +163,9 @@ export default function UserAvatar({
   }, [profilePictureUrl, hasProfilePicture]);
 
   const shouldShowProfileImage =
-    hasProfilePicture && resolvedImageUrl && !imageError && !isLoadingUrl;
+    hasProfilePicture && resolvedImageUrl && !imageError && !isLoadingUrl && !isImageLoading;
 
-  const shouldShowLoadingState = hasProfilePicture && isLoadingUrl;
+  const shouldShowLoadingState = hasProfilePicture && (isLoadingUrl || isImageLoading);
 
   return (
     <div className={`relative ${className} cursor-pointer`}>
@@ -181,15 +187,26 @@ export default function UserAvatar({
               width: '100%',
               height: '100%',
             }}
-            onError={() => setImageError(true)}
+            onLoadStart={() => setIsImageLoading(true)}
+            onLoad={() => setIsImageLoading(false)}
+            onError={() => {
+              setImageError(true);
+              setIsImageLoading(false);
+            }}
             priority={size === 'lg' || size === 'xl'} // Prioritize larger avatars
           />
         ) : shouldShowLoadingState ? (
-          <div className='bg-gray-100 w-full h-full flex items-center justify-center'>
-            <div className='animate-pulse'>
-              <User className='w-3/5 h-3/5 text-gray-300' />
-            </div>
-          </div>
+          <ShimmerProvider>
+            <Skeleton
+              circle
+              width={getAvatarSize()}
+              height={getAvatarSize()}
+              style={{
+                width: '100%',
+                height: '100%',
+              }}
+            />
+          </ShimmerProvider>
         ) : (
           <div className='bg-gray-100 w-full h-full flex items-center justify-center'>
             <User className='w-3/5 h-3/5 text-gray-400' />

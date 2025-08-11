@@ -17,13 +17,17 @@ import {
   NotificationsContent,
   AccountContent,
 } from './dashboard';
-import LoadingContainer from './LoadingContainer';
 import SearchUser from './SearchUser';
 import { useChatActions } from '../hooks/useChatActions';
 import { useUserCategorization } from '../hooks/useUserCategorization';
 import { useRealtimeOnlineUsers } from '../hooks/realtime';
 import { useChatRequests } from '../hooks/realtime/useChatRequests';
 import { useRealtime } from '../contexts/RealtimeContext';
+import {
+  OnlineUsers_Shimmer,
+  ShimmerProvider,
+  ProfileDetails_Shimmer,
+} from './ShimmerLoader/exports';
 
 type UserPresence = Schema['UserPresence']['type'];
 type Conversation = Schema['Conversation']['type'];
@@ -492,7 +496,11 @@ export default function OnlineUsers({
   }
 
   if (initialLoading) {
-    return <LoadingContainer />;
+    return (
+      <ShimmerProvider>
+        <OnlineUsers_Shimmer userCount={6} />
+      </ShimmerProvider>
+    );
   }
 
   return (
@@ -699,12 +707,9 @@ export default function OnlineUsers({
             <div className='flex-1 overflow-y-auto'>
               <div className='px-6 pb-8'>
                 {profileSidebarLoading ? (
-                  <div className='flex flex-col items-center gap-3 text-sm text-zinc-500'>
-                    <div className='w-4 h-4 bg-zinc-100 rounded-full animate-pulse'></div>
-                    <span className='text-center'>
-                      Loading profile details...
-                    </span>
-                  </div>
+                  <ShimmerProvider>
+                    <ProfileDetails_Shimmer />
+                  </ShimmerProvider>
                 ) : profileSidebarFullProfile ? (
                   <div className='space-y-4'>
                     {/* Professional Info Section */}

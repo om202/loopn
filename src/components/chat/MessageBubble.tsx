@@ -115,13 +115,16 @@ export default function MessageBubble({
       }
 
       try {
-        const profileResult = await new UserProfileService().getUserProfile(otherParticipantId);
-        
+        const profileResult = await new UserProfileService().getUserProfile(
+          otherParticipantId
+        );
+
         if (mounted && profileResult.data) {
           setUserProfile({
             fullName: profileResult.data.fullName || undefined,
             email: profileResult.data.email || undefined,
-            profilePictureUrl: profileResult.data.profilePictureUrl || undefined,
+            profilePictureUrl:
+              profileResult.data.profilePictureUrl || undefined,
             hasProfilePicture: profileResult.data.hasProfilePicture || false,
           });
         }

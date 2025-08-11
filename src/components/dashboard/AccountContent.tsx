@@ -20,7 +20,7 @@ export default function AccountContent() {
 
   const getUserDisplayName = () => {
     let name = '';
-    
+
     // Try to get full name from onboarding data first
     if (onboardingStatus?.onboardingData?.fullName) {
       name = onboardingStatus.onboardingData.fullName;
@@ -37,7 +37,7 @@ export default function AccountContent() {
     else {
       return 'You';
     }
-    
+
     // Add "(You)" to indicate it's the current user
     return `${name} (You)`;
   };
