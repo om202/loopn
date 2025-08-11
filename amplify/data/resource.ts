@@ -267,8 +267,6 @@ const schema = a
         // Get all notifications for a user, sorted by time (newest first)
         index('userId').sortKeys(['timestamp']),
       ]),
-
-
   })
   .authorization(allow => [allow.resource(presenceCleanup)]);
 

@@ -710,58 +710,98 @@ export default function OnlineUsers({
                     <div className='mb-2 font-semibold'>Profile Details</div>
                     {profileSidebarFullProfile.fullName && (
                       <div>
-                        <span className='text-xs font-medium text-zinc-500'>Name:</span>
-                        <p className='text-sm text-zinc-700'>{profileSidebarFullProfile.fullName}</p>
+                        <span className='text-xs font-medium text-zinc-500'>
+                          Name:
+                        </span>
+                        <p className='text-sm text-zinc-700'>
+                          {profileSidebarFullProfile.fullName}
+                        </p>
                       </div>
                     )}
                     {profileSidebarFullProfile.jobRole && (
                       <div>
-                        <span className='text-xs font-medium text-zinc-500'>Role:</span>
-                        <p className='text-sm text-zinc-700'>{profileSidebarFullProfile.jobRole}</p>
+                        <span className='text-xs font-medium text-zinc-500'>
+                          Role:
+                        </span>
+                        <p className='text-sm text-zinc-700'>
+                          {profileSidebarFullProfile.jobRole}
+                        </p>
                       </div>
                     )}
                     {profileSidebarFullProfile.companyName && (
                       <div>
-                        <span className='text-xs font-medium text-zinc-500'>Company:</span>
-                        <p className='text-sm text-zinc-700'>{profileSidebarFullProfile.companyName}</p>
+                        <span className='text-xs font-medium text-zinc-500'>
+                          Company:
+                        </span>
+                        <p className='text-sm text-zinc-700'>
+                          {profileSidebarFullProfile.companyName}
+                        </p>
                       </div>
                     )}
                     {profileSidebarFullProfile.industry && (
                       <div>
-                        <span className='text-xs font-medium text-zinc-500'>Industry:</span>
-                        <p className='text-sm text-zinc-700'>{profileSidebarFullProfile.industry}</p>
+                        <span className='text-xs font-medium text-zinc-500'>
+                          Industry:
+                        </span>
+                        <p className='text-sm text-zinc-700'>
+                          {profileSidebarFullProfile.industry}
+                        </p>
                       </div>
                     )}
-                    {profileSidebarFullProfile.yearsOfExperience !== null && profileSidebarFullProfile.yearsOfExperience !== undefined && (
-                      <div>
-                        <span className='text-xs font-medium text-zinc-500'>Experience:</span>
-                        <p className='text-sm text-zinc-700'>{profileSidebarFullProfile.yearsOfExperience} years</p>
-                      </div>
-                    )}
+                    {profileSidebarFullProfile.yearsOfExperience !== null &&
+                      profileSidebarFullProfile.yearsOfExperience !==
+                        undefined && (
+                        <div>
+                          <span className='text-xs font-medium text-zinc-500'>
+                            Experience:
+                          </span>
+                          <p className='text-sm text-zinc-700'>
+                            {profileSidebarFullProfile.yearsOfExperience} years
+                          </p>
+                        </div>
+                      )}
                     {profileSidebarFullProfile.education && (
                       <div>
-                        <span className='text-xs font-medium text-zinc-500'>Education:</span>
-                        <p className='text-sm text-zinc-700'>{profileSidebarFullProfile.education}</p>
+                        <span className='text-xs font-medium text-zinc-500'>
+                          Education:
+                        </span>
+                        <p className='text-sm text-zinc-700'>
+                          {profileSidebarFullProfile.education}
+                        </p>
                       </div>
                     )}
                     {profileSidebarFullProfile.about && (
                       <div>
-                        <span className='text-xs font-medium text-zinc-500'>About:</span>
-                        <p className='text-sm text-zinc-700'>{profileSidebarFullProfile.about}</p>
+                        <span className='text-xs font-medium text-zinc-500'>
+                          About:
+                        </span>
+                        <p className='text-sm text-zinc-700'>
+                          {profileSidebarFullProfile.about}
+                        </p>
                       </div>
                     )}
-                    {profileSidebarFullProfile.interests && profileSidebarFullProfile.interests.length > 0 && (
-                      <div>
-                        <span className='text-xs font-medium text-zinc-500'>Interests:</span>
-                        <p className='text-sm text-zinc-700'>{profileSidebarFullProfile.interests.join(', ')}</p>
-                      </div>
-                    )}
-                    {profileSidebarFullProfile.skills && profileSidebarFullProfile.skills.length > 0 && (
-                      <div>
-                        <span className='text-xs font-medium text-zinc-500'>Skills:</span>
-                        <p className='text-sm text-zinc-700'>{profileSidebarFullProfile.skills.join(', ')}</p>
-                      </div>
-                    )}
+                    {profileSidebarFullProfile.interests &&
+                      profileSidebarFullProfile.interests.length > 0 && (
+                        <div>
+                          <span className='text-xs font-medium text-zinc-500'>
+                            Interests:
+                          </span>
+                          <p className='text-sm text-zinc-700'>
+                            {profileSidebarFullProfile.interests.join(', ')}
+                          </p>
+                        </div>
+                      )}
+                    {profileSidebarFullProfile.skills &&
+                      profileSidebarFullProfile.skills.length > 0 && (
+                        <div>
+                          <span className='text-xs font-medium text-zinc-500'>
+                            Skills:
+                          </span>
+                          <p className='text-sm text-zinc-700'>
+                            {profileSidebarFullProfile.skills.join(', ')}
+                          </p>
+                        </div>
+                      )}
                   </div>
                 ) : (
                   <div className='text-sm text-zinc-900 leading-relaxed rounded-lg px-3 py-2 bg-zinc-50 text-center'>

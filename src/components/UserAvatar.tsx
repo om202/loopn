@@ -122,18 +122,24 @@ export default function UserAvatar({
       if (profilePictureUrl && hasProfilePicture) {
         setIsLoadingUrl(true);
         const startTime = Date.now();
-        
+
         try {
           const url = await imageUrlCache.getResolvedUrl(profilePictureUrl);
           const duration = Date.now() - startTime;
-          
+
           // Log cache performance (you can remove this later)
           if (duration < 10) {
-            console.log(`🚀 Avatar loaded from cache in ${duration}ms:`, profilePictureUrl);
+            console.log(
+              `🚀 Avatar loaded from cache in ${duration}ms:`,
+              profilePictureUrl
+            );
           } else {
-            console.log(`📡 Avatar resolved from AWS in ${duration}ms:`, profilePictureUrl);
+            console.log(
+              `📡 Avatar resolved from AWS in ${duration}ms:`,
+              profilePictureUrl
+            );
           }
-          
+
           setResolvedImageUrl(url);
         } catch (error) {
           console.error('Error resolving profile picture URL:', error);

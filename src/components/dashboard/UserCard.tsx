@@ -66,7 +66,9 @@ export default function UserCard({
 }: UserCardProps) {
   const [showCancelDialog, setShowCancelDialog] = useState(false);
   const [showProfileDialog, setShowProfileDialog] = useState(false);
-  const [fullProfile, setFullProfile] = useState<Schema['UserProfile']['type'] | null>(null);
+  const [fullProfile, setFullProfile] = useState<
+    Schema['UserProfile']['type'] | null
+  >(null);
   const [loadingProfile, setLoadingProfile] = useState(false);
   const [userProfile, setUserProfile] = useState<{
     fullName?: string;
@@ -362,56 +364,91 @@ export default function UserCard({
                 <div className='font-semibold mb-2'>Profile Details</div>
                 {fullProfile.fullName && (
                   <div>
-                    <span className='text-xs font-medium text-zinc-500'>Name:</span>
-                    <p className='text-sm text-zinc-700'>{fullProfile.fullName}</p>
+                    <span className='text-xs font-medium text-zinc-500'>
+                      Name:
+                    </span>
+                    <p className='text-sm text-zinc-700'>
+                      {fullProfile.fullName}
+                    </p>
                   </div>
                 )}
                 {fullProfile.jobRole && (
                   <div>
-                    <span className='text-xs font-medium text-zinc-500'>Role:</span>
-                    <p className='text-sm text-zinc-700'>{fullProfile.jobRole}</p>
+                    <span className='text-xs font-medium text-zinc-500'>
+                      Role:
+                    </span>
+                    <p className='text-sm text-zinc-700'>
+                      {fullProfile.jobRole}
+                    </p>
                   </div>
                 )}
                 {fullProfile.companyName && (
                   <div>
-                    <span className='text-xs font-medium text-zinc-500'>Company:</span>
-                    <p className='text-sm text-zinc-700'>{fullProfile.companyName}</p>
+                    <span className='text-xs font-medium text-zinc-500'>
+                      Company:
+                    </span>
+                    <p className='text-sm text-zinc-700'>
+                      {fullProfile.companyName}
+                    </p>
                   </div>
                 )}
                 {fullProfile.industry && (
                   <div>
-                    <span className='text-xs font-medium text-zinc-500'>Industry:</span>
-                    <p className='text-sm text-zinc-700'>{fullProfile.industry}</p>
+                    <span className='text-xs font-medium text-zinc-500'>
+                      Industry:
+                    </span>
+                    <p className='text-sm text-zinc-700'>
+                      {fullProfile.industry}
+                    </p>
                   </div>
                 )}
-                {fullProfile.yearsOfExperience !== null && fullProfile.yearsOfExperience !== undefined && (
-                  <div>
-                    <span className='text-xs font-medium text-zinc-500'>Experience:</span>
-                    <p className='text-sm text-zinc-700'>{fullProfile.yearsOfExperience} years</p>
-                  </div>
-                )}
+                {fullProfile.yearsOfExperience !== null &&
+                  fullProfile.yearsOfExperience !== undefined && (
+                    <div>
+                      <span className='text-xs font-medium text-zinc-500'>
+                        Experience:
+                      </span>
+                      <p className='text-sm text-zinc-700'>
+                        {fullProfile.yearsOfExperience} years
+                      </p>
+                    </div>
+                  )}
                 {fullProfile.education && (
                   <div>
-                    <span className='text-xs font-medium text-zinc-500'>Education:</span>
-                    <p className='text-sm text-zinc-700'>{fullProfile.education}</p>
+                    <span className='text-xs font-medium text-zinc-500'>
+                      Education:
+                    </span>
+                    <p className='text-sm text-zinc-700'>
+                      {fullProfile.education}
+                    </p>
                   </div>
                 )}
                 {fullProfile.about && (
                   <div>
-                    <span className='text-xs font-medium text-zinc-500'>About:</span>
+                    <span className='text-xs font-medium text-zinc-500'>
+                      About:
+                    </span>
                     <p className='text-sm text-zinc-700'>{fullProfile.about}</p>
                   </div>
                 )}
                 {fullProfile.interests && fullProfile.interests.length > 0 && (
                   <div>
-                    <span className='text-xs font-medium text-zinc-500'>Interests:</span>
-                    <p className='text-sm text-zinc-700'>{fullProfile.interests.join(', ')}</p>
+                    <span className='text-xs font-medium text-zinc-500'>
+                      Interests:
+                    </span>
+                    <p className='text-sm text-zinc-700'>
+                      {fullProfile.interests.join(', ')}
+                    </p>
                   </div>
                 )}
                 {fullProfile.skills && fullProfile.skills.length > 0 && (
                   <div>
-                    <span className='text-xs font-medium text-zinc-500'>Skills:</span>
-                    <p className='text-sm text-zinc-700'>{fullProfile.skills.join(', ')}</p>
+                    <span className='text-xs font-medium text-zinc-500'>
+                      Skills:
+                    </span>
+                    <p className='text-sm text-zinc-700'>
+                      {fullProfile.skills.join(', ')}
+                    </p>
                   </div>
                 )}
               </div>

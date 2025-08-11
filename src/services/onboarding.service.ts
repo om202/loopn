@@ -1,5 +1,3 @@
-import { generateClient } from 'aws-amplify/data';
-import type { Schema } from '@/../../amplify/data/resource';
 import { getCurrentUser } from 'aws-amplify/auth';
 import { uploadData } from 'aws-amplify/storage';
 import { amplifyInitialization } from '../lib/amplify-initialization';
@@ -132,8 +130,6 @@ export class OnboardingService {
       if (!user) {
         throw new Error('User not authenticated');
       }
-
-      const client = generateClient<Schema>();
 
       // Handle profile picture upload if provided
       let profilePictureUrl: string | undefined;
