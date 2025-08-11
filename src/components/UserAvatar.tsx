@@ -116,14 +116,12 @@ export default function UserAvatar({
   const [imageError, setImageError] = useState(false);
   const [resolvedImageUrl, setResolvedImageUrl] = useState<string | null>(null);
   const [isLoadingUrl, setIsLoadingUrl] = useState(false);
-  const [isImageLoading, setIsImageLoading] = useState(true);
 
   // Convert S3 key to displayable URL using cache
   useEffect(() => {
     const resolveImageUrl = async () => {
       if (profilePictureUrl && hasProfilePicture) {
         setIsLoadingUrl(true);
-        setIsImageLoading(true);
         setImageError(false);
         const startTime = Date.now();
 
@@ -148,14 +146,12 @@ export default function UserAvatar({
         } catch (error) {
           console.error('Error resolving profile picture URL:', error);
           setResolvedImageUrl(null);
-          setIsImageLoading(false);
         } finally {
           setIsLoadingUrl(false);
         }
       } else {
         setResolvedImageUrl(null);
         setIsLoadingUrl(false);
-        setIsImageLoading(false);
       }
     };
 
@@ -163,9 +159,9 @@ export default function UserAvatar({
   }, [profilePictureUrl, hasProfilePicture]);
 
   const shouldShowProfileImage =
-    hasProfilePicture && resolvedImageUrl && !imageError && !isLoadingUrl && !isImageLoading;
+    hasProfilePicture && resolvedImageUrl && !imageError && !isLoadingUrl;
 
-  const shouldShowLoadingState = hasProfilePicture && (isLoadingUrl || isImageLoading);
+  const shouldShowLoadingState = hasProfilePicture && isLoadingUrl;
 
   return (
     <div className={`relative ${className} cursor-pointer`}>
@@ -187,11 +183,8 @@ export default function UserAvatar({
               width: '100%',
               height: '100%',
             }}
-            onLoadStart={() => setIsImageLoading(true)}
-            onLoad={() => setIsImageLoading(false)}
             onError={() => {
               setImageError(true);
-              setIsImageLoading(false);
             }}
             priority={size === 'lg' || size === 'xl'} // Prioritize larger avatars
           />

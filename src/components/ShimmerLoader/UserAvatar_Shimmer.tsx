@@ -63,7 +63,7 @@ export default function UserAvatar_Shimmer({
   return (
     <div className={`relative ${className}`}>
       <div
-        className='rounded-full overflow-hidden border border-brand-500 flex-shrink-0'
+        className='rounded-full overflow-hidden flex-shrink-0'
         style={{
           width: `${avatarSize}px`,
           height: `${avatarSize}px`,
