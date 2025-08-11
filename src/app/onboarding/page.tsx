@@ -472,7 +472,7 @@ export default function OnboardingPage() {
                 />
                 <div className='flex justify-between text-sm mt-2'>
                   <span
-                    className={`${wordCount < 24 ? 'text-b_red-500' : 'text-green-500'}`}
+                    className={`${wordCount < 24 ? 'text-b_red-500' : 'text-b_green-500'}`}
                   >
                     {wordCount} words (minimum 24)
                   </span>

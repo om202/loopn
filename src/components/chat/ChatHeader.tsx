@@ -83,7 +83,7 @@ export default function ChatHeader({
     if (otherUserPresence.status === 'ONLINE') {
       return {
         text: 'Online',
-        color: 'text-green-500',
+        color: 'text-b_green-500',
       };
     }
 
@@ -243,7 +243,7 @@ export default function ChatHeader({
               </h1>
               <div className='flex items-center gap-1 sm:gap-2 mt-0.5'>
                 {conversation.isConnected ? (
-                  <div className='flex items-center text-sm sm:text-sm text-green-500'>
+                  <div className='flex items-center text-sm sm:text-sm text-b_green-500'>
                     <svg
                       className='w-2.5 h-2.5 sm:w-3 sm:h-3 mr-1 flex-shrink-0'
                       fill='currentColor'

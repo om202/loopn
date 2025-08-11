@@ -834,7 +834,7 @@ export default function OnlineUsers({
                                     (interest, index) => (
                                       <span
                                         key={index}
-                                        className='px-2 py-1 text-xs bg-green-50 text-green-700 rounded-md border border-green-100'
+                                        className='px-2 py-1 text-xs bg-b_green-50 text-b_green-700 rounded-md border border-b_green-100'
                                       >
                                         {interest}
                                       </span>

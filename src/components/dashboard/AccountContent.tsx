@@ -246,7 +246,7 @@ export default function AccountContent() {
                             {userProfile.interests.map((interest, index) => (
                               <span
                                 key={index}
-                                className='px-3 py-1.5 text-xs bg-green-50 text-green-700 rounded-md border border-green-100'
+                                className='px-3 py-1.5 text-xs bg-b_green-50 text-b_green-700 rounded-md border border-b_green-100'
                               >
                                 {interest}
                               </span>

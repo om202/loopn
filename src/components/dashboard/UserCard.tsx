@@ -185,7 +185,7 @@ export default function UserCard({
                   ? 'text-brand-500'
                   : 'text-zinc-500'
                 : isOnline
-                  ? 'text-green-500'
+                  ? 'text-b_green-500'
                   : userPresence.lastSeen &&
                       formatPresenceTime(userPresence.lastSeen) ===
                         'Recently active'
@@ -480,7 +480,7 @@ export default function UserCard({
                               {fullProfile.interests.map((interest, index) => (
                                 <span
                                   key={index}
-                                  className='px-2 py-1 text-xs bg-green-50 text-green-700 rounded-md border border-green-100'
+                                  className='px-2 py-1 text-xs bg-b_green-50 text-b_green-700 rounded-md border border-b_green-100'
                                 >
                                   {interest}
                                 </span>

@@ -205,7 +205,7 @@ export default function HomePage() {
                         <p className='text-sm text-zinc-500'>UX Designer</p>
                       </div>
                     </div>
-                    <div className='w-3 h-3 bg-green-400 rounded-full'></div>
+                    <div className='w-3 h-3 bg-b_green-400 rounded-full'></div>
                   </div>
                 </div>
 
@@ -366,8 +366,8 @@ export default function HomePage() {
 
             {/* Feature 2 - Real-time Chat */}
             <div className='group bg-white rounded-2xl p-8 border border-zinc-200 h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
-              <div className='w-14 h-14 bg-gradient-to-br from-green-100 to-green-200 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300'>
-                <Zap className='w-7 h-7 text-green-600' />
+              <div className='w-14 h-14 bg-gradient-to-br from-b_green-100 to-b_green-200 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300'>
+                <Zap className='w-7 h-7 text-b_green-600' />
               </div>
               <h3 className='text-xl font-bold text-zinc-900 mb-4'>
                 Instant Connections
@@ -378,22 +378,22 @@ export default function HomePage() {
               </p>
               <ul className='space-y-3'>
                 <li className='flex items-center gap-3 text-zinc-700'>
-                  <div className='w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0'>
-                    <CheckCircle className='w-3 h-3 text-green-600' />
+                  <div className='w-5 h-5 bg-b_green-100 rounded-full flex items-center justify-center flex-shrink-0'>
+                    <CheckCircle className='w-3 h-3 text-b_green-600' />
                   </div>
                   <span className='font-medium'>Real-time messaging</span>
                 </li>
                 <li className='flex items-center gap-3 text-zinc-700'>
-                  <div className='w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0'>
-                    <CheckCircle className='w-3 h-3 text-green-600' />
+                  <div className='w-5 h-5 bg-b_green-100 rounded-full flex items-center justify-center flex-shrink-0'>
+                    <CheckCircle className='w-3 h-3 text-b_green-600' />
                   </div>
                   <span className='font-medium'>
                     Professional conversation starters
                   </span>
                 </li>
                 <li className='flex items-center gap-3 text-zinc-700'>
-                  <div className='w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0'>
-                    <CheckCircle className='w-3 h-3 text-green-600' />
+                  <div className='w-5 h-5 bg-b_green-100 rounded-full flex items-center justify-center flex-shrink-0'>
+                    <CheckCircle className='w-3 h-3 text-b_green-600' />
                   </div>
                   <span className='font-medium'>Seamless experience</span>
                 </li>
@@ -516,8 +516,8 @@ export default function HomePage() {
                   2
                 </div>
                 {/* Icon */}
-                <div className='w-16 h-16 bg-green-50 rounded-2xl flex items-center justify-center mb-6 mx-auto mt-4'>
-                  <Brain className='w-8 h-8 text-green-600' />
+                <div className='w-16 h-16 bg-b_green-50 rounded-2xl flex items-center justify-center mb-6 mx-auto mt-4'>
+                  <Brain className='w-8 h-8 text-b_green-600' />
                 </div>
                 {/* Content */}
                 <div className='text-center'>
@@ -596,7 +596,7 @@ export default function HomePage() {
                 {[1, 2, 3, 4, 5].map(star => (
                   <Star
                     key={`testimonial-1-star-${star}`}
-                    className='w-5 h-5 text-yellow-400 fill-current'
+                    className='w-5 h-5 text-b_yellow-400 fill-current'
                   />
                 ))}
               </div>
@@ -622,7 +622,7 @@ export default function HomePage() {
                 {[1, 2, 3, 4, 5].map(star => (
                   <Star
                     key={`testimonial-2-star-${star}`}
-                    className='w-5 h-5 text-yellow-400 fill-current'
+                    className='w-5 h-5 text-b_yellow-400 fill-current'
                   />
                 ))}
               </div>
@@ -648,7 +648,7 @@ export default function HomePage() {
                 {[1, 2, 3, 4, 5].map(star => (
                   <Star
                     key={`testimonial-3-star-${star}`}
-                    className='w-5 h-5 text-yellow-400 fill-current'
+                    className='w-5 h-5 text-b_yellow-400 fill-current'
                   />
                 ))}
               </div>

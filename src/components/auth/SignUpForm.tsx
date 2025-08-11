@@ -13,10 +13,10 @@ interface SignUpFormProps {
 function PasswordRequirement({ met, text }: { met: boolean; text: string }) {
   return (
     <div
-      className={`flex items-center gap-2 text-xs ${met ? 'text-green-600' : 'text-zinc-500'}`}
+      className={`flex items-center gap-2 text-xs ${met ? 'text-b_green-600' : 'text-zinc-500'}`}
     >
       {met ? (
-        <Check className='w-3 h-3 text-green-600' />
+        <Check className='w-3 h-3 text-b_green-600' />
       ) : (
         <X className='w-3 h-3 text-zinc-500' />
       )}
@@ -150,7 +150,7 @@ export default function SignUpForm({
               className={`w-full pl-10 pr-12 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:border-transparent transition-colors bg-white ${
                 password.length > 0
                   ? isPasswordValid
-                    ? 'border-green-200 focus:ring-green-500'
+                    ? 'border-b_green-200 focus:ring-b_green-500'
                     : 'border-b_red-200 focus:ring-b_red-500'
                   : 'border-zinc-200 focus:ring-brand-500'
               }`}

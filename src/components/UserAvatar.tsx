@@ -82,7 +82,7 @@ export default function UserAvatar({
       case 'ONLINE':
         return (
           <div
-            className={`${indicatorSize} bg-green-500 rounded-full border-2 border-white box-content`}
+            className={`${indicatorSize} bg-b_green-500 rounded-full border-2 border-white box-content`}
           />
         );
       case 'BUSY':

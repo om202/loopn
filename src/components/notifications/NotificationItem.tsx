@@ -60,7 +60,7 @@ const getNotificationIcon = (type: string | null) => {
         </svg>
       );
     case 'connection':
-      return <CheckCircle2 className='w-6 h-6 text-green-500' />;
+      return <CheckCircle2 className='w-6 h-6 text-b_green-500' />;
     case 'system':
       return (
         <svg
@@ -336,7 +336,7 @@ export default function NotificationItem({
                   e.stopPropagation();
                   onNotificationClick(notification);
                 }}
-                className='px-2.5 py-2 bg-green-500 text-white text-sm font-medium rounded-xl hover:bg-green-600 transition-colors border border-green-500'
+                className='px-2.5 py-2 bg-b_green-500 text-white text-sm font-medium rounded-xl hover:bg-b_green-600 transition-colors border border-b_green-500'
               >
                 Start Chat
               </button>
