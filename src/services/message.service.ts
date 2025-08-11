@@ -1,7 +1,7 @@
 import type { Schema } from '../../amplify/data/resource';
 import { getClient } from '../lib/amplify-config';
 import { notificationService } from './notification.service';
-import { userService } from './user.service';
+import { userPresenceService } from './user.service';
 
 // Type definitions from schema
 type Message = Schema['Message']['type'];
@@ -59,7 +59,7 @@ export class MessageService {
       if (result.data) {
         try {
           // Get sender's information for notification
-          const senderResult = await userService.getUserPresence(senderId);
+          const senderResult = await userPresenceService.getUserPresence(senderId);
           const senderEmail = senderResult.data?.email;
           const senderName = senderEmail || `User ${senderId.slice(-4)}`;
 

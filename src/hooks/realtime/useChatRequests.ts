@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import type { Schema } from '../../../amplify/data/resource';
 import { useRealtime } from '../../contexts/RealtimeContext';
-import { userService } from '../../services/user.service';
+import { userPresenceService } from '../../services/user.service';
 
 export interface ChatRequestWithUser {
   id: string;
@@ -47,7 +47,7 @@ export function useChatRequests({ userId, enabled }: UseChatRequestsProps) {
         const requestsWithUsers = await Promise.all(
           requests.map(async request => {
             try {
-              const userResult = await userService.getUserPresence(
+              const userResult = await userPresenceService.getUserPresence(
                 request.requesterId
               );
               return {
@@ -112,7 +112,7 @@ export function useChatRequests({ userId, enabled }: UseChatRequestsProps) {
         const requestsWithUsers = await Promise.all(
           requests.map(async request => {
             try {
-              const userResult = await userService.getUserPresence(
+              const userResult = await userPresenceService.getUserPresence(
                 request.receiverId
               );
               return {

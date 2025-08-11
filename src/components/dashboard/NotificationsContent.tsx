@@ -10,7 +10,7 @@ import { chatService } from '../../services/chat.service';
 import { messageService } from '../../services/message.service';
 import { notificationService } from '../../services/notification.service';
 import { useChatRequests } from '../../hooks/realtime/useChatRequests';
-import { userService } from '../../services/user.service';
+import { userPresenceService } from '../../services/user.service';
 
 import NotificationItem from '../notifications/NotificationItem';
 import LoadingContainer from '../LoadingContainer';
@@ -76,12 +76,12 @@ export default function NotificationsContent() {
     const processRequests = async () => {
       const requestsWithUsers: ChatRequestWithUser[] = await Promise.all(
         realtimeChatRequests.map(async request => {
-          const userResult = await userService.getUserPresence(
+          const userResult = await userPresenceService.getUserPresence(
             request.requesterId
           );
           return {
             ...request,
-            requesterEmail: userResult.data?.email || undefined,
+            requesterEmail: undefined, // Email moved to UserProfile
           };
         })
       );

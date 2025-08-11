@@ -9,7 +9,7 @@ import { formatPresenceTime } from '../lib/presence-utils';
 
 import type { Schema } from '../../amplify/data/resource';
 import { chatService } from '../services/chat.service';
-import { userService } from '../services/user.service';
+import { userPresenceService } from '../services/user.service';
 
 import {
   DashboardSidebar,
@@ -183,7 +183,7 @@ export default function OnlineUsers({
 
       const userPresencePromises = Array.from(userIds).map(async userId => {
         try {
-          const result = await userService.getUserPresence(userId);
+          const result = await userPresenceService.getUserPresence(userId);
           return result.data;
         } catch {
           console.error('Error getting user presence for:', userId);
@@ -317,7 +317,7 @@ export default function OnlineUsers({
 
     const loadSuggestedUsers = async () => {
       try {
-        const result = await userService.getAllUsers();
+        const result = await userPresenceService.getAllUsers();
         if (result.error) {
           console.error('Error loading suggested users:', result.error);
           return;
@@ -519,7 +519,6 @@ export default function OnlineUsers({
             <div className='p-6 pb-4 flex justify-center'>
               <div className='flex flex-col items-center text-center'>
                 <UserAvatar
-                  email={profileSidebarUser.email}
                   userId={profileSidebarUser.userId}
                   size='lg'
                   showStatus
@@ -538,8 +537,7 @@ export default function OnlineUsers({
                 <div className='mt-4'>
                   <div className='mb-1'>
                     <div className='font-medium text-zinc-900 text-base'>
-                      {profileSidebarUser.email ||
-                        `User${profileSidebarUser.userId.slice(-4)}`}
+                      {`User${profileSidebarUser.userId.slice(-4)}`}
                     </div>
                   </div>
                   <div className='text-sm text-zinc-500'>

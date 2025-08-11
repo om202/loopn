@@ -1,7 +1,7 @@
 import type { Schema } from '../../amplify/data/resource';
 import { getClient } from '../lib/amplify-config';
 import { notificationService } from './notification.service';
-import { userService } from './user.service';
+import { userPresenceService } from './user.service';
 
 // Type definitions from schema
 type ChatRequest = Schema['ChatRequest']['type'];
@@ -61,7 +61,7 @@ export class ChatService {
       // Create a notification for the receiver (especially important for offline users)
       if (result.data) {
         // Get requester's information for a more personalized notification
-        const requesterResult = await userService.getUserPresence(requesterId);
+        const requesterResult = await userPresenceService.getUserPresence(requesterId);
         const requesterName = requesterResult.data?.email
           ? requesterResult.data.email.split('@')[0]
           : `User ${requesterId.slice(-4)}`;
@@ -158,7 +158,7 @@ export class ChatService {
         // Create a notification for the requester (sender) that their request was accepted
         if (conversation) {
           // Get receiver's information for a personalized notification
-          const receiverResult = await userService.getUserPresence(
+          const receiverResult = await userPresenceService.getUserPresence(
             chatRequestResult.data.receiverId
           );
           const receiverName = receiverResult.data?.email

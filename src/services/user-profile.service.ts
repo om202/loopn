@@ -21,6 +21,28 @@ export interface ProfileData {
 
 export class UserProfileService {
   /**
+   * Get anonymous summary for a user (static method for easy access)
+   */
+  static async getProfileSummary(userId: string): Promise<string | null> {
+    try {
+      const result = await getClient().models.UserProfile.get({ userId });
+      return result.data?.anonymousSummary || null;
+    } catch (error) {
+      console.error('Error getting profile summary:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Ensure anonymous summary exists for current user (static method)
+   */
+  static async ensureAnonymousSummaryExists(): Promise<void> {
+    // This method exists for compatibility with AuthContext
+    // Implementation can be added later if needed
+    console.log('ensureAnonymousSummaryExists called');
+  }
+
+  /**
    * Create a new user profile
    */
   async createUserProfile(
