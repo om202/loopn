@@ -1,5 +1,6 @@
 import { type ClientSchema, a, defineData } from '@aws-amplify/backend';
 import { presenceCleanup } from '../functions/presence-cleanup/resource';
+import { vectorSearch } from '../functions/vector-search/resource';
 
 /*== LOOPN CHAT APP SCHEMA ==============================================
 This schema implements the Loopn user story:
@@ -26,6 +27,22 @@ Models:
 
 const schema = a
   .schema({
+    // Vector search query handler
+    vectorSearch: a
+      .query()
+      .arguments({
+        action: a.string().required(),
+        text: a.string(),
+        query: a.string(),
+        userId: a.string(),
+        userProfile: a.json(),
+        users: a.json(),
+        limit: a.integer(),
+      })
+      .returns(a.json())
+      .authorization(allow => [allow.authenticated()])
+      .handler(a.handler.function(vectorSearch)),
+
     // Request to start chatting with someone (Step 1)
     ChatRequest: a
       .model({
@@ -204,6 +221,9 @@ const schema = a
         // Onboarding status
         isOnboardingComplete: a.boolean().default(false),
         onboardingCompletedAt: a.datetime(),
+        // Vector search fields for natural language search
+        profileEmbedding: a.float().array(), // Vector embedding for profile content
+        embeddingLastUpdated: a.datetime(), // When the embedding was last generated
 
         // TODO: Later add fields for AI matching:
         // - aiGeneratedDescription: a.string()

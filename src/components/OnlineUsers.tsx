@@ -520,7 +520,10 @@ export default function OnlineUsers({
       <div className='flex-1 bg-white sm:rounded-2xl sm:border sm:border-zinc-200 p-2 sm:p-4 lg:p-6 ultra-compact overflow-hidden flex flex-col min-h-0'>
         {/* Search User - Always visible at top */}
         <div className='flex-shrink-0 mb-4 sm:mb-6'>
-          <SearchUser onProfessionalRequest={onProfessionalRequest} />
+          <SearchUser
+            onProfessionalRequest={onProfessionalRequest}
+            onChatRequestSent={onChatRequestSent}
+          />
         </div>
 
         <div className='overflow-y-auto flex-1'>

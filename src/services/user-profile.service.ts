@@ -1,5 +1,6 @@
 import type { Schema } from '../../amplify/data/resource';
 import { getClient } from '../lib/amplify-config';
+import { VectorSearchService } from './vector-search.service';
 
 type UserProfile = Schema['UserProfile']['type'];
 type DataResult<T> = { data: T | null; error: string | null };
@@ -50,6 +51,19 @@ export class UserProfileService {
         onboardingCompletedAt: new Date().toISOString(),
       });
 
+      // Automatically index the user profile for vector search
+      if (result.data) {
+        try {
+          await VectorSearchService.indexUserProfile(userId, profileData);
+        } catch (indexError) {
+          console.error(
+            'Failed to index user profile for vector search:',
+            indexError
+          );
+          // Continue even if indexing fails
+        }
+      }
+
       return {
         data: result.data,
         error: null,
@@ -77,6 +91,41 @@ export class UserProfileService {
         userId,
         ...updates,
       });
+
+      // Re-index the user profile for vector search if update was successful
+      if (result.data) {
+        try {
+          // Get the full profile to re-index
+          const fullProfile =
+            await UserProfileService.getProfileDetails(userId);
+          if (fullProfile) {
+            const profileData: ProfileData = {
+              fullName: fullProfile.fullName || '',
+              jobRole: fullProfile.jobRole || '',
+              companyName: fullProfile.companyName || '',
+              industry: fullProfile.industry || '',
+              yearsOfExperience: fullProfile.yearsOfExperience || 0,
+              education: fullProfile.education || '',
+              about: fullProfile.about || '',
+              interests: (fullProfile.interests || []).filter(
+                (item): item is string => item !== null
+              ),
+              skills: (fullProfile.skills || []).filter(
+                (item): item is string => item !== null
+              ),
+              profilePictureUrl: fullProfile.profilePictureUrl || undefined,
+              hasProfilePicture: fullProfile.hasProfilePicture || false,
+            };
+            await VectorSearchService.indexUserProfile(userId, profileData);
+          }
+        } catch (indexError) {
+          console.error(
+            'Failed to re-index user profile for vector search:',
+            indexError
+          );
+          // Continue even if indexing fails
+        }
+      }
 
       return {
         data: result.data,

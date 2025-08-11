@@ -15,7 +15,11 @@ This directory contains shimmer loading placeholders using the `react-loading-sk
 ## Usage
 
 ```tsx
-import { OnlineUsers_Shimmer, UserAvatar_Shimmer, ShimmerProvider } from './ShimmerLoader/exports';
+import {
+  OnlineUsers_Shimmer,
+  UserAvatar_Shimmer,
+  ShimmerProvider,
+} from './ShimmerLoader/exports';
 
 // Wrap with ShimmerProvider for consistent theming
 if (loading) {
@@ -30,7 +34,7 @@ if (loading) {
 if (isLoadingAvatar) {
   return (
     <ShimmerProvider>
-      <UserAvatar_Shimmer size="lg" showStatus />
+      <UserAvatar_Shimmer size='lg' showStatus />
     </ShimmerProvider>
   );
 }
