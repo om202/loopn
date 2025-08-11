@@ -31,6 +31,9 @@ export default function RootPage() {
 
         if (!onboardingStatus.isOnboardingComplete) {
           router.replace('/onboarding');
+        } else if (onboardingStatus.needsProfilePicture) {
+          // User completed onboarding but needs profile picture
+          router.replace('/onboarding');
         } else {
           router.replace('/dashboard');
         }

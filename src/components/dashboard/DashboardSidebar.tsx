@@ -5,6 +5,7 @@ import { MessageCircle, Sparkles, Users } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAuthenticator } from '@aws-amplify/ui-react';
+import { useAuth } from '@/contexts/AuthContext';
 
 import UserAvatar from '../UserAvatar';
 import { notificationService } from '../../services/notification.service';
@@ -34,6 +35,7 @@ export default function DashboardSidebar({
   chatTrialsCount,
   suggestedUsersCount,
 }: DashboardSidebarProps) {
+  const { onboardingStatus } = useAuth();
   const { user } = useAuthenticator();
   const [notificationCount, setNotificationCount] = useState(0);
 
@@ -269,7 +271,18 @@ export default function DashboardSidebar({
               }`}
             >
               <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
-                <UserAvatar email={getUserEmail()} size='xs' />
+                <UserAvatar
+                  email={getUserEmail()}
+                  userId={user?.userId}
+                  profilePictureUrl={
+                    onboardingStatus?.onboardingData?.profilePictureUrl
+                  }
+                  hasProfilePicture={
+                    onboardingStatus?.needsProfilePicture === false &&
+                    !!onboardingStatus?.onboardingData?.profilePictureUrl
+                  }
+                  size='xs'
+                />
               </div>
               <span className='font-medium text-sm flex-1'>
                 {accountItem.label}
@@ -311,7 +324,18 @@ export default function DashboardSidebar({
                         />
                       </svg>
                     ) : icon === 'UserAvatar' ? (
-                      <UserAvatar email={getUserEmail()} size='xs' />
+                      <UserAvatar
+                        email={getUserEmail()}
+                        userId={user?.userId}
+                        profilePictureUrl={
+                          onboardingStatus?.onboardingData?.profilePictureUrl
+                        }
+                        hasProfilePicture={
+                          onboardingStatus?.needsProfilePicture === false &&
+                          !!onboardingStatus?.onboardingData?.profilePictureUrl
+                        }
+                        size='xs'
+                      />
                     ) : (
                       React.createElement(icon, {
                         className: 'w-5 h-5',

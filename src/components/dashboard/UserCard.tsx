@@ -34,10 +34,19 @@ interface UserCardProps {
   selectedUserId?: string;
 }
 
-const getDisplayName = (userPresence: UserPresence) => {
-  if (userPresence.email) {
-    return userPresence.email;
+const getDisplayName = (
+  userPresence: UserPresence,
+  userProfile?: { fullName?: string; email?: string } | null
+) => {
+  // Try to get full name from profile first
+  if (userProfile?.fullName) {
+    return userProfile.fullName;
   }
+  // Fall back to email if available
+  if (userProfile?.email) {
+    return userProfile.email;
+  }
+  // Last resort: User + last 4 chars of userId
   return `User${userPresence.userId.slice(-4)}`;
 };
 
@@ -59,24 +68,39 @@ export default function UserCard({
   const [showProfileDialog, setShowProfileDialog] = useState(false);
   const [profileSummary, setProfileSummary] = useState<string | null>(null);
   const [loadingSummary, setLoadingSummary] = useState(false);
+  const [userProfile, setUserProfile] = useState<{
+    fullName?: string;
+    email?: string;
+    profilePictureUrl?: string;
+    hasProfilePicture?: boolean;
+  } | null>(null);
   const isOnline = onlineUsers.some(ou => ou.userId === userPresence.userId);
   const isSelected = selectedUserId === userPresence.userId;
 
-  // Load profile summary when component mounts
+  // Load profile data when component mounts
   useEffect(() => {
     let mounted = true;
 
-    const loadProfileSummary = async () => {
+    const loadProfileData = async () => {
       setLoadingSummary(true);
       try {
-        const summary = await UserProfileService.getProfileSummary(
-          userPresence.userId
-        );
+        // Get both summary and full profile
+        const [summary, profileResult] = await Promise.all([
+          UserProfileService.getProfileSummary(userPresence.userId),
+          new UserProfileService().getUserProfile(userPresence.userId),
+        ]);
+
         if (mounted) {
           setProfileSummary(summary);
+          setUserProfile(profileResult.data ? {
+            fullName: profileResult.data.fullName || undefined,
+            email: profileResult.data.email || undefined,
+            profilePictureUrl: profileResult.data.profilePictureUrl || undefined,
+            hasProfilePicture: profileResult.data.hasProfilePicture || false,
+          } : null);
         }
       } catch (error) {
-        console.error('Error loading profile summary:', error);
+        console.error('Error loading profile data:', error);
       } finally {
         if (mounted) {
           setLoadingSummary(false);
@@ -84,7 +108,7 @@ export default function UserCard({
       }
     };
 
-    loadProfileSummary();
+    loadProfileData();
 
     return () => {
       mounted = false;
@@ -112,8 +136,10 @@ export default function UserCard({
       <div className='flex items-center gap-3'>
         <div className='flex-shrink-0'>
           <UserAvatar
-            email={userPresence.email}
+            email={userProfile?.email}
             userId={userPresence.userId}
+            profilePictureUrl={userProfile?.profilePictureUrl}
+            hasProfilePicture={userProfile?.hasProfilePicture}
             size='md'
             showStatus
             status={
@@ -131,7 +157,7 @@ export default function UserCard({
         <div className='flex-1 min-w-0'>
           <div className='flex items-center gap-2 mb-1'>
             <div className='text-zinc-900 truncate no-email-detection'>
-              {getDisplayName(userPresence)}
+              {getDisplayName(userPresence, userProfile)}
             </div>
             {/* Trial indicator */}
             {existingConversations.has(userPresence.userId) &&
@@ -318,7 +344,7 @@ export default function UserCard({
           </h3>
           <div className='mb-4'>
             <div className='text-sm text-zinc-500 mb-2'>
-              {getDisplayName(userPresence)}
+              {getDisplayName(userPresence, userProfile)}
             </div>
             {loadingSummary ? (
               <div className='flex items-center gap-2 text-sm text-zinc-500'>
@@ -360,7 +386,7 @@ export default function UserCard({
           </h3>
           <p className='text-sm text-zinc-900 text-center mb-4'>
             This will cancel your pending chat request to{' '}
-            {getDisplayName(userPresence)}.
+            {getDisplayName(userPresence, userProfile)}.
           </p>
           <div className='flex gap-2'>
             <button

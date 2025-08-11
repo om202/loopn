@@ -43,12 +43,12 @@ export default function ProfilePictureUpload({
         const previewUrl = createImagePreview(file);
         setPreview(previewUrl);
 
-        // Compress the image
+        // Compress the image (more aggressive for profile pictures)
         const compressedFile = await compressImage(file, {
-          maxWidth: 800,
-          maxHeight: 800,
-          quality: 0.85,
-          maxSizeInMB: 2,
+          maxWidth: 400,
+          maxHeight: 400,
+          quality: 0.75,
+          maxSizeInMB: 0.5,
           outputFormat: 'image/jpeg',
         });
 

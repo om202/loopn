@@ -28,11 +28,8 @@ export async function compressImage(
 ): Promise<File> {
   const opts = { ...DEFAULT_OPTIONS, ...options };
 
-  // Check if file is already small enough
-  const fileSizeInMB = file.size / (1024 * 1024);
-  if (fileSizeInMB <= opts.maxSizeInMB) {
-    return file;
-  }
+  // Always compress to ensure consistent sizing and format
+  // (removed early return to force compression)
 
   return new Promise((resolve, reject) => {
     const canvas = document.createElement('canvas');

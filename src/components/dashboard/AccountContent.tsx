@@ -7,7 +7,7 @@ import { UserProfileService } from '@/services/user-profile.service';
 import UserAvatar from '../UserAvatar';
 
 export default function AccountContent() {
-  const { handleSignOut, user } = useAuth();
+  const { handleSignOut, user, onboardingStatus } = useAuth();
   const [userSummary, setUserSummary] = useState<string | null>(null);
   const [loadingSummary, setLoadingSummary] = useState(false);
 
@@ -72,7 +72,18 @@ export default function AccountContent() {
       {/* Profile Section */}
       <div className='max-w-2xl'>
         <div className='flex items-center gap-2'>
-          <UserAvatar email={getUserEmail()} size='md' />
+          <UserAvatar
+            email={getUserEmail()}
+            userId={user?.userId}
+            profilePictureUrl={
+              onboardingStatus?.onboardingData?.profilePictureUrl
+            }
+            hasProfilePicture={
+              onboardingStatus?.needsProfilePicture === false &&
+              !!onboardingStatus?.onboardingData?.profilePictureUrl
+            }
+            size='md'
+          />
           <div className='flex-1'>
             <h3 className='font-semibold text-zinc-900 mb-1'>
               {getUserEmail()}

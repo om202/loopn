@@ -219,6 +219,56 @@ export class UserProfileService {
   }
 
   /**
+   * Fix hasProfilePicture flag for users who have uploaded profile pictures
+   * This is a utility method to fix existing users
+   */
+  async fixHasProfilePictureFlag(
+    userId: string
+  ): Promise<DataResult<UserProfile>> {
+    try {
+      const userProfile = await this.getUserProfile(userId);
+
+      if (!userProfile.data) {
+        return {
+          data: null,
+          error: 'User profile not found',
+        };
+      }
+
+      // If user has profilePictureUrl but hasProfilePicture is false, fix it
+      if (
+        userProfile.data.profilePictureUrl &&
+        !userProfile.data.hasProfilePicture
+      ) {
+        console.log(`Fixing hasProfilePicture flag for user ${userId}`);
+
+        const result = await getClient().models.UserProfile.update({
+          userId,
+          hasProfilePicture: true,
+        });
+
+        return {
+          data: result.data,
+          error: null,
+        };
+      }
+
+      return {
+        data: userProfile.data,
+        error: null,
+      };
+    } catch (error) {
+      return {
+        data: null,
+        error:
+          error instanceof Error
+            ? error.message
+            : 'Failed to fix hasProfilePicture flag',
+      };
+    }
+  }
+
+  /**
    * Update anonymous summary
    */
   async updateAnonymousSummary(

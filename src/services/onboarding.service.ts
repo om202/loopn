@@ -21,6 +21,7 @@ export interface OnboardingData {
 
 export interface UserOnboardingStatus {
   isOnboardingComplete: boolean;
+  needsProfilePicture?: boolean;
   onboardingData?: OnboardingData;
 }
 
@@ -47,13 +48,29 @@ export class OnboardingService {
       // First check localStorage
       const cachedStatus = await this.getOnboardingStatusFromStorage();
       if (cachedStatus !== null) {
+        // If user completed onboarding, always refresh to check for profile picture
+        if (cachedStatus.isOnboardingComplete) {
+          return await this.getOnboardingStatusFromAPI();
+        }
         return cachedStatus;
       }
 
+      // If not in localStorage, get from API
+      return await this.getOnboardingStatusFromAPI();
+    } catch (error) {
+      console.error('Error checking onboarding status:', error);
+      return { isOnboardingComplete: false };
+    }
+  }
+
+  /**
+   * Get onboarding status directly from API
+   */
+  private static async getOnboardingStatusFromAPI(): Promise<UserOnboardingStatus> {
+    try {
       // Ensure Amplify is ready before making API calls
       await amplifyInitialization.waitForReady();
 
-      // If not in localStorage, check API
       const user = await getCurrentUser();
       if (!user) {
         throw new Error('User not authenticated');
@@ -66,8 +83,12 @@ export class OnboardingService {
       if (userProfileResult.data) {
         const userProfile = userProfileResult.data;
         const isComplete = userProfile.isOnboardingComplete || false;
+        const needsProfilePicture =
+          isComplete && !userProfile.hasProfilePicture;
+
         const status: UserOnboardingStatus = {
           isOnboardingComplete: isComplete,
+          needsProfilePicture,
           onboardingData: isComplete
             ? {
                 fullName: userProfile.fullName || '',
@@ -91,6 +112,7 @@ export class OnboardingService {
 
         // Cache the status
         await this.setOnboardingStatusInStorage(status);
+        console.log('Onboarding service - Returning status:', status);
         return status;
       }
 
@@ -102,7 +124,7 @@ export class OnboardingService {
       await this.setOnboardingStatusInStorage(defaultStatus);
       return defaultStatus;
     } catch (error) {
-      console.error('Error checking onboarding status:', error);
+      console.error('Error getting onboarding status from API:', error);
       return { isOnboardingComplete: false };
     }
   }
@@ -132,6 +154,8 @@ export class OnboardingService {
             data.profilePictureFile.name.split('.').pop() || 'jpg';
           const fileName = `${user.userId}/profile.${fileExtension}`;
 
+          console.log('Attempting to upload profile picture:', fileName);
+
           const uploadResult = await uploadData({
             key: `profile-pictures/${fileName}`,
             data: data.profilePictureFile,
@@ -142,11 +166,23 @@ export class OnboardingService {
 
           profilePictureUrl = uploadResult.key;
           hasProfilePicture = true;
-          console.log('Profile picture uploaded:', profilePictureUrl);
+          console.log('Profile picture uploaded successfully:', {
+            key: profilePictureUrl,
+            size: data.profilePictureFile.size,
+            type: data.profilePictureFile.type,
+          });
         } catch (uploadError) {
           console.error('Failed to upload profile picture:', uploadError);
+          console.error('Upload error details:', {
+            userId: user.userId,
+            fileName: `${user.userId}/profile.${data.profilePictureFile.name.split('.').pop() || 'jpg'}`,
+            fileSize: data.profilePictureFile.size,
+            fileType: data.profilePictureFile.type,
+          });
           // Continue with onboarding even if image upload fails
         }
+      } else {
+        console.log('No profile picture file provided during onboarding');
       }
 
       // Generate AI summary in the background
@@ -211,6 +247,75 @@ export class OnboardingService {
       await this.setOnboardingStatusInStorage(status);
     } catch (error) {
       console.error('Error completing onboarding:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Update just the profile picture for an existing user
+   */
+  static async updateProfilePicture(profilePictureFile: File): Promise<void> {
+    try {
+      await amplifyInitialization.waitForReady();
+
+      const user = await getCurrentUser();
+      if (!user) {
+        throw new Error('User not authenticated');
+      }
+
+      // Handle profile picture upload
+      let profilePictureUrl: string | undefined;
+      let hasProfilePicture = false;
+
+      try {
+        const fileExtension = profilePictureFile.name.split('.').pop() || 'jpg';
+        const fileName = `${user.userId}/profile.${fileExtension}`;
+
+        console.log('Updating profile picture:', fileName);
+
+        const uploadResult = await uploadData({
+          key: `profile-pictures/${fileName}`,
+          data: profilePictureFile,
+          options: {
+            contentType: profilePictureFile.type,
+          },
+        }).result;
+
+        profilePictureUrl = uploadResult.key;
+        hasProfilePicture = true;
+        console.log('Profile picture updated successfully:', {
+          key: profilePictureUrl,
+          size: profilePictureFile.size,
+          type: profilePictureFile.type,
+        });
+      } catch (uploadError) {
+        console.error('Failed to upload profile picture:', uploadError);
+        throw new Error('Failed to upload profile picture');
+      }
+
+      // Update user profile with new picture info
+      await userProfileService.updateUserProfile(user.userId, {
+        profilePictureUrl,
+        hasProfilePicture,
+      });
+
+      // Update localStorage to reflect the change
+      const currentStatus = await this.getOnboardingStatusFromStorage();
+      if (currentStatus) {
+        const updatedStatus: UserOnboardingStatus = {
+          ...currentStatus,
+          needsProfilePicture: false,
+          onboardingData: currentStatus.onboardingData
+            ? {
+                ...currentStatus.onboardingData,
+                profilePictureUrl,
+              }
+            : undefined,
+        };
+        await this.setOnboardingStatusInStorage(updatedStatus);
+      }
+    } catch (error) {
+      console.error('Error updating profile picture:', error);
       throw error;
     }
   }

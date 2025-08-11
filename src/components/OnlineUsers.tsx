@@ -53,6 +53,12 @@ export default function OnlineUsers({
   const [profileSidebarSummary, setProfileSidebarSummary] = useState<
     string | null
   >(null);
+  const [profileSidebarUserProfile, setProfileSidebarUserProfile] = useState<{
+    fullName?: string;
+    email?: string;
+    profilePictureUrl?: string;
+    hasProfilePicture?: boolean;
+  } | null>(null);
   const [profileSidebarLoading, setProfileSidebarLoading] = useState(false);
   const [profileSidebarOpen, setProfileSidebarOpen] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -119,10 +125,17 @@ export default function OnlineUsers({
           const { UserProfileService } = await import(
             '../services/user-profile.service'
           );
-          const summary = await UserProfileService.getProfileSummary(
-            firstUser.userId
-          );
+          const [summary, profileResult] = await Promise.all([
+            UserProfileService.getProfileSummary(firstUser.userId),
+            new UserProfileService().getUserProfile(firstUser.userId),
+          ]);
           setProfileSidebarSummary(summary);
+          setProfileSidebarUserProfile(profileResult.data ? {
+            fullName: profileResult.data.fullName || undefined,
+            email: profileResult.data.email || undefined,
+            profilePictureUrl: profileResult.data.profilePictureUrl || undefined,
+            hasProfilePicture: profileResult.data.hasProfilePicture || false,
+          } : null);
         } catch (e) {
           console.error('Failed to load profile summary for sidebar', e);
         } finally {
@@ -390,14 +403,22 @@ export default function OnlineUsers({
     setProfileSidebarUser(userPresence);
     setProfileSidebarLoading(true);
     setProfileSidebarSummary(null);
+    setProfileSidebarUserProfile(null);
     try {
       const { UserProfileService } = await import(
         '../services/user-profile.service'
       );
-      const summary = await UserProfileService.getProfileSummary(
-        userPresence.userId
-      );
+      const [summary, profileResult] = await Promise.all([
+        UserProfileService.getProfileSummary(userPresence.userId),
+        new UserProfileService().getUserProfile(userPresence.userId),
+      ]);
       setProfileSidebarSummary(summary);
+      setProfileSidebarUserProfile(profileResult.data ? {
+        fullName: profileResult.data.fullName || undefined,
+        email: profileResult.data.email || undefined,
+        profilePictureUrl: profileResult.data.profilePictureUrl || undefined,
+        hasProfilePicture: profileResult.data.hasProfilePicture || false,
+      } : null);
     } catch (e) {
       console.error('Failed to load profile summary for sidebar', e);
     } finally {
@@ -420,14 +441,22 @@ export default function OnlineUsers({
     setProfileSidebarUser(userPresence);
     setProfileSidebarLoading(true);
     setProfileSidebarSummary(null);
+    setProfileSidebarUserProfile(null);
     try {
       const { UserProfileService } = await import(
         '../services/user-profile.service'
       );
-      const summary = await UserProfileService.getProfileSummary(
-        userPresence.userId
-      );
+      const [summary, profileResult] = await Promise.all([
+        UserProfileService.getProfileSummary(userPresence.userId),
+        new UserProfileService().getUserProfile(userPresence.userId),
+      ]);
       setProfileSidebarSummary(summary);
+      setProfileSidebarUserProfile(profileResult.data ? {
+        fullName: profileResult.data.fullName || undefined,
+        email: profileResult.data.email || undefined,
+        profilePictureUrl: profileResult.data.profilePictureUrl || undefined,
+        hasProfilePicture: profileResult.data.hasProfilePicture || false,
+      } : null);
     } catch (e) {
       console.error('Failed to load profile summary for sidebar', e);
     } finally {
@@ -519,7 +548,10 @@ export default function OnlineUsers({
             <div className='p-6 pb-4 flex justify-center'>
               <div className='flex flex-col items-center text-center'>
                 <UserAvatar
+                  email={profileSidebarUserProfile?.email}
                   userId={profileSidebarUser.userId}
+                  profilePictureUrl={profileSidebarUserProfile?.profilePictureUrl}
+                  hasProfilePicture={profileSidebarUserProfile?.hasProfilePicture}
                   size='lg'
                   showStatus
                   status={
@@ -537,7 +569,9 @@ export default function OnlineUsers({
                 <div className='mt-4'>
                   <div className='mb-1'>
                     <div className='font-medium text-zinc-900 text-base'>
-                      {`User${profileSidebarUser.userId.slice(-4)}`}
+                      {profileSidebarUserProfile?.fullName || 
+                       profileSidebarUserProfile?.email || 
+                       `User${profileSidebarUser.userId.slice(-4)}`}
                     </div>
                   </div>
                   <div className='text-sm text-zinc-500'>

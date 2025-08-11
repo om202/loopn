@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Avatar from 'boring-avatars';
+import { getUrl } from 'aws-amplify/storage';
 
 interface UserAvatarProps {
   email?: string | null;
@@ -129,20 +130,56 @@ export default function UserAvatar({
   };
 
   const [imageError, setImageError] = useState(false);
+  const [resolvedImageUrl, setResolvedImageUrl] = useState<string | null>(null);
+
+  // Convert S3 key to displayable URL
+  useEffect(() => {
+    const resolveImageUrl = async () => {
+      if (profilePictureUrl && hasProfilePicture) {
+        try {
+          // Check if it's already a full URL
+          if (profilePictureUrl.startsWith('http')) {
+            setResolvedImageUrl(profilePictureUrl);
+          } else {
+            // Convert S3 key to URL
+            const result = await getUrl({ key: profilePictureUrl });
+            setResolvedImageUrl(result.url.toString());
+          }
+        } catch (error) {
+          console.error('Error resolving profile picture URL:', error);
+          setResolvedImageUrl(null);
+        }
+      } else {
+        setResolvedImageUrl(null);
+      }
+    };
+
+    resolveImageUrl();
+  }, [profilePictureUrl, hasProfilePicture]);
 
   const shouldShowProfileImage =
-    hasProfilePicture && profilePictureUrl && !imageError;
+    hasProfilePicture && resolvedImageUrl && !imageError;
 
   return (
     <div className={`relative ${className} cursor-pointer`}>
-      <div className='rounded-full overflow-hidden border border-brand-500'>
+      <div
+        className='rounded-full overflow-hidden border border-brand-500 flex-shrink-0'
+        style={{
+          width: `${getAvatarSize()}px`,
+          height: `${getAvatarSize()}px`,
+        }}
+      >
         {shouldShowProfileImage ? (
           <Image
-            src={profilePictureUrl}
+            src={resolvedImageUrl}
             alt={`${email || userId || 'User'} profile picture`}
             width={getAvatarSize()}
             height={getAvatarSize()}
-            className='object-cover w-full h-full'
+            className='object-cover'
+            style={{
+              width: '100%',
+              height: '100%',
+            }}
             onError={() => setImageError(true)}
           />
         ) : (
