@@ -17,9 +17,6 @@ export default function AuthPage() {
 
       if (!onboardingStatus.isOnboardingComplete) {
         window.location.href = '/onboarding';
-      } else if (onboardingStatus.needsProfilePicture) {
-        // User completed onboarding but needs profile picture
-        window.location.href = '/onboarding';
       } else {
         window.location.href = '/dashboard';
       }

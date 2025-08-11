@@ -26,8 +26,7 @@ export default function OnboardingPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [skillInput, setSkillInput] = useState('');
-  const [isProfilePictureOnlyMode, setIsProfilePictureOnlyMode] =
-    useState(false);
+
 
   // Form data
   const [formData, setFormData] = useState<Partial<OnboardingData>>({
@@ -43,36 +42,15 @@ export default function OnboardingPage() {
     profilePictureFile: undefined,
   });
 
-  // Handle authentication and onboarding status
+    // Handle authentication and onboarding status
   useEffect(() => {
-    console.log('Onboarding page - Auth status:', authStatus);
-    console.log('Onboarding page - Onboarding status:', onboardingStatus);
-
     if (authStatus === 'unauthenticated') {
       router.replace('/auth');
-    } else if (authStatus === 'authenticated' && onboardingStatus) {
-      // If user completed onboarding but needs profile picture
-      if (
-        onboardingStatus.isOnboardingComplete &&
-        onboardingStatus.needsProfilePicture
-      ) {
-        console.log('Setting profile picture only mode');
-        setIsProfilePictureOnlyMode(true);
-        setCurrentStep(4); // Go directly to profile picture step
-
-        // Pre-fill form with existing data
-        if (onboardingStatus.onboardingData) {
-          setFormData(onboardingStatus.onboardingData);
-        }
-      } else if (
-        onboardingStatus.isOnboardingComplete &&
-        !onboardingStatus.needsProfilePicture
-      ) {
-        // Fully complete - go to dashboard
-        console.log('Redirecting to dashboard - onboarding complete');
-        router.replace('/dashboard');
-      }
-      // If not complete at all, stay on regular onboarding flow (step 1)
+    } else if (
+      authStatus === 'authenticated' &&
+      onboardingStatus?.isOnboardingComplete
+    ) {
+      router.replace('/dashboard');
     }
   }, [authStatus, onboardingStatus, router]);
 
@@ -144,8 +122,7 @@ export default function OnboardingPage() {
       case 3:
         return (formData.interests?.length || 0) > 0;
       case 4:
-        // Profile picture is required in profile picture only mode
-        return isProfilePictureOnlyMode ? !!formData.profilePictureFile : true;
+        return true; // Profile picture is optional
       default:
         return false;
     }
@@ -170,21 +147,8 @@ export default function OnboardingPage() {
     setError('');
 
     try {
-      if (isProfilePictureOnlyMode) {
-        // Only update profile picture for existing user
-        if (formData.profilePictureFile) {
-          await OnboardingService.updateProfilePicture(
-            formData.profilePictureFile
-          );
-        } else {
-          throw new Error('Please select a profile picture');
-        }
-      } else {
-        // Complete full onboarding
-        await OnboardingService.completeOnboarding(formData as OnboardingData);
-      }
-
-      // Navigate to dashboard
+      await OnboardingService.completeOnboarding(formData as OnboardingData);
+      // Onboarding complete! Navigate to dashboard
       router.replace('/dashboard');
     } catch (err) {
       setError(
@@ -199,11 +163,9 @@ export default function OnboardingPage() {
     return <LoadingContainer />;
   }
 
-  if (
+    if (
     authStatus === 'unauthenticated' ||
-    (authStatus === 'authenticated' &&
-      onboardingStatus?.isOnboardingComplete &&
-      !onboardingStatus?.needsProfilePicture)
+    (authStatus === 'authenticated' && onboardingStatus?.isOnboardingComplete)
   ) {
     return null; // Will redirect via useEffect
   }
@@ -588,14 +550,12 @@ export default function OnboardingPage() {
           {currentStep === 4 && (
             <div className='space-y-6'>
               <h2 className='text-xl font-semibold text-zinc-900 mb-4'>
-                {isProfilePictureOnlyMode
-                  ? 'Add Profile Picture'
-                  : 'Profile Picture'}
+                Profile Picture
               </h2>
               <p className='text-sm text-zinc-600 mb-6'>
-                {isProfilePictureOnlyMode
-                  ? 'Please add a profile picture to complete your profile setup. This helps others recognize and trust you on the platform.'
-                  : 'Add a profile picture to help others recognize you. This is optional but recommended for building trust in professional connections.'}
+                Add a profile picture to help others recognize you. This is
+                optional but recommended for building trust in professional
+                connections.
               </p>
 
               <ProfilePictureUpload
@@ -612,7 +572,7 @@ export default function OnboardingPage() {
           <div className='flex justify-between mt-8'>
             <button
               onClick={prevStep}
-              disabled={currentStep === 1 || isProfilePictureOnlyMode}
+              disabled={currentStep === 1}
               className={`px-6 py-3 rounded-xl font-medium border bg-white text-zinc-900 border-zinc-200 hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-brand-500 disabled:opacity-50 disabled:cursor-not-allowed`}
             >
               Previous
@@ -632,13 +592,7 @@ export default function OnboardingPage() {
                 disabled={!validateStep(4) || isLoading}
                 className='px-6 py-3 rounded-xl font-medium bg-brand-500 text-white hover:bg-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed'
               >
-                {isLoading
-                  ? isProfilePictureOnlyMode
-                    ? 'Uploading...'
-                    : 'Completing...'
-                  : isProfilePictureOnlyMode
-                    ? 'Add Picture'
-                    : 'Complete Setup'}
+                {isLoading ? 'Completing...' : 'Complete Setup'}
               </button>
             )}
           </div>

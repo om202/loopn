@@ -21,7 +21,6 @@ export interface OnboardingData {
 
 export interface UserOnboardingStatus {
   isOnboardingComplete: boolean;
-  needsProfilePicture?: boolean;
   onboardingData?: OnboardingData;
 }
 
@@ -48,10 +47,6 @@ export class OnboardingService {
       // First check localStorage
       const cachedStatus = await this.getOnboardingStatusFromStorage();
       if (cachedStatus !== null) {
-        // If user completed onboarding, always refresh to check for profile picture
-        if (cachedStatus.isOnboardingComplete) {
-          return await this.getOnboardingStatusFromAPI();
-        }
         return cachedStatus;
       }
 
@@ -83,12 +78,9 @@ export class OnboardingService {
       if (userProfileResult.data) {
         const userProfile = userProfileResult.data;
         const isComplete = userProfile.isOnboardingComplete || false;
-        const needsProfilePicture =
-          isComplete && !userProfile.hasProfilePicture;
 
         const status: UserOnboardingStatus = {
           isOnboardingComplete: isComplete,
-          needsProfilePicture,
           onboardingData: isComplete
             ? {
                 fullName: userProfile.fullName || '',
@@ -112,7 +104,6 @@ export class OnboardingService {
 
         // Cache the status
         await this.setOnboardingStatusInStorage(status);
-        console.log('Onboarding service - Returning status:', status);
         return status;
       }
 
@@ -301,16 +292,13 @@ export class OnboardingService {
 
       // Update localStorage to reflect the change
       const currentStatus = await this.getOnboardingStatusFromStorage();
-      if (currentStatus) {
+      if (currentStatus && currentStatus.onboardingData) {
         const updatedStatus: UserOnboardingStatus = {
           ...currentStatus,
-          needsProfilePicture: false,
-          onboardingData: currentStatus.onboardingData
-            ? {
-                ...currentStatus.onboardingData,
-                profilePictureUrl,
-              }
-            : undefined,
+          onboardingData: {
+            ...currentStatus.onboardingData,
+            profilePictureUrl,
+          },
         };
         await this.setOnboardingStatusInStorage(updatedStatus);
       }

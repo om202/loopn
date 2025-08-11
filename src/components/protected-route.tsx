@@ -30,8 +30,7 @@ export default function ProtectedRoute({
       if (
         requireOnboarding &&
         onboardingStatus !== null &&
-        (!onboardingStatus.isOnboardingComplete ||
-          onboardingStatus.needsProfilePicture)
+        !onboardingStatus.isOnboardingComplete
       ) {
         window.location.href = '/onboarding';
         return;
@@ -69,8 +68,7 @@ export default function ProtectedRoute({
     if (
       requireOnboarding &&
       onboardingStatus &&
-      (!onboardingStatus.isOnboardingComplete ||
-        onboardingStatus.needsProfilePicture)
+      !onboardingStatus.isOnboardingComplete
     ) {
       return null;
     }
