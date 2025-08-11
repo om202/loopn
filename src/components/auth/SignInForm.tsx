@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { Mail, Lock } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
 
 interface SignInFormProps {
   onSwitchToSignUp: () => void;
@@ -15,6 +15,7 @@ export default function SignInForm({
 }: SignInFormProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const { handleSignIn, isLoading, error, clearError } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -75,13 +76,24 @@ export default function SignInForm({
             </div>
             <input
               id='password'
-              type='password'
+              type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={e => setPassword(e.target.value)}
-              className='w-full pl-10 pr-4 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white'
+              className='w-full pl-10 pr-12 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white'
               placeholder='Enter your password'
               required
             />
+            <button
+              type='button'
+              onClick={() => setShowPassword(!showPassword)}
+              className='absolute inset-y-0 right-0 pr-3 flex items-center text-zinc-500 hover:text-zinc-700 transition-colors'
+            >
+              {showPassword ? (
+                <EyeOff className='h-5 w-5' />
+              ) : (
+                <Eye className='h-5 w-5' />
+              )}
+            </button>
           </div>
         </div>
 

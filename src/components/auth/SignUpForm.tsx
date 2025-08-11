@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { Mail, Lock, Check, X } from 'lucide-react';
+import { Mail, Lock, Check, X, Eye, EyeOff } from 'lucide-react';
 
 interface SignUpFormProps {
   onSwitchToSignIn: () => void;
@@ -36,6 +36,10 @@ export default function SignUpForm({
 
   // Password validation state
   const [passwordFocused, setPasswordFocused] = useState(false);
+  
+  // Password visibility state
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // Real-time password validation
   const passwordValidation = {
@@ -123,12 +127,12 @@ export default function SignUpForm({
             </div>
             <input
               id='password'
-              type='password'
+              type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={e => setPassword(e.target.value)}
               onFocus={() => setPasswordFocused(true)}
               onBlur={() => setPasswordFocused(false)}
-              className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:border-transparent transition-colors bg-white ${
+              className={`w-full pl-10 pr-12 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:border-transparent transition-colors bg-white ${
                 password.length > 0
                   ? isPasswordValid
                     ? 'border-green-200 focus:ring-green-500'
@@ -138,6 +142,17 @@ export default function SignUpForm({
               placeholder='Create a password'
               required
             />
+            <button
+              type='button'
+              onClick={() => setShowPassword(!showPassword)}
+              className='absolute inset-y-0 right-0 pr-3 flex items-center text-zinc-500 hover:text-zinc-700 transition-colors'
+            >
+              {showPassword ? (
+                <EyeOff className='h-5 w-5' />
+              ) : (
+                <Eye className='h-5 w-5' />
+              )}
+            </button>
           </div>
 
           {/* Real-time password validation */}
@@ -185,10 +200,10 @@ export default function SignUpForm({
             </div>
             <input
               id='confirmPassword'
-              type='password'
+              type={showConfirmPassword ? 'text' : 'password'}
               value={confirmPassword}
               onChange={e => setConfirmPassword(e.target.value)}
-              className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:border-transparent transition-colors bg-white ${
+              className={`w-full pl-10 pr-12 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:border-transparent transition-colors bg-white ${
                 confirmPassword && password !== confirmPassword
                   ? 'border-b_red-200 focus:ring-b_red-500'
                   : 'border-zinc-200 focus:ring-brand-500'
@@ -196,6 +211,17 @@ export default function SignUpForm({
               placeholder='Confirm your password'
               required
             />
+            <button
+              type='button'
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className='absolute inset-y-0 right-0 pr-3 flex items-center text-zinc-500 hover:text-zinc-700 transition-colors'
+            >
+              {showConfirmPassword ? (
+                <EyeOff className='h-5 w-5' />
+              ) : (
+                <Eye className='h-5 w-5' />
+              )}
+            </button>
           </div>
           {confirmPassword && password !== confirmPassword && (
             <p className='text-xs text-b_red-500 mt-2'>
