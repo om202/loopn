@@ -1,10 +1,14 @@
 'use client';
 
+import { useState } from 'react';
+import Image from 'next/image';
 import Avatar from 'boring-avatars';
 
 interface UserAvatarProps {
   email?: string | null;
   userId?: string;
+  profilePictureUrl?: string | null;
+  hasProfilePicture?: boolean;
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   showStatus?: boolean;
   status?: string | null;
@@ -16,6 +20,8 @@ interface UserAvatarProps {
 export default function UserAvatar({
   email,
   userId,
+  profilePictureUrl,
+  hasProfilePicture = false,
   size = 'md',
   showStatus = false,
   status,
@@ -122,15 +128,31 @@ export default function UserAvatar({
     }
   };
 
+  const [imageError, setImageError] = useState(false);
+
+  const shouldShowProfileImage =
+    hasProfilePicture && profilePictureUrl && !imageError;
+
   return (
     <div className={`relative ${className} cursor-pointer`}>
       <div className='rounded-full overflow-hidden border border-brand-500'>
-        <Avatar
-          size={getAvatarSize()}
-          name={getUserIdentifier()}
-          variant={variant}
-          colors={getAvatarColors()}
-        />
+        {shouldShowProfileImage ? (
+          <Image
+            src={profilePictureUrl}
+            alt={`${email || userId || 'User'} profile picture`}
+            width={getAvatarSize()}
+            height={getAvatarSize()}
+            className='object-cover w-full h-full'
+            onError={() => setImageError(true)}
+          />
+        ) : (
+          <Avatar
+            size={getAvatarSize()}
+            name={getUserIdentifier()}
+            variant={variant}
+            colors={getAvatarColors()}
+          />
+        )}
       </div>
       {showStatus === true && (
         <div className={`absolute ${getIndicatorSizeAndPosition().position}`}>

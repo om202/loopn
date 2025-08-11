@@ -1,6 +1,7 @@
 import { generateClient } from 'aws-amplify/data';
 import type { Schema } from '@/../../amplify/data/resource';
 import { getCurrentUser } from 'aws-amplify/auth';
+import { uploadData } from 'aws-amplify/storage';
 import { amplifyInitialization } from '../lib/amplify-initialization';
 
 export interface OnboardingData {
@@ -13,6 +14,8 @@ export interface OnboardingData {
   about: string;
   interests: string[];
   skills: string[];
+  profilePictureFile?: File; // For upload during onboarding
+  profilePictureUrl?: string; // S3 URL after upload
 }
 
 export interface UserOnboardingStatus {
@@ -115,6 +118,33 @@ export class OnboardingService {
 
       const client = generateClient<Schema>();
 
+      // Handle profile picture upload if provided
+      let profilePictureUrl: string | undefined;
+      let hasProfilePicture = false;
+
+      if (data.profilePictureFile) {
+        try {
+          const fileExtension =
+            data.profilePictureFile.name.split('.').pop() || 'jpg';
+          const fileName = `${user.userId}/profile.${fileExtension}`;
+
+          const uploadResult = await uploadData({
+            key: `profile-pictures/${fileName}`,
+            data: data.profilePictureFile,
+            options: {
+              contentType: data.profilePictureFile.type,
+            },
+          }).result;
+
+          profilePictureUrl = uploadResult.key;
+          hasProfilePicture = true;
+          console.log('Profile picture uploaded:', profilePictureUrl);
+        } catch (uploadError) {
+          console.error('Failed to upload profile picture:', uploadError);
+          // Continue with onboarding even if image upload fails
+        }
+      }
+
       // Generate AI summary in the background
       let anonymousSummary = '';
       try {
@@ -156,6 +186,8 @@ export class OnboardingService {
         isOnboardingComplete: true,
         onboardingCompletedAt: new Date().toISOString(),
         anonymousSummary: anonymousSummary,
+        profilePictureUrl: profilePictureUrl,
+        hasProfilePicture: hasProfilePicture,
       });
 
       // Update localStorage

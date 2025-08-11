@@ -84,7 +84,9 @@ export default function SignUpForm({
     <div className='w-full'>
       {/* Sign in prompt at the top */}
       <div className='text-center mb-6 p-4 bg-zinc-50 rounded-xl border border-zinc-200'>
-        <span className='text-sm text-zinc-700 mr-3 font-medium'>Already have an account?</span>
+        <span className='text-sm text-zinc-700 mr-3 font-medium'>
+          Already have an account?
+        </span>
         <button
           type='button'
           onClick={() => {
@@ -250,8 +252,6 @@ export default function SignUpForm({
         >
           {isLoading ? 'Creating account...' : 'Create Account'}
         </button>
-
-
       </form>
     </div>
   );

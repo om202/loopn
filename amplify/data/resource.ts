@@ -209,6 +209,10 @@ const schema = a
         isOnboardingComplete: a.boolean().default(false),
         onboardingCompletedAt: a.datetime(),
         anonymousSummary: a.string(),
+        // Profile picture fields
+        profilePictureUrl: a.string(), // S3 URL for uploaded profile picture
+        profilePictureThumbnailUrl: a.string(), // Optimized thumbnail version
+        hasProfilePicture: a.boolean().default(false), // Quick check for avatar display
         // TODO: Later add fields for AI matching:
         // - aiGeneratedDescription: a.string()
         // - isAvailableForChat: a.boolean()

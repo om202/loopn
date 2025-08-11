@@ -16,6 +16,7 @@ import {
   YEARS_OF_EXPERIENCE_OPTIONS,
 } from '@/lib/interests-data';
 import LoadingContainer from '@/components/LoadingContainer';
+import ProfilePictureUpload from '@/components/ProfilePictureUpload';
 
 export default function OnboardingPage() {
   const { authStatus, onboardingStatus, handleSignOut } = useAuth();
@@ -37,6 +38,7 @@ export default function OnboardingPage() {
     about: '',
     interests: [],
     skills: [],
+    profilePictureFile: undefined,
   });
 
   // Redirect if not authenticated or already completed onboarding
@@ -118,13 +120,15 @@ export default function OnboardingPage() {
       }
       case 3:
         return (formData.interests?.length || 0) > 0;
+      case 4:
+        return true; // Profile picture is optional
       default:
         return false;
     }
   };
 
   const nextStep = () => {
-    if (validateStep(currentStep) && currentStep < 3) {
+    if (validateStep(currentStep) && currentStep < 4) {
       setCurrentStep(currentStep + 1);
     }
   };
@@ -136,7 +140,7 @@ export default function OnboardingPage() {
   };
 
   const handleComplete = async () => {
-    if (!validateStep(3)) return;
+    if (!validateStep(4)) return;
 
     setIsLoading(true);
     setError('');
@@ -243,15 +247,17 @@ export default function OnboardingPage() {
                 <h1 className='text-3xl font-bold text-zinc-900'>Loopn</h1>
               </div>
             </Link>
-            <p className='text-zinc-900 text-base mb-6'>Let's set up your profile</p>
+            <p className='text-zinc-900 text-base mb-6'>
+              Let's set up your profile
+            </p>
           </div>
           {/* Stepper */}
           <div className='mb-8 sm:mb-10'>
             <div className='relative'>
               {/* Solid connector line between steps (center-aligned) */}
               <div className='absolute left-5 right-5 top-1/2 -translate-y-1/2 border-t border-zinc-200 z-0' />
-              <div className='grid grid-cols-3 items-center'>
-                {[1, 2, 3].map(step => (
+              <div className='grid grid-cols-4 items-center'>
+                {[1, 2, 3, 4].map(step => (
                   <div key={step} className='flex justify-center'>
                     <div
                       className={`relative z-10 w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold border ${
@@ -267,19 +273,21 @@ export default function OnboardingPage() {
               </div>
             </div>
             {/* Labels */}
-            <div className='mt-3 grid grid-cols-3 text-center text-xs sm:text-sm'>
-              {['Profile', 'Use Loopn', 'Interests'].map((label, i) => (
-                <div
-                  key={label}
-                  className={
-                    i + 1 === currentStep
-                      ? 'text-zinc-900 font-medium'
-                      : 'text-zinc-500'
-                  }
-                >
-                  {label}
-                </div>
-              ))}
+            <div className='mt-3 grid grid-cols-4 text-center text-xs sm:text-sm'>
+              {['Profile', 'Use Loopn', 'Interests', 'Picture'].map(
+                (label, i) => (
+                  <div
+                    key={label}
+                    className={
+                      i + 1 === currentStep
+                        ? 'text-zinc-900 font-medium'
+                        : 'text-zinc-500'
+                    }
+                  >
+                    {label}
+                  </div>
+                )
+              )}
             </div>
           </div>
           {error && (
@@ -292,7 +300,7 @@ export default function OnboardingPage() {
           {currentStep === 1 && (
             <div className='space-y-6'>
               <h2 className='text-xl font-semibold text-zinc-900 mb-4'>
-                 Profile
+                Profile
               </h2>
 
               <div>
@@ -537,6 +545,28 @@ export default function OnboardingPage() {
             </div>
           )}
 
+          {/* Step 4: Profile Picture */}
+          {currentStep === 4 && (
+            <div className='space-y-6'>
+              <h2 className='text-xl font-semibold text-zinc-900 mb-4'>
+                Profile Picture
+              </h2>
+              <p className='text-sm text-zinc-600 mb-6'>
+                Add a profile picture to help others recognize you. This is
+                optional but recommended for building trust in professional
+                connections.
+              </p>
+
+              <ProfilePictureUpload
+                currentImage={formData.profilePictureFile || null}
+                onImageSelect={file =>
+                  updateFormData('profilePictureFile', file || undefined)
+                }
+                className='flex justify-center'
+              />
+            </div>
+          )}
+
           {/* Navigation buttons */}
           <div className='flex justify-between mt-8'>
             <button
@@ -547,18 +577,18 @@ export default function OnboardingPage() {
               Previous
             </button>
 
-            {currentStep < 3 ? (
+            {currentStep < 4 ? (
               <button
                 onClick={nextStep}
                 disabled={!validateStep(currentStep)}
                 className='px-6 py-3 rounded-xl font-medium bg-brand-500 text-white hover:bg-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed'
               >
-                Next
+                {currentStep === 3 ? 'Almost Done!' : 'Next'}
               </button>
             ) : (
               <button
                 onClick={handleComplete}
-                disabled={!validateStep(3) || isLoading}
+                disabled={!validateStep(4) || isLoading}
                 className='px-6 py-3 rounded-xl font-medium bg-brand-500 text-white hover:bg-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed'
               >
                 {isLoading ? 'Completing...' : 'Complete Setup'}

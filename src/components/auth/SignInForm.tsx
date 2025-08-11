@@ -35,7 +35,9 @@ export default function SignInForm({
     <div className='w-full'>
       {/* Sign up prompt at the top */}
       <div className='text-center mb-6 p-4 bg-zinc-50 rounded-xl border border-zinc-200'>
-        <span className='text-sm text-zinc-700 mr-3 font-medium'>New to Loopn?</span>
+        <span className='text-sm text-zinc-700 mr-3 font-medium'>
+          New to Loopn?
+        </span>
         <button
           type='button'
           onClick={() => {

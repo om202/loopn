@@ -3,6 +3,7 @@ import { PolicyStatement, Effect } from 'aws-cdk-lib/aws-iam';
 
 import { auth } from './auth/resource';
 import { data } from './data/resource';
+import { storage } from './storage/resource';
 import { presenceCleanup } from './functions/presence-cleanup/resource';
 import { aiSummaryGenerator } from './functions/ai-summary-generator/resource';
 
@@ -12,6 +13,7 @@ import { aiSummaryGenerator } from './functions/ai-summary-generator/resource';
 const backend = defineBackend({
   auth,
   data,
+  storage,
   presenceCleanup,
   aiSummaryGenerator,
 });
