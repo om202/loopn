@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import SignInForm from './SignInForm';
 import SignUpForm from './SignUpForm';
 import ConfirmSignUpForm from './ConfirmSignUpForm';
@@ -25,10 +26,12 @@ export default function CustomAuthenticator() {
 
   const AuthHeader = () => (
     <div className='text-center mb-8'>
-      <div className='flex items-center justify-center space-x-3 mb-6'>
-        <Image src='/loopn.svg' alt='Loopn' width={48} height={48} priority />
-        <h1 className='text-3xl font-bold text-zinc-900'>Loopn</h1>
-      </div>
+      <Link href='/home' className='inline-block'>
+        <div className='flex items-center justify-center space-x-3 mb-6 cursor-pointer hover:opacity-80 transition-opacity'>
+          <Image src='/loopn.svg' alt='Loopn' width={48} height={48} priority />
+          <h1 className='text-3xl font-bold text-zinc-900'>Loopn</h1>
+        </div>
+      </Link>
       <p className='text-zinc-900 text-base'>
         {authState.view === 'signIn' && 'Please sign in to continue'}
         {authState.view === 'signUp' && 'Create your account to get started'}
