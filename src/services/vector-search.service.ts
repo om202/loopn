@@ -27,8 +27,6 @@ export interface VectorSearchResponse {
 }
 
 export class VectorSearchService {
-
-
   /**
    * Generate embedding for a user profile and store it
    */

@@ -100,14 +100,14 @@ export const handler = async (
 
         return await bulkIndexUsers(users);
 
-            case 'search_users':
+      case 'search_users':
         if (!actualEvent.query || typeof actualEvent.query !== 'string') {
           throw new Error('Query is missing or invalid');
         }
 
         const query = actualEvent.query.trim();
         const limit = actualEvent.limit || 10;
-        
+
         return await searchUsers(query, limit);
 
       default:
@@ -126,7 +126,6 @@ async function generateEmbedding(text: string): Promise<EmbeddingResponse> {
   for (let i = 0; i < POSSIBLE_MODELS.length; i++) {
     const modelId = POSSIBLE_MODELS[i];
     try {
-
       const command = new InvokeModelCommand({
         modelId: modelId,
         body: JSON.stringify({
@@ -144,7 +143,6 @@ async function generateEmbedding(text: string): Promise<EmbeddingResponse> {
       if (!responseBody.embedding) {
         throw new Error('No embedding in response');
       }
-
 
       return {
         success: true,
@@ -232,7 +230,6 @@ async function indexUser(
   userId: string,
   userProfile: UserProfile
 ): Promise<EmbeddingResponse> {
-
   // Validate userProfile is not empty
   if (!userProfile || Object.keys(userProfile).length === 0) {
     throw new Error('UserProfile is empty or invalid');

@@ -126,9 +126,6 @@ export async function indexAllExistingUsers(): Promise<{
           }
         }
 
-
-
-
         return {
           userId: profile.userId,
           userProfile,
