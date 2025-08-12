@@ -13,7 +13,7 @@ import React from 'react';
 
 export default function DashboardDemo() {
   return (
-    <div className='bg-white rounded-2xl shadow-2xl border border-zinc-200 max-w-7xl mx-auto overflow-hidden'>
+    <div className='bg-white md:rounded-2xl shadow-xl border border-zinc-200 md:max-w-7xl md:mx-auto overflow-hidden w-full'>
       {/* Dashboard Layout - Desktop and Tablet */}
       <div className='hidden md:flex h-[650px]'>
         {/* Left Sidebar */}
@@ -330,7 +330,7 @@ export default function DashboardDemo() {
                 </p>
               </div>
             </div>
-            <div className='flex items-center gap-2'>
+            <div className='flex items-center gap-3'>
               <div className='relative'>
                 <Bell className='w-5 h-5 text-zinc-600' />
                 <div className='absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full flex items-center justify-center'>
@@ -363,7 +363,7 @@ export default function DashboardDemo() {
         </div>
 
         {/* Mobile Content */}
-        <div className='p-4 bg-zinc-50 min-h-[600px]'>
+        <div className='p-4 bg-zinc-50 min-h-[500px]'>
           {/* Mobile Header */}
           <div className='mb-4'>
             <h2 className='text-lg font-bold text-zinc-900 mb-1'>
@@ -511,8 +511,8 @@ export default function DashboardDemo() {
                     disabled
                     className='px-3 py-2 text-xs font-medium rounded-lg border transition-colors bg-white text-brand-500 border-zinc-200 hover:bg-brand-100 hover:border-zinc-200 flex items-center gap-1.5 opacity-80 cursor-not-allowed'
                   >
-                    <CheckCircle2 className='w-3 h-3 text-brand-500 flex-shrink-0' />
-                    Start
+                    <MessageCircle className='w-3 h-3 text-brand-500 flex-shrink-0' />
+                    Chat
                   </button>
                 </div>
               </div>

@@ -15,7 +15,6 @@ import {
   Clock,
 } from 'lucide-react';
 import DashboardDemo from '@/components/DashboardDemo';
-import UserAvatar from '@/components/UserAvatar';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -190,7 +189,7 @@ export default function HomePage() {
             {/* Right column - Demo */}
             <div className='relative mt-12 lg:mt-0'>
               {/* Chat Interface Mockup - matching real chat UI */}
-              <div className='bg-white rounded-2xl shadow-2xl border border-zinc-200 max-w-sm sm:max-w-md lg:max-w-lg mx-auto overflow-hidden'>
+              <div className='bg-white md:rounded-2xl shadow-xl border border-zinc-200 w-full sm:max-w-md lg:max-w-lg sm:mx-auto overflow-hidden'>
                 {/* Chat Header - matching ChatHeader.tsx */}
                 <div
                   className='bg-white border-b border-zinc-200 relative z-10'
@@ -253,7 +252,7 @@ export default function HomePage() {
                 </div>
 
                 {/* Chat Messages - matching MessageList.tsx structure */}
-                <div className='bg-white px-4 py-4 space-y-4 max-h-96 overflow-hidden'>
+                <div className='bg-white px-4 py-4 space-y-4 max-h-[500px] md:max-h-96 overflow-hidden'>
                   {/* Date separator */}
                   <div className='flex items-center justify-center my-6'>
                     <div className='text-zinc-500 text-sm'>
@@ -356,29 +355,7 @@ export default function HomePage() {
                     </div>
                   </div>
 
-                  {/* Typing indicator */}
-                  <div className='flex items-center gap-2 opacity-0 animate-[fadeInUp_0.6s_ease-out_4s_forwards] mt-1'>
-                    <div className='flex-shrink-0 w-8 h-8'>
-                      <UserAvatar
-                        email='sarah.chen@company.com'
-                        size='sm'
-                        showStatus={false}
-                      />
-                    </div>
-                    <div className='bg-zinc-100 rounded-3xl px-4 py-3 shadow-sm'>
-                      <div className='flex space-x-1'>
-                        <div className='w-2 h-2 bg-zinc-400 rounded-full animate-bounce'></div>
-                        <div
-                          className='w-2 h-2 bg-zinc-400 rounded-full animate-bounce'
-                          style={{ animationDelay: '0.1s' }}
-                        ></div>
-                        <div
-                          className='w-2 h-2 bg-zinc-400 rounded-full animate-bounce'
-                          style={{ animationDelay: '0.2s' }}
-                        ></div>
-                      </div>
-                    </div>
-                  </div>
+
                 </div>
 
                 {/* Chat Input - matching MessageInput.tsx */}
