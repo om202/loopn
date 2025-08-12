@@ -135,9 +135,7 @@ export default function DashboardDemo() {
                     className='px-2.5 py-2 text-sm font-medium rounded-xl border transition-colors bg-white text-brand-500 border-zinc-200 hover:bg-brand-100 hover:border-zinc-200 flex items-center gap-1.5 flex-shrink-0 min-w-[44px] justify-center opacity-80 cursor-not-allowed'
                   >
                     <MessageCircle className='w-4 h-4 text-brand-500 flex-shrink-0' />
-                    <span className='hidden min-[400px]:inline'>
-                      Chat Now
-                    </span>
+                    <span className='hidden min-[400px]:inline'>Chat Now</span>
                   </button>
                 </div>
               </div>
@@ -217,9 +215,7 @@ export default function DashboardDemo() {
                     className='px-2.5 py-2 text-sm font-medium rounded-xl border transition-colors bg-white text-brand-500 border-zinc-200 hover:bg-brand-100 hover:border-zinc-200 flex items-center gap-1.5 flex-shrink-0 min-w-[44px] justify-center opacity-80 cursor-not-allowed'
                   >
                     <MessageCircle className='w-4 h-4 text-brand-500 flex-shrink-0' />
-                    <span className='hidden min-[400px]:inline'>
-                      Chat Now
-                    </span>
+                    <span className='hidden min-[400px]:inline'>Chat Now</span>
                   </button>
                 </div>
               </div>
@@ -300,9 +296,7 @@ export default function DashboardDemo() {
                     className='px-2.5 py-2 text-sm font-medium rounded-xl border transition-colors bg-white text-brand-500 border-zinc-200 hover:bg-brand-100 hover:border-zinc-200 flex items-center gap-1.5 flex-shrink-0 min-w-[44px] justify-center opacity-80 cursor-not-allowed'
                   >
                     <MessageCircle className='w-4 h-4 text-brand-500 flex-shrink-0' />
-                    <span className='hidden min-[400px]:inline'>
-                      Chat Now
-                    </span>
+                    <span className='hidden min-[400px]:inline'>Chat Now</span>
                   </button>
                 </div>
               </div>
@@ -423,8 +417,8 @@ export default function DashboardDemo() {
                     disabled
                     className='px-3 py-2 text-xs font-medium rounded-lg border transition-colors bg-white text-brand-500 border-zinc-200 hover:bg-brand-100 hover:border-zinc-200 flex items-center gap-1.5 opacity-80 cursor-not-allowed'
                   >
-                    <CheckCircle2 className='w-3 h-3 text-brand-500 flex-shrink-0' />
-                    Start
+                    <MessageCircle className='w-3 h-3 text-brand-500 flex-shrink-0' />
+                    Chat
                   </button>
                 </div>
               </div>

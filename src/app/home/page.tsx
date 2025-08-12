@@ -431,7 +431,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <DashboardDemo/>
+          <DashboardDemo />
 
           {/* Features Grid */}
           <div className='grid lg:grid-cols-3 gap-6 sm:gap-8 mb-16 mt-16'>
