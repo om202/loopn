@@ -14,6 +14,7 @@ import {
   Shield,
   Clock,
 } from 'lucide-react';
+import DashboardDemo from '@/components/DashboardDemo';
 import UserAvatar from '@/components/UserAvatar';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -142,22 +143,29 @@ export default function HomePage() {
               </h1>
 
               <p className='text-lg sm:text-xl text-zinc-700 mb-10 leading-relaxed max-w-2xl'>
-                Loopn helps you build meaningful professional relationships through smart AI matching and authentic conversations.
+                Loopn helps you build meaningful professional relationships
+                through smart AI matching and authentic conversations.
               </p>
 
               {/* Value Propositions */}
               <div className='flex flex-wrap gap-6 justify-center lg:justify-start mb-12'>
                 <div className='flex items-center gap-2 text-zinc-700'>
                   <CheckCircle className='w-5 h-5 text-brand-500' />
-                  <span className='font-medium text-sm'>Smart AI Matching – Meet the right people faster</span>
+                  <span className='font-medium text-sm'>
+                    Smart AI Matching – Meet the right people faster
+                  </span>
                 </div>
                 <div className='flex items-center gap-2 text-zinc-700'>
                   <CheckCircle className='w-5 h-5 text-brand-500' />
-                  <span className='font-medium text-sm'>Real-time Chat – Talk instantly, anytime</span>
+                  <span className='font-medium text-sm'>
+                    Real-time Chat – Talk instantly, anytime
+                  </span>
                 </div>
                 <div className='flex items-center gap-2 text-zinc-700'>
                   <CheckCircle className='w-5 h-5 text-brand-500' />
-                  <span className='font-medium text-sm'>Privacy First – You control what you share</span>
+                  <span className='font-medium text-sm'>
+                    Privacy First – You control what you share
+                  </span>
                 </div>
               </div>
 
@@ -417,12 +425,16 @@ export default function HomePage() {
               </span>
             </h2>
             <p className='text-lg text-zinc-700 leading-relaxed'>
-              Loopn removes the noise from traditional networking, helping you connect based on what truly matters — your expertise, goals, and shared interests.
+              Loopn removes the noise from traditional networking, helping you
+              connect based on what truly matters — your expertise, goals, and
+              shared interests.
             </p>
           </div>
 
+          <DashboardDemo/>
+
           {/* Features Grid */}
-          <div className='grid lg:grid-cols-3 gap-6 sm:gap-8 mb-16'>
+          <div className='grid lg:grid-cols-3 gap-6 sm:gap-8 mb-16 mt-16'>
             {/* Feature 1 - Smart Matching */}
             <div className='group bg-white rounded-2xl p-6 sm:p-8 border border-zinc-200 h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
               <div className='w-14 h-14 bg-gradient-to-br from-brand-100 to-brand-200 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300'>
@@ -432,7 +444,8 @@ export default function HomePage() {
                 Smart AI Matching
               </h3>
               <p className='text-zinc-700 mb-6 leading-relaxed text-sm sm:text-base'>
-                Meet professionals who complement your skills and align with your goals.
+                Meet professionals who complement your skills and align with
+                your goals.
               </p>
               <ul className='space-y-3'>
                 <li className='flex items-center gap-3 text-zinc-700'>
@@ -471,7 +484,8 @@ export default function HomePage() {
                 Instant Connections
               </h3>
               <p className='text-zinc-700 mb-6 leading-relaxed text-sm sm:text-base'>
-                Start meaningful conversations the moment you match — no delays, no barriers.
+                Start meaningful conversations the moment you match — no delays,
+                no barriers.
               </p>
               <ul className='space-y-3'>
                 <li className='flex items-center gap-3 text-zinc-700'>
@@ -598,7 +612,8 @@ export default function HomePage() {
                     Create Your Profile
                   </h3>
                   <p className='text-zinc-700 leading-relaxed text-sm sm:text-base'>
-                    Showcase your expertise, goals, and what you're looking for — so the right people can find you.
+                    Showcase your expertise, goals, and what you're looking for
+                    — so the right people can find you.
                   </p>
                 </div>
               </div>
@@ -621,7 +636,8 @@ export default function HomePage() {
                     Get Smart Matches
                   </h3>
                   <p className='text-zinc-700 leading-relaxed text-sm sm:text-base'>
-                    Our AI connects you with professionals who share your interests and complement your skills.
+                    Our AI connects you with professionals who share your
+                    interests and complement your skills.
                   </p>
                 </div>
               </div>
@@ -644,7 +660,8 @@ export default function HomePage() {
                     Start Connecting
                   </h3>
                   <p className='text-zinc-700 leading-relaxed text-sm sm:text-base'>
-                    Engage in real conversations, grow your network, and build relationships that last.
+                    Engage in real conversations, grow your network, and build
+                    relationships that last.
                   </p>
                 </div>
               </div>
@@ -671,7 +688,8 @@ export default function HomePage() {
               </span>
             </h2>
             <p className='text-lg text-zinc-700 max-w-3xl mx-auto leading-relaxed'>
-              Loopn is built for those who value authentic networking and meaningful connections.
+              Loopn is built for those who value authentic networking and
+              meaningful connections.
             </p>
           </div>
 
@@ -693,7 +711,7 @@ export default function HomePage() {
               </blockquote>
               <div className='flex items-center gap-4 mt-auto'>
                 <Image
-                  src='/dummy-user2.png'
+                  src='/dummy-user2.jpg'
                   alt='Sarah Johnson'
                   width={48}
                   height={48}
@@ -727,7 +745,7 @@ export default function HomePage() {
               </blockquote>
               <div className='flex items-center gap-4 mt-auto'>
                 <Image
-                  src='/dummy-user3.png'
+                  src='/dummy-user3.jpg'
                   alt='Michael Chen'
                   width={48}
                   height={48}
@@ -761,7 +779,7 @@ export default function HomePage() {
               </blockquote>
               <div className='flex items-center gap-4 mt-auto'>
                 <Image
-                  src='/dummy-user4.png'
+                  src='/dummy-user4.jpg'
                   alt='Emily Rodriguez'
                   width={48}
                   height={48}
@@ -785,7 +803,8 @@ export default function HomePage() {
               Built for Professionals in Every Field
             </h3>
             <p className='text-zinc-600 mb-8 text-sm sm:text-base'>
-              From startups to global enterprises, Loopn connects experts across industries.
+              From startups to global enterprises, Loopn connects experts across
+              industries.
             </p>
             <div className='flex flex-wrap justify-center items-center gap-6 sm:gap-8 opacity-60'>
               <div className='text-zinc-500 font-semibold text-sm sm:text-base'>
@@ -851,7 +870,8 @@ export default function HomePage() {
               <span className='text-2xl font-bold text-zinc-900'>Loopn</span>
             </div>
             <p className='text-zinc-600 text-center max-w-2xl mx-auto mb-8 leading-relaxed'>
-              Build meaningful connections through smart matching and genuine conversations.
+              Build meaningful connections through smart matching and genuine
+              conversations.
             </p>
 
             {/* Footer Links */}
