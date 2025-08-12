@@ -46,25 +46,6 @@ export async function indexAllExistingUsers(): Promise<{
 
     console.log(`Found ${profiles.length} user profiles to index`);
 
-    // DEBUG: Let's see what we actually got
-    console.log('=== DEBUG: First profile data ===');
-    if (profiles.length > 0) {
-      const firstProfile = profiles[0];
-      console.log('Profile keys:', Object.keys(firstProfile));
-      console.log('Profile data:', {
-        userId: firstProfile.userId,
-        jobRole: firstProfile.jobRole,
-        companyName: firstProfile.companyName,
-        industry: firstProfile.industry,
-        yearsOfExperience: firstProfile.yearsOfExperience,
-        education: firstProfile.education,
-        about: firstProfile.about,
-        interests: firstProfile.interests,
-        skills: firstProfile.skills,
-        isOnboardingComplete: firstProfile.isOnboardingComplete,
-      });
-    }
-
     // Prepare users for bulk indexing
     const usersToIndex = profiles
       .filter(profile => {
@@ -145,10 +126,8 @@ export async function indexAllExistingUsers(): Promise<{
           }
         }
 
-        // DEBUG: Show what we're sending for each user
-        console.log(`=== DEBUG: User ${profile.userId} userProfile ===`);
-        console.log('userProfile keys:', Object.keys(userProfile));
-        console.log('userProfile:', userProfile);
+
+
 
         return {
           userId: profile.userId,

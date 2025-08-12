@@ -27,37 +27,7 @@ export interface VectorSearchResponse {
 }
 
 export class VectorSearchService {
-  /**
-   * Search for users using natural language query
-   */
-  static async searchUsers(
-    query: string,
-    limit: number = 10
-  ): Promise<VectorSearchResponse> {
-    try {
-      const { data, errors } = await client.queries.vectorSearch({
-        action: 'search',
-        query,
-        limit,
-      });
 
-      if (errors && errors.length > 0) {
-        console.error('Vector search errors:', errors);
-        return {
-          success: false,
-          error: errors[0].message,
-        };
-      }
-
-      return data as VectorSearchResponse;
-    } catch (error) {
-      console.error('Error in vector search:', error);
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
-      };
-    }
-  }
 
   /**
    * Generate embedding for a user profile and store it
@@ -130,26 +100,11 @@ export class VectorSearchService {
       // Convert userProfile to JSON string for GraphQL
       const userProfileJson = JSON.stringify(cleanUserProfile);
 
-      console.log('=== DEBUG: Sending to GraphQL ===');
-      console.log('userProfile object:', cleanUserProfile);
-      console.log('userProfile JSON string:', userProfileJson);
-      console.log('Full GraphQL query params:', {
-        action: 'index_user',
-        userId,
-        userProfile: userProfileJson,
-      });
-
       const { data, errors } = await client.queries.vectorSearch({
         action: 'index_user',
         userId,
         userProfile: userProfileJson,
       });
-
-      console.log('=== DEBUG: GraphQL Response ===');
-      console.log('data:', data);
-      console.log('errors:', errors);
-      console.log('data type:', typeof data);
-      console.log('errors type:', typeof errors);
 
       if (errors && errors.length > 0) {
         console.error('Vector indexing errors:', errors);
@@ -324,6 +279,78 @@ export class VectorSearchService {
       return result;
     } catch (error) {
       console.error('Error bulk indexing user profiles:', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+      };
+    }
+  }
+
+  /**
+   * Search for users using natural language query
+   */
+  static async searchUsers(
+    query: string,
+    limit: number = 10
+  ): Promise<{ success: boolean; results?: SearchResult[]; error?: string }> {
+    try {
+      const { data, errors } = await client.queries.vectorSearch({
+        action: 'search_users',
+        query,
+        limit,
+      });
+
+      if (errors && errors.length > 0) {
+        console.error('Vector search errors:', errors);
+        return {
+          success: false,
+          error: errors[0].message,
+        };
+      }
+
+      if (!data) {
+        console.error('No data returned from vector search query');
+        return {
+          success: false,
+          error: 'No data returned from vector search service',
+        };
+      }
+
+      // Parse the JSON string if data is returned as string
+      let result: {
+        success: boolean;
+        results?: SearchResult[];
+        error?: string;
+      };
+      if (typeof data === 'string') {
+        try {
+          result = JSON.parse(data);
+        } catch (parseError) {
+          console.error('Failed to parse vector search response:', parseError);
+          return {
+            success: false,
+            error: 'Invalid response format from vector search service',
+          };
+        }
+      } else {
+        result = data as {
+          success: boolean;
+          results?: SearchResult[];
+          error?: string;
+        };
+      }
+
+      if (!result.success && result.error) {
+        console.error('Vector search service returned error:', result.error);
+        return {
+          success: false,
+          error: result.error,
+        };
+      }
+
+      return result;
+    } catch (error) {
+      console.error('Error searching users:', error);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error',
