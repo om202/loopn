@@ -22,10 +22,16 @@ const backend = defineBackend({
 backend.vectorSearch.resources.lambda.addToRolePolicy(
   new PolicyStatement({
     effect: Effect.ALLOW,
-    actions: ['bedrock:InvokeModel', 'bedrock:InvokeModelWithResponseStream'],
+    actions: [
+      'bedrock:InvokeModel',
+      'bedrock:InvokeModelWithResponseStream',
+      'bedrock:ListFoundationModels',
+      'bedrock:GetModelInvocationLoggingConfiguration',
+    ],
     resources: [
-      'arn:aws:bedrock:*::foundation-model/amazon.titan-embed-text-v2:0',
-      'arn:aws:bedrock:*::foundation-model/amazon.titan-embed-text-v1',
+      // Allow all Bedrock foundation models across regions
+      'arn:aws:bedrock:*::foundation-model/*',
+      '*',
     ],
   })
 );

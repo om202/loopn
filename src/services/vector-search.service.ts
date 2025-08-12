@@ -67,11 +67,89 @@ export class VectorSearchService {
     userProfile: UserProfile
   ): Promise<{ success: boolean; error?: string }> {
     try {
+      // Validate userProfile has content
+      if (!userProfile || Object.keys(userProfile).length === 0) {
+        return {
+          success: false,
+          error: 'UserProfile is empty or invalid',
+        };
+      }
+
+      // Create a clean userProfile object by explicitly filtering out undefined values
+      const cleanUserProfile: UserProfile = {};
+
+      // Only include fields that have actual values (not null, undefined, or empty strings)
+      if (userProfile.jobRole && userProfile.jobRole.trim()) {
+        cleanUserProfile.jobRole = userProfile.jobRole.trim();
+      }
+      if (userProfile.companyName && userProfile.companyName.trim()) {
+        cleanUserProfile.companyName = userProfile.companyName.trim();
+      }
+      if (userProfile.industry && userProfile.industry.trim()) {
+        cleanUserProfile.industry = userProfile.industry.trim();
+      }
+      if (
+        typeof userProfile.yearsOfExperience === 'number' &&
+        userProfile.yearsOfExperience >= 0
+      ) {
+        cleanUserProfile.yearsOfExperience = userProfile.yearsOfExperience;
+      }
+      if (userProfile.education && userProfile.education.trim()) {
+        cleanUserProfile.education = userProfile.education.trim();
+      }
+      if (userProfile.about && userProfile.about.trim()) {
+        cleanUserProfile.about = userProfile.about.trim();
+      }
+      if (
+        userProfile.interests &&
+        Array.isArray(userProfile.interests) &&
+        userProfile.interests.length > 0
+      ) {
+        cleanUserProfile.interests = userProfile.interests
+          .filter(item => item && item.trim())
+          .map(item => item.trim());
+      }
+      if (
+        userProfile.skills &&
+        Array.isArray(userProfile.skills) &&
+        userProfile.skills.length > 0
+      ) {
+        cleanUserProfile.skills = userProfile.skills
+          .filter(item => item && item.trim())
+          .map(item => item.trim());
+      }
+
+      // Validate after cleaning
+      if (Object.keys(cleanUserProfile).length === 0) {
+        return {
+          success: false,
+          error: 'UserProfile has no valid content after cleaning',
+        };
+      }
+
+      // Convert userProfile to JSON string for GraphQL
+      const userProfileJson = JSON.stringify(cleanUserProfile);
+
+      console.log('=== DEBUG: Sending to GraphQL ===');
+      console.log('userProfile object:', cleanUserProfile);
+      console.log('userProfile JSON string:', userProfileJson);
+      console.log('Full GraphQL query params:', {
+        action: 'index_user',
+        userId,
+        userProfile: userProfileJson,
+      });
+
       const { data, errors } = await client.queries.vectorSearch({
         action: 'index_user',
         userId,
-        userProfile,
+        userProfile: userProfileJson,
       });
+
+      console.log('=== DEBUG: GraphQL Response ===');
+      console.log('data:', data);
+      console.log('errors:', errors);
+      console.log('data type:', typeof data);
+      console.log('errors type:', typeof errors);
 
       if (errors && errors.length > 0) {
         console.error('Vector indexing errors:', errors);
@@ -81,7 +159,39 @@ export class VectorSearchService {
         };
       }
 
-      return data as { success: boolean; error?: string };
+      if (!data) {
+        console.error('No data returned from GraphQL query');
+        return {
+          success: false,
+          error: 'No data returned from vector search service',
+        };
+      }
+
+      // Parse the JSON string if data is returned as string
+      let result: { success: boolean; error?: string };
+      if (typeof data === 'string') {
+        try {
+          result = JSON.parse(data);
+        } catch (parseError) {
+          console.error('Failed to parse GraphQL response:', parseError);
+          return {
+            success: false,
+            error: 'Invalid response format from vector search service',
+          };
+        }
+      } else {
+        result = data as { success: boolean; error?: string };
+      }
+
+      if (!result.success && result.error) {
+        console.error('Vector search service returned error:', result.error);
+        return {
+          success: false,
+          error: result.error,
+        };
+      }
+
+      return result;
     } catch (error) {
       console.error('Error indexing user profile:', error);
       return {
@@ -98,9 +208,74 @@ export class VectorSearchService {
     users: Array<{ userId: string; userProfile: UserProfile }>
   ): Promise<{ success: boolean; error?: string }> {
     try {
+      // Clean all user profiles before sending
+      const cleanUsers = users
+        .map(user => {
+          const cleanUserProfile: UserProfile = {};
+
+          const { userProfile } = user;
+
+          // Only include fields that have actual values (not null, undefined, or empty strings)
+          if (userProfile.jobRole && userProfile.jobRole.trim()) {
+            cleanUserProfile.jobRole = userProfile.jobRole.trim();
+          }
+          if (userProfile.companyName && userProfile.companyName.trim()) {
+            cleanUserProfile.companyName = userProfile.companyName.trim();
+          }
+          if (userProfile.industry && userProfile.industry.trim()) {
+            cleanUserProfile.industry = userProfile.industry.trim();
+          }
+          if (
+            typeof userProfile.yearsOfExperience === 'number' &&
+            userProfile.yearsOfExperience >= 0
+          ) {
+            cleanUserProfile.yearsOfExperience = userProfile.yearsOfExperience;
+          }
+          if (userProfile.education && userProfile.education.trim()) {
+            cleanUserProfile.education = userProfile.education.trim();
+          }
+          if (userProfile.about && userProfile.about.trim()) {
+            cleanUserProfile.about = userProfile.about.trim();
+          }
+          if (
+            userProfile.interests &&
+            Array.isArray(userProfile.interests) &&
+            userProfile.interests.length > 0
+          ) {
+            cleanUserProfile.interests = userProfile.interests
+              .filter(item => item && item.trim())
+              .map(item => item.trim());
+          }
+          if (
+            userProfile.skills &&
+            Array.isArray(userProfile.skills) &&
+            userProfile.skills.length > 0
+          ) {
+            cleanUserProfile.skills = userProfile.skills
+              .filter(item => item && item.trim())
+              .map(item => item.trim());
+          }
+
+          return {
+            userId: user.userId,
+            userProfile: cleanUserProfile,
+          };
+        })
+        .filter(user => Object.keys(user.userProfile).length > 0); // Only include users with valid content
+
+      if (cleanUsers.length === 0) {
+        return {
+          success: false,
+          error: 'No valid user profiles to index after cleaning',
+        };
+      }
+
+      // Convert users array to JSON string for GraphQL
+      const usersJson = JSON.stringify(cleanUsers);
+
       const { data, errors } = await client.queries.vectorSearch({
         action: 'bulk_index',
-        users,
+        users: usersJson,
       });
 
       if (errors && errors.length > 0) {
@@ -111,7 +286,42 @@ export class VectorSearchService {
         };
       }
 
-      return data as { success: boolean; error?: string };
+      if (!data) {
+        console.error('No data returned from bulk GraphQL query');
+        return {
+          success: false,
+          error: 'No data returned from vector search service',
+        };
+      }
+
+      // Parse the JSON string if data is returned as string
+      let result: { success: boolean; error?: string };
+      if (typeof data === 'string') {
+        try {
+          result = JSON.parse(data);
+        } catch (parseError) {
+          console.error('Failed to parse bulk GraphQL response:', parseError);
+          return {
+            success: false,
+            error: 'Invalid response format from vector search service',
+          };
+        }
+      } else {
+        result = data as { success: boolean; error?: string };
+      }
+
+      if (!result.success && result.error) {
+        console.error(
+          'Bulk vector search service returned error:',
+          result.error
+        );
+        return {
+          success: false,
+          error: result.error,
+        };
+      }
+
+      return result;
     } catch (error) {
       console.error('Error bulk indexing user profiles:', error);
       return {

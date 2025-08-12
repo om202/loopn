@@ -26,18 +26,6 @@ interface SearchResult {
   profile: UserProfile;
 }
 
-interface EmbeddingRequest {
-  action: 'generate_embedding' | 'search' | 'index_user' | 'bulk_index';
-  text?: string;
-  query?: string;
-  userId?: string;
-  userProfile?: UserProfile;
-  users?: Array<{
-    userId: string;
-    userProfile: UserProfile;
-  }>;
-  limit?: number;
-}
 
 interface EmbeddingResponse {
   success: boolean;
@@ -46,7 +34,12 @@ interface EmbeddingResponse {
   error?: string;
 }
 
-const EMBEDDING_MODEL = 'amazon.titan-embed-text-v2:0';
+// Try different possible model IDs for Titan Text Embeddings
+const POSSIBLE_MODELS = [
+  'amazon.titan-embed-text-v2:0', // V2 is granted, try this first
+  'amazon.titan-embed-text-v1', // Fallback (might not be available)
+];
+let EMBEDDING_MODEL = POSSIBLE_MODELS[0]; // Start with v2
 const EMBEDDING_DIMENSION = 1024; // Titan Text Embeddings v2 produces 1024-dimensional vectors
 const USER_PROFILE_TABLE = process.env.USER_PROFILE_TABLE || 'UserProfile';
 
@@ -56,29 +49,81 @@ const bedrockClient = new BedrockRuntimeClient({
 const dynamoClient = new DynamoDBClient({ region: process.env.AWS_REGION });
 
 export const handler = async (
-  event: EmbeddingRequest
+  event: any // Change to any to see the raw structure
 ): Promise<EmbeddingResponse> => {
   try {
-    console.log('Vector search function called with action:', event.action);
+    console.log('=== RAW EVENT DEBUG ===');
+    console.log('Event keys:', Object.keys(event));
+    console.log('Full event:', JSON.stringify(event, null, 2));
+    console.log('event.action:', event.action);
+    console.log('event.arguments:', event.arguments);
 
-    switch (event.action) {
+    // AppSync might wrap arguments differently
+    const actualEvent = event.arguments || event;
+    console.log('=== PROCESSED EVENT ===');
+    console.log('actualEvent.action:', actualEvent.action);
+
+    switch (actualEvent.action) {
       case 'generate_embedding':
-        return await generateEmbedding(event.text!);
+        return await generateEmbedding(actualEvent.text!);
 
       case 'search':
-        return await searchUsers(event.query!, event.limit || 10);
+        return await searchUsers(actualEvent.query!, actualEvent.limit || 10);
 
       case 'index_user':
-        return await indexUser(event.userId!, event.userProfile!);
+        console.log('Raw userProfile:', actualEvent.userProfile);
+        console.log('userProfile type:', typeof actualEvent.userProfile);
+        let userProfile: UserProfile;
+
+        if (typeof actualEvent.userProfile === 'string') {
+          try {
+            userProfile = JSON.parse(actualEvent.userProfile);
+          } catch (parseError) {
+            console.error('Failed to parse userProfile JSON:', parseError);
+            throw new Error('Invalid userProfile JSON format');
+          }
+        } else if (
+          actualEvent.userProfile &&
+          typeof actualEvent.userProfile === 'object'
+        ) {
+          userProfile = actualEvent.userProfile as UserProfile;
+        } else {
+          throw new Error('userProfile is missing or invalid');
+        }
+
+        console.log('Parsed userProfile:', userProfile);
+        return await indexUser(actualEvent.userId!, userProfile);
 
       case 'bulk_index':
-        return await bulkIndexUsers(event.users!);
+        console.log('Raw users:', actualEvent.users);
+        console.log('users type:', typeof actualEvent.users);
+        let users: Array<{ userId: string; userProfile: UserProfile }>;
+
+        if (typeof actualEvent.users === 'string') {
+          try {
+            users = JSON.parse(actualEvent.users);
+          } catch (parseError) {
+            console.error('Failed to parse users JSON:', parseError);
+            throw new Error('Invalid users JSON format');
+          }
+        } else if (Array.isArray(actualEvent.users)) {
+          users = actualEvent.users as Array<{
+            userId: string;
+            userProfile: UserProfile;
+          }>;
+        } else {
+          throw new Error('users is missing or invalid');
+        }
+
+        console.log('Parsed users:', users);
+        return await bulkIndexUsers(users);
 
       default:
-        throw new Error(`Unknown action: ${event.action}`);
+        throw new Error(`Unknown action: ${actualEvent.action}`);
     }
   } catch (error) {
     console.error('Error in vector search function:', error);
+    console.error('Full error details:', error);
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error',
@@ -87,23 +132,62 @@ export const handler = async (
 };
 
 async function generateEmbedding(text: string): Promise<EmbeddingResponse> {
-  const command = new InvokeModelCommand({
-    modelId: EMBEDDING_MODEL,
-    body: JSON.stringify({
-      inputText: text,
-      dimensions: EMBEDDING_DIMENSION,
-      normalize: true,
-    }),
-    contentType: 'application/json',
-    accept: 'application/json',
-  });
+  console.log(`=== EMBEDDING GENERATION DEBUG ===`);
+  console.log(`Text to embed: ${text.substring(0, 100)}...`);
+  console.log(`Current model: ${EMBEDDING_MODEL}`);
+  console.log(`AWS Region: ${process.env.AWS_REGION}`);
 
-  const response = await bedrockClient.send(command);
-  const responseBody = JSON.parse(new TextDecoder().decode(response.body));
+  for (let i = 0; i < POSSIBLE_MODELS.length; i++) {
+    const modelId = POSSIBLE_MODELS[i];
+    try {
+      console.log(`Trying model: ${modelId}`);
+
+      const command = new InvokeModelCommand({
+        modelId: modelId,
+        body: JSON.stringify({
+          inputText: text,
+          dimensions: EMBEDDING_DIMENSION,
+          normalize: true,
+        }),
+        contentType: 'application/json',
+        accept: 'application/json',
+      });
+
+      const response = await bedrockClient.send(command);
+      const responseBody = JSON.parse(new TextDecoder().decode(response.body));
+
+      console.log(`SUCCESS with model ${modelId}:`, Object.keys(responseBody));
+
+      if (!responseBody.embedding) {
+        throw new Error('No embedding in response');
+      }
+
+      // Update the working model for future calls
+      EMBEDDING_MODEL = modelId;
+      console.log(`Updated EMBEDDING_MODEL to: ${EMBEDDING_MODEL}`);
+
+      return {
+        success: true,
+        embedding: responseBody.embedding,
+      };
+    } catch (error: any) {
+      console.error(`Model ${modelId} failed:`, error.message);
+
+      // If this is the last model to try, return error
+      if (i === POSSIBLE_MODELS.length - 1) {
+        console.error('All models failed. Last error:', error);
+        return {
+          success: false,
+          error: `All embedding models failed. Last error: ${error.message}`,
+        };
+      }
+      // Otherwise, continue to next model
+    }
+  }
 
   return {
-    success: true,
-    embedding: responseBody.embedding,
+    success: false,
+    error: 'All embedding models failed',
   };
 }
 
@@ -118,17 +202,51 @@ function cosineSimilarity(a: number[], b: number[]): number {
 function createProfileText(profile: UserProfile): string {
   const parts = [];
 
-  if (profile.jobRole) parts.push(`Job: ${profile.jobRole}`);
-  if (profile.companyName) parts.push(`Company: ${profile.companyName}`);
-  if (profile.industry) parts.push(`Industry: ${profile.industry}`);
-  if (profile.yearsOfExperience)
+  if (profile.jobRole && profile.jobRole.trim()) {
+    parts.push(`Job: ${profile.jobRole.trim()}`);
+  }
+  if (profile.companyName && profile.companyName.trim()) {
+    parts.push(`Company: ${profile.companyName.trim()}`);
+  }
+  if (profile.industry && profile.industry.trim()) {
+    parts.push(`Industry: ${profile.industry.trim()}`);
+  }
+  if (
+    typeof profile.yearsOfExperience === 'number' &&
+    profile.yearsOfExperience >= 0
+  ) {
     parts.push(`Experience: ${profile.yearsOfExperience} years`);
-  if (profile.education) parts.push(`Education: ${profile.education}`);
-  if (profile.about) parts.push(`About: ${profile.about}`);
-  if (profile.interests?.length)
-    parts.push(`Interests: ${profile.interests.join(', ')}`);
-  if (profile.skills?.length)
-    parts.push(`Skills: ${profile.skills.join(', ')}`);
+  }
+  if (profile.education && profile.education.trim()) {
+    parts.push(`Education: ${profile.education.trim()}`);
+  }
+  if (profile.about && profile.about.trim()) {
+    parts.push(`About: ${profile.about.trim()}`);
+  }
+  if (
+    profile.interests &&
+    Array.isArray(profile.interests) &&
+    profile.interests.length > 0
+  ) {
+    const validInterests = profile.interests
+      .filter(item => item && typeof item === 'string' && item.trim())
+      .map(item => item.trim());
+    if (validInterests.length > 0) {
+      parts.push(`Interests: ${validInterests.join(', ')}`);
+    }
+  }
+  if (
+    profile.skills &&
+    Array.isArray(profile.skills) &&
+    profile.skills.length > 0
+  ) {
+    const validSkills = profile.skills
+      .filter(item => item && typeof item === 'string' && item.trim())
+      .map(item => item.trim());
+    if (validSkills.length > 0) {
+      parts.push(`Skills: ${validSkills.join(', ')}`);
+    }
+  }
 
   return parts.join('. ');
 }
@@ -137,10 +255,32 @@ async function indexUser(
   userId: string,
   userProfile: UserProfile
 ): Promise<EmbeddingResponse> {
+  console.log('Indexing user:', userId, 'with profile:', userProfile);
+  console.log('Environment variables:');
+  console.log('- AWS_REGION:', process.env.AWS_REGION);
+  console.log('- USER_PROFILE_TABLE:', process.env.USER_PROFILE_TABLE);
+
+  // Validate userProfile is not empty
+  if (!userProfile || Object.keys(userProfile).length === 0) {
+    console.error('UserProfile is empty or invalid:', userProfile);
+    throw new Error('UserProfile is empty or invalid');
+  }
+
   const profileText = createProfileText(userProfile);
+  console.log('Generated profile text:', profileText);
+
+  if (!profileText || profileText.trim().length === 0) {
+    console.error('No meaningful profile text generated from:', userProfile);
+    throw new Error('No meaningful profile text could be generated');
+  }
+
   const embeddingResponse = await generateEmbedding(profileText);
 
   if (!embeddingResponse.success || !embeddingResponse.embedding) {
+    console.error(
+      'Failed to generate embedding for profile text:',
+      profileText
+    );
     throw new Error('Failed to generate embedding');
   }
 
@@ -156,6 +296,7 @@ async function indexUser(
     }),
   };
 
+  console.log('Updating DynamoDB for user:', userId);
   await dynamoClient.send(new UpdateItemCommand(updateParams));
   return { success: true };
 }

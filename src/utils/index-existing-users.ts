@@ -1,6 +1,9 @@
 import { generateClient } from 'aws-amplify/data';
 import type { Schema } from '../../amplify/data/resource';
-import { VectorSearchService } from '../services/vector-search.service';
+import {
+  VectorSearchService,
+  UserProfile,
+} from '../services/vector-search.service';
 
 const client = generateClient<Schema>();
 
@@ -43,6 +46,25 @@ export async function indexAllExistingUsers(): Promise<{
 
     console.log(`Found ${profiles.length} user profiles to index`);
 
+    // DEBUG: Let's see what we actually got
+    console.log('=== DEBUG: First profile data ===');
+    if (profiles.length > 0) {
+      const firstProfile = profiles[0];
+      console.log('Profile keys:', Object.keys(firstProfile));
+      console.log('Profile data:', {
+        userId: firstProfile.userId,
+        jobRole: firstProfile.jobRole,
+        companyName: firstProfile.companyName,
+        industry: firstProfile.industry,
+        yearsOfExperience: firstProfile.yearsOfExperience,
+        education: firstProfile.education,
+        about: firstProfile.about,
+        interests: firstProfile.interests,
+        skills: firstProfile.skills,
+        isOnboardingComplete: firstProfile.isOnboardingComplete,
+      });
+    }
+
     // Prepare users for bulk indexing
     const usersToIndex = profiles
       .filter(profile => {
@@ -61,19 +83,89 @@ export async function indexAllExistingUsers(): Promise<{
         }
         return true;
       })
-      .map(profile => ({
-        userId: profile.userId,
-        userProfile: {
-          jobRole: profile.jobRole || '',
-          companyName: profile.companyName || '',
-          industry: profile.industry || '',
-          yearsOfExperience: profile.yearsOfExperience || 0,
-          education: profile.education || '',
-          about: profile.about || '',
-          interests: profile.interests || [],
-          skills: profile.skills || [],
-        },
-      }));
+      .map(profile => {
+        const userProfile: UserProfile = {};
+
+        // Only include fields that have actual values (not null, undefined, or empty strings)
+        if (profile.jobRole && profile.jobRole.trim()) {
+          userProfile.jobRole = profile.jobRole.trim();
+        }
+        if (profile.companyName && profile.companyName.trim()) {
+          userProfile.companyName = profile.companyName.trim();
+        }
+        if (profile.industry && profile.industry.trim()) {
+          userProfile.industry = profile.industry.trim();
+        }
+        if (
+          typeof profile.yearsOfExperience === 'number' &&
+          profile.yearsOfExperience >= 0
+        ) {
+          userProfile.yearsOfExperience = profile.yearsOfExperience;
+        }
+        if (profile.education && profile.education.trim()) {
+          userProfile.education = profile.education.trim();
+        }
+        if (profile.about && profile.about.trim()) {
+          userProfile.about = profile.about.trim();
+        }
+        if (
+          profile.interests &&
+          Array.isArray(profile.interests) &&
+          profile.interests.length > 0
+        ) {
+          const validInterests = profile.interests
+            .filter(
+              (item): item is string =>
+                item !== null &&
+                item !== undefined &&
+                typeof item === 'string' &&
+                Boolean(item.trim())
+            )
+            .map(item => item.trim());
+          if (validInterests.length > 0) {
+            userProfile.interests = validInterests;
+          }
+        }
+        if (
+          profile.skills &&
+          Array.isArray(profile.skills) &&
+          profile.skills.length > 0
+        ) {
+          const validSkills = profile.skills
+            .filter(
+              (item): item is string =>
+                item !== null &&
+                item !== undefined &&
+                typeof item === 'string' &&
+                Boolean(item.trim())
+            )
+            .map(item => item.trim());
+          if (validSkills.length > 0) {
+            userProfile.skills = validSkills;
+          }
+        }
+
+        // DEBUG: Show what we're sending for each user
+        console.log(`=== DEBUG: User ${profile.userId} userProfile ===`);
+        console.log('userProfile keys:', Object.keys(userProfile));
+        console.log('userProfile:', userProfile);
+
+        return {
+          userId: profile.userId,
+          userProfile,
+        };
+      })
+      .filter(user => {
+        // Ensure userProfile has at least one field
+        const hasContent = Object.keys(user.userProfile).length > 0;
+        if (!hasContent) {
+          console.log(
+            `Skipping user ${user.userId} - empty userProfile after filtering`
+          );
+          results.skippedCount++;
+        }
+        return hasContent;
+      });
 
     if (usersToIndex.length === 0) {
       console.log('No users to index after filtering');
@@ -82,42 +174,36 @@ export async function indexAllExistingUsers(): Promise<{
 
     console.log(`Indexing ${usersToIndex.length} users...`);
 
-    // Index users in batches of 10 to avoid timeouts
-    const batchSize = 10;
-    for (let i = 0; i < usersToIndex.length; i += batchSize) {
-      const batch = usersToIndex.slice(i, i + batchSize);
+    // Index users one by one to avoid GraphQL serialization issues
+    for (let i = 0; i < usersToIndex.length; i++) {
+      const user = usersToIndex[i];
 
       try {
-        const response = await VectorSearchService.bulkIndexUsers(batch);
+        const response = await VectorSearchService.indexUserProfile(
+          user.userId,
+          user.userProfile
+        );
 
         if (response.success) {
-          results.indexedCount += batch.length;
+          results.indexedCount++;
           console.log(
-            `Successfully indexed batch ${Math.floor(i / batchSize) + 1}/${Math.ceil(usersToIndex.length / batchSize)}`
+            `Successfully indexed user ${i + 1}/${usersToIndex.length}: ${user.userId}`
           );
         } else {
-          results.errors.push(
-            `Batch ${Math.floor(i / batchSize) + 1} failed: ${response.error}`
-          );
-          console.error(
-            `Failed to index batch ${Math.floor(i / batchSize) + 1}:`,
-            response.error
-          );
+          results.errors.push(`User ${user.userId} failed: ${response.error}`);
+          console.error(`Failed to index user ${user.userId}:`, response.error);
         }
       } catch (error) {
         const errorMessage =
           error instanceof Error ? error.message : 'Unknown error';
-        results.errors.push(
-          `Batch ${Math.floor(i / batchSize) + 1} error: ${errorMessage}`
-        );
-        console.error(
-          `Error indexing batch ${Math.floor(i / batchSize) + 1}:`,
-          error
-        );
+        results.errors.push(`User ${user.userId} error: ${errorMessage}`);
+        console.error(`Error indexing user ${user.userId}:`, error);
       }
 
-      // Small delay between batches
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Small delay between requests
+      if (i < usersToIndex.length - 1) {
+        await new Promise(resolve => setTimeout(resolve, 500));
+      }
     }
 
     if (results.errors.length > 0) {

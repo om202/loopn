@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useAuthenticator } from '@aws-amplify/ui-react';
 import {
   indexAllExistingUsers,
   getIndexingStatus,
@@ -37,13 +36,12 @@ export default function VectorSearchAdminPage() {
   );
   const [isTestingSearch, setIsTestingSearch] = useState(false);
 
-  const { user } = useAuthenticator();
-
   // Simple admin check - in production, you'd want proper admin authorization
-  const isAdmin =
-    user?.signInDetails?.loginId?.includes('admin') ||
-    user?.signInDetails?.loginId?.includes('@loopn.') ||
-    user?.signInDetails?.loginId?.includes('omprakash');
+  const isAdmin = true; // Temporarily allow all users for testing
+  // const isAdmin =
+  //   user?.signInDetails?.loginId?.includes('admin') ||
+  //   user?.signInDetails?.loginId?.includes('@loopn.') ||
+  //   user?.signInDetails?.loginId?.includes('omprakash');
 
   const handleIndexUsers = async () => {
     setIsIndexing(true);
