@@ -5,15 +5,9 @@ import { Search, Sparkles } from 'lucide-react';
 
 interface SearchUserProps {
   onProfessionalRequest?: (request: string) => void;
-  onChatRequestSent?: () => void;
-  activeSection?: string;
 }
 
-export default function SearchUser({
-  onProfessionalRequest,
-  onChatRequestSent,
-  activeSection,
-}: SearchUserProps) {
+export default function SearchUser({ onProfessionalRequest }: SearchUserProps) {
   const [query, setQuery] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
 

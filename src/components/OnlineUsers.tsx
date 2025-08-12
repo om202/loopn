@@ -538,8 +538,6 @@ export default function OnlineUsers({
         <div className='flex-shrink-0 mb-4 sm:mb-6'>
           <SearchUser
             onProfessionalRequest={handleProfessionalRequest}
-            onChatRequestSent={onChatRequestSent}
-            activeSection={activeSection}
           />
         </div>
 
