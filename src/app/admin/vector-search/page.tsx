@@ -283,7 +283,6 @@ export default function VectorSearchAdminPage() {
                                 </p>
                               )}
                             </div>
-
                           </div>
                         </div>
                       ))}
