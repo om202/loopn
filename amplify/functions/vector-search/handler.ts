@@ -324,6 +324,7 @@ async function searchUsers(
     } as SearchResult;
   })
     .filter((result): result is SearchResult => result !== null)
+    .filter(result => result.score >= 0.20) // Filter out results below 20% similarity
     .sort((a, b) => b.score - a.score)
     .slice(0, limit);
 
