@@ -128,14 +128,16 @@ export default function SearchSectionContent({
       <div className='flex-1 overflow-y-auto'>
         {!hasSearched ? (
           <div className='flex flex-col items-center justify-center h-full text-center p-8'>
-            <Search className='w-16 h-16 text-gray-300 mb-4' />
-            <h3 className='text-lg font-medium text-gray-900 mb-2'>
+            <div className='w-16 h-16 mx-auto mb-4 bg-zinc-100 rounded-full flex items-center justify-center'>
+              <Search className='w-8 h-8 text-zinc-500' />
+            </div>
+            <h3 className='text-lg font-medium text-zinc-900 mb-2'>
               Search Professionals
             </h3>
-            <p className='text-gray-600 text-sm max-w-sm'>
+            <p className='text-zinc-500 text-base max-w-sm'>
               Search for any professional, in any way you like.
             </p>
-            <div className='mt-4 text-xs text-gray-500'>
+            <div className='mt-4 text-sm text-zinc-500'>
               <p>
                 Try: "React developer", "AI engineer", "Product manager from
                 tech".
@@ -145,22 +147,24 @@ export default function SearchSectionContent({
         ) : error ? (
           <div className='flex flex-col items-center justify-center h-full text-center p-8'>
             <div className='text-red-600 text-sm mb-2'>Search Error</div>
-            <p className='text-gray-600 text-sm'>{error}</p>
+            <p className='text-zinc-600 text-sm'>{error}</p>
           </div>
         ) : searchResults.length === 0 && !isSearching ? (
           <div className='flex flex-col items-center justify-center h-full text-center p-8'>
-            <Search className='w-12 h-12 text-gray-300 mb-4' />
-            <h3 className='text-lg font-medium text-gray-900 mb-2'>
+            <div className='w-16 h-16 mx-auto mb-4 bg-zinc-100 rounded-full flex items-center justify-center'>
+              <Search className='w-8 h-8 text-zinc-500' />
+            </div>
+            <h3 className='text-lg font-medium text-zinc-900 mb-2'>
               No Results Found
             </h3>
-            <p className='text-gray-600 text-sm max-w-sm'>
+            <p className='text-zinc-500 text-sm max-w-sm'>
               No professionals found matching "{query}". Try using different
               keywords or phrases.
             </p>
           </div>
         ) : (
           <div className='p-4 space-y-4'>
-            <div className='text-sm text-gray-600 mb-4'>
+            <div className='text-sm text-zinc-600 mb-4'>
               Found {searchResults.length} professionals matching "{query}"
             </div>
             {searchResults.map(result => {
@@ -168,14 +172,14 @@ export default function SearchSectionContent({
                 return (
                   <div
                     key={result.userId}
-                    className='border border-gray-200 rounded-lg p-4'
+                    className='border border-zinc-200 rounded-lg p-4'
                   >
                     <div className='animate-pulse'>
                       <div className='flex items-center space-x-3'>
-                        <div className='w-12 h-12 bg-gray-200 rounded-full'></div>
+                        <div className='w-12 h-12 bg-zinc-200 rounded-full'></div>
                         <div className='flex-1 space-y-2'>
-                          <div className='h-4 bg-gray-200 rounded w-3/4'></div>
-                          <div className='h-3 bg-gray-200 rounded w-1/2'></div>
+                          <div className='h-4 bg-zinc-200 rounded w-3/4'></div>
+                          <div className='h-3 bg-zinc-200 rounded w-1/2'></div>
                         </div>
                       </div>
                     </div>

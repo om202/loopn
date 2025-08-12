@@ -354,8 +354,6 @@ export default function HomePage() {
                       </div>
                     </div>
                   </div>
-
-
                 </div>
 
                 {/* Chat Input - matching MessageInput.tsx */}
