@@ -185,10 +185,7 @@ export default function SearchSectionContent({
               }
 
               return (
-                <div key={result.userId} className='relative'>
-                  <div className='absolute top-2 right-2 bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full z-10'>
-                    {Math.round(result.score * 100)}% match
-                  </div>
+                <div key={result.userId}>
                   <UserCard
                     userPresence={{
                       userId: result.userId,
@@ -204,6 +201,7 @@ export default function SearchSectionContent({
                     onCancelChatRequest={() => {}}
                     canUserReconnect={() => true}
                     getReconnectTimeRemaining={() => null}
+                    matchPercentage={Math.round(result.score * 100)}
                   />
                 </div>
               );
