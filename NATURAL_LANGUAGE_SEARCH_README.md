@@ -59,7 +59,7 @@ This implementation adds a powerful natural language search feature to the Loopn
 
 - Search-as-you-type functionality
 - Debounced queries for performance
-- Similarity scoring (0-100% match)
+- Relevance-based sorting (best matches first)
 
 ### 3. Automatic Indexing
 
@@ -112,7 +112,7 @@ npx amplify deploy
 - Go to the main dashboard
 - Type your query in the search box
 - Results appear as you type (minimum 3 characters)
-- View similarity percentages for each match
+- Browse results sorted by relevance (best matches first)
 
 #### 2. Connect with Results
 

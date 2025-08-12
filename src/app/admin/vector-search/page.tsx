@@ -283,9 +283,7 @@ export default function VectorSearchAdminPage() {
                                 </p>
                               )}
                             </div>
-                            <span className='text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded'>
-                              {Math.round(result.score * 100)}%
-                            </span>
+
                           </div>
                         </div>
                       ))}

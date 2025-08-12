@@ -36,7 +36,6 @@ interface UserCardProps {
   onUserCardClick?: (user: UserPresence) => void;
   isProfileSidebarOpen?: boolean;
   selectedUserId?: string;
-  matchPercentage?: number;
 }
 
 const getDisplayName = (
@@ -68,7 +67,6 @@ export default function UserCard({
   onUserCardClick,
   isProfileSidebarOpen,
   selectedUserId,
-  matchPercentage,
 }: UserCardProps) {
   const [showCancelDialog, setShowCancelDialog] = useState(false);
   const [showProfileDialog, setShowProfileDialog] = useState(false);
@@ -173,12 +171,7 @@ export default function UserCard({
             <div className='text-zinc-900 truncate no-email-detection'>
               {getDisplayName(userPresence, userProfile)}
             </div>
-            {/* Match percentage */}
-            {matchPercentage && (
-              <span className='px-2 py-0.5 text-xs bg-brand-100 text-brand-700 rounded-full flex-shrink-0'>
-                {matchPercentage}% match
-              </span>
-            )}
+
             {/* Trial indicator */}
             {existingConversations.has(userPresence.userId) &&
               !existingConversations.get(userPresence.userId)?.isConnected && (

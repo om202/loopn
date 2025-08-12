@@ -133,14 +133,10 @@ export default function SearchSectionContent({
               Search Professionals
             </h3>
             <p className='text-gray-600 text-sm max-w-sm'>
-              Use the search bar above to find professionals based on their
-              skills, experience, industry, and interests.
+              Search for any professional, in any way you like.
             </p>
             <div className='mt-4 text-xs text-gray-500'>
-              <p>Try searching for:</p>
-              <p className='mt-1'>
-                "React developer", "AI engineer", "Product manager from tech"
-              </p>
+              <p>Try: "React developer", "AI engineer", "Product manager from tech".</p>
             </div>
           </div>
         ) : error ? (
@@ -201,7 +197,7 @@ export default function SearchSectionContent({
                     onCancelChatRequest={() => {}}
                     canUserReconnect={() => true}
                     getReconnectTimeRemaining={() => null}
-                    matchPercentage={Math.round(result.score * 100)}
+
                   />
                 </div>
               );
