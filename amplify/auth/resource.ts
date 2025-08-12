@@ -8,13 +8,19 @@ export const auth = defineAuth({
   loginWith: {
     email: {
       verificationEmailStyle: 'CODE',
-      verificationEmailSubject: 'Welcome to our app! Verify your email',
+      verificationEmailSubject: 'Welcome to Loopn! Verify your email',
       verificationEmailBody: createCode =>
-        `Thank you for signing up! Use this verification code to confirm your account: ${createCode()}`,
+        `Welcome to Loopn!  
+  Your verification code is: ${createCode()}  
+  Enter this in the app to confirm your account.`,
       userInvitation: {
-        emailSubject: "You're invited to join our app!",
+        emailSubject: "You've been invited to join Loopn!",
         emailBody: (user, code) =>
-          `Welcome! You can now login with your email ${user()} and temporary password ${code()}`,
+          `Hello!  
+  You've been invited to join Loopn.  
+  Login with your email: ${user()}  
+  Temporary password: ${code()}  
+  Once logged in, you can change your password in settings.`,
       },
     },
   },

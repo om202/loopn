@@ -64,8 +64,15 @@ export default function SearchUser({ onProfessionalRequest }: SearchUserProps) {
           data-gramm='false'
           data-gramm_editor='false'
           data-enable-grammarly='false'
-          name='professional-request-input'
-          id='professional-request-input'
+          name='search-input'
+          id='search-professionals-input'
+          role='textbox'
+          aria-label='Search for professionals'
+          style={{
+            fontSize: '16px',
+            WebkitAppearance: 'none',
+            MozAppearance: 'textfield',
+          }}
           className='w-full pl-10 pr-10 py-3 rounded-full focus:outline-none focus:ring-1 focus:ring-brand-200 focus:bg-white bg-zinc-100 hover:bg-brand-50 transition-colors placeholder-zinc-500'
         />
         <button
