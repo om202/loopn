@@ -41,6 +41,7 @@ type SidebarSection =
   | 'all'
   | 'connections'
   | 'suggested'
+  | 'search'
   | 'notifications'
   | 'account';
 
@@ -69,6 +70,8 @@ export default function OnlineUsers({
   const [, setConversationsLoaded] = useState(false);
   const [activeSection, setActiveSection] =
     useState<SidebarSection>('suggested');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [shouldTriggerSearch, setShouldTriggerSearch] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [optimisticPendingRequests, setOptimisticPendingRequests] = useState<
     Set<string>
@@ -389,6 +392,19 @@ export default function OnlineUsers({
     );
   };
 
+  const handleProfessionalRequest = (query: string) => {
+    // Switch to search section and trigger search
+    setActiveSection('search');
+    setSearchQuery(query);
+    setShouldTriggerSearch(true);
+
+    // Reset trigger after a moment to allow for new searches
+    setTimeout(() => setShouldTriggerSearch(false), 100);
+
+    // Call the original callback if provided
+    onProfessionalRequest?.(query);
+  };
+
   const handleOpenProfileSidebar = async (userPresence: UserPresence) => {
     // Toggle open/close and persist only the open state; selection is ephemeral
     if (profileSidebarOpen) {
@@ -521,8 +537,9 @@ export default function OnlineUsers({
         {/* Search User - Always visible at top */}
         <div className='flex-shrink-0 mb-4 sm:mb-6'>
           <SearchUser
-            onProfessionalRequest={onProfessionalRequest}
+            onProfessionalRequest={handleProfessionalRequest}
             onChatRequestSent={onChatRequestSent}
+            activeSection={activeSection}
           />
         </div>
 
@@ -551,6 +568,8 @@ export default function OnlineUsers({
               onUserCardClick={handleUserCardClick}
               isProfileSidebarOpen={profileSidebarOpen}
               selectedUserId={profileSidebarUser?.userId}
+              searchQuery={searchQuery}
+              shouldTriggerSearch={shouldTriggerSearch}
             />
           )}
         </div>

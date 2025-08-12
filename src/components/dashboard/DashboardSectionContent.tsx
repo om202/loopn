@@ -1,14 +1,15 @@
 'use client';
 
-import { MessageCircle, Sparkles, Users } from 'lucide-react';
+import { MessageCircle, Sparkles, Users, Search } from 'lucide-react';
 
 import type { Schema } from '../../../amplify/data/resource';
 
 import UserCard from './UserCard';
+import SearchSectionContent from './SearchSectionContent';
 
 type UserPresence = Schema['UserPresence']['type'];
 type Conversation = Schema['Conversation']['type'];
-type SidebarSection = 'all' | 'connections' | 'suggested';
+type SidebarSection = 'all' | 'connections' | 'suggested' | 'search';
 
 interface DashboardSectionContentProps {
   activeSection: SidebarSection;
@@ -27,6 +28,8 @@ interface DashboardSectionContentProps {
   onUserCardClick?: (user: UserPresence) => void;
   isProfileSidebarOpen?: boolean;
   selectedUserId?: string;
+  searchQuery?: string;
+  shouldTriggerSearch?: boolean;
 }
 
 export default function DashboardSectionContent({
@@ -46,6 +49,8 @@ export default function DashboardSectionContent({
   onUserCardClick,
   isProfileSidebarOpen,
   selectedUserId,
+  searchQuery,
+  shouldTriggerSearch,
 }: DashboardSectionContentProps) {
   // Combine all users for "All Chats" section
   const allChatUsers = [
@@ -86,6 +91,8 @@ export default function DashboardSectionContent({
         return connectionUsers;
       case 'suggested':
         return suggestedUsers;
+      case 'search':
+        return []; // Search section uses its own component
       case 'all':
       default:
         return uniqueAllChatUsers;
@@ -109,6 +116,13 @@ export default function DashboardSectionContent({
           emptyIcon: Sparkles,
           emptyMessage: 'No suggestions available',
         };
+      case 'search':
+        return {
+          title: 'Search',
+          description: 'Search for professionals',
+          emptyIcon: Search,
+          emptyMessage: 'Start searching for professionals',
+        };
       case 'all':
       default:
         return {
@@ -128,6 +142,20 @@ export default function DashboardSectionContent({
     emptyIcon: EmptyIcon,
     emptyMessage,
   } = sectionInfo;
+
+  // Special handling for search section
+  if (activeSection === 'search') {
+    return (
+      <SearchSectionContent
+        onChatRequestSent={() => {
+          // Call the onChatAction callback if needed
+          // onChatAction could be used here if we need to track search chat requests
+        }}
+        searchQuery={searchQuery}
+        shouldSearch={shouldTriggerSearch}
+      />
+    );
+  }
 
   return (
     <div>

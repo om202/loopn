@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { MessageCircle, Sparkles, Users } from 'lucide-react';
+import { MessageCircle, Sparkles, Users, Search } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAuthenticator } from '@aws-amplify/ui-react';
@@ -15,6 +15,7 @@ type SidebarSection =
   | 'all'
   | 'connections'
   | 'suggested'
+  | 'search'
   | 'notifications'
   | 'account';
 
@@ -170,6 +171,12 @@ export default function DashboardSidebar({
       icon: Sparkles,
       label: 'Suggested',
       count: suggestedUsersCount,
+    },
+    {
+      id: 'search' as const,
+      icon: Search,
+      label: 'Search',
+      count: 0,
     },
     {
       id: 'all' as const,

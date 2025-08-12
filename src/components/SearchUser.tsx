@@ -2,28 +2,25 @@
 
 import React, { useState } from 'react';
 import { Search, Sparkles } from 'lucide-react';
-import SearchResults from './SearchResults';
 
 interface SearchUserProps {
   onProfessionalRequest?: (request: string) => void;
   onChatRequestSent?: () => void;
+  activeSection?: string;
 }
 
 export default function SearchUser({
   onProfessionalRequest,
   onChatRequestSent,
+  activeSection,
 }: SearchUserProps) {
   const [query, setQuery] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
-  const [showResults, setShowResults] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (query.trim() && !isProcessing) {
       setIsProcessing(true);
-      setSearchQuery(query);
-      setShowResults(true);
       onProfessionalRequest?.(query);
       setTimeout(() => setIsProcessing(false), 1000);
     }
@@ -32,14 +29,6 @@ export default function SearchUser({
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newQuery = e.target.value;
     setQuery(newQuery);
-
-    // Show results as user types (debounced in SearchResults component)
-    if (newQuery.trim().length > 2) {
-      setSearchQuery(newQuery);
-      setShowResults(true);
-    } else {
-      setShowResults(false);
-    }
   };
 
   return (
@@ -64,7 +53,7 @@ export default function SearchUser({
         <Sparkles className='absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-500 z-10' />
         <input
           type='text'
-          placeholder='Who would you like to meet?'
+          placeholder='Search for professionals, skills, companies...'
           value={query}
           onChange={handleInputChange}
           disabled={isProcessing}
@@ -96,16 +85,6 @@ export default function SearchUser({
           )}
         </button>
       </form>
-
-      {/* Search Results */}
-      <div className='mt-6'>
-        <SearchResults
-          query={searchQuery}
-          isVisible={showResults}
-          onChatRequestSent={onChatRequestSent}
-          onProfessionalRequest={onProfessionalRequest}
-        />
-      </div>
     </div>
   );
 }

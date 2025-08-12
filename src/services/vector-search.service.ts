@@ -129,7 +129,7 @@ export class VectorSearchService {
           console.error('Failed to parse GraphQL response:', parseError);
           return {
             success: false,
-            error: 'Invalid response format from vector search service',
+            error: `Invalid response format from vector search service: ${parseError}`,
           };
         }
       } else {
@@ -256,7 +256,7 @@ export class VectorSearchService {
           console.error('Failed to parse bulk GraphQL response:', parseError);
           return {
             success: false,
-            error: 'Invalid response format from vector search service',
+            error: `Invalid response format from vector search service: ${parseError}`,
           };
         }
       } else {
@@ -327,7 +327,7 @@ export class VectorSearchService {
           console.error('Failed to parse vector search response:', parseError);
           return {
             success: false,
-            error: 'Invalid response format from vector search service',
+            error: `Invalid response format from vector search service: ${parseError}`,
           };
         }
       } else {
