@@ -384,85 +384,85 @@ export default function DashboardSidebar({
             {[
               // Filter out search and help for mobile
               ...sidebarItems.filter(item => item.id !== 'search'),
-              accountItem
-            ].map(
-              ({ id, icon, label, count }) => (
-                <button
-                  key={id}
-                  onClick={() => onSectionChange(id)}
-                  className={`relative flex-1 flex flex-col items-center justify-center gap-0.5 px-1 py-2.5 rounded-xl border ${
-                    activeSection === id
-                      ? 'text-brand-600 bg-white shadow-sm border-brand-100'
-                      : 'text-zinc-500 hover:text-zinc-700 hover:bg-white/60 border-transparent'
-                  }`}
-                  title={label}
-                >
-                  <div className='w-6 h-6 flex-shrink-0 flex items-center justify-center'>
-                    {icon === 'NotificationBell' ? (
-                      <svg
-                        className='w-6 h-6'
-                        fill='none'
-                        stroke='currentColor'
-                        viewBox='0 0 24 24'
-                      >
-                        <path
-                          strokeLinecap='round'
-                          strokeLinejoin='round'
-                          strokeWidth={2}
-                          d='M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9'
-                        />
-                      </svg>
-                    ) : icon === 'UserAvatar' ? (
-                      <UserAvatar
-                        email={getUserEmail()}
-                        userId={user?.userId}
-                        profilePictureUrl={
-                          userProfile?.profilePictureUrl ||
-                          onboardingStatus?.onboardingData?.profilePictureUrl
-                        }
-                        hasProfilePicture={
-                          !!userProfile?.profilePictureUrl ||
-                          !!onboardingStatus?.onboardingData?.profilePictureUrl
-                        }
-                        size='sm'
-                        showStatus={true}
-                        status='ONLINE'
-                      />
-                    ) : (
-                      React.createElement(icon, {
-                        className: 'w-6 h-6',
-                      })
-                    )}
-                  </div>
-                  <div className='text-[10px] font-medium leading-tight text-center'>
-                    {id === 'account' ? (
-                      <div>
-                        <div className='truncate max-w-[50px]'>{label.length > 8 ? label.slice(0, 8) + '...' : label}</div>
-                      </div>
-                    ) : id === 'suggested' ? (
-                      'Suggest'
-                    ) : id === 'connections' ? (
-                      'Connect'
-                    ) : id === 'notifications' ? (
-                      'Notify'
-                    ) : (
-                      label
-                    )}
-                  </div>
-
-                  {/* Count indicator for mobile */}
-                  {count > 0 && (
-                    <span
-                      className={`absolute -top-0.5 -right-0.5 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center font-bold shadow-sm ${
-                        id === 'notifications' ? 'bg-b_red-500' : 'bg-brand-500'
-                      }`}
+              accountItem,
+            ].map(({ id, icon, label, count }) => (
+              <button
+                key={id}
+                onClick={() => onSectionChange(id)}
+                className={`relative flex-1 flex flex-col items-center justify-center gap-0.5 px-1 py-2.5 rounded-xl border ${
+                  activeSection === id
+                    ? 'text-brand-600 bg-white shadow-sm border-brand-100'
+                    : 'text-zinc-500 hover:text-zinc-700 hover:bg-white/60 border-transparent'
+                }`}
+                title={label}
+              >
+                <div className='w-6 h-6 flex-shrink-0 flex items-center justify-center'>
+                  {icon === 'NotificationBell' ? (
+                    <svg
+                      className='w-6 h-6'
+                      fill='none'
+                      stroke='currentColor'
+                      viewBox='0 0 24 24'
                     >
-                      {count > 9 ? '9+' : count}
-                    </span>
+                      <path
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        strokeWidth={2}
+                        d='M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9'
+                      />
+                    </svg>
+                  ) : icon === 'UserAvatar' ? (
+                    <UserAvatar
+                      email={getUserEmail()}
+                      userId={user?.userId}
+                      profilePictureUrl={
+                        userProfile?.profilePictureUrl ||
+                        onboardingStatus?.onboardingData?.profilePictureUrl
+                      }
+                      hasProfilePicture={
+                        !!userProfile?.profilePictureUrl ||
+                        !!onboardingStatus?.onboardingData?.profilePictureUrl
+                      }
+                      size='sm'
+                      showStatus={true}
+                      status='ONLINE'
+                    />
+                  ) : (
+                    React.createElement(icon, {
+                      className: 'w-6 h-6',
+                    })
                   )}
-                </button>
-              )
-            )}
+                </div>
+                <div className='text-[10px] font-medium leading-tight text-center'>
+                  {id === 'account' ? (
+                    <div>
+                      <div className='truncate max-w-[50px]'>
+                        {label.length > 8 ? label.slice(0, 8) + '...' : label}
+                      </div>
+                    </div>
+                  ) : id === 'suggested' ? (
+                    'Suggest'
+                  ) : id === 'connections' ? (
+                    'Connect'
+                  ) : id === 'notifications' ? (
+                    'Notify'
+                  ) : (
+                    label
+                  )}
+                </div>
+
+                {/* Count indicator for mobile */}
+                {count > 0 && (
+                  <span
+                    className={`absolute -top-0.5 -right-0.5 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center font-bold shadow-sm ${
+                      id === 'notifications' ? 'bg-b_red-500' : 'bg-brand-500'
+                    }`}
+                  >
+                    {count > 9 ? '9+' : count}
+                  </span>
+                )}
+              </button>
+            ))}
           </div>
         </nav>
       </div>

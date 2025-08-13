@@ -184,8 +184,6 @@ export default function UserCard({
                 </span>
               )}
             </div>
-
-
           </div>
 
           {/* Profession */}
@@ -210,7 +208,10 @@ export default function UserCard({
               );
               return (
                 <div className='flex items-center justify-center w-[40px] h-[40px] rounded-xl border border-zinc-200 bg-white'>
-                  <div className='text-zinc-500 flex flex-col items-center gap-0.5' title={`Reconnect in ${timeRemaining}`}>
+                  <div
+                    className='text-zinc-500 flex flex-col items-center gap-0.5'
+                    title={`Reconnect in ${timeRemaining}`}
+                  >
                     <Clock className='w-4 h-4 text-zinc-500' />
                     <span className='text-[10px] leading-none'>
                       {timeRemaining}
@@ -234,7 +235,8 @@ export default function UserCard({
                   pendingRequests.has(userPresence.userId)
                     ? 'Cancel Request'
                     : existingConversations.has(userPresence.userId)
-                      ? existingConversations.get(userPresence.userId)?.chatStatus === 'ENDED'
+                      ? existingConversations.get(userPresence.userId)
+                          ?.chatStatus === 'ENDED'
                         ? canUserReconnect(userPresence.userId)
                           ? 'Reconnect'
                           : 'View Chat'
@@ -245,12 +247,15 @@ export default function UserCard({
                 {pendingRequests.has(userPresence.userId) ? (
                   <Clock className='w-4 h-4 text-zinc-600 flex-shrink-0' />
                 ) : existingConversations.has(userPresence.userId) ? (
-                  existingConversations.get(userPresence.userId)?.chatStatus === 'ENDED' ? (
+                  existingConversations.get(userPresence.userId)?.chatStatus ===
+                  'ENDED' ? (
                     canUserReconnect(userPresence.userId) ? (
                       <CheckCircle2 className='w-4 h-4 text-brand-500 flex-shrink-0' />
                     ) : (
                       (() => {
-                        const timeRemaining = getReconnectTimeRemaining(userPresence.userId);
+                        const timeRemaining = getReconnectTimeRemaining(
+                          userPresence.userId
+                        );
                         return timeRemaining ? (
                           <Clock className='w-4 h-4 text-zinc-500 flex-shrink-0' />
                         ) : (
