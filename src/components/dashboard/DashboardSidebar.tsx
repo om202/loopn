@@ -10,6 +10,10 @@ import { useAuth } from '@/contexts/AuthContext';
 import UserAvatar from '../UserAvatar';
 import { notificationService } from '../../services/notification.service';
 import { useChatRequests } from '../../hooks/realtime/useChatRequests';
+import { UserProfileService } from '../../services/user-profile.service';
+import type { Schema } from '../../../amplify/data/resource';
+
+type UserProfile = Schema['UserProfile']['type'];
 
 type SidebarSection =
   | 'all'
@@ -39,6 +43,7 @@ export default function DashboardSidebar({
   const { onboardingStatus } = useAuth();
   const { user } = useAuthenticator();
   const [notificationCount, setNotificationCount] = useState(0);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
 
   const {
     incomingRequests: realtimeChatRequests,
@@ -64,6 +69,32 @@ export default function DashboardSidebar({
     // Last resort: generic name
     return 'Your Account';
   };
+
+  // Load current user's profile data
+  useEffect(() => {
+    let mounted = true;
+
+    const loadUserProfile = async () => {
+      if (!user?.userId) return;
+
+      try {
+        const profile = await UserProfileService.getProfileDetails(user.userId);
+        if (mounted) {
+          setUserProfile(profile);
+        }
+      } catch (error) {
+        console.error('Error loading user profile in sidebar:', error);
+      }
+    };
+
+    loadUserProfile();
+
+    return () => {
+      mounted = false;
+    };
+  }, [user?.userId]);
+
+
 
   // Simple notification count tracking (lightweight)
   useEffect(() => {
@@ -290,17 +321,17 @@ export default function DashboardSidebar({
                   : 'text-zinc-700 hover:bg-zinc-50 hover:text-zinc-900 border-transparent'
               }`}
             >
-              <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
+              <div className='flex-shrink-0 flex items-center justify-center'>
                 <UserAvatar
                   email={getUserEmail()}
                   userId={user?.userId}
                   profilePictureUrl={
-                    onboardingStatus?.onboardingData?.profilePictureUrl
+                    userProfile?.profilePictureUrl || onboardingStatus?.onboardingData?.profilePictureUrl
                   }
                   hasProfilePicture={
-                    !!onboardingStatus?.onboardingData?.profilePictureUrl
+                    !!userProfile?.profilePictureUrl || !!onboardingStatus?.onboardingData?.profilePictureUrl
                   }
-                  size='xs'
+                  size='sm'
                 />
               </div>
               <span className='font-medium text-sm flex-1'>
@@ -347,10 +378,10 @@ export default function DashboardSidebar({
                         email={getUserEmail()}
                         userId={user?.userId}
                         profilePictureUrl={
-                          onboardingStatus?.onboardingData?.profilePictureUrl
+                          userProfile?.profilePictureUrl || onboardingStatus?.onboardingData?.profilePictureUrl
                         }
                         hasProfilePicture={
-                          !!onboardingStatus?.onboardingData?.profilePictureUrl
+                          !!userProfile?.profilePictureUrl || !!onboardingStatus?.onboardingData?.profilePictureUrl
                         }
                         size='xs'
                       />
