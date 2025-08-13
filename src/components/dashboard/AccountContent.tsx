@@ -103,10 +103,12 @@ export default function AccountContent() {
             email={getUserEmail()}
             userId={user?.userId}
             profilePictureUrl={
-              userProfile?.profilePictureUrl || onboardingStatus?.onboardingData?.profilePictureUrl
+              userProfile?.profilePictureUrl ||
+              onboardingStatus?.onboardingData?.profilePictureUrl
             }
             hasProfilePicture={
-              !!userProfile?.profilePictureUrl || !!onboardingStatus?.onboardingData?.profilePictureUrl
+              !!userProfile?.profilePictureUrl ||
+              !!onboardingStatus?.onboardingData?.profilePictureUrl
             }
             size='md'
           />

@@ -94,8 +94,6 @@ export default function DashboardSidebar({
     };
   }, [user?.userId]);
 
-
-
   // Simple notification count tracking (lightweight)
   useEffect(() => {
     if (!user) {
@@ -326,17 +324,26 @@ export default function DashboardSidebar({
                   email={getUserEmail()}
                   userId={user?.userId}
                   profilePictureUrl={
-                    userProfile?.profilePictureUrl || onboardingStatus?.onboardingData?.profilePictureUrl
+                    userProfile?.profilePictureUrl ||
+                    onboardingStatus?.onboardingData?.profilePictureUrl
                   }
                   hasProfilePicture={
-                    !!userProfile?.profilePictureUrl || !!onboardingStatus?.onboardingData?.profilePictureUrl
+                    !!userProfile?.profilePictureUrl ||
+                    !!onboardingStatus?.onboardingData?.profilePictureUrl
                   }
                   size='sm'
+                  showStatus={true}
+                  status='ONLINE'
                 />
               </div>
-              <span className='font-medium text-sm flex-1'>
-                {accountItem.label}
-              </span>
+              <div className='flex-1'>
+                <div className='font-medium text-sm'>
+                  {accountItem.label}
+                </div>
+                <div className='text-xs text-zinc-500'>
+                  You
+                </div>
+              </div>
             </button>
           </div>
         </div>
@@ -378,12 +385,16 @@ export default function DashboardSidebar({
                         email={getUserEmail()}
                         userId={user?.userId}
                         profilePictureUrl={
-                          userProfile?.profilePictureUrl || onboardingStatus?.onboardingData?.profilePictureUrl
+                          userProfile?.profilePictureUrl ||
+                          onboardingStatus?.onboardingData?.profilePictureUrl
                         }
                         hasProfilePicture={
-                          !!userProfile?.profilePictureUrl || !!onboardingStatus?.onboardingData?.profilePictureUrl
+                          !!userProfile?.profilePictureUrl ||
+                          !!onboardingStatus?.onboardingData?.profilePictureUrl
                         }
                         size='xs'
+                        showStatus={true}
+                        status='ONLINE'
                       />
                     ) : (
                       React.createElement(icon, {
@@ -391,9 +402,16 @@ export default function DashboardSidebar({
                       })
                     )}
                   </div>
-                  <span className='text-xs font-medium leading-tight text-center'>
-                    {label}
-                  </span>
+                  <div className='text-xs font-medium leading-tight text-center'>
+                    {id === 'account' ? (
+                      <div>
+                        <div>{label}</div>
+                        <div className='text-[10px] text-zinc-500'>You</div>
+                      </div>
+                    ) : (
+                      label
+                    )}
+                  </div>
 
                   {/* Count indicator for mobile */}
                   {count > 0 && (
