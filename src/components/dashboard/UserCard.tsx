@@ -168,8 +168,19 @@ export default function UserCard({
 
         <div className='flex-1 min-w-0'>
           <div className='flex items-center gap-2 mb-1'>
-            <div className='text-zinc-900 truncate no-email-detection'>
-              {getDisplayName(userPresence, userProfile)}
+            <div className='text-zinc-900 truncate no-email-detection flex items-center gap-1'>
+              <span>{getDisplayName(userPresence, userProfile)}</span>
+              <span className='text-xs text-zinc-500'>
+                ({existingConversations.has(userPresence.userId) &&
+                existingConversations.get(userPresence.userId)?.chatStatus ===
+                  'ENDED'
+                  ? 'Chat Trial Ended'
+                  : isOnline
+                    ? 'Online now'
+                    : userPresence.lastSeen
+                      ? formatPresenceTime(userPresence.lastSeen)
+                      : 'Offline'})
+              </span>
             </div>
 
             {/* Trial indicator */}
@@ -181,33 +192,13 @@ export default function UserCard({
                 </span>
               )}
           </div>
-          <div
-            className={`text-sm mb-1.5 ${
-              existingConversations.has(userPresence.userId) &&
-              existingConversations.get(userPresence.userId)?.chatStatus ===
-                'ENDED'
-                ? canUserReconnect(userPresence.userId)
-                  ? 'text-brand-500'
-                  : 'text-zinc-500'
-                : isOnline
-                  ? 'text-b_green-500'
-                  : userPresence.lastSeen &&
-                      formatPresenceTime(userPresence.lastSeen) ===
-                        'Recently active'
-                    ? 'text-zinc-500'
-                    : 'text-zinc-500'
-            }`}
-          >
-            {existingConversations.has(userPresence.userId) &&
-            existingConversations.get(userPresence.userId)?.chatStatus ===
-              'ENDED'
-              ? 'Chat Trial Ended'
-              : isOnline
-                ? 'Online now'
-                : userPresence.lastSeen
-                  ? formatPresenceTime(userPresence.lastSeen)
-                  : 'Offline'}
-          </div>
+          
+          {/* Profession */}
+          {fullProfile?.jobRole && (
+            <div className='text-sm text-zinc-600 mb-1.5 truncate'>
+              {fullProfile.jobRole}
+            </div>
+          )}
         </div>
 
         <div className='flex-shrink-0 flex items-center gap-1.5'>
