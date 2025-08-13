@@ -299,7 +299,7 @@ async function searchUsers(
   }
 
   // Calculate similarities and sort by score
-  const scoredResults = scanResponse.Items.map(item => {
+  const scoredResults = scanResponse.Items!.map((item: any) => {
     const userProfile = unmarshall(item);
     if (!userProfile.profileEmbedding) return null;
 
@@ -323,9 +323,9 @@ async function searchUsers(
       },
     } as SearchResult;
   })
-    .filter((result): result is SearchResult => result !== null)
-    .filter(result => result.score >= 0.1) // Filter out results below 10% similarity
-    .sort((a, b) => b.score - a.score)
+    .filter((result: any): result is SearchResult => result !== null)
+    .filter((result: SearchResult) => result.score >= 0.1) // Filter out results below 10% similarity
+    .sort((a: SearchResult, b: SearchResult) => b.score - a.score)
     .slice(0, limit);
 
   return {

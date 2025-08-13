@@ -6,6 +6,7 @@ import { data } from './data/resource';
 import { storage } from './storage/resource';
 import { presenceCleanup } from './functions/presence-cleanup/resource';
 import { vectorSearch } from './functions/vector-search/resource';
+import { autoConfirm } from './functions/auto-confirm/resource';
 
 /**
  * @see https://docs.amplify.aws/react/build-a-backend/ to add storage, functions, and more
@@ -16,6 +17,7 @@ const backend = defineBackend({
   storage,
   presenceCleanup,
   vectorSearch,
+  autoConfirm,
 });
 
 // Add IAM permissions for Bedrock access
@@ -57,4 +59,12 @@ backend.vectorSearch.resources.lambda.addToRolePolicy(
 backend.vectorSearch.addEnvironment(
   'USER_PROFILE_TABLE',
   backend.data.resources.tables['UserProfile'].tableName
+);
+
+// Add environment variable to control email verification
+// Set to 'true' to disable email verification (for testing)
+// Set to 'false' to enable normal email verification (for production)
+backend.autoConfirm.addEnvironment(
+  'DISABLE_EMAIL_VERIFICATION',
+  'true' // Manually change this value as needed
 );

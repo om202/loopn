@@ -1,0 +1,9 @@
+{
+  "name": "auto-confirm",
+  "version": "1.0.0",
+  "description": "Lambda function to auto-confirm users for testing",
+  "main": "handler.ts",
+  "dependencies": {
+    "@types/aws-lambda": "^8.10.136"
+  }
+}

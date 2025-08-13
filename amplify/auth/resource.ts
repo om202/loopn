@@ -1,4 +1,5 @@
 import { defineAuth } from '@aws-amplify/backend';
+import { autoConfirm } from '../functions/auto-confirm/resource';
 
 /**
  * Define and configure your auth resource
@@ -30,5 +31,8 @@ export const auth = defineAuth({
       required: true,
       mutable: true,
     },
+  },
+  triggers: {
+    preSignUp: autoConfirm,
   },
 });
