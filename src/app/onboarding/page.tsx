@@ -497,21 +497,21 @@ export default function OnboardingPage() {
                 like-minded professionals.
               </p>
 
-              <div className='space-y-6'>
+              <div className='space-y-8'>
                 {INTERESTS_GROUPS.map((group, idx) => (
                   <div
                     key={group.title}
-                    className={`${idx !== 0 ? 'pt-4 mt-4 border-t border-zinc-200' : ''}`}
+                    className={`${idx !== 0 ? 'pt-6 mt-6 border-t border-zinc-200' : ''}`}
                   >
-                    <div className='text-sm font-medium text-zinc-900 mb-2'>
+                    <div className='text-sm font-medium text-zinc-900 mb-4'>
                       {group.title}
                     </div>
-                    <div className='grid grid-cols-2 md:grid-cols-3 gap-2'>
+                    <div className='grid grid-cols-2 md:grid-cols-3 gap-3'>
                       {group.items.map(interest => (
                         <button
                           key={interest}
                           onClick={() => toggleInterest(interest)}
-                          className={`px-3 py-1.5 rounded-xl text-xs transition-colors border ${
+                          className={`px-2.5 py-2 rounded-xl text-sm transition-colors border text-center ${
                             formData.interests?.includes(interest)
                               ? 'bg-brand-500 text-white border-brand-500'
                               : 'bg-white text-zinc-700 border-zinc-200 hover:bg-brand-50'
