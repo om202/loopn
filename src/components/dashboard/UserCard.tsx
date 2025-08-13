@@ -185,14 +185,7 @@ export default function UserCard({
               )}
             </div>
 
-            {/* Trial indicator */}
-            {existingConversations.has(userPresence.userId) &&
-              !existingConversations.get(userPresence.userId)?.isConnected && (
-                <span className='px-1.5 py-0.5 text-xs border bg-white border-zinc-200 text-zinc-500 rounded-full flex-shrink-0 flex items-center gap-1'>
-                  <Clock className='w-3 h-3' />
-                  Trial
-                </span>
-              )}
+
           </div>
 
           {/* Profession */}
@@ -256,11 +249,9 @@ export default function UserCard({
                       ?.chatStatus === 'ENDED' ? (
                       canUserReconnect(userPresence.userId) ? (
                         <>
-                          <span className='text-sm'>
-                            <span className='hidden min-[400px]:inline'>
-                              Send Request
-                            </span>
-                            <span className='min-[400px]:hidden'>Request</span>
+                          <CheckCircle2 className='w-4 h-4 text-brand-500 flex-shrink-0' />
+                          <span className='hidden min-[400px]:inline'>
+                            Reconnect
                           </span>
                         </>
                       ) : (
@@ -302,7 +293,7 @@ export default function UserCard({
                   <>
                     <CheckCircle2 className='w-4 h-4 text-brand-500 flex-shrink-0' />
                     <span className='hidden min-[400px]:inline'>
-                      Start Trial
+                      Send Request
                     </span>
                   </>
                 )}
