@@ -6,15 +6,16 @@ import { PreSignUpTriggerHandler } from 'aws-lambda';
  * When true: allows creating multiple fake accounts without email verification
  * When false: normal email verification flow
  */
-export const handler: PreSignUpTriggerHandler = async (event) => {
+export const handler: PreSignUpTriggerHandler = async event => {
   // Check if email verification should be disabled
-  const disableEmailVerification = process.env.DISABLE_EMAIL_VERIFICATION === 'true';
-  
+  const disableEmailVerification =
+    process.env.DISABLE_EMAIL_VERIFICATION === 'true';
+
   if (disableEmailVerification) {
     console.log('Email verification disabled - auto-confirming user');
     // Auto-confirm the user
     event.response.autoConfirmUser = true;
-    
+
     // Auto-verify email (no verification email sent)
     event.response.autoVerifyEmail = true;
   } else {
@@ -22,6 +23,6 @@ export const handler: PreSignUpTriggerHandler = async (event) => {
     // Let the normal verification process happen
     // Don't set autoConfirmUser or autoVerifyEmail
   }
-  
+
   return event;
 };

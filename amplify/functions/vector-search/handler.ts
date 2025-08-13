@@ -299,30 +299,31 @@ async function searchUsers(
   }
 
   // Calculate similarities and sort by score
-  const scoredResults = scanResponse.Items!.map((item: any) => {
-    const userProfile = unmarshall(item);
-    if (!userProfile.profileEmbedding) return null;
+  const scoredResults = scanResponse
+    .Items!.map((item: any) => {
+      const userProfile = unmarshall(item);
+      if (!userProfile.profileEmbedding) return null;
 
-    const similarity = cosineSimilarity(
-      embeddingResponse.embedding!,
-      userProfile.profileEmbedding
-    );
+      const similarity = cosineSimilarity(
+        embeddingResponse.embedding!,
+        userProfile.profileEmbedding
+      );
 
-    return {
-      userId: userProfile.userId,
-      score: similarity,
-      profile: {
-        jobRole: userProfile.jobRole,
-        companyName: userProfile.companyName,
-        industry: userProfile.industry,
-        yearsOfExperience: userProfile.yearsOfExperience,
-        education: userProfile.education,
-        about: userProfile.about,
-        interests: userProfile.interests,
-        skills: userProfile.skills,
-      },
-    } as SearchResult;
-  })
+      return {
+        userId: userProfile.userId,
+        score: similarity,
+        profile: {
+          jobRole: userProfile.jobRole,
+          companyName: userProfile.companyName,
+          industry: userProfile.industry,
+          yearsOfExperience: userProfile.yearsOfExperience,
+          education: userProfile.education,
+          about: userProfile.about,
+          interests: userProfile.interests,
+          skills: userProfile.skills,
+        },
+      } as SearchResult;
+    })
     .filter((result: any): result is SearchResult => result !== null)
     .filter((result: SearchResult) => result.score >= 0.1) // Filter out results below 10% similarity
     .sort((a: SearchResult, b: SearchResult) => b.score - a.score)
