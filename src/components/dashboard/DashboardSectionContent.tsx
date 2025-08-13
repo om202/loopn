@@ -89,7 +89,7 @@ export default function DashboardSectionContent({
     return [...users].sort((a, b) => {
       const aIsOnline = onlineUsers.some(ou => ou.userId === a.userId);
       const bIsOnline = onlineUsers.some(ou => ou.userId === b.userId);
-      
+
       // Online users first
       if (aIsOnline && !bIsOnline) return -1;
       if (!aIsOnline && bIsOnline) return 1;
@@ -114,7 +114,7 @@ export default function DashboardSectionContent({
         users = uniqueAllChatUsers;
         break;
     }
-    
+
     // Sort users with online users first
     return sortUsersByOnlineStatus(users);
   };

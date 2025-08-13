@@ -170,17 +170,19 @@ export default function UserCard({
           <div className='flex items-center gap-2 mb-1'>
             <div className='text-zinc-900 truncate no-email-detection flex items-center gap-1'>
               <span>{getDisplayName(userPresence, userProfile)}</span>
-                              {!isOnline && (
-                  <span className='text-sm text-zinc-600'>
-                    ({existingConversations.has(userPresence.userId) &&
-                    existingConversations.get(userPresence.userId)?.chatStatus ===
-                      'ENDED'
-                      ? 'Chat Trial Ended'
-                      : userPresence.lastSeen
-                        ? formatPresenceTime(userPresence.lastSeen)
-                        : 'Offline'})
-                  </span>
-                )}
+              {!isOnline && (
+                <span className='text-sm text-zinc-600'>
+                  (
+                  {existingConversations.has(userPresence.userId) &&
+                  existingConversations.get(userPresence.userId)?.chatStatus ===
+                    'ENDED'
+                    ? 'Chat Trial Ended'
+                    : userPresence.lastSeen
+                      ? formatPresenceTime(userPresence.lastSeen)
+                      : 'Offline'}
+                  )
+                </span>
+              )}
             </div>
 
             {/* Trial indicator */}
@@ -192,7 +194,7 @@ export default function UserCard({
                 </span>
               )}
           </div>
-          
+
           {/* Profession */}
           {fullProfile?.jobRole && (
             <div className='text-sm text-zinc-600 mb-1.5 truncate'>

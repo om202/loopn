@@ -1,7 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { MessageCircle, Sparkles, Users, Search, HelpCircle } from 'lucide-react';
+import {
+  MessageCircle,
+  Sparkles,
+  Users,
+  Search,
+  HelpCircle,
+} from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAuthenticator } from '@aws-amplify/ui-react';
@@ -331,7 +337,9 @@ export default function DashboardSidebar({
               <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
                 <HelpCircle className='w-5 h-5' />
               </div>
-              <span className='font-medium text-sm flex-1'>{helpItem.label}</span>
+              <span className='font-medium text-sm flex-1'>
+                {helpItem.label}
+              </span>
             </button>
 
             {/* Account Button */}
@@ -361,12 +369,8 @@ export default function DashboardSidebar({
                 />
               </div>
               <div className='flex-1'>
-                <div className='font-medium text-sm'>
-                  {accountItem.label}
-                </div>
-                <div className='text-xs text-zinc-500'>
-                  You
-                </div>
+                <div className='font-medium text-sm'>{accountItem.label}</div>
+                <div className='text-xs text-zinc-500'>You</div>
               </div>
             </button>
           </div>
