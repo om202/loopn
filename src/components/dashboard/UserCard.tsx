@@ -209,13 +209,10 @@ export default function UserCard({
                 userPresence.userId
               );
               return (
-                <div className='text-sm text-right min-w-[70px]'>
-                  <div className='text-zinc-500 hidden min-[400px]:block'>
-                    Reconnect in
-                  </div>
-                  <div className='text-zinc-500 flex items-center justify-end gap-1'>
-                    <Clock className='w-3 h-3 text-zinc-500 hover:text-zinc-900 cursor-pointer transition-colors' />
-                    <span className='text-xs min-[400px]:text-sm'>
+                <div className='flex items-center justify-center w-[40px] h-[40px] rounded-xl border border-zinc-200 bg-white'>
+                  <div className='text-zinc-500 flex flex-col items-center gap-0.5' title={`Reconnect in ${timeRemaining}`}>
+                    <Clock className='w-4 h-4 text-zinc-500' />
+                    <span className='text-[10px] leading-none'>
                       {timeRemaining}
                     </span>
                   </div>
@@ -232,70 +229,40 @@ export default function UserCard({
                     onChatAction(userPresence.userId);
                   }
                 }}
-                className='px-2.5 py-2 text-sm font-medium rounded-xl border transition-colors bg-white text-brand-500 border-zinc-200 hover:bg-brand-100 hover:border-zinc-200 flex items-center gap-1.5 flex-shrink-0 min-w-[44px] justify-center'
+                className='px-2.5 py-2 text-sm font-medium rounded-xl border transition-colors bg-white text-brand-500 border-zinc-200 hover:bg-brand-100 hover:border-zinc-200 flex items-center justify-center flex-shrink-0 w-[40px] h-[40px]'
+                title={
+                  pendingRequests.has(userPresence.userId)
+                    ? 'Cancel Request'
+                    : existingConversations.has(userPresence.userId)
+                      ? existingConversations.get(userPresence.userId)?.chatStatus === 'ENDED'
+                        ? canUserReconnect(userPresence.userId)
+                          ? 'Reconnect'
+                          : 'View Chat'
+                        : 'Continue Chat'
+                      : 'Send Request'
+                }
               >
                 {pendingRequests.has(userPresence.userId) ? (
-                  <>
-                    <span className='text-zinc-600 text-base min-[400px]:inline'>
-                      <span className='hidden min-[400px]:inline'>
-                        Cancel Request
-                      </span>
-                      <span className='min-[400px]:hidden'>Cancel</span>
-                    </span>
-                  </>
+                  <Clock className='w-4 h-4 text-zinc-600 flex-shrink-0' />
                 ) : existingConversations.has(userPresence.userId) ? (
-                  <>
-                    {existingConversations.get(userPresence.userId)
-                      ?.chatStatus === 'ENDED' ? (
-                      canUserReconnect(userPresence.userId) ? (
-                        <>
-                          <CheckCircle2 className='w-4 h-4 text-brand-500 flex-shrink-0' />
-                          <span className='hidden min-[400px]:inline'>
-                            Reconnect
-                          </span>
-                        </>
-                      ) : (
-                        (() => {
-                          const timeRemaining = getReconnectTimeRemaining(
-                            userPresence.userId
-                          );
-                          return timeRemaining ? (
-                            <div className='text-right'>
-                              <div className='hidden min-[400px]:block text-xs'>
-                                Reconnect in
-                              </div>
-                              <div className='min-[400px]:hidden text-xs'>
-                                Wait
-                              </div>
-                              <div className='flex items-center justify-end gap-1'>
-                                <span className='text-xs'>{timeRemaining}</span>
-                                <Clock
-                                  className='w-3 h-3 text-zinc-500 hover:text-zinc-900 cursor-pointer transition-colors'
-                                  onClick={e => {
-                                    e.stopPropagation();
-                                  }}
-                                />
-                              </div>
-                            </div>
-                          ) : (
-                            'View'
-                          );
-                        })()
-                      )
+                  existingConversations.get(userPresence.userId)?.chatStatus === 'ENDED' ? (
+                    canUserReconnect(userPresence.userId) ? (
+                      <CheckCircle2 className='w-4 h-4 text-brand-500 flex-shrink-0' />
                     ) : (
-                      <>
-                        <MessageCircle className='w-4 h-4 text-brand-500 flex-shrink-0' />
-                        <span className='hidden min-[400px]:inline'>Chat</span>
-                      </>
-                    )}
-                  </>
+                      (() => {
+                        const timeRemaining = getReconnectTimeRemaining(userPresence.userId);
+                        return timeRemaining ? (
+                          <Clock className='w-4 h-4 text-zinc-500 flex-shrink-0' />
+                        ) : (
+                          <MessageCircle className='w-4 h-4 text-brand-500 flex-shrink-0' />
+                        );
+                      })()
+                    )
+                  ) : (
+                    <MessageCircle className='w-4 h-4 text-brand-500 flex-shrink-0' />
+                  )
                 ) : (
-                  <>
-                    <CheckCircle2 className='w-4 h-4 text-brand-500 flex-shrink-0' />
-                    <span className='hidden min-[400px]:inline'>
-                      Send Request
-                    </span>
-                  </>
+                  <CheckCircle2 className='w-4 h-4 text-brand-500 flex-shrink-0' />
                 )}
               </button>
             );
@@ -305,11 +272,11 @@ export default function UserCard({
           {/* Mobile: Profile dialog button */}
           <button
             onClick={() => setShowProfileDialog(true)}
-            className='md:hidden px-2.5 py-2 text-sm font-medium rounded-xl border transition-colors bg-white text-zinc-900 border-zinc-200 hover:bg-zinc-100 hover:border-zinc-200 flex items-center gap-1.5 flex-shrink-0 min-w-[44px] justify-center'
+            className='md:hidden px-2.5 py-2 text-sm font-medium rounded-xl border transition-colors bg-white text-zinc-900 border-zinc-200 hover:bg-zinc-100 hover:border-zinc-200 flex items-center justify-center flex-shrink-0 w-[40px] h-[40px]'
             disabled={loadingProfile}
+            title='View Profile'
           >
             <User className='w-4 h-4 text-zinc-900 flex-shrink-0' />
-            <span className='hidden min-[400px]:inline'>Profile</span>
           </button>
 
           {/* Desktop: three dots opens sidebar via parent */}

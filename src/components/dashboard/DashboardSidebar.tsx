@@ -381,22 +381,26 @@ export default function DashboardSidebar({
       <div className='lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-zinc-200'>
         <nav className='flex justify-center items-stretch px-4 py-2'>
           <div className='flex bg-zinc-50 rounded-2xl p-1 gap-0.5 w-full max-w-md'>
-            {[...sidebarItems, helpItem, accountItem].map(
+            {[
+              // Filter out search and help for mobile
+              ...sidebarItems.filter(item => item.id !== 'search'),
+              accountItem
+            ].map(
               ({ id, icon, label, count }) => (
                 <button
                   key={id}
                   onClick={() => onSectionChange(id)}
-                  className={`relative flex-1 flex flex-col items-center justify-center gap-1 px-2 py-3 rounded-xl border ${
+                  className={`relative flex-1 flex flex-col items-center justify-center gap-0.5 px-1 py-2.5 rounded-xl border ${
                     activeSection === id
                       ? 'text-brand-600 bg-white shadow-sm border-brand-100'
                       : 'text-zinc-500 hover:text-zinc-700 hover:bg-white/60 border-transparent'
                   }`}
                   title={label}
                 >
-                  <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
+                  <div className='w-6 h-6 flex-shrink-0 flex items-center justify-center'>
                     {icon === 'NotificationBell' ? (
                       <svg
-                        className='w-5 h-5'
+                        className='w-6 h-6'
                         fill='none'
                         stroke='currentColor'
                         viewBox='0 0 24 24'
@@ -420,22 +424,27 @@ export default function DashboardSidebar({
                           !!userProfile?.profilePictureUrl ||
                           !!onboardingStatus?.onboardingData?.profilePictureUrl
                         }
-                        size='xs'
+                        size='sm'
                         showStatus={true}
                         status='ONLINE'
                       />
                     ) : (
                       React.createElement(icon, {
-                        className: 'w-5 h-5',
+                        className: 'w-6 h-6',
                       })
                     )}
                   </div>
-                  <div className='text-xs font-medium leading-tight text-center'>
+                  <div className='text-[10px] font-medium leading-tight text-center'>
                     {id === 'account' ? (
                       <div>
-                        <div>{label}</div>
-                        <div className='text-[10px] text-zinc-500'>You</div>
+                        <div className='truncate max-w-[50px]'>{label.length > 8 ? label.slice(0, 8) + '...' : label}</div>
                       </div>
+                    ) : id === 'suggested' ? (
+                      'Suggest'
+                    ) : id === 'connections' ? (
+                      'Connect'
+                    ) : id === 'notifications' ? (
+                      'Notify'
                     ) : (
                       label
                     )}
