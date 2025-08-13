@@ -198,7 +198,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
       });
 
       console.log('Sign up result:', signUpResult);
-      // User will need to confirm their email
+
+      // Check if user was auto-confirmed (when email verification is disabled)
+      if (signUpResult.isSignUpComplete) {
+        console.log('User auto-confirmed - signing in automatically');
+        // Auto-sign in the user since they were auto-confirmed
+        await handleSignIn(email, password);
+        return; // Don't proceed to confirmation flow
+      }
+      // If not auto-confirmed, user will need to confirm their email via the UI flow
     } catch (err) {
       console.error('Sign up error:', err);
       setError(err instanceof Error ? err.message : 'Failed to sign up');

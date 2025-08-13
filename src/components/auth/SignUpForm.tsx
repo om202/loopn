@@ -32,7 +32,7 @@ export default function SignUpForm({
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const { handleSignUp, isLoading, error, clearError } = useAuth();
+  const { handleSignUp, isLoading, error, clearError, authStatus } = useAuth();
 
   // Password validation state
   const [passwordFocused, setPasswordFocused] = useState(false);
@@ -74,10 +74,12 @@ export default function SignUpForm({
 
     await handleSignUp(email, password);
 
-    // If successful, go to confirmation
-    if (!error) {
+    // If successful and not auto-signed in, go to confirmation
+    // (If user was auto-confirmed, handleSignUp will auto-sign them in)
+    if (!error && authStatus !== 'authenticated') {
       onSignUpSuccess(email);
     }
+    // If user is now authenticated, they were auto-confirmed and signed in
   };
 
   return (
