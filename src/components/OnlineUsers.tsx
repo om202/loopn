@@ -608,7 +608,7 @@ export default function OnlineUsers({
                     onlineUsers.find(
                       u => u.userId === profileSidebarUser.userId
                     )
-                      ? profileSidebarUser.status
+                      ? 'ONLINE'
                       : profileSidebarUser.lastSeen &&
                           formatPresenceTime(profileSidebarUser.lastSeen) ===
                             'Recently active'

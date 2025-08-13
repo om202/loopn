@@ -156,7 +156,7 @@ export default function UserCard({
             showStatus
             status={
               isOnline
-                ? userPresence.status
+                ? 'ONLINE'
                 : userPresence.lastSeen &&
                     formatPresenceTime(userPresence.lastSeen) ===
                       'Recently active'
@@ -170,17 +170,17 @@ export default function UserCard({
           <div className='flex items-center gap-2 mb-1'>
             <div className='text-zinc-900 truncate no-email-detection flex items-center gap-1'>
               <span>{getDisplayName(userPresence, userProfile)}</span>
-              <span className='text-xs text-zinc-500'>
-                ({existingConversations.has(userPresence.userId) &&
-                existingConversations.get(userPresence.userId)?.chatStatus ===
-                  'ENDED'
-                  ? 'Chat Trial Ended'
-                  : isOnline
-                    ? 'Online now'
-                    : userPresence.lastSeen
-                      ? formatPresenceTime(userPresence.lastSeen)
-                      : 'Offline'})
-              </span>
+                              {!isOnline && (
+                  <span className='text-sm text-zinc-600'>
+                    ({existingConversations.has(userPresence.userId) &&
+                    existingConversations.get(userPresence.userId)?.chatStatus ===
+                      'ENDED'
+                      ? 'Chat Trial Ended'
+                      : userPresence.lastSeen
+                        ? formatPresenceTime(userPresence.lastSeen)
+                        : 'Offline'})
+                  </span>
+                )}
             </div>
 
             {/* Trial indicator */}

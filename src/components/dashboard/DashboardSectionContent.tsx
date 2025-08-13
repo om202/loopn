@@ -84,19 +84,39 @@ export default function DashboardSectionContent({
     />
   );
 
+  // Helper function to sort users with online users first
+  const sortUsersByOnlineStatus = (users: UserPresence[]) => {
+    return [...users].sort((a, b) => {
+      const aIsOnline = onlineUsers.some(ou => ou.userId === a.userId);
+      const bIsOnline = onlineUsers.some(ou => ou.userId === b.userId);
+      
+      // Online users first
+      if (aIsOnline && !bIsOnline) return -1;
+      if (!aIsOnline && bIsOnline) return 1;
+      return 0;
+    });
+  };
+
   // Determine which users to show based on active section (filter)
   const getUsersToShow = () => {
+    let users: UserPresence[];
     switch (activeSection) {
       case 'connections':
-        return connectionUsers;
+        users = connectionUsers;
+        break;
       case 'suggested':
-        return suggestedUsers;
+        users = suggestedUsers;
+        break;
       case 'search':
         return []; // Search section uses its own component
       case 'all':
       default:
-        return uniqueAllChatUsers;
+        users = uniqueAllChatUsers;
+        break;
     }
+    
+    // Sort users with online users first
+    return sortUsersByOnlineStatus(users);
   };
 
   // Get section title and description
