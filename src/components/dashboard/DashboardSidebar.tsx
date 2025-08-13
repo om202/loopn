@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { MessageCircle, Sparkles, Users, Search } from 'lucide-react';
+import { MessageCircle, Sparkles, Users, Search, HelpCircle } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAuthenticator } from '@aws-amplify/ui-react';
@@ -21,6 +21,7 @@ type SidebarSection =
   | 'suggested'
   | 'search'
   | 'notifications'
+  | 'help'
   | 'account';
 
 interface DashboardSidebarProps {
@@ -227,6 +228,13 @@ export default function DashboardSidebar({
     },
   ];
 
+  const helpItem = {
+    id: 'help' as const,
+    icon: HelpCircle,
+    label: 'Help & Support',
+    count: 0,
+  };
+
   const accountItem = {
     id: 'account' as const,
     icon: 'UserAvatar',
@@ -309,8 +317,24 @@ export default function DashboardSidebar({
             </div>
           </nav>
 
-          {/* Account button at bottom */}
-          <div className='border-t border-zinc-100 p-2'>
+          {/* Help and Account buttons at bottom */}
+          <div className='border-t border-zinc-100 p-2 space-y-1'>
+            {/* Help Button */}
+            <button
+              onClick={() => onSectionChange(helpItem.id)}
+              className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border ${
+                activeSection === helpItem.id
+                  ? 'bg-brand-50 text-brand-700 border-brand-200'
+                  : 'text-zinc-700 hover:bg-zinc-50 hover:text-zinc-900 border-transparent'
+              }`}
+            >
+              <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
+                <HelpCircle className='w-5 h-5' />
+              </div>
+              <span className='font-medium text-sm flex-1'>{helpItem.label}</span>
+            </button>
+
+            {/* Account Button */}
             <button
               onClick={() => onSectionChange(accountItem.id)}
               className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border ${
@@ -353,7 +377,7 @@ export default function DashboardSidebar({
       <div className='lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-zinc-200'>
         <nav className='flex justify-center items-stretch px-4 py-2'>
           <div className='flex bg-zinc-50 rounded-2xl p-1 gap-0.5 w-full max-w-md'>
-            {[...sidebarItems, accountItem].map(
+            {[...sidebarItems, helpItem, accountItem].map(
               ({ id, icon, label, count }) => (
                 <button
                   key={id}

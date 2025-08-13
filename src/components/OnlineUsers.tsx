@@ -16,6 +16,7 @@ import {
   DashboardSectionContent,
   NotificationsContent,
   AccountContent,
+  HelpContent,
 } from './dashboard';
 import SearchUser from './SearchUser';
 import { useChatActions } from '../hooks/useChatActions';
@@ -43,6 +44,7 @@ type SidebarSection =
   | 'suggested'
   | 'search'
   | 'notifications'
+  | 'help'
   | 'account';
 
 export default function OnlineUsers({
@@ -542,6 +544,8 @@ export default function OnlineUsers({
         <div className='overflow-y-auto flex-1'>
           {activeSection === 'notifications' ? (
             <NotificationsContent />
+          ) : activeSection === 'help' ? (
+            <HelpContent />
           ) : activeSection === 'account' ? (
             <AccountContent />
           ) : (
