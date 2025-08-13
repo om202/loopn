@@ -61,7 +61,7 @@ export default function UserAvatar({
         };
       case 'xl':
         return {
-          size: 'w-5 h-5',
+          size: 'w-4 h-4',
           position: '-bottom-0 -right-0',
         };
       default: // md
