@@ -98,7 +98,7 @@ export default function AccountContent() {
 
       {/* Profile Section */}
       <div className='max-w-2xl'>
-        <div className='flex items-center gap-2'>
+        <div className='flex flex-col items-start mb-8'>
           <UserAvatar
             email={getUserEmail()}
             userId={user?.userId}
@@ -110,9 +110,10 @@ export default function AccountContent() {
               !!userProfile?.profilePictureUrl ||
               !!onboardingStatus?.onboardingData?.profilePictureUrl
             }
-            size='md'
+            size='xl'
+            className='mb-4'
           />
-          <div className='flex-1'>
+          <div>
             <h3 className='font-semibold text-zinc-900 mb-1'>
               {getUserDisplayName()}
             </h3>

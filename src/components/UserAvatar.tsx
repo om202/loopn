@@ -34,9 +34,9 @@ export default function UserAvatar({
       case 'sm':
         return 35; // w-8 h-8
       case 'lg':
-        return 50; // w-12 h-12
+        return 60; // w-15 h-15
       case 'xl':
-        return 65; // w-16 h-16
+        return 80; // w-20 h-20
       default:
         return 50; // w-10 h-10
     }
@@ -56,12 +56,12 @@ export default function UserAvatar({
         };
       case 'lg':
         return {
-          size: 'w-3.5 h-3.5',
+          size: 'w-4 h-4',
           position: '-bottom-0 -right-0',
         };
       case 'xl':
         return {
-          size: 'w-4 h-4',
+          size: 'w-5 h-5',
           position: '-bottom-0 -right-0',
         };
       default: // md
