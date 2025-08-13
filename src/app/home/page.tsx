@@ -686,7 +686,7 @@ export default function HomePage() {
               </blockquote>
               <div className='flex items-center gap-4 mt-auto'>
                 <Image
-                  src='/dummy-user2.jpg'
+                  src='/dummy-users/dummy-user2.jpg'
                   alt='Sarah Johnson'
                   width={48}
                   height={48}
@@ -720,7 +720,7 @@ export default function HomePage() {
               </blockquote>
               <div className='flex items-center gap-4 mt-auto'>
                 <Image
-                  src='/dummy-user3.jpg'
+                  src='/dummy-users/dummy-user3.jpg'
                   alt='Michael Chen'
                   width={48}
                   height={48}
@@ -754,7 +754,7 @@ export default function HomePage() {
               </blockquote>
               <div className='flex items-center gap-4 mt-auto'>
                 <Image
-                  src='/dummy-user4.jpg'
+                  src='/dummy-users/dummy-user4.jpg'
                   alt='Emily Rodriguez'
                   width={48}
                   height={48}
