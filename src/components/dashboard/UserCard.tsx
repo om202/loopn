@@ -207,15 +207,28 @@ export default function UserCard({
                 userPresence.userId
               );
               return (
-                <div className='flex items-center justify-center w-[40px] h-[40px] rounded-xl border border-zinc-200 bg-white'>
+                <div className='flex items-center justify-center w-[40px] h-[40px] md:w-auto md:h-auto md:min-w-[70px] rounded-xl border border-zinc-200 bg-white md:px-2.5 md:py-2'>
                   <div
-                    className='text-zinc-500 flex flex-col items-center gap-0.5'
+                    className='text-zinc-500 flex flex-col items-center gap-0.5 md:text-right'
                     title={`Reconnect in ${timeRemaining}`}
                   >
-                    <Clock className='w-4 h-4 text-zinc-500' />
-                    <span className='text-[10px] leading-none'>
-                      {timeRemaining}
-                    </span>
+                    <div className='md:hidden flex flex-col items-center gap-0.5'>
+                      <Clock className='w-4 h-4 text-zinc-500' />
+                      <span className='text-[10px] leading-none'>
+                        {timeRemaining}
+                      </span>
+                    </div>
+                    <div className='hidden md:block text-sm'>
+                      <div className='text-zinc-500 text-xs'>
+                        Reconnect in
+                      </div>
+                      <div className='text-zinc-500 flex items-center justify-end gap-1'>
+                        <Clock className='w-3 h-3 text-zinc-500' />
+                        <span className='text-xs'>
+                          {timeRemaining}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               );
@@ -230,7 +243,7 @@ export default function UserCard({
                     onChatAction(userPresence.userId);
                   }
                 }}
-                className='px-2.5 py-2 text-sm font-medium rounded-xl border transition-colors bg-white text-brand-500 border-zinc-200 hover:bg-brand-100 hover:border-zinc-200 flex items-center justify-center flex-shrink-0 w-[40px] h-[40px]'
+                className='px-2.5 py-2 text-sm font-medium rounded-xl border transition-colors bg-white text-brand-500 border-zinc-200 hover:bg-brand-100 hover:border-zinc-200 flex items-center justify-center flex-shrink-0 w-[40px] h-[40px] md:w-auto md:h-auto md:gap-1.5 md:min-w-[44px]'
                 title={
                   pendingRequests.has(userPresence.userId)
                     ? 'Cancel Request'
@@ -245,12 +258,21 @@ export default function UserCard({
                 }
               >
                 {pendingRequests.has(userPresence.userId) ? (
-                  <Clock className='w-4 h-4 text-zinc-600 flex-shrink-0' />
+                  <>
+                    <Clock className='w-4 h-4 text-zinc-600 flex-shrink-0' />
+                    <span className='hidden md:inline text-zinc-600'>
+                      <span className='hidden lg:inline'>Cancel Request</span>
+                      <span className='lg:hidden'>Cancel</span>
+                    </span>
+                  </>
                 ) : existingConversations.has(userPresence.userId) ? (
                   existingConversations.get(userPresence.userId)?.chatStatus ===
                   'ENDED' ? (
                     canUserReconnect(userPresence.userId) ? (
-                      <CheckCircle2 className='w-4 h-4 text-brand-500 flex-shrink-0' />
+                      <>
+                        <CheckCircle2 className='w-4 h-4 text-brand-500 flex-shrink-0' />
+                        <span className='hidden md:inline'>Reconnect</span>
+                      </>
                     ) : (
                       (() => {
                         const timeRemaining = getReconnectTimeRemaining(
@@ -259,15 +281,24 @@ export default function UserCard({
                         return timeRemaining ? (
                           <Clock className='w-4 h-4 text-zinc-500 flex-shrink-0' />
                         ) : (
-                          <MessageCircle className='w-4 h-4 text-brand-500 flex-shrink-0' />
+                          <>
+                            <MessageCircle className='w-4 h-4 text-brand-500 flex-shrink-0' />
+                            <span className='hidden md:inline'>View</span>
+                          </>
                         );
                       })()
                     )
                   ) : (
-                    <MessageCircle className='w-4 h-4 text-brand-500 flex-shrink-0' />
+                    <>
+                      <MessageCircle className='w-4 h-4 text-brand-500 flex-shrink-0' />
+                      <span className='hidden md:inline'>Chat</span>
+                    </>
                   )
                 ) : (
-                  <CheckCircle2 className='w-4 h-4 text-brand-500 flex-shrink-0' />
+                  <>
+                    <CheckCircle2 className='w-4 h-4 text-brand-500 flex-shrink-0' />
+                    <span className='hidden md:inline'>Send Request</span>
+                  </>
                 )}
               </button>
             );
