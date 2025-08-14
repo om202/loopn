@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Search } from 'lucide-react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import {
@@ -45,38 +45,10 @@ export default function SearchSectionContent({
   const [isSearching, setIsSearching] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
-  const [currentUserProfile, setCurrentUserProfile] =
-    useState<UserProfile | null>(null);
+
   const { user } = useAuthenticator();
 
-  // Load current user's profile for personalized search
-  // This is the right place for this data since it's only needed for search functionality
-  useEffect(() => {
-    let mounted = true;
 
-    const loadCurrentUserProfile = async () => {
-      if (!user?.userId) return;
-
-      try {
-        const profile = await UserProfileService.getProfileDetails(user.userId);
-        if (mounted) {
-          setCurrentUserProfile(profile);
-        }
-      } catch (error) {
-        console.error(
-          '❌ Error loading current user profile for search:',
-          error
-        );
-        // Don't throw - search can work without user context, just less personalized
-      }
-    };
-
-    loadCurrentUserProfile();
-
-    return () => {
-      mounted = false;
-    };
-  }, [user?.userId]);
 
   const performSearch = useCallback(
     async (searchTerm: string) => {
@@ -87,29 +59,14 @@ export default function SearchSectionContent({
       setHasSearched(true);
 
       try {
-        // Use AI-enhanced search with current user's real profile for personalization
-        const userContext = currentUserProfile
-          ? {
-              userProfile: {
-                jobRole: currentUserProfile.jobRole,
-                industry: currentUserProfile.industry,
-                yearsOfExperience: currentUserProfile.yearsOfExperience,
-                companyName: currentUserProfile.companyName,
-                skills: currentUserProfile.skills,
-                interests: currentUserProfile.interests,
-              },
-            }
-          : undefined;
-
-        const response = await VectorSearchService.intelligentSearch(
+        // Use normal vector search
+        const response = await VectorSearchService.searchUsers(
           searchTerm.trim(),
-          userContext,
           10
         );
 
-        console.info('AI Enhanced Search:', {
+        console.info('Vector Search:', {
           query: searchTerm,
-          enhancedQuery: response.enhancedQuery,
           resultsCount: response.results?.length || 0,
         });
 
@@ -120,9 +77,7 @@ export default function SearchSectionContent({
         }
 
         // Filter out current user and enhance results with full profile data
-        // Handle both regular results and enhanced results from AI search
-        const searchResults =
-          response.enhancedResults || response.results || [];
+        const searchResults = response.results || [];
         const filteredResults = searchResults.filter(
           result => result.userId !== user.userId
         );
@@ -175,7 +130,7 @@ export default function SearchSectionContent({
         setIsSearching(false);
       }
     },
-    [isSearching, user, currentUserProfile]
+    [isSearching, user]
   );
 
   // Effect to handle search from external search bar
@@ -289,3 +244,87 @@ export default function SearchSectionContent({
     </div>
   );
 }
+
+/*
+ * HOW TO SWITCH BACK TO INTELLIGENT SEARCH:
+ * 
+ * This component currently uses normal vector search (VectorSearchService.searchUsers).
+ * To switch back to AI-enhanced intelligent search, follow these steps:
+ * 
+ * 1. RESTORE USER PROFILE STATE:
+ *    Add back the currentUserProfile state and its loading effect:
+ *    
+ *    const [currentUserProfile, setCurrentUserProfile] = useState<UserProfile | null>(null);
+ *    
+ *    useEffect(() => {
+ *      let mounted = true;
+ *      const loadCurrentUserProfile = async () => {
+ *        if (!user?.userId) return;
+ *        try {
+ *          const profile = await UserProfileService.getProfileDetails(user.userId);
+ *          if (mounted) setCurrentUserProfile(profile);
+ *        } catch (error) {
+ *          console.error('Error loading current user profile for search:', error);
+ *        }
+ *      };
+ *      loadCurrentUserProfile();
+ *      return () => { mounted = false; };
+ *    }, [user?.userId]);
+ * 
+ * 2. REPLACE SEARCH METHOD:
+ *    In the performSearch function, replace this:
+ *    
+ *    const response = await VectorSearchService.searchUsers(searchTerm.trim(), 10);
+ *    
+ *    With this:
+ *    
+ *    const userContext = currentUserProfile ? {
+ *      userProfile: {
+ *        jobRole: currentUserProfile.jobRole,
+ *        industry: currentUserProfile.industry,
+ *        yearsOfExperience: currentUserProfile.yearsOfExperience,
+ *        companyName: currentUserProfile.companyName,
+ *        skills: currentUserProfile.skills,
+ *        interests: currentUserProfile.interests,
+ *      },
+ *    } : undefined;
+ *    
+ *    const response = await VectorSearchService.intelligentSearch(
+ *      searchTerm.trim(),
+ *      userContext,
+ *      10
+ *    );
+ * 
+ * 3. UPDATE RESULT HANDLING:
+ *    Replace this line:
+ *    const searchResults = response.results || [];
+ *    
+ *    With this:
+ *    const searchResults = response.enhancedResults || response.results || [];
+ * 
+ * 4. UPDATE LOGGING:
+ *    Replace the console.info call with:
+ *    console.info('AI Enhanced Search:', {
+ *      query: searchTerm,
+ *      enhancedQuery: response.enhancedQuery,
+ *      resultsCount: response.results?.length || 0,
+ *    });
+ * 
+ * 5. UPDATE DEPENDENCIES:
+ *    Update the useCallback dependency array to include currentUserProfile:
+ *    [isSearching, user, currentUserProfile]
+ * 
+ * 6. ADD IMPORTS:
+ *    Make sure useEffect is imported:
+ *    import React, { useState, useCallback, useEffect } from 'react';
+ * 
+ * BENEFITS OF INTELLIGENT SEARCH:
+ * - AI-enhanced query understanding and expansion
+ * - Personalized results based on user's profile
+ * - Better result ranking and relevance
+ * - Enhanced search insights and explanations
+ * - Context-aware matching
+ * 
+ * The intelligent search provides more sophisticated results but requires more processing
+ * time and resources compared to the current normal vector search implementation.
+ */
