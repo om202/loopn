@@ -26,10 +26,26 @@ interface SearchResult {
   profile: UserProfile;
 }
 
+interface EnhancedSearchResult extends SearchResult {
+  matchExplanation?: string;
+  relevanceFactors?: string[];
+  confidenceScore?: number;
+}
+
+interface SearchContext {
+  userProfile?: UserProfile;
+  searchHistory?: string[];
+  userIndustry?: string;
+  userExperience?: number;
+}
+
 interface EmbeddingResponse {
   success: boolean;
   embedding?: number[];
   results?: SearchResult[];
+  enhancedResults?: EnhancedSearchResult[];
+  enhancedQuery?: string;
+  searchInsights?: string;
   error?: string;
 }
 
@@ -38,6 +54,7 @@ const POSSIBLE_MODELS = [
   'amazon.titan-embed-text-v2:0', // V2 is granted, try this first
   'amazon.titan-embed-text-v1', // Fallback (might not be available)
 ];
+const CLAUDE_MODEL_ID = 'anthropic.claude-3-5-sonnet-20241022-v2:0';
 const EMBEDDING_DIMENSION = 1024; // Titan Text Embeddings v2 produces 1024-dimensional vectors
 const USER_PROFILE_TABLE = process.env.USER_PROFILE_TABLE || 'UserProfile';
 
@@ -46,12 +63,25 @@ const bedrockClient = new BedrockRuntimeClient({
 });
 const dynamoClient = new DynamoDBClient({ region: process.env.AWS_REGION });
 
+interface GraphQLEvent {
+  action: string;
+  text?: string;
+  query?: string;
+  userId?: string;
+  userProfile?: string | Record<string, unknown>;
+  users?: string | Array<{ userId: string; userProfile: UserProfile }>;
+  limit?: number;
+  userContext?: string | SearchContext;
+  results?: string | SearchResult[];
+}
+
 export const handler = async (
-  event: any // Change to any to see the raw structure
+  event: unknown // GraphQL event structure
 ): Promise<EmbeddingResponse> => {
   try {
     // AppSync might wrap arguments differently
-    const actualEvent = event.arguments || event;
+    const wrappedEvent = event as { arguments?: GraphQLEvent };
+    const actualEvent = wrappedEvent.arguments || (event as GraphQLEvent);
 
     switch (actualEvent.action) {
       case 'generate_embedding':
@@ -110,6 +140,87 @@ export const handler = async (
 
         return await searchUsers(query, limit);
 
+      case 'intelligent_search':
+        if (!actualEvent.query || typeof actualEvent.query !== 'string') {
+          throw new Error('Query is missing or invalid');
+        }
+
+        let userContext: SearchContext | undefined;
+        if (actualEvent.userContext) {
+          try {
+            userContext =
+              typeof actualEvent.userContext === 'string'
+                ? JSON.parse(actualEvent.userContext)
+                : actualEvent.userContext;
+          } catch (_parseError) {
+            console.warn(
+              'Invalid userContext format, proceeding without context'
+            );
+          }
+        }
+
+        return await intelligentSearch(
+          actualEvent.query.trim(),
+          userContext,
+          actualEvent.limit || 10
+        );
+
+      case 'enhance_query':
+        if (!actualEvent.query || typeof actualEvent.query !== 'string') {
+          throw new Error('Query is missing or invalid');
+        }
+
+        let queryUserContext: SearchContext | undefined;
+        if (actualEvent.userContext) {
+          try {
+            queryUserContext =
+              typeof actualEvent.userContext === 'string'
+                ? JSON.parse(actualEvent.userContext)
+                : actualEvent.userContext;
+          } catch (_parseError) {
+            console.warn(
+              'Invalid userContext format, proceeding without context'
+            );
+          }
+        }
+
+        return await enhanceQuery(actualEvent.query.trim(), queryUserContext);
+
+      case 'rerank_results':
+        if (!actualEvent.results || !actualEvent.query) {
+          throw new Error('Results and query are required for reranking');
+        }
+
+        let rerankResults: SearchResult[];
+        try {
+          rerankResults =
+            typeof actualEvent.results === 'string'
+              ? JSON.parse(actualEvent.results)
+              : actualEvent.results;
+        } catch (_parseError) {
+          throw new Error('Invalid results format for reranking');
+        }
+
+        let rerankUserContext: SearchContext | undefined;
+        if (actualEvent.userContext) {
+          try {
+            rerankUserContext =
+              typeof actualEvent.userContext === 'string'
+                ? JSON.parse(actualEvent.userContext)
+                : actualEvent.userContext;
+          } catch (_parseError) {
+            console.warn(
+              'Invalid userContext format, proceeding without context'
+            );
+          }
+        }
+
+        return await rerankResultsFunction(
+          rerankResults,
+          actualEvent.query,
+          rerankUserContext
+        );
+
       default:
         throw new Error(`Unknown action: ${actualEvent.action}`);
     }
@@ -148,12 +259,12 @@ async function generateEmbedding(text: string): Promise<EmbeddingResponse> {
         success: true,
         embedding: responseBody.embedding,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       // If this is the last model to try, return error
       if (i === POSSIBLE_MODELS.length - 1) {
         return {
           success: false,
-          error: `All embedding models failed. Last error: ${error.message}`,
+          error: `All embedding models failed. Last error: ${error instanceof Error ? error.message : 'Unknown error'}`,
         };
       }
       // Otherwise, continue to next model
@@ -300,7 +411,7 @@ async function searchUsers(
 
   // Calculate similarities and sort by score
   const scoredResults = scanResponse
-    .Items!.map((item: any) => {
+    .Items!.map(item => {
       const userProfile = unmarshall(item);
       if (!userProfile.profileEmbedding) return null;
 
@@ -324,7 +435,9 @@ async function searchUsers(
         },
       } as SearchResult;
     })
-    .filter((result: any): result is SearchResult => result !== null)
+    .filter(
+      (result: SearchResult | null): result is SearchResult => result !== null
+    )
     .filter((result: SearchResult) => result.score >= 0.1) // Filter out results below 10% similarity
     .sort((a: SearchResult, b: SearchResult) => b.score - a.score)
     .slice(0, limit);
@@ -333,4 +446,271 @@ async function searchUsers(
     success: true,
     results: scoredResults,
   };
+}
+
+// Helper function to invoke Claude 3.5 Sonnet
+async function invokeClaude(prompt: string): Promise<string> {
+  try {
+    const command = new InvokeModelCommand({
+      modelId: CLAUDE_MODEL_ID,
+      body: JSON.stringify({
+        anthropic_version: 'bedrock-2023-05-31',
+        max_tokens: 2000,
+        messages: [
+          {
+            role: 'user',
+            content: prompt,
+          },
+        ],
+        temperature: 0.1, // Low temperature for consistent results
+      }),
+      contentType: 'application/json',
+      accept: 'application/json',
+    });
+
+    const response = await bedrockClient.send(command);
+    const responseBody = JSON.parse(new TextDecoder().decode(response.body));
+
+    if (!responseBody.content || responseBody.content.length === 0) {
+      throw new Error('No content in Claude response');
+    }
+
+    return responseBody.content[0].text;
+  } catch (error: unknown) {
+    console.error('Error invoking Claude:', error);
+    throw new Error(
+      `Claude invocation failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+    );
+  }
+}
+
+// Enhanced query function using Claude
+async function enhanceQuery(
+  originalQuery: string,
+  userContext?: SearchContext
+): Promise<{
+  success: boolean;
+  enhancedQuery: string;
+  searchTerms: string[];
+  intent: string;
+  error?: string;
+}> {
+  try {
+    const prompt = `You are an expert at understanding professional search queries. 
+
+User is searching for professionals with query: "${originalQuery}"
+
+User context:
+- Role: ${userContext?.userProfile?.jobRole || 'Unknown'}
+- Industry: ${userContext?.userProfile?.industry || 'Unknown'}
+- Experience: ${userContext?.userProfile?.yearsOfExperience || 'Unknown'} years
+- Company: ${userContext?.userProfile?.companyName || 'Unknown'}
+
+Enhance this query by:
+1. Expanding job titles and skills that match the intent
+2. Adding relevant synonyms and related roles
+3. Considering complementary roles that would work well with the user
+4. Understanding the business context and needs
+
+Return ONLY a valid JSON object with this exact structure:
+{
+  "enhancedQuery": "expanded search terms that capture the intent better",
+  "searchTerms": ["term1", "term2", "term3"],
+  "intent": "clear description of what the user is looking for"
+}
+
+Examples:
+- "find a co-founder" → enhancedQuery: "technical co-founder CTO startup founder software engineer entrepreneur", searchTerms: ["co-founder", "CTO", "technical founder", "startup founder"], intent: "Looking for a technical business partner"
+- "backend engineer" → enhancedQuery: "backend engineer software engineer full-stack developer API developer cloud engineer", searchTerms: ["backend", "software engineer", "API developer"], intent: "Looking for server-side development expertise"`;
+
+    const response = await invokeClaude(prompt);
+    const parsed = JSON.parse(response);
+
+    return {
+      success: true,
+      enhancedQuery: parsed.enhancedQuery,
+      searchTerms: parsed.searchTerms,
+      intent: parsed.intent,
+    };
+  } catch (error: unknown) {
+    console.error('Error enhancing query:', error);
+    return {
+      success: false,
+      enhancedQuery: originalQuery,
+      searchTerms: [originalQuery],
+      intent: 'Basic search',
+      error: error instanceof Error ? error.message : 'Unknown error',
+    };
+  }
+}
+
+// Result reranking function using Claude
+async function rerankResultsFunction(
+  vectorResults: SearchResult[],
+  originalQuery: string,
+  userContext?: SearchContext
+): Promise<{
+  success: boolean;
+  results: EnhancedSearchResult[];
+  error?: string;
+}> {
+  try {
+    const prompt = `You are an expert at matching professionals for collaboration and networking.
+
+User searched for: "${originalQuery}"
+
+User profile:
+- Role: ${userContext?.userProfile?.jobRole || 'Unknown'}
+- Industry: ${userContext?.userProfile?.industry || 'Unknown'}
+- Experience: ${userContext?.userProfile?.yearsOfExperience || 'Unknown'} years
+- Skills: ${userContext?.userProfile?.skills?.join(', ') || 'Unknown'}
+- Interests: ${userContext?.userProfile?.interests?.join(', ') || 'Unknown'}
+
+Vector search returned these professional profiles:
+${JSON.stringify(
+  vectorResults.map(r => ({
+    userId: r.userId,
+    score: r.score,
+    profile: r.profile,
+  })),
+  null,
+  2
+)}
+
+For each profile, provide:
+1. A confidence score (0-100) based on how well they match the search intent
+2. A clear explanation of why they match or don't match
+3. Key relevance factors that make them a good connection
+
+Consider:
+- Complementary skills and expertise
+- Experience level compatibility
+- Industry relevance and cross-industry potential
+- Role synergy and collaboration potential
+- Career stage alignment
+
+Return ONLY a valid JSON array where each object has this exact structure:
+[
+  {
+    "userId": "user123",
+    "score": 85,
+    "profile": {...},
+    "confidenceScore": 92,
+    "matchExplanation": "Strong match because of shared fintech experience and complementary technical skills",
+    "relevanceFactors": ["Fintech expertise", "Technical leadership", "Startup experience"]
+  }
+]
+
+Ensure the array maintains the same order as the input profiles.`;
+
+    const response = await invokeClaude(prompt);
+    const enhancedResults: EnhancedSearchResult[] = JSON.parse(response);
+
+    return {
+      success: true,
+      results: enhancedResults,
+    };
+  } catch (error: unknown) {
+    console.error('Error reranking results:', error);
+    // Fallback: return original results with basic confidence scores
+    const fallbackResults: EnhancedSearchResult[] = vectorResults.map(
+      result => ({
+        ...result,
+        confidenceScore: Math.round(result.score * 100),
+        matchExplanation: `${Math.round(result.score * 100)}% semantic similarity match`,
+        relevanceFactors: ['Semantic similarity'],
+      })
+    );
+
+    return {
+      success: true,
+      results: fallbackResults,
+      error: `Claude reranking failed, using fallback: ${error instanceof Error ? error.message : 'Unknown error'}`,
+    };
+  }
+}
+
+// Main intelligent search function
+async function intelligentSearch(
+  query: string,
+  userContext?: SearchContext,
+  limit: number = 10
+): Promise<EmbeddingResponse> {
+  try {
+    console.log(`Starting intelligent search for query: "${query}"`);
+
+    // Step 1: Enhance query with Claude
+    const queryEnhancement = await enhanceQuery(query, userContext);
+    if (!queryEnhancement.success) {
+      console.warn('Query enhancement failed, proceeding with original query');
+    }
+
+    const searchQuery = queryEnhancement.success
+      ? queryEnhancement.enhancedQuery
+      : query;
+    console.log(`Enhanced query: "${searchQuery}"`);
+
+    // Step 2: Use enhanced query for vector search (get more results for reranking)
+    const vectorResults = await searchUsers(searchQuery, limit * 2);
+
+    if (!vectorResults.success || !vectorResults.results) {
+      return {
+        success: false,
+        error: 'Vector search failed',
+      };
+    }
+
+    console.log(
+      `Vector search returned ${vectorResults.results.length} results`
+    );
+
+    // Step 3: Rerank results with Claude
+    const rerankingResult = await rerankResultsFunction(
+      vectorResults.results,
+      query,
+      userContext
+    );
+
+    if (!rerankingResult.success) {
+      console.warn('Result reranking failed, using original results');
+      // Fallback to original results
+      return {
+        success: true,
+        results: vectorResults.results,
+        enhancedQuery: searchQuery,
+        searchInsights: `Found ${vectorResults.results.length} matches using basic vector search`,
+      };
+    }
+
+    // Step 4: Sort by confidence score and take top results
+    const finalResults = rerankingResult.results
+      .sort((a, b) => (b.confidenceScore || 0) - (a.confidenceScore || 0))
+      .slice(0, limit);
+
+    console.log(`Returning ${finalResults.length} reranked results`);
+
+    return {
+      success: true,
+      enhancedResults: finalResults,
+      enhancedQuery: searchQuery,
+      searchInsights: `Found ${finalResults.length} matches using AI-enhanced search. Query enhanced from "${query}" to "${searchQuery}"`,
+    };
+  } catch (error: unknown) {
+    console.error('Error in intelligent search:', error);
+
+    // Fallback to basic search
+    console.log('Falling back to basic vector search');
+    try {
+      const fallbackResults = await searchUsers(query, limit);
+      return {
+        ...fallbackResults,
+        searchInsights: `AI search failed, used basic search: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      };
+    } catch (fallbackError: unknown) {
+      return {
+        success: false,
+        error: `Both intelligent and fallback search failed: ${error instanceof Error ? error.message : 'Unknown error'}, ${fallbackError instanceof Error ? fallbackError.message : 'Unknown error'}`,
+      };
+    }
+  }
 }

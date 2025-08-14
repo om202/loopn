@@ -38,6 +38,9 @@ const schema = a
         userProfile: a.json(),
         users: a.json(),
         limit: a.integer(),
+        // NEW: Enhanced search arguments
+        userContext: a.json(),
+        results: a.json(),
       })
       .returns(a.json())
       .authorization(allow => [allow.authenticated()])

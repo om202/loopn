@@ -20,9 +20,18 @@ export interface SearchResult {
   profile: UserProfile;
 }
 
+export interface EnhancedSearchResult extends SearchResult {
+  matchExplanation?: string;
+  relevanceFactors?: string[];
+  confidenceScore?: number;
+}
+
 export interface VectorSearchResponse {
   success: boolean;
   results?: SearchResult[];
+  enhancedResults?: EnhancedSearchResult[];
+  enhancedQuery?: string;
+  searchInsights?: string;
   error?: string;
 }
 
@@ -379,6 +388,136 @@ export class VectorSearchService {
       return data as { success: boolean; embedding?: number[]; error?: string };
     } catch (error) {
       console.error('Error generating embedding:', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+      };
+    }
+  }
+
+  /**
+   * Intelligent search with Claude enhancement
+   */
+  static async intelligentSearch(
+    query: string,
+    userContext?: Record<string, unknown>,
+    limit: number = 10
+  ): Promise<VectorSearchResponse> {
+    try {
+      const { data, errors } = await client.queries.vectorSearch({
+        action: 'intelligent_search',
+        query,
+        userContext: userContext ? JSON.stringify(userContext) : undefined,
+        limit,
+      });
+
+      if (errors && errors.length > 0) {
+        return {
+          success: false,
+          error: errors[0].message,
+        };
+      }
+
+      if (!data) {
+        return {
+          success: false,
+          error: 'No data returned from intelligent search',
+        };
+      }
+
+      return typeof data === 'string'
+        ? JSON.parse(data)
+        : (data as VectorSearchResponse);
+    } catch (error) {
+      console.error('Error in intelligent search:', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+      };
+    }
+  }
+
+  /**
+   * Enhance query using Claude
+   */
+  static async enhanceQuery(
+    query: string,
+    userContext?: Record<string, unknown>
+  ): Promise<{
+    success: boolean;
+    enhancedQuery?: string;
+    searchTerms?: string[];
+    intent?: string;
+    error?: string;
+  }> {
+    try {
+      const { data, errors } = await client.queries.vectorSearch({
+        action: 'enhance_query',
+        query,
+        userContext: userContext ? JSON.stringify(userContext) : undefined,
+      });
+
+      if (errors && errors.length > 0) {
+        return {
+          success: false,
+          error: errors[0].message,
+        };
+      }
+
+      return typeof data === 'string'
+        ? JSON.parse(data)
+        : (data as {
+            success: boolean;
+            enhancedQuery?: string;
+            searchTerms?: string[];
+            intent?: string;
+            error?: string;
+          });
+    } catch (error) {
+      console.error('Error enhancing query:', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+      };
+    }
+  }
+
+  /**
+   * Rerank search results using Claude
+   */
+  static async rerankResults(
+    results: SearchResult[],
+    query: string,
+    userContext?: Record<string, unknown>
+  ): Promise<{
+    success: boolean;
+    results?: EnhancedSearchResult[];
+    error?: string;
+  }> {
+    try {
+      const { data, errors } = await client.queries.vectorSearch({
+        action: 'rerank_results',
+        results: JSON.stringify(results),
+        query,
+        userContext: userContext ? JSON.stringify(userContext) : undefined,
+      });
+
+      if (errors && errors.length > 0) {
+        return {
+          success: false,
+          error: errors[0].message,
+        };
+      }
+
+      return typeof data === 'string'
+        ? JSON.parse(data)
+        : (data as {
+            success: boolean;
+            results?: EnhancedSearchResult[];
+            error?: string;
+          });
+    } catch (error) {
+      console.error('Error reranking results:', error);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error',
