@@ -54,7 +54,8 @@ const POSSIBLE_MODELS = [
   'amazon.titan-embed-text-v2:0', // V2 is granted, try this first
   'amazon.titan-embed-text-v1', // Fallback (might not be available)
 ];
-const CLAUDE_MODEL_ID = 'anthropic.claude-3-5-sonnet-20241022-v2:0';
+// Use Claude 3.5 Haiku with cross-region inference profile
+const CLAUDE_MODEL_ID = 'us.anthropic.claude-3-5-haiku-20241022-v1:0';
 const EMBEDDING_DIMENSION = 1024; // Titan Text Embeddings v2 produces 1024-dimensional vectors
 const USER_PROFILE_TABLE = process.env.USER_PROFILE_TABLE || 'UserProfile';
 
@@ -496,6 +497,7 @@ async function enhanceQuery(
   error?: string;
 }> {
   try {
+    console.log(`enhanceQuery called with: "${originalQuery}"`);
     const prompt = `You are an expert at understanding professional search queries. 
 
 User is searching for professionals with query: "${originalQuery}"
@@ -512,19 +514,36 @@ Enhance this query by:
 3. Considering complementary roles that would work well with the user
 4. Understanding the business context and needs
 
-Return ONLY a valid JSON object with this exact structure:
+Return ONLY a valid JSON object with this exact structure, no additional text or explanations:
 {
   "enhancedQuery": "expanded search terms that capture the intent better",
   "searchTerms": ["term1", "term2", "term3"],
   "intent": "clear description of what the user is looking for"
 }
 
+IMPORTANT: Return ONLY the JSON object, nothing else. No explanations, no notes, no additional text.
+
 Examples:
 - "find a co-founder" → enhancedQuery: "technical co-founder CTO startup founder software engineer entrepreneur", searchTerms: ["co-founder", "CTO", "technical founder", "startup founder"], intent: "Looking for a technical business partner"
 - "backend engineer" → enhancedQuery: "backend engineer software engineer full-stack developer API developer cloud engineer", searchTerms: ["backend", "software engineer", "API developer"], intent: "Looking for server-side development expertise"`;
 
+    console.log('Calling Claude with prompt length:', prompt.length);
     const response = await invokeClaude(prompt);
-    const parsed = JSON.parse(response);
+    console.log('Claude response:', response);
+    
+    // Extract JSON from Claude's response (in case there's extra text)
+    let jsonText = response.trim();
+    
+    // Try to find JSON object in the response
+    const jsonStart = jsonText.indexOf('{');
+    const jsonEnd = jsonText.lastIndexOf('}') + 1;
+    
+    if (jsonStart >= 0 && jsonEnd > jsonStart) {
+      jsonText = jsonText.substring(jsonStart, jsonEnd);
+    }
+    
+    console.log('Extracted JSON:', jsonText);
+    const parsed = JSON.parse(jsonText);
 
     return {
       success: true,
@@ -640,9 +659,17 @@ async function intelligentSearch(
     console.log(`Starting intelligent search for query: "${query}"`);
 
     // Step 1: Enhance query with Claude
+    console.log('Calling enhanceQuery...');
     const queryEnhancement = await enhanceQuery(query, userContext);
+    console.log(
+      'Query enhancement result:',
+      JSON.stringify(queryEnhancement, null, 2)
+    );
     if (!queryEnhancement.success) {
-      console.warn('Query enhancement failed, proceeding with original query');
+      console.warn(
+        'Query enhancement failed, proceeding with original query',
+        queryEnhancement.error
+      );
     }
 
     const searchQuery = queryEnhancement.success
