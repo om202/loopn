@@ -5,7 +5,10 @@ import { fetchAuthSession } from 'aws-amplify/auth';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { CheckCircle2, Clock, MessageCircle } from 'lucide-react';
 import UserAvatar from './UserAvatar';
-import { formatPresenceTime, simplePresenceManager } from '../lib/presence-utils';
+import {
+  formatPresenceTime,
+  simplePresenceManager,
+} from '../lib/presence-utils';
 import { useAuth } from '../contexts/AuthContext';
 
 import type { Schema } from '../../amplify/data/resource';
@@ -601,7 +604,9 @@ export default function OnlineUsers({
               <h2 className='text-xl sm:text-2xl font-bold text-zinc-900 mb-1'>
                 Suggested
               </h2>
-              <p className='text-sm text-zinc-500'>Find and connect with new people</p>
+              <p className='text-sm text-zinc-500'>
+                Find and connect with new people
+              </p>
             </div>
           )}
           {activeSection === 'search' && (
@@ -625,24 +630,28 @@ export default function OnlineUsers({
         <div className='relative flex-1 overflow-hidden'>
           {/* Top border - shows when scrolled down */}
           <div className='absolute top-0 left-0 right-0 h-px bg-zinc-200 opacity-0 transition-opacity duration-200 z-10 scroll-top-border'></div>
-          
+
           {/* Bottom border - shows when not at bottom */}
           <div className='absolute bottom-0 left-0 right-0 h-px bg-zinc-200 opacity-0 transition-opacity duration-200 z-10 scroll-bottom-border'></div>
-          
-          <div 
+
+          <div
             className='overflow-y-auto flex-1 h-full'
-            onScroll={(e) => {
+            onScroll={e => {
               const target = e.target as HTMLDivElement;
               const { scrollTop, scrollHeight, clientHeight } = target;
-              
+
               // Show top border when scrolled down
-              const topBorder = target.parentElement?.querySelector('.scroll-top-border') as HTMLElement;
+              const topBorder = target.parentElement?.querySelector(
+                '.scroll-top-border'
+              ) as HTMLElement;
               if (topBorder) {
                 topBorder.style.opacity = scrollTop > 0 ? '1' : '0';
               }
-              
+
               // Show bottom border when not at bottom
-              const bottomBorder = target.parentElement?.querySelector('.scroll-bottom-border') as HTMLElement;
+              const bottomBorder = target.parentElement?.querySelector(
+                '.scroll-bottom-border'
+              ) as HTMLElement;
               if (bottomBorder) {
                 const isAtBottom = scrollTop + clientHeight >= scrollHeight - 1;
                 bottomBorder.style.opacity = isAtBottom ? '0' : '1';

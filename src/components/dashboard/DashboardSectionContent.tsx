@@ -156,12 +156,7 @@ export default function DashboardSectionContent({
 
   const usersToShow = getUsersToShow();
   const sectionInfo = getSectionInfo();
-  const {
-    title,
-    description,
-    emptyIcon: EmptyIcon,
-    emptyMessage,
-  } = sectionInfo;
+  const { emptyIcon: EmptyIcon, emptyMessage } = sectionInfo;
 
   // Special handling for search section
   if (activeSection === 'search') {

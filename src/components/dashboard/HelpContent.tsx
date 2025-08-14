@@ -16,7 +16,6 @@ import {
 export default function HelpContent() {
   return (
     <div className='h-full'>
-
       {/* Getting Started */}
       <div className='mb-6'>
         <h3 className='text-lg font-semibold text-zinc-900 mb-4'>

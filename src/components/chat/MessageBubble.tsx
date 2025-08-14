@@ -361,7 +361,9 @@ export default function MessageBubble({
                 )}
 
                 <div className='relative'>
-                  <p className={`text-base leading-normal break-words select-none m-0 ${isOwnMessage ? 'pr-10' : 'pr-2'}`}>
+                  <p
+                    className={`text-base leading-normal break-words select-none m-0 ${isOwnMessage ? 'pr-10' : 'pr-2'}`}
+                  >
                     {renderMessageContent(message.content, false)}
                   </p>
                   {isOwnMessage && (

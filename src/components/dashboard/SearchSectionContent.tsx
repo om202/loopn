@@ -48,8 +48,6 @@ export default function SearchSectionContent({
 
   const { user } = useAuthenticator();
 
-
-
   const performSearch = useCallback(
     async (searchTerm: string) => {
       if (!searchTerm.trim() || isSearching || !user) return;
@@ -246,15 +244,15 @@ export default function SearchSectionContent({
 
 /*
  * HOW TO SWITCH BACK TO INTELLIGENT SEARCH:
- * 
+ *
  * This component currently uses normal vector search (VectorSearchService.searchUsers).
  * To switch back to AI-enhanced intelligent search, follow these steps:
- * 
+ *
  * 1. RESTORE USER PROFILE STATE:
  *    Add back the currentUserProfile state and its loading effect:
- *    
+ *
  *    const [currentUserProfile, setCurrentUserProfile] = useState<UserProfile | null>(null);
- *    
+ *
  *    useEffect(() => {
  *      let mounted = true;
  *      const loadCurrentUserProfile = async () => {
@@ -269,14 +267,14 @@ export default function SearchSectionContent({
  *      loadCurrentUserProfile();
  *      return () => { mounted = false; };
  *    }, [user?.userId]);
- * 
+ *
  * 2. REPLACE SEARCH METHOD:
  *    In the performSearch function, replace this:
- *    
+ *
  *    const response = await VectorSearchService.searchUsers(searchTerm.trim(), 10);
- *    
+ *
  *    With this:
- *    
+ *
  *    const userContext = currentUserProfile ? {
  *      userProfile: {
  *        jobRole: currentUserProfile.jobRole,
@@ -287,20 +285,20 @@ export default function SearchSectionContent({
  *        interests: currentUserProfile.interests,
  *      },
  *    } : undefined;
- *    
+ *
  *    const response = await VectorSearchService.intelligentSearch(
  *      searchTerm.trim(),
  *      userContext,
  *      10
  *    );
- * 
+ *
  * 3. UPDATE RESULT HANDLING:
  *    Replace this line:
  *    const searchResults = response.results || [];
- *    
+ *
  *    With this:
  *    const searchResults = response.enhancedResults || response.results || [];
- * 
+ *
  * 4. UPDATE LOGGING:
  *    Replace the console.info call with:
  *    console.info('AI Enhanced Search:', {
@@ -308,22 +306,22 @@ export default function SearchSectionContent({
  *      enhancedQuery: response.enhancedQuery,
  *      resultsCount: response.results?.length || 0,
  *    });
- * 
+ *
  * 5. UPDATE DEPENDENCIES:
  *    Update the useCallback dependency array to include currentUserProfile:
  *    [isSearching, user, currentUserProfile]
- * 
+ *
  * 6. ADD IMPORTS:
  *    Make sure useEffect is imported:
  *    import React, { useState, useCallback, useEffect } from 'react';
- * 
+ *
  * BENEFITS OF INTELLIGENT SEARCH:
  * - AI-enhanced query understanding and expansion
  * - Personalized results based on user's profile
  * - Better result ranking and relevance
  * - Enhanced search insights and explanations
  * - Context-aware matching
- * 
+ *
  * The intelligent search provides more sophisticated results but requires more processing
  * time and resources compared to the current normal vector search implementation.
  */

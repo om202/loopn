@@ -1,12 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import {
-  MessageCircle,
-  Sparkles,
-  Users,
-  HelpCircle,
-} from 'lucide-react';
+import { MessageCircle, Sparkles, Users, HelpCircle } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAuthenticator } from '@aws-amplify/ui-react';
@@ -375,7 +370,7 @@ export default function DashboardSidebar({
         <nav className='flex items-stretch px-4 py-2'>
           <div className='flex w-full'>
             {[
-              // Filter out help for mobile 
+              // Filter out help for mobile
               ...sidebarItems,
               accountItem,
             ].map(({ id, icon, label, count }) => (
@@ -427,12 +422,14 @@ export default function DashboardSidebar({
                       className: 'w-6 h-6',
                     })
                   )}
-                  
+
                   {/* Count indicator positioned on the icon */}
                   {count > 0 && (
                     <span
                       className={`absolute -top-3 -right-3 bg-zinc-100 text-[9px] rounded-full w-5 h-5 flex items-center justify-center font-bold shadow-sm border leading-none ${
-                        id === 'notifications' ? 'border-b_red-500 text-b_red-600' : 'border-brand-200 text-brand-600'
+                        id === 'notifications'
+                          ? 'border-b_red-500 text-b_red-600'
+                          : 'border-brand-200 text-brand-600'
                       }`}
                       style={{ minWidth: '20px', minHeight: '20px' }}
                     >
@@ -440,18 +437,19 @@ export default function DashboardSidebar({
                     </span>
                   )}
                 </div>
-                <div className='text-[10px] font-medium leading-tight text-center' style={{ textShadow: '0 1px 1px rgba(255, 255, 255, 0.8)' }}>
-                  {id === 'account' ? (
-                    'You'
-                  ) : id === 'suggested' ? (
-                    'Suggest'
-                  ) : id === 'connections' ? (
-                    'Connect'
-                  ) : id === 'notifications' ? (
-                    'Notify'
-                  ) : (
-                    label
-                  )}
+                <div
+                  className='text-[10px] font-medium leading-tight text-center'
+                  style={{ textShadow: '0 1px 1px rgba(255, 255, 255, 0.8)' }}
+                >
+                  {id === 'account'
+                    ? 'You'
+                    : id === 'suggested'
+                      ? 'Suggest'
+                      : id === 'connections'
+                        ? 'Connect'
+                        : id === 'notifications'
+                          ? 'Notify'
+                          : label}
                 </div>
               </button>
             ))}

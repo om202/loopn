@@ -41,8 +41,6 @@ export default function AccountContent() {
     return `${name} (You)`;
   };
 
-
-
   // Load current user's profile details
   useEffect(() => {
     let mounted = true;
