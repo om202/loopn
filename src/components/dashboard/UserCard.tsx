@@ -312,7 +312,7 @@ export default function UserCard({
             aria-label='Open profile sidebar'
             aria-pressed={isProfileSidebarOpen}
           >
-            <Info className='w-5 h-5 text-zinc-500' />
+            <MoreHorizontal className='w-5 h-5 text-zinc-500' />
           </button>
         </div>
       </div>
