@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 
 interface TooltipProps {
   content: string;
@@ -25,7 +25,7 @@ export default function Tooltip({
   const tooltipRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout>();
 
-  const updateTooltipPosition = () => {
+  const updateTooltipPosition = useCallback(() => {
     if (!containerRef.current || !tooltipRef.current) return;
 
     const containerRect = containerRef.current.getBoundingClientRect();
@@ -75,7 +75,7 @@ export default function Tooltip({
       left: `${left}px`,
       zIndex: 50,
     });
-  };
+  }, [position]);
 
   const showTooltip = () => {
     if (disabled || !content.trim()) return;
@@ -101,7 +101,7 @@ export default function Tooltip({
     if (isVisible) {
       updateTooltipPosition();
     }
-  }, [isVisible, position]);
+  }, [isVisible, position, updateTooltipPosition]);
 
   useEffect(() => {
     return () => {

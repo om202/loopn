@@ -62,10 +62,6 @@ export default function SearchSectionContent({
         const profile = await UserProfileService.getProfileDetails(user.userId);
         if (mounted) {
           setCurrentUserProfile(profile);
-          console.log(
-            '✅ User profile loaded for search personalization:',
-            profile
-          );
         }
       } catch (error) {
         console.error(
@@ -87,11 +83,6 @@ export default function SearchSectionContent({
     async (searchTerm: string) => {
       if (!searchTerm.trim() || isSearching || !user) return;
 
-      console.log('🔍 SEARCH TRIGGERED');
-      console.log('Search Query:', searchTerm);
-      console.log('Current User ID:', user?.userId);
-      console.log('Current User Profile:', currentUserProfile);
-
       setIsSearching(true);
       setError(null);
       setHasSearched(true);
@@ -112,15 +103,17 @@ export default function SearchSectionContent({
             }
           : undefined;
 
-        console.log('User Context being sent to AI:', userContext);
-
         const response = await VectorSearchService.intelligentSearch(
           searchTerm.trim(),
           userContext,
           10
         );
 
-        console.log('AI Search Response:', response);
+        console.info('AI Enhanced Search:', {
+          query: searchTerm,
+          enhancedQuery: response.enhancedQuery,
+          resultsCount: response.results?.length || 0,
+        });
 
         if (!response.success) {
           setError(response.error || 'Search failed');
@@ -248,11 +241,6 @@ export default function SearchSectionContent({
           </div>
         ) : (
           <div className='p-4 space-y-4'>
-            {enhancedQuery && enhancedQuery !== query && (
-              <div className='mb-3 text-sm text-zinc-600'>
-                Searched using "{enhancedQuery}"
-              </div>
-            )}
             <div className='text-sm text-zinc-600 mb-4'>
               Found {searchResults.length} professionals matching "{query}"
             </div>

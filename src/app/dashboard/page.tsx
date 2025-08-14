@@ -8,8 +8,7 @@ export default function DashboardPage() {
     console.info('Chat request sent');
   };
 
-  const handleProfessionalRequest = (request: string) => {
-    console.log('AI Professional Request:', request);
+  const handleProfessionalRequest = (_request: string) => {
     // TODO: Implement AI professional matching logic
   };
 

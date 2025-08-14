@@ -142,7 +142,7 @@ export default function SearchUser({ onProfessionalRequest }: SearchUserProps) {
           onChange={handleInputChange}
           onFocus={handleInputFocus}
           disabled={isProcessing}
-          autoComplete='new-password'
+          autoComplete='off'
           autoCorrect='off'
           autoCapitalize='off'
           spellCheck='false'

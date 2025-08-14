@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { CheckCircle2, Clock, Info, MessageCircle, User } from 'lucide-react';
+import { CheckCircle2, Clock, MessageCircle, MoreHorizontal, User } from 'lucide-react';
 
 import type { Schema } from '../../../amplify/data/resource';
 import { formatPresenceTime } from '../../lib/presence-utils';

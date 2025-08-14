@@ -44,7 +44,6 @@ class AmplifyInitializationService {
       }
 
       this.isInitialized = true;
-      console.log('Amplify initialization completed successfully');
     } catch (error) {
       console.error('Error during Amplify initialization:', error);
       // Still mark as initialized to prevent blocking the app
