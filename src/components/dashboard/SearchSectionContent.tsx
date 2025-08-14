@@ -45,7 +45,6 @@ export default function SearchSectionContent({
   const [isSearching, setIsSearching] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
-  const [enhancedQuery, setEnhancedQuery] = useState<string | null>(null);
   const [currentUserProfile, setCurrentUserProfile] =
     useState<UserProfile | null>(null);
   const { user } = useAuthenticator();
@@ -86,7 +85,6 @@ export default function SearchSectionContent({
       setIsSearching(true);
       setError(null);
       setHasSearched(true);
-      setEnhancedQuery(null);
 
       try {
         // Use AI-enhanced search with current user's real profile for personalization
@@ -118,12 +116,8 @@ export default function SearchSectionContent({
         if (!response.success) {
           setError(response.error || 'Search failed');
           setSearchResults([]);
-          setEnhancedQuery(null);
           return;
         }
-
-        // Capture the enhanced query if available
-        setEnhancedQuery(response.enhancedQuery || null);
 
         // Filter out current user and enhance results with full profile data
         // Handle both regular results and enhanced results from AI search
