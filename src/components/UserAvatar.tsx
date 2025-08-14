@@ -90,7 +90,11 @@ export default function UserAvatar({
       return null;
     }
 
-    const { size: indicatorSize, iconSize, smallDotSize } = getIndicatorSizeAndPosition();
+    const {
+      size: indicatorSize,
+      iconSize,
+      smallDotSize,
+    } = getIndicatorSizeAndPosition();
 
     switch (status) {
       case 'ONLINE':
@@ -164,7 +168,7 @@ export default function UserAvatar({
 
   const getStatusText = () => {
     if (statusTooltip) return statusTooltip;
-    
+
     switch (status) {
       case 'ONLINE':
         return 'Online';
@@ -180,8 +184,8 @@ export default function UserAvatar({
   };
 
   return (
-    <Tooltip 
-      content={showStatus ? getStatusText() : ''} 
+    <Tooltip
+      content={showStatus ? getStatusText() : ''}
       disabled={!showStatus}
       position='left'
     >
@@ -193,40 +197,40 @@ export default function UserAvatar({
             height: `${getAvatarSize()}px`,
           }}
         >
-        {shouldShowProfileImage ? (
-          <Image
-            src={resolvedImageUrl}
-            alt={`${email || userId || 'User'} profile picture`}
-            width={getAvatarSize()}
-            height={getAvatarSize()}
-            className='object-cover'
-            style={{
-              width: '100%',
-              height: '100%',
-            }}
-            onError={() => {
-              setImageError(true);
-            }}
-            priority={size === 'lg' || size === 'xl'} // Prioritize larger avatars
-          />
-        ) : shouldShowLoadingState ? (
-          <ShimmerProvider>
-            <Skeleton
-              circle
+          {shouldShowProfileImage ? (
+            <Image
+              src={resolvedImageUrl}
+              alt={`${email || userId || 'User'} profile picture`}
               width={getAvatarSize()}
               height={getAvatarSize()}
+              className='object-cover'
               style={{
                 width: '100%',
                 height: '100%',
               }}
+              onError={() => {
+                setImageError(true);
+              }}
+              priority={size === 'lg' || size === 'xl'} // Prioritize larger avatars
             />
-          </ShimmerProvider>
-        ) : (
-          <div className='bg-gray-100 w-full h-full flex items-center justify-center'>
-            <User className='w-3/5 h-3/5 text-gray-400' />
-          </div>
-        )}
-      </div>
+          ) : shouldShowLoadingState ? (
+            <ShimmerProvider>
+              <Skeleton
+                circle
+                width={getAvatarSize()}
+                height={getAvatarSize()}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                }}
+              />
+            </ShimmerProvider>
+          ) : (
+            <div className='bg-gray-100 w-full h-full flex items-center justify-center'>
+              <User className='w-3/5 h-3/5 text-gray-400' />
+            </div>
+          )}
+        </div>
         {showStatus === true && (
           <div className={`absolute ${getIndicatorSizeAndPosition().position}`}>
             {getStatusIndicator()}

@@ -686,7 +686,9 @@ export default function OnlineUsers({
                         profileSidebarUser.userId
                       ) ? (
                         <>
-                          <span className='text-zinc-600 text-sm font-medium'>Cancel Request</span>
+                          <span className='text-zinc-600 text-sm font-medium'>
+                            Cancel Request
+                          </span>
                         </>
                       ) : existingConversations.has(
                           profileSidebarUser.userId
@@ -699,12 +701,16 @@ export default function OnlineUsers({
                             ) ? (
                               <>
                                 <MessageCircle className='w-4 h-4' />
-                                <span className='text-sm font-medium'>Send Request</span>
+                                <span className='text-sm font-medium'>
+                                  Send Request
+                                </span>
                               </>
                             ) : (
                               <>
                                 <MessageCircle className='w-4 h-4' />
-                                <span className='text-sm font-medium'>View Chat</span>
+                                <span className='text-sm font-medium'>
+                                  View Chat
+                                </span>
                               </>
                             )
                           ) : (
@@ -717,7 +723,9 @@ export default function OnlineUsers({
                       ) : (
                         <>
                           <CheckCircle2 className='w-4 h-4' />
-                          <span className='text-sm font-medium'>Start Trial</span>
+                          <span className='text-sm font-medium'>
+                            Start Trial
+                          </span>
                         </>
                       )}
                     </button>

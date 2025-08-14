@@ -39,18 +39,22 @@ export default function Tooltip({
     switch (position) {
       case 'top':
         top = containerRect.top - tooltipRect.height - 8;
-        left = containerRect.left + (containerRect.width - tooltipRect.width) / 2;
+        left =
+          containerRect.left + (containerRect.width - tooltipRect.width) / 2;
         break;
       case 'bottom':
         top = containerRect.bottom + 8;
-        left = containerRect.left + (containerRect.width - tooltipRect.width) / 2;
+        left =
+          containerRect.left + (containerRect.width - tooltipRect.width) / 2;
         break;
       case 'left':
-        top = containerRect.top + (containerRect.height - tooltipRect.height) / 2;
+        top =
+          containerRect.top + (containerRect.height - tooltipRect.height) / 2;
         left = containerRect.left - tooltipRect.width - 8;
         break;
       case 'right':
-        top = containerRect.top + (containerRect.height - tooltipRect.height) / 2;
+        top =
+          containerRect.top + (containerRect.height - tooltipRect.height) / 2;
         left = containerRect.right + 8;
         break;
     }
@@ -109,7 +113,7 @@ export default function Tooltip({
 
   const getArrowClasses = () => {
     const baseArrow = 'absolute w-0 h-0 border-solid';
-    
+
     switch (position) {
       case 'top':
         return `${baseArrow} border-l-[6px] border-r-[6px] border-t-[6px] border-l-transparent border-r-transparent border-t-white top-full left-1/2 transform -translate-x-1/2`;
@@ -141,7 +145,7 @@ export default function Tooltip({
         <div
           ref={tooltipRef}
           style={tooltipStyle}
-          className="bg-white text-zinc-900 text-xs px-2 py-1 rounded-md shadow-[0_4px_12px_rgba(0,0,0,0.15)] whitespace-nowrap pointer-events-none animate-in fade-in-0 zoom-in-95 duration-200"
+          className='bg-white text-zinc-900 text-xs px-2 py-1 rounded-md shadow-[0_4px_12px_rgba(0,0,0,0.15)] whitespace-nowrap pointer-events-none animate-in fade-in-0 zoom-in-95 duration-200'
         >
           {content}
           <div className={getArrowClasses()} />

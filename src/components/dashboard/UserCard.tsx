@@ -254,7 +254,9 @@ export default function UserCard({
                     canUserReconnect(userPresence.userId) ? (
                       <>
                         <CheckCircle2 className='w-4 h-4 text-brand-500 flex-shrink-0' />
-                        <span className='hidden md:inline text-sm font-medium'>Reconnect</span>
+                        <span className='hidden md:inline text-sm font-medium'>
+                          Reconnect
+                        </span>
                       </>
                     ) : (
                       (() => {
@@ -266,7 +268,9 @@ export default function UserCard({
                         ) : (
                           <>
                             <MessageCircle className='w-4 h-4 text-brand-500 flex-shrink-0' />
-                            <span className='hidden md:inline text-sm font-medium'>View</span>
+                            <span className='hidden md:inline text-sm font-medium'>
+                              View
+                            </span>
                           </>
                         );
                       })()
@@ -274,13 +278,17 @@ export default function UserCard({
                   ) : (
                     <>
                       <MessageCircle className='w-4 h-4 text-brand-500 flex-shrink-0' />
-                      <span className='hidden md:inline text-sm font-medium'>Chat</span>
+                      <span className='hidden md:inline text-sm font-medium'>
+                        Chat
+                      </span>
                     </>
                   )
                 ) : (
                   <>
                     <CheckCircle2 className='w-4 h-4 text-brand-500 flex-shrink-0' />
-                    <span className='hidden md:inline text-sm font-medium'>Send Request</span>
+                    <span className='hidden md:inline text-sm font-medium'>
+                      Send Request
+                    </span>
                   </>
                 )}
               </button>
