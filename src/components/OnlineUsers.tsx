@@ -639,7 +639,7 @@ export default function OnlineUsers({
 
             {/* Action buttons section */}
             <div className='px-6 pb-6'>
-              <div className='w-full'>
+              <div className='w-full flex justify-center'>
                 {(() => {
                   const conversation = existingConversations.get(
                     profileSidebarUser.userId
@@ -680,13 +680,13 @@ export default function OnlineUsers({
                           handleChatAction(profileSidebarUser.userId);
                         }
                       }}
-                      className='w-full px-4 py-2.5 text-sm font-medium rounded-xl border transition-colors bg-white text-brand-500 border-zinc-200 hover:bg-brand-100 hover:border-zinc-200 flex items-center justify-center gap-2'
+                      className='px-2 py-1.5 text-sm font-medium rounded-xl border transition-colors bg-white text-brand-500 border-brand-200 hover:bg-brand-100 hover:border-brand-300 flex items-center justify-center gap-2'
                     >
                       {combinedPendingRequests.has(
                         profileSidebarUser.userId
                       ) ? (
                         <>
-                          <span className='text-zinc-600'>Cancel Request</span>
+                          <span className='text-zinc-600 text-sm font-medium'>Cancel Request</span>
                         </>
                       ) : existingConversations.has(
                           profileSidebarUser.userId
@@ -699,25 +699,25 @@ export default function OnlineUsers({
                             ) ? (
                               <>
                                 <MessageCircle className='w-4 h-4' />
-                                <span>Send Request</span>
+                                <span className='text-sm font-medium'>Send Request</span>
                               </>
                             ) : (
                               <>
                                 <MessageCircle className='w-4 h-4' />
-                                <span>View Chat</span>
+                                <span className='text-sm font-medium'>View Chat</span>
                               </>
                             )
                           ) : (
                             <>
                               <MessageCircle className='w-4 h-4' />
-                              <span>Chat</span>
+                              <span className='text-sm font-medium'>Chat</span>
                             </>
                           )}
                         </>
                       ) : (
                         <>
                           <CheckCircle2 className='w-4 h-4' />
-                          <span>Start Trial</span>
+                          <span className='text-sm font-medium'>Start Trial</span>
                         </>
                       )}
                     </button>
