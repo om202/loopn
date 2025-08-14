@@ -78,16 +78,8 @@ export default function AccountContent() {
 
   return (
     <div className='h-full flex flex-col'>
-      {/* Header */}
-      <div className='mb-12 flex items-start justify-between'>
-        <div>
-          <h2 className='text-2xl font-bold text-zinc-900 mb-1'>Account</h2>
-          <p className='text-sm text-zinc-500'>
-            Manage your account and profile information
-          </p>
-        </div>
-
-        {/* Sign Out Button */}
+      {/* Sign Out Button - Fixed at top */}
+      <div className='flex justify-end mb-6'>
         <button
           onClick={handleSignOutClick}
           className='flex items-center gap-2 px-4 py-2.5 text-b_red-600 hover:bg-b_red-50 rounded-lg border border-b_red-200'

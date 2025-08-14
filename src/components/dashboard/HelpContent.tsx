@@ -15,16 +15,7 @@ import {
 
 export default function HelpContent() {
   return (
-    <div className='h-full overflow-y-auto'>
-      {/* Header */}
-      <div className='mb-6'>
-        <h2 className='text-2xl font-bold text-zinc-900 mb-1'>
-          Help & Support
-        </h2>
-        <p className='text-sm text-zinc-600'>
-          Common questions and troubleshooting
-        </p>
-      </div>
+    <div className='h-full'>
 
       {/* Getting Started */}
       <div className='mb-6'>

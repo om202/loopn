@@ -182,34 +182,26 @@ export default function DashboardSectionContent({
   }
 
   return (
-    <div>
-      <div className='mb-6 sm:mb-8 lg:mb-10'>
-        <h2 className='text-xl sm:text-2xl font-bold text-zinc-900 mb-1'>
-          {title}
-        </h2>
-        <p className='text-sm text-zinc-500'>{description}</p>
-      </div>
-      <div className='space-y-2.5 sm:space-y-3'>
-        {usersToShow.length > 0 ? (
-          usersToShow.map(renderUserCard)
-        ) : (
-          <div className='flex flex-col items-center justify-center h-full text-center'>
-            <div className='w-16 h-16 mx-auto mb-4 bg-zinc-100 rounded-full flex items-center justify-center'>
-              <EmptyIcon className='w-8 h-8 text-zinc-500' />
-            </div>
-            <h3 className='text-lg font-medium text-zinc-900 mb-2'>
-              {emptyMessage}
-            </h3>
-            <p className='text-zinc-500'>
-              {activeSection === 'connections'
-                ? 'Start chatting to build connections'
-                : activeSection === 'suggested'
-                  ? 'Check back later for new suggestions'
-                  : 'No conversations yet'}
-            </p>
+    <div className='space-y-2.5 sm:space-y-3'>
+      {usersToShow.length > 0 ? (
+        usersToShow.map(renderUserCard)
+      ) : (
+        <div className='flex flex-col items-center justify-center h-full text-center'>
+          <div className='w-16 h-16 mx-auto mb-4 bg-zinc-100 rounded-full flex items-center justify-center'>
+            <EmptyIcon className='w-8 h-8 text-zinc-500' />
           </div>
-        )}
-      </div>
+          <h3 className='text-lg font-medium text-zinc-900 mb-2'>
+            {emptyMessage}
+          </h3>
+          <p className='text-zinc-500'>
+            {activeSection === 'connections'
+              ? 'Start chatting to build connections'
+              : activeSection === 'suggested'
+                ? 'Check back later for new suggestions'
+                : 'No conversations yet'}
+          </p>
+        </div>
+      )}
     </div>
   );
 }

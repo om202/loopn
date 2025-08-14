@@ -401,28 +401,20 @@ export default function NotificationsContent() {
 
   return (
     <div className='h-full flex flex-col'>
-      {/* Header */}
-      <div className='mb-6'>
-        <div className='flex items-center justify-between mb-1'>
-          <div className='flex items-center gap-3'>
-            <h1 className='text-2xl font-bold text-zinc-900'>Notifications</h1>
-          </div>
-          {getFilteredNotifications().length > 0 && (
-            <button
-              onClick={handleMarkAllAsRead}
-              className='text-sm text-brand-500 hover:text-brand-700 font-medium py-2 px-3 rounded-lg hover:bg-brand-50 transition-colors'
-            >
-              Mark all as read
-            </button>
-          )}
+      {/* Mark all as read button - Fixed at top */}
+      {getFilteredNotifications().length > 0 && (
+        <div className='flex justify-end mb-4'>
+          <button
+            onClick={handleMarkAllAsRead}
+            className='text-sm text-brand-500 hover:text-brand-700 font-medium py-2 px-3 rounded-lg hover:bg-brand-50 transition-colors'
+          >
+            Mark all as read
+          </button>
         </div>
-        <p className='text-zinc-600 text-sm'>
-          Keep up with your latest activity
-        </p>
-      </div>
+      )}
 
       {/* Content */}
-      <div className='flex-1 overflow-y-auto'>
+      <div className='flex-1'>
         {error && (
           <div className='p-4 text-b_red-700 bg-b_red-100 mb-4 rounded-2xl'>
             {error}

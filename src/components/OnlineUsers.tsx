@@ -541,37 +541,130 @@ export default function OnlineUsers({
           <SearchUser onProfessionalRequest={handleProfessionalRequest} />
         </div>
 
-        <div className='overflow-y-auto flex-1'>
-          {activeSection === 'notifications' ? (
-            <NotificationsContent />
-          ) : activeSection === 'help' ? (
-            <HelpContent />
-          ) : activeSection === 'account' ? (
-            <AccountContent />
-          ) : (
-            <DashboardSectionContent
-              activeSection={activeSection}
-              onlineUsers={userCategories.onlineUsers}
-              connectionUsers={userCategories.connectionUsers}
-              activeChatTrialUsers={userCategories.activeChatTrialUsers}
-              endedChatTrialUsers={userCategories.endedChatTrialUsers}
-              suggestedUsers={suggestedUsers}
-              existingConversations={existingConversations}
-              pendingRequests={combinedPendingRequests}
-              onChatAction={handleChatAction}
-              onCancelChatRequest={handleCancelChatRequest}
-              canUserReconnect={userCategories.canUserReconnect}
-              getReconnectTimeRemaining={
-                userCategories.getReconnectTimeRemaining
-              }
-              onOpenProfileSidebar={handleOpenProfileSidebar}
-              onUserCardClick={handleUserCardClick}
-              isProfileSidebarOpen={profileSidebarOpen}
-              selectedUserId={profileSidebarUser?.userId}
-              searchQuery={searchQuery}
-              shouldTriggerSearch={shouldTriggerSearch}
-            />
+        {/* Section Header - Fixed at top */}
+        <div className='flex-shrink-0 mb-4 sm:mb-5 lg:mb-6'>
+          {activeSection === 'notifications' && (
+            <div>
+              <h2 className='text-xl sm:text-2xl font-bold text-zinc-900 mb-1'>
+                Notifications
+              </h2>
+              <p className='text-sm text-zinc-500'>
+                Keep up with your latest activity
+              </p>
+            </div>
           )}
+          {activeSection === 'help' && (
+            <div>
+              <h2 className='text-xl sm:text-2xl font-bold text-zinc-900 mb-1'>
+                Help & Support
+              </h2>
+              <p className='text-sm text-zinc-500'>
+                Common questions and troubleshooting
+              </p>
+            </div>
+          )}
+          {activeSection === 'account' && (
+            <div>
+              <h2 className='text-xl sm:text-2xl font-bold text-zinc-900 mb-1'>
+                Account
+              </h2>
+              <p className='text-sm text-zinc-500'>
+                Manage your profile and settings
+              </p>
+            </div>
+          )}
+          {activeSection === 'connections' && (
+            <div>
+              <h2 className='text-xl sm:text-2xl font-bold text-zinc-900 mb-1'>
+                Connections
+              </h2>
+              <p className='text-sm text-zinc-500'>Your connections</p>
+            </div>
+          )}
+          {activeSection === 'suggested' && (
+            <div>
+              <h2 className='text-xl sm:text-2xl font-bold text-zinc-900 mb-1'>
+                Suggested
+              </h2>
+              <p className='text-sm text-zinc-500'>Find and connect with new people</p>
+            </div>
+          )}
+          {activeSection === 'search' && (
+            <div>
+              <h2 className='text-xl sm:text-2xl font-bold text-zinc-900 mb-1'>
+                Search
+              </h2>
+              <p className='text-sm text-zinc-500'>Search for professionals</p>
+            </div>
+          )}
+          {activeSection === 'all' && (
+            <div>
+              <h2 className='text-xl sm:text-2xl font-bold text-zinc-900 mb-1'>
+                Chats
+              </h2>
+              <p className='text-sm text-zinc-500'>Your conversations</p>
+            </div>
+          )}
+        </div>
+
+        <div className='relative flex-1 overflow-hidden'>
+          {/* Top border - shows when scrolled down */}
+          <div className='absolute top-0 left-0 right-0 h-px bg-zinc-200 opacity-0 transition-opacity duration-200 z-10 scroll-top-border'></div>
+          
+          {/* Bottom border - shows when not at bottom */}
+          <div className='absolute bottom-0 left-0 right-0 h-px bg-zinc-200 opacity-0 transition-opacity duration-200 z-10 scroll-bottom-border'></div>
+          
+          <div 
+            className='overflow-y-auto flex-1 h-full'
+            onScroll={(e) => {
+              const target = e.target as HTMLDivElement;
+              const { scrollTop, scrollHeight, clientHeight } = target;
+              
+              // Show top border when scrolled down
+              const topBorder = target.parentElement?.querySelector('.scroll-top-border') as HTMLElement;
+              if (topBorder) {
+                topBorder.style.opacity = scrollTop > 0 ? '1' : '0';
+              }
+              
+              // Show bottom border when not at bottom
+              const bottomBorder = target.parentElement?.querySelector('.scroll-bottom-border') as HTMLElement;
+              if (bottomBorder) {
+                const isAtBottom = scrollTop + clientHeight >= scrollHeight - 1;
+                bottomBorder.style.opacity = isAtBottom ? '0' : '1';
+              }
+            }}
+          >
+            {activeSection === 'notifications' ? (
+              <NotificationsContent />
+            ) : activeSection === 'help' ? (
+              <HelpContent />
+            ) : activeSection === 'account' ? (
+              <AccountContent />
+            ) : (
+              <DashboardSectionContent
+                activeSection={activeSection}
+                onlineUsers={userCategories.onlineUsers}
+                connectionUsers={userCategories.connectionUsers}
+                activeChatTrialUsers={userCategories.activeChatTrialUsers}
+                endedChatTrialUsers={userCategories.endedChatTrialUsers}
+                suggestedUsers={suggestedUsers}
+                existingConversations={existingConversations}
+                pendingRequests={combinedPendingRequests}
+                onChatAction={handleChatAction}
+                onCancelChatRequest={handleCancelChatRequest}
+                canUserReconnect={userCategories.canUserReconnect}
+                getReconnectTimeRemaining={
+                  userCategories.getReconnectTimeRemaining
+                }
+                onOpenProfileSidebar={handleOpenProfileSidebar}
+                onUserCardClick={handleUserCardClick}
+                isProfileSidebarOpen={profileSidebarOpen}
+                selectedUserId={profileSidebarUser?.userId}
+                searchQuery={searchQuery}
+                shouldTriggerSearch={shouldTriggerSearch}
+              />
+            )}
+          </div>
         </div>
       </div>
 
