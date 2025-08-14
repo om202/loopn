@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react';
 import {
   CheckCircle2,
   Clock,
+  Info,
   MessageCircle,
-  MoreHorizontal,
   User,
 } from 'lucide-react';
 
@@ -306,19 +306,19 @@ export default function UserCard({
             <User className='w-4 h-4 text-zinc-900 flex-shrink-0' />
           </button>
 
-          {/* Desktop: three dots opens sidebar via parent */}
+          {/* Desktop: profile icon opens sidebar via parent */}
           <button
             onClick={() => onOpenProfileSidebar?.(userPresence)}
-            className={`hidden md:flex p-1.5 text-xs font-medium rounded-full transition-colors text-zinc-900 items-center justify-center w-[32px] h-[32px] ${
+            className={`hidden md:flex p-1.5 text-xs font-medium rounded-full border transition-colors items-center justify-center w-[32px] h-[32px] ${
               isProfileSidebarOpen
-                ? 'bg-zinc-100'
-                : 'bg-transparent hover:bg-zinc-100'
+                ? 'bg-zinc-100 border-zinc-200'
+                : 'bg-white border-zinc-200 hover:bg-zinc-100'
             }`}
             disabled={loadingProfile}
             aria-label='Open profile sidebar'
             aria-pressed={isProfileSidebarOpen}
           >
-            <MoreHorizontal className='w-5 h-5 text-zinc-900' />
+            <Info className='w-5 h-5 text-zinc-500' />
           </button>
         </div>
       </div>

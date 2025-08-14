@@ -12,11 +12,16 @@ import { UserProfileService } from '../../services/user-profile.service';
 import type { Schema } from '../../../amplify/data/resource';
 
 type UserProfile = Schema['UserProfile']['type'];
+type UserPresence = Schema['UserPresence']['type'];
 
 interface SearchSectionContentProps {
   onChatRequestSent?: () => void;
   searchQuery?: string;
   shouldSearch?: boolean;
+  onOpenProfileSidebar?: (user: UserPresence) => void;
+  onUserCardClick?: (user: UserPresence) => void;
+  isProfileSidebarOpen?: boolean;
+  selectedUserId?: string;
 }
 
 interface EnhancedSearchResult extends SearchResult {
@@ -28,6 +33,10 @@ export default function SearchSectionContent({
   onChatRequestSent,
   searchQuery = '',
   shouldSearch = false,
+  onOpenProfileSidebar,
+  onUserCardClick,
+  isProfileSidebarOpen,
+  selectedUserId,
 }: SearchSectionContentProps) {
   const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState<EnhancedSearchResult[]>(
@@ -234,6 +243,10 @@ export default function SearchSectionContent({
                     onCancelChatRequest={() => {}}
                     canUserReconnect={() => true}
                     getReconnectTimeRemaining={() => null}
+                    onOpenProfileSidebar={onOpenProfileSidebar}
+                    onUserCardClick={onUserCardClick}
+                    isProfileSidebarOpen={isProfileSidebarOpen}
+                    selectedUserId={selectedUserId}
                   />
                 </div>
               );

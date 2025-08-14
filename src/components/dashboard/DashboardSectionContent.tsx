@@ -173,6 +173,10 @@ export default function DashboardSectionContent({
         }}
         searchQuery={searchQuery}
         shouldSearch={shouldTriggerSearch}
+        onOpenProfileSidebar={onOpenProfileSidebar}
+        onUserCardClick={onUserCardClick}
+        isProfileSidebarOpen={isProfileSidebarOpen}
+        selectedUserId={selectedUserId}
       />
     );
   }
