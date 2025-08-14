@@ -36,6 +36,7 @@ export default function SearchSectionContent({
   const [isSearching, setIsSearching] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
+  const [enhancedQuery, setEnhancedQuery] = useState<string | null>(null);
   const { user } = useAuthenticator();
 
   const performSearch = useCallback(
@@ -45,6 +46,7 @@ export default function SearchSectionContent({
       setIsSearching(true);
       setError(null);
       setHasSearched(true);
+      setEnhancedQuery(null);
 
       try {
         // Use AI-enhanced search for better results
@@ -64,8 +66,12 @@ export default function SearchSectionContent({
         if (!response.success) {
           setError(response.error || 'Search failed');
           setSearchResults([]);
+          setEnhancedQuery(null);
           return;
         }
+
+        // Capture the enhanced query if available
+        setEnhancedQuery(response.enhancedQuery || null);
 
         // Filter out current user and enhance results with full profile data
         // Handle both regular results and enhanced results from AI search
@@ -156,12 +162,19 @@ export default function SearchSectionContent({
               </p>
             </div>
           </div>
+        ) : isSearching ? (
+          <div className='p-4'>
+            <div className='flex items-center gap-3 text-sm text-zinc-600'>
+              <div className='w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin'></div>
+              <span>Searching for professionals matching "{query}"...</span>
+            </div>
+          </div>
         ) : error ? (
           <div className='flex flex-col items-center justify-center h-full text-center p-8'>
             <div className='text-red-600 text-sm mb-2'>Search Error</div>
             <p className='text-zinc-600 text-sm'>{error}</p>
           </div>
-        ) : searchResults.length === 0 && !isSearching ? (
+        ) : searchResults.length === 0 ? (
           <div className='flex flex-col items-center justify-center h-full text-center p-8'>
             <div className='w-16 h-16 mx-auto mb-4 bg-zinc-100 rounded-full flex items-center justify-center'>
               <Search className='w-8 h-8 text-zinc-500' />
@@ -176,13 +189,13 @@ export default function SearchSectionContent({
           </div>
         ) : (
           <div className='p-4 space-y-4'>
+            {enhancedQuery && enhancedQuery !== query && (
+              <div className='mb-3 text-sm text-zinc-600'>
+                Searched using "{enhancedQuery}"
+              </div>
+            )}
             <div className='text-sm text-zinc-600 mb-4'>
               Found {searchResults.length} professionals matching "{query}"
-              {/* Show AI enhancement indicator */}
-              <div className='text-xs text-blue-600 mt-1 flex items-center gap-1'>
-                <span className='w-1 h-1 bg-blue-600 rounded-full'></span>
-                AI-enhanced search
-              </div>
             </div>
             {searchResults.map(result => {
               if (result.isLoading) {
