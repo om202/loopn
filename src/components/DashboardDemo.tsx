@@ -23,7 +23,7 @@ export default function DashboardDemo() {
             <div className='flex items-center gap-3'>
               <div className='relative'>
                 <Image
-                  src='/dummy-user5.jpg'
+                  src='/dummy-users/dummy-user5.jpg'
                   alt='Your Profile'
                   width={48}
                   height={48}
@@ -108,7 +108,7 @@ export default function DashboardDemo() {
                 <div className='flex-shrink-0'>
                   <div className='relative'>
                     <Image
-                      src='/dummy-user6.jpg'
+                      src='/dummy-users/dummy-user6.jpg'
                       alt='Zara Thompson'
                       width={48}
                       height={48}
@@ -147,7 +147,7 @@ export default function DashboardDemo() {
                 <div className='flex-shrink-0'>
                   <div className='relative'>
                     <Image
-                      src='/dummy-user7.jpg'
+                      src='/dummy-users/dummy-user7.jpg'
                       alt='Kai Anderson'
                       width={48}
                       height={48}
@@ -188,7 +188,7 @@ export default function DashboardDemo() {
                 <div className='flex-shrink-0'>
                   <div className='relative'>
                     <Image
-                      src='/dummy-user8.jpg'
+                      src='/dummy-users/dummy-user8.jpg'
                       alt='Ganesh Thapa'
                       width={48}
                       height={48}
@@ -227,7 +227,7 @@ export default function DashboardDemo() {
                 <div className='flex-shrink-0'>
                   <div className='relative'>
                     <Image
-                      src='/dummy-usr9.jpg'
+                      src='/dummy-users/dummy-usr9.jpg'
                       alt='Haoyu Lee'
                       width={48}
                       height={48}
@@ -268,7 +268,7 @@ export default function DashboardDemo() {
                 <div className='flex-shrink-0'>
                   <div className='relative'>
                     <Image
-                      src='/dummy-user2.jpg'
+                      src='/dummy-users/dummy-user2.jpg'
                       alt='Alex Chen'
                       width={48}
                       height={48}
@@ -313,7 +313,7 @@ export default function DashboardDemo() {
             <div className='flex items-center gap-3'>
               <div className='relative'>
                 <Image
-                  src='/dummy-user5.jpg'
+                  src='/dummy-users/dummy-user5.jpg'
                   alt='Your Profile'
                   width={40}
                   height={40}
@@ -382,7 +382,7 @@ export default function DashboardDemo() {
                 <div className='flex-shrink-0'>
                   <div className='relative'>
                     <Image
-                      src='/dummy-user6.jpg'
+                      src='/dummy-users/dummy-user6.jpg'
                       alt='Zara Thompson'
                       width={48}
                       height={48}
@@ -430,7 +430,7 @@ export default function DashboardDemo() {
                 <div className='flex-shrink-0'>
                   <div className='relative'>
                     <Image
-                      src='/dummy-user7.jpg'
+                      src='/dummy-users/dummy-user7.jpg'
                       alt='Kai Anderson'
                       width={48}
                       height={48}
@@ -477,7 +477,7 @@ export default function DashboardDemo() {
                 <div className='flex-shrink-0'>
                   <div className='relative'>
                     <Image
-                      src='/dummy-user8.jpg'
+                      src='/dummy-users/dummy-user8.jpg'
                       alt='Ganesh Thapa'
                       width={48}
                       height={48}
@@ -524,7 +524,7 @@ export default function DashboardDemo() {
                 <div className='flex-shrink-0'>
                   <div className='relative'>
                     <Image
-                      src='/dummy-usr9.jpg'
+                      src='/dummy-users/dummy-usr9.jpg'
                       alt='Haoyu Lee'
                       width={48}
                       height={48}

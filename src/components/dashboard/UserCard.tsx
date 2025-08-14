@@ -219,14 +219,10 @@ export default function UserCard({
                       </span>
                     </div>
                     <div className='hidden md:block text-sm'>
-                      <div className='text-zinc-500 text-xs'>
-                        Reconnect in
-                      </div>
+                      <div className='text-zinc-500 text-xs'>Reconnect in</div>
                       <div className='text-zinc-500 flex items-center justify-end gap-1'>
                         <Clock className='w-3 h-3 text-zinc-500' />
-                        <span className='text-xs'>
-                          {timeRemaining}
-                        </span>
+                        <span className='text-xs'>{timeRemaining}</span>
                       </div>
                     </div>
                   </div>
