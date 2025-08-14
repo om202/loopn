@@ -693,38 +693,17 @@ async function intelligentSearch(
       `Vector search returned ${vectorResults.results.length} results`
     );
 
-    // Step 3: Rerank results with Claude
-    const rerankingResult = await rerankResultsFunction(
-      vectorResults.results,
-      query,
-      userContext
-    );
+    // Step 3: Return results based on vector similarity only (no Claude reranking)
+    const finalResults = vectorResults.results.slice(0, limit);
 
-    if (!rerankingResult.success) {
-      console.warn('Result reranking failed, using original results');
-      // Fallback to original results
-      return {
-        success: true,
-        results: vectorResults.results,
-        enhancedQuery: searchQuery,
-        searchInsights: `Found ${vectorResults.results.length} matches using basic vector search`,
-      };
-    }
-
-    // Step 4: Filter by confidence score, sort, and take top results
-    const finalResults = rerankingResult.results
-      .filter((result) => (result.confidenceScore || 0) >= 40) // Only keep high-confidence matches
-      .sort((a, b) => (b.confidenceScore || 0) - (a.confidenceScore || 0))
-      .slice(0, limit);
-
-    console.log(`Returning ${finalResults.length} reranked results`);
+    console.log(`Returning ${finalResults.length} vector-based results`);
 
     return {
       success: true,
-      enhancedResults: finalResults,
+      results: finalResults, // Use regular results format, not enhancedResults
       enhancedQuery: searchQuery,
       searchInsights: finalResults.length > 0 
-        ? `Found ${finalResults.length} high-quality matches using AI-enhanced search. Query enhanced from "${query}" to "${searchQuery}"`
+        ? `Found ${finalResults.length} matches using AI-enhanced search. Query enhanced from "${query}" to "${searchQuery}"`
         : `No relevant matches found for "${query}". Try broader search terms or check if professionals with matching skills are in the system.`,
     };
   } catch (error: unknown) {

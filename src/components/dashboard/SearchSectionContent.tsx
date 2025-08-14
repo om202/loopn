@@ -47,8 +47,17 @@ export default function SearchSectionContent({
       setHasSearched(true);
 
       try {
-        const response = await VectorSearchService.searchUsers(
+        // Use AI-enhanced search for better results
+        const response = await VectorSearchService.intelligentSearch(
           searchTerm.trim(),
+          {
+            userProfile: {
+              // Add user context if available for better personalization
+              jobRole: 'Professional',
+              industry: 'Technology',
+              yearsOfExperience: 5,
+            },
+          },
           10
         );
 
@@ -59,7 +68,9 @@ export default function SearchSectionContent({
         }
 
         // Filter out current user and enhance results with full profile data
-        const filteredResults = (response.results || []).filter(
+        // Handle both regular results and enhanced results from AI search
+        const searchResults = response.enhancedResults || response.results || [];
+        const filteredResults = searchResults.filter(
           result => result.userId !== user.userId
         );
 
@@ -166,6 +177,11 @@ export default function SearchSectionContent({
           <div className='p-4 space-y-4'>
             <div className='text-sm text-zinc-600 mb-4'>
               Found {searchResults.length} professionals matching "{query}"
+              {/* Show AI enhancement indicator */}
+              <div className='text-xs text-blue-600 mt-1 flex items-center gap-1'>
+                <span className='w-1 h-1 bg-blue-600 rounded-full'></span>
+                AI-enhanced search
+              </div>
             </div>
             {searchResults.map(result => {
               if (result.isLoading) {
