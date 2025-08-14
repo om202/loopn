@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Search } from 'lucide-react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import {
@@ -46,11 +46,51 @@ export default function SearchSectionContent({
   const [error, setError] = useState<string | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
   const [enhancedQuery, setEnhancedQuery] = useState<string | null>(null);
+  const [currentUserProfile, setCurrentUserProfile] =
+    useState<UserProfile | null>(null);
   const { user } = useAuthenticator();
+
+  // Load current user's profile for personalized search
+  // This is the right place for this data since it's only needed for search functionality
+  useEffect(() => {
+    let mounted = true;
+
+    const loadCurrentUserProfile = async () => {
+      if (!user?.userId) return;
+
+      try {
+        const profile = await UserProfileService.getProfileDetails(user.userId);
+        if (mounted) {
+          setCurrentUserProfile(profile);
+          console.log(
+            '✅ User profile loaded for search personalization:',
+            profile
+          );
+        }
+      } catch (error) {
+        console.error(
+          '❌ Error loading current user profile for search:',
+          error
+        );
+        // Don't throw - search can work without user context, just less personalized
+      }
+    };
+
+    loadCurrentUserProfile();
+
+    return () => {
+      mounted = false;
+    };
+  }, [user?.userId]);
 
   const performSearch = useCallback(
     async (searchTerm: string) => {
       if (!searchTerm.trim() || isSearching || !user) return;
+
+      console.log('🔍 SEARCH TRIGGERED');
+      console.log('Search Query:', searchTerm);
+      console.log('Current User ID:', user?.userId);
+      console.log('Current User Profile:', currentUserProfile);
 
       setIsSearching(true);
       setError(null);
@@ -58,19 +98,29 @@ export default function SearchSectionContent({
       setEnhancedQuery(null);
 
       try {
-        // Use AI-enhanced search for better results
+        // Use AI-enhanced search with current user's real profile for personalization
+        const userContext = currentUserProfile
+          ? {
+              userProfile: {
+                jobRole: currentUserProfile.jobRole,
+                industry: currentUserProfile.industry,
+                yearsOfExperience: currentUserProfile.yearsOfExperience,
+                companyName: currentUserProfile.companyName,
+                skills: currentUserProfile.skills,
+                interests: currentUserProfile.interests,
+              },
+            }
+          : undefined;
+
+        console.log('User Context being sent to AI:', userContext);
+
         const response = await VectorSearchService.intelligentSearch(
           searchTerm.trim(),
-          {
-            userProfile: {
-              // Add user context if available for better personalization
-              jobRole: 'Professional',
-              industry: 'Technology',
-              yearsOfExperience: 5,
-            },
-          },
+          userContext,
           10
         );
+
+        console.log('AI Search Response:', response);
 
         if (!response.success) {
           setError(response.error || 'Search failed');
@@ -138,7 +188,7 @@ export default function SearchSectionContent({
         setIsSearching(false);
       }
     },
-    [isSearching, user]
+    [isSearching, user, currentUserProfile]
   );
 
   // Effect to handle search from external search bar

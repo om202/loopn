@@ -498,34 +498,43 @@ async function enhanceQuery(
 }> {
   try {
     console.log(`enhanceQuery called with: "${originalQuery}"`);
-    const prompt = `You are an expert at understanding professional search queries. 
+    const prompt = `You are an expert at understanding professional search queries and providing personalized search enhancements.
 
-User is searching for professionals with query: "${originalQuery}"
+The CURRENT LOGGED-IN USER is searching for professionals with query: "${originalQuery}"
 
-User context:
-- Role: ${userContext?.userProfile?.jobRole || 'Unknown'}
-- Industry: ${userContext?.userProfile?.industry || 'Unknown'}
-- Experience: ${userContext?.userProfile?.yearsOfExperience || 'Unknown'} years
-- Company: ${userContext?.userProfile?.companyName || 'Unknown'}
+CURRENT LOGGED-IN USER'S PROFILE:
+- Role: ${userContext?.userProfile?.jobRole || 'Not specified'}
+- Industry: ${userContext?.userProfile?.industry || 'Not specified'}
+- Experience Level: ${userContext?.userProfile?.yearsOfExperience || 'Not specified'} years
+- Company: ${userContext?.userProfile?.companyName || 'Not specified'}
+- Skills: ${userContext?.userProfile?.skills?.join(', ') || 'Not specified'}
+- Interests: ${userContext?.userProfile?.interests?.join(', ') || 'Not specified'}
 
-Enhance this query by:
-1. Expanding job titles and skills that match the intent
-2. Adding relevant synonyms and related roles
-3. Considering complementary roles that would work well with the user
-4. Understanding the business context and needs
+Based on the CURRENT USER'S profile and their search query, enhance the search by:
+1. Expanding job titles and skills that match the search intent
+2. Adding relevant synonyms and related professional roles
+3. Considering complementary roles that would work well with the CURRENT USER's background
+4. Understanding roles that could collaborate with the CURRENT USER's industry and experience level
+5. Finding professionals who could be valuable connections given the CURRENT USER's career stage
+
+PERSONALIZATION GUIDELINES:
+- If the CURRENT USER is senior, prioritize finding other senior professionals or emerging talent they could mentor
+- If the CURRENT USER is junior, focus on mentors, peers, or complementary skills they could learn from
+- Consider industry-specific collaborations and cross-functional partnerships
+- Factor in the CURRENT USER's company size and type for relevant professional matches
 
 Return ONLY a valid JSON object with this exact structure, no additional text or explanations:
 {
-  "enhancedQuery": "expanded search terms that capture the intent better",
+  "enhancedQuery": "expanded search terms that capture the intent better and align with the current user's profile",
   "searchTerms": ["term1", "term2", "term3"],
-  "intent": "clear description of what the user is looking for"
+  "intent": "clear description of what the current user is looking for based on their profile"
 }
 
 IMPORTANT: Return ONLY the JSON object, nothing else. No explanations, no notes, no additional text.
 
 Examples:
-- "find a co-founder" → enhancedQuery: "technical co-founder CTO startup founder software engineer entrepreneur", searchTerms: ["co-founder", "CTO", "technical founder", "startup founder"], intent: "Looking for a technical business partner"
-- "backend engineer" → enhancedQuery: "backend engineer software engineer full-stack developer API developer cloud engineer", searchTerms: ["backend", "software engineer", "API developer"], intent: "Looking for server-side development expertise"`;
+- Current User: "Senior Product Manager at tech startup" searching "find a co-founder" → enhancedQuery: "technical co-founder CTO startup founder software engineer entrepreneur full-stack developer", searchTerms: ["co-founder", "CTO", "technical founder", "startup founder"], intent: "Senior PM looking for a technical business partner to complement product expertise"
+- Current User: "Junior Frontend Developer" searching "backend engineer" → enhancedQuery: "backend engineer software engineer full-stack developer API developer senior backend mentor", searchTerms: ["backend", "software engineer", "API developer", "senior mentor"], intent: "Junior frontend developer seeking backend expertise for collaboration or learning"`;
 
     console.log('Calling Claude with prompt length:', prompt.length);
     const response = await invokeClaude(prompt);
@@ -574,18 +583,19 @@ async function rerankResultsFunction(
   error?: string;
 }> {
   try {
-    const prompt = `You are an expert at matching professionals for collaboration and networking.
+    const prompt = `You are an expert at matching professionals for collaboration and networking based on personalized compatibility.
 
-User searched for: "${originalQuery}"
+The CURRENT LOGGED-IN USER searched for: "${originalQuery}"
 
-User profile:
-- Role: ${userContext?.userProfile?.jobRole || 'Unknown'}
-- Industry: ${userContext?.userProfile?.industry || 'Unknown'}
-- Experience: ${userContext?.userProfile?.yearsOfExperience || 'Unknown'} years
-- Skills: ${userContext?.userProfile?.skills?.join(', ') || 'Unknown'}
-- Interests: ${userContext?.userProfile?.interests?.join(', ') || 'Unknown'}
+CURRENT LOGGED-IN USER'S PROFILE:
+- Role: ${userContext?.userProfile?.jobRole || 'Not specified'}
+- Industry: ${userContext?.userProfile?.industry || 'Not specified'}
+- Experience Level: ${userContext?.userProfile?.yearsOfExperience || 'Not specified'} years
+- Company: ${userContext?.userProfile?.companyName || 'Not specified'}
+- Skills: ${userContext?.userProfile?.skills?.join(', ') || 'Not specified'}
+- Interests: ${userContext?.userProfile?.interests?.join(', ') || 'Not specified'}
 
-Vector search returned these professional profiles:
+Vector search returned these professional profiles that could potentially match the CURRENT USER's search:
 ${JSON.stringify(
   vectorResults.map(r => ({
     userId: r.userId,
@@ -596,19 +606,20 @@ ${JSON.stringify(
   2
 )}
 
-For each profile, provide:
-1. A confidence score (0-100) based on how well they match the search intent
-2. A clear explanation of why they match (ONLY include profiles with confidence score >= 40)
-3. Key relevance factors that make them a good connection
+For each profile, provide a personalized evaluation based on compatibility with the CURRENT USER:
+1. A confidence score (0-100) based on how well they match the CURRENT USER's search intent and profile
+2. A clear explanation of why they would be valuable for the CURRENT USER (ONLY include profiles with confidence score >= 40)
+3. Key relevance factors that make them a good connection specifically for the CURRENT USER
 
-IMPORTANT: EXCLUDE any profiles with confidence score below 40. Only return highly relevant matches.
+IMPORTANT: EXCLUDE any profiles with confidence score below 40. Only return highly relevant matches for the CURRENT USER.
 
-Consider:
-- Direct role/skill alignment with search query
-- Industry relevance and expertise
-- Experience level compatibility
-- Role synergy and collaboration potential
-- Career stage alignment
+PERSONALIZED EVALUATION CRITERIA:
+- Direct role/skill alignment with the CURRENT USER's search query
+- Industry relevance and potential for collaboration with the CURRENT USER's industry
+- Experience level compatibility (mentorship, peer collaboration, or learning opportunities)
+- Complementary skills that would benefit the CURRENT USER's work
+- Career stage alignment and networking value for the CURRENT USER
+- Company size/type compatibility for meaningful professional relationships
 
 Return ONLY a valid JSON array where each object has this exact structure:
 [
