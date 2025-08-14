@@ -530,18 +530,18 @@ Examples:
     console.log('Calling Claude with prompt length:', prompt.length);
     const response = await invokeClaude(prompt);
     console.log('Claude response:', response);
-    
+
     // Extract JSON from Claude's response (in case there's extra text)
     let jsonText = response.trim();
-    
+
     // Try to find JSON object in the response
     const jsonStart = jsonText.indexOf('{');
     const jsonEnd = jsonText.lastIndexOf('}') + 1;
-    
+
     if (jsonStart >= 0 && jsonEnd > jsonStart) {
       jsonText = jsonText.substring(jsonStart, jsonEnd);
     }
-    
+
     console.log('Extracted JSON:', jsonText);
     const parsed = JSON.parse(jsonText);
 
@@ -702,9 +702,10 @@ async function intelligentSearch(
       success: true,
       results: finalResults, // Use regular results format, not enhancedResults
       enhancedQuery: searchQuery,
-      searchInsights: finalResults.length > 0 
-        ? `Found ${finalResults.length} matches using AI-enhanced search. Query enhanced from "${query}" to "${searchQuery}"`
-        : `No relevant matches found for "${query}". Try broader search terms or check if professionals with matching skills are in the system.`,
+      searchInsights:
+        finalResults.length > 0
+          ? `Found ${finalResults.length} matches using AI-enhanced search. Query enhanced from "${query}" to "${searchQuery}"`
+          : `No relevant matches found for "${query}". Try broader search terms or check if professionals with matching skills are in the system.`,
     };
   } catch (error: unknown) {
     console.error('Error in intelligent search:', error);

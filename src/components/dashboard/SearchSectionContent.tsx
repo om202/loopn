@@ -69,7 +69,8 @@ export default function SearchSectionContent({
 
         // Filter out current user and enhance results with full profile data
         // Handle both regular results and enhanced results from AI search
-        const searchResults = response.enhancedResults || response.results || [];
+        const searchResults =
+          response.enhancedResults || response.results || [];
         const filteredResults = searchResults.filter(
           result => result.userId !== user.userId
         );
