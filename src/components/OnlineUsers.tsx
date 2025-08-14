@@ -5,7 +5,8 @@ import { fetchAuthSession } from 'aws-amplify/auth';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { CheckCircle2, Clock, MessageCircle } from 'lucide-react';
 import UserAvatar from './UserAvatar';
-import { formatPresenceTime } from '../lib/presence-utils';
+import { formatPresenceTime, simplePresenceManager } from '../lib/presence-utils';
+import { useAuth } from '../contexts/AuthContext';
 
 import type { Schema } from '../../amplify/data/resource';
 import { chatService } from '../services/chat.service';
@@ -79,6 +80,12 @@ export default function OnlineUsers({
     Set<string>
   >(new Set());
   const { user } = useAuthenticator();
+  const { handleSignOut } = useAuth();
+
+  const handleSignOutClick = async () => {
+    await simplePresenceManager.setOffline();
+    handleSignOut();
+  };
   const { subscribeToConversations } = useRealtime();
 
   const {
@@ -537,7 +544,7 @@ export default function OnlineUsers({
 
       <div className='flex-1 bg-white sm:rounded-2xl sm:border sm:border-zinc-200 p-2 sm:p-4 lg:p-6 ultra-compact overflow-hidden flex flex-col min-h-0'>
         {/* Search User - Always visible at top */}
-        <div className='flex-shrink-0 mb-4 sm:mb-6'>
+        <div className='flex-shrink-0 mb-2 sm:mb-2'>
           <SearchUser onProfessionalRequest={handleProfessionalRequest} />
         </div>
 
@@ -564,13 +571,21 @@ export default function OnlineUsers({
             </div>
           )}
           {activeSection === 'account' && (
-            <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-zinc-900 mb-1'>
-                Account
-              </h2>
-              <p className='text-sm text-zinc-500'>
-                Manage your profile and settings
-              </p>
+            <div className='flex items-start justify-between'>
+              <div>
+                <h2 className='text-xl sm:text-2xl font-bold text-zinc-900 mb-1'>
+                  Account
+                </h2>
+                <p className='text-sm text-zinc-500'>
+                  Manage your profile and settings
+                </p>
+              </div>
+              <button
+                onClick={handleSignOutClick}
+                className='flex items-center gap-2 px-4 py-2.5 text-b_red-600 hover:bg-b_red-50 rounded-lg border border-b_red-200 ml-4 flex-shrink-0'
+              >
+                <span className='text-sm font-medium'>Log Out</span>
+              </button>
             </div>
           )}
           {activeSection === 'connections' && (
@@ -817,7 +832,7 @@ export default function OnlineUsers({
                         <>
                           <CheckCircle2 className='w-4 h-4' />
                           <span className='text-sm font-medium'>
-                            Start Trial
+                            Send Request
                           </span>
                         </>
                       )}

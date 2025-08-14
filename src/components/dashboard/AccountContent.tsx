@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { simplePresenceManager } from '@/lib/presence-utils';
 import { UserProfileService } from '@/services/user-profile.service';
 import UserAvatar from '../UserAvatar';
 import type { Schema } from '../../../amplify/data/resource';
@@ -10,7 +9,7 @@ import type { Schema } from '../../../amplify/data/resource';
 type UserProfile = Schema['UserProfile']['type'];
 
 export default function AccountContent() {
-  const { handleSignOut, user, onboardingStatus } = useAuth();
+  const { user, onboardingStatus } = useAuth();
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loadingProfile, setLoadingProfile] = useState(false);
 
@@ -42,10 +41,7 @@ export default function AccountContent() {
     return `${name} (You)`;
   };
 
-  const handleSignOutClick = async () => {
-    await simplePresenceManager.setOffline();
-    handleSignOut();
-  };
+
 
   // Load current user's profile details
   useEffect(() => {
@@ -78,16 +74,6 @@ export default function AccountContent() {
 
   return (
     <div className='h-full flex flex-col'>
-      {/* Sign Out Button - Fixed at top */}
-      <div className='flex justify-end mb-6'>
-        <button
-          onClick={handleSignOutClick}
-          className='flex items-center gap-2 px-4 py-2.5 text-b_red-600 hover:bg-b_red-50 rounded-lg border border-b_red-200'
-        >
-          <span className='text-sm font-medium'>Log Out</span>
-        </button>
-      </div>
-
       {/* Profile Section */}
       <div className='max-w-2xl'>
         <div className='flex flex-col items-start mb-8'>
@@ -114,7 +100,7 @@ export default function AccountContent() {
         </div>
 
         {/* Profile Details */}
-        <div className='mt-5 pt-5 border-t border-zinc-100'>
+        <div className='mt-5'>
           {loadingProfile ? (
             <div className='flex items-center gap-2 text-sm text-zinc-500'>
               <div className='w-3 h-3 bg-zinc-200 rounded-full animate-pulse'></div>

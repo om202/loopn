@@ -117,7 +117,7 @@ export default function MessageInput({
         </div>
       )}
 
-      <div className='flex-shrink-0 bg-white border-t border-zinc-200 p-4 sm:p-6 lg:px-32 xl:px-48 shadow-lg relative'>
+      <div className='flex-shrink-0 bg-white border-t border-zinc-200 p-3 sm:p-4 lg:px-32 xl:px-48 shadow-lg relative'>
         <div className='w-full'>
           <form
             autoComplete='off'
@@ -175,7 +175,7 @@ export default function MessageInput({
                     }
                   }}
                   disabled={disabled}
-                  autoComplete='new-text'
+                  autoComplete='off'
                   autoCorrect='off'
                   autoCapitalize='off'
                   spellCheck='false'

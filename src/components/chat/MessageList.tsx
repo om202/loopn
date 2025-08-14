@@ -521,8 +521,8 @@ export default function MessageList({
           const isGroupedWithPrev = isPrevFromSameSender && prevTimeDiff <= 2;
           const isGroupedWithNext = isNextFromSameSender && nextTimeDiff <= 2;
 
-          let marginTop = 'mt-1';
-          let marginBottom = 'mb-1';
+          let marginTop = 'mt-0.5';
+          let marginBottom = 'mb-0.5';
 
           if (isGroupedWithPrev) {
             // Within same group - no spacing at all
@@ -530,13 +530,13 @@ export default function MessageList({
           } else {
             // Between different groups - more spacing
             if (prevTimeDiff > 60) {
-              marginTop = 'mt-8';
+              marginTop = 'mt-4';
             } else if (prevTimeDiff > 30) {
-              marginTop = 'mt-7';
+              marginTop = 'mt-3';
             } else if (prevTimeDiff > 10) {
-              marginTop = 'mt-6';
+              marginTop = 'mt-2';
             } else {
-              marginTop = 'mt-5';
+              marginTop = 'mt-1.5';
             }
           }
 
@@ -545,7 +545,7 @@ export default function MessageList({
             marginBottom = 'mb-0';
           } else {
             // Between different groups - more spacing
-            marginBottom = 'mb-4';
+            marginBottom = 'mb-2';
           }
 
           const showAvatar = !isOwnMessage && !isGroupedWithPrev;

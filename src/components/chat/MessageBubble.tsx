@@ -51,16 +51,16 @@ const MessageTicks = ({ isOptimistic }: { isOptimistic: boolean }) => {
         <Image
           src='/tick.svg'
           alt='sent'
-          width={20}
-          height={20}
+          width={22}
+          height={22}
           className='opacity-30 filter brightness-0 invert select-none'
         />
       ) : (
         <Image
           src='/double_tick.svg'
           alt='delivered'
-          width={20}
-          height={20}
+          width={22}
+          height={22}
           className='opacity-50 filter brightness-0 invert select-none'
         />
       )}
@@ -310,7 +310,7 @@ export default function MessageBubble({
           <div className='relative max-w-[85vw] sm:max-w-sm md:max-w-md lg:max-w-lg'>
             {message.isDeleted ? (
               <div
-                className={`px-3 py-2 rounded-3xl border ${
+                className={`p-3 rounded-3xl border ${
                   isOwnMessage
                     ? 'bg-zinc-100 text-zinc-500 border-zinc-200 rounded-br-sm'
                     : 'bg-zinc-100 text-zinc-500 border-zinc-200 rounded-bl-sm'
@@ -324,7 +324,7 @@ export default function MessageBubble({
               </div>
             ) : (
               <div
-                className={`px-3 py-2 rounded-3xl ${
+                className={`p-3 rounded-3xl ${
                   isOwnMessage
                     ? 'bg-brand-500 text-white border border-brand-500 rounded-br-sm'
                     : 'bg-zinc-100 text-zinc-900 rounded-bl-sm'
@@ -361,7 +361,7 @@ export default function MessageBubble({
                 )}
 
                 <div className='relative'>
-                  <p className='text-sm font-medium leading-relaxed break-words pr-10 select-none'>
+                  <p className={`text-base leading-normal break-words select-none m-0 ${isOwnMessage ? 'pr-10' : 'pr-2'}`}>
                     {renderMessageContent(message.content, false)}
                   </p>
                   {isOwnMessage && (

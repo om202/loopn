@@ -255,11 +255,11 @@ export default function DashboardSidebar({
               <Image
                 src='/loopn.svg'
                 alt='Loopn'
-                width={28}
-                height={28}
+                width={32}
+                height={32}
                 priority
               />
-              <h1 className='text-xl font-bold text-zinc-900'>Loopn</h1>
+              <h1 className='text-2xl font-bold text-zinc-900'>Loopn</h1>
             </Link>
           </div>
 
