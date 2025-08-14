@@ -439,7 +439,7 @@ async function searchUsers(
     .filter(
       (result: SearchResult | null): result is SearchResult => result !== null
     )
-    .filter((result: SearchResult) => result.score >= 0.1) // Filter out results below 10% similarity
+    .filter((result: SearchResult) => result.score >= 0.25) // Filter out results below 25% similarity
     .sort((a: SearchResult, b: SearchResult) => b.score - a.score)
     .slice(0, limit);
 
@@ -598,13 +598,15 @@ ${JSON.stringify(
 
 For each profile, provide:
 1. A confidence score (0-100) based on how well they match the search intent
-2. A clear explanation of why they match or don't match
+2. A clear explanation of why they match (ONLY include profiles with confidence score >= 40)
 3. Key relevance factors that make them a good connection
 
+IMPORTANT: EXCLUDE any profiles with confidence score below 40. Only return highly relevant matches.
+
 Consider:
-- Complementary skills and expertise
+- Direct role/skill alignment with search query
+- Industry relevance and expertise
 - Experience level compatibility
-- Industry relevance and cross-industry potential
 - Role synergy and collaboration potential
 - Career stage alignment
 
@@ -709,8 +711,9 @@ async function intelligentSearch(
       };
     }
 
-    // Step 4: Sort by confidence score and take top results
+    // Step 4: Filter by confidence score, sort, and take top results
     const finalResults = rerankingResult.results
+      .filter((result) => (result.confidenceScore || 0) >= 40) // Only keep high-confidence matches
       .sort((a, b) => (b.confidenceScore || 0) - (a.confidenceScore || 0))
       .slice(0, limit);
 
@@ -720,7 +723,9 @@ async function intelligentSearch(
       success: true,
       enhancedResults: finalResults,
       enhancedQuery: searchQuery,
-      searchInsights: `Found ${finalResults.length} matches using AI-enhanced search. Query enhanced from "${query}" to "${searchQuery}"`,
+      searchInsights: finalResults.length > 0 
+        ? `Found ${finalResults.length} high-quality matches using AI-enhanced search. Query enhanced from "${query}" to "${searchQuery}"`
+        : `No relevant matches found for "${query}". Try broader search terms or check if professionals with matching skills are in the system.`,
     };
   } catch (error: unknown) {
     console.error('Error in intelligent search:', error);
