@@ -5,7 +5,6 @@ import {
   MessageCircle,
   Sparkles,
   Users,
-  Search,
   HelpCircle,
 } from 'lucide-react';
 import Image from 'next/image';
@@ -373,8 +372,8 @@ export default function DashboardSidebar({
 
       {/* Mobile Bottom Bar */}
       <div className='lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-zinc-200'>
-        <nav className='flex justify-center items-stretch px-4 py-2'>
-          <div className='flex bg-zinc-50 rounded-2xl p-1 gap-0.5 w-full max-w-md'>
+        <nav className='flex items-stretch px-4 py-2'>
+          <div className='flex w-full'>
             {[
               // Filter out help for mobile 
               ...sidebarItems,
@@ -383,14 +382,14 @@ export default function DashboardSidebar({
               <button
                 key={id}
                 onClick={() => onSectionChange(id)}
-                className={`relative flex-1 flex flex-col items-center justify-center gap-0.5 px-1 py-2.5 rounded-xl border ${
+                className={`relative flex-1 flex flex-col items-center justify-center gap-1.5 px-1 py-2.5 ${
                   activeSection === id
-                    ? 'text-brand-600 bg-white shadow-sm border-brand-100'
-                    : 'text-zinc-500 hover:text-zinc-700 hover:bg-white/60 border-transparent'
+                    ? 'text-brand-600'
+                    : 'text-zinc-700 hover:text-zinc-800'
                 }`}
                 title={label}
               >
-                <div className='w-6 h-6 flex-shrink-0 flex items-center justify-center'>
+                <div className='relative w-6 h-6 flex-shrink-0 flex items-center justify-center'>
                   {icon === 'NotificationBell' ? (
                     <svg
                       className='w-6 h-6'
@@ -406,34 +405,44 @@ export default function DashboardSidebar({
                       />
                     </svg>
                   ) : icon === 'UserAvatar' ? (
-                    <UserAvatar
-                      email={getUserEmail()}
-                      userId={user?.userId}
-                      profilePictureUrl={
-                        userProfile?.profilePictureUrl ||
-                        onboardingStatus?.onboardingData?.profilePictureUrl
-                      }
-                      hasProfilePicture={
-                        !!userProfile?.profilePictureUrl ||
-                        !!onboardingStatus?.onboardingData?.profilePictureUrl
-                      }
-                      size='sm'
-                      showStatus={true}
-                      status='ONLINE'
-                    />
+                    <div className='w-6 h-6 flex items-center justify-center'>
+                      <UserAvatar
+                        email={getUserEmail()}
+                        userId={user?.userId}
+                        profilePictureUrl={
+                          userProfile?.profilePictureUrl ||
+                          onboardingStatus?.onboardingData?.profilePictureUrl
+                        }
+                        hasProfilePicture={
+                          !!userProfile?.profilePictureUrl ||
+                          !!onboardingStatus?.onboardingData?.profilePictureUrl
+                        }
+                        size='xs'
+                        showStatus={true}
+                        status='ONLINE'
+                      />
+                    </div>
                   ) : (
                     React.createElement(icon, {
                       className: 'w-6 h-6',
                     })
                   )}
+                  
+                  {/* Count indicator positioned on the icon */}
+                  {count > 0 && (
+                    <span
+                      className={`absolute -top-3 -right-3 bg-zinc-100 text-[9px] rounded-full w-5 h-5 flex items-center justify-center font-bold shadow-sm border leading-none ${
+                        id === 'notifications' ? 'border-b_red-500 text-b_red-600' : 'border-brand-200 text-brand-600'
+                      }`}
+                      style={{ minWidth: '20px', minHeight: '20px' }}
+                    >
+                      {count > 9 ? '9+' : count}
+                    </span>
+                  )}
                 </div>
-                <div className='text-[10px] font-medium leading-tight text-center'>
+                <div className='text-[10px] font-medium leading-tight text-center' style={{ textShadow: '0 1px 1px rgba(255, 255, 255, 0.8)' }}>
                   {id === 'account' ? (
-                    <div>
-                      <div className='truncate max-w-[50px]'>
-                        {label.length > 8 ? label.slice(0, 8) + '...' : label}
-                      </div>
-                    </div>
+                    'You'
                   ) : id === 'suggested' ? (
                     'Suggest'
                   ) : id === 'connections' ? (
@@ -444,17 +453,6 @@ export default function DashboardSidebar({
                     label
                   )}
                 </div>
-
-                {/* Count indicator for mobile */}
-                {count > 0 && (
-                  <span
-                    className={`absolute -top-0.5 -right-0.5 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center font-bold shadow-sm ${
-                      id === 'notifications' ? 'bg-b_red-500' : 'bg-brand-500'
-                    }`}
-                  >
-                    {count > 9 ? '9+' : count}
-                  </span>
-                )}
               </button>
             ))}
           </div>

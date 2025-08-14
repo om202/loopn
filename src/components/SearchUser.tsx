@@ -133,11 +133,11 @@ export default function SearchUser({ onProfessionalRequest }: SearchUserProps) {
           tabIndex={-1}
           aria-hidden='true'
         />
-        <Sparkles className='absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-500 z-10' />
+        <Sparkles className='absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-400 z-10' />
         <input
           ref={inputRef}
           type='text'
-          placeholder='Search for professionals, skills, companies...'
+          placeholder='Ask Loopn or Search'
           value={query}
           onChange={handleInputChange}
           onFocus={handleInputFocus}
@@ -181,7 +181,7 @@ export default function SearchUser({ onProfessionalRequest }: SearchUserProps) {
 
         <button
           type='submit'
-          className='absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-brand-500 text-white rounded-full hover:bg-brand-600 flex items-center justify-center'
+          className='absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-brand-400 text-white rounded-full hover:bg-brand-600 flex items-center justify-center'
         >
           {isProcessing ? (
             <div className='w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin' />
