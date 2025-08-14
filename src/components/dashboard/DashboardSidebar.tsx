@@ -209,12 +209,6 @@ export default function DashboardSidebar({
       count: suggestedUsersCount,
     },
     {
-      id: 'search' as const,
-      icon: Search,
-      label: 'Search',
-      count: 0,
-    },
-    {
       id: 'all' as const,
       icon: MessageCircle,
       label: 'Chats',
@@ -382,8 +376,8 @@ export default function DashboardSidebar({
         <nav className='flex justify-center items-stretch px-4 py-2'>
           <div className='flex bg-zinc-50 rounded-2xl p-1 gap-0.5 w-full max-w-md'>
             {[
-              // Filter out search and help for mobile
-              ...sidebarItems.filter(item => item.id !== 'search'),
+              // Filter out help for mobile 
+              ...sidebarItems,
               accountItem,
             ].map(({ id, icon, label, count }) => (
               <button
