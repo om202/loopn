@@ -20,17 +20,16 @@ import { defineOpenSearch } from './opensearch/resource';
  *   - No changes needed
  * 
  * 🔸 100-500 Users:
- *   - openSearchClient: memoryMB: 64 → 128
- *   - presenceCleanup: memoryMB: 64 → 128
+ *   - No changes needed (already at AWS minimum 128MB)
  * 
  * 🔹 500-1000 Users:
  *   - openSearchClient: memoryMB: 128 → 256
- *   - presenceCleanup: schedule: 'every 5m' → 'every 2m'
+ *   - presenceCleanup: memoryMB: 128 → 256, schedule: 'every 5m' → 'every 2m'
  *   - OpenSearch replicas: 0 → 1 (for production reliability)
  * 
  * 🔸 1000+ Users:
  *   - openSearchClient: memoryMB: 256 → 512
- *   - presenceCleanup: memoryMB: 128 → 256, schedule: 'every 2m' → 'every 1m'
+ *   - presenceCleanup: schedule: 'every 2m' → 'every 1m'
  *   - Consider DynamoDB provisioned capacity
  *   - Add CloudWatch alarms for performance monitoring
  * 
