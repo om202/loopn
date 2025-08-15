@@ -809,10 +809,12 @@ async function expandKeywords(
 }> {
   try {
     console.log(`expandKeywords called with: "${originalQuery}"`);
-    
+
     // Always include original query terms as the foundation
-    const originalTerms = originalQuery.split(' ').filter(term => term.trim().length > 0);
-    
+    const originalTerms = originalQuery
+      .split(' ')
+      .filter(term => term.trim().length > 0);
+
     const prompt = `[INST] You are a professional search term expansion specialist.
 
 TASK: Expand the search query "${originalQuery}" with relevant professional terms.
@@ -870,7 +872,9 @@ Output: {"expandedTerms": ["marketing", "marketer", "digital marketing"], "synon
   } catch (error: unknown) {
     console.error('Error expanding keywords:', error);
     // Fallback to at least include original terms
-    const originalTerms = originalQuery.split(' ').filter(term => term.trim().length > 0);
+    const originalTerms = originalQuery
+      .split(' ')
+      .filter(term => term.trim().length > 0);
     return {
       success: false,
       expandedTerms: originalTerms,
@@ -1093,12 +1097,18 @@ async function advancedRAGSearch(
     // Step 1.5: Create enhanced query that includes original terms
     console.log('Step 1.5: Creating enhanced query with original terms...');
     const enhancementResult = await enhanceQuery(query, userContext);
-    const enhancedQuery = enhancementResult.success ? enhancementResult.enhancedQuery : query;
-    
+    const enhancedQuery = enhancementResult.success
+      ? enhancementResult.enhancedQuery
+      : query;
+
     // Combine original query terms with enhanced and expanded terms
-    const originalTerms = query.split(' ').filter(term => term.trim().length > 0);
-    const enhancedTerms = enhancedQuery.split(' ').filter(term => term.trim().length > 0);
-    
+    const originalTerms = query
+      .split(' ')
+      .filter(term => term.trim().length > 0);
+    const enhancedTerms = enhancedQuery
+      .split(' ')
+      .filter(term => term.trim().length > 0);
+
     const allKeywords = [
       ...originalTerms, // IMPORTANT: Include original query terms
       ...enhancedTerms, // Include enhanced query terms
@@ -1109,15 +1119,15 @@ async function advancedRAGSearch(
 
     // Remove duplicates while preserving order (original terms first)
     const uniqueKeywords = [...new Set(allKeywords)];
-    
+
     console.log('Combined keywords:', uniqueKeywords);
 
     // Step 2: Hybrid Search (Semantic + Keyword) using BOTH original and enhanced query
     console.log('Step 2: Performing hybrid search with combined terms...');
-    
+
     // Create a combined search query that includes both original and enhanced
     const combinedSearchQuery = `${query} ${enhancedQuery}`.trim();
-    
+
     const { results: hybridResults, hybridScores } = await hybridSearch(
       combinedSearchQuery, // Use combined query for semantic search
       uniqueKeywords, // Use all unique keywords for keyword search
@@ -1264,12 +1274,11 @@ async function intelligentSearch(
     const enhancedQuery = queryEnhancement.success
       ? queryEnhancement.enhancedQuery
       : query;
-    
+
     // Combine original query with enhanced query for comprehensive search
-    const combinedSearchQuery = query === enhancedQuery 
-      ? query 
-      : `${query} ${enhancedQuery}`.trim();
-      
+    const combinedSearchQuery =
+      query === enhancedQuery ? query : `${query} ${enhancedQuery}`.trim();
+
     console.log(`Original query: "${query}"`);
     console.log(`Enhanced query: "${enhancedQuery}"`);
     console.log(`Combined search query: "${combinedSearchQuery}"`);

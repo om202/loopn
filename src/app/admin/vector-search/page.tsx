@@ -307,86 +307,86 @@ export default function VectorSearchAdminPage() {
 
                       {/* Enhanced Results Display */}
                       <div className='animate-fade-in'>
-                      {(
-                        testResults.enhancedResults || testResults.results
-                      )?.map((result, index: number) => {
-                        const enhancedResult = result as EnhancedSearchResult; // Could be EnhancedSearchResult or SearchResult
-                        return (
-                          <div
-                            key={index}
-                            className='mb-2 p-3 bg-white rounded border transition-all duration-200 hover:shadow-sm'
-                          >
-                            <div className='flex justify-between items-start'>
-                              <div className='flex-1'>
-                                <div className='flex items-center gap-2'>
-                                  <p className='font-medium'>
-                                    {enhancedResult.profile.jobRole ||
-                                      'Unknown Role'}
-                                  </p>
-                                  {enhancedResult.confidenceScore && (
-                                    <span className='px-2 py-1 bg-green-100 text-green-800 text-xs rounded'>
-                                      {enhancedResult.confidenceScore}% match
-                                    </span>
-                                  )}
-                                </div>
-                                <p className='text-sm text-gray-600'>
-                                  {enhancedResult.profile.companyName} •{' '}
-                                  {enhancedResult.profile.industry}
-                                </p>
-                                {enhancedResult.profile.about && (
-                                  <p className='text-xs text-gray-500 mt-1'>
-                                    {enhancedResult.profile.about}
-                                  </p>
-                                )}
-
-                                {/* Enhanced Match Explanation */}
-                                {enhancedResult.matchExplanation && (
-                                  <div className='mt-2 p-2 bg-yellow-50 rounded border border-yellow-200'>
-                                    <p className='text-xs font-medium text-yellow-800'>
-                                      🎯 Why this matches:
+                        {(
+                          testResults.enhancedResults || testResults.results
+                        )?.map((result, index: number) => {
+                          const enhancedResult = result as EnhancedSearchResult; // Could be EnhancedSearchResult or SearchResult
+                          return (
+                            <div
+                              key={index}
+                              className='mb-2 p-3 bg-white rounded border transition-all duration-200 hover:shadow-sm'
+                            >
+                              <div className='flex justify-between items-start'>
+                                <div className='flex-1'>
+                                  <div className='flex items-center gap-2'>
+                                    <p className='font-medium'>
+                                      {enhancedResult.profile.jobRole ||
+                                        'Unknown Role'}
                                     </p>
-                                    <p className='text-xs text-yellow-700'>
-                                      {enhancedResult.matchExplanation}
-                                    </p>
+                                    {enhancedResult.confidenceScore && (
+                                      <span className='px-2 py-1 bg-green-100 text-green-800 text-xs rounded'>
+                                        {enhancedResult.confidenceScore}% match
+                                      </span>
+                                    )}
                                   </div>
-                                )}
+                                  <p className='text-sm text-gray-600'>
+                                    {enhancedResult.profile.companyName} •{' '}
+                                    {enhancedResult.profile.industry}
+                                  </p>
+                                  {enhancedResult.profile.about && (
+                                    <p className='text-xs text-gray-500 mt-1'>
+                                      {enhancedResult.profile.about}
+                                    </p>
+                                  )}
 
-                                {/* Relevance Factors */}
-                                {enhancedResult.relevanceFactors &&
-                                  enhancedResult.relevanceFactors.length >
-                                    0 && (
-                                    <div className='mt-2'>
-                                      <p className='text-xs font-medium text-gray-700'>
-                                        Key factors:
+                                  {/* Enhanced Match Explanation */}
+                                  {enhancedResult.matchExplanation && (
+                                    <div className='mt-2 p-2 bg-yellow-50 rounded border border-yellow-200'>
+                                      <p className='text-xs font-medium text-yellow-800'>
+                                        🎯 Why this matches:
                                       </p>
-                                      <div className='flex flex-wrap gap-1 mt-1'>
-                                        {enhancedResult.relevanceFactors.map(
-                                          (
-                                            factor: string,
-                                            factorIndex: number
-                                          ) => (
-                                            <span
-                                              key={factorIndex}
-                                              className='px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded'
-                                            >
-                                              {factor}
-                                            </span>
-                                          )
-                                        )}
-                                      </div>
+                                      <p className='text-xs text-yellow-700'>
+                                        {enhancedResult.matchExplanation}
+                                      </p>
                                     </div>
                                   )}
-                              </div>
-                              <div className='text-right'>
-                                <p className='text-xs text-gray-500'>
-                                  {Math.round(enhancedResult.score * 100)}%
-                                  similarity
-                                </p>
+
+                                  {/* Relevance Factors */}
+                                  {enhancedResult.relevanceFactors &&
+                                    enhancedResult.relevanceFactors.length >
+                                      0 && (
+                                      <div className='mt-2'>
+                                        <p className='text-xs font-medium text-gray-700'>
+                                          Key factors:
+                                        </p>
+                                        <div className='flex flex-wrap gap-1 mt-1'>
+                                          {enhancedResult.relevanceFactors.map(
+                                            (
+                                              factor: string,
+                                              factorIndex: number
+                                            ) => (
+                                              <span
+                                                key={factorIndex}
+                                                className='px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded'
+                                              >
+                                                {factor}
+                                              </span>
+                                            )
+                                          )}
+                                        </div>
+                                      </div>
+                                    )}
+                                </div>
+                                <div className='text-right'>
+                                  <p className='text-xs text-gray-500'>
+                                    {Math.round(enhancedResult.score * 100)}%
+                                    similarity
+                                  </p>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        );
-                      })}
+                          );
+                        })}
                       </div>
                     </div>
                   ) : (
