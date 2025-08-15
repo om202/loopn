@@ -5,8 +5,9 @@ import { auth } from './auth/resource';
 import { data } from './data/resource';
 import { storage } from './storage/resource';
 import { presenceCleanup } from './functions/presence-cleanup/resource';
-import { vectorSearch } from './functions/vector-search/resource';
+import { openSearchClient } from './functions/opensearch-client/resource';
 import { autoConfirm } from './functions/auto-confirm/resource';
+import { defineOpenSearch } from './opensearch/resource';
 
 /**
  * @see https://docs.amplify.aws/react/build-a-backend/ to add storage, functions, and more
@@ -16,49 +17,31 @@ const backend = defineBackend({
   data,
   storage,
   presenceCleanup,
-  vectorSearch,
+  openSearchClient,
   autoConfirm,
 });
 
-// Add IAM permissions for Bedrock access
-backend.vectorSearch.resources.lambda.addToRolePolicy(
+// Set up OpenSearch Serverless
+const openSearchResources = defineOpenSearch(backend.createStack('OpenSearchStack'));
+
+// Add IAM permissions for OpenSearch Serverless access
+backend.openSearchClient.resources.lambda.addToRolePolicy(
   new PolicyStatement({
     effect: Effect.ALLOW,
     actions: [
-      'bedrock:InvokeModel',
-      'bedrock:InvokeModelWithResponseStream',
-      'bedrock:ListFoundationModels',
-      'bedrock:GetModelInvocationLoggingConfiguration',
+      'aoss:APIAccessAll',
+      'aoss:DashboardsAccessAll'
     ],
     resources: [
-      // Allow all Bedrock foundation models across regions
-      'arn:aws:bedrock:*::foundation-model/*',
-      '*',
+      openSearchResources.collection.attrArn
     ],
   })
 );
 
-// Grant permissions to interact with data models
-backend.vectorSearch.resources.lambda.addToRolePolicy(
-  new PolicyStatement({
-    effect: Effect.ALLOW,
-    actions: [
-      'dynamodb:Query',
-      'dynamodb:GetItem',
-      'dynamodb:Scan',
-      'dynamodb:UpdateItem',
-    ],
-    resources: [
-      backend.data.resources.tables['UserProfile'].tableArn,
-      `${backend.data.resources.tables['UserProfile'].tableArn}/index/*`,
-    ],
-  })
-);
-
-// Pass the table name as environment variable
-backend.vectorSearch.addEnvironment(
-  'USER_PROFILE_TABLE',
-  backend.data.resources.tables['UserProfile'].tableName
+// Pass OpenSearch endpoint as environment variable
+backend.openSearchClient.addEnvironment(
+  'OPENSEARCH_ENDPOINT',
+  openSearchResources.endpoint
 );
 
 // Add environment variable to control email verification

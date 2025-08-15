@@ -1,6 +1,6 @@
 import type { Schema } from '../../amplify/data/resource';
 import { getClient } from '../lib/amplify-config';
-import { VectorSearchService } from './vector-search.service';
+import { OpenSearchService } from './opensearch.service';
 
 type UserProfile = Schema['UserProfile']['type'];
 type DataResult<T> = { data: T | null; error: string | null };
@@ -72,7 +72,7 @@ export class UserProfileService {
       // Automatically index the user profile for vector search
       if (result.data) {
         try {
-          await VectorSearchService.indexUserProfile(userId, profileData);
+          await OpenSearchService.indexUser(userId, profileData);
         } catch (indexError) {
           console.error(
             'Failed to index user profile for vector search:',
@@ -134,7 +134,7 @@ export class UserProfileService {
               profilePictureUrl: fullProfile.profilePictureUrl || undefined,
               hasProfilePicture: fullProfile.hasProfilePicture || false,
             };
-            await VectorSearchService.indexUserProfile(userId, profileData);
+            await OpenSearchService.indexUser(userId, profileData);
           }
         } catch (indexError) {
           console.error(

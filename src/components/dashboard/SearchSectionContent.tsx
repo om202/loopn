@@ -4,9 +4,9 @@ import React, { useState, useCallback } from 'react';
 import { Search } from 'lucide-react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import {
-  VectorSearchService,
+  OpenSearchService,
   SearchResult,
-} from '../../services/vector-search.service';
+} from '../../services/opensearch.service';
 import UserCard from './UserCard';
 import { UserProfileService } from '../../services/user-profile.service';
 import type { Schema } from '../../../amplify/data/resource';
@@ -60,13 +60,9 @@ export default function SearchSectionContent({
       console.log(`🚀 Starting search for: "${searchTerm.trim()}"`);
 
       try {
-        // Use advanced RAG search without user profile context for generic results
-        // const userContext = currentUserProfile ? { ... } : undefined; // DISABLED: User profile context
-        const userContext = undefined; // Generic search without personalization
 
-        const response = await VectorSearchService.advancedRAGSearch(
+        const response = await OpenSearchService.searchUsers(
           searchTerm.trim(),
-          userContext,
           10
         );
 
@@ -75,11 +71,10 @@ export default function SearchSectionContent({
           `⚡ Search completed in ${(searchEndTime - searchStartTime).toFixed(2)}ms`
         );
 
-        console.info('Advanced RAG Search:', {
+        console.info('OpenSearch Results:', {
           originalQuery: searchTerm,
-          enhancedQuery: response.enhancedQuery,
-          keywordTerms: response.keywordTerms,
           resultsCount: response.results?.length || 0,
+          total: response.total || 0,
         });
 
         if (!response.success) {
@@ -92,16 +87,16 @@ export default function SearchSectionContent({
         const searchResults = response.results || [];
         console.log('🔍 Raw search results received:', {
           totalResults: searchResults.length,
-          resultUserIds: searchResults.map(r => r.userId),
-          resultScores: searchResults.map(r => r.score),
+          resultUserIds: searchResults.map((r: SearchResult) => r.userId),
+          resultScores: searchResults.map((r: SearchResult) => r.score),
         });
 
         const filteredResults = searchResults.filter(
-          result => result.userId !== user.userId
+          (result: SearchResult) => result.userId !== user.userId
         );
         console.log('🔍 Filtered search results (excluding current user):', {
           filteredCount: filteredResults.length,
-          filteredUserIds: filteredResults.map(r => r.userId),
+          filteredUserIds: filteredResults.map((r: SearchResult) => r.userId),
           currentUserId: user.userId,
         });
 
@@ -126,19 +121,19 @@ export default function SearchSectionContent({
         // Load full profile data for each result in parallel with progressive updates
         console.log('📊 Starting parallel profile loading for all results:', {
           numberOfProfilesToLoad: enhancedResults.length,
-          userIds: enhancedResults.map(r => r.userId),
+          userIds: enhancedResults.map((r: SearchResult) => r.userId),
         });
 
         try {
           const profilePromises = enhancedResults.map((result, index) => {
             console.log(
-              `📊 [${index}] Starting profile load for user: ${result.userId}`
+              `📊 [${index}] Starting profile load for user: ${(result as SearchResult).userId}`
             );
 
-            return UserProfileService.getProfileDetails(result.userId)
+            return UserProfileService.getProfileDetails((result as SearchResult).userId)
               .then(profile => {
                 console.log(
-                  `✅ [${index}] Profile loaded successfully for user: ${result.userId}`,
+                  `✅ [${index}] Profile loaded successfully for user: ${(result as SearchResult).userId}`,
                   {
                     profileExists: !!profile,
                     profileKeys: profile ? Object.keys(profile) : 'null',
@@ -159,13 +154,13 @@ export default function SearchSectionContent({
                 );
 
                 console.log(
-                  `🔄 [${index}] State updated for user: ${result.userId} (loading: false)`
+                  `🔄 [${index}] State updated for user: ${(result as SearchResult).userId} (loading: false)`
                 );
                 return profile;
               })
               .catch(error => {
                 console.error(
-                  `❌ [${index}] Error loading profile for user ${result.userId}:`,
+                  `❌ [${index}] Error loading profile for user ${(result as SearchResult).userId}:`,
                   error
                 );
 
@@ -177,7 +172,7 @@ export default function SearchSectionContent({
                 );
 
                 console.log(
-                  `🔄 [${index}] State updated for user: ${result.userId} (loading: false, error)`
+                  `🔄 [${index}] State updated for user: ${(result as SearchResult).userId} (loading: false, error)`
                 );
                 return null;
               });
@@ -288,7 +283,7 @@ export default function SearchSectionContent({
               if (result.isLoading) {
                 return (
                   <div
-                    key={result.userId}
+                    key={(result as SearchResult).userId}
                     className='rounded-2xl border border-zinc-200 px-3 pt-2.5 pb-1.5'
                   >
                     <div className='animate-pulse'>
@@ -305,10 +300,10 @@ export default function SearchSectionContent({
               }
 
               return (
-                <div key={result.userId}>
+                <div key={(result as SearchResult).userId}>
                   <UserCard
                     userPresence={{
-                      userId: result.userId,
+                      userId: (result as SearchResult).userId,
                       isOnline: false,
                       lastSeen: null,
                       createdAt: new Date().toISOString(),
