@@ -46,6 +46,9 @@ interface EmbeddingResponse {
   enhancedResults?: EnhancedSearchResult[];
   enhancedQuery?: string;
   searchInsights?: string;
+  keywordTerms?: string[];
+  hybridScores?: { semantic: number; keyword: number; combined: number }[];
+  ragReasoning?: string;
   error?: string;
 }
 
@@ -220,6 +223,57 @@ export const handler = async (
           rerankResults,
           actualEvent.query,
           rerankUserContext
+        );
+
+      case 'advanced_rag_search':
+        if (!actualEvent.query || typeof actualEvent.query !== 'string') {
+          throw new Error(
+            'Query is missing or invalid for advanced RAG search'
+          );
+        }
+
+        let ragUserContext: SearchContext | undefined;
+        if (actualEvent.userContext) {
+          try {
+            ragUserContext =
+              typeof actualEvent.userContext === 'string'
+                ? JSON.parse(actualEvent.userContext)
+                : actualEvent.userContext;
+          } catch (_parseError) {
+            console.warn(
+              'Invalid userContext format, proceeding without context'
+            );
+          }
+        }
+
+        return await advancedRAGSearch(
+          actualEvent.query.trim(),
+          ragUserContext,
+          actualEvent.limit || 10
+        );
+
+      case 'expand_keywords':
+        if (!actualEvent.query || typeof actualEvent.query !== 'string') {
+          throw new Error('Query is missing or invalid for keyword expansion');
+        }
+
+        let keywordUserContext: SearchContext | undefined;
+        if (actualEvent.userContext) {
+          try {
+            keywordUserContext =
+              typeof actualEvent.userContext === 'string'
+                ? JSON.parse(actualEvent.userContext)
+                : actualEvent.userContext;
+          } catch (_parseError) {
+            console.warn(
+              'Invalid userContext format, proceeding without context'
+            );
+          }
+        }
+
+        return await expandKeywords(
+          actualEvent.query.trim(),
+          keywordUserContext
         );
 
       default:
@@ -659,6 +713,395 @@ Ensure the array maintains the same order as the input profiles.`;
       results: fallbackResults,
       error: `Claude reranking failed, using fallback: ${error instanceof Error ? error.message : 'Unknown error'}`,
     };
+  }
+}
+
+// Keyword expansion function using Claude
+async function expandKeywords(
+  originalQuery: string,
+  userContext?: SearchContext
+): Promise<{
+  success: boolean;
+  expandedTerms: string[];
+  synonyms: string[];
+  relatedTerms: string[];
+  error?: string;
+}> {
+  try {
+    console.log(`expandKeywords called with: "${originalQuery}"`);
+    const prompt = `You are an expert at expanding professional search terms for better recruitment and networking.
+
+The user is searching for: "${originalQuery}"
+
+USER'S CONTEXT:
+- Role: ${userContext?.userProfile?.jobRole || 'Not specified'}
+- Industry: ${userContext?.userProfile?.industry || 'Not specified'}
+- Experience: ${userContext?.userProfile?.yearsOfExperience || 'Not specified'} years
+
+Generate comprehensive keyword expansions including:
+1. Direct synonyms and alternative job titles
+2. Related roles and specializations  
+3. Industry-specific terms
+4. Skills and technologies commonly associated
+5. Experience levels and seniority variations
+
+Return ONLY a valid JSON object with this exact structure:
+{
+  "expandedTerms": ["expanded version with all related terms"],
+  "synonyms": ["direct synonyms", "alternative titles"],
+  "relatedTerms": ["related roles", "complementary skills", "industry terms"]
+}
+
+Examples:
+- "software engineer" → synonyms: ["developer", "programmer", "software developer"], relatedTerms: ["full stack", "backend", "frontend", "DevOps", "SRE"]
+- "marketing" → synonyms: ["marketer", "marketing specialist"], relatedTerms: ["digital marketing", "content marketing", "growth marketing", "brand manager"]`;
+
+    const response = await invokeClaude(prompt);
+
+    // Extract JSON from response
+    let jsonText = response.trim();
+    const jsonStart = jsonText.indexOf('{');
+    const jsonEnd = jsonText.lastIndexOf('}') + 1;
+
+    if (jsonStart >= 0 && jsonEnd > jsonStart) {
+      jsonText = jsonText.substring(jsonStart, jsonEnd);
+    }
+
+    const parsed = JSON.parse(jsonText);
+
+    return {
+      success: true,
+      expandedTerms: parsed.expandedTerms || [],
+      synonyms: parsed.synonyms || [],
+      relatedTerms: parsed.relatedTerms || [],
+    };
+  } catch (error: unknown) {
+    console.error('Error expanding keywords:', error);
+    return {
+      success: false,
+      expandedTerms: [originalQuery],
+      synonyms: [],
+      relatedTerms: [],
+      error: error instanceof Error ? error.message : 'Unknown error',
+    };
+  }
+}
+
+// Keyword-based search function
+async function keywordSearch(
+  keywordTerms: string[],
+  limit: number
+): Promise<SearchResult[]> {
+  const scanParams = {
+    TableName: USER_PROFILE_TABLE,
+    FilterExpression: 'attribute_exists(profileEmbedding)',
+  };
+
+  const scanResponse = await dynamoClient.send(new ScanCommand(scanParams));
+
+  if (!scanResponse.Items) {
+    return [];
+  }
+
+  const keywordResults = scanResponse
+    .Items!.map(item => {
+      const userProfile = unmarshall(item);
+
+      // Create searchable text from profile
+      const profileText = createProfileText({
+        jobRole: userProfile.jobRole,
+        companyName: userProfile.companyName,
+        industry: userProfile.industry,
+        yearsOfExperience: userProfile.yearsOfExperience,
+        education: userProfile.education,
+        about: userProfile.about,
+        interests: userProfile.interests,
+        skills: userProfile.skills,
+      }).toLowerCase();
+
+      // Calculate keyword match score
+      let matchCount = 0;
+      let totalMatches = 0;
+
+      for (const term of keywordTerms) {
+        const termLower = term.toLowerCase();
+        const matches = (profileText.match(new RegExp(termLower, 'g')) || [])
+          .length;
+        if (matches > 0) {
+          matchCount++;
+          totalMatches += matches;
+        }
+      }
+
+      // Score based on percentage of terms matched and frequency
+      const termMatchRatio = matchCount / keywordTerms.length;
+      const frequencyBonus = Math.min(totalMatches / 10, 0.3); // Cap bonus at 0.3
+      const keywordScore = termMatchRatio + frequencyBonus;
+
+      if (keywordScore <= 0) return null;
+
+      return {
+        userId: userProfile.userId,
+        score: keywordScore,
+        profile: {
+          jobRole: userProfile.jobRole,
+          companyName: userProfile.companyName,
+          industry: userProfile.industry,
+          yearsOfExperience: userProfile.yearsOfExperience,
+          education: userProfile.education,
+          about: userProfile.about,
+          interests: userProfile.interests,
+          skills: userProfile.skills,
+        },
+      } as SearchResult;
+    })
+    .filter(
+      (result: SearchResult | null): result is SearchResult => result !== null
+    )
+    .sort((a: SearchResult, b: SearchResult) => b.score - a.score)
+    .slice(0, limit);
+
+  return keywordResults;
+}
+
+// Hybrid search combining semantic and keyword search
+async function hybridSearch(
+  query: string,
+  keywordTerms: string[],
+  limit: number
+): Promise<{
+  results: SearchResult[];
+  hybridScores: { semantic: number; keyword: number; combined: number }[];
+}> {
+  // Get semantic search results
+  const semanticResults = await searchUsers(query, limit * 2);
+
+  // Get keyword search results
+  const keywordResults = await keywordSearch(keywordTerms, limit * 2);
+
+  if (!semanticResults.success || !semanticResults.results) {
+    return { results: keywordResults.slice(0, limit), hybridScores: [] };
+  }
+
+  // Create a map to combine scores
+  const userScores = new Map<string, { semantic: number; keyword: number }>();
+
+  // Add semantic scores
+  for (const result of semanticResults.results) {
+    userScores.set(result.userId, { semantic: result.score, keyword: 0 });
+  }
+
+  // Add keyword scores
+  for (const result of keywordResults) {
+    const existing = userScores.get(result.userId);
+    if (existing) {
+      existing.keyword = result.score;
+    } else {
+      userScores.set(result.userId, { semantic: 0, keyword: result.score });
+    }
+  }
+
+  // Calculate hybrid scores and create results
+  const hybridResults: SearchResult[] = [];
+  const hybridScores: {
+    semantic: number;
+    keyword: number;
+    combined: number;
+  }[] = [];
+
+  // Get all unique users from both searches
+  const allUsers = new Map<string, SearchResult>();
+
+  for (const result of semanticResults.results) {
+    allUsers.set(result.userId, result);
+  }
+
+  for (const result of keywordResults) {
+    if (!allUsers.has(result.userId)) {
+      allUsers.set(result.userId, result);
+    }
+  }
+
+  for (const [userId, userResult] of allUsers) {
+    const scores = userScores.get(userId);
+    if (!scores) continue;
+
+    // Weighted combination: 60% semantic, 40% keyword
+    const combinedScore = scores.semantic * 0.6 + scores.keyword * 0.4;
+
+    hybridResults.push({
+      ...userResult,
+      score: combinedScore,
+    });
+
+    hybridScores.push({
+      semantic: scores.semantic,
+      keyword: scores.keyword,
+      combined: combinedScore,
+    });
+  }
+
+  // Sort by combined score
+  const sortedIndices = hybridResults
+    .map((_, index) => index)
+    .sort((a, b) => hybridResults[b].score - hybridResults[a].score);
+
+  const sortedResults = sortedIndices
+    .map(i => hybridResults[i])
+    .slice(0, limit);
+  const sortedScores = sortedIndices.map(i => hybridScores[i]).slice(0, limit);
+
+  return {
+    results: sortedResults,
+    hybridScores: sortedScores,
+  };
+}
+
+// Advanced RAG search function
+async function advancedRAGSearch(
+  query: string,
+  userContext?: SearchContext,
+  limit: number = 10
+): Promise<EmbeddingResponse> {
+  try {
+    console.log(`Starting advanced RAG search for query: "${query}"`);
+
+    // Step 1: Keyword Expansion
+    console.log('Step 1: Expanding keywords...');
+    const keywordExpansion = await expandKeywords(query, userContext);
+    console.log(
+      'Keyword expansion result:',
+      JSON.stringify(keywordExpansion, null, 2)
+    );
+
+    const allKeywords = [
+      ...keywordExpansion.expandedTerms,
+      ...keywordExpansion.synonyms,
+      ...keywordExpansion.relatedTerms,
+    ].filter(Boolean);
+
+    // Step 2: Hybrid Search (Semantic + Keyword)
+    console.log('Step 2: Performing hybrid search...');
+    const { results: hybridResults, hybridScores } = await hybridSearch(
+      query,
+      allKeywords,
+      limit * 2 // Get more results for LLM filtering
+    );
+
+    console.log(`Hybrid search returned ${hybridResults.length} results`);
+
+    if (hybridResults.length === 0) {
+      return {
+        success: true,
+        results: [],
+        keywordTerms: allKeywords,
+        hybridScores: [],
+        ragReasoning: `No matches found for "${query}". Tried ${allKeywords.length} expanded terms including: ${allKeywords.slice(0, 5).join(', ')}.`,
+        searchInsights:
+          'No relevant professionals found. Try broader search terms or different keywords.',
+      };
+    }
+
+    // Step 3: LLM Reasoning and Filtering
+    console.log('Step 3: Applying LLM reasoning...');
+    const ragReasoningPrompt = `You are an expert professional matchmaker analyzing search results for optimal relevance.
+
+SEARCH QUERY: "${query}"
+USER CONTEXT: ${JSON.stringify(userContext?.userProfile || {}, null, 2)}
+
+HYBRID SEARCH RESULTS (combining semantic similarity + keyword matching):
+${JSON.stringify(hybridResults.slice(0, 15), null, 2)}
+
+KEYWORD EXPANSION USED:
+- Expanded Terms: ${keywordExpansion.expandedTerms.join(', ')}
+- Synonyms: ${keywordExpansion.synonyms.join(', ')}  
+- Related Terms: ${keywordExpansion.relatedTerms.join(', ')}
+
+TASK: Select the top ${limit} most relevant professionals and provide reasoning.
+
+SELECTION CRITERIA (in order of importance):
+1. Direct relevance to search query and user's needs
+2. Quality of profile match (skills, experience, industry)
+3. Potential for meaningful professional relationship
+4. Complementary expertise that adds value
+5. Appropriate experience level for collaboration
+
+Return ONLY a valid JSON object:
+{
+  "selectedResults": [
+    {
+      "userId": "user123",
+      "score": 0.85,
+      "profile": {...},
+      "reasoningScore": 92,
+      "relevanceReason": "Strong match because...",
+      "valueProposition": "Would be valuable for..."
+    }
+  ],
+  "overallReasoning": "Selected these professionals because...",
+  "searchQuality": "excellent|good|fair|poor",
+  "suggestions": ["suggestion1", "suggestion2"]
+}
+
+IMPORTANT: Only include professionals with reasoningScore >= 70. If fewer than ${limit} qualify, return only the qualified ones.`;
+
+    const ragResponse = await invokeClaude(ragReasoningPrompt);
+
+    let ragResult;
+    try {
+      // Extract JSON from response
+      let jsonText = ragResponse.trim();
+      const jsonStart = jsonText.indexOf('{');
+      const jsonEnd = jsonText.lastIndexOf('}') + 1;
+
+      if (jsonStart >= 0 && jsonEnd > jsonStart) {
+        jsonText = jsonText.substring(jsonStart, jsonEnd);
+      }
+
+      ragResult = JSON.parse(jsonText);
+    } catch (_parseError) {
+      console.warn(
+        'Failed to parse RAG reasoning response, using hybrid results'
+      );
+      ragResult = {
+        selectedResults: hybridResults.slice(0, limit),
+        overallReasoning: 'LLM reasoning failed, using hybrid search results',
+        searchQuality: 'fair',
+        suggestions: ['Try more specific search terms', 'Broaden your query'],
+      };
+    }
+
+    const finalResults =
+      ragResult.selectedResults || hybridResults.slice(0, limit);
+
+    console.log(`RAG search returning ${finalResults.length} filtered results`);
+
+    return {
+      success: true,
+      results: finalResults,
+      keywordTerms: allKeywords,
+      hybridScores: hybridScores.slice(0, finalResults.length),
+      ragReasoning: ragResult.overallReasoning,
+      searchInsights: `Advanced RAG search found ${finalResults.length} highly relevant matches. Search quality: ${ragResult.searchQuality}. ${ragResult.suggestions ? 'Suggestions: ' + ragResult.suggestions.join(', ') : ''}`,
+    };
+  } catch (error: unknown) {
+    console.error('Error in advanced RAG search:', error);
+
+    // Fallback to basic search
+    console.log('Falling back to basic vector search');
+    try {
+      const fallbackResults = await searchUsers(query, limit);
+      return {
+        ...fallbackResults,
+        ragReasoning: `Advanced RAG search failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        searchInsights: `Fallback to basic search used due to RAG failure.`,
+      };
+    } catch (_fallbackError: unknown) {
+      return {
+        success: false,
+        error: `Both RAG and fallback search failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      };
+    }
   }
 }
 

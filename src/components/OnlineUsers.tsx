@@ -71,6 +71,11 @@ export default function OnlineUsers({
     hasProfilePicture?: boolean;
   } | null>(null);
   const [profileSidebarLoading, setProfileSidebarLoading] = useState(false);
+
+  // Current user profile for search context
+  const [currentUserProfile, setCurrentUserProfile] = useState<
+    Schema['UserProfile']['type'] | null
+  >(null);
   const [profileSidebarOpen, setProfileSidebarOpen] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [, setConversationsLoaded] = useState(false);
@@ -118,6 +123,29 @@ export default function OnlineUsers({
   }, [allOnlineUsers, user?.userId]);
 
   const initialLoading = onlineUsersLoading;
+
+  // Load current user profile for search context
+  useEffect(() => {
+    let mounted = true;
+    const loadCurrentUserProfile = async () => {
+      if (!user?.userId) return;
+      try {
+        const { UserProfileService } = await import(
+          '../services/user-profile.service'
+        );
+        const profileDetails = await UserProfileService.getProfileDetails(
+          user.userId
+        );
+        if (mounted) setCurrentUserProfile(profileDetails);
+      } catch (error) {
+        console.error('Error loading current user profile for search:', error);
+      }
+    };
+    loadCurrentUserProfile();
+    return () => {
+      mounted = false;
+    };
+  }, [user?.userId]);
 
   // Persist and restore sidebar open/close state only (not the selected user)
   useEffect(() => {
@@ -548,7 +576,11 @@ export default function OnlineUsers({
       <div className='flex-1 bg-white sm:rounded-2xl sm:border sm:border-zinc-200 p-2 sm:p-4 lg:p-6 ultra-compact overflow-hidden flex flex-col min-h-0'>
         {/* Search User - Always visible at top */}
         <div className='flex-shrink-0 mb-2 sm:mb-2'>
-          <SearchUser onProfessionalRequest={handleProfessionalRequest} />
+          <SearchUser
+            onProfessionalRequest={handleProfessionalRequest}
+            enableAdvancedRAG={true}
+            userProfile={currentUserProfile || undefined}
+          />
         </div>
 
         {/* Section Header - Fixed at top */}

@@ -8,16 +8,24 @@ import {
   removeFromSearchHistory,
   type SearchHistoryItem,
 } from '../lib/search-history-utils';
+import { VectorSearchService } from '../services/vector-search.service';
 
 interface SearchUserProps {
   onProfessionalRequest?: (request: string) => void;
+  enableAdvancedRAG?: boolean;
+  userProfile?: Record<string, unknown>;
 }
 
-export default function SearchUser({ onProfessionalRequest }: SearchUserProps) {
+export default function SearchUser({
+  onProfessionalRequest,
+  enableAdvancedRAG = false,
+  userProfile,
+}: SearchUserProps) {
   const [query, setQuery] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [searchHistory, setSearchHistory] = useState<SearchHistoryItem[]>([]);
   const [showHistory, setShowHistory] = useState(false);
+  const [useRAGSearch] = useState(enableAdvancedRAG);
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -45,7 +53,7 @@ export default function SearchUser({ onProfessionalRequest }: SearchUserProps) {
     };
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (query.trim() && !isProcessing) {
       setIsProcessing(true);
@@ -55,7 +63,31 @@ export default function SearchUser({ onProfessionalRequest }: SearchUserProps) {
       // Hide dropdown
       setShowHistory(false);
 
-      onProfessionalRequest?.(query);
+      let searchQuery = query.trim();
+
+      // Use RAG search if enabled
+      if (useRAGSearch && userProfile) {
+        try {
+          const ragResponse = await VectorSearchService.advancedRAGSearch(
+            searchQuery,
+            { userProfile },
+            10
+          );
+
+          if (ragResponse.success && ragResponse.searchInsights) {
+            setRagInsights(ragResponse.searchInsights);
+            // Use enhanced query if available
+            if (ragResponse.enhancedQuery) {
+              searchQuery = ragResponse.enhancedQuery;
+            }
+          }
+        } catch (error) {
+          console.error('RAG search error:', error);
+          setRagInsights('Advanced search failed, using standard search');
+        }
+      }
+
+      onProfessionalRequest?.(searchQuery);
       setTimeout(() => setIsProcessing(false), 1000);
     }
   };
@@ -105,7 +137,7 @@ export default function SearchUser({ onProfessionalRequest }: SearchUserProps) {
   };
 
   return (
-    <div className='max-w-md mx-auto relative'>
+    <div className='max-w-md mx-auto relative space-y-4'>
       <form
         onSubmit={handleSubmit}
         className='relative'
@@ -223,6 +255,46 @@ export default function SearchUser({ onProfessionalRequest }: SearchUserProps) {
                 </button>
               </div>
             ))}
+          </div>
+        </div>
+      )}
+
+      {/* Advanced RAG Toggle */}
+      {enableAdvancedRAG && (
+        <div className='flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-200'>
+          <div className='flex items-center space-x-2'>
+            <Sparkles className='w-4 h-4 text-blue-600' />
+            <span className='text-sm font-medium text-blue-900'>
+              Advanced AI Search
+            </span>
+          </div>
+          <button
+            type='button'
+            onClick={() => setUseRAGSearch(!useRAGSearch)}
+            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+              useRAGSearch ? 'bg-blue-600' : 'bg-gray-200'
+            }`}
+          >
+            <span
+              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                useRAGSearch ? 'translate-x-6' : 'translate-x-1'
+              }`}
+            />
+          </button>
+        </div>
+      )}
+
+      {/* RAG Insights */}
+      {ragInsights && (
+        <div className='p-3 bg-green-50 rounded-lg border border-green-200'>
+          <div className='flex items-start space-x-2'>
+            <Sparkles className='w-4 h-4 text-green-600 mt-0.5 flex-shrink-0' />
+            <div>
+              <p className='text-sm font-medium text-green-900 mb-1'>
+                AI Search Insights
+              </p>
+              <p className='text-xs text-green-800'>{ragInsights}</p>
+            </div>
           </div>
         </div>
       )}

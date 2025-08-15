@@ -32,6 +32,9 @@ export interface VectorSearchResponse {
   enhancedResults?: EnhancedSearchResult[];
   enhancedQuery?: string;
   searchInsights?: string;
+  keywordTerms?: string[];
+  hybridScores?: { semantic: number; keyword: number; combined: number }[];
+  ragReasoning?: string;
   error?: string;
 }
 
@@ -518,6 +521,93 @@ export class VectorSearchService {
           });
     } catch (error) {
       console.error('Error reranking results:', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+      };
+    }
+  }
+
+  /**
+   * Advanced RAG search with keyword expansion, hybrid search, and LLM reasoning
+   */
+  static async advancedRAGSearch(
+    query: string,
+    userContext?: Record<string, unknown>,
+    limit: number = 10
+  ): Promise<VectorSearchResponse> {
+    try {
+      const { data, errors } = await client.queries.vectorSearch({
+        action: 'advanced_rag_search',
+        query,
+        userContext: userContext ? JSON.stringify(userContext) : undefined,
+        limit,
+      });
+
+      if (errors && errors.length > 0) {
+        return {
+          success: false,
+          error: errors[0].message,
+        };
+      }
+
+      if (!data) {
+        return {
+          success: false,
+          error: 'No data returned from advanced RAG search',
+        };
+      }
+
+      return typeof data === 'string'
+        ? JSON.parse(data)
+        : (data as VectorSearchResponse);
+    } catch (error) {
+      console.error('Error in advanced RAG search:', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+      };
+    }
+  }
+
+  /**
+   * Expand keywords using LLM for better search coverage
+   */
+  static async expandKeywords(
+    query: string,
+    userContext?: Record<string, unknown>
+  ): Promise<{
+    success: boolean;
+    expandedTerms?: string[];
+    synonyms?: string[];
+    relatedTerms?: string[];
+    error?: string;
+  }> {
+    try {
+      const { data, errors } = await client.queries.vectorSearch({
+        action: 'expand_keywords',
+        query,
+        userContext: userContext ? JSON.stringify(userContext) : undefined,
+      });
+
+      if (errors && errors.length > 0) {
+        return {
+          success: false,
+          error: errors[0].message,
+        };
+      }
+
+      return typeof data === 'string'
+        ? JSON.parse(data)
+        : (data as {
+            success: boolean;
+            expandedTerms?: string[];
+            synonyms?: string[];
+            relatedTerms?: string[];
+            error?: string;
+          });
+    } catch (error) {
+      console.error('Error expanding keywords:', error);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error',

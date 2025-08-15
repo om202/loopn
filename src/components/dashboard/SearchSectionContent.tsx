@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Search } from 'lucide-react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import {
@@ -45,8 +45,29 @@ export default function SearchSectionContent({
   const [isSearching, setIsSearching] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
+  const [currentUserProfile, setCurrentUserProfile] =
+    useState<UserProfile | null>(null);
+  const [searchInsights, setSearchInsights] = useState<string>('');
 
   const { user } = useAuthenticator();
+
+  // Load current user profile for search context
+  useEffect(() => {
+    let mounted = true;
+    const loadCurrentUserProfile = async () => {
+      if (!user?.userId) return;
+      try {
+        const profile = await UserProfileService.getProfileDetails(user.userId);
+        if (mounted) setCurrentUserProfile(profile);
+      } catch (error) {
+        console.error('Error loading current user profile for search:', error);
+      }
+    };
+    loadCurrentUserProfile();
+    return () => {
+      mounted = false;
+    };
+  }, [user?.userId]);
 
   const performSearch = useCallback(
     async (searchTerm: string) => {
@@ -57,22 +78,43 @@ export default function SearchSectionContent({
       setHasSearched(true);
 
       try {
-        // Use normal vector search
-        const response = await VectorSearchService.searchUsers(
+        // Use advanced RAG search if user profile is available, otherwise fall back to intelligent search
+        const userContext = currentUserProfile
+          ? {
+              userProfile: {
+                jobRole: currentUserProfile.jobRole,
+                industry: currentUserProfile.industry,
+                yearsOfExperience: currentUserProfile.yearsOfExperience,
+                companyName: currentUserProfile.companyName,
+                skills: currentUserProfile.skills,
+                interests: currentUserProfile.interests,
+              },
+            }
+          : undefined;
+
+        const response = await VectorSearchService.advancedRAGSearch(
           searchTerm.trim(),
+          userContext,
           10
         );
 
-        console.info('Vector Search:', {
+        console.info('Advanced RAG Search:', {
           query: searchTerm,
+          enhancedQuery: response.enhancedQuery,
           resultsCount: response.results?.length || 0,
+          ragReasoning: response.ragReasoning,
+          searchInsights: response.searchInsights,
         });
 
         if (!response.success) {
           setError(response.error || 'Search failed');
           setSearchResults([]);
+          setSearchInsights('');
           return;
         }
+
+        // Set search insights if available
+        setSearchInsights(response.searchInsights || '');
 
         // Filter out current user and enhance results with full profile data
         const searchResults = response.results || [];
@@ -128,7 +170,7 @@ export default function SearchSectionContent({
         setIsSearching(false);
       }
     },
-    [isSearching, user]
+    [isSearching, user, currentUserProfile]
   );
 
   // Effect to handle search from external search bar
@@ -190,6 +232,21 @@ export default function SearchSectionContent({
             <div className='text-sm text-zinc-600 mb-4'>
               Found {searchResults.length} professionals matching "{query}"
             </div>
+
+            {/* Search Insights */}
+            {searchInsights && (
+              <div className='mb-4 p-3 bg-blue-50 rounded-lg border border-blue-200'>
+                <div className='flex items-start space-x-2'>
+                  <div className='w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0'></div>
+                  <div>
+                    <p className='text-sm font-medium text-blue-900 mb-1'>
+                      AI Search Insights
+                    </p>
+                    <p className='text-xs text-blue-800'>{searchInsights}</p>
+                  </div>
+                </div>
+              </div>
+            )}
             {searchResults.map(result => {
               if (result.isLoading) {
                 return (
