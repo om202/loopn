@@ -113,19 +113,19 @@ export default function AdvancedRAGTestPage() {
               <div>
                 <span className='font-medium text-gray-700'>Role:</span>{' '}
                 <span className='text-gray-600'>
-                  {userProfile.jobRole || 'Not specified'}
+                  {String(userProfile.jobRole) || 'Not specified'}
                 </span>
               </div>
               <div>
                 <span className='font-medium text-gray-700'>Industry:</span>{' '}
                 <span className='text-gray-600'>
-                  {userProfile.industry || 'Not specified'}
+                  {String(userProfile.industry) || 'Not specified'}
                 </span>
               </div>
               <div>
                 <span className='font-medium text-gray-700'>Experience:</span>{' '}
                 <span className='text-gray-600'>
-                  {userProfile.yearsOfExperience || 0} years
+                  {Number(userProfile.yearsOfExperience) || 0} years
                 </span>
               </div>
             </div>
@@ -165,16 +165,17 @@ export default function AdvancedRAGTestPage() {
                       Expanded Terms:
                     </h4>
                     <div className='flex flex-wrap gap-2'>
-                      {keywordTest.result.expandedTerms?.map(
-                        (term: string, index: number) => (
-                          <span
-                            key={index}
-                            className='px-2 py-1 bg-blue-100 text-blue-800 text-sm rounded'
-                          >
-                            {term}
-                          </span>
-                        )
-                      )}
+                      {Array.isArray(keywordTest.result.expandedTerms) &&
+                        keywordTest.result.expandedTerms.map(
+                          (term: string, index: number) => (
+                            <span
+                              key={index}
+                              className='px-2 py-1 bg-blue-100 text-blue-800 text-sm rounded'
+                            >
+                              {term}
+                            </span>
+                          )
+                        )}
                     </div>
                   </div>
                   <div>
@@ -182,16 +183,17 @@ export default function AdvancedRAGTestPage() {
                       Synonyms:
                     </h4>
                     <div className='flex flex-wrap gap-2'>
-                      {keywordTest.result.synonyms?.map(
-                        (synonym: string, index: number) => (
-                          <span
-                            key={index}
-                            className='px-2 py-1 bg-green-100 text-green-800 text-sm rounded'
-                          >
-                            {synonym}
-                          </span>
-                        )
-                      )}
+                      {Array.isArray(keywordTest.result.synonyms) &&
+                        keywordTest.result.synonyms.map(
+                          (synonym: string, index: number) => (
+                            <span
+                              key={index}
+                              className='px-2 py-1 bg-green-100 text-green-800 text-sm rounded'
+                            >
+                              {synonym}
+                            </span>
+                          )
+                        )}
                     </div>
                   </div>
                   <div>
@@ -199,22 +201,23 @@ export default function AdvancedRAGTestPage() {
                       Related Terms:
                     </h4>
                     <div className='flex flex-wrap gap-2'>
-                      {keywordTest.result.relatedTerms?.map(
-                        (term: string, index: number) => (
-                          <span
-                            key={index}
-                            className='px-2 py-1 bg-purple-100 text-purple-800 text-sm rounded'
-                          >
-                            {term}
-                          </span>
-                        )
-                      )}
+                      {Array.isArray(keywordTest.result.relatedTerms) &&
+                        keywordTest.result.relatedTerms.map(
+                          (term: string, index: number) => (
+                            <span
+                              key={index}
+                              className='px-2 py-1 bg-purple-100 text-purple-800 text-sm rounded'
+                            >
+                              {term}
+                            </span>
+                          )
+                        )}
                     </div>
                   </div>
                 </div>
               ) : (
                 <div className='text-red-600'>
-                  Error: {keywordTest.result.error}
+                  Error: {String(keywordTest.result.error)}
                 </div>
               )}
             </div>
@@ -226,7 +229,7 @@ export default function AdvancedRAGTestPage() {
           <AdvancedRAGSearch
             onUserSelect={handleUserSelect}
             currentUserId={user?.userId}
-            userProfile={userProfile}
+            userProfile={userProfile || undefined}
           />
         </div>
 
