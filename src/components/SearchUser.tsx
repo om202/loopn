@@ -8,7 +8,6 @@ import {
   removeFromSearchHistory,
   type SearchHistoryItem,
 } from '../lib/search-history-utils';
-import { VectorSearchService } from '../services/vector-search.service';
 
 interface SearchUserProps {
   onProfessionalRequest?: (request: string) => void;
@@ -17,13 +16,12 @@ interface SearchUserProps {
 
 export default function SearchUser({
   onProfessionalRequest,
-  userProfile,
+  userProfile: _userProfile,
 }: SearchUserProps) {
   const [query, setQuery] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [searchHistory, setSearchHistory] = useState<SearchHistoryItem[]>([]);
   const [showHistory, setShowHistory] = useState(false);
-  const [useRAGSearch] = useState(true); // Always use advanced RAG search
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -61,30 +59,14 @@ export default function SearchUser({
       // Hide dropdown
       setShowHistory(false);
 
-      let searchQuery = query.trim();
+      const searchQuery = query.trim();
 
-      // Use RAG search if enabled
-      if (useRAGSearch && userProfile) {
-        try {
-          const ragResponse = await VectorSearchService.advancedRAGSearch(
-            searchQuery,
-            { userProfile },
-            10
-          );
-
-          if (ragResponse.success) {
-            // Use enhanced query if available
-            if (ragResponse.enhancedQuery) {
-              searchQuery = ragResponse.enhancedQuery;
-            }
-          }
-        } catch (error) {
-          console.error('RAG search error:', error);
-        }
-      }
-
+      // Immediately trigger the search without doing RAG processing here
+      // The SearchSectionContent component will handle the actual search
       onProfessionalRequest?.(searchQuery);
-      setTimeout(() => setIsProcessing(false), 1000);
+
+      // Quick reset of processing state - no artificial delay
+      setTimeout(() => setIsProcessing(false), 200);
     }
   };
 
@@ -110,7 +92,7 @@ export default function SearchUser({
       setSearchHistory(getSearchHistory());
 
       onProfessionalRequest?.(historyQuery);
-      setTimeout(() => setIsProcessing(false), 1000);
+      setTimeout(() => setIsProcessing(false), 200);
     }
   };
 

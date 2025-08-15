@@ -75,6 +75,7 @@ export default function SearchSectionContent({
       setIsSearching(true);
       setError(null);
       setHasSearched(true);
+      setSearchResults([]); // Clear previous results immediately
 
       try {
         // Use advanced RAG search if user profile is available, otherwise fall back to intelligent search
@@ -122,30 +123,45 @@ export default function SearchSectionContent({
           })
         );
 
+        // Show results immediately with loading state
         setSearchResults(enhancedResults);
 
-        // Load full profile data for each result in parallel
+        // Load full profile data for each result in parallel with progressive updates
         try {
-          const profilePromises = enhancedResults.map(result =>
-            UserProfileService.getProfileDetails(result.userId).catch(error => {
-              console.error(
-                `Error loading profile for user ${result.userId}:`,
-                error
-              );
-              return null; // Return null for failed profiles
-            })
+          const profilePromises = enhancedResults.map((result, index) =>
+            UserProfileService.getProfileDetails(result.userId)
+              .then(profile => {
+                // Update this specific result as soon as its profile loads
+                setSearchResults(prev =>
+                  prev.map((item, i) =>
+                    i === index
+                      ? {
+                          ...item,
+                          fullProfile: profile || undefined,
+                          isLoading: false,
+                        }
+                      : item
+                  )
+                );
+                return profile;
+              })
+              .catch(error => {
+                console.error(
+                  `Error loading profile for user ${result.userId}:`,
+                  error
+                );
+                // Mark this specific result as not loading on error
+                setSearchResults(prev =>
+                  prev.map((item, i) =>
+                    i === index ? { ...item, isLoading: false } : item
+                  )
+                );
+                return null;
+              })
           );
 
-          const profiles = await Promise.all(profilePromises);
-
-          // Update all results at once with loaded profiles
-          setSearchResults(prev =>
-            prev.map((item, index) => ({
-              ...item,
-              fullProfile: profiles[index] || undefined,
-              isLoading: false,
-            }))
-          );
+          // Wait for all profiles to complete
+          await Promise.all(profilePromises);
         } catch (error) {
           console.error('Error loading profiles in parallel:', error);
           // Fallback: mark all as not loading
@@ -197,6 +213,7 @@ export default function SearchSectionContent({
         ) : isSearching ? (
           <div className='p-4'>
             <div className='flex items-center gap-3 text-sm text-zinc-600'>
+              <div className='w-4 h-4 border-2 border-zinc-300 border-t-blue-600 rounded-full animate-spin'></div>
               <span>Searching for professionals matching "{query}"...</span>
             </div>
           </div>
