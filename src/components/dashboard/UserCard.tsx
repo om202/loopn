@@ -36,6 +36,22 @@ interface UserCardProps {
   onUserCardClick?: (user: UserPresence) => void;
   isProfileSidebarOpen?: boolean;
   selectedUserId?: string;
+  searchProfile?: {
+    userId: string;
+    fullName?: string;
+    email?: string;
+    jobRole?: string;
+    companyName?: string;
+    industry?: string;
+    yearsOfExperience?: number;
+    education?: string;
+    about?: string;
+    interests?: string[];
+    skills?: string[];
+    profilePictureUrl?: string;
+    isOnboardingComplete?: boolean;
+  };
+  useRealtimeStatus?: boolean; // Whether to show real-time status (online/offline)
 }
 
 const getDisplayName = (
@@ -67,6 +83,8 @@ export default function UserCard({
   onUserCardClick,
   isProfileSidebarOpen,
   selectedUserId,
+  searchProfile,
+  useRealtimeStatus = true,
 }: UserCardProps) {
   const [showCancelDialog, setShowCancelDialog] = useState(false);
   const [showProfileDialog, setShowProfileDialog] = useState(false);
@@ -80,7 +98,8 @@ export default function UserCard({
     profilePictureUrl?: string;
     hasProfilePicture?: boolean;
   } | null>(null);
-  const isOnline = onlineUsers.some(ou => ou.userId === userPresence.userId);
+  // Only show online status if useRealtimeStatus is enabled
+  const isOnline = useRealtimeStatus ? onlineUsers.some(ou => ou.userId === userPresence.userId) : false;
   const isSelected = selectedUserId === userPresence.userId;
 
   // Load profile data when component mounts
@@ -88,6 +107,38 @@ export default function UserCard({
     let mounted = true;
 
     const loadProfileData = async () => {
+      // If searchProfile is provided (from OpenSearch), use it directly
+      if (searchProfile) {
+        setFullProfile({
+          userId: searchProfile.userId,
+          fullName: searchProfile.fullName || null,
+          email: searchProfile.email || null,
+          jobRole: searchProfile.jobRole || null,
+          companyName: searchProfile.companyName || null,
+          industry: searchProfile.industry || null,
+          yearsOfExperience: searchProfile.yearsOfExperience || null,
+          education: searchProfile.education || null,
+          about: searchProfile.about || null,
+          interests: searchProfile.interests || null,
+          skills: searchProfile.skills || null,
+          profilePictureUrl: searchProfile.profilePictureUrl || null,
+          isOnboardingComplete: searchProfile.isOnboardingComplete || false,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        } as Schema['UserProfile']['type']);
+
+        setUserProfile({
+          fullName: searchProfile.fullName,
+          email: searchProfile.email,
+          profilePictureUrl: searchProfile.profilePictureUrl,
+          hasProfilePicture: !!searchProfile.profilePictureUrl,
+        });
+
+        setLoadingProfile(false);
+        return;
+      }
+
+      // Otherwise, fetch profile data as usual
       setLoadingProfile(true);
       try {
         // Get both full profile details and basic profile data
@@ -125,7 +176,7 @@ export default function UserCard({
     return () => {
       mounted = false;
     };
-  }, [userPresence.userId]);
+  }, [userPresence.userId, searchProfile]);
 
   const handleCardClick = (e: React.MouseEvent) => {
     // Don't trigger card click if clicking on buttons
@@ -153,15 +204,17 @@ export default function UserCard({
             profilePictureUrl={userProfile?.profilePictureUrl}
             hasProfilePicture={userProfile?.hasProfilePicture}
             size='md'
-            showStatus
+            showStatus={useRealtimeStatus}
             status={
-              isOnline
-                ? 'ONLINE'
-                : userPresence.lastSeen &&
-                    formatPresenceTime(userPresence.lastSeen) ===
-                      'Recently active'
-                  ? 'RECENTLY_ACTIVE'
-                  : 'OFFLINE'
+              useRealtimeStatus
+                ? isOnline
+                  ? 'ONLINE'
+                  : userPresence.lastSeen &&
+                      formatPresenceTime(userPresence.lastSeen) ===
+                        'Recently active'
+                    ? 'RECENTLY_ACTIVE'
+                    : 'OFFLINE'
+                : 'OFFLINE'
             }
           />
         </div>

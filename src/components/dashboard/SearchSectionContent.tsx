@@ -8,10 +8,8 @@ import {
   SearchResult,
 } from '../../services/opensearch.service';
 import UserCard from './UserCard';
-import { UserProfileService } from '../../services/user-profile.service';
 import type { Schema } from '../../../amplify/data/resource';
 
-type UserProfile = Schema['UserProfile']['type'];
 type UserPresence = Schema['UserPresence']['type'];
 
 interface SearchSectionContentProps {
@@ -24,11 +22,6 @@ interface SearchSectionContentProps {
   selectedUserId?: string;
 }
 
-interface EnhancedSearchResult extends SearchResult {
-  fullProfile?: UserProfile;
-  isLoading?: boolean;
-}
-
 export default function SearchSectionContent({
   onChatRequestSent,
   searchQuery = '',
@@ -39,9 +32,7 @@ export default function SearchSectionContent({
   selectedUserId,
 }: SearchSectionContentProps) {
   const [query, setQuery] = useState('');
-  const [searchResults, setSearchResults] = useState<EnhancedSearchResult[]>(
-    []
-  );
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
@@ -82,129 +73,20 @@ export default function SearchSectionContent({
           return;
         }
 
-        // Filter out current user and enhance results with full profile data
+        // Filter out current user - OpenSearch already provides complete profile data
         const searchResults = response.results || [];
-        console.log('🔍 Raw search results received:', {
-          totalResults: searchResults.length,
-          resultUserIds: searchResults.map((r: SearchResult) => r.userId),
-          resultScores: searchResults.map((r: SearchResult) => r.score),
-        });
-
         const filteredResults = searchResults.filter(
           (result: SearchResult) => result.userId !== user.userId
         );
-        console.log('🔍 Filtered search results (excluding current user):', {
+
+        console.log('🔍 Search results processed:', {
+          totalResults: searchResults.length,
           filteredCount: filteredResults.length,
-          filteredUserIds: filteredResults.map((r: SearchResult) => r.userId),
           currentUserId: user.userId,
         });
 
-        const enhancedResults: EnhancedSearchResult[] = filteredResults.map(
-          result => ({
-            ...result,
-            isLoading: true,
-          })
-        );
-
-        console.log('🔍 Enhanced results with loading state:', {
-          enhancedCount: enhancedResults.length,
-          allMarkedAsLoading: enhancedResults.every(r => r.isLoading === true),
-        });
-
-        // Show results immediately with loading state
-        setSearchResults(enhancedResults);
-        console.log(
-          '🔍 Search results state updated with loading placeholders'
-        );
-
-        // Load full profile data for each result in parallel with progressive updates
-        console.log('📊 Starting parallel profile loading for all results:', {
-          numberOfProfilesToLoad: enhancedResults.length,
-          userIds: enhancedResults.map((r: SearchResult) => r.userId),
-        });
-
-        try {
-          const profilePromises = enhancedResults.map((result, index) => {
-            console.log(
-              `📊 [${index}] Starting profile load for user: ${(result as SearchResult).userId}`
-            );
-
-            return UserProfileService.getProfileDetails(
-              (result as SearchResult).userId
-            )
-              .then(profile => {
-                console.log(
-                  `✅ [${index}] Profile loaded successfully for user: ${(result as SearchResult).userId}`,
-                  {
-                    profileExists: !!profile,
-                    profileKeys: profile ? Object.keys(profile) : 'null',
-                  }
-                );
-
-                // Update this specific result as soon as its profile loads
-                setSearchResults(prev =>
-                  prev.map((item, i) =>
-                    i === index
-                      ? {
-                          ...item,
-                          fullProfile: profile || undefined,
-                          isLoading: false,
-                        }
-                      : item
-                  )
-                );
-
-                console.log(
-                  `🔄 [${index}] State updated for user: ${(result as SearchResult).userId} (loading: false)`
-                );
-                return profile;
-              })
-              .catch(error => {
-                console.error(
-                  `❌ [${index}] Error loading profile for user ${(result as SearchResult).userId}:`,
-                  error
-                );
-
-                // Mark this specific result as not loading on error
-                setSearchResults(prev =>
-                  prev.map((item, i) =>
-                    i === index ? { ...item, isLoading: false } : item
-                  )
-                );
-
-                console.log(
-                  `🔄 [${index}] State updated for user: ${(result as SearchResult).userId} (loading: false, error)`
-                );
-                return null;
-              });
-          });
-
-          console.log('⏳ Waiting for all profile promises to complete...');
-          const profileResults = await Promise.all(profilePromises);
-
-          console.log('🎉 All profile loading completed:', {
-            totalPromises: profilePromises.length,
-            successfulProfiles: profileResults.filter(p => p !== null).length,
-            failedProfiles: profileResults.filter(p => p === null).length,
-          });
-        } catch (error) {
-          console.error(
-            '💥 Critical error in parallel profile loading:',
-            error
-          );
-          console.log(
-            '🔧 Applying fallback: marking all results as not loading'
-          );
-
-          // Fallback: mark all as not loading
-          setSearchResults(prev =>
-            prev.map(item => ({ ...item, isLoading: false }))
-          );
-
-          console.log(
-            '🔧 Fallback completed: all results marked as not loading'
-          );
-        }
+        // Set results directly - no need for additional profile fetching
+        setSearchResults(filteredResults);
       } catch (error) {
         console.error('Search error:', error);
         setError('An error occurred while searching');
@@ -212,7 +94,7 @@ export default function SearchSectionContent({
       } finally {
         const totalEndTime = performance.now();
         console.log(
-          `🏁 Complete search process finished in ${(totalEndTime - searchStartTime).toFixed(2)}ms`
+          `🏁 Search process finished in ${(totalEndTime - searchStartTime).toFixed(2)}ms`
         );
         setIsSearching(false);
       }
@@ -280,51 +162,36 @@ export default function SearchSectionContent({
               Found {searchResults.length} results for "{query}"
             </div>
 
-            {searchResults.map((result, _index) => {
-              if (result.isLoading) {
-                return (
-                  <div
-                    key={(result as SearchResult).userId}
-                    className='rounded-2xl border border-zinc-200 px-3 pt-2.5 pb-1.5'
-                  >
-                    <div className='animate-pulse'>
-                      <div className='flex items-center gap-3'>
-                        <div className='w-12 h-12 bg-zinc-200 rounded-full'></div>
-                        <div className='flex-1 space-y-2'>
-                          <div className='h-4 bg-zinc-200 rounded w-3/4'></div>
-                          <div className='h-3 bg-zinc-200 rounded w-1/2'></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                );
-              }
-
-              return (
-                <div key={(result as SearchResult).userId}>
-                  <UserCard
-                    userPresence={{
-                      userId: (result as SearchResult).userId,
-                      isOnline: false,
-                      lastSeen: null,
-                      createdAt: new Date().toISOString(),
-                      updatedAt: new Date().toISOString(),
-                    }}
-                    onlineUsers={[]}
-                    existingConversations={new Map()}
-                    pendingRequests={new Set()}
-                    onChatAction={() => onChatRequestSent?.()}
-                    onCancelChatRequest={() => {}}
-                    canUserReconnect={() => true}
-                    getReconnectTimeRemaining={() => null}
-                    onOpenProfileSidebar={onOpenProfileSidebar}
-                    onUserCardClick={onUserCardClick}
-                    isProfileSidebarOpen={isProfileSidebarOpen}
-                    selectedUserId={selectedUserId}
-                  />
-                </div>
-              );
-            })}
+            {searchResults.map((result) => (
+              <div key={result.userId}>
+                <UserCard
+                  userPresence={{
+                    userId: result.userId,
+                    isOnline: false, // Not relevant for search results
+                    status: 'OFFLINE', // Static status for search
+                    lastSeen: null,
+                    lastHeartbeat: null,
+                    activeChatId: null,
+                    lastChatActivity: null,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
+                  }}
+                  onlineUsers={[]} // Empty - no online status needed
+                  existingConversations={new Map()} // Empty for search results
+                  pendingRequests={new Set()} // Empty for search results
+                  onChatAction={() => onChatRequestSent?.()}
+                  onCancelChatRequest={() => {}} // Not used in search context
+                  canUserReconnect={() => true} // Default to allow chat requests
+                  getReconnectTimeRemaining={() => null} // No restrictions for search
+                  onOpenProfileSidebar={onOpenProfileSidebar}
+                  onUserCardClick={onUserCardClick}
+                  isProfileSidebarOpen={isProfileSidebarOpen}
+                  selectedUserId={selectedUserId}
+                  searchProfile={result.profile} // OpenSearch profile data
+                  useRealtimeStatus={false} // Disable real-time status for search results
+                />
+              </div>
+            ))}
           </div>
         )}
       </div>
@@ -332,86 +199,3 @@ export default function SearchSectionContent({
   );
 }
 
-/*
- * HOW TO SWITCH BACK TO INTELLIGENT SEARCH:
- *
- * This component currently uses normal vector search (VectorSearchService.searchUsers).
- * To switch back to AI-enhanced intelligent search, follow these steps:
- *
- * 1. RESTORE USER PROFILE STATE:
- *    Add back the currentUserProfile state and its loading effect:
- *
- *    const [currentUserProfile, setCurrentUserProfile] = useState<UserProfile | null>(null);
- *
- *    useEffect(() => {
- *      let mounted = true;
- *      const loadCurrentUserProfile = async () => {
- *        if (!user?.userId) return;
- *        try {
- *          const profile = await UserProfileService.getProfileDetails(user.userId);
- *          if (mounted) setCurrentUserProfile(profile);
- *        } catch (error) {
- *          console.error('Error loading current user profile for search:', error);
- *        }
- *      };
- *      loadCurrentUserProfile();
- *      return () => { mounted = false; };
- *    }, [user?.userId]);
- *
- * 2. REPLACE SEARCH METHOD:
- *    In the performSearch function, replace this:
- *
- *    const response = await VectorSearchService.searchUsers(searchTerm.trim(), 10);
- *
- *    With this:
- *
- *    const userContext = currentUserProfile ? {
- *      userProfile: {
- *        jobRole: currentUserProfile.jobRole,
- *        industry: currentUserProfile.industry,
- *        yearsOfExperience: currentUserProfile.yearsOfExperience,
- *        companyName: currentUserProfile.companyName,
- *        skills: currentUserProfile.skills,
- *        interests: currentUserProfile.interests,
- *      },
- *    } : undefined;
- *
- *    const response = await VectorSearchService.intelligentSearch(
- *      searchTerm.trim(),
- *      userContext,
- *      10
- *    );
- *
- * 3. UPDATE RESULT HANDLING:
- *    Replace this line:
- *    const searchResults = response.results || [];
- *
- *    With this:
- *    const searchResults = response.enhancedResults || response.results || [];
- *
- * 4. UPDATE LOGGING:
- *    Replace the console.info call with:
- *    console.info('AI Enhanced Search:', {
- *      query: searchTerm,
- *      enhancedQuery: response.enhancedQuery,
- *      resultsCount: response.results?.length || 0,
- *    });
- *
- * 5. UPDATE DEPENDENCIES:
- *    Update the useCallback dependency array to include currentUserProfile:
- *    [isSearching, user, currentUserProfile]
- *
- * 6. ADD IMPORTS:
- *    Make sure useEffect is imported:
- *    import React, { useState, useCallback, useEffect } from 'react';
- *
- * BENEFITS OF INTELLIGENT SEARCH:
- * - AI-enhanced query understanding and expansion
- * - Personalized results based on user's profile
- * - Better result ranking and relevance
- * - Enhanced search insights and explanations
- * - Context-aware matching
- *
- * The intelligent search provides more sophisticated results but requires more processing
- * time and resources compared to the current normal vector search implementation.
- */
