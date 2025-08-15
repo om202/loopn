@@ -21,8 +21,11 @@ const backend = defineBackend({
   autoConfirm,
 });
 
-// Set up OpenSearch Serverless
-const openSearchResources = defineOpenSearch(backend.createStack('OpenSearchStack'));
+// Set up OpenSearch Serverless in the search stack to avoid circular dependency
+const openSearchResources = defineOpenSearch(
+  backend.openSearchClient.resources.cfnResources.cfnFunction.stack,
+  backend.openSearchClient.resources.lambda.role
+);
 
 // Add IAM permissions for OpenSearch Serverless access
 backend.openSearchClient.resources.lambda.addToRolePolicy(

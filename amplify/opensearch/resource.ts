@@ -1,9 +1,8 @@
-import { defineFunction } from '@aws-amplify/backend';
 import * as opensearch from 'aws-cdk-lib/aws-opensearchserverless';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import { Stack } from 'aws-cdk-lib';
 
-export function defineOpenSearch(stack: Stack) {
+export function defineOpenSearch(stack: Stack, lambdaRole?: iam.IRole) {
   // Create OpenSearch Serverless collection for auto-scaling
   const userSearchCollection = new opensearch.CfnCollection(stack, 'UserSearchCollection', {
     name: 'user-search',
@@ -77,7 +76,7 @@ export function defineOpenSearch(stack: Stack) {
             ]
           }
         ],
-        Principal: ['*'] // Will be restricted to specific roles in production
+        Principal: lambdaRole ? [lambdaRole.roleArn] : []
       }
     ])
   });
