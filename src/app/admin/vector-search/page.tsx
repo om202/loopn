@@ -71,17 +71,22 @@ export default function VectorSearchAdminPage() {
                 if (user.isOnboardingComplete) {
                   await OpenSearchService.indexUser(user.userId, {
                     userId: user.userId,
-                    email: user.email,
-                    fullName: user.fullName,
-                    jobRole: user.jobRole,
-                    companyName: user.companyName,
-                    industry: user.industry,
-                    yearsOfExperience: user.yearsOfExperience,
-                    education: user.education,
-                    about: user.about,
-                    interests: user.interests,
-                    skills: user.skills,
-                    profilePictureUrl: user.profilePictureUrl,
+                    fullName: user.fullName ?? undefined,
+                    jobRole: user.jobRole ?? undefined,
+                    companyName: user.companyName ?? undefined,
+                    industry: user.industry ?? undefined,
+                    yearsOfExperience: user.yearsOfExperience ?? undefined,
+                    education: user.education ?? undefined,
+                    about: user.about ?? undefined,
+                    interests:
+                      user.interests?.filter(
+                        (item): item is string => item !== null
+                      ) ?? undefined,
+                    skills:
+                      user.skills?.filter(
+                        (item): item is string => item !== null
+                      ) ?? undefined,
+                    profilePictureUrl: user.profilePictureUrl ?? undefined,
                     isOnboardingComplete: user.isOnboardingComplete,
                   });
                   migrated++;
@@ -161,6 +166,7 @@ export default function VectorSearchAdminPage() {
     try {
       console.log('Testing OpenSearch intelligent search...');
       const searchResult = await OpenSearchService.searchUsers(testQuery, 10);
+      console.log('Frontend received search result:', searchResult);
       setTestResults(searchResult);
     } catch (error) {
       console.error('Error testing search:', error);
@@ -428,7 +434,9 @@ export default function VectorSearchAdminPage() {
                                               className='text-xs text-yellow-700'
                                             >
                                               <strong>{field}:</strong>{' '}
-                                              {highlights.join(' ... ')}
+                                              {Array.isArray(highlights)
+                                                ? highlights.join(' ... ')
+                                                : highlights}
                                             </div>
                                           )
                                         )}

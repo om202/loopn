@@ -50,7 +50,10 @@ interface SearchResponse {
 
 export const handler = async (event: any): Promise<SearchResponse> => {
   try {
-    console.log('OpenSearch handler called with event:', JSON.stringify(event, null, 2));
+    console.log(
+      'OpenSearch handler called with event:',
+      JSON.stringify(event, null, 2)
+    );
     const request = event.arguments as SearchRequest;
     console.log('Parsed request:', JSON.stringify(request, null, 2));
 
@@ -271,10 +274,16 @@ async function searchUsers(
   });
 
   try {
+    console.log(
+      'Executing search with body:',
+      JSON.stringify(searchBody, null, 2)
+    );
     const response = await client.search({
       index: USER_INDEX,
       body: searchBody,
     });
+
+    console.log('OpenSearch response:', JSON.stringify(response.body, null, 2));
 
     const results = response.body.hits.hits.map((hit: any) => ({
       userId: hit._source.userId,
@@ -283,14 +292,23 @@ async function searchUsers(
       highlights: hit.highlight || {},
     }));
 
-    return {
+    const searchResponse = {
       success: true,
       results,
       total: response.body.hits.total.value,
     };
+
+    console.log(
+      'Returning search response:',
+      JSON.stringify(searchResponse, null, 2)
+    );
+    return searchResponse;
   } catch (error) {
     console.error('Search failed:', error);
-    throw error;
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Search failed',
+    };
   }
 }
 
@@ -326,10 +344,9 @@ async function indexUser(
         index: USER_INDEX,
         body: {
           query: {
-            term: { userId: userId }
-          }
+            term: { userId: userId },
+          },
         },
-        refresh: true,
       });
     } catch (deleteError) {
       // Ignore delete errors (user might not exist yet)
@@ -340,7 +357,6 @@ async function indexUser(
     await client.index({
       index: USER_INDEX,
       body: document,
-      refresh: true, // Make immediately searchable
     });
 
     return { success: true };
@@ -357,15 +373,15 @@ async function getUser(userId: string): Promise<SearchResponse> {
       index: USER_INDEX,
       body: {
         query: {
-          term: { userId: userId }
-        }
-      }
+          term: { userId: userId },
+        },
+      },
     });
 
     return {
       success: true,
       results: response.body.hits.hits.map((hit: any) => hit._source),
-      total: response.body.hits.total.value
+      total: response.body.hits.total.value,
     };
   } catch (error: any) {
     if (error.meta?.statusCode === 404) {
@@ -407,17 +423,15 @@ async function updateUser(
       index: USER_INDEX,
       body: {
         query: {
-          term: { userId: userId }
-        }
+          term: { userId: userId },
+        },
       },
-      refresh: true,
     });
 
     // Then index the updated document
     await client.index({
       index: USER_INDEX,
       body: updateDoc,
-      refresh: true,
     });
 
     return { success: true };
@@ -434,10 +448,9 @@ async function deleteUser(userId: string): Promise<SearchResponse> {
       index: USER_INDEX,
       body: {
         query: {
-          term: { userId: userId }
-        }
+          term: { userId: userId },
+        },
       },
-      refresh: true,
     });
 
     return { success: true };

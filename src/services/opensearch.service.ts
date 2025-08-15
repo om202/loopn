@@ -57,7 +57,15 @@ export class OpenSearchService {
         filters: filters ? JSON.stringify(filters) : undefined,
       });
 
-      return response.data as SearchResponse;
+      console.log('OpenSearch service received response:', response);
+      console.log('Response data:', response.data);
+      
+      // Parse the JSON string response
+      const parsedData = typeof response.data === 'string' 
+        ? JSON.parse(response.data) 
+        : response.data;
+      
+      return parsedData as SearchResponse;
     } catch (error) {
       console.error('Search failed:', error);
       return {
@@ -82,7 +90,12 @@ export class OpenSearchService {
         userProfile: JSON.stringify(userProfile),
       });
 
-      return response.data as SearchResponse;
+      // Parse the JSON string response
+      const parsedData = typeof response.data === 'string' 
+        ? JSON.parse(response.data) 
+        : response.data;
+      
+      return parsedData as SearchResponse;
     } catch (error) {
       console.error('Indexing failed:', error);
       return {
@@ -106,7 +119,12 @@ export class OpenSearchService {
         userProfile: JSON.stringify(userProfile),
       });
 
-      return response.data as SearchResponse;
+      // Parse the JSON string response
+      const parsedData = typeof response.data === 'string' 
+        ? JSON.parse(response.data) 
+        : response.data;
+      
+      return parsedData as SearchResponse;
     } catch (error) {
       console.error('Update failed:', error);
       return {
@@ -126,7 +144,12 @@ export class OpenSearchService {
         userId,
       });
 
-      return response.data as SearchResponse;
+      // Parse the JSON string response
+      const parsedData = typeof response.data === 'string' 
+        ? JSON.parse(response.data) 
+        : response.data;
+      
+      return parsedData as SearchResponse;
     } catch (error) {
       console.error('Get user failed:', error);
       return {
@@ -146,7 +169,12 @@ export class OpenSearchService {
         userId,
       });
 
-      return response.data as SearchResponse;
+      // Parse the JSON string response
+      const parsedData = typeof response.data === 'string' 
+        ? JSON.parse(response.data) 
+        : response.data;
+      
+      return parsedData as SearchResponse;
     } catch (error) {
       console.error('Delete failed:', error);
       return {
@@ -165,7 +193,12 @@ export class OpenSearchService {
         action: 'initialize_index',
       });
 
-      return response.data as SearchResponse;
+      // Parse the JSON string response
+      const parsedData = typeof response.data === 'string' 
+        ? JSON.parse(response.data) 
+        : response.data;
+      
+      return parsedData as SearchResponse;
     } catch (error) {
       console.error('Index initialization failed:', error);
       return {
