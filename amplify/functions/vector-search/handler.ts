@@ -1077,8 +1077,11 @@ async function advancedRAGSearch(
       };
     }
 
-    // Step 3: LLM Reasoning and Filtering
-    console.log('Step 3: Applying LLM reasoning...');
+    // Step 3: LLM Reasoning and Filtering (DISABLED for performance)
+    console.log('Step 3: Skipping LLM reasoning for performance...');
+    
+    // TODO: Re-enable LLM reasoning when rate limits are resolved
+    /*
     const ragReasoningPrompt = `[INST] You are a professional matching AI that ranks search results for optimal relevance.
 
 SEARCH QUERY: "${query}"
@@ -1141,8 +1144,12 @@ REQUIREMENTS:
 
     const finalResults =
       ragResult.selectedResults || hybridResults.slice(0, limit);
+    */
 
-    console.log(`RAG search returning ${finalResults.length} filtered results`);
+    // Skip LLM reasoning for performance - return hybrid results directly
+    const finalResults = hybridResults.slice(0, limit);
+
+    console.log(`RAG search returning ${finalResults.length} hybrid results (LLM reasoning disabled)`);
 
     return {
       success: true,
