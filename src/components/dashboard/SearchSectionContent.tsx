@@ -138,7 +138,7 @@ export default function SearchSectionContent({
               Found {searchResults.length} results for "{query}"
             </div>
 
-            {searchResults.map((result) => (
+            {searchResults.map(result => (
               <div key={result.userId}>
                 <UserCard
                   userPresence={{
@@ -164,6 +164,7 @@ export default function SearchSectionContent({
                   isProfileSidebarOpen={isProfileSidebarOpen}
                   selectedUserId={selectedUserId}
                   searchProfile={result.profile} // OpenSearch profile data
+                  searchHighlights={result.highlights} // OpenSearch highlights showing what matched
                   useRealtimeStatus={false} // Disable real-time status for search results
                 />
               </div>
@@ -174,4 +175,3 @@ export default function SearchSectionContent({
     </div>
   );
 }
-

@@ -11,28 +11,28 @@ import { defineOpenSearch } from './opensearch/resource';
 
 /*
  * 📈 SCALING CONFIGURATION GUIDE
- * 
+ *
  * Current setup is optimized for LOW USER COUNT (< 50 users)
- * 
+ *
  * WHEN TO SCALE UP:
- * 
+ *
  * 🔹 50-100 Users:
  *   - No changes needed
- * 
+ *
  * 🔸 100-500 Users:
  *   - No changes needed (already at AWS minimum 128MB)
- * 
+ *
  * 🔹 500-1000 Users:
  *   - openSearchClient: memoryMB: 128 → 256
  *   - presenceCleanup: memoryMB: 128 → 256, schedule: 'every 5m' → 'every 2m'
  *   - OpenSearch replicas: 0 → 1 (for production reliability)
- * 
+ *
  * 🔸 1000+ Users:
  *   - openSearchClient: memoryMB: 256 → 512
  *   - presenceCleanup: schedule: 'every 2m' → 'every 1m'
  *   - Consider DynamoDB provisioned capacity
  *   - Add CloudWatch alarms for performance monitoring
- * 
+ *
  * 💰 ESTIMATED MONTHLY COSTS:
  *   - Current (< 50 users): $15-30/month
  *   - 100 users: $25-50/month

@@ -188,7 +188,6 @@ async function searchUsers(
   limit: number = 10,
   filters?: Record<string, any>
 ): Promise<SearchResponse> {
-
   const searchBody: any = {
     size: limit,
     query: {
