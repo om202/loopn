@@ -463,6 +463,22 @@ async function bulkIndexUsers(
   return { success: true };
 }
 
+/*
+ * SIMILARITY THRESHOLD GUIDE:
+ * 
+ * CURRENT (TESTING): Very permissive thresholds to see all possible results
+ * - Early Filter: 0.05 (5% similarity)
+ * - Final Filter: 0.05 (5% similarity)
+ * 
+ * PRODUCTION OPTIMAL THRESHOLDS:
+ * - Early Filter: 0.25-0.30 (25-30% similarity) - Good quality candidates
+ * - Final Filter: 0.20-0.25 (20-25% similarity) - Relevant results
+ * - Keyword Filter: 0.15-0.20 (15-20% keyword match) - Meaningful matches
+ * 
+ * PERFORMANCE SETTINGS:
+ * - TESTING: Process 25x limit, batch size 150 (comprehensive but slower)
+ * - PRODUCTION: Process 10-15x limit, batch size 50-100 (balanced performance)
+ */
 async function searchUsers(
   query: string,
   limit: number
@@ -488,13 +504,15 @@ async function searchUsers(
   const results: SearchResult[] = [];
   let lastEvaluatedKey: Record<string, AttributeValue> | undefined;
   let processedItems = 0;
-  const maxItemsToProcess = limit * 10; // Process at most 10x the limit to find good matches
+  const maxItemsToProcess = limit * 25; // TESTING: Process 25x limit for comprehensive results
+  // PRODUCTION OPTIMAL: limit * 10-15 for performance balance
 
   do {
     const scanParams = {
       TableName: USER_PROFILE_TABLE,
       FilterExpression: 'attribute_exists(profileEmbedding)',
-      Limit: 100, // Process in smaller batches
+      Limit: 150, // TESTING: Larger batches for comprehensive results
+      // PRODUCTION OPTIMAL: 50-100 for performance balance
       ExclusiveStartKey: lastEvaluatedKey,
       // Add projection to only fetch necessary fields for performance
       ProjectionExpression:
@@ -514,8 +532,10 @@ async function searchUsers(
           userProfile.profileEmbedding
         );
 
-        // Early filtering with higher threshold to reduce processing
-        if (similarity < 0.3) return null;
+        // Early filtering - minimal threshold for testing
+        // PRODUCTION OPTIMAL: 0.25-0.30 for quality results
+        // TESTING: 0.05 to see almost all candidates
+        if (similarity < 0.05) return null;
 
         return {
           userId: userProfile.userId,
@@ -548,8 +568,10 @@ async function searchUsers(
   } while (lastEvaluatedKey);
 
   // Sort by score and apply final filtering
+  // PRODUCTION OPTIMAL: 0.20-0.25 for relevant results
+  // TESTING: 0.05 to see most candidates with any similarity
   const finalResults = results
-    .filter((result: SearchResult) => result.score >= 0.25)
+    .filter((result: SearchResult) => result.score >= 0.05)
     .sort((a: SearchResult, b: SearchResult) => b.score - a.score)
     .slice(0, limit);
 
@@ -855,13 +877,15 @@ async function keywordSearch(
   const results: SearchResult[] = [];
   let lastEvaluatedKey: Record<string, AttributeValue> | undefined;
   let processedItems = 0;
-  const maxItemsToProcess = limit * 8; // Process fewer items for keyword search
+  const maxItemsToProcess = limit * 20; // TESTING: Process 20x limit for comprehensive keyword search
+  // PRODUCTION OPTIMAL: limit * 8-12 for performance balance
 
   do {
     const scanParams = {
       TableName: USER_PROFILE_TABLE,
       FilterExpression: 'attribute_exists(profileEmbedding)',
-      Limit: 50, // Smaller batch size for keyword processing
+      Limit: 100, // TESTING: Larger batches for comprehensive keyword search
+      // PRODUCTION OPTIMAL: 30-50 for performance balance
       ExclusiveStartKey: lastEvaluatedKey,
       ProjectionExpression:
         'userId, jobRole, companyName, industry, yearsOfExperience, education, about, interests, skills',
@@ -904,8 +928,10 @@ async function keywordSearch(
         const frequencyBonus = Math.min(totalMatches / 10, 0.3); // Cap bonus at 0.3
         const keywordScore = termMatchRatio + frequencyBonus;
 
-        // Early filtering - only keep results with decent keyword matches
-        if (keywordScore <= 0.2) return null;
+        // Early filtering - minimal keyword threshold for testing
+        // PRODUCTION OPTIMAL: 0.15-0.20 for relevant keyword matches
+        // TESTING: 0.05 to see almost any keyword match
+        if (keywordScore <= 0.05) return null;
 
         return {
           userId: userProfile.userId,
