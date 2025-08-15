@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Search } from 'lucide-react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import {
@@ -45,28 +45,7 @@ export default function SearchSectionContent({
   const [isSearching, setIsSearching] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
-  const [currentUserProfile, setCurrentUserProfile] =
-    useState<UserProfile | null>(null);
-
   const { user } = useAuthenticator();
-
-  // Load current user profile for search context
-  useEffect(() => {
-    let mounted = true;
-    const loadCurrentUserProfile = async () => {
-      if (!user?.userId) return;
-      try {
-        const profile = await UserProfileService.getProfileDetails(user.userId);
-        if (mounted) setCurrentUserProfile(profile);
-      } catch (error) {
-        console.error('Error loading current user profile for search:', error);
-      }
-    };
-    loadCurrentUserProfile();
-    return () => {
-      mounted = false;
-    };
-  }, [user?.userId]);
 
   const performSearch = useCallback(
     async (searchTerm: string) => {
@@ -78,19 +57,9 @@ export default function SearchSectionContent({
       setSearchResults([]); // Clear previous results immediately
 
       try {
-        // Use advanced RAG search if user profile is available, otherwise fall back to intelligent search
-        const userContext = currentUserProfile
-          ? {
-              userProfile: {
-                jobRole: currentUserProfile.jobRole,
-                industry: currentUserProfile.industry,
-                yearsOfExperience: currentUserProfile.yearsOfExperience,
-                companyName: currentUserProfile.companyName,
-                skills: currentUserProfile.skills,
-                interests: currentUserProfile.interests,
-              },
-            }
-          : undefined;
+        // Use advanced RAG search without user profile context for generic results
+        // const userContext = currentUserProfile ? { ... } : undefined; // DISABLED: User profile context
+        const userContext = undefined; // Generic search without personalization
 
         const response = await VectorSearchService.advancedRAGSearch(
           searchTerm.trim(),
@@ -177,7 +146,7 @@ export default function SearchSectionContent({
         setIsSearching(false);
       }
     },
-    [isSearching, user, currentUserProfile]
+    [isSearching, user]
   );
 
   // Effect to handle search from external search bar

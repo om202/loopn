@@ -465,17 +465,17 @@ async function bulkIndexUsers(
 
 /*
  * SIMILARITY THRESHOLD GUIDE:
- * 
+ *
  * CURRENT (BALANCED): Good balance between relevance and coverage
  * - Early Filter: 0.18 (18% similarity) - Relevant candidates with good coverage
  * - Final Filter: 0.15 (15% similarity) - Quality results with decent quantity
  * - Keyword Filter: 0.12 (12% keyword match) - Meaningful keyword matches
- * 
+ *
  * PRODUCTION OPTIMAL THRESHOLDS:
  * - Early Filter: 0.25-0.30 (25-30% similarity) - High quality candidates
  * - Final Filter: 0.20-0.25 (20-25% similarity) - Very relevant results
  * - Keyword Filter: 0.15-0.20 (15-20% keyword match) - Strong keyword matches
- * 
+ *
  * PERFORMANCE SETTINGS:
  * - BALANCED: Process 18x limit, batch size 120 (good coverage with reasonable speed)
  * - PRODUCTION: Process 10-15x limit, batch size 50-100 (optimal performance)
@@ -929,7 +929,7 @@ async function keywordSearch(
         const frequencyBonus = Math.min(totalMatches / 10, 0.3); // Cap bonus at 0.3
         const keywordScore = termMatchRatio + frequencyBonus;
 
-        // Early filtering - balanced keyword threshold 
+        // Early filtering - balanced keyword threshold
         // PRODUCTION OPTIMAL: 0.15-0.20 for relevant keyword matches
         // BALANCED: 0.12 for meaningful keyword matches with good coverage
         if (keywordScore <= 0.12) return null;

@@ -29,7 +29,6 @@ interface RAGSearchState {
 export default function AdvancedRAGSearch({
   onUserSelect,
   currentUserId: _currentUserId,
-  userProfile,
 }: AdvancedRAGSearchProps) {
   const [query, setQuery] = useState('');
   const [searchState, setSearchState] = useState<RAGSearchState>({
@@ -63,10 +62,12 @@ export default function AdvancedRAGSearch({
     setSearchState(prev => ({ ...prev, isSearching: true, error: undefined }));
 
     try {
-      const userContext = {
-        userProfile: userProfile || {},
-        searchHistory: [], // Could be implemented later
-      };
+      // DISABLED: User profile context for generic search results
+      // const userContext = {
+      //   userProfile: userProfile || {},
+      //   searchHistory: [], // Could be implemented later
+      // };
+      const userContext = undefined; // Generic search without personalization
 
       const response: VectorSearchResponse =
         await VectorSearchService.advancedRAGSearch(
