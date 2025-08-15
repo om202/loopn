@@ -45,10 +45,8 @@ interface EmbeddingResponse {
   results?: SearchResult[];
   enhancedResults?: EnhancedSearchResult[];
   enhancedQuery?: string;
-  searchInsights?: string;
   keywordTerms?: string[];
   hybridScores?: { semantic: number; keyword: number; combined: number }[];
-  ragReasoning?: string;
   error?: string;
 }
 
@@ -996,54 +994,37 @@ async function advancedRAGSearch(
         results: [],
         keywordTerms: allKeywords,
         hybridScores: [],
-        ragReasoning: `No matches found for "${query}". Tried ${allKeywords.length} expanded terms including: ${allKeywords.slice(0, 5).join(', ')}.`,
-        searchInsights:
-          'No relevant professionals found. Try broader search terms or different keywords.',
       };
     }
 
     // Step 3: LLM Reasoning and Filtering
     console.log('Step 3: Applying LLM reasoning...');
-    const ragReasoningPrompt = `You are an expert professional matchmaker analyzing search results for optimal relevance.
+    const ragReasoningPrompt = `You are a professional matching system. Rank and filter these search results.
 
 SEARCH QUERY: "${query}"
-USER CONTEXT: ${JSON.stringify(userContext?.userProfile || {}, null, 2)}
+USER PROFILE: ${JSON.stringify(userContext?.userProfile || {}, null, 2)}
 
-HYBRID SEARCH RESULTS (combining semantic similarity + keyword matching):
+SEARCH RESULTS:
 ${JSON.stringify(hybridResults.slice(0, 15), null, 2)}
 
-KEYWORD EXPANSION USED:
-- Expanded Terms: ${keywordExpansion.expandedTerms.join(', ')}
-- Synonyms: ${keywordExpansion.synonyms.join(', ')}  
-- Related Terms: ${keywordExpansion.relatedTerms.join(', ')}
+TASK: Select top ${limit} most relevant professionals. Score based on:
+1. Direct relevance to search query
+2. Profile compatibility 
+3. Professional value match
 
-TASK: Select the top ${limit} most relevant professionals and provide reasoning.
-
-SELECTION CRITERIA (in order of importance):
-1. Direct relevance to search query and user's needs
-2. Quality of profile match (skills, experience, industry)
-3. Potential for meaningful professional relationship
-4. Complementary expertise that adds value
-5. Appropriate experience level for collaboration
-
-Return ONLY a valid JSON object:
+Return ONLY valid JSON:
 {
   "selectedResults": [
     {
       "userId": "user123",
       "score": 0.85,
       "profile": {...},
-      "reasoningScore": 92,
-      "relevanceReason": "Strong match because...",
-      "valueProposition": "Would be valuable for..."
+      "reasoningScore": 92
     }
-  ],
-  "overallReasoning": "Selected these professionals because...",
-  "searchQuality": "excellent|good|fair|poor",
-  "suggestions": ["suggestion1", "suggestion2"]
+  ]
 }
 
-IMPORTANT: Only include professionals with reasoningScore >= 70. If fewer than ${limit} qualify, return only the qualified ones.`;
+IMPORTANT: Only include professionals with reasoningScore >= 70.`;
 
     const ragResponse = await invokeClaude(ragReasoningPrompt);
 
@@ -1065,9 +1046,6 @@ IMPORTANT: Only include professionals with reasoningScore >= 70. If fewer than $
       );
       ragResult = {
         selectedResults: hybridResults.slice(0, limit),
-        overallReasoning: 'LLM reasoning failed, using hybrid search results',
-        searchQuality: 'fair',
-        suggestions: ['Try more specific search terms', 'Broaden your query'],
       };
     }
 
@@ -1081,8 +1059,6 @@ IMPORTANT: Only include professionals with reasoningScore >= 70. If fewer than $
       results: finalResults,
       keywordTerms: allKeywords,
       hybridScores: hybridScores.slice(0, finalResults.length),
-      ragReasoning: ragResult.overallReasoning,
-      searchInsights: `Advanced RAG search found ${finalResults.length} highly relevant matches. Search quality: ${ragResult.searchQuality}. ${ragResult.suggestions ? 'Suggestions: ' + ragResult.suggestions.join(', ') : ''}`,
     };
   } catch (error: unknown) {
     console.error('Error in advanced RAG search:', error);
@@ -1093,8 +1069,6 @@ IMPORTANT: Only include professionals with reasoningScore >= 70. If fewer than $
       const fallbackResults = await searchUsers(query, limit);
       return {
         ...fallbackResults,
-        ragReasoning: `Advanced RAG search failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
-        searchInsights: `Fallback to basic search used due to RAG failure.`,
       };
     } catch (_fallbackError: unknown) {
       return {
@@ -1156,10 +1130,6 @@ async function intelligentSearch(
       success: true,
       results: finalResults, // Use regular results format, not enhancedResults
       enhancedQuery: searchQuery,
-      searchInsights:
-        finalResults.length > 0
-          ? `Found ${finalResults.length} matches using AI-enhanced search. Query enhanced from "${query}" to "${searchQuery}"`
-          : `No relevant matches found for "${query}". Try broader search terms or check if professionals with matching skills are in the system.`,
     };
   } catch (error: unknown) {
     console.error('Error in intelligent search:', error);
@@ -1170,7 +1140,6 @@ async function intelligentSearch(
       const fallbackResults = await searchUsers(query, limit);
       return {
         ...fallbackResults,
-        searchInsights: `AI search failed, used basic search: ${error instanceof Error ? error.message : 'Unknown error'}`,
       };
     } catch (fallbackError: unknown) {
       return {

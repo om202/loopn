@@ -47,7 +47,6 @@ export default function SearchSectionContent({
   const [hasSearched, setHasSearched] = useState(false);
   const [currentUserProfile, setCurrentUserProfile] =
     useState<UserProfile | null>(null);
-  const [searchInsights, setSearchInsights] = useState<string>('');
 
   const { user } = useAuthenticator();
 
@@ -102,19 +101,13 @@ export default function SearchSectionContent({
           query: searchTerm,
           enhancedQuery: response.enhancedQuery,
           resultsCount: response.results?.length || 0,
-          ragReasoning: response.ragReasoning,
-          searchInsights: response.searchInsights,
         });
 
         if (!response.success) {
           setError(response.error || 'Search failed');
           setSearchResults([]);
-          setSearchInsights('');
           return;
         }
-
-        // Set search insights if available
-        setSearchInsights(response.searchInsights || '');
 
         // Filter out current user and enhance results with full profile data
         const searchResults = response.results || [];
@@ -233,20 +226,6 @@ export default function SearchSectionContent({
               Found {searchResults.length} professionals matching "{query}"
             </div>
 
-            {/* Search Insights */}
-            {searchInsights && (
-              <div className='mb-4 p-3 bg-blue-50 rounded-lg border border-blue-200'>
-                <div className='flex items-start space-x-2'>
-                  <div className='w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0'></div>
-                  <div>
-                    <p className='text-sm font-medium text-blue-900 mb-1'>
-                      AI Search Insights
-                    </p>
-                    <p className='text-xs text-blue-800'>{searchInsights}</p>
-                  </div>
-                </div>
-              </div>
-            )}
             {searchResults.map(result => {
               if (result.isLoading) {
                 return (

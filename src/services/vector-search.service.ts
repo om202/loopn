@@ -31,10 +31,8 @@ export interface VectorSearchResponse {
   results?: SearchResult[];
   enhancedResults?: EnhancedSearchResult[];
   enhancedQuery?: string;
-  searchInsights?: string;
   keywordTerms?: string[];
   hybridScores?: { semantic: number; keyword: number; combined: number }[];
-  ragReasoning?: string;
   error?: string;
 }
 

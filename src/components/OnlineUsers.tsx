@@ -578,7 +578,6 @@ export default function OnlineUsers({
         <div className='flex-shrink-0 mb-2 sm:mb-2'>
           <SearchUser
             onProfessionalRequest={handleProfessionalRequest}
-            enableAdvancedRAG={true}
             userProfile={currentUserProfile || undefined}
           />
         </div>
