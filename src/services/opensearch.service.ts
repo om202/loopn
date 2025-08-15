@@ -57,9 +57,6 @@ export class OpenSearchService {
         filters: filters ? JSON.stringify(filters) : undefined,
       });
 
-      console.log('OpenSearch service received response:', response);
-      console.log('Response data:', response.data);
-      
       // Parse the JSON string response
       const parsedData = typeof response.data === 'string' 
         ? JSON.parse(response.data) 

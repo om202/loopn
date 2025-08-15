@@ -47,25 +47,11 @@ export default function SearchSectionContent({
       setHasSearched(true);
       setSearchResults([]); // Clear previous results immediately
 
-      const searchStartTime = performance.now();
-      console.log(`🚀 Starting search for: "${searchTerm.trim()}"`);
-
       try {
         const response = await OpenSearchService.searchUsers(
           searchTerm.trim(),
           10
         );
-
-        const searchEndTime = performance.now();
-        console.log(
-          `⚡ Search completed in ${(searchEndTime - searchStartTime).toFixed(2)}ms`
-        );
-
-        console.info('OpenSearch Results:', {
-          originalQuery: searchTerm,
-          resultsCount: response.results?.length || 0,
-          total: response.total || 0,
-        });
 
         if (!response.success) {
           setError(response.error || 'Search failed');
@@ -79,12 +65,6 @@ export default function SearchSectionContent({
           (result: SearchResult) => result.userId !== user.userId
         );
 
-        console.log('🔍 Search results processed:', {
-          totalResults: searchResults.length,
-          filteredCount: filteredResults.length,
-          currentUserId: user.userId,
-        });
-
         // Set results directly - no need for additional profile fetching
         setSearchResults(filteredResults);
       } catch (error) {
@@ -92,10 +72,6 @@ export default function SearchSectionContent({
         setError('An error occurred while searching');
         setSearchResults([]);
       } finally {
-        const totalEndTime = performance.now();
-        console.log(
-          `🏁 Search process finished in ${(totalEndTime - searchStartTime).toFixed(2)}ms`
-        );
         setIsSearching(false);
       }
     },
