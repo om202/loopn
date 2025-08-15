@@ -55,8 +55,8 @@ const POSSIBLE_MODELS = [
   'amazon.titan-embed-text-v2:0', // V2 is granted, try this first
   'amazon.titan-embed-text-v1', // Fallback (might not be available)
 ];
-// Use Claude 3.5 Haiku with cross-region inference profile
-const CLAUDE_MODEL_ID = 'us.anthropic.claude-3-5-haiku-20241022-v1:0';
+// Use Mistral Small (24.02)
+const MISTRAL_MODEL_ID = 'mistral.mistral-small-2402-v1:0';
 const EMBEDDING_DIMENSION = 1024; // Titan Text Embeddings v2 produces 1024-dimensional vectors
 const USER_PROFILE_TABLE = process.env.USER_PROFILE_TABLE || 'UserProfile';
 
@@ -501,21 +501,17 @@ async function searchUsers(
   };
 }
 
-// Helper function to invoke Claude 3.5 Sonnet
-async function invokeClaude(prompt: string): Promise<string> {
+// Helper function to invoke Mistral Small
+async function invokeMistral(prompt: string): Promise<string> {
   try {
     const command = new InvokeModelCommand({
-      modelId: CLAUDE_MODEL_ID,
+      modelId: MISTRAL_MODEL_ID,
       body: JSON.stringify({
-        anthropic_version: 'bedrock-2023-05-31',
+        prompt: prompt,
         max_tokens: 2000,
-        messages: [
-          {
-            role: 'user',
-            content: prompt,
-          },
-        ],
         temperature: 0.1, // Low temperature for consistent results
+        top_p: 0.9,
+        stop: ["</s>"]
       }),
       contentType: 'application/json',
       accept: 'application/json',
@@ -524,20 +520,20 @@ async function invokeClaude(prompt: string): Promise<string> {
     const response = await bedrockClient.send(command);
     const responseBody = JSON.parse(new TextDecoder().decode(response.body));
 
-    if (!responseBody.content || responseBody.content.length === 0) {
-      throw new Error('No content in Claude response');
+    if (!responseBody.outputs || responseBody.outputs.length === 0) {
+      throw new Error('No content in Mistral response');
     }
 
-    return responseBody.content[0].text;
+    return responseBody.outputs[0].text;
   } catch (error: unknown) {
-    console.error('Error invoking Claude:', error);
+    console.error('Error invoking Mistral:', error);
     throw new Error(
-      `Claude invocation failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+      `Mistral invocation failed: ${error instanceof Error ? error.message : 'Unknown error'}`
     );
   }
 }
 
-// Enhanced query function using Claude
+// Enhanced query function using Mistral
 async function enhanceQuery(
   originalQuery: string,
   userContext?: SearchContext
@@ -588,11 +584,11 @@ Examples:
 - Current User: "Senior Product Manager at tech startup" searching "find a co-founder" → enhancedQuery: "technical co-founder CTO startup founder software engineer entrepreneur full-stack developer", searchTerms: ["co-founder", "CTO", "technical founder", "startup founder"], intent: "Senior PM looking for a technical business partner to complement product expertise"
 - Current User: "Junior Frontend Developer" searching "backend engineer" → enhancedQuery: "backend engineer software engineer full-stack developer API developer senior backend mentor", searchTerms: ["backend", "software engineer", "API developer", "senior mentor"], intent: "Junior frontend developer seeking backend expertise for collaboration or learning"`;
 
-    console.log('Calling Claude with prompt length:', prompt.length);
-    const response = await invokeClaude(prompt);
-    console.log('Claude response:', response);
+    console.log('Calling Mistral with prompt length:', prompt.length);
+    const response = await invokeMistral(prompt);
+    console.log('Mistral response:', response);
 
-    // Extract JSON from Claude's response (in case there's extra text)
+    // Extract JSON from Mistral's response (in case there's extra text)
     let jsonText = response.trim();
 
     // Try to find JSON object in the response
@@ -624,7 +620,7 @@ Examples:
   }
 }
 
-// Result reranking function using Claude
+// Result reranking function using Mistral
 async function rerankResultsFunction(
   vectorResults: SearchResult[],
   originalQuery: string,
@@ -687,7 +683,7 @@ Return ONLY a valid JSON array where each object has this exact structure:
 
 Ensure the array maintains the same order as the input profiles.`;
 
-    const response = await invokeClaude(prompt);
+    const response = await invokeMistral(prompt);
     const enhancedResults: EnhancedSearchResult[] = JSON.parse(response);
 
     return {
@@ -695,26 +691,26 @@ Ensure the array maintains the same order as the input profiles.`;
       results: enhancedResults,
     };
   } catch (error: unknown) {
-    console.error('Error reranking results:', error);
-    // Fallback: return original results with basic confidence scores
-    const fallbackResults: EnhancedSearchResult[] = vectorResults.map(
-      result => ({
-        ...result,
-        confidenceScore: Math.round(result.score * 100),
-        matchExplanation: `${Math.round(result.score * 100)}% semantic similarity match`,
-        relevanceFactors: ['Semantic similarity'],
-      })
-    );
+          console.error('Error reranking results:', error);
+      // Fallback: return original results with basic confidence scores
+      const fallbackResults: EnhancedSearchResult[] = vectorResults.map(
+        result => ({
+          ...result,
+          confidenceScore: Math.round(result.score * 100),
+          matchExplanation: `${Math.round(result.score * 100)}% semantic similarity match`,
+          relevanceFactors: ['Semantic similarity'],
+        })
+      );
 
-    return {
-      success: true,
-      results: fallbackResults,
-      error: `Claude reranking failed, using fallback: ${error instanceof Error ? error.message : 'Unknown error'}`,
-    };
+      return {
+        success: true,
+        results: fallbackResults,
+        error: `Mistral reranking failed, using fallback: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      };
   }
 }
 
-// Keyword expansion function using Claude
+// Keyword expansion function using Mistral
 async function expandKeywords(
   originalQuery: string,
   userContext?: SearchContext
@@ -754,7 +750,7 @@ Examples:
 - "software engineer" → synonyms: ["developer", "programmer", "software developer"], relatedTerms: ["full stack", "backend", "frontend", "DevOps", "SRE"]
 - "marketing" → synonyms: ["marketer", "marketing specialist"], relatedTerms: ["digital marketing", "content marketing", "growth marketing", "brand manager"]`;
 
-    const response = await invokeClaude(prompt);
+    const response = await invokeMistral(prompt);
 
     // Extract JSON from response
     let jsonText = response.trim();
@@ -1026,7 +1022,7 @@ Return ONLY valid JSON:
 
 IMPORTANT: Only include professionals with reasoningScore >= 70.`;
 
-    const ragResponse = await invokeClaude(ragReasoningPrompt);
+    const ragResponse = await invokeMistral(ragReasoningPrompt);
 
     let ragResult;
     try {
@@ -1088,7 +1084,7 @@ async function intelligentSearch(
   try {
     console.log(`Starting intelligent search for query: "${query}"`);
 
-    // Step 1: Enhance query with Claude
+    // Step 1: Enhance query with Mistral
     console.log('Calling enhanceQuery...');
     const queryEnhancement = await enhanceQuery(query, userContext);
     console.log(
