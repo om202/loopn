@@ -91,7 +91,7 @@ export function defineOpenSearch(stack: Stack, lambdaRole?: iam.IRole) {
               ],
             },
           ],
-          Principal: lambdaRole ? [lambdaRole.roleArn] : [],
+          Principal: lambdaRole ? [lambdaRole.roleArn] : ['*'],
         },
       ]),
     }

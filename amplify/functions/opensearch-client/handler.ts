@@ -50,7 +50,9 @@ interface SearchResponse {
 
 export const handler = async (event: any): Promise<SearchResponse> => {
   try {
+    console.log('OpenSearch handler called with event:', JSON.stringify(event, null, 2));
     const request = event.arguments as SearchRequest;
+    console.log('Parsed request:', JSON.stringify(request, null, 2));
 
     switch (request.action) {
       case 'search_users':
@@ -186,6 +188,8 @@ async function searchUsers(
   limit: number = 10,
   filters?: Record<string, any>
 ): Promise<SearchResponse> {
+  console.log('searchUsers called with:', { query, limit, filters });
+  console.log('OpenSearch endpoint:', OPENSEARCH_ENDPOINT);
   const searchBody: any = {
     size: limit,
     query: {
@@ -316,9 +320,25 @@ async function indexUser(
   };
 
   try {
+    // First, delete any existing documents for this user to avoid duplicates
+    try {
+      await client.deleteByQuery({
+        index: USER_INDEX,
+        body: {
+          query: {
+            term: { userId: userId }
+          }
+        },
+        refresh: true,
+      });
+    } catch (deleteError) {
+      // Ignore delete errors (user might not exist yet)
+      console.log('Delete query failed (user might not exist):', deleteError);
+    }
+
+    // Then index the new document
     await client.index({
       index: USER_INDEX,
-      id: userId,
       body: document,
       refresh: true, // Make immediately searchable
     });
@@ -333,14 +353,19 @@ async function indexUser(
 // Get a specific user
 async function getUser(userId: string): Promise<SearchResponse> {
   try {
-    const response = await client.get({
+    const response = await client.search({
       index: USER_INDEX,
-      id: userId,
+      body: {
+        query: {
+          term: { userId: userId }
+        }
+      }
     });
 
     return {
       success: true,
-      results: [response.body._source],
+      results: response.body.hits.hits.map((hit: any) => hit._source),
+      total: response.body.hits.total.value
     };
   } catch (error: any) {
     if (error.meta?.statusCode === 404) {
@@ -377,13 +402,21 @@ async function updateUser(
   };
 
   try {
-    await client.update({
+    // First, delete any existing documents for this user
+    await client.deleteByQuery({
       index: USER_INDEX,
-      id: userId,
       body: {
-        doc: updateDoc,
-        doc_as_upsert: true,
+        query: {
+          term: { userId: userId }
+        }
       },
+      refresh: true,
+    });
+
+    // Then index the updated document
+    await client.index({
+      index: USER_INDEX,
+      body: updateDoc,
       refresh: true,
     });
 
@@ -397,9 +430,13 @@ async function updateUser(
 // Delete a user
 async function deleteUser(userId: string): Promise<SearchResponse> {
   try {
-    await client.delete({
+    await client.deleteByQuery({
       index: USER_INDEX,
-      id: userId,
+      body: {
+        query: {
+          term: { userId: userId }
+        }
+      },
       refresh: true,
     });
 
