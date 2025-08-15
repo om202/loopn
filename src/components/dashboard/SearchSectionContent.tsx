@@ -182,7 +182,7 @@ export default function SearchSectionContent({
         ) : isSearching ? (
           <div>
             <div className='flex items-center gap-3 text-sm text-zinc-600'>
-              <span>Searching for professionals matching "{query}"...</span>
+              <span>Just a moment...</span>
             </div>
           </div>
         ) : error ? (
@@ -204,12 +204,12 @@ export default function SearchSectionContent({
             </p>
           </div>
         ) : (
-          <div className='space-y-2.5 sm:space-y-3'>
+          <div className='space-y-2.5 sm:space-y-3 animate-fade-in'>
             <div className='text-sm text-zinc-600 mb-4'>
-              Found {searchResults.length} professionals matching "{query}"
+              Found {searchResults.length} results for "{query}"
             </div>
 
-            {searchResults.map(result => {
+            {searchResults.map((result, _index) => {
               if (result.isLoading) {
                 return (
                   <div

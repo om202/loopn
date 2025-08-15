@@ -92,6 +92,20 @@ body {
   animation: reaction-pop 0.4s ease-out;
 }
 
+/* Simple search results animation */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
 /* Ensure all interactive elements show pointer cursor on hover */
 button:hover,
 a:hover,

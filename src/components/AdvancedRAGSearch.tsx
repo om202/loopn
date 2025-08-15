@@ -258,7 +258,7 @@ export default function AdvancedRAGSearch({
 
       {/* Results */}
       {searchState.results.length > 0 && (
-        <div className='space-y-4'>
+        <div className='space-y-4 animate-fade-in'>
           <h3 className='font-medium text-gray-900'>
             Found {searchState.results.length} professionals
           </h3>

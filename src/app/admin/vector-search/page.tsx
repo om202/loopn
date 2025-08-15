@@ -306,6 +306,7 @@ export default function VectorSearchAdminPage() {
                       </p>
 
                       {/* Enhanced Results Display */}
+                      <div className='animate-fade-in'>
                       {(
                         testResults.enhancedResults || testResults.results
                       )?.map((result, index: number) => {
@@ -313,7 +314,7 @@ export default function VectorSearchAdminPage() {
                         return (
                           <div
                             key={index}
-                            className='mb-2 p-3 bg-white rounded border'
+                            className='mb-2 p-3 bg-white rounded border transition-all duration-200 hover:shadow-sm'
                           >
                             <div className='flex justify-between items-start'>
                               <div className='flex-1'>
@@ -386,6 +387,7 @@ export default function VectorSearchAdminPage() {
                           </div>
                         );
                       })}
+                      </div>
                     </div>
                   ) : (
                     <p className='text-red-600'>Error: {testResults.error}</p>
