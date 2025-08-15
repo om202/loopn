@@ -689,21 +689,25 @@ RESPOND WITH JSON ONLY - NO OTHER TEXT: [/INST]`;
       jsonText = jsonText.substring(jsonStart, jsonEnd);
     } else {
       // If no JSON found, throw an error to trigger fallback
-      throw new Error(`No valid JSON object found in Mistral response. Response: ${response.substring(0, 200)}...`);
+      throw new Error(
+        `No valid JSON object found in Mistral response. Response: ${response.substring(0, 200)}...`
+      );
     }
 
     console.log('Extracted JSON:', jsonText);
-    
+
     // Validate that we have a non-empty JSON string
     if (!jsonText || jsonText.trim().length === 0) {
       throw new Error('Empty JSON string extracted from Mistral response');
     }
-    
+
     const parsed = JSON.parse(jsonText);
-    
+
     // Validate that the parsed object has the required fields
     if (!parsed.enhancedQuery || !parsed.searchTerms || !parsed.intent) {
-      throw new Error(`Invalid JSON structure from Mistral. Missing required fields. Parsed: ${JSON.stringify(parsed)}`);
+      throw new Error(
+        `Invalid JSON structure from Mistral. Missing required fields. Parsed: ${JSON.stringify(parsed)}`
+      );
     }
 
     return {
@@ -879,19 +883,25 @@ RESPOND WITH JSON ONLY - NO OTHER TEXT: [/INST]`;
       jsonText = jsonText.substring(jsonStart, jsonEnd);
     } else {
       // If no JSON found, throw an error to trigger fallback
-      throw new Error(`No valid JSON object found in keyword expansion response. Response: ${response.substring(0, 200)}...`);
+      throw new Error(
+        `No valid JSON object found in keyword expansion response. Response: ${response.substring(0, 200)}...`
+      );
     }
 
     // Validate that we have a non-empty JSON string
     if (!jsonText || jsonText.trim().length === 0) {
-      throw new Error('Empty JSON string extracted from keyword expansion response');
+      throw new Error(
+        'Empty JSON string extracted from keyword expansion response'
+      );
     }
 
     const parsed = JSON.parse(jsonText);
-    
+
     // Validate that the parsed object has the expected structure
     if (typeof parsed !== 'object' || parsed === null) {
-      throw new Error(`Invalid JSON object from keyword expansion. Parsed: ${JSON.stringify(parsed)}`);
+      throw new Error(
+        `Invalid JSON object from keyword expansion. Parsed: ${JSON.stringify(parsed)}`
+      );
     }
 
     // Ensure original terms are always included in expandedTerms

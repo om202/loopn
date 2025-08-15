@@ -69,9 +69,11 @@ export default function SearchSectionContent({
           userContext,
           10
         );
-        
+
         const searchEndTime = performance.now();
-        console.log(`⚡ Search completed in ${(searchEndTime - searchStartTime).toFixed(2)}ms`);
+        console.log(
+          `⚡ Search completed in ${(searchEndTime - searchStartTime).toFixed(2)}ms`
+        );
 
         console.info('Advanced RAG Search:', {
           originalQuery: searchTerm,
@@ -117,25 +119,32 @@ export default function SearchSectionContent({
 
         // Show results immediately with loading state
         setSearchResults(enhancedResults);
-        console.log('🔍 Search results state updated with loading placeholders');
+        console.log(
+          '🔍 Search results state updated with loading placeholders'
+        );
 
         // Load full profile data for each result in parallel with progressive updates
         console.log('📊 Starting parallel profile loading for all results:', {
           numberOfProfilesToLoad: enhancedResults.length,
           userIds: enhancedResults.map(r => r.userId),
         });
-        
+
         try {
           const profilePromises = enhancedResults.map((result, index) => {
-            console.log(`📊 [${index}] Starting profile load for user: ${result.userId}`);
-            
+            console.log(
+              `📊 [${index}] Starting profile load for user: ${result.userId}`
+            );
+
             return UserProfileService.getProfileDetails(result.userId)
               .then(profile => {
-                console.log(`✅ [${index}] Profile loaded successfully for user: ${result.userId}`, {
-                  profileExists: !!profile,
-                  profileKeys: profile ? Object.keys(profile) : 'null',
-                });
-                
+                console.log(
+                  `✅ [${index}] Profile loaded successfully for user: ${result.userId}`,
+                  {
+                    profileExists: !!profile,
+                    profileKeys: profile ? Object.keys(profile) : 'null',
+                  }
+                );
+
                 // Update this specific result as soon as its profile loads
                 setSearchResults(prev =>
                   prev.map((item, i) =>
@@ -148,43 +157,57 @@ export default function SearchSectionContent({
                       : item
                   )
                 );
-                
-                console.log(`🔄 [${index}] State updated for user: ${result.userId} (loading: false)`);
+
+                console.log(
+                  `🔄 [${index}] State updated for user: ${result.userId} (loading: false)`
+                );
                 return profile;
               })
               .catch(error => {
-                console.error(`❌ [${index}] Error loading profile for user ${result.userId}:`, error);
-                
+                console.error(
+                  `❌ [${index}] Error loading profile for user ${result.userId}:`,
+                  error
+                );
+
                 // Mark this specific result as not loading on error
                 setSearchResults(prev =>
                   prev.map((item, i) =>
                     i === index ? { ...item, isLoading: false } : item
                   )
                 );
-                
-                console.log(`🔄 [${index}] State updated for user: ${result.userId} (loading: false, error)`);
+
+                console.log(
+                  `🔄 [${index}] State updated for user: ${result.userId} (loading: false, error)`
+                );
                 return null;
               });
           });
 
           console.log('⏳ Waiting for all profile promises to complete...');
           const profileResults = await Promise.all(profilePromises);
-          
+
           console.log('🎉 All profile loading completed:', {
             totalPromises: profilePromises.length,
             successfulProfiles: profileResults.filter(p => p !== null).length,
             failedProfiles: profileResults.filter(p => p === null).length,
           });
         } catch (error) {
-          console.error('💥 Critical error in parallel profile loading:', error);
-          console.log('🔧 Applying fallback: marking all results as not loading');
-          
+          console.error(
+            '💥 Critical error in parallel profile loading:',
+            error
+          );
+          console.log(
+            '🔧 Applying fallback: marking all results as not loading'
+          );
+
           // Fallback: mark all as not loading
           setSearchResults(prev =>
             prev.map(item => ({ ...item, isLoading: false }))
           );
-          
-          console.log('🔧 Fallback completed: all results marked as not loading');
+
+          console.log(
+            '🔧 Fallback completed: all results marked as not loading'
+          );
         }
       } catch (error) {
         console.error('Search error:', error);
@@ -192,7 +215,9 @@ export default function SearchSectionContent({
         setSearchResults([]);
       } finally {
         const totalEndTime = performance.now();
-        console.log(`🏁 Complete search process finished in ${(totalEndTime - searchStartTime).toFixed(2)}ms`);
+        console.log(
+          `🏁 Complete search process finished in ${(totalEndTime - searchStartTime).toFixed(2)}ms`
+        );
         setIsSearching(false);
       }
     },
