@@ -419,29 +419,7 @@ export default function VectorSearchAdminPage() {
                                       </div>
                                     )}
 
-                                  {/* Highlights */}
-                                  {result.highlights &&
-                                    Object.keys(result.highlights).length >
-                                      0 && (
-                                      <div className='mt-2 p-2 bg-yellow-50 rounded border border-yellow-200'>
-                                        <p className='text-xs font-medium text-yellow-800'>
-                                          🎯 Search highlights:
-                                        </p>
-                                        {Object.entries(result.highlights).map(
-                                          ([field, highlights]) => (
-                                            <div
-                                              key={field}
-                                              className='text-xs text-yellow-700'
-                                            >
-                                              <strong>{field}:</strong>{' '}
-                                              {Array.isArray(highlights)
-                                                ? highlights.join(' ... ')
-                                                : highlights}
-                                            </div>
-                                          )
-                                        )}
-                                      </div>
-                                    )}
+
                                 </div>
                                 <div className='text-right'>
                                   <p className='text-xs text-gray-500'>

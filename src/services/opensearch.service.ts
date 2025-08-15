@@ -29,7 +29,6 @@ export interface SearchResult {
   userId: string;
   score: number;
   profile: UserProfile;
-  highlights?: Record<string, string[]>;
 }
 
 export interface SearchResponse {

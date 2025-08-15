@@ -196,15 +196,6 @@ async function searchUsers(
         filter: [],
       },
     },
-    highlight: {
-      fields: {
-        fullName: {},
-        jobRole: {},
-        about: {},
-        skills: {},
-        interests: {},
-      },
-    },
     sort: [{ _score: { order: 'desc' } }],
   };
 
@@ -279,7 +270,6 @@ async function searchUsers(
       userId: hit._source.userId,
       score: hit._score,
       profile: hit._source,
-      highlights: hit.highlight || {},
     }));
 
     return {

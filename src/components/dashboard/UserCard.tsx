@@ -70,25 +70,6 @@ const getDisplayName = (
   return `User${userPresence.userId.slice(-4)}`;
 };
 
-// Helper function to render highlighted text
-const renderHighlightedText = (text: string, highlights: string[]) => {
-  if (!highlights || highlights.length === 0) {
-    return text;
-  }
-  
-  // Get the first highlight (most relevant)
-  const highlight = highlights[0];
-  
-  // Return the highlighted text with HTML tags converted to JSX
-  return (
-    <span 
-      dangerouslySetInnerHTML={{ 
-        __html: highlight.replace(/<em>/g, '<mark class="bg-yellow-200 px-1 rounded">').replace(/<\/em>/g, '</mark>') 
-      }} 
-    />
-  );
-};
-
 export default function UserCard({
   userPresence,
   onlineUsers,
@@ -103,7 +84,6 @@ export default function UserCard({
   isProfileSidebarOpen,
   selectedUserId,
   searchProfile,
-  searchHighlights,
   useRealtimeStatus = true,
 }: UserCardProps) {
   const [showCancelDialog, setShowCancelDialog] = useState(false);
@@ -251,24 +231,7 @@ export default function UserCard({
           {/* Profession */}
           {fullProfile?.jobRole && (
             <div className='text-sm text-zinc-600 mb-1.5 truncate'>
-              {searchHighlights?.jobRole 
-                ? renderHighlightedText(fullProfile.jobRole, searchHighlights.jobRole)
-                : fullProfile.jobRole
-              }
-            </div>
-          )}
-
-          {/* Search Highlights */}
-          {searchHighlights && Object.keys(searchHighlights).length > 0 && (
-            <div className='text-xs text-amber-700 bg-amber-50 px-2 py-1 rounded-md border border-amber-200 mb-2'>
-              <span className='font-medium'>🎯 Matches: </span>
-              {Object.entries(searchHighlights).map(([field, highlights], index) => (
-                <span key={field}>
-                  {index > 0 && ', '}
-                  <span className='capitalize'>{field}</span>
-                  {highlights.length > 1 && ` (${highlights.length})`}
-                </span>
-              ))}
+              {fullProfile.jobRole}
             </div>
           )}
         </div>

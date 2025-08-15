@@ -164,7 +164,6 @@ export default function SearchSectionContent({
                   isProfileSidebarOpen={isProfileSidebarOpen}
                   selectedUserId={selectedUserId}
                   searchProfile={result.profile} // OpenSearch profile data
-                  searchHighlights={result.highlights} // OpenSearch highlights showing what matched
                   useRealtimeStatus={false} // Disable real-time status for search results
                 />
               </div>
