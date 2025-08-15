@@ -639,6 +639,8 @@ async function enhanceQuery(
     console.log(`enhanceQuery called with: "${originalQuery}"`);
     const prompt = `[INST] You are a professional search enhancement specialist. Personalize search queries based on user context.
 
+CRITICAL: You MUST respond with ONLY valid JSON. Do not include any explanatory text, comments, or markdown formatting.
+
 SEARCH QUERY: "${originalQuery}"
 
 USER PROFILE:
@@ -656,7 +658,7 @@ TASK: Enhance the search query by considering:
 4. Professional networking value
 5. Cross-functional partnership potential
 
-OUTPUT: Return ONLY valid JSON:
+REQUIRED OUTPUT FORMAT (EXACT JSON ONLY):
 {
   "enhancedQuery": "personalized search terms aligned with user's profile",
   "searchTerms": ["term1", "term2", "term3"],
@@ -668,7 +670,9 @@ Input: Senior PM searching "co-founder"
 Output: {"enhancedQuery": "technical co-founder CTO startup founder software engineer entrepreneur", "searchTerms": ["co-founder", "CTO", "technical founder"], "intent": "Technical business partner to complement product expertise"}
 
 Input: Junior developer searching "backend engineer"  
-Output: {"enhancedQuery": "backend engineer senior mentor full-stack developer API developer", "searchTerms": ["backend engineer", "senior mentor", "API developer"], "intent": "Backend expertise for learning and collaboration"} [/INST]`;
+Output: {"enhancedQuery": "backend engineer senior mentor full-stack developer API developer", "searchTerms": ["backend engineer", "senior mentor", "API developer"], "intent": "Backend expertise for learning and collaboration"}
+
+RESPOND WITH JSON ONLY - NO OTHER TEXT: [/INST]`;
 
     console.log('Calling Mistral with prompt length:', prompt.length);
     const response = await invokeMistral(prompt);
@@ -683,10 +687,24 @@ Output: {"enhancedQuery": "backend engineer senior mentor full-stack developer A
 
     if (jsonStart >= 0 && jsonEnd > jsonStart) {
       jsonText = jsonText.substring(jsonStart, jsonEnd);
+    } else {
+      // If no JSON found, throw an error to trigger fallback
+      throw new Error(`No valid JSON object found in Mistral response. Response: ${response.substring(0, 200)}...`);
     }
 
     console.log('Extracted JSON:', jsonText);
+    
+    // Validate that we have a non-empty JSON string
+    if (!jsonText || jsonText.trim().length === 0) {
+      throw new Error('Empty JSON string extracted from Mistral response');
+    }
+    
     const parsed = JSON.parse(jsonText);
+    
+    // Validate that the parsed object has the required fields
+    if (!parsed.enhancedQuery || !parsed.searchTerms || !parsed.intent) {
+      throw new Error(`Invalid JSON structure from Mistral. Missing required fields. Parsed: ${JSON.stringify(parsed)}`);
+    }
 
     return {
       success: true,
@@ -817,6 +835,8 @@ async function expandKeywords(
 
     const prompt = `[INST] You are a professional search term expansion specialist.
 
+CRITICAL: You MUST respond with ONLY valid JSON. Do not include any explanatory text, comments, or markdown formatting.
+
 TASK: Expand the search query "${originalQuery}" with relevant professional terms.
 
 USER CONTEXT:
@@ -832,7 +852,7 @@ REQUIREMENTS:
 5. Consider different seniority levels
 6. PRESERVE the original search terms - they are important
 
-OUTPUT: Return ONLY valid JSON in this exact format:
+REQUIRED OUTPUT FORMAT (EXACT JSON ONLY):
 {
   "expandedTerms": ["term1", "term2", "term3"],
   "synonyms": ["synonym1", "synonym2"],
@@ -844,7 +864,9 @@ Query: "software engineer"
 Output: {"expandedTerms": ["software engineer", "developer", "programmer"], "synonyms": ["developer", "programmer", "software developer"], "relatedTerms": ["full stack", "backend", "frontend", "DevOps", "SRE"]}
 
 Query: "marketing"  
-Output: {"expandedTerms": ["marketing", "marketer", "digital marketing"], "synonyms": ["marketer", "marketing specialist"], "relatedTerms": ["digital marketing", "content marketing", "growth marketing", "brand manager"]} [/INST]`;
+Output: {"expandedTerms": ["marketing", "marketer", "digital marketing"], "synonyms": ["marketer", "marketing specialist"], "relatedTerms": ["digital marketing", "content marketing", "growth marketing", "brand manager"]}
+
+RESPOND WITH JSON ONLY - NO OTHER TEXT: [/INST]`;
 
     const response = await invokeMistral(prompt);
 
@@ -855,9 +877,22 @@ Output: {"expandedTerms": ["marketing", "marketer", "digital marketing"], "synon
 
     if (jsonStart >= 0 && jsonEnd > jsonStart) {
       jsonText = jsonText.substring(jsonStart, jsonEnd);
+    } else {
+      // If no JSON found, throw an error to trigger fallback
+      throw new Error(`No valid JSON object found in keyword expansion response. Response: ${response.substring(0, 200)}...`);
+    }
+
+    // Validate that we have a non-empty JSON string
+    if (!jsonText || jsonText.trim().length === 0) {
+      throw new Error('Empty JSON string extracted from keyword expansion response');
     }
 
     const parsed = JSON.parse(jsonText);
+    
+    // Validate that the parsed object has the expected structure
+    if (typeof parsed !== 'object' || parsed === null) {
+      throw new Error(`Invalid JSON object from keyword expansion. Parsed: ${JSON.stringify(parsed)}`);
+    }
 
     // Ensure original terms are always included in expandedTerms
     const expandedTerms = [...originalTerms, ...(parsed.expandedTerms || [])];

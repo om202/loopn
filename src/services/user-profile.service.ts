@@ -25,11 +25,26 @@ export class UserProfileService {
    * Get user profile details for display (replaces anonymous summary)
    */
   static async getProfileDetails(userId: string): Promise<UserProfile | null> {
+    const apiStartTime = performance.now();
+    console.log(`🔄 API: Starting getProfileDetails for userId: ${userId}`);
+    
     try {
       const result = await getClient().models.UserProfile.get({ userId });
+      const apiEndTime = performance.now();
+      
+      console.log(`✅ API: getProfileDetails completed for userId: ${userId}`, {
+        duration: `${(apiEndTime - apiStartTime).toFixed(2)}ms`,
+        hasData: !!result.data,
+        dataKeys: result.data ? Object.keys(result.data) : 'null',
+      });
+      
       return result.data || null;
     } catch (error) {
-      console.error('Error getting profile details:', error);
+      const apiEndTime = performance.now();
+      console.error(`❌ API: Error getting profile details for userId: ${userId}`, {
+        duration: `${(apiEndTime - apiStartTime).toFixed(2)}ms`,
+        error: error,
+      });
       return null;
     }
   }

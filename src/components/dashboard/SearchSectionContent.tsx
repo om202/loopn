@@ -56,6 +56,9 @@ export default function SearchSectionContent({
       setHasSearched(true);
       setSearchResults([]); // Clear previous results immediately
 
+      const searchStartTime = performance.now();
+      console.log(`🚀 Starting search for: "${searchTerm.trim()}"`);
+
       try {
         // Use advanced RAG search without user profile context for generic results
         // const userContext = currentUserProfile ? { ... } : undefined; // DISABLED: User profile context
@@ -66,6 +69,9 @@ export default function SearchSectionContent({
           userContext,
           10
         );
+        
+        const searchEndTime = performance.now();
+        console.log(`⚡ Search completed in ${(searchEndTime - searchStartTime).toFixed(2)}ms`);
 
         console.info('Advanced RAG Search:', {
           originalQuery: searchTerm,
@@ -82,9 +88,20 @@ export default function SearchSectionContent({
 
         // Filter out current user and enhance results with full profile data
         const searchResults = response.results || [];
+        console.log('🔍 Raw search results received:', {
+          totalResults: searchResults.length,
+          resultUserIds: searchResults.map(r => r.userId),
+          resultScores: searchResults.map(r => r.score),
+        });
+
         const filteredResults = searchResults.filter(
           result => result.userId !== user.userId
         );
+        console.log('🔍 Filtered search results (excluding current user):', {
+          filteredCount: filteredResults.length,
+          filteredUserIds: filteredResults.map(r => r.userId),
+          currentUserId: user.userId,
+        });
 
         const enhancedResults: EnhancedSearchResult[] = filteredResults.map(
           result => ({
@@ -93,14 +110,32 @@ export default function SearchSectionContent({
           })
         );
 
+        console.log('🔍 Enhanced results with loading state:', {
+          enhancedCount: enhancedResults.length,
+          allMarkedAsLoading: enhancedResults.every(r => r.isLoading === true),
+        });
+
         // Show results immediately with loading state
         setSearchResults(enhancedResults);
+        console.log('🔍 Search results state updated with loading placeholders');
 
         // Load full profile data for each result in parallel with progressive updates
+        console.log('📊 Starting parallel profile loading for all results:', {
+          numberOfProfilesToLoad: enhancedResults.length,
+          userIds: enhancedResults.map(r => r.userId),
+        });
+        
         try {
-          const profilePromises = enhancedResults.map((result, index) =>
-            UserProfileService.getProfileDetails(result.userId)
+          const profilePromises = enhancedResults.map((result, index) => {
+            console.log(`📊 [${index}] Starting profile load for user: ${result.userId}`);
+            
+            return UserProfileService.getProfileDetails(result.userId)
               .then(profile => {
+                console.log(`✅ [${index}] Profile loaded successfully for user: ${result.userId}`, {
+                  profileExists: !!profile,
+                  profileKeys: profile ? Object.keys(profile) : 'null',
+                });
+                
                 // Update this specific result as soon as its profile loads
                 setSearchResults(prev =>
                   prev.map((item, i) =>
@@ -113,37 +148,51 @@ export default function SearchSectionContent({
                       : item
                   )
                 );
+                
+                console.log(`🔄 [${index}] State updated for user: ${result.userId} (loading: false)`);
                 return profile;
               })
               .catch(error => {
-                console.error(
-                  `Error loading profile for user ${result.userId}:`,
-                  error
-                );
+                console.error(`❌ [${index}] Error loading profile for user ${result.userId}:`, error);
+                
                 // Mark this specific result as not loading on error
                 setSearchResults(prev =>
                   prev.map((item, i) =>
                     i === index ? { ...item, isLoading: false } : item
                   )
                 );
+                
+                console.log(`🔄 [${index}] State updated for user: ${result.userId} (loading: false, error)`);
                 return null;
-              })
-          );
+              });
+          });
 
-          // Wait for all profiles to complete
-          await Promise.all(profilePromises);
+          console.log('⏳ Waiting for all profile promises to complete...');
+          const profileResults = await Promise.all(profilePromises);
+          
+          console.log('🎉 All profile loading completed:', {
+            totalPromises: profilePromises.length,
+            successfulProfiles: profileResults.filter(p => p !== null).length,
+            failedProfiles: profileResults.filter(p => p === null).length,
+          });
         } catch (error) {
-          console.error('Error loading profiles in parallel:', error);
+          console.error('💥 Critical error in parallel profile loading:', error);
+          console.log('🔧 Applying fallback: marking all results as not loading');
+          
           // Fallback: mark all as not loading
           setSearchResults(prev =>
             prev.map(item => ({ ...item, isLoading: false }))
           );
+          
+          console.log('🔧 Fallback completed: all results marked as not loading');
         }
       } catch (error) {
         console.error('Search error:', error);
         setError('An error occurred while searching');
         setSearchResults([]);
       } finally {
+        const totalEndTime = performance.now();
+        console.log(`🏁 Complete search process finished in ${(totalEndTime - searchStartTime).toFixed(2)}ms`);
         setIsSearching(false);
       }
     },
