@@ -9,6 +9,38 @@ import { openSearchClient } from './functions/opensearch-client/resource';
 import { autoConfirm } from './functions/auto-confirm/resource';
 import { defineOpenSearch } from './opensearch/resource';
 
+/*
+ * 📈 SCALING CONFIGURATION GUIDE
+ * 
+ * Current setup is optimized for LOW USER COUNT (< 50 users)
+ * 
+ * WHEN TO SCALE UP:
+ * 
+ * 🔹 50-100 Users:
+ *   - No changes needed
+ * 
+ * 🔸 100-500 Users:
+ *   - openSearchClient: memoryMB: 64 → 128
+ *   - presenceCleanup: memoryMB: 64 → 128
+ * 
+ * 🔹 500-1000 Users:
+ *   - openSearchClient: memoryMB: 128 → 256
+ *   - presenceCleanup: schedule: 'every 5m' → 'every 2m'
+ *   - OpenSearch replicas: 0 → 1 (for production reliability)
+ * 
+ * 🔸 1000+ Users:
+ *   - openSearchClient: memoryMB: 256 → 512
+ *   - presenceCleanup: memoryMB: 128 → 256, schedule: 'every 2m' → 'every 1m'
+ *   - Consider DynamoDB provisioned capacity
+ *   - Add CloudWatch alarms for performance monitoring
+ * 
+ * 💰 ESTIMATED MONTHLY COSTS:
+ *   - Current (< 50 users): $15-30/month
+ *   - 100 users: $25-50/month
+ *   - 500 users: $50-100/month
+ *   - 1000+ users: $100-200/month
+ */
+
 /**
  * @see https://docs.amplify.aws/react/build-a-backend/ to add storage, functions, and more
  */

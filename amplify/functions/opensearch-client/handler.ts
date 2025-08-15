@@ -152,7 +152,9 @@ async function initializeIndex(): Promise<SearchResponse> {
         knn: true,
         'knn.algo_param.ef_search': 100,
         // Number of replicas for high availability
-        number_of_replicas: 1,
+        // Current: 0 (cost optimized for low users)
+        // Scale to: 1 when users > 500 for production reliability
+        number_of_replicas: 0,
       },
     },
   };
