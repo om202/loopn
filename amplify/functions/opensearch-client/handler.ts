@@ -271,6 +271,7 @@ async function searchUsers(
     const response = await client.search({
       index: USER_INDEX,
       body: searchBody,
+      request_cache: true, // Enable OpenSearch request cache
     });
 
     const results = response.body.hits.hits.map((hit: any) => ({
