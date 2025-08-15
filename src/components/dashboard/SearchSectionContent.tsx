@@ -133,7 +133,7 @@ export default function SearchSectionContent({
             </p>
           </div>
         ) : (
-          <div className='space-y-2.5 sm:space-y-3 animate-fade-in'>
+          <div className='space-y-2.5 sm:space-y-3'>
             <div className='text-sm text-zinc-600 mb-4'>
               Found {searchResults.length} results for "{query}"
             </div>
