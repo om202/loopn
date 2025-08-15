@@ -508,10 +508,10 @@ async function invokeMistral(prompt: string): Promise<string> {
       modelId: MISTRAL_MODEL_ID,
       body: JSON.stringify({
         prompt: prompt,
-        max_tokens: 2000,
-        temperature: 0.1, // Low temperature for consistent results
-        top_p: 0.9,
-        stop: ["</s>"]
+        max_tokens: 1500,
+        temperature: 0.15, // Optimized for RAG tasks
+        top_p: 0.95,
+        stop: ["</s>", "\n\n", "[/INST]"]
       }),
       contentType: 'application/json',
       accept: 'application/json',
@@ -546,43 +546,38 @@ async function enhanceQuery(
 }> {
   try {
     console.log(`enhanceQuery called with: "${originalQuery}"`);
-    const prompt = `You are an expert at understanding professional search queries and providing personalized search enhancements.
+    const prompt = `[INST] You are a professional search enhancement specialist. Personalize search queries based on user context.
 
-The CURRENT LOGGED-IN USER is searching for professionals with query: "${originalQuery}"
+SEARCH QUERY: "${originalQuery}"
 
-CURRENT LOGGED-IN USER'S PROFILE:
+USER PROFILE:
 - Role: ${userContext?.userProfile?.jobRole || 'Not specified'}
 - Industry: ${userContext?.userProfile?.industry || 'Not specified'}
-- Experience Level: ${userContext?.userProfile?.yearsOfExperience || 'Not specified'} years
+- Experience: ${userContext?.userProfile?.yearsOfExperience || 'Not specified'} years
 - Company: ${userContext?.userProfile?.companyName || 'Not specified'}
 - Skills: ${userContext?.userProfile?.skills?.join(', ') || 'Not specified'}
 - Interests: ${userContext?.userProfile?.interests?.join(', ') || 'Not specified'}
 
-Based on the CURRENT USER'S profile and their search query, enhance the search by:
-1. Expanding job titles and skills that match the search intent
-2. Adding relevant synonyms and related professional roles
-3. Considering complementary roles that would work well with the CURRENT USER's background
-4. Understanding roles that could collaborate with the CURRENT USER's industry and experience level
-5. Finding professionals who could be valuable connections given the CURRENT USER's career stage
+TASK: Enhance the search query by considering:
+1. User's career stage and experience level
+2. Industry-specific collaboration opportunities
+3. Complementary skills and roles
+4. Professional networking value
+5. Cross-functional partnership potential
 
-PERSONALIZATION GUIDELINES:
-- If the CURRENT USER is senior, prioritize finding other senior professionals or emerging talent they could mentor
-- If the CURRENT USER is junior, focus on mentors, peers, or complementary skills they could learn from
-- Consider industry-specific collaborations and cross-functional partnerships
-- Factor in the CURRENT USER's company size and type for relevant professional matches
-
-Return ONLY a valid JSON object with this exact structure, no additional text or explanations:
+OUTPUT: Return ONLY valid JSON:
 {
-  "enhancedQuery": "expanded search terms that capture the intent better and align with the current user's profile",
+  "enhancedQuery": "personalized search terms aligned with user's profile",
   "searchTerms": ["term1", "term2", "term3"],
-  "intent": "clear description of what the current user is looking for based on their profile"
+  "intent": "what the user is looking for based on their profile"
 }
 
-IMPORTANT: Return ONLY the JSON object, nothing else. No explanations, no notes, no additional text.
+EXAMPLES:
+Input: Senior PM searching "co-founder"
+Output: {"enhancedQuery": "technical co-founder CTO startup founder software engineer entrepreneur", "searchTerms": ["co-founder", "CTO", "technical founder"], "intent": "Technical business partner to complement product expertise"}
 
-Examples:
-- Current User: "Senior Product Manager at tech startup" searching "find a co-founder" → enhancedQuery: "technical co-founder CTO startup founder software engineer entrepreneur full-stack developer", searchTerms: ["co-founder", "CTO", "technical founder", "startup founder"], intent: "Senior PM looking for a technical business partner to complement product expertise"
-- Current User: "Junior Frontend Developer" searching "backend engineer" → enhancedQuery: "backend engineer software engineer full-stack developer API developer senior backend mentor", searchTerms: ["backend", "software engineer", "API developer", "senior mentor"], intent: "Junior frontend developer seeking backend expertise for collaboration or learning"`;
+Input: Junior developer searching "backend engineer"  
+Output: {"enhancedQuery": "backend engineer senior mentor full-stack developer API developer", "searchTerms": ["backend engineer", "senior mentor", "API developer"], "intent": "Backend expertise for learning and collaboration"} [/INST]`;
 
     console.log('Calling Mistral with prompt length:', prompt.length);
     const response = await invokeMistral(prompt);
@@ -723,32 +718,35 @@ async function expandKeywords(
 }> {
   try {
     console.log(`expandKeywords called with: "${originalQuery}"`);
-    const prompt = `You are an expert at expanding professional search terms for better recruitment and networking.
+    const prompt = `[INST] You are a professional search term expansion specialist.
 
-The user is searching for: "${originalQuery}"
+TASK: Expand the search query "${originalQuery}" with relevant professional terms.
 
-USER'S CONTEXT:
+USER CONTEXT:
 - Role: ${userContext?.userProfile?.jobRole || 'Not specified'}
 - Industry: ${userContext?.userProfile?.industry || 'Not specified'}
 - Experience: ${userContext?.userProfile?.yearsOfExperience || 'Not specified'} years
 
-Generate comprehensive keyword expansions including:
-1. Direct synonyms and alternative job titles
-2. Related roles and specializations  
-3. Industry-specific terms
-4. Skills and technologies commonly associated
-5. Experience levels and seniority variations
+REQUIREMENTS:
+1. Generate direct synonyms and alternative job titles
+2. Include related roles and specializations
+3. Add industry-specific terminology
+4. Include relevant skills and technologies
+5. Consider different seniority levels
 
-Return ONLY a valid JSON object with this exact structure:
+OUTPUT: Return ONLY valid JSON in this exact format:
 {
-  "expandedTerms": ["expanded version with all related terms"],
-  "synonyms": ["direct synonyms", "alternative titles"],
-  "relatedTerms": ["related roles", "complementary skills", "industry terms"]
+  "expandedTerms": ["term1", "term2", "term3"],
+  "synonyms": ["synonym1", "synonym2"],
+  "relatedTerms": ["related1", "related2", "related3"]
 }
 
-Examples:
-- "software engineer" → synonyms: ["developer", "programmer", "software developer"], relatedTerms: ["full stack", "backend", "frontend", "DevOps", "SRE"]
-- "marketing" → synonyms: ["marketer", "marketing specialist"], relatedTerms: ["digital marketing", "content marketing", "growth marketing", "brand manager"]`;
+EXAMPLES:
+Query: "software engineer"
+Output: {"expandedTerms": ["software engineer", "developer", "programmer"], "synonyms": ["developer", "programmer", "software developer"], "relatedTerms": ["full stack", "backend", "frontend", "DevOps", "SRE"]}
+
+Query: "marketing"  
+Output: {"expandedTerms": ["marketing", "marketer", "digital marketing"], "synonyms": ["marketer", "marketing specialist"], "relatedTerms": ["digital marketing", "content marketing", "growth marketing", "brand manager"]} [/INST]`;
 
     const response = await invokeMistral(prompt);
 
@@ -995,20 +993,26 @@ async function advancedRAGSearch(
 
     // Step 3: LLM Reasoning and Filtering
     console.log('Step 3: Applying LLM reasoning...');
-    const ragReasoningPrompt = `You are a professional matching system. Rank and filter these search results.
+    const ragReasoningPrompt = `[INST] You are a professional matching AI that ranks search results for optimal relevance.
 
 SEARCH QUERY: "${query}"
-USER PROFILE: ${JSON.stringify(userContext?.userProfile || {}, null, 2)}
 
-SEARCH RESULTS:
+USER PROFILE:
+${JSON.stringify(userContext?.userProfile || {}, null, 2)}
+
+CANDIDATE RESULTS:
 ${JSON.stringify(hybridResults.slice(0, 15), null, 2)}
 
-TASK: Select top ${limit} most relevant professionals. Score based on:
-1. Direct relevance to search query
-2. Profile compatibility 
-3. Professional value match
+TASK: Select the top ${limit} most relevant professionals for this user's search.
 
-Return ONLY valid JSON:
+RANKING CRITERIA:
+1. Direct relevance to search query
+2. Professional compatibility with user's profile
+3. Potential for meaningful collaboration
+4. Complementary skills and experience
+5. Industry alignment
+
+OUTPUT: Return ONLY valid JSON with selected professionals:
 {
   "selectedResults": [
     {
@@ -1020,7 +1024,11 @@ Return ONLY valid JSON:
   ]
 }
 
-IMPORTANT: Only include professionals with reasoningScore >= 70.`;
+REQUIREMENTS:
+- Only include professionals with reasoningScore >= 70
+- Maximum ${limit} results
+- Maintain original profile structure
+- Score professionals 0-100 based on relevance [/INST]`;
 
     const ragResponse = await invokeMistral(ragReasoningPrompt);
 
