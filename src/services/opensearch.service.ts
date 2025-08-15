@@ -10,23 +10,25 @@ export interface SearchFilters {
   skills?: string[];
 }
 
+export interface UserProfile {
+  userId: string;
+  fullName?: string;
+  jobRole?: string;
+  companyName?: string;
+  industry?: string;
+  yearsOfExperience?: number;
+  education?: string;
+  about?: string;
+  interests?: string[];
+  skills?: string[];
+  profilePictureUrl?: string;
+  isOnboardingComplete?: boolean;
+}
+
 export interface SearchResult {
   userId: string;
   score: number;
-  profile: {
-    userId: string;
-    fullName?: string;
-    jobRole?: string;
-    companyName?: string;
-    industry?: string;
-    yearsOfExperience?: number;
-    education?: string;
-    about?: string;
-    interests?: string[];
-    skills?: string[];
-    profilePictureUrl?: string;
-    isOnboardingComplete?: boolean;
-  };
+  profile: UserProfile;
   highlights?: Record<string, string[]>;
 }
 
@@ -71,7 +73,7 @@ export class OpenSearchService {
    */
   static async indexUser(
     userId: string,
-    userProfile: any
+    userProfile: UserProfile
   ): Promise<SearchResponse> {
     try {
       const response = await client.queries.searchUsers({
@@ -95,7 +97,7 @@ export class OpenSearchService {
    */
   static async updateUser(
     userId: string,
-    userProfile: any
+    userProfile: UserProfile
   ): Promise<SearchResponse> {
     try {
       const response = await client.queries.searchUsers({
