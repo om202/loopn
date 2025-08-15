@@ -465,16 +465,16 @@ async function bulkIndexUsers(
 
 /*
  * SIMILARITY THRESHOLD GUIDE:
- * 
+ *
  * CURRENT (TESTING): Very permissive thresholds to see all possible results
  * - Early Filter: 0.05 (5% similarity)
  * - Final Filter: 0.05 (5% similarity)
- * 
+ *
  * PRODUCTION OPTIMAL THRESHOLDS:
  * - Early Filter: 0.25-0.30 (25-30% similarity) - Good quality candidates
  * - Final Filter: 0.20-0.25 (20-25% similarity) - Relevant results
  * - Keyword Filter: 0.15-0.20 (15-20% keyword match) - Meaningful matches
- * 
+ *
  * PERFORMANCE SETTINGS:
  * - TESTING: Process 25x limit, batch size 150 (comprehensive but slower)
  * - PRODUCTION: Process 10-15x limit, batch size 50-100 (balanced performance)
@@ -1105,7 +1105,7 @@ async function advancedRAGSearch(
 
     // Step 3: LLM Reasoning and Filtering (DISABLED for performance)
     console.log('Step 3: Skipping LLM reasoning for performance...');
-    
+
     // TODO: Re-enable LLM reasoning when rate limits are resolved
     /*
     const ragReasoningPrompt = `[INST] You are a professional matching AI that ranks search results for optimal relevance.
@@ -1175,7 +1175,9 @@ REQUIREMENTS:
     // Skip LLM reasoning for performance - return hybrid results directly
     const finalResults = hybridResults.slice(0, limit);
 
-    console.log(`RAG search returning ${finalResults.length} hybrid results (LLM reasoning disabled)`);
+    console.log(
+      `RAG search returning ${finalResults.length} hybrid results (LLM reasoning disabled)`
+    );
 
     return {
       success: true,
