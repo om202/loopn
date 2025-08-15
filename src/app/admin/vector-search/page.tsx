@@ -418,8 +418,6 @@ export default function VectorSearchAdminPage() {
                                         </div>
                                       </div>
                                     )}
-
-
                                 </div>
                                 <div className='text-right'>
                                   <p className='text-xs text-gray-500'>

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 import { Search, X, Clock, User, Briefcase, MapPin } from 'lucide-react';
 import {
   OpenSearchService,
@@ -349,9 +350,11 @@ export default function IntelligentSearch({
                       <div className='flex items-start space-x-3'>
                         <div className='flex-shrink-0'>
                           {user.profile.profilePictureUrl ? (
-                            <img
+                            <Image
                               src={user.profile.profilePictureUrl}
-                              alt={user.profile.fullName}
+                              alt={user.profile.fullName || 'Profile picture'}
+                              width={48}
+                              height={48}
                               className='w-12 h-12 rounded-full object-cover'
                             />
                           ) : (
