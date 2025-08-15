@@ -2,7 +2,11 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Search, X, Clock, User, Briefcase, MapPin } from 'lucide-react';
-import { OpenSearchService, type SearchResult, type SearchFilters } from '../services/opensearch.service';
+import {
+  OpenSearchService,
+  type SearchResult,
+  type SearchFilters,
+} from '../services/opensearch.service';
 import {
   getSearchHistory,
   addToSearchHistory,
@@ -19,7 +23,7 @@ interface IntelligentSearchProps {
 export default function IntelligentSearch({
   onUserSelect,
   placeholder = "Search for anyone... (e.g., 'software engineer', 'co-founder', 'marketing expert')",
-  showFilters = false
+  showFilters = false,
 }: IntelligentSearchProps) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
@@ -29,7 +33,7 @@ export default function IntelligentSearch({
   const [showResults, setShowResults] = useState(false);
   const [filters, setFilters] = useState<SearchFilters>({});
   const [showFiltersPanel, setShowFiltersPanel] = useState(false);
-  
+
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchTimeoutRef = useRef<NodeJS.Timeout>();
@@ -68,10 +72,14 @@ export default function IntelligentSearch({
     }
 
     setIsSearching(true);
-    
+
     try {
-      const response = await OpenSearchService.searchUsers(searchQuery, 10, filters);
-      
+      const response = await OpenSearchService.searchUsers(
+        searchQuery,
+        10,
+        filters
+      );
+
       if (response.success && response.results) {
         setResults(response.results);
         setShowResults(true);
@@ -104,7 +112,7 @@ export default function IntelligentSearch({
       setResults([]);
     } else {
       setShowHistory(false);
-      
+
       // Debounce search
       searchTimeoutRef.current = setTimeout(() => {
         performSearch(value);
@@ -119,7 +127,7 @@ export default function IntelligentSearch({
     // Add to search history
     addToSearchHistory(query.trim());
     setSearchHistory(getSearchHistory());
-    
+
     // Perform immediate search
     await performSearch(query);
   };
@@ -164,32 +172,34 @@ export default function IntelligentSearch({
   };
 
   return (
-    <div className="relative w-full max-w-2xl mx-auto">
+    <div className='relative w-full max-w-2xl mx-auto'>
       {/* Search Input */}
-      <div className="relative">
-        <div className="relative">
-          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+      <div className='relative'>
+        <div className='relative'>
+          <Search className='absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5' />
           <input
             ref={inputRef}
-            type="text"
+            type='text'
             value={query}
-            onChange={(e) => handleQueryChange(e.target.value)}
-            onFocus={() => !query.trim() ? setShowHistory(true) : setShowResults(true)}
-            onKeyDown={(e) => {
+            onChange={e => handleQueryChange(e.target.value)}
+            onFocus={() =>
+              !query.trim() ? setShowHistory(true) : setShowResults(true)
+            }
+            onKeyDown={e => {
               if (e.key === 'Enter') {
                 e.preventDefault();
                 handleSearch();
               }
             }}
             placeholder={placeholder}
-            className="w-full pl-12 pr-12 py-4 text-lg border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none bg-white shadow-sm"
+            className='w-full pl-12 pr-12 py-4 text-lg border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none bg-white shadow-sm'
           />
           {query && (
             <button
               onClick={handleClear}
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              className='absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600'
             >
-              <X className="w-5 h-5" />
+              <X className='w-5 h-5' />
             </button>
           )}
         </div>
@@ -198,7 +208,7 @@ export default function IntelligentSearch({
         {showFilters && (
           <button
             onClick={() => setShowFiltersPanel(!showFiltersPanel)}
-            className="mt-2 text-sm text-blue-600 hover:text-blue-700"
+            className='mt-2 text-sm text-blue-600 hover:text-blue-700'
           >
             {showFiltersPanel ? 'Hide Filters' : 'Show Filters'}
           </button>
@@ -207,67 +217,77 @@ export default function IntelligentSearch({
 
       {/* Filters Panel */}
       {showFilters && showFiltersPanel && (
-        <div className="mt-4 p-4 bg-gray-50 rounded-lg border">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className='mt-4 p-4 bg-gray-50 rounded-lg border'>
+          <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className='block text-sm font-medium text-gray-700 mb-1'>
                 Industry
               </label>
               <select
                 value={filters.industry || ''}
-                onChange={(e) => handleFilterChange({
-                  ...filters,
-                  industry: e.target.value || undefined
-                })}
-                className="w-full p-2 border border-gray-300 rounded"
+                onChange={e =>
+                  handleFilterChange({
+                    ...filters,
+                    industry: e.target.value || undefined,
+                  })
+                }
+                className='w-full p-2 border border-gray-300 rounded'
               >
-                <option value="">Any Industry</option>
-                <option value="technology">Technology</option>
-                <option value="finance">Finance</option>
-                <option value="healthcare">Healthcare</option>
-                <option value="education">Education</option>
-                <option value="marketing">Marketing</option>
-                <option value="design">Design</option>
+                <option value=''>Any Industry</option>
+                <option value='technology'>Technology</option>
+                <option value='finance'>Finance</option>
+                <option value='healthcare'>Healthcare</option>
+                <option value='education'>Education</option>
+                <option value='marketing'>Marketing</option>
+                <option value='design'>Design</option>
               </select>
             </div>
-            
+
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className='block text-sm font-medium text-gray-700 mb-1'>
                 Min Experience
               </label>
               <select
                 value={filters.minExperience || ''}
-                onChange={(e) => handleFilterChange({
-                  ...filters,
-                  minExperience: e.target.value ? parseInt(e.target.value) : undefined
-                })}
-                className="w-full p-2 border border-gray-300 rounded"
+                onChange={e =>
+                  handleFilterChange({
+                    ...filters,
+                    minExperience: e.target.value
+                      ? parseInt(e.target.value)
+                      : undefined,
+                  })
+                }
+                className='w-full p-2 border border-gray-300 rounded'
               >
-                <option value="">Any</option>
-                <option value="0">Entry Level</option>
-                <option value="2">2+ Years</option>
-                <option value="5">5+ Years</option>
-                <option value="10">10+ Years</option>
+                <option value=''>Any</option>
+                <option value='0'>Entry Level</option>
+                <option value='2'>2+ Years</option>
+                <option value='5'>5+ Years</option>
+                <option value='10'>10+ Years</option>
               </select>
             </div>
-            
+
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className='block text-sm font-medium text-gray-700 mb-1'>
                 Max Experience
               </label>
               <select
                 value={filters.maxExperience || ''}
-                onChange={(e) => handleFilterChange({
-                  ...filters,
-                  maxExperience: e.target.value ? parseInt(e.target.value) : undefined
-                })}
-                className="w-full p-2 border border-gray-300 rounded"
+                onChange={e =>
+                  handleFilterChange({
+                    ...filters,
+                    maxExperience: e.target.value
+                      ? parseInt(e.target.value)
+                      : undefined,
+                  })
+                }
+                className='w-full p-2 border border-gray-300 rounded'
               >
-                <option value="">Any</option>
-                <option value="2">Up to 2 Years</option>
-                <option value="5">Up to 5 Years</option>
-                <option value="10">Up to 10 Years</option>
-                <option value="15">Up to 15 Years</option>
+                <option value=''>Any</option>
+                <option value='2'>Up to 2 Years</option>
+                <option value='5'>Up to 5 Years</option>
+                <option value='10'>Up to 10 Years</option>
+                <option value='15'>Up to 15 Years</option>
               </select>
             </div>
           </div>
@@ -278,28 +298,28 @@ export default function IntelligentSearch({
       {(showHistory || showResults) && (
         <div
           ref={dropdownRef}
-          className="absolute top-full mt-2 w-full bg-white border border-gray-200 rounded-xl shadow-lg z-50 max-h-96 overflow-y-auto"
+          className='absolute top-full mt-2 w-full bg-white border border-gray-200 rounded-xl shadow-lg z-50 max-h-96 overflow-y-auto'
         >
           {/* Search History */}
           {showHistory && searchHistory.length > 0 && (
-            <div className="p-4">
-              <h3 className="text-sm font-medium text-gray-700 mb-3 flex items-center">
-                <Clock className="w-4 h-4 mr-2" />
+            <div className='p-4'>
+              <h3 className='text-sm font-medium text-gray-700 mb-3 flex items-center'>
+                <Clock className='w-4 h-4 mr-2' />
                 Recent Searches
               </h3>
-              <div className="space-y-2">
-                {searchHistory.slice(0, 5).map((item) => (
+              <div className='space-y-2'>
+                {searchHistory.slice(0, 5).map(item => (
                   <div
                     key={item.id}
-                    className="flex items-center justify-between p-2 hover:bg-gray-50 rounded cursor-pointer group"
+                    className='flex items-center justify-between p-2 hover:bg-gray-50 rounded cursor-pointer group'
                     onClick={() => handleHistoryClick(item)}
                   >
-                    <span className="text-gray-700">{item.query}</span>
+                    <span className='text-gray-700'>{item.query}</span>
                     <button
-                      onClick={(e) => handleRemoveHistory(item.id, e)}
-                      className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-gray-600"
+                      onClick={e => handleRemoveHistory(item.id, e)}
+                      className='opacity-0 group-hover:opacity-100 text-gray-400 hover:text-gray-600'
                     >
-                      <X className="w-4 h-4" />
+                      <X className='w-4 h-4' />
                     </button>
                   </div>
                 ))}
@@ -309,71 +329,76 @@ export default function IntelligentSearch({
 
           {/* Search Results */}
           {showResults && (
-            <div className="p-4">
+            <div className='p-4'>
               {isSearching ? (
-                <div className="text-center py-8">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto"></div>
-                  <p className="text-gray-500 mt-2">Searching...</p>
+                <div className='text-center py-8'>
+                  <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto'></div>
+                  <p className='text-gray-500 mt-2'>Searching...</p>
                 </div>
               ) : results.length > 0 ? (
-                <div className="space-y-3">
-                  <h3 className="text-sm font-medium text-gray-700 mb-3">
+                <div className='space-y-3'>
+                  <h3 className='text-sm font-medium text-gray-700 mb-3'>
                     Found {results.length} people
                   </h3>
-                  {results.map((user) => (
+                  {results.map(user => (
                     <div
                       key={user.userId}
-                      className="p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors border border-gray-100"
+                      className='p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors border border-gray-100'
                       onClick={() => handleUserSelect(user)}
                     >
-                      <div className="flex items-start space-x-3">
-                        <div className="flex-shrink-0">
+                      <div className='flex items-start space-x-3'>
+                        <div className='flex-shrink-0'>
                           {user.profile.profilePictureUrl ? (
                             <img
                               src={user.profile.profilePictureUrl}
                               alt={user.profile.fullName}
-                              className="w-12 h-12 rounded-full object-cover"
+                              className='w-12 h-12 rounded-full object-cover'
                             />
                           ) : (
-                            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                              <User className="w-6 h-6 text-blue-600" />
+                            <div className='w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center'>
+                              <User className='w-6 h-6 text-blue-600' />
                             </div>
                           )}
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <h4 className="text-sm font-medium text-gray-900 truncate">
+                        <div className='flex-1 min-w-0'>
+                          <h4 className='text-sm font-medium text-gray-900 truncate'>
                             {user.profile.fullName || 'Unknown User'}
                           </h4>
-                          <div className="flex items-center text-sm text-gray-500 mt-1">
-                            <Briefcase className="w-4 h-4 mr-1" />
-                            <span className="truncate">
+                          <div className='flex items-center text-sm text-gray-500 mt-1'>
+                            <Briefcase className='w-4 h-4 mr-1' />
+                            <span className='truncate'>
                               {user.profile.jobRole || 'No role specified'}
                             </span>
                           </div>
                           {user.profile.companyName && (
-                            <div className="flex items-center text-sm text-gray-500 mt-1">
-                              <MapPin className="w-4 h-4 mr-1" />
-                              <span className="truncate">{user.profile.companyName}</span>
+                            <div className='flex items-center text-sm text-gray-500 mt-1'>
+                              <MapPin className='w-4 h-4 mr-1' />
+                              <span className='truncate'>
+                                {user.profile.companyName}
+                              </span>
                             </div>
                           )}
-                          {user.profile.skills && user.profile.skills.length > 0 && (
-                            <div className="flex flex-wrap gap-1 mt-2">
-                              {user.profile.skills.slice(0, 3).map((skill, index) => (
-                                <span
-                                  key={index}
-                                  className="inline-block px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded"
-                                >
-                                  {skill}
-                                </span>
-                              ))}
-                              {user.profile.skills.length > 3 && (
-                                <span className="text-xs text-gray-500">
-                                  +{user.profile.skills.length - 3} more
-                                </span>
-                              )}
-                            </div>
-                          )}
-                          <div className="text-xs text-gray-400 mt-1">
+                          {user.profile.skills &&
+                            user.profile.skills.length > 0 && (
+                              <div className='flex flex-wrap gap-1 mt-2'>
+                                {user.profile.skills
+                                  .slice(0, 3)
+                                  .map((skill, index) => (
+                                    <span
+                                      key={index}
+                                      className='inline-block px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded'
+                                    >
+                                      {skill}
+                                    </span>
+                                  ))}
+                                {user.profile.skills.length > 3 && (
+                                  <span className='text-xs text-gray-500'>
+                                    +{user.profile.skills.length - 3} more
+                                  </span>
+                                )}
+                              </div>
+                            )}
+                          <div className='text-xs text-gray-400 mt-1'>
                             Match: {Math.round(user.score * 100)}%
                           </div>
                         </div>
@@ -382,10 +407,10 @@ export default function IntelligentSearch({
                   ))}
                 </div>
               ) : query.trim() ? (
-                <div className="text-center py-8">
-                  <User className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                  <p className="text-gray-500">No users found for "{query}"</p>
-                  <p className="text-sm text-gray-400 mt-1">
+                <div className='text-center py-8'>
+                  <User className='w-12 h-12 text-gray-300 mx-auto mb-3' />
+                  <p className='text-gray-500'>No users found for "{query}"</p>
+                  <p className='text-sm text-gray-400 mt-1'>
                     Try a different search term or check your filters
                   </p>
                 </div>

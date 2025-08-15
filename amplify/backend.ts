@@ -31,13 +31,8 @@ const openSearchResources = defineOpenSearch(
 backend.openSearchClient.resources.lambda.addToRolePolicy(
   new PolicyStatement({
     effect: Effect.ALLOW,
-    actions: [
-      'aoss:APIAccessAll',
-      'aoss:DashboardsAccessAll'
-    ],
-    resources: [
-      openSearchResources.collection.attrArn
-    ],
+    actions: ['aoss:APIAccessAll', 'aoss:DashboardsAccessAll'],
+    resources: [openSearchResources.collection.attrArn],
   })
 );
 

@@ -32,9 +32,7 @@ export default function VectorSearchAdminPage() {
   const [status, setStatus] = useState<IndexingStatus | null>(null);
   const [isLoadingStatus, setIsLoadingStatus] = useState(false);
   const [testQuery, setTestQuery] = useState('');
-  const [testResults, setTestResults] = useState<SearchResponse | null>(
-    null
-  );
+  const [testResults, setTestResults] = useState<SearchResponse | null>(null);
   const [isTestingSearch, setIsTestingSearch] = useState(false);
 
   // Simple admin check - in production, you'd want proper admin authorization
@@ -64,7 +62,7 @@ export default function VectorSearchAdminPage() {
         try {
           const response = await client.models.UserProfile.list({
             limit: 50,
-            nextToken
+            nextToken,
           });
 
           if (response.data && response.data.length > 0) {
@@ -84,19 +82,23 @@ export default function VectorSearchAdminPage() {
                     interests: user.interests,
                     skills: user.skills,
                     profilePictureUrl: user.profilePictureUrl,
-                    isOnboardingComplete: user.isOnboardingComplete
+                    isOnboardingComplete: user.isOnboardingComplete,
                   });
                   migrated++;
                 }
               } catch (error) {
                 failed++;
-                errors.push(`Failed to migrate user ${user.userId}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+                errors.push(
+                  `Failed to migrate user ${user.userId}: ${error instanceof Error ? error.message : 'Unknown error'}`
+                );
               }
             }
           }
           nextToken = response.nextToken || undefined;
         } catch (error) {
-          errors.push(`Failed to fetch users: ${error instanceof Error ? error.message : 'Unknown error'}`);
+          errors.push(
+            `Failed to fetch users: ${error instanceof Error ? error.message : 'Unknown error'}`
+          );
           break;
         }
       } while (nextToken);
@@ -105,7 +107,7 @@ export default function VectorSearchAdminPage() {
         success: true,
         migrated,
         failed,
-        errors
+        errors,
       });
     } catch (error) {
       console.error('Error migrating users:', error);
@@ -127,9 +129,9 @@ export default function VectorSearchAdminPage() {
       const totalResponse = await client.models.UserProfile.list({
         filter: {
           isOnboardingComplete: {
-            eq: true
-          }
-        }
+            eq: true,
+          },
+        },
       });
       const totalUsers = totalResponse.data?.length || 0;
 
@@ -141,7 +143,7 @@ export default function VectorSearchAdminPage() {
       setStatus({
         totalUsers,
         migratedUsers,
-        pendingUsers
+        pendingUsers,
       });
     } catch (error) {
       console.error('Error checking status:', error);
@@ -254,9 +256,10 @@ export default function VectorSearchAdminPage() {
                     </h3>
                     <div className='mt-2 text-sm text-blue-700'>
                       <p>
-                        This will migrate all user profiles from DynamoDB to OpenSearch
-                        for intelligent search. No additional AWS charges for embeddings -
-                        OpenSearch handles all the intelligence internally.
+                        This will migrate all user profiles from DynamoDB to
+                        OpenSearch for intelligent search. No additional AWS
+                        charges for embeddings - OpenSearch handles all the
+                        intelligence internally.
                       </p>
                     </div>
                   </div>
@@ -268,7 +271,9 @@ export default function VectorSearchAdminPage() {
                 disabled={isIndexing}
                 className='px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50'
               >
-                {isIndexing ? 'Migrating Users...' : 'Migrate All Users to OpenSearch'}
+                {isIndexing
+                  ? 'Migrating Users...'
+                  : 'Migrate All Users to OpenSearch'}
               </button>
 
               {indexingResult && (
@@ -337,89 +342,114 @@ export default function VectorSearchAdminPage() {
                   {testResults.success ? (
                     <div>
                       <p className='font-medium mb-2'>
-                        Found {testResults.results?.length || 0} results (Total: {testResults.total || 0}):
+                        Found {testResults.results?.length || 0} results (Total:{' '}
+                        {testResults.total || 0}):
                       </p>
 
                       {/* Search Results Display */}
                       <div className='space-y-3'>
-                        {testResults.results?.map((result: SearchResult, index: number) => (
-                          <div
-                            key={index}
-                            className='p-3 bg-white rounded border transition-all duration-200 hover:shadow-sm'
-                          >
-                            <div className='flex justify-between items-start'>
-                              <div className='flex-1'>
-                                <div className='flex items-center gap-2'>
-                                  <p className='font-medium'>
-                                    {result.profile.fullName || 'Unknown Name'}
-                                  </p>
-                                  <span className='px-2 py-1 bg-green-100 text-green-800 text-xs rounded'>
-                                    {Math.round(result.score * 100)}% match
-                                  </span>
-                                </div>
-                                <p className='text-sm text-gray-600'>
-                                  {result.profile.jobRole || 'No role specified'}
-                                </p>
-                                {result.profile.companyName && (
-                                  <p className='text-sm text-gray-500'>
-                                    {result.profile.companyName}
-                                    {result.profile.industry && ` • ${result.profile.industry}`}
-                                  </p>
-                                )}
-                                {result.profile.about && (
-                                  <p className='text-xs text-gray-500 mt-1 line-clamp-2'>
-                                    {result.profile.about}
-                                  </p>
-                                )}
-                                
-                                {/* Skills Display */}
-                                {result.profile.skills && result.profile.skills.length > 0 && (
-                                  <div className='mt-2'>
-                                    <div className='flex flex-wrap gap-1'>
-                                      {result.profile.skills.slice(0, 5).map((skill: string, skillIndex: number) => (
-                                        <span
-                                          key={skillIndex}
-                                          className='px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded'
-                                        >
-                                          {skill}
-                                        </span>
-                                      ))}
-                                      {result.profile.skills.length > 5 && (
-                                        <span className='text-xs text-gray-500 self-center'>
-                                          +{result.profile.skills.length - 5} more
-                                        </span>
-                                      )}
-                                    </div>
-                                  </div>
-                                )}
-
-                                {/* Highlights */}
-                                {result.highlights && Object.keys(result.highlights).length > 0 && (
-                                  <div className='mt-2 p-2 bg-yellow-50 rounded border border-yellow-200'>
-                                    <p className='text-xs font-medium text-yellow-800'>
-                                      🎯 Search highlights:
+                        {testResults.results?.map(
+                          (result: SearchResult, index: number) => (
+                            <div
+                              key={index}
+                              className='p-3 bg-white rounded border transition-all duration-200 hover:shadow-sm'
+                            >
+                              <div className='flex justify-between items-start'>
+                                <div className='flex-1'>
+                                  <div className='flex items-center gap-2'>
+                                    <p className='font-medium'>
+                                      {result.profile.fullName ||
+                                        'Unknown Name'}
                                     </p>
-                                    {Object.entries(result.highlights).map(([field, highlights]) => (
-                                      <div key={field} className='text-xs text-yellow-700'>
-                                        <strong>{field}:</strong> {highlights.join(' ... ')}
-                                      </div>
-                                    ))}
+                                    <span className='px-2 py-1 bg-green-100 text-green-800 text-xs rounded'>
+                                      {Math.round(result.score * 100)}% match
+                                    </span>
                                   </div>
-                                )}
-                              </div>
-                              <div className='text-right'>
-                                <p className='text-xs text-gray-500'>
-                                  Score: {result.score.toFixed(3)}
-                                </p>
-                                {result.profile.yearsOfExperience && (
-                                  <p className='text-xs text-gray-500'>
-                                    {result.profile.yearsOfExperience} years exp
+                                  <p className='text-sm text-gray-600'>
+                                    {result.profile.jobRole ||
+                                      'No role specified'}
                                   </p>
-                                )}
+                                  {result.profile.companyName && (
+                                    <p className='text-sm text-gray-500'>
+                                      {result.profile.companyName}
+                                      {result.profile.industry &&
+                                        ` • ${result.profile.industry}`}
+                                    </p>
+                                  )}
+                                  {result.profile.about && (
+                                    <p className='text-xs text-gray-500 mt-1 line-clamp-2'>
+                                      {result.profile.about}
+                                    </p>
+                                  )}
+
+                                  {/* Skills Display */}
+                                  {result.profile.skills &&
+                                    result.profile.skills.length > 0 && (
+                                      <div className='mt-2'>
+                                        <div className='flex flex-wrap gap-1'>
+                                          {result.profile.skills
+                                            .slice(0, 5)
+                                            .map(
+                                              (
+                                                skill: string,
+                                                skillIndex: number
+                                              ) => (
+                                                <span
+                                                  key={skillIndex}
+                                                  className='px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded'
+                                                >
+                                                  {skill}
+                                                </span>
+                                              )
+                                            )}
+                                          {result.profile.skills.length > 5 && (
+                                            <span className='text-xs text-gray-500 self-center'>
+                                              +
+                                              {result.profile.skills.length - 5}{' '}
+                                              more
+                                            </span>
+                                          )}
+                                        </div>
+                                      </div>
+                                    )}
+
+                                  {/* Highlights */}
+                                  {result.highlights &&
+                                    Object.keys(result.highlights).length >
+                                      0 && (
+                                      <div className='mt-2 p-2 bg-yellow-50 rounded border border-yellow-200'>
+                                        <p className='text-xs font-medium text-yellow-800'>
+                                          🎯 Search highlights:
+                                        </p>
+                                        {Object.entries(result.highlights).map(
+                                          ([field, highlights]) => (
+                                            <div
+                                              key={field}
+                                              className='text-xs text-yellow-700'
+                                            >
+                                              <strong>{field}:</strong>{' '}
+                                              {highlights.join(' ... ')}
+                                            </div>
+                                          )
+                                        )}
+                                      </div>
+                                    )}
+                                </div>
+                                <div className='text-right'>
+                                  <p className='text-xs text-gray-500'>
+                                    Score: {result.score.toFixed(3)}
+                                  </p>
+                                  {result.profile.yearsOfExperience && (
+                                    <p className='text-xs text-gray-500'>
+                                      {result.profile.yearsOfExperience} years
+                                      exp
+                                    </p>
+                                  )}
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        ))}
+                          )
+                        )}
                       </div>
                     </div>
                   ) : (

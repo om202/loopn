@@ -52,7 +52,7 @@ export class OpenSearchService {
         action: 'search_users',
         query: query.trim(),
         limit,
-        filters: filters ? JSON.stringify(filters) : undefined
+        filters: filters ? JSON.stringify(filters) : undefined,
       });
 
       return response.data as SearchResponse;
@@ -60,7 +60,7 @@ export class OpenSearchService {
       console.error('Search failed:', error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Search failed'
+        error: error instanceof Error ? error.message : 'Search failed',
       };
     }
   }
@@ -77,7 +77,7 @@ export class OpenSearchService {
       const response = await client.queries.searchUsers({
         action: 'index_user',
         userId,
-        userProfile: JSON.stringify(userProfile)
+        userProfile: JSON.stringify(userProfile),
       });
 
       return response.data as SearchResponse;
@@ -85,7 +85,7 @@ export class OpenSearchService {
       console.error('Indexing failed:', error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Indexing failed'
+        error: error instanceof Error ? error.message : 'Indexing failed',
       };
     }
   }
@@ -101,7 +101,7 @@ export class OpenSearchService {
       const response = await client.queries.searchUsers({
         action: 'update_user',
         userId,
-        userProfile: JSON.stringify(userProfile)
+        userProfile: JSON.stringify(userProfile),
       });
 
       return response.data as SearchResponse;
@@ -109,7 +109,7 @@ export class OpenSearchService {
       console.error('Update failed:', error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Update failed'
+        error: error instanceof Error ? error.message : 'Update failed',
       };
     }
   }
@@ -121,7 +121,7 @@ export class OpenSearchService {
     try {
       const response = await client.queries.searchUsers({
         action: 'get_user',
-        userId
+        userId,
       });
 
       return response.data as SearchResponse;
@@ -129,7 +129,7 @@ export class OpenSearchService {
       console.error('Get user failed:', error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Get user failed'
+        error: error instanceof Error ? error.message : 'Get user failed',
       };
     }
   }
@@ -141,7 +141,7 @@ export class OpenSearchService {
     try {
       const response = await client.queries.searchUsers({
         action: 'delete_user',
-        userId
+        userId,
       });
 
       return response.data as SearchResponse;
@@ -149,7 +149,7 @@ export class OpenSearchService {
       console.error('Delete failed:', error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Delete failed'
+        error: error instanceof Error ? error.message : 'Delete failed',
       };
     }
   }
@@ -160,7 +160,7 @@ export class OpenSearchService {
   static async initializeIndex(): Promise<SearchResponse> {
     try {
       const response = await client.queries.searchUsers({
-        action: 'initialize_index'
+        action: 'initialize_index',
       });
 
       return response.data as SearchResponse;
@@ -168,7 +168,10 @@ export class OpenSearchService {
       console.error('Index initialization failed:', error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Index initialization failed'
+        error:
+          error instanceof Error
+            ? error.message
+            : 'Index initialization failed',
       };
     }
   }
@@ -191,35 +194,38 @@ export class OpenSearchService {
   /**
    * Search by specific criteria with intelligent matching
    */
-  static async searchByCriteria(criteria: {
-    role?: string;
-    industry?: string;
-    skills?: string[];
-    experience?: { min?: number; max?: number };
-    interests?: string[];
-    query?: string;
-  }, limit: number = 10): Promise<SearchResult[]> {
+  static async searchByCriteria(
+    criteria: {
+      role?: string;
+      industry?: string;
+      skills?: string[];
+      experience?: { min?: number; max?: number };
+      interests?: string[];
+      query?: string;
+    },
+    limit: number = 10
+  ): Promise<SearchResult[]> {
     // Build intelligent query from criteria
     const queryParts: string[] = [];
-    
+
     if (criteria.query) {
       queryParts.push(criteria.query);
     }
-    
+
     if (criteria.role) {
       queryParts.push(criteria.role);
     }
-    
+
     if (criteria.skills && criteria.skills.length > 0) {
       queryParts.push(criteria.skills.join(' '));
     }
-    
+
     if (criteria.interests && criteria.interests.length > 0) {
       queryParts.push(criteria.interests.join(' '));
     }
 
     const searchQuery = queryParts.join(' ');
-    
+
     const filters: SearchFilters = {};
     if (criteria.industry) {
       filters.industry = criteria.industry;
@@ -248,5 +254,5 @@ export const {
   deleteUser,
   initializeIndex,
   quickSearch,
-  searchByCriteria
+  searchByCriteria,
 } = OpenSearchService;

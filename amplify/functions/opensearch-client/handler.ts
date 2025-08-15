@@ -54,23 +54,27 @@ export const handler = async (event: any): Promise<SearchResponse> => {
 
     switch (request.action) {
       case 'search_users':
-        return await searchUsers(request.query!, request.limit || 10, request.filters);
-      
+        return await searchUsers(
+          request.query!,
+          request.limit || 10,
+          request.filters
+        );
+
       case 'index_user':
         return await indexUser(request.userId!, request.userProfile!);
-      
+
       case 'get_user':
         return await getUser(request.userId!);
-      
+
       case 'update_user':
         return await updateUser(request.userId!, request.userProfile!);
-      
+
       case 'delete_user':
         return await deleteUser(request.userId!);
-      
+
       case 'initialize_index':
         return await initializeIndex();
-      
+
       default:
         throw new Error(`Unknown action: ${request.action}`);
     }
@@ -78,7 +82,7 @@ export const handler = async (event: any): Promise<SearchResponse> => {
     console.error('OpenSearch operation failed:', error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error'
+      error: error instanceof Error ? error.message : 'Unknown error',
     };
   }
 };
@@ -90,26 +94,26 @@ async function initializeIndex(): Promise<SearchResponse> {
       properties: {
         userId: { type: 'keyword' },
         email: { type: 'keyword' },
-        fullName: { 
+        fullName: {
           type: 'text',
           analyzer: 'standard',
           fields: {
-            keyword: { type: 'keyword' }
-          }
+            keyword: { type: 'keyword' },
+          },
         },
-        jobRole: { 
+        jobRole: {
           type: 'text',
           analyzer: 'standard',
           fields: {
-            keyword: { type: 'keyword' }
-          }
+            keyword: { type: 'keyword' },
+          },
         },
-        companyName: { 
+        companyName: {
           type: 'text',
           analyzer: 'standard',
           fields: {
-            keyword: { type: 'keyword' }
-          }
+            keyword: { type: 'keyword' },
+          },
         },
         industry: { type: 'keyword' },
         yearsOfExperience: { type: 'integer' },
@@ -119,13 +123,13 @@ async function initializeIndex(): Promise<SearchResponse> {
         skills: { type: 'keyword' },
         profilePictureUrl: { type: 'keyword' },
         isOnboardingComplete: { type: 'boolean' },
-        
+
         // Combined text field for intelligent search
         searchableContent: {
           type: 'text',
-          analyzer: 'standard'
+          analyzer: 'standard',
         },
-        
+
         // Vector field for semantic search (if needed later)
         profileVector: {
           type: 'knn_vector',
@@ -133,37 +137,37 @@ async function initializeIndex(): Promise<SearchResponse> {
           method: {
             name: 'hnsw',
             space_type: 'cosinesimil',
-            engine: 'nmslib'
-          }
+            engine: 'nmslib',
+          },
         },
-        
+
         // Timestamps
         createdAt: { type: 'date' },
-        updatedAt: { type: 'date' }
-      }
+        updatedAt: { type: 'date' },
+      },
     },
     settings: {
       index: {
         // Enable k-NN for vector search
-        'knn': true,
+        knn: true,
         'knn.algo_param.ef_search': 100,
         // Number of replicas for high availability
-        'number_of_replicas': 1
-      }
-    }
+        number_of_replicas: 1,
+      },
+    },
   };
 
   try {
     // Check if index exists
     const indexExists = await client.indices.exists({ index: USER_INDEX });
-    
+
     if (!indexExists.body) {
       // Create index with mapping
       await client.indices.create({
         index: USER_INDEX,
-        body: indexMapping
+        body: indexMapping,
       });
-      
+
       console.log(`Created index: ${USER_INDEX}`);
     } else {
       console.log(`Index ${USER_INDEX} already exists`);
@@ -178,8 +182,8 @@ async function initializeIndex(): Promise<SearchResponse> {
 
 // Search users using OpenSearch's intelligent search capabilities
 async function searchUsers(
-  query: string, 
-  limit: number = 10, 
+  query: string,
+  limit: number = 10,
   filters?: Record<string, any>
 ): Promise<SearchResponse> {
   const searchBody: any = {
@@ -187,8 +191,8 @@ async function searchUsers(
     query: {
       bool: {
         must: [],
-        filter: []
-      }
+        filter: [],
+      },
     },
     highlight: {
       fields: {
@@ -196,12 +200,10 @@ async function searchUsers(
         jobRole: {},
         about: {},
         skills: {},
-        interests: {}
-      }
+        interests: {},
+      },
     },
-    sort: [
-      { _score: { order: 'desc' } }
-    ]
+    sort: [{ _score: { order: 'desc' } }],
   };
 
   // Use OpenSearch's intelligent multi-match query
@@ -210,25 +212,25 @@ async function searchUsers(
       multi_match: {
         query: query,
         fields: [
-          'fullName^3',           // Boost name matches
-          'jobRole^2',            // Boost job role matches
-          'skills^2',             // Boost skill matches
-          'about^1.5',            // Boost about section
-          'companyName^1.5',      // Boost company matches
+          'fullName^3', // Boost name matches
+          'jobRole^2', // Boost job role matches
+          'skills^2', // Boost skill matches
+          'about^1.5', // Boost about section
+          'companyName^1.5', // Boost company matches
           'education',
           'interests',
-          'searchableContent'     // General searchable content
+          'searchableContent', // General searchable content
         ],
-        type: 'best_fields',      // Find best matching field
-        fuzziness: 'AUTO',        // Handle typos automatically
-        operator: 'or',           // Match any of the terms
-        minimum_should_match: '60%' // Require good relevance
-      }
+        type: 'best_fields', // Find best matching field
+        fuzziness: 'AUTO', // Handle typos automatically
+        operator: 'or', // Match any of the terms
+        minimum_should_match: '60%', // Require good relevance
+      },
     });
   } else {
     // If no query, return all active users
     searchBody.query.bool.must.push({
-      match_all: {}
+      match_all: {},
     });
   }
 
@@ -236,51 +238,51 @@ async function searchUsers(
   if (filters) {
     if (filters.industry) {
       searchBody.query.bool.filter.push({
-        term: { industry: filters.industry }
+        term: { industry: filters.industry },
       });
     }
-    
+
     if (filters.minExperience !== undefined) {
       searchBody.query.bool.filter.push({
-        range: { yearsOfExperience: { gte: filters.minExperience } }
+        range: { yearsOfExperience: { gte: filters.minExperience } },
       });
     }
-    
+
     if (filters.maxExperience !== undefined) {
       searchBody.query.bool.filter.push({
-        range: { yearsOfExperience: { lte: filters.maxExperience } }
+        range: { yearsOfExperience: { lte: filters.maxExperience } },
       });
     }
-    
+
     if (filters.skills && filters.skills.length > 0) {
       searchBody.query.bool.filter.push({
-        terms: { skills: filters.skills }
+        terms: { skills: filters.skills },
       });
     }
   }
 
   // Always filter for complete profiles
   searchBody.query.bool.filter.push({
-    term: { isOnboardingComplete: true }
+    term: { isOnboardingComplete: true },
   });
 
   try {
     const response = await client.search({
       index: USER_INDEX,
-      body: searchBody
+      body: searchBody,
     });
 
     const results = response.body.hits.hits.map((hit: any) => ({
       userId: hit._source.userId,
       score: hit._score,
       profile: hit._source,
-      highlights: hit.highlight || {}
+      highlights: hit.highlight || {},
     }));
 
     return {
       success: true,
       results,
-      total: response.body.hits.total.value
+      total: response.body.hits.total.value,
     };
   } catch (error) {
     console.error('Search failed:', error);
@@ -289,7 +291,10 @@ async function searchUsers(
 }
 
 // Index a user profile
-async function indexUser(userId: string, userProfile: UserProfile): Promise<SearchResponse> {
+async function indexUser(
+  userId: string,
+  userProfile: UserProfile
+): Promise<SearchResponse> {
   // Create searchable content by combining all text fields
   const searchableContent = [
     userProfile.fullName,
@@ -298,14 +303,16 @@ async function indexUser(userId: string, userProfile: UserProfile): Promise<Sear
     userProfile.education,
     userProfile.about,
     ...(userProfile.skills || []),
-    ...(userProfile.interests || [])
-  ].filter(Boolean).join(' ');
+    ...(userProfile.interests || []),
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   const document = {
     ...userProfile,
     userId,
     searchableContent,
-    updatedAt: new Date().toISOString()
+    updatedAt: new Date().toISOString(),
   };
 
   try {
@@ -313,7 +320,7 @@ async function indexUser(userId: string, userProfile: UserProfile): Promise<Sear
       index: USER_INDEX,
       id: userId,
       body: document,
-      refresh: true // Make immediately searchable
+      refresh: true, // Make immediately searchable
     });
 
     return { success: true };
@@ -328,18 +335,18 @@ async function getUser(userId: string): Promise<SearchResponse> {
   try {
     const response = await client.get({
       index: USER_INDEX,
-      id: userId
+      id: userId,
     });
 
     return {
       success: true,
-      results: [response.body._source]
+      results: [response.body._source],
     };
   } catch (error: any) {
     if (error.meta?.statusCode === 404) {
       return {
         success: true,
-        results: []
+        results: [],
       };
     }
     throw error;
@@ -347,7 +354,10 @@ async function getUser(userId: string): Promise<SearchResponse> {
 }
 
 // Update a user profile
-async function updateUser(userId: string, userProfile: Partial<UserProfile>): Promise<SearchResponse> {
+async function updateUser(
+  userId: string,
+  userProfile: Partial<UserProfile>
+): Promise<SearchResponse> {
   const searchableContent = [
     userProfile.fullName,
     userProfile.jobRole,
@@ -355,13 +365,15 @@ async function updateUser(userId: string, userProfile: Partial<UserProfile>): Pr
     userProfile.education,
     userProfile.about,
     ...(userProfile.skills || []),
-    ...(userProfile.interests || [])
-  ].filter(Boolean).join(' ');
+    ...(userProfile.interests || []),
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   const updateDoc = {
     ...userProfile,
     searchableContent,
-    updatedAt: new Date().toISOString()
+    updatedAt: new Date().toISOString(),
   };
 
   try {
@@ -370,9 +382,9 @@ async function updateUser(userId: string, userProfile: Partial<UserProfile>): Pr
       id: userId,
       body: {
         doc: updateDoc,
-        doc_as_upsert: true
+        doc_as_upsert: true,
       },
-      refresh: true
+      refresh: true,
     });
 
     return { success: true };
@@ -388,7 +400,7 @@ async function deleteUser(userId: string): Promise<SearchResponse> {
     await client.delete({
       index: USER_INDEX,
       id: userId,
-      refresh: true
+      refresh: true,
     });
 
     return { success: true };

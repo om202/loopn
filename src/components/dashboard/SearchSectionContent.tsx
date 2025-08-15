@@ -60,7 +60,6 @@ export default function SearchSectionContent({
       console.log(`🚀 Starting search for: "${searchTerm.trim()}"`);
 
       try {
-
         const response = await OpenSearchService.searchUsers(
           searchTerm.trim(),
           10
@@ -130,7 +129,9 @@ export default function SearchSectionContent({
               `📊 [${index}] Starting profile load for user: ${(result as SearchResult).userId}`
             );
 
-            return UserProfileService.getProfileDetails((result as SearchResult).userId)
+            return UserProfileService.getProfileDetails(
+              (result as SearchResult).userId
+            )
               .then(profile => {
                 console.log(
                   `✅ [${index}] Profile loaded successfully for user: ${(result as SearchResult).userId}`,
