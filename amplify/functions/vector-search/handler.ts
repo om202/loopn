@@ -6,6 +6,7 @@ import {
   DynamoDBClient,
   ScanCommand,
   UpdateItemCommand,
+  AttributeValue,
 } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 
@@ -59,6 +60,14 @@ const POSSIBLE_MODELS = [
 const MISTRAL_MODEL_ID = 'mistral.mistral-small-2402-v1:0';
 const EMBEDDING_DIMENSION = 1024; // Titan Text Embeddings v2 produces 1024-dimensional vectors
 const USER_PROFILE_TABLE = process.env.USER_PROFILE_TABLE || 'UserProfile';
+
+// Simple in-memory cache for embeddings and search results
+const embeddingCache = new Map<string, number[]>();
+const searchCache = new Map<
+  string,
+  { results: SearchResult[]; timestamp: number }
+>();
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes cache TTL
 
 const bedrockClient = new BedrockRuntimeClient({
   region: process.env.AWS_REGION,
@@ -287,6 +296,16 @@ export const handler = async (
 };
 
 async function generateEmbedding(text: string): Promise<EmbeddingResponse> {
+  // Check cache first
+  const normalizedText = text.trim().toLowerCase();
+  if (embeddingCache.has(normalizedText)) {
+    console.log('Using cached embedding for:', normalizedText.substring(0, 50));
+    return {
+      success: true,
+      embedding: embeddingCache.get(normalizedText)!,
+    };
+  }
+
   for (let i = 0; i < POSSIBLE_MODELS.length; i++) {
     const modelId = POSSIBLE_MODELS[i];
     try {
@@ -307,6 +326,10 @@ async function generateEmbedding(text: string): Promise<EmbeddingResponse> {
       if (!responseBody.embedding) {
         throw new Error('No embedding in response');
       }
+
+      // Cache the successful result
+      embeddingCache.set(normalizedText, responseBody.embedding);
+      console.log('Cached new embedding for:', normalizedText.substring(0, 50));
 
       return {
         success: true,
@@ -444,60 +467,105 @@ async function searchUsers(
   query: string,
   limit: number
 ): Promise<EmbeddingResponse> {
+  // Check search cache first
+  const cacheKey = `${query.trim().toLowerCase()}_${limit}`;
+  const cached = searchCache.get(cacheKey);
+  if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+    console.log('Using cached search results for:', query);
+    return {
+      success: true,
+      results: cached.results,
+    };
+  }
+
   const embeddingResponse = await generateEmbedding(query);
 
   if (!embeddingResponse.success || !embeddingResponse.embedding) {
     throw new Error('Failed to generate query embedding');
   }
 
-  // Scan all user profiles to find the most similar ones
-  const scanParams = {
-    TableName: USER_PROFILE_TABLE,
-    FilterExpression: 'attribute_exists(profileEmbedding)',
-  };
+  // Use paginated scan with optimizations for better performance
+  const results: SearchResult[] = [];
+  let lastEvaluatedKey: Record<string, AttributeValue> | undefined;
+  let processedItems = 0;
+  const maxItemsToProcess = limit * 10; // Process at most 10x the limit to find good matches
 
-  const scanResponse = await dynamoClient.send(new ScanCommand(scanParams));
+  do {
+    const scanParams = {
+      TableName: USER_PROFILE_TABLE,
+      FilterExpression: 'attribute_exists(profileEmbedding)',
+      Limit: 100, // Process in smaller batches
+      ExclusiveStartKey: lastEvaluatedKey,
+      // Add projection to only fetch necessary fields for performance
+      ProjectionExpression:
+        'userId, profileEmbedding, jobRole, companyName, industry, yearsOfExperience, education, about, interests, skills',
+    };
 
-  if (!scanResponse.Items) {
-    return { success: true, results: [] };
-  }
+    const scanResponse = await dynamoClient.send(new ScanCommand(scanParams));
 
-  // Calculate similarities and sort by score
-  const scoredResults = scanResponse
-    .Items!.map(item => {
-      const userProfile = unmarshall(item);
-      if (!userProfile.profileEmbedding) return null;
+    if (scanResponse.Items && scanResponse.Items.length > 0) {
+      // Process this batch
+      const batchResults = scanResponse.Items.map(item => {
+        const userProfile = unmarshall(item);
+        if (!userProfile.profileEmbedding) return null;
 
-      const similarity = cosineSimilarity(
-        embeddingResponse.embedding!,
-        userProfile.profileEmbedding
+        const similarity = cosineSimilarity(
+          embeddingResponse.embedding!,
+          userProfile.profileEmbedding
+        );
+
+        // Early filtering with higher threshold to reduce processing
+        if (similarity < 0.3) return null;
+
+        return {
+          userId: userProfile.userId,
+          score: similarity,
+          profile: {
+            jobRole: userProfile.jobRole,
+            companyName: userProfile.companyName,
+            industry: userProfile.industry,
+            yearsOfExperience: userProfile.yearsOfExperience,
+            education: userProfile.education,
+            about: userProfile.about,
+            interests: userProfile.interests,
+            skills: userProfile.skills,
+          },
+        } as SearchResult;
+      }).filter(
+        (result: SearchResult | null): result is SearchResult => result !== null
       );
 
-      return {
-        userId: userProfile.userId,
-        score: similarity,
-        profile: {
-          jobRole: userProfile.jobRole,
-          companyName: userProfile.companyName,
-          industry: userProfile.industry,
-          yearsOfExperience: userProfile.yearsOfExperience,
-          education: userProfile.education,
-          about: userProfile.about,
-          interests: userProfile.interests,
-          skills: userProfile.skills,
-        },
-      } as SearchResult;
-    })
-    .filter(
-      (result: SearchResult | null): result is SearchResult => result !== null
-    )
-    .filter((result: SearchResult) => result.score >= 0.25) // Filter out results below 25% similarity
+      results.push(...batchResults);
+      processedItems += scanResponse.Items.length;
+    }
+
+    lastEvaluatedKey = scanResponse.LastEvaluatedKey;
+
+    // Stop early if we have enough good results or processed enough items
+    if (results.length >= limit * 3 || processedItems >= maxItemsToProcess) {
+      break;
+    }
+  } while (lastEvaluatedKey);
+
+  // Sort by score and apply final filtering
+  const finalResults = results
+    .filter((result: SearchResult) => result.score >= 0.25)
     .sort((a: SearchResult, b: SearchResult) => b.score - a.score)
     .slice(0, limit);
 
+  console.log(
+    `Processed ${processedItems} items, found ${results.length} candidates, returning ${finalResults.length} results`
+  );
+
+  // Cache the results
+  searchCache.set(cacheKey, {
+    results: finalResults,
+    timestamp: Date.now(),
+  });
+
   return {
     success: true,
-    results: scoredResults,
+    results: finalResults,
   };
 }
 
@@ -779,63 +847,34 @@ Output: {"expandedTerms": ["marketing", "marketer", "digital marketing"], "synon
   }
 }
 
-// Keyword-based search function
+// Keyword-based search function with optimized scanning
 async function keywordSearch(
   keywordTerms: string[],
   limit: number
 ): Promise<SearchResult[]> {
-  const scanParams = {
-    TableName: USER_PROFILE_TABLE,
-    FilterExpression: 'attribute_exists(profileEmbedding)',
-  };
+  const results: SearchResult[] = [];
+  let lastEvaluatedKey: Record<string, AttributeValue> | undefined;
+  let processedItems = 0;
+  const maxItemsToProcess = limit * 8; // Process fewer items for keyword search
 
-  const scanResponse = await dynamoClient.send(new ScanCommand(scanParams));
+  do {
+    const scanParams = {
+      TableName: USER_PROFILE_TABLE,
+      FilterExpression: 'attribute_exists(profileEmbedding)',
+      Limit: 50, // Smaller batch size for keyword processing
+      ExclusiveStartKey: lastEvaluatedKey,
+      ProjectionExpression:
+        'userId, jobRole, companyName, industry, yearsOfExperience, education, about, interests, skills',
+    };
 
-  if (!scanResponse.Items) {
-    return [];
-  }
+    const scanResponse = await dynamoClient.send(new ScanCommand(scanParams));
 
-  const keywordResults = scanResponse
-    .Items!.map(item => {
-      const userProfile = unmarshall(item);
+    if (scanResponse.Items && scanResponse.Items.length > 0) {
+      const batchResults = scanResponse.Items.map(item => {
+        const userProfile = unmarshall(item);
 
-      // Create searchable text from profile
-      const profileText = createProfileText({
-        jobRole: userProfile.jobRole,
-        companyName: userProfile.companyName,
-        industry: userProfile.industry,
-        yearsOfExperience: userProfile.yearsOfExperience,
-        education: userProfile.education,
-        about: userProfile.about,
-        interests: userProfile.interests,
-        skills: userProfile.skills,
-      }).toLowerCase();
-
-      // Calculate keyword match score
-      let matchCount = 0;
-      let totalMatches = 0;
-
-      for (const term of keywordTerms) {
-        const termLower = term.toLowerCase();
-        const matches = (profileText.match(new RegExp(termLower, 'g')) || [])
-          .length;
-        if (matches > 0) {
-          matchCount++;
-          totalMatches += matches;
-        }
-      }
-
-      // Score based on percentage of terms matched and frequency
-      const termMatchRatio = matchCount / keywordTerms.length;
-      const frequencyBonus = Math.min(totalMatches / 10, 0.3); // Cap bonus at 0.3
-      const keywordScore = termMatchRatio + frequencyBonus;
-
-      if (keywordScore <= 0) return null;
-
-      return {
-        userId: userProfile.userId,
-        score: keywordScore,
-        profile: {
+        // Create searchable text from profile
+        const profileText = createProfileText({
           jobRole: userProfile.jobRole,
           companyName: userProfile.companyName,
           industry: userProfile.industry,
@@ -844,16 +883,63 @@ async function keywordSearch(
           about: userProfile.about,
           interests: userProfile.interests,
           skills: userProfile.skills,
-        },
-      } as SearchResult;
-    })
-    .filter(
-      (result: SearchResult | null): result is SearchResult => result !== null
-    )
+        }).toLowerCase();
+
+        // Calculate keyword match score
+        let matchCount = 0;
+        let totalMatches = 0;
+
+        for (const term of keywordTerms) {
+          const termLower = term.toLowerCase();
+          const matches = (profileText.match(new RegExp(termLower, 'g')) || [])
+            .length;
+          if (matches > 0) {
+            matchCount++;
+            totalMatches += matches;
+          }
+        }
+
+        // Score based on percentage of terms matched and frequency
+        const termMatchRatio = matchCount / keywordTerms.length;
+        const frequencyBonus = Math.min(totalMatches / 10, 0.3); // Cap bonus at 0.3
+        const keywordScore = termMatchRatio + frequencyBonus;
+
+        // Early filtering - only keep results with decent keyword matches
+        if (keywordScore <= 0.2) return null;
+
+        return {
+          userId: userProfile.userId,
+          score: keywordScore,
+          profile: {
+            jobRole: userProfile.jobRole,
+            companyName: userProfile.companyName,
+            industry: userProfile.industry,
+            yearsOfExperience: userProfile.yearsOfExperience,
+            education: userProfile.education,
+            about: userProfile.about,
+            interests: userProfile.interests,
+            skills: userProfile.skills,
+          },
+        } as SearchResult;
+      }).filter(
+        (result: SearchResult | null): result is SearchResult => result !== null
+      );
+
+      results.push(...batchResults);
+      processedItems += scanResponse.Items.length;
+    }
+
+    lastEvaluatedKey = scanResponse.LastEvaluatedKey;
+
+    // Stop early if we have enough results or processed enough items
+    if (results.length >= limit * 2 || processedItems >= maxItemsToProcess) {
+      break;
+    }
+  } while (lastEvaluatedKey);
+
+  return results
     .sort((a: SearchResult, b: SearchResult) => b.score - a.score)
     .slice(0, limit);
-
-  return keywordResults;
 }
 
 // Hybrid search combining semantic and keyword search

@@ -120,7 +120,7 @@ export default function AdvancedRAGSearch({
 
     debounceRef.current = setTimeout(() => {
       performRAGSearch(newQuery);
-    }, 500);
+    }, 800); // Increased debounce to reduce API calls
   };
 
   const getScoreColor = (score: number) => {

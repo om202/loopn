@@ -33,6 +33,8 @@ export interface VectorSearchResponse {
   enhancedQuery?: string;
   keywordTerms?: string[];
   hybridScores?: { semantic: number; keyword: number; combined: number }[];
+  ragReasoning?: string;
+  searchInsights?: string;
   error?: string;
 }
 

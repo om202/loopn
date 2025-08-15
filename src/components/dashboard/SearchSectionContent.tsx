@@ -124,36 +124,34 @@ export default function SearchSectionContent({
 
         setSearchResults(enhancedResults);
 
-        // Load full profile data for each result
-        for (let i = 0; i < enhancedResults.length; i++) {
-          const result = enhancedResults[i];
-          try {
-            const fullProfile = await UserProfileService.getProfileDetails(
-              result.userId
-            );
+        // Load full profile data for each result in parallel
+        try {
+          const profilePromises = enhancedResults.map(result =>
+            UserProfileService.getProfileDetails(result.userId).catch(error => {
+              console.error(
+                `Error loading profile for user ${result.userId}:`,
+                error
+              );
+              return null; // Return null for failed profiles
+            })
+          );
 
-            setSearchResults(prev =>
-              prev.map((item, index) =>
-                index === i
-                  ? {
-                      ...item,
-                      fullProfile: fullProfile || undefined,
-                      isLoading: false,
-                    }
-                  : item
-              )
-            );
-          } catch (error) {
-            console.error(
-              `Error loading profile for user ${result.userId}:`,
-              error
-            );
-            setSearchResults(prev =>
-              prev.map((item, index) =>
-                index === i ? { ...item, isLoading: false } : item
-              )
-            );
-          }
+          const profiles = await Promise.all(profilePromises);
+
+          // Update all results at once with loaded profiles
+          setSearchResults(prev =>
+            prev.map((item, index) => ({
+              ...item,
+              fullProfile: profiles[index] || undefined,
+              isLoading: false,
+            }))
+          );
+        } catch (error) {
+          console.error('Error loading profiles in parallel:', error);
+          // Fallback: mark all as not loading
+          setSearchResults(prev =>
+            prev.map(item => ({ ...item, isLoading: false }))
+          );
         }
       } catch (error) {
         console.error('Search error:', error);
