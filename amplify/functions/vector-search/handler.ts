@@ -809,6 +809,10 @@ async function expandKeywords(
 }> {
   try {
     console.log(`expandKeywords called with: "${originalQuery}"`);
+    
+    // Always include original query terms as the foundation
+    const originalTerms = originalQuery.split(' ').filter(term => term.trim().length > 0);
+    
     const prompt = `[INST] You are a professional search term expansion specialist.
 
 TASK: Expand the search query "${originalQuery}" with relevant professional terms.
@@ -824,6 +828,7 @@ REQUIREMENTS:
 3. Add industry-specific terminology
 4. Include relevant skills and technologies
 5. Consider different seniority levels
+6. PRESERVE the original search terms - they are important
 
 OUTPUT: Return ONLY valid JSON in this exact format:
 {
@@ -852,17 +857,23 @@ Output: {"expandedTerms": ["marketing", "marketer", "digital marketing"], "synon
 
     const parsed = JSON.parse(jsonText);
 
+    // Ensure original terms are always included in expandedTerms
+    const expandedTerms = [...originalTerms, ...(parsed.expandedTerms || [])];
+    const uniqueExpandedTerms = [...new Set(expandedTerms)]; // Remove duplicates
+
     return {
       success: true,
-      expandedTerms: parsed.expandedTerms || [],
+      expandedTerms: uniqueExpandedTerms,
       synonyms: parsed.synonyms || [],
       relatedTerms: parsed.relatedTerms || [],
     };
   } catch (error: unknown) {
     console.error('Error expanding keywords:', error);
+    // Fallback to at least include original terms
+    const originalTerms = originalQuery.split(' ').filter(term => term.trim().length > 0);
     return {
       success: false,
-      expandedTerms: [originalQuery],
+      expandedTerms: originalTerms,
       synonyms: [],
       relatedTerms: [],
       error: error instanceof Error ? error.message : 'Unknown error',
@@ -1079,17 +1090,37 @@ async function advancedRAGSearch(
       JSON.stringify(keywordExpansion, null, 2)
     );
 
+    // Step 1.5: Create enhanced query that includes original terms
+    console.log('Step 1.5: Creating enhanced query with original terms...');
+    const enhancementResult = await enhanceQuery(query, userContext);
+    const enhancedQuery = enhancementResult.success ? enhancementResult.enhancedQuery : query;
+    
+    // Combine original query terms with enhanced and expanded terms
+    const originalTerms = query.split(' ').filter(term => term.trim().length > 0);
+    const enhancedTerms = enhancedQuery.split(' ').filter(term => term.trim().length > 0);
+    
     const allKeywords = [
+      ...originalTerms, // IMPORTANT: Include original query terms
+      ...enhancedTerms, // Include enhanced query terms
       ...keywordExpansion.expandedTerms,
       ...keywordExpansion.synonyms,
       ...keywordExpansion.relatedTerms,
     ].filter(Boolean);
 
-    // Step 2: Hybrid Search (Semantic + Keyword)
-    console.log('Step 2: Performing hybrid search...');
+    // Remove duplicates while preserving order (original terms first)
+    const uniqueKeywords = [...new Set(allKeywords)];
+    
+    console.log('Combined keywords:', uniqueKeywords);
+
+    // Step 2: Hybrid Search (Semantic + Keyword) using BOTH original and enhanced query
+    console.log('Step 2: Performing hybrid search with combined terms...');
+    
+    // Create a combined search query that includes both original and enhanced
+    const combinedSearchQuery = `${query} ${enhancedQuery}`.trim();
+    
     const { results: hybridResults, hybridScores } = await hybridSearch(
-      query,
-      allKeywords,
+      combinedSearchQuery, // Use combined query for semantic search
+      uniqueKeywords, // Use all unique keywords for keyword search
       limit * 2 // Get more results for LLM filtering
     );
 
@@ -1099,7 +1130,8 @@ async function advancedRAGSearch(
       return {
         success: true,
         results: [],
-        keywordTerms: allKeywords,
+        enhancedQuery: enhancedQuery,
+        keywordTerms: uniqueKeywords,
         hybridScores: [],
       };
     }
@@ -1183,7 +1215,8 @@ REQUIREMENTS:
     return {
       success: true,
       results: finalResults,
-      keywordTerms: allKeywords,
+      enhancedQuery: enhancedQuery, // Include the enhanced query
+      keywordTerms: uniqueKeywords, // Use the combined unique keywords
       hybridScores: hybridScores.slice(0, finalResults.length),
     };
   } catch (error: unknown) {
@@ -1228,13 +1261,21 @@ async function intelligentSearch(
       );
     }
 
-    const searchQuery = queryEnhancement.success
+    const enhancedQuery = queryEnhancement.success
       ? queryEnhancement.enhancedQuery
       : query;
-    console.log(`Enhanced query: "${searchQuery}"`);
+    
+    // Combine original query with enhanced query for comprehensive search
+    const combinedSearchQuery = query === enhancedQuery 
+      ? query 
+      : `${query} ${enhancedQuery}`.trim();
+      
+    console.log(`Original query: "${query}"`);
+    console.log(`Enhanced query: "${enhancedQuery}"`);
+    console.log(`Combined search query: "${combinedSearchQuery}"`);
 
-    // Step 2: Use enhanced query for vector search (get more results for reranking)
-    const vectorResults = await searchUsers(searchQuery, limit * 2);
+    // Step 2: Use combined query for vector search (get more results for reranking)
+    const vectorResults = await searchUsers(combinedSearchQuery, limit * 2);
 
     if (!vectorResults.success || !vectorResults.results) {
       return {
@@ -1255,7 +1296,7 @@ async function intelligentSearch(
     return {
       success: true,
       results: finalResults, // Use regular results format, not enhancedResults
-      enhancedQuery: searchQuery,
+      enhancedQuery: enhancedQuery,
     };
   } catch (error: unknown) {
     console.error('Error in intelligent search:', error);

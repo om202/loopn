@@ -68,8 +68,9 @@ export default function SearchSectionContent({
         );
 
         console.info('Advanced RAG Search:', {
-          query: searchTerm,
+          originalQuery: searchTerm,
           enhancedQuery: response.enhancedQuery,
+          keywordTerms: response.keywordTerms,
           resultsCount: response.results?.length || 0,
         });
 
