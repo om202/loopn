@@ -465,19 +465,20 @@ async function bulkIndexUsers(
 
 /*
  * SIMILARITY THRESHOLD GUIDE:
- *
- * CURRENT (TESTING): Very permissive thresholds to see all possible results
- * - Early Filter: 0.05 (5% similarity)
- * - Final Filter: 0.05 (5% similarity)
- *
+ * 
+ * CURRENT (BALANCED): Good balance between relevance and coverage
+ * - Early Filter: 0.18 (18% similarity) - Relevant candidates with good coverage
+ * - Final Filter: 0.15 (15% similarity) - Quality results with decent quantity
+ * - Keyword Filter: 0.12 (12% keyword match) - Meaningful keyword matches
+ * 
  * PRODUCTION OPTIMAL THRESHOLDS:
- * - Early Filter: 0.25-0.30 (25-30% similarity) - Good quality candidates
- * - Final Filter: 0.20-0.25 (20-25% similarity) - Relevant results
- * - Keyword Filter: 0.15-0.20 (15-20% keyword match) - Meaningful matches
- *
+ * - Early Filter: 0.25-0.30 (25-30% similarity) - High quality candidates
+ * - Final Filter: 0.20-0.25 (20-25% similarity) - Very relevant results
+ * - Keyword Filter: 0.15-0.20 (15-20% keyword match) - Strong keyword matches
+ * 
  * PERFORMANCE SETTINGS:
- * - TESTING: Process 25x limit, batch size 150 (comprehensive but slower)
- * - PRODUCTION: Process 10-15x limit, batch size 50-100 (balanced performance)
+ * - BALANCED: Process 18x limit, batch size 120 (good coverage with reasonable speed)
+ * - PRODUCTION: Process 10-15x limit, batch size 50-100 (optimal performance)
  */
 async function searchUsers(
   query: string,
@@ -504,14 +505,14 @@ async function searchUsers(
   const results: SearchResult[] = [];
   let lastEvaluatedKey: Record<string, AttributeValue> | undefined;
   let processedItems = 0;
-  const maxItemsToProcess = limit * 25; // TESTING: Process 25x limit for comprehensive results
+  const maxItemsToProcess = limit * 18; // BALANCED: Process 18x limit for good coverage
   // PRODUCTION OPTIMAL: limit * 10-15 for performance balance
 
   do {
     const scanParams = {
       TableName: USER_PROFILE_TABLE,
       FilterExpression: 'attribute_exists(profileEmbedding)',
-      Limit: 150, // TESTING: Larger batches for comprehensive results
+      Limit: 120, // BALANCED: Medium batches for good performance
       // PRODUCTION OPTIMAL: 50-100 for performance balance
       ExclusiveStartKey: lastEvaluatedKey,
       // Add projection to only fetch necessary fields for performance
@@ -532,10 +533,10 @@ async function searchUsers(
           userProfile.profileEmbedding
         );
 
-        // Early filtering - minimal threshold for testing
+        // Early filtering - balanced threshold for good results
         // PRODUCTION OPTIMAL: 0.25-0.30 for quality results
-        // TESTING: 0.05 to see almost all candidates
-        if (similarity < 0.05) return null;
+        // BALANCED: 0.18 for relevant results with good coverage
+        if (similarity < 0.18) return null;
 
         return {
           userId: userProfile.userId,
@@ -569,9 +570,9 @@ async function searchUsers(
 
   // Sort by score and apply final filtering
   // PRODUCTION OPTIMAL: 0.20-0.25 for relevant results
-  // TESTING: 0.05 to see most candidates with any similarity
+  // BALANCED: 0.15 for good quality with decent coverage
   const finalResults = results
-    .filter((result: SearchResult) => result.score >= 0.05)
+    .filter((result: SearchResult) => result.score >= 0.15)
     .sort((a: SearchResult, b: SearchResult) => b.score - a.score)
     .slice(0, limit);
 
@@ -877,14 +878,14 @@ async function keywordSearch(
   const results: SearchResult[] = [];
   let lastEvaluatedKey: Record<string, AttributeValue> | undefined;
   let processedItems = 0;
-  const maxItemsToProcess = limit * 20; // TESTING: Process 20x limit for comprehensive keyword search
+  const maxItemsToProcess = limit * 15; // BALANCED: Process 15x limit for good keyword coverage
   // PRODUCTION OPTIMAL: limit * 8-12 for performance balance
 
   do {
     const scanParams = {
       TableName: USER_PROFILE_TABLE,
       FilterExpression: 'attribute_exists(profileEmbedding)',
-      Limit: 100, // TESTING: Larger batches for comprehensive keyword search
+      Limit: 80, // BALANCED: Medium batches for keyword search
       // PRODUCTION OPTIMAL: 30-50 for performance balance
       ExclusiveStartKey: lastEvaluatedKey,
       ProjectionExpression:
@@ -928,10 +929,10 @@ async function keywordSearch(
         const frequencyBonus = Math.min(totalMatches / 10, 0.3); // Cap bonus at 0.3
         const keywordScore = termMatchRatio + frequencyBonus;
 
-        // Early filtering - minimal keyword threshold for testing
+        // Early filtering - balanced keyword threshold 
         // PRODUCTION OPTIMAL: 0.15-0.20 for relevant keyword matches
-        // TESTING: 0.05 to see almost any keyword match
-        if (keywordScore <= 0.05) return null;
+        // BALANCED: 0.12 for meaningful keyword matches with good coverage
+        if (keywordScore <= 0.12) return null;
 
         return {
           userId: userProfile.userId,
