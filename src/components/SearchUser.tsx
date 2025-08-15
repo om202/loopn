@@ -115,7 +115,7 @@ export default function SearchUser({
   };
 
   return (
-    <div className='max-w-md mx-auto relative space-y-4'>
+    <div className='max-w-md mx-auto relative'>
       <form
         onSubmit={handleSubmit}
         className='relative'
@@ -205,7 +205,7 @@ export default function SearchUser({
       {showHistory && searchHistory.length > 0 && (
         <div
           ref={dropdownRef}
-          className='absolute top-full left-0 right-0 bg-white border border-zinc-200 rounded-2xl shadow-lg z-20 max-h-64 overflow-y-auto mt-2'
+          className='absolute top-full left-0 right-0 bg-white border border-zinc-200 rounded-2xl shadow-lg z-50 max-h-64 overflow-y-auto mt-2'
         >
           <div className='py-2'>
             <div className='px-4 py-2 text-xs font-medium text-zinc-500 border-b border-zinc-100'>
