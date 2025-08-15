@@ -511,7 +511,7 @@ async function invokeMistral(prompt: string): Promise<string> {
         max_tokens: 1500,
         temperature: 0.15, // Optimized for RAG tasks
         top_p: 0.95,
-        stop: ["</s>", "\n\n", "[/INST]"]
+        stop: ['</s>', '\n\n', '[/INST]'],
       }),
       contentType: 'application/json',
       accept: 'application/json',
@@ -686,22 +686,22 @@ Ensure the array maintains the same order as the input profiles.`;
       results: enhancedResults,
     };
   } catch (error: unknown) {
-          console.error('Error reranking results:', error);
-      // Fallback: return original results with basic confidence scores
-      const fallbackResults: EnhancedSearchResult[] = vectorResults.map(
-        result => ({
-          ...result,
-          confidenceScore: Math.round(result.score * 100),
-          matchExplanation: `${Math.round(result.score * 100)}% semantic similarity match`,
-          relevanceFactors: ['Semantic similarity'],
-        })
-      );
+    console.error('Error reranking results:', error);
+    // Fallback: return original results with basic confidence scores
+    const fallbackResults: EnhancedSearchResult[] = vectorResults.map(
+      result => ({
+        ...result,
+        confidenceScore: Math.round(result.score * 100),
+        matchExplanation: `${Math.round(result.score * 100)}% semantic similarity match`,
+        relevanceFactors: ['Semantic similarity'],
+      })
+    );
 
-      return {
-        success: true,
-        results: fallbackResults,
-        error: `Mistral reranking failed, using fallback: ${error instanceof Error ? error.message : 'Unknown error'}`,
-      };
+    return {
+      success: true,
+      results: fallbackResults,
+      error: `Mistral reranking failed, using fallback: ${error instanceof Error ? error.message : 'Unknown error'}`,
+    };
   }
 }
 
