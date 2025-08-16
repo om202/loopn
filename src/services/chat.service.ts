@@ -80,8 +80,12 @@ export class ChatService {
         // Try to use cached profile first, then fallback to API
         let requesterProfile = null;
         try {
-          const { useSubscriptionStore } = await import('../stores/subscription-store');
-          const cachedProfile = useSubscriptionStore.getState().getUserProfile(requesterId);
+          const { useSubscriptionStore } = await import(
+            '../stores/subscription-store'
+          );
+          const cachedProfile = useSubscriptionStore
+            .getState()
+            .getUserProfile(requesterId);
           if (cachedProfile) {
             requesterProfile = {
               fullName: cachedProfile.fullName || undefined,
@@ -259,24 +263,44 @@ export class ChatService {
     receiverId: string
   ): Promise<DataResult<boolean>> {
     try {
-      // Find the pending chat request between these users
-      const result = await getClient().models.ChatRequest.list({
-        filter: {
-          requesterId: { eq: requesterId },
-          receiverId: { eq: receiverId },
-          status: { eq: 'PENDING' },
-        },
-      });
-
-      if (!result.data || result.data.length === 0) {
-        return {
-          data: false,
-          error: 'No pending chat request found',
-        };
+      // Try to find the pending chat request in our Zustand cache first
+      let chatRequest = null;
+      try {
+        const { useSubscriptionStore } = await import(
+          '../stores/subscription-store'
+        );
+        const sentRequests = useSubscriptionStore.getState().sentChatRequests;
+        chatRequest = sentRequests.find(
+          req =>
+            req.requesterId === requesterId &&
+            req.receiverId === receiverId &&
+            req.status === 'PENDING'
+        );
+      } catch (_cacheError) {
+        console.log(
+          '[ChatService] Cache not available for cancel request, using API fallback'
+        );
       }
 
-      // Update the first matching request to REJECTED status
-      const chatRequest = result.data[0];
+      // Fallback to API if not found in cache
+      if (!chatRequest) {
+        const result = await getClient().models.ChatRequest.list({
+          filter: {
+            requesterId: { eq: requesterId },
+            receiverId: { eq: receiverId },
+            status: { eq: 'PENDING' },
+          },
+        });
+
+        if (!result.data || result.data.length === 0) {
+          return {
+            data: false,
+            error: 'No pending chat request found',
+          };
+        }
+
+        chatRequest = result.data[0];
+      }
       const updateResult = await getClient().models.ChatRequest.update({
         id: chatRequest.id,
         status: 'REJECTED', // Use REJECTED to mark as cancelled
