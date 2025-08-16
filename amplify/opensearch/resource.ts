@@ -4,19 +4,23 @@ import { Stack, RemovalPolicy } from 'aws-cdk-lib';
 
 export function defineOpenSearch(stack: Stack, lambdaRole?: iam.IRole) {
   // Generate unique resource names based on stack to avoid conflicts
-  const stackHash = stack.stackName.slice(-8).toLowerCase();
-  const collectionName = `user-search-${stackHash}`;
+  const stackHash = stack.stackName.slice(-8).toLowerCase().replace(/[^a-z0-9]/g, '');
+  const collectionName = `usersearch${stackHash}`;
   
   // Create security policy for the collection
   const securityPolicy = new opensearch.CfnSecurityPolicy(
     stack,
     'UserSearchSecurityPolicy',
     {
-      name: `user-search-security-policy-${stackHash}`,
+      name: `usersearchsecpolicy${stackHash}`,
       type: 'encryption',
       policy: JSON.stringify({
-        ResourceType: 'collection',
-        Resource: [`collection/${collectionName}`],
+        Rules: [
+          {
+            ResourceType: 'collection',
+            Resource: [`collection/${collectionName}`]
+          }
+        ],
         AWSOwnedKey: true
       }),
     }
@@ -27,7 +31,7 @@ export function defineOpenSearch(stack: Stack, lambdaRole?: iam.IRole) {
     stack,
     'UserSearchNetworkPolicy',
     {
-      name: `user-search-network-policy-${stackHash}`,
+      name: `usersearchnetpolicy${stackHash}`,
       type: 'network',
       policy: JSON.stringify([
         {
@@ -52,7 +56,7 @@ export function defineOpenSearch(stack: Stack, lambdaRole?: iam.IRole) {
     stack,
     'UserSearchDataAccessPolicy',
     {
-      name: `user-search-data-access-policy-${stackHash}`,
+      name: `usersearchdatapolicy${stackHash}`,
       type: 'data',
       policy: JSON.stringify([
         {
