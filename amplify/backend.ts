@@ -73,6 +73,12 @@ backend.openSearchClient.addEnvironment(
   openSearchResources.endpoint
 );
 
+// Pass collection name for reference
+backend.openSearchClient.addEnvironment(
+  'OPENSEARCH_COLLECTION_NAME',
+  openSearchResources.collection.name!
+);
+
 // Add environment variable to control email verification
 // Set to 'true' to disable email verification (for testing)
 // Set to 'false' to enable normal email verification (for production)

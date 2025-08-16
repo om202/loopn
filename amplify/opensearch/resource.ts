@@ -5,6 +5,7 @@ import { Stack, RemovalPolicy } from 'aws-cdk-lib';
 export function defineOpenSearch(stack: Stack, lambdaRole?: iam.IRole) {
   // Generate unique resource names based on stack to avoid conflicts
   const stackHash = stack.stackName.slice(-8).toLowerCase();
+  const collectionName = `user-search-${stackHash}`;
   
   // Create security policy for the collection
   const securityPolicy = new opensearch.CfnSecurityPolicy(
@@ -17,10 +18,10 @@ export function defineOpenSearch(stack: Stack, lambdaRole?: iam.IRole) {
         Rules: [
           {
             ResourceType: 'collection',
-            Resource: [`collection/user-search`],
-          },
+            Resource: [`collection/${collectionName}`]
+          }
         ],
-        AWSOwnedKey: true,
+        AWSOwnedKey: true
       }),
     }
   );
@@ -37,11 +38,11 @@ export function defineOpenSearch(stack: Stack, lambdaRole?: iam.IRole) {
           Rules: [
             {
               ResourceType: 'collection',
-              Resource: [`collection/user-search`],
+              Resource: [`collection/${collectionName}`],
             },
             {
               ResourceType: 'dashboard',
-              Resource: [`collection/user-search`],
+              Resource: [`collection/${collectionName}`],
             },
           ],
           AllowFromPublic: true,
@@ -62,7 +63,7 @@ export function defineOpenSearch(stack: Stack, lambdaRole?: iam.IRole) {
           Rules: [
             {
               ResourceType: 'collection',
-              Resource: [`collection/user-search`],
+              Resource: [`collection/${collectionName}`],
               Permission: [
                 'aoss:CreateCollectionItems',
                 'aoss:DeleteCollectionItems',
@@ -72,7 +73,7 @@ export function defineOpenSearch(stack: Stack, lambdaRole?: iam.IRole) {
             },
             {
               ResourceType: 'index',
-              Resource: [`index/user-search/*`],
+              Resource: [`index/${collectionName}/*`],
               Permission: [
                 'aoss:CreateIndex',
                 'aoss:DeleteIndex',
@@ -94,7 +95,7 @@ export function defineOpenSearch(stack: Stack, lambdaRole?: iam.IRole) {
     stack,
     'UserSearchCollection',
     {
-      name: 'user-search',
+      name: collectionName,
       type: 'VECTORSEARCH',
       description: 'Vector search collection for user profiles',
     }
