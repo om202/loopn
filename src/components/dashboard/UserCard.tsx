@@ -233,14 +233,27 @@ export default function UserCard({
               );
             }
 
+            // Handle pending request state differently - show as status text with clickable tick icon
+            if (pendingRequests.has(userPresence.userId)) {
+              return (
+                <div className='flex items-center gap-1.5 px-2 py-1.5 text-sm text-zinc-600'>
+                  {/* Clickable Tick Icon for Cancel */}
+                  <button
+                    onClick={() => setShowCancelDialog(true)}
+                    className='hover:bg-zinc-100 rounded transition-colors p-0.5'
+                    title='Cancel Request'
+                  >
+                    <CheckCircle2 className='w-4 h-4 text-green-500 flex-shrink-0' />
+                  </button>
+                  <span className='text-sm font-medium'>Request Sent</span>
+                </div>
+              );
+            }
+
             return (
               <button
                 onClick={() => {
-                  if (pendingRequests.has(userPresence.userId)) {
-                    setShowCancelDialog(true);
-                  } else if (
-                    incomingRequestSenderIds.has(userPresence.userId)
-                  ) {
+                  if (incomingRequestSenderIds.has(userPresence.userId)) {
                     onAcceptChatRequest(userPresence.userId);
                   } else {
                     onChatAction(userPresence.userId);
@@ -248,29 +261,19 @@ export default function UserCard({
                 }}
                 className='px-2 py-1.5 text-sm font-medium rounded-xl border transition-colors bg-white text-brand-500 border-brand-200 hover:bg-brand-100 hover:border-brand-300 flex items-center justify-center flex-shrink-0 w-[40px] h-[40px] md:w-auto md:h-auto md:gap-1.5 md:min-w-[44px]'
                 title={
-                  pendingRequests.has(userPresence.userId)
-                    ? 'Cancel Request'
-                    : existingConversations.has(userPresence.userId)
-                      ? existingConversations.get(userPresence.userId)
-                          ?.chatStatus === 'ENDED'
-                        ? canUserReconnect(userPresence.userId)
-                          ? 'Reconnect'
-                          : 'View Chat'
-                        : 'Continue Chat'
-                      : incomingRequestSenderIds.has(userPresence.userId)
-                        ? 'Accept Request'
-                        : 'Send Request'
+                  existingConversations.has(userPresence.userId)
+                    ? existingConversations.get(userPresence.userId)
+                        ?.chatStatus === 'ENDED'
+                      ? canUserReconnect(userPresence.userId)
+                        ? 'Reconnect'
+                        : 'View Chat'
+                      : 'Continue Chat'
+                    : incomingRequestSenderIds.has(userPresence.userId)
+                      ? 'Accept Request'
+                      : 'Send Request'
                 }
               >
-                {pendingRequests.has(userPresence.userId) ? (
-                  <>
-                    <Clock className='w-4 h-4 text-zinc-600 flex-shrink-0' />
-                    <span className='hidden md:inline text-zinc-600 text-sm font-medium'>
-                      <span className='hidden lg:inline'>Cancel Request</span>
-                      <span className='lg:hidden'>Cancel</span>
-                    </span>
-                  </>
-                ) : existingConversations.has(userPresence.userId) ? (
+                {existingConversations.has(userPresence.userId) ? (
                   existingConversations.get(userPresence.userId)?.chatStatus ===
                   'ENDED' ? (
                     canUserReconnect(userPresence.userId) ? (
