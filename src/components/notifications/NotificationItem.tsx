@@ -231,6 +231,7 @@ export default function NotificationItem({
           </div>
         )}
 
+        {/* Main Content Area */}
         <div className='flex-1 min-w-0'>
           <div
             className={`${isClickable ? 'cursor-pointer' : ''}`}
@@ -238,46 +239,32 @@ export default function NotificationItem({
               onClick: () => onNotificationClick(notification),
             })}
           >
-            <div className='flex items-start justify-between mb-1'>
-              <div className='flex-1 min-w-0'>
-                <h4 className='text-sm font-medium text-zinc-900 truncate no-email-detection'>
-                  {notification.title}
-                </h4>
-                <p className='text-sm text-zinc-700 mb-1.5'>
-                  {notification.content}
-                </p>
-              </div>
-              <div className='flex flex-col items-end ml-2'>
-                <span className='text-sm text-zinc-500 font-medium'>
-                  {formatTimeAgo(notification.timestamp)}
-                </span>
-              </div>
+            {/* Name and Timestamp */}
+            <div className='flex items-center justify-between mb-0.5'>
+              <h4 className='text-base font-medium text-zinc-900 truncate no-email-detection'>
+                {notification.title}
+              </h4>
+              <span className='text-sm text-zinc-500 font-medium ml-2 flex-shrink-0'>
+                {formatTimeAgo(notification.timestamp)}
+              </span>
             </div>
+            
+            {/* Content */}
+            <p className='text-base text-zinc-700'>
+              {notification.content}
+            </p>
           </div>
+        </div>
 
+        {/* Action Buttons Area */}
+        <div className='flex flex-row gap-1 ml-3 flex-shrink-0'>
           {notification.type === 'chat_request' &&
           notification.data &&
           'requesterId' in notification.data ? (
             (() => {
               const chatRequestData = notification.data as ChatRequestWithUser;
               return (
-                <div className='flex items-center gap-1.5 mt-3'>
-                  <button
-                    onClick={e => {
-                      e.stopPropagation();
-                      onRespondToRequest(
-                        notification.id,
-                        'REJECTED',
-                        chatRequestData
-                      );
-                    }}
-                    disabled={decliningId === notification.id}
-                    className='px-2.5 py-2 text-sm font-medium text-zinc-900 bg-white border border-zinc-200 rounded-xl hover:bg-zinc-100 disabled:opacity-50 transition-colors'
-                  >
-                    {decliningId === notification.id
-                      ? 'Declining...'
-                      : 'Decline'}
-                  </button>
+                <>
                   <button
                     onClick={e => {
                       e.stopPropagation();
@@ -288,21 +275,37 @@ export default function NotificationItem({
                       );
                     }}
                     disabled={decliningId === notification.id}
-                    className='px-2.5 py-2 bg-brand-500 text-white text-sm font-medium rounded-xl hover:bg-brand-600 disabled:opacity-50 transition-colors border border-brand-500'
+                    className='px-3 py-2 bg-brand-500 text-white text-sm font-medium rounded-lg hover:bg-brand-600 disabled:opacity-50 transition-colors border border-brand-500'
                   >
                     Accept
                   </button>
-                </div>
+                  <button
+                    onClick={e => {
+                      e.stopPropagation();
+                      onRespondToRequest(
+                        notification.id,
+                        'REJECTED',
+                        chatRequestData
+                      );
+                    }}
+                    disabled={decliningId === notification.id}
+                    className='px-3 py-2 text-sm font-medium text-zinc-900 bg-white border border-zinc-200 rounded-lg hover:bg-zinc-100 disabled:opacity-50 transition-colors'
+                  >
+                    {decliningId === notification.id
+                      ? 'Declining...'
+                      : 'Decline'}
+                  </button>
+                </>
               );
             })()
           ) : notification.type === 'message' ? (
-            <div className='flex items-center gap-1.5 mt-3'>
+            <>
               <button
                 onClick={e => {
                   e.stopPropagation();
                   onNotificationClick(notification);
                 }}
-                className='px-2.5 py-2 bg-brand-500 text-white text-sm font-medium rounded-xl hover:bg-brand-600 transition-colors border border-brand-500'
+                className='px-3 py-2 bg-brand-500 text-white text-sm font-medium rounded-lg hover:bg-brand-600 transition-colors border border-brand-500'
               >
                 Reply
               </button>
@@ -331,19 +334,19 @@ export default function NotificationItem({
                     onError('Failed to mark notification as read');
                   }
                 }}
-                className='px-2.5 py-2 text-sm font-medium text-zinc-900 bg-white border border-zinc-200 rounded-xl hover:bg-zinc-100 transition-colors'
+                className='px-3 py-2 text-sm font-medium text-zinc-900 bg-white border border-zinc-200 rounded-lg hover:bg-zinc-100 transition-colors'
               >
                 Mark as Read
               </button>
-            </div>
+            </>
           ) : notification.type === 'connection' ? (
-            <div className='flex items-center gap-1.5 mt-3'>
+            <>
               <button
                 onClick={e => {
                   e.stopPropagation();
                   onNotificationClick(notification);
                 }}
-                className='px-2.5 py-2 bg-b_green-500 text-white text-sm font-medium rounded-xl hover:bg-b_green-600 transition-colors border border-b_green-500'
+                className='px-3 py-2 bg-b_green-500 text-white text-sm font-medium rounded-lg hover:bg-b_green-600 transition-colors border border-b_green-500'
               >
                 Start Chat
               </button>
@@ -365,33 +368,31 @@ export default function NotificationItem({
                     onError('Failed to mark notification as read');
                   }
                 }}
-                className='px-2.5 py-2 text-sm font-medium text-zinc-900 bg-white border border-zinc-200 rounded-xl hover:bg-zinc-100 transition-colors'
+                className='px-3 py-2 text-sm font-medium text-zinc-900 bg-white border border-zinc-200 rounded-lg hover:bg-zinc-100 transition-colors'
               >
                 Mark as Read
               </button>
-            </div>
+            </>
           ) : (
-            <div className='flex items-center gap-1.5 mt-3'>
-              <button
-                onClick={async e => {
-                  e.stopPropagation();
-                  if (!user) return;
-                  try {
-                    await notificationService.markNotificationAsRead(
-                      notification.id
-                    );
-                    // Remove from local state via parent callback
-                    onRemoveNotification(notification.id);
-                  } catch (error) {
-                    console.error('Error marking notification as read:', error);
-                    onError('Failed to mark notification as read');
-                  }
-                }}
-                className='px-2.5 py-2 text-sm font-medium text-zinc-900 bg-white border border-zinc-200 rounded-xl hover:bg-zinc-100 transition-colors'
-              >
-                Mark as Read
-              </button>
-            </div>
+            <button
+              onClick={async e => {
+                e.stopPropagation();
+                if (!user) return;
+                try {
+                  await notificationService.markNotificationAsRead(
+                    notification.id
+                  );
+                  // Remove from local state via parent callback
+                  onRemoveNotification(notification.id);
+                } catch (error) {
+                  console.error('Error marking notification as read:', error);
+                  onError('Failed to mark notification as read');
+                }
+              }}
+              className='px-3 py-2 text-sm font-medium text-zinc-900 bg-white border border-zinc-200 rounded-lg hover:bg-zinc-100 transition-colors'
+            >
+              Mark as Read
+            </button>
           )}
         </div>
       </div>
