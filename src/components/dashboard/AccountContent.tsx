@@ -1,17 +1,15 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { UserProfileService } from '@/services/user-profile.service';
 import UserAvatar from '../UserAvatar';
-import type { Schema } from '../../../amplify/data/resource';
-
-type UserProfile = Schema['UserProfile']['type'];
+import { useUserProfile } from '../../hooks/useUserProfile';
 
 export default function AccountContent() {
   const { user, onboardingStatus } = useAuth();
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
-  const [loadingProfile, setLoadingProfile] = useState(false);
+  
+  // Use our centralized user profile hook instead of local state and API calls
+  const { profile: userProfile, isLoading: loadingProfile } = useUserProfile(user?.userId || '');
 
   const getUserEmail = () => {
     return user?.signInDetails?.loginId || '';
@@ -41,34 +39,7 @@ export default function AccountContent() {
     return `${name} (You)`;
   };
 
-  // Load current user's profile details
-  useEffect(() => {
-    let mounted = true;
 
-    const loadUserProfile = async () => {
-      if (!user?.userId) return;
-
-      setLoadingProfile(true);
-      try {
-        const profile = await UserProfileService.getProfileDetails(user.userId);
-        if (mounted) {
-          setUserProfile(profile);
-        }
-      } catch (error) {
-        console.error('Error loading user profile:', error);
-      } finally {
-        if (mounted) {
-          setLoadingProfile(false);
-        }
-      }
-    };
-
-    loadUserProfile();
-
-    return () => {
-      mounted = false;
-    };
-  }, [user?.userId]);
 
   return (
     <div className='h-full flex flex-col'>
