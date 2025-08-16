@@ -15,12 +15,8 @@ export function defineOpenSearch(stack: Stack, lambdaRole?: iam.IRole) {
       name: `user-search-security-policy-${stackHash}`,
       type: 'encryption',
       policy: JSON.stringify({
-        Rules: [
-          {
-            ResourceType: 'collection',
-            Resource: [`collection/${collectionName}`]
-          }
-        ],
+        ResourceType: 'collection',
+        Resource: [`collection/${collectionName}`],
         AWSOwnedKey: true
       }),
     }
