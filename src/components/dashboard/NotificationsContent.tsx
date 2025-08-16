@@ -9,9 +9,10 @@ import { createShortChatUrl } from '../../lib/url-utils';
 import { chatService } from '../../services/chat.service';
 import { messageService } from '../../services/message.service';
 import { notificationService } from '../../services/notification.service';
-import { UserProfileService } from '../../services/user-profile.service';
+
 import { useChatRequests } from '../../hooks/useChatRequests';
 import { useNotifications } from '../../hooks/useNotifications';
+import { useSubscriptionStore } from '../../stores/subscription-store';
 
 import NotificationItem from '../notifications/NotificationItem';
 import LoadingContainer from '../LoadingContainer';
@@ -58,6 +59,9 @@ export default function NotificationsContent() {
     enabled: !!user?.userId,
   });
 
+  // Use centralized profile cache
+  const { fetchUserProfile } = useSubscriptionStore();
+
   const [notifications, setNotifications] = useState<UINotification[]>([]);
   const [activeFilter] = useState<NotificationFilter>('all');
   const [decliningId, setDecliningId] = useState<string | null>(null);
@@ -89,18 +93,16 @@ export default function NotificationsContent() {
     const processRequests = async () => {
       const requestsWithUsers: ChatRequestWithUser[] = await Promise.all(
         realtimeChatRequests.map(async request => {
-          // Fetch user profile for real name and avatar
-          const profileResult = await new UserProfileService().getUserProfile(
-            request.requesterId
-          );
-          const requesterProfile = profileResult.data
+          // Fetch user profile from centralized cache
+          const profileData = await fetchUserProfile(request.requesterId);
+          const requesterProfile = profileData
             ? {
-                fullName: profileResult.data.fullName || undefined,
-                email: profileResult.data.email || undefined,
+                fullName: profileData.fullName || undefined,
+                email: profileData.email || undefined,
                 profilePictureUrl:
-                  profileResult.data.profilePictureUrl || undefined,
+                  profileData.profilePictureUrl || undefined,
                 hasProfilePicture:
-                  profileResult.data.hasProfilePicture || false,
+                  profileData.hasProfilePicture || false,
               }
             : undefined;
 
@@ -158,7 +160,7 @@ export default function NotificationsContent() {
     };
 
     processRequests();
-  }, [realtimeChatRequests, chatRequestsLoading]);
+  }, [realtimeChatRequests, chatRequestsLoading, fetchUserProfile]);
 
   useEffect(() => {
     if (!user) {
