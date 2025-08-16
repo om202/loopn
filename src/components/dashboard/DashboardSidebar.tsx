@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { MessageCircle, Home, Users, HelpCircle, Bug } from 'lucide-react';
+import { MessageCircle, Compass, Users, HelpCircle, Bug } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAuthenticator } from '@aws-amplify/ui-react';
@@ -82,8 +82,8 @@ export default function DashboardSidebar({
   const sidebarItems = [
     {
       id: 'suggested' as const,
-      icon: Home,
-      label: 'Home',
+      icon: Compass,
+      label: 'Discover',
       count: suggestedUsersCount,
     },
     {
@@ -326,7 +326,7 @@ export default function DashboardSidebar({
                   {id === 'account'
                     ? 'You'
                     : id === 'suggested'
-                      ? 'Home'
+                      ? 'Discover'
                       : id === 'connections'
                         ? 'Connect'
                         : id === 'notifications'

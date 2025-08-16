@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, X, Clock } from 'lucide-react';
+import { Search, X, Clock, Sparkles } from 'lucide-react';
 import {
   getSearchHistory,
   addToSearchHistory,
@@ -143,7 +143,7 @@ export default function SearchUser({
           tabIndex={-1}
           aria-hidden='true'
         />
-        <Search className='absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-400 z-10' />
+        <Sparkles className='absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 z-10' />
         <input
           ref={inputRef}
           type='text'

@@ -862,15 +862,7 @@ export default function OnlineUsers({
                         `User${profileSidebarUser.userId.slice(-4)}`}
                     </div>
                   </div>
-                  <div className='text-sm text-zinc-500'>
-                    {onlineUsers.find(
-                      u => u.userId === profileSidebarUser.userId
-                    )
-                      ? 'Online now'
-                      : profileSidebarUser.lastSeen
-                        ? formatPresenceTime(profileSidebarUser.lastSeen)
-                        : 'Offline'}
-                  </div>
+
                 </div>
               </div>
             </div>
