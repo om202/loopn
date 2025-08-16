@@ -1,11 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { User, Clock } from 'lucide-react';
 import { imageUrlCache } from '@/lib/image-cache';
 import { ShimmerProvider, Skeleton } from './ShimmerLoader/exports';
 import Tooltip from './Tooltip';
+
+// Global set to track which images have been loaded before
+const loadedImages = new Set<string>();
 
 interface UserAvatarProps {
   email?: string | null;
@@ -139,37 +142,52 @@ export default function UserAvatar({
 
   const [imageError, setImageError] = useState(false);
   const [resolvedImageUrl, setResolvedImageUrl] = useState<string | null>(null);
-  const [isLoadingUrl, setIsLoadingUrl] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const previousUrlRef = useRef<string | null>(null);
+  const previousResolvedUrlRef = useRef<string | null>(null);
 
   // Convert S3 key to displayable URL using cache
   useEffect(() => {
     const resolveImageUrl = async () => {
       if (profilePictureUrl && hasProfilePicture) {
-        setIsLoadingUrl(true);
-        setImageError(false);
-
         try {
           const url = await imageUrlCache.getResolvedUrl(profilePictureUrl);
+
+          // Check if this image has been loaded before globally
+          const wasLoadedBefore = url ? loadedImages.has(url) : false;
+
+          // Only reset imageLoaded if either the profile picture URL or resolved URL has actually changed
+          const hasUrlChanged = previousUrlRef.current !== profilePictureUrl;
+          const hasResolvedUrlChanged = previousResolvedUrlRef.current !== url;
+
+          if (hasUrlChanged || hasResolvedUrlChanged) {
+            setImageError(false);
+            // If the image was loaded before, don't reset imageLoaded to false
+            setImageLoaded(wasLoadedBefore);
+            previousUrlRef.current = profilePictureUrl;
+            previousResolvedUrlRef.current = url;
+          }
+
           setResolvedImageUrl(url);
         } catch (error) {
           console.error('Error resolving profile picture URL:', error);
           setResolvedImageUrl(null);
-        } finally {
-          setIsLoadingUrl(false);
+          setImageError(true);
+          previousUrlRef.current = profilePictureUrl;
+          previousResolvedUrlRef.current = null;
         }
       } else {
         setResolvedImageUrl(null);
-        setIsLoadingUrl(false);
+        setImageLoaded(false);
+        previousUrlRef.current = null;
+        previousResolvedUrlRef.current = null;
       }
     };
 
     resolveImageUrl();
   }, [profilePictureUrl, hasProfilePicture]);
 
-  const shouldShowProfileImage =
-    hasProfilePicture && resolvedImageUrl && !imageError && !isLoadingUrl;
-
-  const shouldShowLoadingState = hasProfilePicture && isLoadingUrl;
+  const shouldShowLoadingState = hasProfilePicture && !imageLoaded;
 
   const getStatusText = () => {
     if (statusTooltip) return statusTooltip;
@@ -196,42 +214,69 @@ export default function UserAvatar({
     >
       <div className={`relative ${className} cursor-pointer`}>
         <div
-          className='rounded-full overflow-hidden border border-brand-500 flex-shrink-0'
+          className={`rounded-full overflow-hidden flex-shrink-0 relative ${
+            imageLoaded && hasProfilePicture && !imageError
+              ? 'border border-brand-500'
+              : 'border border-transparent'
+          }`}
           style={{
             width: `${getAvatarSize()}px`,
             height: `${getAvatarSize()}px`,
           }}
         >
-          {shouldShowProfileImage ? (
+          {/* Always render the image if we have a URL, but control visibility with opacity */}
+          {resolvedImageUrl && !imageError && (
             <Image
               src={resolvedImageUrl}
               alt={`${email || userId || 'User'} profile picture`}
               width={getAvatarSize()}
               height={getAvatarSize()}
-              className='object-cover'
+              className={`object-cover absolute inset-0 transition-opacity duration-300 ease-in-out ${
+                imageLoaded ? 'opacity-100' : 'opacity-0'
+              }`}
               style={{
                 width: '100%',
                 height: '100%',
               }}
+              onLoad={() => {
+                setImageLoaded(true);
+                // Add this URL to the global set of loaded images
+                if (resolvedImageUrl) {
+                  loadedImages.add(resolvedImageUrl);
+                }
+              }}
               onError={() => {
                 setImageError(true);
+                setImageLoaded(false);
               }}
               priority={size === 'lg' || size === 'xl'} // Prioritize larger avatars
             />
-          ) : shouldShowLoadingState ? (
-            <ShimmerProvider>
-              <Skeleton
-                circle
-                width={getAvatarSize()}
-                height={getAvatarSize()}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                }}
-              />
-            </ShimmerProvider>
-          ) : (
-            <div className='bg-gray-100 w-full h-full flex items-center justify-center'>
+          )}
+
+          {/* Loading state - show shimmer while loading */}
+          {shouldShowLoadingState && (
+            <div
+              className={`absolute inset-0 transition-opacity duration-300 ease-in-out ${
+                imageLoaded ? 'opacity-0' : 'opacity-100'
+              }`}
+            >
+              <ShimmerProvider>
+                <Skeleton
+                  circle
+                  width={getAvatarSize()}
+                  height={getAvatarSize()}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                  }}
+                />
+              </ShimmerProvider>
+            </div>
+          )}
+
+          {/* Fallback state - show when no profile picture or error */}
+          {(!hasProfilePicture || imageError) && (
+            <div className='bg-gray-100 w-full h-full flex items-center justify-center absolute inset-0'>
               <User className='w-3/5 h-3/5 text-gray-400' />
             </div>
           )}

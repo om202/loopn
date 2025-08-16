@@ -119,7 +119,7 @@ export default function NotificationsContent() {
         if (storeNotif.type === 'chat_request') {
           continue; // Skip chat_request notifications to avoid duplicates
         }
-        
+
         // Create a proper Notification object
         const notification: Notification = {
           id: storeNotif.id,

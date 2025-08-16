@@ -818,7 +818,6 @@ export default function OnlineUsers({
       {profileSidebarOpen && profileSidebarUser && (
         <div className='hidden md:flex w-[340px] xl:w-[350px] flex-shrink-0'>
           <div className='bg-white rounded-2xl border border-zinc-200 w-full h-full flex flex-col relative'>
-
             <div className='p-6 pb-2 flex justify-center'>
               <div className='flex flex-col items-center text-center'>
                 <UserAvatar
@@ -888,15 +887,19 @@ export default function OnlineUsers({
                     );
                   }
 
-                  const isTrialConversation = existingConversations.has(profileSidebarUser.userId) &&
-                    !existingConversations.get(profileSidebarUser.userId)?.isConnected;
+                  const isTrialConversation =
+                    existingConversations.has(profileSidebarUser.userId) &&
+                    !existingConversations.get(profileSidebarUser.userId)
+                      ?.isConnected;
 
                   return (
                     <div className='flex items-center gap-3'>
                       <button
                         onClick={() => {
                           if (
-                            combinedPendingRequests.has(profileSidebarUser.userId)
+                            combinedPendingRequests.has(
+                              profileSidebarUser.userId
+                            )
                           ) {
                             handleCancelChatRequest(profileSidebarUser.userId);
                           } else {
@@ -905,52 +908,55 @@ export default function OnlineUsers({
                         }}
                         className='px-2 py-1.5 text-sm font-medium rounded-xl border transition-colors bg-white text-brand-500 border-brand-200 hover:bg-brand-100 hover:border-brand-300 flex items-center justify-center gap-2'
                       >
-                      {combinedPendingRequests.has(
-                        profileSidebarUser.userId
-                      ) ? (
-                        <>
-                          <span className='text-zinc-600 text-sm font-medium'>
-                            Cancel Request
-                          </span>
-                        </>
-                      ) : existingConversations.has(
+                        {combinedPendingRequests.has(
                           profileSidebarUser.userId
                         ) ? (
-                        <>
-                          {existingConversations.get(profileSidebarUser.userId)
-                            ?.chatStatus === 'ENDED' ? (
-                            userCategories.canUserReconnect(
+                          <>
+                            <span className='text-zinc-600 text-sm font-medium'>
+                              Cancel Request
+                            </span>
+                          </>
+                        ) : existingConversations.has(
+                            profileSidebarUser.userId
+                          ) ? (
+                          <>
+                            {existingConversations.get(
                               profileSidebarUser.userId
-                            ) ? (
-                              <>
-                                <MessageCircle className='w-4 h-4' />
-                                <span className='text-sm font-medium'>
-                                  Send Request
-                                </span>
-                              </>
+                            )?.chatStatus === 'ENDED' ? (
+                              userCategories.canUserReconnect(
+                                profileSidebarUser.userId
+                              ) ? (
+                                <>
+                                  <MessageCircle className='w-4 h-4' />
+                                  <span className='text-sm font-medium'>
+                                    Send Request
+                                  </span>
+                                </>
+                              ) : (
+                                <>
+                                  <MessageCircle className='w-4 h-4' />
+                                  <span className='text-sm font-medium'>
+                                    View Chat
+                                  </span>
+                                </>
+                              )
                             ) : (
                               <>
                                 <MessageCircle className='w-4 h-4' />
                                 <span className='text-sm font-medium'>
-                                  View Chat
+                                  Chat
                                 </span>
                               </>
-                            )
-                          ) : (
-                            <>
-                              <MessageCircle className='w-4 h-4' />
-                              <span className='text-sm font-medium'>Chat</span>
-                            </>
-                          )}
-                        </>
-                      ) : (
-                        <>
-                          <CheckCircle2 className='w-4 h-4' />
-                          <span className='text-sm font-medium'>
-                            Send Request
-                          </span>
-                        </>
-                      )}
+                            )}
+                          </>
+                        ) : (
+                          <>
+                            <CheckCircle2 className='w-4 h-4' />
+                            <span className='text-sm font-medium'>
+                              Send Request
+                            </span>
+                          </>
+                        )}
                       </button>
                       {isTrialConversation && (
                         <span className='px-2 py-1.5 text-sm font-medium text-zinc-500 rounded-xl flex-shrink-0 flex items-center gap-1'>
