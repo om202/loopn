@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
   CheckCircle2,
   Clock,
@@ -11,7 +11,7 @@ import {
 
 import type { Schema } from '../../../amplify/data/resource';
 import { formatPresenceTime } from '../../lib/presence-utils';
-import { UserProfileService } from '../../services/user-profile.service';
+import { useUserProfile } from '../../hooks/useUserProfile';
 
 import DialogContainer from '../DialogContainer';
 import UserAvatar from '../UserAvatar';
@@ -88,97 +88,54 @@ export default function UserCard({
 }: UserCardProps) {
   const [showCancelDialog, setShowCancelDialog] = useState(false);
   const [showProfileDialog, setShowProfileDialog] = useState(false);
-  const [fullProfile, setFullProfile] = useState<
-    Schema['UserProfile']['type'] | null
-  >(null);
-  const [loadingProfile, setLoadingProfile] = useState(false);
-  const [userProfile, setUserProfile] = useState<{
-    fullName?: string;
-    email?: string;
-    profilePictureUrl?: string;
-    hasProfilePicture?: boolean;
-  } | null>(null);
+
+  // Use our centralized user profile hook instead of local state and API calls
+  const { profile: fullProfile, isLoading: loadingProfile } = useUserProfile(
+    searchProfile ? '' : userPresence.userId // Skip fetching if searchProfile is provided
+  );
+
+  // Derive user profile data from either searchProfile or fetched profile
+  const userProfile = searchProfile
+    ? {
+        fullName: searchProfile.fullName,
+        email: searchProfile.email,
+        profilePictureUrl: searchProfile.profilePictureUrl,
+        hasProfilePicture: !!searchProfile.profilePictureUrl,
+      }
+    : fullProfile
+      ? {
+          fullName: fullProfile.fullName || undefined,
+          email: fullProfile.email || undefined,
+          profilePictureUrl: fullProfile.profilePictureUrl || undefined,
+          hasProfilePicture: fullProfile.hasProfilePicture || false,
+        }
+      : null;
   // Only show online status if useRealtimeStatus is enabled
   const isOnline = useRealtimeStatus
     ? onlineUsers.some(ou => ou.userId === userPresence.userId)
     : false;
   const isSelected = selectedUserId === userPresence.userId;
 
-  // Load profile data when component mounts
-  useEffect(() => {
-    let mounted = true;
-
-    const loadProfileData = async () => {
-      // If searchProfile is provided (from OpenSearch), use it directly
-      if (searchProfile) {
-        setFullProfile({
-          userId: searchProfile.userId,
-          fullName: searchProfile.fullName || null,
-          email: searchProfile.email || null,
-          jobRole: searchProfile.jobRole || null,
-          companyName: searchProfile.companyName || null,
-          industry: searchProfile.industry || null,
-          yearsOfExperience: searchProfile.yearsOfExperience || null,
-          education: searchProfile.education || null,
-          about: searchProfile.about || null,
-          interests: searchProfile.interests || null,
-          skills: searchProfile.skills || null,
-          profilePictureUrl: searchProfile.profilePictureUrl || null,
-          isOnboardingComplete: searchProfile.isOnboardingComplete || false,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        } as Schema['UserProfile']['type']);
-
-        setUserProfile({
-          fullName: searchProfile.fullName,
-          email: searchProfile.email,
-          profilePictureUrl: searchProfile.profilePictureUrl,
-          hasProfilePicture: !!searchProfile.profilePictureUrl,
-        });
-
-        setLoadingProfile(false);
-        return;
-      }
-
-      // Otherwise, fetch profile data as usual
-      setLoadingProfile(true);
-      try {
-        // Get both full profile details and basic profile data
-        const [profileDetails, profileResult] = await Promise.all([
-          UserProfileService.getProfileDetails(userPresence.userId),
-          new UserProfileService().getUserProfile(userPresence.userId),
-        ]);
-
-        if (mounted) {
-          setFullProfile(profileDetails);
-          setUserProfile(
-            profileResult.data
-              ? {
-                  fullName: profileResult.data.fullName || undefined,
-                  email: profileResult.data.email || undefined,
-                  profilePictureUrl:
-                    profileResult.data.profilePictureUrl || undefined,
-                  hasProfilePicture:
-                    profileResult.data.hasProfilePicture || false,
-                }
-              : null
-          );
-        }
-      } catch (error) {
-        console.error('Error loading profile data:', error);
-      } finally {
-        if (mounted) {
-          setLoadingProfile(false);
-        }
-      }
-    };
-
-    loadProfileData();
-
-    return () => {
-      mounted = false;
-    };
-  }, [userPresence.userId, searchProfile]);
+  // Handle searchProfile case - create a mock fullProfile for consistency
+  const finalFullProfile = searchProfile
+    ? ({
+        userId: searchProfile.userId,
+        fullName: searchProfile.fullName || null,
+        email: searchProfile.email || null,
+        jobRole: searchProfile.jobRole || null,
+        companyName: searchProfile.companyName || null,
+        industry: searchProfile.industry || null,
+        yearsOfExperience: searchProfile.yearsOfExperience || null,
+        education: searchProfile.education || null,
+        about: searchProfile.about || null,
+        interests: searchProfile.interests || null,
+        skills: searchProfile.skills || null,
+        profilePictureUrl: searchProfile.profilePictureUrl || null,
+        isOnboardingComplete: searchProfile.isOnboardingComplete || false,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      } as Schema['UserProfile']['type'])
+    : fullProfile;
 
   const handleCardClick = (e: React.MouseEvent) => {
     // Don't trigger card click if clicking on buttons
@@ -229,9 +186,9 @@ export default function UserCard({
           </div>
 
           {/* Profession */}
-          {fullProfile?.jobRole && (
+          {finalFullProfile?.jobRole && (
             <div className='text-sm text-zinc-600 mb-1.5 truncate'>
-              {fullProfile.jobRole}
+              {finalFullProfile.jobRole}
             </div>
           )}
         </div>
@@ -396,56 +353,56 @@ export default function UserCard({
               <ShimmerProvider>
                 <ProfileDetails_Shimmer />
               </ShimmerProvider>
-            ) : fullProfile ? (
+            ) : finalFullProfile ? (
               <div className='space-y-5'>
                 {/* Professional Info Section */}
-                {(fullProfile.jobRole ||
-                  fullProfile.companyName ||
-                  fullProfile.industry ||
-                  fullProfile.yearsOfExperience !== null) && (
+                {(finalFullProfile.jobRole ||
+                  finalFullProfile.companyName ||
+                  finalFullProfile.industry ||
+                  finalFullProfile.yearsOfExperience !== null) && (
                   <div>
                     <h4 className='text-sm font-semibold text-zinc-900 mb-3 border-b border-zinc-100 pb-2'>
                       Profile Details
                     </h4>
                     <div className='space-y-3'>
-                      {fullProfile.jobRole && (
+                      {finalFullProfile.jobRole && (
                         <div>
                           <dt className='text-xs font-medium text-zinc-500 mb-1'>
                             Role
                           </dt>
                           <dd className='text-sm text-zinc-900'>
-                            {fullProfile.jobRole}
+                            {finalFullProfile.jobRole}
                           </dd>
                         </div>
                       )}
-                      {fullProfile.companyName && (
+                      {finalFullProfile.companyName && (
                         <div>
                           <dt className='text-xs font-medium text-zinc-500 mb-1'>
                             Company
                           </dt>
                           <dd className='text-sm text-zinc-900'>
-                            {fullProfile.companyName}
+                            {finalFullProfile.companyName}
                           </dd>
                         </div>
                       )}
-                      {fullProfile.industry && (
+                      {finalFullProfile.industry && (
                         <div>
                           <dt className='text-xs font-medium text-zinc-500 mb-1'>
                             Industry
                           </dt>
                           <dd className='text-sm text-zinc-900'>
-                            {fullProfile.industry}
+                            {finalFullProfile.industry}
                           </dd>
                         </div>
                       )}
-                      {fullProfile.yearsOfExperience !== null &&
-                        fullProfile.yearsOfExperience !== undefined && (
+                      {finalFullProfile.yearsOfExperience !== null &&
+                        finalFullProfile.yearsOfExperience !== undefined && (
                           <div>
                             <dt className='text-xs font-medium text-zinc-500 mb-1'>
                               Experience
                             </dt>
                             <dd className='text-sm text-zinc-900'>
-                              {fullProfile.yearsOfExperience} years
+                              {finalFullProfile.yearsOfExperience} years
                             </dd>
                           </div>
                         )}
@@ -454,74 +411,78 @@ export default function UserCard({
                 )}
 
                 {/* Education Section */}
-                {fullProfile.education && (
+                {finalFullProfile.education && (
                   <div>
                     <h4 className='text-sm font-semibold text-zinc-900 mb-3 border-b border-zinc-100 pb-2'>
                       Education
                     </h4>
                     <div>
                       <dd className='text-sm text-zinc-900'>
-                        {fullProfile.education}
+                        {finalFullProfile.education}
                       </dd>
                     </div>
                   </div>
                 )}
 
                 {/* About Section */}
-                {fullProfile.about && (
+                {finalFullProfile.about && (
                   <div>
                     <h4 className='text-sm font-semibold text-zinc-900 mb-3 border-b border-zinc-100 pb-2'>
                       About
                     </h4>
                     <div>
                       <dd className='text-sm text-zinc-900 leading-relaxed'>
-                        {fullProfile.about}
+                        {finalFullProfile.about}
                       </dd>
                     </div>
                   </div>
                 )}
 
                 {/* Skills & Interests Section */}
-                {((fullProfile.skills && fullProfile.skills.length > 0) ||
-                  (fullProfile.interests &&
-                    fullProfile.interests.length > 0)) && (
+                {((finalFullProfile.skills &&
+                  finalFullProfile.skills.length > 0) ||
+                  (finalFullProfile.interests &&
+                    finalFullProfile.interests.length > 0)) && (
                   <div>
                     <h4 className='text-sm font-semibold text-zinc-900 mb-3 border-b border-zinc-100 pb-2'>
                       Skills & Interests
                     </h4>
                     <div className='space-y-3'>
-                      {fullProfile.skills && fullProfile.skills.length > 0 && (
-                        <div>
-                          <dt className='text-xs font-medium text-zinc-500 mb-2'>
-                            Skills
-                          </dt>
-                          <dd className='flex flex-wrap gap-2'>
-                            {fullProfile.skills.map((skill, index) => (
-                              <span
-                                key={index}
-                                className='px-2 py-1 text-xs bg-brand-50 text-brand-700 rounded-md border border-brand-100'
-                              >
-                                {skill}
-                              </span>
-                            ))}
-                          </dd>
-                        </div>
-                      )}
-                      {fullProfile.interests &&
-                        fullProfile.interests.length > 0 && (
+                      {finalFullProfile.skills &&
+                        finalFullProfile.skills.length > 0 && (
+                          <div>
+                            <dt className='text-xs font-medium text-zinc-500 mb-2'>
+                              Skills
+                            </dt>
+                            <dd className='flex flex-wrap gap-2'>
+                              {finalFullProfile.skills.map((skill, index) => (
+                                <span
+                                  key={index}
+                                  className='px-2 py-1 text-xs bg-brand-50 text-brand-700 rounded-md border border-brand-100'
+                                >
+                                  {skill}
+                                </span>
+                              ))}
+                            </dd>
+                          </div>
+                        )}
+                      {finalFullProfile.interests &&
+                        finalFullProfile.interests.length > 0 && (
                           <div>
                             <dt className='text-xs font-medium text-zinc-500 mb-2'>
                               Interests
                             </dt>
                             <dd className='flex flex-wrap gap-2'>
-                              {fullProfile.interests.map((interest, index) => (
-                                <span
-                                  key={index}
-                                  className='px-2 py-1 text-xs bg-b_green-50 text-b_green-700 rounded-md border border-b_green-100'
-                                >
-                                  {interest}
-                                </span>
-                              ))}
+                              {finalFullProfile.interests.map(
+                                (interest, index) => (
+                                  <span
+                                    key={index}
+                                    className='px-2 py-1 text-xs bg-b_green-50 text-b_green-700 rounded-md border border-b_green-100'
+                                  >
+                                    {interest}
+                                  </span>
+                                )
+                              )}
                             </dd>
                           </div>
                         )}

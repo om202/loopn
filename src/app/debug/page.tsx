@@ -20,8 +20,7 @@ import {
  */
 export default function DebugPage() {
   const { onlineUsers, isLoading, error } = useOnlineUsers({ enabled: true });
-  const { getStats } = useSubscriptionStore();
-  const [refreshCount, setRefreshCount] = useState(0);
+  const { getStats, userProfiles } = useSubscriptionStore();
   const [startTime] = useState(Date.now());
   const [currentTime, setCurrentTime] = useState(Date.now());
 
@@ -35,10 +34,6 @@ export default function DebugPage() {
 
   const stats = getStats();
   const uptime = Math.floor((currentTime - startTime) / 1000);
-
-  const refreshStats = () => {
-    setRefreshCount(prev => prev + 1);
-  };
 
   return (
     <ProtectedRoute requireOnboarding={true}>
@@ -128,26 +123,23 @@ export default function DebugPage() {
               </div>
             </div>
 
-            {/* Refresh Count */}
+            {/* Cached Profiles */}
             <div className='bg-white rounded-lg shadow-sm border p-6'>
               <div className='flex items-center justify-between'>
                 <div>
                   <p className='text-sm font-medium text-gray-600'>
-                    Page Refreshes
+                    Cached Profiles
                   </p>
                   <p className='text-3xl font-bold text-orange-600'>
-                    {refreshCount}
+                    {userProfiles.size}
                   </p>
                 </div>
                 <Clock className='w-8 h-8 text-orange-600' />
               </div>
               <div className='mt-2'>
-                <button
-                  onClick={refreshStats}
-                  className='text-xs text-orange-600 font-medium hover:underline'
-                >
-                  Click to refresh
-                </button>
+                <span className='text-xs text-orange-600 font-medium'>
+                  No duplicate API calls
+                </span>
               </div>
             </div>
           </div>
@@ -202,6 +194,27 @@ export default function DebugPage() {
                       {stats.totalCallbacks > stats.activeSubscriptions
                         ? `${Math.round(((stats.totalCallbacks - stats.activeSubscriptions) / stats.totalCallbacks) * 100)}% reduction in subscriptions!`
                         : 'Optimal efficiency achieved!'}
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <label className='text-sm font-medium text-gray-600'>
+                    Profile Cache Efficiency
+                  </label>
+                  <div className='mt-1 p-3 bg-blue-50 rounded-md'>
+                    <div className='text-sm text-blue-800'>
+                      <strong>Cached Profiles:</strong> {userProfiles.size}{' '}
+                      users
+                    </div>
+                    <div className='text-sm text-blue-800 mt-1'>
+                      <strong>API Calls Saved:</strong> Eliminates duplicate
+                      getUserProfile calls
+                    </div>
+                    <div className='text-xs text-blue-600 mt-2 font-medium'>
+                      {userProfiles.size > 0
+                        ? `${userProfiles.size} profiles cached - no duplicate API calls when switching sections!`
+                        : 'Profiles will be cached as you browse users'}
                     </div>
                   </div>
                 </div>

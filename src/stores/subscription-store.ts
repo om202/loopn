@@ -6,6 +6,7 @@ import { getClient } from '../lib/amplify-config';
 
 // Type definitions
 type UserPresence = Schema['UserPresence']['type'];
+type UserProfile = Schema['UserProfile']['type'];
 type Conversation = Schema['Conversation']['type'];
 type ChatRequest = Schema['ChatRequest']['type'];
 type Notification = Schema['Notification']['type'];
@@ -39,6 +40,7 @@ interface SubscriptionState {
 
   // Data caches
   onlineUsers: UserPresence[];
+  userProfiles: Map<string, UserProfile>; // userId -> profile
   conversations: Map<string, Conversation>;
   chatRequests: {
     incoming: ChatRequest[];
@@ -81,6 +83,11 @@ interface SubscriptionState {
   setOnlineUsersLoading: (loading: boolean) => void;
   setOnlineUsersError: (error: string | null) => void;
 
+  // User profile methods
+  getUserProfile: (userId: string) => UserProfile | null;
+  setUserProfile: (userId: string, profile: UserProfile) => void;
+  fetchUserProfile: (userId: string) => Promise<UserProfile | null>;
+
   updateConversations: (conversations: Conversation[]) => void;
   setConversationsLoading: (loading: boolean) => void;
   setConversationsError: (error: string | null) => void;
@@ -111,6 +118,7 @@ export const useSubscriptionStore = create<SubscriptionState>()(
       // Initial state
       activeSubscriptions: new Map(),
       onlineUsers: [],
+      userProfiles: new Map(),
       conversations: new Map(),
       chatRequests: {
         incoming: [],
@@ -290,6 +298,49 @@ export const useSubscriptionStore = create<SubscriptionState>()(
         set(state => ({
           errors: { ...state.errors, onlineUsers: error },
         }));
+      },
+
+      // User profile methods
+      getUserProfile: (userId: string) => {
+        const state = get();
+        return state.userProfiles.get(userId) || null;
+      },
+
+      setUserProfile: (userId: string, profile: UserProfile) => {
+        set(state => ({
+          userProfiles: new Map(state.userProfiles).set(userId, profile),
+        }));
+      },
+
+      fetchUserProfile: async (userId: string) => {
+        const state = get();
+
+        // Return cached profile if available
+        const cached = state.userProfiles.get(userId);
+        if (cached) {
+          return cached;
+        }
+
+        try {
+          // Import here to avoid circular dependencies
+          const { UserProfileService } = await import(
+            '../services/user-profile.service'
+          );
+
+          const result = await new UserProfileService().getUserProfile(userId);
+          if (result.data) {
+            // Cache the profile
+            get().setUserProfile(userId, result.data);
+            return result.data;
+          }
+          return null;
+        } catch (error) {
+          console.error(
+            `[SubscriptionStore] Error fetching profile for ${userId}:`,
+            error
+          );
+          return null;
+        }
       },
 
       updateConversations: (conversations: Conversation[]) => {

@@ -1,10 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { MessageCircle, Home, Users, HelpCircle } from 'lucide-react';
+import { MessageCircle, Home, Users, HelpCircle, Bug } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Bug } from 'lucide-react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -259,7 +258,7 @@ export default function DashboardSidebar({
                 <h1 className='text-2xl font-bold text-zinc-900'>Loopn</h1>
               </Link>
               <Link href='/debug'>
-                <button 
+                <button
                   className='p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors'
                   title='Debug Dashboard'
                 >
