@@ -12,6 +12,7 @@ import {
   Zap,
   Clock,
   CheckCircle,
+  MessageCircle,
 } from 'lucide-react';
 
 /**
@@ -20,7 +21,8 @@ import {
  */
 export default function DebugPage() {
   const { onlineUsers, isLoading, error } = useOnlineUsers({ enabled: true });
-  const { getStats, userProfiles } = useSubscriptionStore();
+  const { getStats, userProfiles, incomingChatRequests, sentChatRequests } =
+    useSubscriptionStore();
   const [startTime] = useState(Date.now());
   const [currentTime, setCurrentTime] = useState(Date.now());
 
@@ -142,6 +144,27 @@ export default function DebugPage() {
                 </span>
               </div>
             </div>
+
+            {/* Chat Requests */}
+            <div className='bg-white rounded-lg shadow-sm border p-6'>
+              <div className='flex items-center justify-between'>
+                <div>
+                  <p className='text-sm font-medium text-gray-600'>
+                    Chat Requests
+                  </p>
+                  <p className='text-3xl font-bold text-purple-600'>
+                    {incomingChatRequests.length + sentChatRequests.length}
+                  </p>
+                </div>
+                <MessageCircle className='w-8 h-8 text-purple-600' />
+              </div>
+              <div className='mt-2'>
+                <span className='text-xs text-purple-600 font-medium'>
+                  {incomingChatRequests.length} incoming,{' '}
+                  {sentChatRequests.length} sent
+                </span>
+              </div>
+            </div>
           </div>
 
           {/* Detailed Analytics */}
@@ -215,6 +238,26 @@ export default function DebugPage() {
                       {userProfiles.size > 0
                         ? `${userProfiles.size} profiles cached - no duplicate API calls when switching sections!`
                         : 'Profiles will be cached as you browse users'}
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <label className='text-sm font-medium text-gray-600'>
+                    Chat Request Subscriptions
+                  </label>
+                  <div className='mt-1 p-3 bg-purple-50 rounded-md'>
+                    <div className='text-sm text-purple-800'>
+                      <strong>Incoming Requests:</strong>{' '}
+                      {incomingChatRequests.length} pending
+                    </div>
+                    <div className='text-sm text-purple-800 mt-1'>
+                      <strong>Sent Requests:</strong> {sentChatRequests.length}{' '}
+                      pending
+                    </div>
+                    <div className='text-xs text-purple-600 mt-2 font-medium'>
+                      Single subscription shared across: ChatRequests,
+                      Notifications, OnlineUsers, DashboardSidebar
                     </div>
                   </div>
                 </div>

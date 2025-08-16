@@ -41,11 +41,9 @@ interface SubscriptionState {
   // Data caches
   onlineUsers: UserPresence[];
   userProfiles: Map<string, UserProfile>; // userId -> profile
+  incomingChatRequests: ChatRequest[];
+  sentChatRequests: ChatRequest[];
   conversations: Map<string, Conversation>;
-  chatRequests: {
-    incoming: ChatRequest[];
-    sent: ChatRequest[];
-  };
   notifications: Notification[];
   messages: Map<string, Message[]>; // conversationId -> messages
   reactions: Map<string, MessageReaction[]>; // messageId -> reactions
@@ -53,16 +51,18 @@ interface SubscriptionState {
   // Loading states
   loading: {
     onlineUsers: boolean;
+    incomingChatRequests: boolean;
+    sentChatRequests: boolean;
     conversations: boolean;
-    chatRequests: boolean;
     notifications: boolean;
   };
 
   // Error states
   errors: {
     onlineUsers: string | null;
+    incomingChatRequests: string | null;
+    sentChatRequests: string | null;
     conversations: string | null;
-    chatRequests: string | null;
     notifications: string | null;
   };
 
@@ -77,11 +77,21 @@ interface SubscriptionState {
 
   // High-level subscription methods
   subscribeToOnlineUsers: (userId: string) => UnsubscribeFn;
+  subscribeToIncomingChatRequests: (userId: string) => UnsubscribeFn;
+  subscribeToSentChatRequests: (userId: string) => UnsubscribeFn;
 
   // Data setters
   setOnlineUsers: (users: UserPresence[]) => void;
   setOnlineUsersLoading: (loading: boolean) => void;
   setOnlineUsersError: (error: string | null) => void;
+
+  // Chat request setters
+  setIncomingChatRequests: (requests: ChatRequest[]) => void;
+  setIncomingChatRequestsLoading: (loading: boolean) => void;
+  setIncomingChatRequestsError: (error: string | null) => void;
+  setSentChatRequests: (requests: ChatRequest[]) => void;
+  setSentChatRequestsLoading: (loading: boolean) => void;
+  setSentChatRequestsError: (error: string | null) => void;
 
   // User profile methods
   getUserProfile: (userId: string) => UserProfile | null;
@@ -119,26 +129,26 @@ export const useSubscriptionStore = create<SubscriptionState>()(
       activeSubscriptions: new Map(),
       onlineUsers: [],
       userProfiles: new Map(),
+      incomingChatRequests: [],
+      sentChatRequests: [],
       conversations: new Map(),
-      chatRequests: {
-        incoming: [],
-        sent: [],
-      },
       notifications: [],
       messages: new Map(),
       reactions: new Map(),
 
       loading: {
         onlineUsers: false,
+        incomingChatRequests: false,
+        sentChatRequests: false,
         conversations: false,
-        chatRequests: false,
         notifications: false,
       },
 
       errors: {
         onlineUsers: null,
+        incomingChatRequests: null,
+        sentChatRequests: null,
         conversations: null,
-        chatRequests: null,
         notifications: null,
       },
 
@@ -300,6 +310,39 @@ export const useSubscriptionStore = create<SubscriptionState>()(
         }));
       },
 
+      // Chat request setters
+      setIncomingChatRequests: (requests: ChatRequest[]) => {
+        set({ incomingChatRequests: requests });
+      },
+
+      setIncomingChatRequestsLoading: (loading: boolean) => {
+        set(state => ({
+          loading: { ...state.loading, incomingChatRequests: loading },
+        }));
+      },
+
+      setIncomingChatRequestsError: (error: string | null) => {
+        set(state => ({
+          errors: { ...state.errors, incomingChatRequests: error },
+        }));
+      },
+
+      setSentChatRequests: (requests: ChatRequest[]) => {
+        set({ sentChatRequests: requests });
+      },
+
+      setSentChatRequestsLoading: (loading: boolean) => {
+        set(state => ({
+          loading: { ...state.loading, sentChatRequests: loading },
+        }));
+      },
+
+      setSentChatRequestsError: (error: string | null) => {
+        set(state => ({
+          errors: { ...state.errors, sentChatRequests: error },
+        }));
+      },
+
       // User profile methods
       getUserProfile: (userId: string) => {
         const state = get();
@@ -363,22 +406,6 @@ export const useSubscriptionStore = create<SubscriptionState>()(
         }));
       },
 
-      setChatRequests: (incoming: ChatRequest[], sent: ChatRequest[]) => {
-        set({ chatRequests: { incoming, sent } });
-      },
-
-      setChatRequestsLoading: (loading: boolean) => {
-        set(state => ({
-          loading: { ...state.loading, chatRequests: loading },
-        }));
-      },
-
-      setChatRequestsError: (error: string | null) => {
-        set(state => ({
-          errors: { ...state.errors, chatRequests: error },
-        }));
-      },
-
       setNotifications: (notifications: Notification[]) => {
         set({ notifications });
       },
@@ -434,6 +461,76 @@ export const useSubscriptionStore = create<SubscriptionState>()(
         // Set loading state
         get().setOnlineUsersLoading(true);
         get().setOnlineUsersError(null);
+
+        return get().subscribe(key, config, callback);
+      },
+
+      subscribeToIncomingChatRequests: (userId: string) => {
+        const key = `incoming-chat-requests-${userId}`;
+
+        const config: SubscriptionConfig = {
+          key,
+          query: () => {
+            return getClient().models.ChatRequest.observeQuery({
+              filter: {
+                receiverId: { eq: userId },
+              },
+            });
+          },
+        };
+
+        const callback = (data: unknown) => {
+          const typedData = data as { items: ChatRequest[] };
+          const { items } = typedData;
+          // Filter for PENDING requests on the client side
+          const pendingRequests = items.filter(
+            (request: ChatRequest) => request.status === 'PENDING'
+          );
+
+          // Update the store with new incoming chat requests
+          get().setIncomingChatRequests(pendingRequests);
+          get().setIncomingChatRequestsLoading(false);
+          get().setIncomingChatRequestsError(null);
+        };
+
+        // Set loading state
+        get().setIncomingChatRequestsLoading(true);
+        get().setIncomingChatRequestsError(null);
+
+        return get().subscribe(key, config, callback);
+      },
+
+      subscribeToSentChatRequests: (userId: string) => {
+        const key = `sent-chat-requests-${userId}`;
+
+        const config: SubscriptionConfig = {
+          key,
+          query: () => {
+            return getClient().models.ChatRequest.observeQuery({
+              filter: {
+                requesterId: { eq: userId },
+              },
+            });
+          },
+        };
+
+        const callback = (data: unknown) => {
+          const typedData = data as { items: ChatRequest[] };
+          const { items } = typedData;
+          // Filter for PENDING requests on the client side
+          const pendingRequests = items.filter(
+            (request: ChatRequest) => request.status === 'PENDING'
+          );
+
+          // Update the store with new sent chat requests
+          get().setSentChatRequests(pendingRequests);
+          get().setSentChatRequestsLoading(false);
+          get().setSentChatRequestsError(null);
+        };
+
+        // Set loading state
+        get().setSentChatRequestsLoading(true);
+        get().setSentChatRequestsError(null);
 
         return get().subscribe(key, config, callback);
       },

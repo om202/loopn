@@ -5,7 +5,7 @@ import { useState } from 'react';
 
 import type { Schema } from '../../amplify/data/resource';
 import { chatService } from '../services/chat.service';
-import { useChatRequests } from '../hooks/realtime';
+import { useChatRequests } from '../hooks/useChatRequests';
 
 import UserAvatar from './UserAvatar';
 

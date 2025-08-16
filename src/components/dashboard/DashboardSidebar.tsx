@@ -10,7 +10,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import UserAvatar from '../UserAvatar';
 import { notificationService } from '../../services/notification.service';
 import { useUserProfile } from '../../hooks/useUserProfile';
-import { useChatRequests } from '../../hooks/realtime/useChatRequests';
+import { useChatRequests } from '../../hooks/useChatRequests';
 
 type SidebarSection =
   | 'all'

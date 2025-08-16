@@ -10,7 +10,7 @@ import { chatService } from '../../services/chat.service';
 import { messageService } from '../../services/message.service';
 import { notificationService } from '../../services/notification.service';
 import { UserProfileService } from '../../services/user-profile.service';
-import { useChatRequests } from '../../hooks/realtime/useChatRequests';
+import { useChatRequests } from '../../hooks/useChatRequests';
 
 import NotificationItem from '../notifications/NotificationItem';
 import LoadingContainer from '../LoadingContainer';

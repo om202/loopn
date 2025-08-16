@@ -19,7 +19,10 @@ interface UseChatRequestsProps {
   enabled: boolean;
 }
 
-export function useChatRequests({ userId, enabled }: UseChatRequestsProps) {
+export function useRealtimeChatRequests({
+  userId,
+  enabled,
+}: UseChatRequestsProps) {
   const [incomingRequests, setIncomingRequests] = useState<
     ChatRequestWithUser[]
   >([]);

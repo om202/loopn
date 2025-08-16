@@ -7,6 +7,6 @@ export {
 // Note: useRealtimeChatRequests and useRealtimeNotifications removed - use useChatRequests instead
 export { useRealtimeReactions } from './useRealtimeReactions';
 export {
-  useChatRequests,
+  useRealtimeChatRequests,
   type ChatRequestWithUser as ChatRequestWithUserUnified,
 } from './useChatRequests';
