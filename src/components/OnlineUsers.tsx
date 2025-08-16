@@ -26,7 +26,6 @@ import SearchUser from './SearchUser';
 import { useChatActions } from '../hooks/useChatActions';
 import { useUserCategorization } from '../hooks/useUserCategorization';
 import { useOnlineUsers } from '../hooks/useOnlineUsers';
-import { useChatRequests } from '../hooks/useChatRequests';
 import { useConversations } from '../hooks/useConversations';
 import { useNotifications } from '../hooks/useNotifications';
 import { notificationService } from '../services/notification.service';
@@ -106,14 +105,14 @@ export default function OnlineUsers({
     enabled: !!user?.userId,
   });
 
+  // Use Zustand store for chat requests
   const {
-    pendingReceiverIds,
-    incomingRequests,
-    error: sentRequestsError,
-  } = useChatRequests({
-    userId: user?.userId || '',
-    enabled: !!user?.userId,
-  });
+    incomingChatRequests,
+    sentChatRequests,
+    subscribeToIncomingChatRequests,
+    subscribeToSentChatRequests,
+    setIncomingChatRequests,
+  } = useSubscriptionStore();
 
   // Use centralized conversations
   const { getConversationByParticipant } = useConversations({
@@ -127,6 +126,32 @@ export default function OnlineUsers({
     enabled: !!user?.userId,
   });
 
+  // Subscribe to chat requests using Zustand store
+  useEffect(() => {
+    if (!user?.userId) return;
+
+    const unsubscribeIncoming = subscribeToIncomingChatRequests(user.userId);
+    const unsubscribeSent = subscribeToSentChatRequests(user.userId);
+
+    return () => {
+      unsubscribeIncoming();
+      unsubscribeSent();
+    };
+  }, [
+    user?.userId,
+    subscribeToIncomingChatRequests,
+    subscribeToSentChatRequests,
+  ]);
+
+  // Derive pending receiver IDs from sent requests
+  const pendingReceiverIds = useMemo(() => {
+    return new Set(
+      sentChatRequests
+        .filter(req => req.status === 'PENDING')
+        .map(req => req.receiverId)
+    );
+  }, [sentChatRequests]);
+
   // Combine real-time pending requests with optimistic updates
   const combinedPendingRequests = useMemo(() => {
     const combined = new Set([
@@ -139,22 +164,22 @@ export default function OnlineUsers({
   // Create a set of user IDs who have sent requests to the current user
   const incomingRequestSenderIds = useMemo(() => {
     return new Set(
-      incomingRequests
+      incomingChatRequests
         .filter(req => req.status === 'PENDING')
         .map(req => req.requesterId)
     );
-  }, [incomingRequests]);
+  }, [incomingChatRequests]);
 
   // Create a map of user ID to chat request for easy lookup
   const incomingRequestsByUserId = useMemo(() => {
     const map = new Map();
-    incomingRequests
+    incomingChatRequests
       .filter(req => req.status === 'PENDING')
       .forEach(req => {
         map.set(req.requesterId, req);
       });
     return map;
-  }, [incomingRequests]);
+  }, [incomingChatRequests]);
 
   const onlineUsers = useMemo(() => {
     return allOnlineUsers.filter(u => u?.userId && u.userId !== user?.userId);
@@ -446,6 +471,12 @@ export default function OnlineUsers({
       return;
     }
 
+    // Optimistic update: immediately remove from incoming requests to prevent flicker
+    const optimisticIncomingRequests = incomingChatRequests.filter(
+      req => req.requesterId !== requesterId
+    );
+    setIncomingChatRequests(optimisticIncomingRequests);
+
     try {
       const result = await chatService.respondToChatRequest(
         chatRequest.id,
@@ -454,14 +485,17 @@ export default function OnlineUsers({
 
       if (result.error) {
         setError(result.error);
+        // Revert optimistic update on error - restore the original request
+        setIncomingChatRequests(incomingChatRequests);
       } else {
-        // The real-time subscription will automatically update the UI
-        // Optionally trigger the callback for any additional handling
+        // The real-time subscription will automatically update the UI with the new conversation
         onChatRequestSent();
       }
     } catch (error) {
       console.error('Error accepting chat request:', error);
       setError('Failed to accept chat request');
+      // Revert optimistic update on error - restore the original request
+      setIncomingChatRequests(incomingChatRequests);
     }
   };
 
@@ -583,12 +617,12 @@ export default function OnlineUsers({
     }
   };
 
-  if (error || onlineUsersError || sentRequestsError || chatActions.error) {
+  if (error || onlineUsersError || chatActions.error) {
     return (
       <div className='p-4 sm:p-6 text-b_red-500 bg-b_red-100 rounded-2xl border border-b_red-200 text-center'>
         <div className='text-sm sm:text-sm font-medium mb-1'>Error</div>
         <div className='text-sm sm:text-sm'>
-          {error || onlineUsersError || sentRequestsError || chatActions.error}
+          {error || onlineUsersError || chatActions.error}
         </div>
       </div>
     );
