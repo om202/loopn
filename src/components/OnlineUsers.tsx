@@ -327,16 +327,17 @@ export default function OnlineUsers({
   const existingConversations = useMemo(() => {
     const conversationMap = new Map<string, Conversation>();
 
-    // Populate map by checking each online user for existing conversations
-    onlineUsers.forEach(onlineUser => {
-      const conversation = getConversationByParticipant(onlineUser.userId);
+    // Populate map by checking ALL users (online, offline, recently active) for existing conversations
+    // This ensures that users with active conversations show "Chat" button regardless of online status
+    allUsers.forEach(user => {
+      const conversation = getConversationByParticipant(user.userId);
       if (conversation) {
-        conversationMap.set(onlineUser.userId, conversation);
+        conversationMap.set(user.userId, conversation);
       }
     });
 
     return conversationMap;
-  }, [onlineUsers, getConversationByParticipant]);
+  }, [allUsers, getConversationByParticipant]);
 
   const userCategories = useUserCategorization({
     onlineUsers,

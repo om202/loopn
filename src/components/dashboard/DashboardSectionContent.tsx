@@ -3,6 +3,7 @@
 import { MessageCircle, Sparkles, Users, Search } from 'lucide-react';
 
 import type { Schema } from '../../../amplify/data/resource';
+import { formatPresenceTime } from '../../lib/presence-utils';
 
 import UserCard from './UserCard';
 import SearchSectionContent from './SearchSectionContent';
@@ -95,15 +96,79 @@ export default function DashboardSectionContent({
     />
   );
 
-  // Helper function to sort users with online users first
-  const sortUsersByOnlineStatus = (users: UserPresence[]) => {
+  // Helper function to sort users by priority: online > available to chat > recently active > offline
+  const sortUsersByPriority = (users: UserPresence[]) => {
     return [...users].sort((a, b) => {
+      // Get user states
       const aIsOnline = onlineUsers.some(ou => ou.userId === a.userId);
       const bIsOnline = onlineUsers.some(ou => ou.userId === b.userId);
 
-      // Online users first
-      if (aIsOnline && !bIsOnline) return -1;
-      if (!aIsOnline && bIsOnline) return 1;
+      const aConversation = existingConversations.get(a.userId);
+      const bConversation = existingConversations.get(b.userId);
+
+      // Check if users are available to chat (have active/connected conversations)
+      const aAvailableToChat =
+        aConversation &&
+        (aConversation.chatStatus === 'ACTIVE' || aConversation.isConnected);
+      const bAvailableToChat =
+        bConversation &&
+        (bConversation.chatStatus === 'ACTIVE' || bConversation.isConnected);
+
+      // Check if users are recently active (offline but within 15 minutes)
+      const aRecentlyActive =
+        !aIsOnline &&
+        a.lastSeen &&
+        formatPresenceTime(a.lastSeen) === 'Recently active';
+      const bRecentlyActive =
+        !bIsOnline &&
+        b.lastSeen &&
+        formatPresenceTime(b.lastSeen) === 'Recently active';
+
+      // Priority levels (lower number = higher priority):
+      // 1. Online users
+      // 2. Available to chat (active/connected conversations)
+      // 3. Recently active users
+      // 4. Offline users
+
+      const getPriority = (
+        user: UserPresence,
+        isOnline: boolean,
+        availableToChat: boolean,
+        recentlyActive: boolean
+      ) => {
+        if (isOnline) return 1;
+        if (availableToChat) return 2;
+        if (recentlyActive) return 3;
+        return 4; // Offline
+      };
+
+      const aPriority = getPriority(
+        a,
+        aIsOnline,
+        !!aAvailableToChat,
+        !!aRecentlyActive
+      );
+      const bPriority = getPriority(
+        b,
+        bIsOnline,
+        !!bAvailableToChat,
+        !!bRecentlyActive
+      );
+
+      // Sort by priority first
+      if (aPriority !== bPriority) {
+        return aPriority - bPriority;
+      }
+
+      // Within same priority, sort by last seen (most recent first)
+      if (a.lastSeen && b.lastSeen) {
+        return new Date(b.lastSeen).getTime() - new Date(a.lastSeen).getTime();
+      }
+
+      // If one has lastSeen and other doesn't, prioritize the one with lastSeen
+      if (a.lastSeen && !b.lastSeen) return -1;
+      if (!a.lastSeen && b.lastSeen) return 1;
+
       return 0;
     });
   };
@@ -126,8 +191,8 @@ export default function DashboardSectionContent({
         break;
     }
 
-    // Sort users with online users first
-    return sortUsersByOnlineStatus(users);
+    // Sort users by priority: online > available to chat > recently active > offline
+    return sortUsersByPriority(users);
   };
 
   // Get section title and description

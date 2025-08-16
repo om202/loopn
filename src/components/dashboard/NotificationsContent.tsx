@@ -89,7 +89,7 @@ export default function NotificationsContent() {
     if (!user?.userId) return;
 
     const unsubscribe = subscribeToNotifications(user.userId);
-    
+
     // Set initial load to false after a reasonable timeout
     const timeoutId = setTimeout(() => {
       console.log('Setting initial load to false after timeout');
@@ -173,7 +173,7 @@ export default function NotificationsContent() {
       );
 
       setNotifications(uiNotifications);
-      
+
       // Mark initial load as complete when we process notifications
       setIsInitialLoad(false);
     };
