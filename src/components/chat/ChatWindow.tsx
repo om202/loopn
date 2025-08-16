@@ -7,7 +7,8 @@ import type { Schema } from '../../../amplify/data/resource';
 import { chatService } from '../../services/chat.service';
 import { messageService } from '../../services/message.service';
 import { chatPresenceService } from '../../services/chat-presence.service';
-import { useRealtimeMessages, useRealtimePresence } from '../../hooks/realtime';
+import { useRealtimeMessages } from '../../hooks/realtime';
+import { useOnlineUsers } from '../../hooks/useOnlineUsers';
 import LoadingContainer from '../LoadingContainer';
 
 import ChatHeader from './ChatHeader';
@@ -92,15 +93,15 @@ export default function ChatWindow({
       ? conversation.participant2Id
       : conversation.participant1Id;
 
-  // Use our new realtime presence hook for the other participant
-  const { presence: otherUserPresence, error: presenceError } =
-    useRealtimePresence({
-      userId: otherParticipantId || '',
-      enabled: !!otherParticipantId,
-    });
+  // Use our centralized online users data to get other participant's presence
+  const { getUserPresence } = useOnlineUsers({
+    enabled: !!otherParticipantId,
+  });
+  
+  const otherUserPresence = otherParticipantId ? getUserPresence(otherParticipantId) : null;
 
-  // Update error to include presence error
-  const finalError = error || presenceError;
+  // Use the message error as the main error (presence is now centralized)
+  const finalError = error;
 
   // Calculate initial time remaining immediately
   const calculateTimeLeft = useCallback(() => {

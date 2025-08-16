@@ -261,6 +261,23 @@ export default function DebugPage() {
                     </div>
                   </div>
                 </div>
+
+                <div>
+                  <label className='text-sm font-medium text-gray-600'>
+                    Presence Optimization
+                  </label>
+                  <div className='mt-1 p-3 bg-green-50 rounded-md'>
+                    <div className='text-sm text-green-800'>
+                      <strong>Global Presence:</strong> Single subscription for all users
+                    </div>
+                    <div className='text-sm text-green-800 mt-1'>
+                      <strong>Individual Presence:</strong> Eliminated (uses global data)
+                    </div>
+                    <div className='text-xs text-green-600 mt-2 font-medium'>
+                      ChatWindow now uses centralized presence data instead of individual subscriptions
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
