@@ -49,37 +49,47 @@ export default function UserAvatar({
     switch (size) {
       case 'xs':
         return {
-          size: 'w-2 h-2',
-          iconSize: 'w-1.5 h-1.5',
+          size: 'w-1.5 h-1.5',
+          iconSize: 'w-1 h-1',
           smallDotSize: 'w-1.5 h-1.5',
+          recentlyActiveSize: 'w-2 h-2',
+          recentlyActiveIconSize: 'w-1.5 h-1.5',
           position: '-bottom-0 -right-0',
         };
       case 'sm':
         return {
-          size: 'w-3 h-3',
-          iconSize: 'w-2 h-2',
+          size: 'w-2.5 h-2.5',
+          iconSize: 'w-1.5 h-1.5',
           smallDotSize: 'w-2.5 h-2.5',
+          recentlyActiveSize: 'w-3 h-3',
+          recentlyActiveIconSize: 'w-2 h-2',
           position: '-bottom-0 -right-0',
         };
       case 'lg':
         return {
-          size: 'w-5 h-5',
-          iconSize: 'w-3.5 h-3.5',
-          smallDotSize: 'w-4 h-4',
+          size: 'w-4.5 h-4.5',
+          iconSize: 'w-3 h-3',
+          smallDotSize: 'w-4.5 h-4.5',
+          recentlyActiveSize: 'w-5 h-5',
+          recentlyActiveIconSize: 'w-3.5 h-3.5',
           position: '-bottom-0 -right-0',
         };
       case 'xl':
         return {
-          size: 'w-5 h-5',
-          iconSize: 'w-3.5 h-3.5',
-          smallDotSize: 'w-4 h-4',
+          size: 'w-4.5 h-4.5',
+          iconSize: 'w-3 h-3',
+          smallDotSize: 'w-4.5 h-4.5',
+          recentlyActiveSize: 'w-5 h-5',
+          recentlyActiveIconSize: 'w-3.5 h-3.5',
           position: '-bottom-0 -right-0',
         };
       default: // md
         return {
-          size: 'w-4 h-4',
-          iconSize: 'w-2.5 h-2.5',
-          smallDotSize: 'w-3 h-3',
+          size: 'w-3.5 h-3.5',
+          iconSize: 'w-2 h-2',
+          smallDotSize: 'w-3.5 h-3.5',
+          recentlyActiveSize: 'w-4 h-4',
+          recentlyActiveIconSize: 'w-2.5 h-2.5',
           position: '-bottom-0 -right-0',
         };
     }
@@ -94,6 +104,8 @@ export default function UserAvatar({
       size: indicatorSize,
       iconSize,
       smallDotSize,
+      recentlyActiveSize,
+      recentlyActiveIconSize,
     } = getIndicatorSizeAndPosition();
 
     switch (status) {
@@ -112,23 +124,15 @@ export default function UserAvatar({
       case 'RECENTLY_ACTIVE':
         return (
           <div
-            className={`${indicatorSize} bg-zinc-300 rounded-full border-2 border-white box-content flex items-center justify-center`}
+            className={`${recentlyActiveSize} bg-zinc-300 rounded-full border-2 border-white box-content flex items-center justify-center`}
           >
-            <Clock className={`${iconSize} text-zinc-900`} />
+            <Clock className={`${recentlyActiveIconSize} text-zinc-900`} strokeWidth={2.5} />
           </div>
         );
       case 'OFFLINE':
-        return (
-          <div
-            className={`${smallDotSize} bg-zinc-400 rounded-full border-2 border-white box-content`}
-          />
-        );
+        return null;
       default:
-        return (
-          <div
-            className={`${smallDotSize} bg-zinc-400 rounded-full border-2 border-white box-content`}
-          />
-        );
+        return null;
     }
   };
 

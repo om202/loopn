@@ -243,7 +243,7 @@ export default function UserCard({
                     className='hover:bg-zinc-100 rounded transition-colors p-0.5'
                     title='Cancel Request'
                   >
-                    <CheckCircle2 className='w-4 h-4 text-green-500 flex-shrink-0' />
+                    <CheckCircle2 className='w-4 h-4 text-zinc-500 flex-shrink-0' />
                   </button>
                   <span className='text-sm font-medium'>Request Sent</span>
                 </div>
