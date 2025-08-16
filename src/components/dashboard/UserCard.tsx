@@ -269,7 +269,7 @@ export default function UserCard({
                     ? existingConversations.get(userPresence.userId)
                         ?.chatStatus === 'ENDED'
                       ? canUserReconnect(userPresence.userId)
-                        ? 'Reconnect'
+                        ? 'Send Request'
                         : 'View Chat'
                       : 'Continue Chat'
                     : incomingRequestSenderIds.has(userPresence.userId)
@@ -284,7 +284,7 @@ export default function UserCard({
                       <>
                         <CheckCircle2 className='w-4 h-4 text-brand-500 flex-shrink-0' />
                         <span className='hidden md:inline text-sm font-medium'>
-                          Reconnect
+                          Send Request
                         </span>
                       </>
                     ) : (
