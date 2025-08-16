@@ -28,6 +28,7 @@ import { useUserCategorization } from '../hooks/useUserCategorization';
 import { useOnlineUsers } from '../hooks/useOnlineUsers';
 import { useChatRequests } from '../hooks/realtime/useChatRequests';
 import { useRealtime } from '../contexts/RealtimeContext';
+import { useSubscriptionStore } from '../stores/subscription-store';
 import {
   OnlineUsers_Shimmer,
   ShimmerProvider,
@@ -95,6 +96,7 @@ export default function OnlineUsers({
     handleSignOut();
   };
   const { subscribeToConversations } = useRealtime();
+  const { fetchUserProfile } = useSubscriptionStore();
 
   const {
     onlineUsers: allOnlineUsers,
@@ -130,13 +132,9 @@ export default function OnlineUsers({
     const loadCurrentUserProfile = async () => {
       if (!user?.userId) return;
       try {
-        const { UserProfileService } = await import(
-          '../services/user-profile.service'
-        );
-        const profileDetails = await UserProfileService.getProfileDetails(
-          user.userId
-        );
-        if (mounted) setCurrentUserProfile(profileDetails);
+        // Use our centralized profile fetching (with caching)
+        const profile = await fetchUserProfile(user.userId);
+        if (mounted) setCurrentUserProfile(profile);
       } catch (error) {
         console.error('Error loading current user profile for search:', error);
       }
@@ -145,7 +143,7 @@ export default function OnlineUsers({
     return () => {
       mounted = false;
     };
-  }, [user?.userId]);
+  }, [user?.userId, fetchUserProfile]);
 
   // Persist and restore sidebar open/close state only (not the selected user)
   useEffect(() => {
@@ -169,26 +167,18 @@ export default function OnlineUsers({
 
       const loadProfile = async () => {
         try {
-          const { UserProfileService } = await import(
-            '../services/user-profile.service'
-          );
-          const [profileDetails, profileResult] = await Promise.all([
-            UserProfileService.getProfileDetails(firstUser.userId),
-            new UserProfileService().getUserProfile(firstUser.userId),
-          ]);
-          setProfileSidebarFullProfile(profileDetails);
-          setProfileSidebarUserProfile(
-            profileResult.data
-              ? {
-                  fullName: profileResult.data.fullName || undefined,
-                  email: profileResult.data.email || undefined,
-                  profilePictureUrl:
-                    profileResult.data.profilePictureUrl || undefined,
-                  hasProfilePicture:
-                    profileResult.data.hasProfilePicture || false,
-                }
-              : null
-          );
+          // Use our centralized profile fetching (with caching)
+          const profile = await fetchUserProfile(firstUser.userId);
+
+          if (profile) {
+            setProfileSidebarFullProfile(profile);
+            setProfileSidebarUserProfile({
+              fullName: profile.fullName || undefined,
+              email: profile.email || undefined,
+              profilePictureUrl: profile.profilePictureUrl || undefined,
+              hasProfilePicture: profile.hasProfilePicture || false,
+            });
+          }
         } catch (e) {
           console.error('Failed to load profile summary for sidebar', e);
         } finally {
@@ -198,7 +188,7 @@ export default function OnlineUsers({
 
       loadProfile();
     }
-  }, [profileSidebarOpen, profileSidebarUser, allUsers]);
+  }, [profileSidebarOpen, profileSidebarUser, allUsers, fetchUserProfile]);
 
   const isAuthSessionReady = async (): Promise<boolean> => {
     try {
@@ -471,25 +461,18 @@ export default function OnlineUsers({
     setProfileSidebarFullProfile(null);
     setProfileSidebarUserProfile(null);
     try {
-      const { UserProfileService } = await import(
-        '../services/user-profile.service'
-      );
-      const [profileDetails, profileResult] = await Promise.all([
-        UserProfileService.getProfileDetails(userPresence.userId),
-        new UserProfileService().getUserProfile(userPresence.userId),
-      ]);
-      setProfileSidebarFullProfile(profileDetails);
-      setProfileSidebarUserProfile(
-        profileResult.data
-          ? {
-              fullName: profileResult.data.fullName || undefined,
-              email: profileResult.data.email || undefined,
-              profilePictureUrl:
-                profileResult.data.profilePictureUrl || undefined,
-              hasProfilePicture: profileResult.data.hasProfilePicture || false,
-            }
-          : null
-      );
+      // Use our centralized profile fetching (with caching)
+      const profile = await fetchUserProfile(userPresence.userId);
+
+      if (profile) {
+        setProfileSidebarFullProfile(profile);
+        setProfileSidebarUserProfile({
+          fullName: profile.fullName || undefined,
+          email: profile.email || undefined,
+          profilePictureUrl: profile.profilePictureUrl || undefined,
+          hasProfilePicture: profile.hasProfilePicture || false,
+        });
+      }
     } catch (e) {
       console.error('Failed to load profile summary for sidebar', e);
     } finally {
@@ -514,25 +497,18 @@ export default function OnlineUsers({
     setProfileSidebarFullProfile(null);
     setProfileSidebarUserProfile(null);
     try {
-      const { UserProfileService } = await import(
-        '../services/user-profile.service'
-      );
-      const [profileDetails, profileResult] = await Promise.all([
-        UserProfileService.getProfileDetails(userPresence.userId),
-        new UserProfileService().getUserProfile(userPresence.userId),
-      ]);
-      setProfileSidebarFullProfile(profileDetails);
-      setProfileSidebarUserProfile(
-        profileResult.data
-          ? {
-              fullName: profileResult.data.fullName || undefined,
-              email: profileResult.data.email || undefined,
-              profilePictureUrl:
-                profileResult.data.profilePictureUrl || undefined,
-              hasProfilePicture: profileResult.data.hasProfilePicture || false,
-            }
-          : null
-      );
+      // Use our centralized profile fetching (with caching)
+      const profile = await fetchUserProfile(userPresence.userId);
+
+      if (profile) {
+        setProfileSidebarFullProfile(profile);
+        setProfileSidebarUserProfile({
+          fullName: profile.fullName || undefined,
+          email: profile.email || undefined,
+          profilePictureUrl: profile.profilePictureUrl || undefined,
+          hasProfilePicture: profile.hasProfilePicture || false,
+        });
+      }
     } catch (e) {
       console.error('Failed to load profile summary for sidebar', e);
     } finally {

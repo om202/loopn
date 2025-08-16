@@ -9,11 +9,8 @@ import { useAuth } from '@/contexts/AuthContext';
 
 import UserAvatar from '../UserAvatar';
 import { notificationService } from '../../services/notification.service';
+import { useUserProfile } from '../../hooks/useUserProfile';
 import { useChatRequests } from '../../hooks/realtime/useChatRequests';
-import { UserProfileService } from '../../services/user-profile.service';
-import type { Schema } from '../../../amplify/data/resource';
-
-type UserProfile = Schema['UserProfile']['type'];
 
 type SidebarSection =
   | 'all'
@@ -44,7 +41,9 @@ export default function DashboardSidebar({
   const { onboardingStatus } = useAuth();
   const { user } = useAuthenticator();
   const [notificationCount, setNotificationCount] = useState(0);
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+
+  // Use our centralized user profile hook for current user
+  const { profile: userProfile } = useUserProfile(user?.userId || '');
 
   const {
     incomingRequests: realtimeChatRequests,
@@ -70,30 +69,6 @@ export default function DashboardSidebar({
     // Last resort: generic name
     return 'Your Account';
   };
-
-  // Load current user's profile data
-  useEffect(() => {
-    let mounted = true;
-
-    const loadUserProfile = async () => {
-      if (!user?.userId) return;
-
-      try {
-        const profile = await UserProfileService.getProfileDetails(user.userId);
-        if (mounted) {
-          setUserProfile(profile);
-        }
-      } catch (error) {
-        console.error('Error loading user profile in sidebar:', error);
-      }
-    };
-
-    loadUserProfile();
-
-    return () => {
-      mounted = false;
-    };
-  }, [user?.userId]);
 
   // Simple notification count tracking (lightweight)
   useEffect(() => {
