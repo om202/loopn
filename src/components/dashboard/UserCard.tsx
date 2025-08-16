@@ -259,7 +259,7 @@ export default function UserCard({
                     onChatAction(userPresence.userId);
                   }
                 }}
-className={`px-2 py-1.5 text-sm font-medium rounded-xl border transition-colors flex items-center justify-center flex-shrink-0 w-[40px] h-[40px] md:w-auto md:h-auto md:gap-1.5 md:min-w-[44px] ${
+                className={`px-2 py-1.5 text-sm font-medium rounded-xl border transition-colors flex items-center justify-center flex-shrink-0 w-[40px] h-[40px] md:w-auto md:h-auto md:gap-1.5 md:min-w-[44px] ${
                   incomingRequestSenderIds.has(userPresence.userId)
                     ? 'bg-brand-500 text-white border-brand-500 hover:bg-brand-600 hover:border-brand-600'
                     : 'bg-white text-brand-500 border-brand-200 hover:bg-brand-100 hover:border-brand-300'

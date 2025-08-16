@@ -862,7 +862,6 @@ export default function OnlineUsers({
                         `User${profileSidebarUser.userId.slice(-4)}`}
                     </div>
                   </div>
-
                 </div>
               </div>
             </div>

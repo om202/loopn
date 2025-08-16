@@ -102,8 +102,6 @@ export default function UserAvatar({
 
     const {
       size: indicatorSize,
-      iconSize,
-      smallDotSize,
       recentlyActiveSize,
       recentlyActiveIconSize,
     } = getIndicatorSizeAndPosition();
@@ -126,7 +124,10 @@ export default function UserAvatar({
           <div
             className={`${recentlyActiveSize} bg-zinc-300 rounded-full border-2 border-white box-content flex items-center justify-center`}
           >
-            <Clock className={`${recentlyActiveIconSize} text-zinc-900`} strokeWidth={2.5} />
+            <Clock
+              className={`${recentlyActiveIconSize} text-zinc-900`}
+              strokeWidth={2.5}
+            />
           </div>
         );
       case 'OFFLINE':

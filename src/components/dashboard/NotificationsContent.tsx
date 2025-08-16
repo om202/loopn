@@ -42,7 +42,7 @@ const getDisplayName = (
 
 export default function NotificationsContent() {
   const { user } = useAuthenticator();
-  
+
   // Use the subscription store directly for notifications
   const {
     notifications: storeNotifications,
@@ -66,9 +66,21 @@ export default function NotificationsContent() {
   const [decliningId, setDecliningId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [, setAcceptingRequestId] = useState<string | null>(null);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
-  // Use the store's loading state directly
-  const isLoading = loading.notifications || chatRequestsLoading;
+  // Much simpler: only show loading during initial load before we've processed any data
+  const isLoading = isInitialLoad && notifications.length === 0;
+
+  // Debug logging to understand the loading issue
+  console.log('NotificationsContent Debug:', {
+    'loading.notifications': loading.notifications,
+    chatRequestsLoading: chatRequestsLoading,
+    'notifications.length': notifications.length,
+    'storeNotifications.length': storeNotifications.length,
+    'realtimeChatRequests?.length': realtimeChatRequests?.length,
+    isInitialLoad: isInitialLoad,
+    isLoading: isLoading,
+  });
 
   const router = useRouter();
 
@@ -77,11 +89,27 @@ export default function NotificationsContent() {
     if (!user?.userId) return;
 
     const unsubscribe = subscribeToNotifications(user.userId);
-    return unsubscribe;
+    
+    // Set initial load to false after a reasonable timeout
+    const timeoutId = setTimeout(() => {
+      console.log('Setting initial load to false after timeout');
+      setIsInitialLoad(false);
+    }, 3000);
+
+    return () => {
+      clearTimeout(timeoutId);
+      unsubscribe();
+    };
   }, [user?.userId, subscribeToNotifications]);
 
   // Process chat requests and store notifications into local UI format
   useEffect(() => {
+    console.log('Processing notifications useEffect triggered:', {
+      'storeNotifications.length': storeNotifications.length,
+      'realtimeChatRequests?.length': realtimeChatRequests?.length,
+      chatRequestsLoading: chatRequestsLoading,
+    });
+
     const processNotifications = async () => {
       const uiNotifications: UINotification[] = [];
 
@@ -98,7 +126,10 @@ export default function NotificationsContent() {
           userId: storeNotif.userId,
           createdAt: storeNotif.createdAt,
           updatedAt: storeNotif.updatedAt,
-          data: storeNotif.data as ChatRequestWithUser | MessageNotificationData | undefined,
+          data: storeNotif.data as
+            | ChatRequestWithUser
+            | MessageNotificationData
+            | undefined,
         };
         uiNotifications.push(notification);
       }
@@ -142,10 +173,18 @@ export default function NotificationsContent() {
       );
 
       setNotifications(uiNotifications);
+      
+      // Mark initial load as complete when we process notifications
+      setIsInitialLoad(false);
     };
 
     processNotifications();
-  }, [storeNotifications, realtimeChatRequests, chatRequestsLoading, fetchUserProfile]);
+  }, [
+    storeNotifications,
+    realtimeChatRequests,
+    chatRequestsLoading,
+    fetchUserProfile,
+  ]);
 
   useEffect(() => {
     if (!user) {
@@ -173,7 +212,6 @@ export default function NotificationsContent() {
   }, [user]);
 
   // Process centralized notifications
-
 
   const handleNotificationClick = async (notification: UINotification) => {
     if (
