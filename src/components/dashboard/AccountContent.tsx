@@ -7,9 +7,11 @@ import { useUserProfile } from '../../hooks/useUserProfile';
 
 export default function AccountContent() {
   const { user, onboardingStatus } = useAuth();
-  
+
   // Use our centralized user profile hook instead of local state and API calls
-  const { profile: userProfile, isLoading: loadingProfile } = useUserProfile(user?.userId || '');
+  const { profile: userProfile, isLoading: loadingProfile } = useUserProfile(
+    user?.userId || ''
+  );
 
   const getUserEmail = () => {
     return user?.signInDetails?.loginId || '';
@@ -38,8 +40,6 @@ export default function AccountContent() {
     // Add "(You)" to indicate it's the current user
     return `${name} (You)`;
   };
-
-
 
   return (
     <div className='h-full flex flex-col'>
