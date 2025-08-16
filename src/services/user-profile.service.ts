@@ -76,7 +76,6 @@ export class UserProfileService {
           const indexResult = await OpenSearchService.indexUser(userId, {
             ...profileData,
             userId,
-            email,
           });
           console.log('User indexing result:', indexResult);
 
