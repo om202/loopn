@@ -668,7 +668,7 @@ export default function OnlineUsers({
                 <h2 className='text-xl sm:text-2xl font-bold text-zinc-900 mb-1'>
                   Notifications
                 </h2>
-                <p className='text-sm text-zinc-500'>
+                <p className='text-base text-zinc-500'>
                   Keep up with your latest activity
                 </p>
               </div>
@@ -687,7 +687,7 @@ export default function OnlineUsers({
               <h2 className='text-xl sm:text-2xl font-bold text-zinc-900 mb-1'>
                 Help & Support
               </h2>
-              <p className='text-sm text-zinc-500'>
+              <p className='text-base text-zinc-500'>
                 Common questions and troubleshooting
               </p>
             </div>
@@ -698,7 +698,7 @@ export default function OnlineUsers({
                 <h2 className='text-xl sm:text-2xl font-bold text-zinc-900 mb-1'>
                   Account
                 </h2>
-                <p className='text-sm text-zinc-500'>
+                <p className='text-base text-zinc-500'>
                   Manage your profile and settings
                 </p>
               </div>
@@ -715,7 +715,7 @@ export default function OnlineUsers({
               <h2 className='text-xl sm:text-2xl font-bold text-zinc-900 mb-1'>
                 Connections
               </h2>
-              <p className='text-sm text-zinc-500'>Your connections</p>
+              <p className='text-base text-zinc-500'>Your connections</p>
             </div>
           )}
           {activeSection === 'suggested' && (
@@ -723,7 +723,7 @@ export default function OnlineUsers({
               <h2 className='text-xl sm:text-2xl font-bold text-zinc-900 mb-1'>
                 Discover
               </h2>
-              <p className='text-sm text-zinc-500'>
+              <p className='text-base text-zinc-500'>
                 Find and connect with new people
               </p>
             </div>
@@ -733,7 +733,7 @@ export default function OnlineUsers({
               <h2 className='text-xl sm:text-2xl font-bold text-zinc-900 mb-1'>
                 Search
               </h2>
-              <p className='text-sm text-zinc-500'>Search for professionals</p>
+              <p className='text-base text-zinc-500'>Search for professionals</p>
             </div>
           )}
           {activeSection === 'all' && (
@@ -741,7 +741,7 @@ export default function OnlineUsers({
               <h2 className='text-xl sm:text-2xl font-bold text-zinc-900 mb-1'>
                 Chats
               </h2>
-              <p className='text-sm text-zinc-500'>Your conversations</p>
+              <p className='text-base text-zinc-500'>Your conversations</p>
             </div>
           )}
         </div>
@@ -843,9 +843,9 @@ export default function OnlineUsers({
                         : 'OFFLINE'
                   }
                 />
-                <div className='mt-2'>
+                <div className='mt-4'>
                   <div className='mb-1'>
-                    <div className='font-medium text-zinc-900 text-base'>
+                    <div className='font-bold text-zinc-900 text-base'>
                       {profileSidebarUserProfile?.fullName ||
                         profileSidebarUserProfile?.email ||
                         `User${profileSidebarUser.userId.slice(-4)}`}
@@ -906,13 +906,13 @@ export default function OnlineUsers({
                             handleChatAction(profileSidebarUser.userId);
                           }
                         }}
-                        className='px-2 py-1.5 text-sm font-medium rounded-xl border transition-colors bg-white text-brand-500 border-brand-200 hover:bg-brand-100 hover:border-brand-300 flex items-center justify-center gap-2'
+                        className='px-2 py-1.5 text-base font-medium rounded-xl border transition-colors bg-white text-brand-500 border-brand-200 hover:bg-brand-100 hover:border-brand-300 flex items-center justify-center gap-2'
                       >
                         {combinedPendingRequests.has(
                           profileSidebarUser.userId
                         ) ? (
                           <>
-                            <span className='text-zinc-600 text-sm font-medium'>
+                            <span className='text-zinc-600 text-base font-medium'>
                               Cancel Request
                             </span>
                           </>
@@ -928,14 +928,14 @@ export default function OnlineUsers({
                               ) ? (
                                 <>
                                   <MessageCircle className='w-4 h-4' />
-                                  <span className='text-sm font-medium'>
+                                  <span className='text-base font-medium'>
                                     Send Request
                                   </span>
                                 </>
                               ) : (
                                 <>
                                   <MessageCircle className='w-4 h-4' />
-                                  <span className='text-sm font-medium'>
+                                  <span className='text-base font-medium'>
                                     View Chat
                                   </span>
                                 </>
@@ -943,7 +943,7 @@ export default function OnlineUsers({
                             ) : (
                               <>
                                 <MessageCircle className='w-4 h-4' />
-                                <span className='text-sm font-medium'>
+                                <span className='text-base font-medium'>
                                   Chat
                                 </span>
                               </>
@@ -952,14 +952,14 @@ export default function OnlineUsers({
                         ) : (
                           <>
                             <CheckCircle2 className='w-4 h-4' />
-                            <span className='text-sm font-medium'>
+                            <span className='text-base font-medium'>
                               Send Request
                             </span>
                           </>
                         )}
                       </button>
                       {isTrialConversation && (
-                        <span className='px-2 py-1.5 text-sm font-medium text-zinc-500 rounded-xl flex-shrink-0 flex items-center gap-1'>
+                        <span className='px-2 py-1.5 text-base font-medium text-zinc-500 rounded-xl flex-shrink-0 flex items-center gap-1'>
                           <Clock className='w-4 h-4' />
                           Trial
                         </span>
@@ -990,30 +990,30 @@ export default function OnlineUsers({
                         <div className='divide-y divide-zinc-100'>
                           {profileSidebarFullProfile.jobRole && (
                             <div className='pb-3'>
-                              <dt className='text-sm font-medium text-zinc-600 mb-1.5'>
+                              <dt className='text-base font-medium text-zinc-600 mb-1.5'>
                                 Role
                               </dt>
-                              <dd className='text-sm text-zinc-900 font-medium'>
+                              <dd className='text-base text-zinc-900 font-medium'>
                                 {profileSidebarFullProfile.jobRole}
                               </dd>
                             </div>
                           )}
                           {profileSidebarFullProfile.companyName && (
                             <div className='py-3'>
-                              <dt className='text-sm font-medium text-zinc-600 mb-1.5'>
+                              <dt className='text-base font-medium text-zinc-600 mb-1.5'>
                                 Company
                               </dt>
-                              <dd className='text-sm text-zinc-900 font-medium'>
+                              <dd className='text-base text-zinc-900 font-medium'>
                                 {profileSidebarFullProfile.companyName}
                               </dd>
                             </div>
                           )}
                           {profileSidebarFullProfile.industry && (
                             <div className='py-3'>
-                              <dt className='text-sm font-medium text-zinc-600 mb-1.5'>
+                              <dt className='text-base font-medium text-zinc-600 mb-1.5'>
                                 Industry
                               </dt>
-                              <dd className='text-sm text-zinc-900 font-medium'>
+                              <dd className='text-base text-zinc-900 font-medium'>
                                 {profileSidebarFullProfile.industry}
                               </dd>
                             </div>
@@ -1023,10 +1023,10 @@ export default function OnlineUsers({
                             profileSidebarFullProfile.yearsOfExperience !==
                               undefined && (
                               <div className='pt-3'>
-                                <dt className='text-sm font-medium text-zinc-600 mb-1.5'>
+                                <dt className='text-base font-medium text-zinc-600 mb-1.5'>
                                   Experience
                                 </dt>
-                                <dd className='text-sm text-zinc-900 font-medium'>
+                                <dd className='text-base text-zinc-900 font-medium'>
                                   {profileSidebarFullProfile.yearsOfExperience}{' '}
                                   years
                                 </dd>
@@ -1042,7 +1042,7 @@ export default function OnlineUsers({
                         <h4 className='text-sm font-semibold text-zinc-900 mb-4'>
                           Education
                         </h4>
-                        <div className='text-sm text-zinc-900 font-medium leading-relaxed'>
+                        <div className='text-base text-zinc-900 font-medium leading-relaxed'>
                           {profileSidebarFullProfile.education}
                         </div>
                       </div>
@@ -1054,7 +1054,7 @@ export default function OnlineUsers({
                         <h4 className='text-sm font-semibold text-zinc-900 mb-4'>
                           About
                         </h4>
-                        <div className='text-sm text-zinc-900 leading-relaxed'>
+                        <div className='text-base text-zinc-900 leading-relaxed'>
                           {profileSidebarFullProfile.about}
                         </div>
                       </div>
@@ -1066,14 +1066,11 @@ export default function OnlineUsers({
                       (profileSidebarFullProfile.interests &&
                         profileSidebarFullProfile.interests.length > 0)) && (
                       <div className='pt-4'>
-                        <h4 className='text-sm font-semibold text-zinc-900 mb-4'>
-                          Skills & Interests
-                        </h4>
                         <div className='divide-y divide-zinc-100'>
                           {profileSidebarFullProfile.skills &&
                             profileSidebarFullProfile.skills.length > 0 && (
                               <div className='pb-3'>
-                                <dt className='text-sm font-medium text-zinc-600 mb-3'>
+                                <dt className='text-base font-medium text-zinc-600 mb-3'>
                                   Skills
                                 </dt>
                                 <dd className='flex flex-wrap gap-2'>
@@ -1081,7 +1078,7 @@ export default function OnlineUsers({
                                     (skill, index) => (
                                       <span
                                         key={index}
-                                        className='px-3 py-1.5 text-sm bg-brand-50 text-brand-700 rounded-lg font-medium'
+                                        className='px-3 py-1.5 text-base bg-transparent text-zinc-700 border border-zinc-200 rounded-lg font-medium'
                                       >
                                         {skill}
                                       </span>
@@ -1093,7 +1090,7 @@ export default function OnlineUsers({
                           {profileSidebarFullProfile.interests &&
                             profileSidebarFullProfile.interests.length > 0 && (
                               <div className='pt-3'>
-                                <dt className='text-sm font-medium text-zinc-600 mb-3'>
+                                <dt className='text-base font-medium text-zinc-600 mb-3'>
                                   Interests
                                 </dt>
                                 <dd className='flex flex-wrap gap-2'>
@@ -1101,7 +1098,7 @@ export default function OnlineUsers({
                                     (interest, index) => (
                                       <span
                                         key={index}
-                                        className='px-3 py-1.5 text-sm bg-b_green-50 text-b_green-700 rounded-lg font-medium'
+                                        className='px-3 py-1.5 text-base bg-transparent text-zinc-700 border border-zinc-200 rounded-lg font-medium'
                                       >
                                         {interest}
                                       </span>

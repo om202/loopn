@@ -275,7 +275,7 @@ export default function NotificationItem({
                       );
                     }}
                     disabled={decliningId === notification.id}
-                    className='px-3 py-2 bg-brand-500 text-white text-sm font-medium rounded-lg hover:bg-brand-600 disabled:opacity-50 transition-colors border border-brand-500'
+                    className='px-3 py-2 bg-transparent text-brand-500 text-sm font-medium rounded-lg hover:bg-brand-50 disabled:opacity-50 transition-colors border border-brand-200'
                   >
                     Accept
                   </button>
@@ -305,7 +305,7 @@ export default function NotificationItem({
                   e.stopPropagation();
                   onNotificationClick(notification);
                 }}
-                className='px-3 py-2 bg-brand-500 text-white text-sm font-medium rounded-lg hover:bg-brand-600 transition-colors border border-brand-500'
+                className='px-3 py-2 bg-transparent text-brand-500 text-sm font-medium rounded-lg hover:bg-brand-50 transition-colors border border-brand-200'
               >
                 Reply
               </button>
@@ -346,7 +346,7 @@ export default function NotificationItem({
                   e.stopPropagation();
                   onNotificationClick(notification);
                 }}
-                className='px-3 py-2 bg-b_green-500 text-white text-sm font-medium rounded-lg hover:bg-b_green-600 transition-colors border border-b_green-500'
+                className='px-3 py-2 bg-transparent text-b_green-500 text-sm font-medium rounded-lg hover:bg-b_green-50 transition-colors border border-b_green-500'
               >
                 Start Chat
               </button>

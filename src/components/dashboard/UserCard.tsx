@@ -191,7 +191,7 @@ export default function UserCard({
 
           {/* Profession */}
           {finalFullProfile?.jobRole && (
-            <div className='text-sm text-zinc-600 mb-1.5 truncate'>
+            <div className='text-base text-zinc-600 mb-1.5 truncate'>
               {finalFullProfile.jobRole}
             </div>
           )}
@@ -245,13 +245,13 @@ export default function UserCard({
                   >
                     <CheckCircle2 className='w-4 h-4 text-zinc-500 flex-shrink-0' />
                   </button>
-                  <span className='text-sm font-medium'>Request Sent</span>
+                  <span className='text-base font-medium'>Request Sent</span>
                 </div>
               );
             }
 
             return (
-              <button
+                              <button
                 onClick={() => {
                   if (incomingRequestSenderIds.has(userPresence.userId)) {
                     onAcceptChatRequest(userPresence.userId);
@@ -259,7 +259,7 @@ export default function UserCard({
                     onChatAction(userPresence.userId);
                   }
                 }}
-                className={`px-2 py-1.5 text-sm font-medium rounded-xl border transition-colors flex items-center justify-center flex-shrink-0 w-[40px] h-[40px] md:w-auto md:h-auto md:gap-1.5 md:min-w-[44px] ${
+                className={`px-2 py-1.5 text-base font-medium rounded-xl border transition-colors flex items-center justify-center flex-shrink-0 w-[40px] h-[40px] md:w-auto md:h-auto md:gap-1.5 md:min-w-[44px] ${
                   incomingRequestSenderIds.has(userPresence.userId)
                     ? 'bg-brand-500 text-white border-brand-500 hover:bg-brand-600 hover:border-brand-600'
                     : 'bg-white text-brand-500 border-brand-200 hover:bg-brand-100 hover:border-brand-300'
@@ -283,7 +283,7 @@ export default function UserCard({
                     canUserReconnect(userPresence.userId) ? (
                       <>
                         <CheckCircle2 className='w-4 h-4 text-brand-500 flex-shrink-0' />
-                        <span className='hidden md:inline text-sm font-medium'>
+                        <span className='hidden md:inline text-base font-medium'>
                           Send Request
                         </span>
                       </>
@@ -297,7 +297,7 @@ export default function UserCard({
                         ) : (
                           <>
                             <MessageCircle className='w-4 h-4 text-brand-500 flex-shrink-0' />
-                            <span className='hidden md:inline text-sm font-medium'>
+                            <span className='hidden md:inline text-base font-medium'>
                               View
                             </span>
                           </>
@@ -307,7 +307,7 @@ export default function UserCard({
                   ) : (
                     <>
                       <MessageCircle className='w-4 h-4 text-brand-500 flex-shrink-0' />
-                      <span className='hidden md:inline text-sm font-medium'>
+                      <span className='hidden md:inline text-base font-medium'>
                         Chat
                       </span>
                     </>
@@ -315,14 +315,14 @@ export default function UserCard({
                 ) : incomingRequestSenderIds.has(userPresence.userId) ? (
                   <>
                     <CheckCircle2 className='w-4 h-4 text-white flex-shrink-0' />
-                    <span className='hidden md:inline text-sm font-medium'>
+                    <span className='hidden md:inline text-base font-medium'>
                       Accept Request
                     </span>
                   </>
                 ) : (
                   <>
                     <CheckCircle2 className='w-4 h-4 text-brand-500 flex-shrink-0' />
-                    <span className='hidden md:inline text-sm font-medium'>
+                    <span className='hidden md:inline text-base font-medium'>
                       Send Request
                     </span>
                   </>
@@ -335,7 +335,7 @@ export default function UserCard({
           {/* Mobile: Profile dialog button */}
           <button
             onClick={() => setShowProfileDialog(true)}
-            className='md:hidden px-2.5 py-2 text-xs font-medium rounded-xl border transition-colors bg-white text-zinc-900 border-zinc-200 hover:bg-zinc-100 hover:border-zinc-200 flex items-center justify-center flex-shrink-0 w-[40px] h-[40px]'
+            className='md:hidden px-2.5 py-2 text-base font-medium rounded-xl border transition-colors bg-white text-zinc-900 border-zinc-200 hover:bg-zinc-100 hover:border-zinc-200 flex items-center justify-center flex-shrink-0 w-[40px] h-[40px]'
             disabled={loadingProfile}
             title='View Profile'
           >
@@ -345,7 +345,7 @@ export default function UserCard({
           {/* Desktop: profile icon opens sidebar via parent */}
           <button
             onClick={() => onOpenProfileSidebar?.(userPresence)}
-            className={`hidden md:flex p-1.5 text-xs font-medium rounded-full border transition-colors items-center justify-center w-[32px] h-[32px] ${
+            className={`hidden md:flex p-1.5 text-base font-medium rounded-full border transition-colors items-center justify-center w-[32px] h-[32px] ${
               isProfileSidebarOpen
                 ? 'bg-zinc-100 border-zinc-200'
                 : 'bg-white border-zinc-200 hover:bg-zinc-100'

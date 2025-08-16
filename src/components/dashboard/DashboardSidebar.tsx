@@ -178,7 +178,7 @@ export default function DashboardSidebar({
                       })
                     )}
                   </div>
-                  <span className='font-medium text-sm flex-1'>{label}</span>
+                  <span className='font-medium text-base flex-1'>{label}</span>
                   {count > 0 && id === 'notifications' && (
                     <span className='text-xs font-semibold flex items-center justify-center h-5 w-5 rounded-full text-center bg-b_red-500 text-white'>
                       {count > 99 ? '99+' : count}
@@ -204,7 +204,7 @@ export default function DashboardSidebar({
                 <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
                   <HelpCircle className='w-5 h-5' />
                 </div>
-                <span className='font-medium text-sm flex-1'>
+                <span className='font-medium text-base flex-1'>
                   {helpItem.label}
                 </span>
               </button>
@@ -246,8 +246,8 @@ export default function DashboardSidebar({
                 />
               </div>
               <div className='flex-1'>
-                <div className='font-medium text-sm'>{accountItem.label}</div>
-                <div className='text-xs text-zinc-500'>You</div>
+                <div className='font-medium text-base'>{accountItem.label}</div>
+                <div className='text-sm text-zinc-500'>You</div>
               </div>
             </button>
           </div>
