@@ -74,51 +74,9 @@ export class ChatService {
         expiresAt: expiresAt.toISOString(),
       });
 
-      // Create a notification for the receiver (especially important for offline users)
-      if (result.data) {
-        // Get requester's profile information for a more personalized notification
-        // Try to use cached profile first, then fallback to API
-        let requesterProfile = null;
-        try {
-          const { useSubscriptionStore } = await import(
-            '../stores/subscription-store'
-          );
-          const cachedProfile = useSubscriptionStore
-            .getState()
-            .getUserProfile(requesterId);
-          if (cachedProfile) {
-            requesterProfile = {
-              fullName: cachedProfile.fullName || undefined,
-              email: cachedProfile.email || undefined,
-            };
-          }
-        } catch (_cacheError) {
-          console.log('[ChatService] Cache not available, using API fallback');
-        }
-
-        // Fallback to API if no cached profile
-        if (!requesterProfile) {
-          const requesterProfileResult =
-            await new UserProfileService().getUserProfile(requesterId);
-          requesterProfile = requesterProfileResult.data
-            ? {
-                fullName: requesterProfileResult.data.fullName || undefined,
-                email: requesterProfileResult.data.email || undefined,
-              }
-            : null;
-        }
-
-        const requesterName = getDisplayName(requesterProfile, requesterId);
-
-        await notificationService.createNotification(
-          receiverId,
-          'chat_request',
-          'New Chat Request',
-          `${requesterName} wants to chat with you`,
-          result.data,
-          { chatRequestId: result.data.id }
-        );
-      }
+      // Note: Chat request notifications are now handled by the real-time subscription system
+      // in NotificationsContent.tsx to avoid duplicates. The useChatRequests hook provides
+      // real-time chat request data that gets converted to notifications in the UI.
 
       return {
         data: result.data,

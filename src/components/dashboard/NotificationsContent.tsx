@@ -114,7 +114,12 @@ export default function NotificationsContent() {
       const uiNotifications: UINotification[] = [];
 
       // Process store notifications (from subscription)
+      // Exclude chat_request notifications since we handle those via real-time chat requests
       for (const storeNotif of storeNotifications) {
+        if (storeNotif.type === 'chat_request') {
+          continue; // Skip chat_request notifications to avoid duplicates
+        }
+        
         // Create a proper Notification object
         const notification: Notification = {
           id: storeNotif.id,
