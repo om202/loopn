@@ -20,8 +20,10 @@ interface DashboardSectionContentProps {
   suggestedUsers: UserPresence[];
   existingConversations: Map<string, Conversation>;
   pendingRequests: Set<string>;
+  incomingRequestSenderIds: Set<string>;
   onChatAction: (userId: string) => void;
   onCancelChatRequest: (userId: string) => void;
+  onAcceptChatRequest: (userId: string) => void;
   canUserReconnect: (userId: string) => boolean;
   getReconnectTimeRemaining: (userId: string) => string | null;
   onOpenProfileSidebar?: (user: UserPresence) => void;
@@ -45,8 +47,10 @@ export default function DashboardSectionContent({
   suggestedUsers,
   existingConversations,
   pendingRequests,
+  incomingRequestSenderIds,
   onChatAction,
   onCancelChatRequest,
+  onAcceptChatRequest,
   canUserReconnect,
   getReconnectTimeRemaining,
   onOpenProfileSidebar,
@@ -78,8 +82,10 @@ export default function DashboardSectionContent({
       onlineUsers={onlineUsers}
       existingConversations={existingConversations}
       pendingRequests={pendingRequests}
+      incomingRequestSenderIds={incomingRequestSenderIds}
       onChatAction={onChatAction}
       onCancelChatRequest={onCancelChatRequest}
+      onAcceptChatRequest={onAcceptChatRequest}
       canUserReconnect={canUserReconnect}
       getReconnectTimeRemaining={getReconnectTimeRemaining}
       onOpenProfileSidebar={onOpenProfileSidebar}
@@ -179,10 +185,12 @@ export default function DashboardSectionContent({
         // Pass chat-related props
         existingConversations={existingConversations}
         pendingRequests={pendingRequests}
+        incomingRequestSenderIds={incomingRequestSenderIds}
         onlineUsers={onlineUsers}
         canUserReconnect={canUserReconnect}
         getReconnectTimeRemaining={getReconnectTimeRemaining}
         onCancelChatRequest={onCancelChatRequest}
+        onAcceptChatRequest={onAcceptChatRequest}
         setOptimisticPendingRequests={setOptimisticPendingRequests}
       />
     );

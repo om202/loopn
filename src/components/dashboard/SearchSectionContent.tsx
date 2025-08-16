@@ -26,10 +26,12 @@ interface SearchSectionContentProps {
   // Chat-related props
   existingConversations: Map<string, Conversation>;
   pendingRequests: Set<string>;
+  incomingRequestSenderIds: Set<string>;
   onlineUsers: UserPresence[];
   canUserReconnect: (userId: string) => boolean;
   getReconnectTimeRemaining: (userId: string) => string | null;
   onCancelChatRequest: (userId: string) => void;
+  onAcceptChatRequest: (userId: string) => void;
   // State setters for optimistic updates
   setOptimisticPendingRequests: (
     fn: (prev: Set<string>) => Set<string>
@@ -46,10 +48,12 @@ export default function SearchSectionContent({
   selectedUserId,
   existingConversations,
   pendingRequests,
+  incomingRequestSenderIds,
   onlineUsers,
   canUserReconnect,
   getReconnectTimeRemaining,
   onCancelChatRequest: _onCancelChatRequest,
+  onAcceptChatRequest,
   setOptimisticPendingRequests,
 }: SearchSectionContentProps) {
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
@@ -188,8 +192,10 @@ export default function SearchSectionContent({
                   onlineUsers={onlineUsers} // Pass real online users data
                   existingConversations={existingConversations} // Pass real conversations
                   pendingRequests={pendingRequests} // Pass real pending requests
+                  incomingRequestSenderIds={incomingRequestSenderIds} // Pass incoming request data
                   onChatAction={handleChatAction} // Use proper chat action handler
                   onCancelChatRequest={handleCancelChatRequest} // Use proper cancel handler
+                  onAcceptChatRequest={onAcceptChatRequest} // Use proper accept handler
                   canUserReconnect={canUserReconnect} // Use real reconnect logic
                   getReconnectTimeRemaining={getReconnectTimeRemaining} // Use real timer logic
                   onOpenProfileSidebar={onOpenProfileSidebar}

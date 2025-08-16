@@ -106,7 +106,11 @@ export default function OnlineUsers({
     enabled: !!user?.userId,
   });
 
-  const { pendingReceiverIds, error: sentRequestsError } = useChatRequests({
+  const {
+    pendingReceiverIds,
+    incomingRequests,
+    error: sentRequestsError,
+  } = useChatRequests({
     userId: user?.userId || '',
     enabled: !!user?.userId,
   });
@@ -131,6 +135,26 @@ export default function OnlineUsers({
     ]);
     return combined;
   }, [pendingReceiverIds, optimisticPendingRequests]);
+
+  // Create a set of user IDs who have sent requests to the current user
+  const incomingRequestSenderIds = useMemo(() => {
+    return new Set(
+      incomingRequests
+        .filter(req => req.status === 'PENDING')
+        .map(req => req.requesterId)
+    );
+  }, [incomingRequests]);
+
+  // Create a map of user ID to chat request for easy lookup
+  const incomingRequestsByUserId = useMemo(() => {
+    const map = new Map();
+    incomingRequests
+      .filter(req => req.status === 'PENDING')
+      .forEach(req => {
+        map.set(req.requesterId, req);
+      });
+    return map;
+  }, [incomingRequests]);
 
   const onlineUsers = useMemo(() => {
     return allOnlineUsers.filter(u => u?.userId && u.userId !== user?.userId);
@@ -413,6 +437,32 @@ export default function OnlineUsers({
       receiverId,
       setOptimisticPendingRequests
     );
+  };
+
+  const handleAcceptChatRequest = async (requesterId: string) => {
+    const chatRequest = incomingRequestsByUserId.get(requesterId);
+    if (!chatRequest) {
+      console.error('Chat request not found for user:', requesterId);
+      return;
+    }
+
+    try {
+      const result = await chatService.respondToChatRequest(
+        chatRequest.id,
+        'ACCEPTED'
+      );
+
+      if (result.error) {
+        setError(result.error);
+      } else {
+        // The real-time subscription will automatically update the UI
+        // Optionally trigger the callback for any additional handling
+        onChatRequestSent();
+      }
+    } catch (error) {
+      console.error('Error accepting chat request:', error);
+      setError('Failed to accept chat request');
+    }
   };
 
   const handleProfessionalRequest = (query: string) => {
@@ -708,8 +758,10 @@ export default function OnlineUsers({
                 suggestedUsers={suggestedUsers}
                 existingConversations={existingConversations}
                 pendingRequests={combinedPendingRequests}
+                incomingRequestSenderIds={incomingRequestSenderIds}
                 onChatAction={handleChatAction}
                 onCancelChatRequest={handleCancelChatRequest}
+                onAcceptChatRequest={handleAcceptChatRequest}
                 canUserReconnect={userCategories.canUserReconnect}
                 getReconnectTimeRemaining={
                   userCategories.getReconnectTimeRemaining

@@ -28,8 +28,10 @@ interface UserCardProps {
   onlineUsers: UserPresence[];
   existingConversations: Map<string, Conversation>;
   pendingRequests: Set<string>;
+  incomingRequestSenderIds: Set<string>;
   onChatAction: (userId: string) => void;
   onCancelChatRequest: (userId: string) => void;
+  onAcceptChatRequest: (userId: string) => void;
   canUserReconnect: (userId: string) => boolean;
   getReconnectTimeRemaining: (userId: string) => string | null;
   onOpenProfileSidebar?: (user: UserPresence) => void;
@@ -75,8 +77,10 @@ export default function UserCard({
   onlineUsers,
   existingConversations,
   pendingRequests,
+  incomingRequestSenderIds,
   onChatAction,
   onCancelChatRequest,
+  onAcceptChatRequest,
   canUserReconnect,
   getReconnectTimeRemaining,
   onOpenProfileSidebar,
@@ -234,6 +238,10 @@ export default function UserCard({
                 onClick={() => {
                   if (pendingRequests.has(userPresence.userId)) {
                     setShowCancelDialog(true);
+                  } else if (
+                    incomingRequestSenderIds.has(userPresence.userId)
+                  ) {
+                    onAcceptChatRequest(userPresence.userId);
                   } else {
                     onChatAction(userPresence.userId);
                   }
@@ -249,7 +257,9 @@ export default function UserCard({
                           ? 'Reconnect'
                           : 'View Chat'
                         : 'Continue Chat'
-                      : 'Send Request'
+                      : incomingRequestSenderIds.has(userPresence.userId)
+                        ? 'Accept Request'
+                        : 'Send Request'
                 }
               >
                 {pendingRequests.has(userPresence.userId) ? (
@@ -295,6 +305,13 @@ export default function UserCard({
                       </span>
                     </>
                   )
+                ) : incomingRequestSenderIds.has(userPresence.userId) ? (
+                  <>
+                    <CheckCircle2 className='w-4 h-4 text-brand-500 flex-shrink-0' />
+                    <span className='hidden md:inline text-sm font-medium'>
+                      Accept Request
+                    </span>
+                  </>
                 ) : (
                   <>
                     <CheckCircle2 className='w-4 h-4 text-brand-500 flex-shrink-0' />
