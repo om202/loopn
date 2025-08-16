@@ -97,8 +97,10 @@ export default function ChatWindow({
   const { getUserPresence } = useOnlineUsers({
     enabled: !!otherParticipantId,
   });
-  
-  const otherUserPresence = otherParticipantId ? getUserPresence(otherParticipantId) : null;
+
+  const otherUserPresence = otherParticipantId
+    ? getUserPresence(otherParticipantId)
+    : null;
 
   // Use the message error as the main error (presence is now centralized)
   const finalError = error;
