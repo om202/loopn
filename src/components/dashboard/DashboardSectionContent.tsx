@@ -30,6 +30,10 @@ interface DashboardSectionContentProps {
   selectedUserId?: string;
   searchQuery?: string;
   shouldTriggerSearch?: boolean;
+  // For search section optimistic updates
+  setOptimisticPendingRequests: (
+    fn: (prev: Set<string>) => Set<string>
+  ) => void;
 }
 
 export default function DashboardSectionContent({
@@ -51,6 +55,7 @@ export default function DashboardSectionContent({
   selectedUserId,
   searchQuery,
   shouldTriggerSearch,
+  setOptimisticPendingRequests,
 }: DashboardSectionContentProps) {
   // Combine all users for "All Chats" section
   const allChatUsers = [
@@ -163,8 +168,7 @@ export default function DashboardSectionContent({
     return (
       <SearchSectionContent
         onChatRequestSent={() => {
-          // Call the onChatAction callback if needed
-          // onChatAction could be used here if we need to track search chat requests
+          // Callback for when chat request is sent from search
         }}
         searchQuery={searchQuery}
         shouldSearch={shouldTriggerSearch}
@@ -172,6 +176,14 @@ export default function DashboardSectionContent({
         onUserCardClick={onUserCardClick}
         isProfileSidebarOpen={isProfileSidebarOpen}
         selectedUserId={selectedUserId}
+        // Pass chat-related props
+        existingConversations={existingConversations}
+        pendingRequests={pendingRequests}
+        onlineUsers={onlineUsers}
+        canUserReconnect={canUserReconnect}
+        getReconnectTimeRemaining={getReconnectTimeRemaining}
+        onCancelChatRequest={onCancelChatRequest}
+        setOptimisticPendingRequests={setOptimisticPendingRequests}
       />
     );
   }

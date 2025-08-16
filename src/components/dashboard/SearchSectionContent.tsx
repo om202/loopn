@@ -7,10 +7,12 @@ import {
   OpenSearchService,
   SearchResult,
 } from '../../services/opensearch.service';
+import { useChatActions } from '../../hooks/useChatActions';
 import UserCard from './UserCard';
 import type { Schema } from '../../../amplify/data/resource';
 
 type UserPresence = Schema['UserPresence']['type'];
+type Conversation = Schema['Conversation']['type'];
 
 interface SearchSectionContentProps {
   onChatRequestSent?: () => void;
@@ -20,6 +22,17 @@ interface SearchSectionContentProps {
   onUserCardClick?: (user: UserPresence) => void;
   isProfileSidebarOpen?: boolean;
   selectedUserId?: string;
+  // Chat-related props
+  existingConversations: Map<string, Conversation>;
+  pendingRequests: Set<string>;
+  onlineUsers: UserPresence[];
+  canUserReconnect: (userId: string) => boolean;
+  getReconnectTimeRemaining: (userId: string) => string | null;
+  onCancelChatRequest: (userId: string) => void;
+  // State setters for optimistic updates
+  setOptimisticPendingRequests: (
+    fn: (prev: Set<string>) => Set<string>
+  ) => void;
 }
 
 export default function SearchSectionContent({
@@ -30,6 +43,13 @@ export default function SearchSectionContent({
   onUserCardClick,
   isProfileSidebarOpen,
   selectedUserId,
+  existingConversations,
+  pendingRequests,
+  onlineUsers,
+  canUserReconnect,
+  getReconnectTimeRemaining,
+  onCancelChatRequest: _onCancelChatRequest,
+  setOptimisticPendingRequests,
 }: SearchSectionContentProps) {
   const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
@@ -37,6 +57,38 @@ export default function SearchSectionContent({
   const [error, setError] = useState<string | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
   const { user } = useAuthenticator();
+
+  // Initialize chat actions
+  const chatActions = useChatActions({
+    user: user ? { userId: user.userId } : { userId: '' },
+    existingConversations,
+    canUserReconnect,
+    onChatRequestSent: onChatRequestSent || (() => {}),
+  });
+
+  // Handle chat action for search results
+  const handleChatAction = async (receiverId: string) => {
+    if (!user) return;
+
+    const action = await chatActions.handleChatAction(
+      receiverId,
+      pendingRequests
+    );
+    if (action === 'send-request') {
+      chatActions.handleSendChatRequest(
+        receiverId,
+        setOptimisticPendingRequests
+      );
+    }
+  };
+
+  // Handle cancel chat request
+  const handleCancelChatRequest = (receiverId: string) => {
+    chatActions.handleCancelChatRequest(
+      receiverId,
+      setOptimisticPendingRequests
+    );
+  };
 
   const performSearch = useCallback(
     async (searchTerm: string) => {
@@ -152,13 +204,13 @@ export default function SearchSectionContent({
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString(),
                   }}
-                  onlineUsers={[]} // Empty - no online status needed
-                  existingConversations={new Map()} // Empty for search results
-                  pendingRequests={new Set()} // Empty for search results
-                  onChatAction={() => onChatRequestSent?.()}
-                  onCancelChatRequest={() => {}} // Not used in search context
-                  canUserReconnect={() => true} // Default to allow chat requests
-                  getReconnectTimeRemaining={() => null} // No restrictions for search
+                  onlineUsers={onlineUsers} // Pass real online users data
+                  existingConversations={existingConversations} // Pass real conversations
+                  pendingRequests={pendingRequests} // Pass real pending requests
+                  onChatAction={handleChatAction} // Use proper chat action handler
+                  onCancelChatRequest={handleCancelChatRequest} // Use proper cancel handler
+                  canUserReconnect={canUserReconnect} // Use real reconnect logic
+                  getReconnectTimeRemaining={getReconnectTimeRemaining} // Use real timer logic
                   onOpenProfileSidebar={onOpenProfileSidebar}
                   onUserCardClick={onUserCardClick}
                   isProfileSidebarOpen={isProfileSidebarOpen}

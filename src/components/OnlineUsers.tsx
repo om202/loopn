@@ -717,6 +717,7 @@ export default function OnlineUsers({
                 selectedUserId={profileSidebarUser?.userId}
                 searchQuery={searchQuery}
                 shouldTriggerSearch={shouldTriggerSearch}
+                setOptimisticPendingRequests={setOptimisticPendingRequests}
               />
             )}
           </div>
