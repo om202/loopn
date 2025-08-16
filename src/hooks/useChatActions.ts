@@ -6,6 +6,7 @@ import { useState } from 'react';
 import type { Schema } from '../../amplify/data/resource';
 import { createShortChatUrl } from '../lib/url-utils';
 import { chatService } from '../services/chat.service';
+import { useSubscriptionStore } from '../stores/subscription-store';
 
 type Conversation = Schema['Conversation']['type'];
 
@@ -24,6 +25,7 @@ export function useChatActions({
 }: UseChatActionsProps) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+  const { sentChatRequests } = useSubscriptionStore();
 
   const handleChatAction = async (
     receiverId: string,
@@ -65,25 +67,16 @@ export function useChatActions({
 
     // Do the API calls in the background without blocking UI
     try {
-      // Check if there's already a pending request
-      const existingRequest = await chatService.hasPendingChatRequest(
-        user.userId,
-        receiverId
+      // Check if there's already a pending request using our Zustand cache
+      const existingRequest = sentChatRequests.find(
+        req => req.receiverId === receiverId && req.status === 'PENDING'
       );
 
-      if (existingRequest.error) {
-        // Revert optimistic update
-        setPendingRequests(prev => {
-          const newSet = new Set(prev);
-          newSet.delete(receiverId);
-          return newSet;
-        });
-        setError(existingRequest.error);
-        return;
-      }
-
-      if (existingRequest.data) {
+      if (existingRequest) {
         // Don't revert - they already have a pending request
+        console.log(
+          '[useChatActions] Request already exists in cache, skipping API call'
+        );
         return;
       }
 

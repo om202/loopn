@@ -77,14 +77,32 @@ export class ChatService {
       // Create a notification for the receiver (especially important for offline users)
       if (result.data) {
         // Get requester's profile information for a more personalized notification
-        const requesterProfileResult =
-          await new UserProfileService().getUserProfile(requesterId);
-        const requesterProfile = requesterProfileResult.data
-          ? {
-              fullName: requesterProfileResult.data.fullName || undefined,
-              email: requesterProfileResult.data.email || undefined,
-            }
-          : null;
+        // Try to use cached profile first, then fallback to API
+        let requesterProfile = null;
+        try {
+          const { useSubscriptionStore } = await import('../stores/subscription-store');
+          const cachedProfile = useSubscriptionStore.getState().getUserProfile(requesterId);
+          if (cachedProfile) {
+            requesterProfile = {
+              fullName: cachedProfile.fullName || undefined,
+              email: cachedProfile.email || undefined,
+            };
+          }
+        } catch (_cacheError) {
+          console.log('[ChatService] Cache not available, using API fallback');
+        }
+
+        // Fallback to API if no cached profile
+        if (!requesterProfile) {
+          const requesterProfileResult =
+            await new UserProfileService().getUserProfile(requesterId);
+          requesterProfile = requesterProfileResult.data
+            ? {
+                fullName: requesterProfileResult.data.fullName || undefined,
+                email: requesterProfileResult.data.email || undefined,
+              }
+            : null;
+        }
 
         const requesterName = getDisplayName(requesterProfile, requesterId);
 
