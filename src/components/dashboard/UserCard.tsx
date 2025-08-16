@@ -191,7 +191,7 @@ export default function UserCard({
 
           {/* Profession */}
           {finalFullProfile?.jobRole && (
-            <div className='text-base text-zinc-600 mb-1.5 truncate'>
+            <div className='text-sm text-zinc-500 mb-1.5 truncate'>
               {finalFullProfile.jobRole}
             </div>
           )}

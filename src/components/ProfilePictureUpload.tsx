@@ -173,7 +173,7 @@ export default function ProfilePictureUpload({
                 <>
                   <div className='w-12 h-12 bg-zinc-100 rounded-full flex items-center justify-center mb-3 mx-auto'>
                     <svg
-                      className='w-6 h-6 text-zinc-400'
+                      className='w-6 h-6 text-zinc-500'
                       fill='none'
                       viewBox='0 0 24 24'
                       stroke='currentColor'
@@ -192,7 +192,7 @@ export default function ProfilePictureUpload({
                   <p className='text-xs text-zinc-500'>
                     Drag & drop or click to select
                   </p>
-                  <p className='text-xs text-zinc-400 mt-2'>
+                  <p className='text-xs text-zinc-500 mt-2'>
                     JPEG, PNG, WebP • Max 10MB
                   </p>
                 </>

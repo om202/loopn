@@ -182,7 +182,7 @@ export default function SearchUser({
           <button
             type='button'
             onClick={handleClearInput}
-            className='absolute right-11 top-1/2 -translate-y-1/2 w-6 h-6 text-zinc-400 hover:text-zinc-600 flex items-center justify-center transition-colors'
+            className='absolute right-11 top-1/2 -translate-y-1/2 w-6 h-6 text-zinc-500 hover:text-zinc-600 flex items-center justify-center transition-colors'
             aria-label='Clear search'
           >
             <X className='w-4 h-4' />
@@ -218,7 +218,7 @@ export default function SearchUser({
                 onClick={() => handleHistoryItemClick(item.query)}
               >
                 <div className='flex items-center gap-3 flex-1 min-w-0'>
-                  <Clock className='w-4 h-4 text-zinc-400 flex-shrink-0' />
+                  <Clock className='w-4 h-4 text-zinc-500 flex-shrink-0' />
                   <span className='text-sm text-zinc-700 truncate'>
                     {item.query}
                   </span>
@@ -226,7 +226,7 @@ export default function SearchUser({
                 <button
                   type='button'
                   onClick={e => handleDeleteHistoryItem(e, item.id)}
-                  className='flex-shrink-0 p-1 text-zinc-400 hover:text-zinc-600 opacity-0 group-hover:opacity-100 transition-opacity'
+                  className='flex-shrink-0 p-1 text-zinc-500 hover:text-zinc-600 opacity-0 group-hover:opacity-100 transition-opacity'
                   aria-label={`Remove "${item.query}" from search history`}
                 >
                   <X className='w-4 h-4' />

@@ -843,9 +843,9 @@ export default function OnlineUsers({
                         : 'OFFLINE'
                   }
                 />
-                <div className='mt-4'>
+                <div className='mt-2'>
                   <div className='mb-1'>
-                    <div className='font-bold text-zinc-900 text-base'>
+                    <div className='font-medium text-zinc-900 text-base'>
                       {profileSidebarUserProfile?.fullName ||
                         profileSidebarUserProfile?.email ||
                         `User${profileSidebarUser.userId.slice(-4)}`}
@@ -984,13 +984,13 @@ export default function OnlineUsers({
                       profileSidebarFullProfile.industry ||
                       profileSidebarFullProfile.yearsOfExperience !== null) && (
                       <div className='pb-4'>
-                        <h4 className='text-sm font-semibold text-zinc-900 mb-4 -mx-6 px-6 py-3 bg-zinc-50'>
+                        <h4 className='text-base font-semibold text-zinc-900 mb-4'>
                           Profile Details
                         </h4>
                         <div className='divide-y divide-zinc-100'>
                           {profileSidebarFullProfile.jobRole && (
                             <div className='pb-3'>
-                              <dt className='text-base font-medium text-zinc-600 mb-1.5'>
+                              <dt className='text-sm font-medium text-zinc-500 mb-1.5'>
                                 Role
                               </dt>
                               <dd className='text-base text-zinc-900 font-medium'>
@@ -1000,7 +1000,7 @@ export default function OnlineUsers({
                           )}
                           {profileSidebarFullProfile.companyName && (
                             <div className='py-3'>
-                              <dt className='text-base font-medium text-zinc-600 mb-1.5'>
+                              <dt className='text-sm font-medium text-zinc-500 mb-1.5'>
                                 Company
                               </dt>
                               <dd className='text-base text-zinc-900 font-medium'>
@@ -1010,7 +1010,7 @@ export default function OnlineUsers({
                           )}
                           {profileSidebarFullProfile.industry && (
                             <div className='py-3'>
-                              <dt className='text-base font-medium text-zinc-600 mb-1.5'>
+                              <dt className='text-sm font-medium text-zinc-500 mb-1.5'>
                                 Industry
                               </dt>
                               <dd className='text-base text-zinc-900 font-medium'>
@@ -1023,7 +1023,7 @@ export default function OnlineUsers({
                             profileSidebarFullProfile.yearsOfExperience !==
                               undefined && (
                               <div className='pt-3'>
-                                <dt className='text-base font-medium text-zinc-600 mb-1.5'>
+                                <dt className='text-sm font-medium text-zinc-500 mb-1.5'>
                                   Experience
                                 </dt>
                                 <dd className='text-base text-zinc-900 font-medium'>
@@ -1051,7 +1051,7 @@ export default function OnlineUsers({
                     {/* About Section */}
                     {profileSidebarFullProfile.about && (
                       <div className='py-4'>
-                        <h4 className='text-sm font-semibold text-zinc-900 mb-4'>
+                        <h4 className='text-sm font-medium text-zinc-500 mb-4'>
                           About
                         </h4>
                         <div className='text-base text-zinc-900 leading-relaxed'>
@@ -1070,7 +1070,7 @@ export default function OnlineUsers({
                           {profileSidebarFullProfile.skills &&
                             profileSidebarFullProfile.skills.length > 0 && (
                               <div className='pb-3'>
-                                <dt className='text-base font-medium text-zinc-600 mb-3'>
+                                <dt className='text-sm font-medium text-zinc-500 mb-3'>
                                   Skills
                                 </dt>
                                 <dd className='flex flex-wrap gap-2'>
@@ -1090,7 +1090,7 @@ export default function OnlineUsers({
                           {profileSidebarFullProfile.interests &&
                             profileSidebarFullProfile.interests.length > 0 && (
                               <div className='pt-3'>
-                                <dt className='text-base font-medium text-zinc-600 mb-3'>
+                                <dt className='text-sm font-medium text-zinc-500 mb-3'>
                                   Interests
                                 </dt>
                                 <dd className='flex flex-wrap gap-2'>
