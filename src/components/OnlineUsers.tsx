@@ -818,19 +818,8 @@ export default function OnlineUsers({
       {profileSidebarOpen && profileSidebarUser && (
         <div className='hidden md:flex w-[340px] xl:w-[350px] flex-shrink-0'>
           <div className='bg-white rounded-2xl border border-zinc-200 w-full h-full flex flex-col relative'>
-            {/* Trial indicator - top right corner */}
-            {existingConversations.has(profileSidebarUser.userId) &&
-              !existingConversations.get(profileSidebarUser.userId)
-                ?.isConnected && (
-                <div className='absolute top-4 right-4 z-10'>
-                  <span className='px-1.5 py-0.5 text-xs border border-zinc-200 text-zinc-500 rounded-full flex-shrink-0 flex items-center gap-1'>
-                    <Clock className='w-3 h-3' />
-                    Trial
-                  </span>
-                </div>
-              )}
 
-            <div className='p-6 pb-4 flex justify-center'>
+            <div className='p-6 pb-2 flex justify-center'>
               <div className='flex flex-col items-center text-center'>
                 <UserAvatar
                   email={profileSidebarUserProfile?.email}
@@ -855,7 +844,7 @@ export default function OnlineUsers({
                         : 'OFFLINE'
                   }
                 />
-                <div className='mt-4'>
+                <div className='mt-2'>
                   <div className='mb-1'>
                     <div className='font-medium text-zinc-900 text-base'>
                       {profileSidebarUserProfile?.fullName ||
@@ -868,7 +857,7 @@ export default function OnlineUsers({
             </div>
 
             {/* Action buttons section */}
-            <div className='px-6 pb-6'>
+            <div className='px-6 pb-6 pt-2'>
               <div className='w-full flex justify-center'>
                 {(() => {
                   const conversation = existingConversations.get(
@@ -899,19 +888,23 @@ export default function OnlineUsers({
                     );
                   }
 
+                  const isTrialConversation = existingConversations.has(profileSidebarUser.userId) &&
+                    !existingConversations.get(profileSidebarUser.userId)?.isConnected;
+
                   return (
-                    <button
-                      onClick={() => {
-                        if (
-                          combinedPendingRequests.has(profileSidebarUser.userId)
-                        ) {
-                          handleCancelChatRequest(profileSidebarUser.userId);
-                        } else {
-                          handleChatAction(profileSidebarUser.userId);
-                        }
-                      }}
-                      className='px-2 py-1.5 text-sm font-medium rounded-xl border transition-colors bg-white text-brand-500 border-brand-200 hover:bg-brand-100 hover:border-brand-300 flex items-center justify-center gap-2'
-                    >
+                    <div className='flex items-center gap-3'>
+                      <button
+                        onClick={() => {
+                          if (
+                            combinedPendingRequests.has(profileSidebarUser.userId)
+                          ) {
+                            handleCancelChatRequest(profileSidebarUser.userId);
+                          } else {
+                            handleChatAction(profileSidebarUser.userId);
+                          }
+                        }}
+                        className='px-2 py-1.5 text-sm font-medium rounded-xl border transition-colors bg-white text-brand-500 border-brand-200 hover:bg-brand-100 hover:border-brand-300 flex items-center justify-center gap-2'
+                      >
                       {combinedPendingRequests.has(
                         profileSidebarUser.userId
                       ) ? (
@@ -958,7 +951,14 @@ export default function OnlineUsers({
                           </span>
                         </>
                       )}
-                    </button>
+                      </button>
+                      {isTrialConversation && (
+                        <span className='px-2 py-1.5 text-sm font-medium text-zinc-500 rounded-xl flex-shrink-0 flex items-center gap-1'>
+                          <Clock className='w-4 h-4' />
+                          Trial
+                        </span>
+                      )}
+                    </div>
                   );
                 })()}
               </div>
@@ -971,43 +971,43 @@ export default function OnlineUsers({
                     <ProfileDetails_Shimmer />
                   </ShimmerProvider>
                 ) : profileSidebarFullProfile ? (
-                  <div className='space-y-4'>
+                  <div className='divide-y divide-zinc-100'>
                     {/* Professional Info Section */}
                     {(profileSidebarFullProfile.jobRole ||
                       profileSidebarFullProfile.companyName ||
                       profileSidebarFullProfile.industry ||
                       profileSidebarFullProfile.yearsOfExperience !== null) && (
-                      <div>
-                        <h4 className='text-sm font-semibold text-zinc-900 mb-3 border-b border-zinc-100 pb-2'>
+                      <div className='pb-4'>
+                        <h4 className='text-sm font-semibold text-zinc-900 mb-4 -mx-6 px-6 py-3 bg-zinc-50'>
                           Profile Details
                         </h4>
-                        <div className='space-y-3'>
+                        <div className='divide-y divide-zinc-100'>
                           {profileSidebarFullProfile.jobRole && (
-                            <div>
-                              <dt className='text-xs font-medium text-zinc-500 mb-1'>
+                            <div className='pb-3'>
+                              <dt className='text-sm font-medium text-zinc-600 mb-1.5'>
                                 Role
                               </dt>
-                              <dd className='text-sm text-zinc-900'>
+                              <dd className='text-sm text-zinc-900 font-medium'>
                                 {profileSidebarFullProfile.jobRole}
                               </dd>
                             </div>
                           )}
                           {profileSidebarFullProfile.companyName && (
-                            <div>
-                              <dt className='text-xs font-medium text-zinc-500 mb-1'>
+                            <div className='py-3'>
+                              <dt className='text-sm font-medium text-zinc-600 mb-1.5'>
                                 Company
                               </dt>
-                              <dd className='text-sm text-zinc-900'>
+                              <dd className='text-sm text-zinc-900 font-medium'>
                                 {profileSidebarFullProfile.companyName}
                               </dd>
                             </div>
                           )}
                           {profileSidebarFullProfile.industry && (
-                            <div>
-                              <dt className='text-xs font-medium text-zinc-500 mb-1'>
+                            <div className='py-3'>
+                              <dt className='text-sm font-medium text-zinc-600 mb-1.5'>
                                 Industry
                               </dt>
-                              <dd className='text-sm text-zinc-900'>
+                              <dd className='text-sm text-zinc-900 font-medium'>
                                 {profileSidebarFullProfile.industry}
                               </dd>
                             </div>
@@ -1016,11 +1016,11 @@ export default function OnlineUsers({
                             null &&
                             profileSidebarFullProfile.yearsOfExperience !==
                               undefined && (
-                              <div>
-                                <dt className='text-xs font-medium text-zinc-500 mb-1'>
+                              <div className='pt-3'>
+                                <dt className='text-sm font-medium text-zinc-600 mb-1.5'>
                                   Experience
                                 </dt>
-                                <dd className='text-sm text-zinc-900'>
+                                <dd className='text-sm text-zinc-900 font-medium'>
                                   {profileSidebarFullProfile.yearsOfExperience}{' '}
                                   years
                                 </dd>
@@ -1032,28 +1032,24 @@ export default function OnlineUsers({
 
                     {/* Education Section */}
                     {profileSidebarFullProfile.education && (
-                      <div>
-                        <h4 className='text-sm font-semibold text-zinc-900 mb-3 border-b border-zinc-100 pb-2'>
+                      <div className='py-4'>
+                        <h4 className='text-sm font-semibold text-zinc-900 mb-4'>
                           Education
                         </h4>
-                        <div>
-                          <dd className='text-sm text-zinc-900'>
-                            {profileSidebarFullProfile.education}
-                          </dd>
+                        <div className='text-sm text-zinc-900 font-medium leading-relaxed'>
+                          {profileSidebarFullProfile.education}
                         </div>
                       </div>
                     )}
 
                     {/* About Section */}
                     {profileSidebarFullProfile.about && (
-                      <div>
-                        <h4 className='text-sm font-semibold text-zinc-900 mb-3 border-b border-zinc-100 pb-2'>
+                      <div className='py-4'>
+                        <h4 className='text-sm font-semibold text-zinc-900 mb-4'>
                           About
                         </h4>
-                        <div>
-                          <dd className='text-sm text-zinc-900 leading-relaxed'>
-                            {profileSidebarFullProfile.about}
-                          </dd>
+                        <div className='text-sm text-zinc-900 leading-relaxed'>
+                          {profileSidebarFullProfile.about}
                         </div>
                       </div>
                     )}
@@ -1063,15 +1059,15 @@ export default function OnlineUsers({
                       profileSidebarFullProfile.skills.length > 0) ||
                       (profileSidebarFullProfile.interests &&
                         profileSidebarFullProfile.interests.length > 0)) && (
-                      <div>
-                        <h4 className='text-sm font-semibold text-zinc-900 mb-3 border-b border-zinc-100 pb-2'>
+                      <div className='pt-4'>
+                        <h4 className='text-sm font-semibold text-zinc-900 mb-4'>
                           Skills & Interests
                         </h4>
-                        <div className='space-y-3'>
+                        <div className='divide-y divide-zinc-100'>
                           {profileSidebarFullProfile.skills &&
                             profileSidebarFullProfile.skills.length > 0 && (
-                              <div>
-                                <dt className='text-xs font-medium text-zinc-500 mb-2'>
+                              <div className='pb-3'>
+                                <dt className='text-sm font-medium text-zinc-600 mb-3'>
                                   Skills
                                 </dt>
                                 <dd className='flex flex-wrap gap-2'>
@@ -1079,7 +1075,7 @@ export default function OnlineUsers({
                                     (skill, index) => (
                                       <span
                                         key={index}
-                                        className='px-2 py-1 text-xs bg-brand-50 text-brand-700 rounded-md border border-brand-100'
+                                        className='px-3 py-1.5 text-sm bg-brand-50 text-brand-700 rounded-lg font-medium'
                                       >
                                         {skill}
                                       </span>
@@ -1090,8 +1086,8 @@ export default function OnlineUsers({
                             )}
                           {profileSidebarFullProfile.interests &&
                             profileSidebarFullProfile.interests.length > 0 && (
-                              <div>
-                                <dt className='text-xs font-medium text-zinc-500 mb-2'>
+                              <div className='pt-3'>
+                                <dt className='text-sm font-medium text-zinc-600 mb-3'>
                                   Interests
                                 </dt>
                                 <dd className='flex flex-wrap gap-2'>
@@ -1099,7 +1095,7 @@ export default function OnlineUsers({
                                     (interest, index) => (
                                       <span
                                         key={index}
-                                        className='px-2 py-1 text-xs bg-b_green-50 text-b_green-700 rounded-md border border-b_green-100'
+                                        className='px-3 py-1.5 text-sm bg-b_green-50 text-b_green-700 rounded-lg font-medium'
                                       >
                                         {interest}
                                       </span>
