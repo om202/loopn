@@ -21,8 +21,13 @@ import {
  */
 export default function DebugPage() {
   const { onlineUsers, isLoading, error } = useOnlineUsers({ enabled: true });
-  const { getStats, userProfiles, incomingChatRequests, sentChatRequests } =
-    useSubscriptionStore();
+  const {
+    getStats,
+    userProfiles,
+    incomingChatRequests,
+    sentChatRequests,
+    notifications,
+  } = useSubscriptionStore();
   const [startTime] = useState(Date.now());
   const [currentTime, setCurrentTime] = useState(Date.now());
 
@@ -165,6 +170,26 @@ export default function DebugPage() {
                 </span>
               </div>
             </div>
+
+            {/* Notifications */}
+            <div className='bg-white rounded-lg shadow-sm border p-6'>
+              <div className='flex items-center justify-between'>
+                <div>
+                  <p className='text-sm font-medium text-gray-600'>
+                    Notifications
+                  </p>
+                  <p className='text-3xl font-bold text-indigo-600'>
+                    {notifications.length}
+                  </p>
+                </div>
+                <CheckCircle className='w-8 h-8 text-indigo-600' />
+              </div>
+              <div className='mt-2'>
+                <span className='text-xs text-indigo-600 font-medium'>
+                  Centralized subscription
+                </span>
+              </div>
+            </div>
           </div>
 
           {/* Detailed Analytics */}
@@ -278,6 +303,26 @@ export default function DebugPage() {
                     <div className='text-xs text-green-600 mt-2 font-medium'>
                       ChatWindow now uses centralized presence data instead of
                       individual subscriptions
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <label className='text-sm font-medium text-gray-600'>
+                    Notification Optimization
+                  </label>
+                  <div className='mt-1 p-3 bg-blue-50 rounded-md'>
+                    <div className='text-sm text-blue-800'>
+                      <strong>Before:</strong> NotificationsContent +
+                      DashboardSidebar = 2 subscriptions ❌
+                    </div>
+                    <div className='text-sm text-blue-800 mt-1'>
+                      <strong>After:</strong> Single shared notification
+                      subscription ✅
+                    </div>
+                    <div className='text-xs text-blue-600 mt-2 font-medium'>
+                      {notifications.length} notifications cached, count
+                      auto-calculated
                     </div>
                   </div>
                 </div>

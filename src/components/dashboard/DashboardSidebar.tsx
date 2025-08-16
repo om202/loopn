@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { MessageCircle, Home, Users, HelpCircle, Bug } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -8,9 +8,9 @@ import { useAuthenticator } from '@aws-amplify/ui-react';
 import { useAuth } from '@/contexts/AuthContext';
 
 import UserAvatar from '../UserAvatar';
-import { notificationService } from '../../services/notification.service';
 import { useUserProfile } from '../../hooks/useUserProfile';
 import { useChatRequests } from '../../hooks/useChatRequests';
+import { useNotifications } from '../../hooks/useNotifications';
 
 type SidebarSection =
   | 'all'
@@ -40,14 +40,19 @@ export default function DashboardSidebar({
 }: DashboardSidebarProps) {
   const { onboardingStatus } = useAuth();
   const { user } = useAuthenticator();
-  const [notificationCount, setNotificationCount] = useState(0);
 
   // Use our centralized user profile hook for current user
   const { profile: userProfile } = useUserProfile(user?.userId || '');
 
+  // Use our centralized notifications hook for count
+  const { notificationCount } = useNotifications({
+    userId: user?.userId || '',
+    enabled: !!user?.userId,
+  });
+
   const {
-    incomingRequests: realtimeChatRequests,
-    isLoadingIncoming: chatRequestsLoading,
+    incomingRequests: _realtimeChatRequests,
+    isLoadingIncoming: _chatRequestsLoading,
   } = useChatRequests({
     userId: user?.userId || '',
     enabled: !!user?.userId,
@@ -70,105 +75,9 @@ export default function DashboardSidebar({
     return 'Your Account';
   };
 
-  // Simple notification count tracking (lightweight)
-  useEffect(() => {
-    if (!user) {
-      setNotificationCount(0);
-      return;
-    }
+  // Notification count is now handled by useNotifications hook
 
-    // Just get the count, don't store all notification data
-    const getNotificationCount = async () => {
-      try {
-        const result = await notificationService.getUnreadNotifications(
-          user.userId
-        );
-        if (result.data) {
-          const count = result.data.reduce((total, notification) => {
-            if (
-              notification.type === 'message' &&
-              notification.data &&
-              'messageCount' in notification.data
-            ) {
-              return total + (notification.data.messageCount || 1);
-            }
-            return total + 1;
-          }, 0);
-          setNotificationCount(count);
-        }
-      } catch (error) {
-        console.error('Error getting notification count:', error);
-      }
-    };
-
-    // Lightweight subscription just for count updates
-    const notificationSubscription =
-      notificationService.observeUserNotifications(
-        user.userId,
-        notifications => {
-          const count = notifications.reduce((total, notification) => {
-            if (
-              notification.type === 'message' &&
-              notification.data &&
-              'messageCount' in notification.data
-            ) {
-              return total + (notification.data.messageCount || 1);
-            }
-            return total + 1;
-          }, 0);
-          setNotificationCount(count);
-        },
-        error => {
-          console.error('Error observing notification count:', error);
-        }
-      );
-
-    const timeoutId = setTimeout(getNotificationCount, 500); // Faster initial load
-
-    return () => {
-      clearTimeout(timeoutId);
-      notificationSubscription.unsubscribe();
-    };
-  }, [user]);
-
-  // Update count when chat requests change
-  useEffect(() => {
-    if (!user) return;
-
-    // Recalculate total count including chat requests
-    const updateTotalCount = async () => {
-      try {
-        const result = await notificationService.getUnreadNotifications(
-          user.userId
-        );
-        let count = 0;
-
-        if (result.data) {
-          count = result.data.reduce((total, notification) => {
-            if (
-              notification.type === 'message' &&
-              notification.data &&
-              'messageCount' in notification.data
-            ) {
-              return total + (notification.data.messageCount || 1);
-            }
-            return total + 1;
-          }, 0);
-        }
-
-        // Add chat requests
-        if (realtimeChatRequests && !chatRequestsLoading) {
-          count += realtimeChatRequests.length;
-        }
-
-        setNotificationCount(count);
-      } catch (error) {
-        console.error('Error updating notification count:', error);
-      }
-    };
-
-    updateTotalCount();
-  }, [user, realtimeChatRequests, chatRequestsLoading]);
+  // Notification count is now handled by useNotifications hook (includes chat requests)
 
   const sidebarItems = [
     {

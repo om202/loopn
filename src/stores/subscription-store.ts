@@ -79,6 +79,7 @@ interface SubscriptionState {
   subscribeToOnlineUsers: (userId: string) => UnsubscribeFn;
   subscribeToIncomingChatRequests: (userId: string) => UnsubscribeFn;
   subscribeToSentChatRequests: (userId: string) => UnsubscribeFn;
+  subscribeToNotifications: (userId: string) => UnsubscribeFn;
 
   // Data setters
   setOnlineUsers: (users: UserPresence[]) => void;
@@ -93,6 +94,11 @@ interface SubscriptionState {
   setSentChatRequestsLoading: (loading: boolean) => void;
   setSentChatRequestsError: (error: string | null) => void;
 
+  // Notification setters
+  setNotifications: (notifications: Notification[]) => void;
+  setNotificationsLoading: (loading: boolean) => void;
+  setNotificationsError: (error: string | null) => void;
+
   // User profile methods
   getUserProfile: (userId: string) => UserProfile | null;
   setUserProfile: (userId: string, profile: UserProfile) => void;
@@ -101,14 +107,6 @@ interface SubscriptionState {
   updateConversations: (conversations: Conversation[]) => void;
   setConversationsLoading: (loading: boolean) => void;
   setConversationsError: (error: string | null) => void;
-
-  setChatRequests: (incoming: ChatRequest[], sent: ChatRequest[]) => void;
-  setChatRequestsLoading: (loading: boolean) => void;
-  setChatRequestsError: (error: string | null) => void;
-
-  setNotifications: (notifications: Notification[]) => void;
-  setNotificationsLoading: (loading: boolean) => void;
-  setNotificationsError: (error: string | null) => void;
 
   updateMessages: (conversationId: string, messages: Message[]) => void;
   updateReactions: (messageId: string, reactions: MessageReaction[]) => void;
@@ -343,6 +341,23 @@ export const useSubscriptionStore = create<SubscriptionState>()(
         }));
       },
 
+      // Notification setters
+      setNotifications: (notifications: Notification[]) => {
+        set({ notifications });
+      },
+
+      setNotificationsLoading: (loading: boolean) => {
+        set(state => ({
+          loading: { ...state.loading, notifications: loading },
+        }));
+      },
+
+      setNotificationsError: (error: string | null) => {
+        set(state => ({
+          errors: { ...state.errors, notifications: error },
+        }));
+      },
+
       // User profile methods
       getUserProfile: (userId: string) => {
         const state = get();
@@ -403,22 +418,6 @@ export const useSubscriptionStore = create<SubscriptionState>()(
       setConversationsError: (error: string | null) => {
         set(state => ({
           errors: { ...state.errors, conversations: error },
-        }));
-      },
-
-      setNotifications: (notifications: Notification[]) => {
-        set({ notifications });
-      },
-
-      setNotificationsLoading: (loading: boolean) => {
-        set(state => ({
-          loading: { ...state.loading, notifications: loading },
-        }));
-      },
-
-      setNotificationsError: (error: string | null) => {
-        set(state => ({
-          errors: { ...state.errors, notifications: error },
         }));
       },
 
@@ -531,6 +530,52 @@ export const useSubscriptionStore = create<SubscriptionState>()(
         // Set loading state
         get().setSentChatRequestsLoading(true);
         get().setSentChatRequestsError(null);
+
+        return get().subscribe(key, config, callback);
+      },
+
+      subscribeToNotifications: (userId: string) => {
+        const key = `notifications-${userId}`;
+
+        const config: SubscriptionConfig = {
+          key,
+          query: () => {
+            return getClient().models.Notification.observeQuery({
+              filter: {
+                userId: { eq: userId },
+                isRead: { eq: false },
+              },
+            });
+          },
+        };
+
+        const callback = (data: unknown) => {
+          const typedData = data as { items: Notification[] };
+          const { items } = typedData;
+
+          // Sort by timestamp descending (newest first)
+          const sortedNotifications = items.sort(
+            (a, b) =>
+              new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+          );
+
+          // Parse JSON data field back to objects
+          const notificationsWithParsedData = sortedNotifications.map(
+            notif => ({
+              ...notif,
+              data: notif.data ? JSON.parse(notif.data as string) : undefined,
+            })
+          );
+
+          // Update the store with new notifications
+          get().setNotifications(notificationsWithParsedData);
+          get().setNotificationsLoading(false);
+          get().setNotificationsError(null);
+        };
+
+        // Set loading state
+        get().setNotificationsLoading(true);
+        get().setNotificationsError(null);
 
         return get().subscribe(key, config, callback);
       },

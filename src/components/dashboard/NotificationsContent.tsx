@@ -11,6 +11,7 @@ import { messageService } from '../../services/message.service';
 import { notificationService } from '../../services/notification.service';
 import { UserProfileService } from '../../services/user-profile.service';
 import { useChatRequests } from '../../hooks/useChatRequests';
+import { useNotifications } from '../../hooks/useNotifications';
 
 import NotificationItem from '../notifications/NotificationItem';
 import LoadingContainer from '../LoadingContainer';
@@ -47,12 +48,22 @@ export default function NotificationsContent() {
     enabled: !!user?.userId,
   });
 
+  // Use our centralized notifications hook
+  const {
+    notifications: centralizedNotifications,
+    isLoading: notificationsLoading,
+    error: notificationsError,
+  } = useNotifications({
+    userId: user?.userId || '',
+    enabled: !!user?.userId,
+  });
+
   const [notifications, setNotifications] = useState<UINotification[]>([]);
   const [activeFilter] = useState<NotificationFilter>('all');
   const [decliningId, setDecliningId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [, setAcceptingRequestId] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const isLoading = notificationsLoading;
 
   const router = useRouter();
 
@@ -77,7 +88,6 @@ export default function NotificationsContent() {
       } else if (result.error) {
         setError(result.error);
       }
-      setIsLoading(false);
     };
 
     const timeoutId = setTimeout(loadNotifications, 100);
@@ -188,33 +198,25 @@ export default function NotificationsContent() {
     return () => clearTimeout(timeoutId);
   }, [user]);
 
+  // Process centralized notifications
   useEffect(() => {
-    if (!user) {
-      return;
+    if (!user || !centralizedNotifications) return;
+
+    const groupedNotifications = groupMessageNotifications(
+      centralizedNotifications as UINotification[]
+    );
+    setNotifications(groupedNotifications);
+
+    // Set error from centralized notifications if any
+    if (notificationsError) {
+      setError(notificationsError);
     }
-
-    const timeoutId = setTimeout(() => {
-      const notificationSubscription =
-        notificationService.observeUserNotifications(
-          user.userId,
-          notifications => {
-            const groupedNotifications =
-              groupMessageNotifications(notifications);
-            setNotifications(groupedNotifications);
-          },
-          error => {
-            console.error('Error observing notifications:', error);
-            setError('Failed to load notifications');
-          }
-        );
-
-      return () => {
-        notificationSubscription.unsubscribe();
-      };
-    }, 100);
-
-    return () => clearTimeout(timeoutId);
-  }, [user, groupMessageNotifications]);
+  }, [
+    user,
+    centralizedNotifications,
+    notificationsError,
+    groupMessageNotifications,
+  ]);
 
   const handleNotificationClick = async (notification: UINotification) => {
     if (
