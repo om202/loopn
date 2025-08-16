@@ -12,7 +12,6 @@ import {
   Zap,
   Clock,
   CheckCircle,
-  MessageCircle,
 } from 'lucide-react';
 
 /**
@@ -45,23 +44,23 @@ export default function DebugPage() {
 
   return (
     <ProtectedRoute requireOnboarding={true}>
-      <div className='min-h-screen bg-gray-50 p-4'>
-        <div className='max-w-7xl mx-auto space-y-6'>
+      <div className='min-h-screen bg-white p-4'>
+        <div className='max-w-4xl mx-auto space-y-4'>
           {/* Header */}
-          <div className='bg-white rounded-lg shadow-sm border p-6'>
+          <div className='border rounded-lg p-4'>
             <div className='flex items-center justify-between'>
               <div>
-                <h1 className='text-3xl font-bold text-gray-900 flex items-center gap-3'>
-                  <Database className='w-8 h-8 text-blue-600' />
-                  Zustand Debug Dashboard
+                <h1 className='text-xl font-medium text-gray-900 flex items-center gap-2'>
+                  <Database className='w-5 h-5 text-gray-600' />
+                  Debug Dashboard
                 </h1>
-                <p className='text-gray-600 mt-2'>
-                  Real-time monitoring of centralized state management
+                <p className='text-gray-500 text-base mt-1'>
+                  State management monitoring
                 </p>
               </div>
               <div className='text-right'>
-                <div className='text-sm text-gray-500'>Uptime</div>
-                <div className='text-2xl font-mono font-bold text-green-600'>
+                <div className='text-base text-gray-500'>Uptime</div>
+                <div className='text-lg font-mono text-gray-700'>
                   {Math.floor(uptime / 60)}:
                   {(uptime % 60).toString().padStart(2, '0')}
                 </div>
@@ -70,170 +69,81 @@ export default function DebugPage() {
           </div>
 
           {/* Stats Grid */}
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>
+          <div className='grid grid-cols-2 md:grid-cols-4 gap-3'>
             {/* Active Subscriptions */}
-            <div className='bg-white rounded-lg shadow-sm border p-6'>
+            <div className='border rounded-lg p-3'>
               <div className='flex items-center justify-between'>
                 <div>
-                  <p className='text-sm font-medium text-gray-600'>
-                    Active Subscriptions
-                  </p>
-                  <p className='text-3xl font-bold text-blue-600'>
+                  <p className='text-base text-gray-500'>Subscriptions</p>
+                  <p className='text-lg font-medium text-gray-900'>
                     {stats.activeSubscriptions}
                   </p>
                 </div>
-                <Activity className='w-8 h-8 text-blue-600' />
-              </div>
-              <div className='mt-2'>
-                <span className='text-xs text-green-600 font-medium'>
-                  ✅ Centralized & Efficient
-                </span>
+                <Activity className='w-4 h-4 text-gray-400' />
               </div>
             </div>
 
             {/* Total Callbacks */}
-            <div className='bg-white rounded-lg shadow-sm border p-6'>
+            <div className='border rounded-lg p-3'>
               <div className='flex items-center justify-between'>
                 <div>
-                  <p className='text-sm font-medium text-gray-600'>
-                    Total Callbacks
-                  </p>
-                  <p className='text-3xl font-bold text-purple-600'>
+                  <p className='text-base text-gray-500'>Callbacks</p>
+                  <p className='text-lg font-medium text-gray-900'>
                     {stats.totalCallbacks}
                   </p>
                 </div>
-                <Zap className='w-8 h-8 text-purple-600' />
-              </div>
-              <div className='mt-2'>
-                <span className='text-xs text-purple-600 font-medium'>
-                  Components sharing data
-                </span>
+                <Zap className='w-4 h-4 text-gray-400' />
               </div>
             </div>
 
             {/* Online Users */}
-            <div className='bg-white rounded-lg shadow-sm border p-6'>
+            <div className='border rounded-lg p-3'>
               <div className='flex items-center justify-between'>
                 <div>
-                  <p className='text-sm font-medium text-gray-600'>
-                    Online Users
-                  </p>
-                  <p className='text-3xl font-bold text-green-600'>
+                  <p className='text-base text-gray-500'>Online</p>
+                  <p className='text-lg font-medium text-gray-900'>
                     {isLoading ? '...' : onlineUsers.length}
                   </p>
                 </div>
-                <Users className='w-8 h-8 text-green-600' />
-              </div>
-              <div className='mt-2'>
-                <span className='text-xs text-green-600 font-medium'>
-                  Real-time updates
-                </span>
+                <Users className='w-4 h-4 text-gray-400' />
               </div>
             </div>
 
             {/* Cached Profiles */}
-            <div className='bg-white rounded-lg shadow-sm border p-6'>
+            <div className='border rounded-lg p-3'>
               <div className='flex items-center justify-between'>
                 <div>
-                  <p className='text-sm font-medium text-gray-600'>
-                    Cached Profiles
-                  </p>
-                  <p className='text-3xl font-bold text-orange-600'>
+                  <p className='text-base text-gray-500'>Cached</p>
+                  <p className='text-lg font-medium text-gray-900'>
                     {userProfiles.size}
                   </p>
                 </div>
-                <Clock className='w-8 h-8 text-orange-600' />
-              </div>
-              <div className='mt-2'>
-                <span className='text-xs text-orange-600 font-medium'>
-                  No duplicate API calls
-                </span>
-              </div>
-            </div>
-
-            {/* Chat Requests */}
-            <div className='bg-white rounded-lg shadow-sm border p-6'>
-              <div className='flex items-center justify-between'>
-                <div>
-                  <p className='text-sm font-medium text-gray-600'>
-                    Chat Requests
-                  </p>
-                  <p className='text-3xl font-bold text-purple-600'>
-                    {incomingChatRequests.length + sentChatRequests.length}
-                  </p>
-                </div>
-                <MessageCircle className='w-8 h-8 text-purple-600' />
-              </div>
-              <div className='mt-2'>
-                <span className='text-xs text-purple-600 font-medium'>
-                  {incomingChatRequests.length} incoming,{' '}
-                  {sentChatRequests.length} sent
-                </span>
-              </div>
-            </div>
-
-            {/* Notifications */}
-            <div className='bg-white rounded-lg shadow-sm border p-6'>
-              <div className='flex items-center justify-between'>
-                <div>
-                  <p className='text-sm font-medium text-gray-600'>
-                    Notifications
-                  </p>
-                  <p className='text-3xl font-bold text-indigo-600'>
-                    {notifications.length}
-                  </p>
-                </div>
-                <CheckCircle className='w-8 h-8 text-indigo-600' />
-              </div>
-              <div className='mt-2'>
-                <span className='text-xs text-indigo-600 font-medium'>
-                  Centralized subscription
-                </span>
-              </div>
-            </div>
-
-            {/* Conversations */}
-            <div className='bg-white rounded-lg shadow-sm border p-6'>
-              <div className='flex items-center justify-between'>
-                <div>
-                  <p className='text-sm font-medium text-gray-600'>
-                    Conversations
-                  </p>
-                  <p className='text-3xl font-bold text-emerald-600'>
-                    {conversations.size}
-                  </p>
-                </div>
-                <MessageCircle className='w-8 h-8 text-emerald-600' />
-              </div>
-              <div className='mt-2'>
-                <span className='text-xs text-emerald-600 font-medium'>
-                  Shared subscription
-                </span>
+                <Clock className='w-4 h-4 text-gray-400' />
               </div>
             </div>
           </div>
 
           {/* Detailed Analytics */}
-          <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
+          <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
             {/* Subscription Details */}
-            <div className='bg-white rounded-lg shadow-sm border p-6'>
-              <h3 className='text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2'>
-                <Database className='w-5 h-5' />
+            <div className='border rounded-lg p-4'>
+              <h3 className='text-base font-medium text-gray-900 mb-3 flex items-center gap-2'>
+                <Database className='w-4 h-4 text-gray-600' />
                 Subscription Analytics
               </h3>
 
-              <div className='space-y-4'>
+              <div className='space-y-3'>
                 <div>
-                  <label className='text-sm font-medium text-gray-600'>
+                  <label className='text-base font-medium text-gray-600'>
                     Active Subscription Keys
                   </label>
-                  <div className='mt-1 p-3 bg-gray-50 rounded-md font-mono text-sm'>
+                  <div className='mt-1 p-2 border rounded text-base font-mono text-gray-700'>
                     {stats.subscriptionKeys.length > 0 ? (
                       <ul className='space-y-1'>
                         {stats.subscriptionKeys.map(key => (
                           <li key={key} className='flex items-center gap-2'>
-                            <CheckCircle className='w-4 h-4 text-green-500' />
-                            <span className='text-blue-600'>{key}</span>
+                            <CheckCircle className='w-3 h-3 text-gray-500' />
+                            <span>{key}</span>
                           </li>
                         ))}
                       </ul>
@@ -246,62 +156,61 @@ export default function DebugPage() {
                 </div>
 
                 <div>
-                  <label className='text-sm font-medium text-gray-600'>
+                  <label className='text-base font-medium text-gray-600'>
                     Subscription Efficiency
                   </label>
-                  <div className='mt-1 p-3 bg-green-50 rounded-md'>
-                    <div className='text-sm text-green-800'>
-                      <strong>Before Zustand:</strong> {stats.totalCallbacks}{' '}
-                      separate subscriptions ❌
+                  <div className='mt-1 p-2 border rounded text-base'>
+                    <div className='text-gray-700'>
+                      <strong>Before:</strong> {stats.totalCallbacks} separate
+                      subscriptions
                     </div>
-                    <div className='text-sm text-green-800 mt-1'>
-                      <strong>After Zustand:</strong>{' '}
-                      {stats.activeSubscriptions} shared subscription
-                      {stats.activeSubscriptions !== 1 ? 's' : ''} ✅
+                    <div className='text-gray-700 mt-1'>
+                      <strong>After:</strong> {stats.activeSubscriptions} shared
+                      subscription
+                      {stats.activeSubscriptions !== 1 ? 's' : ''}
                     </div>
-                    <div className='text-xs text-green-600 mt-2 font-medium'>
+                    <div className='text-gray-600 mt-1'>
                       {stats.totalCallbacks > stats.activeSubscriptions
-                        ? `${Math.round(((stats.totalCallbacks - stats.activeSubscriptions) / stats.totalCallbacks) * 100)}% reduction in subscriptions!`
-                        : 'Optimal efficiency achieved!'}
+                        ? `${Math.round(((stats.totalCallbacks - stats.activeSubscriptions) / stats.totalCallbacks) * 100)}% reduction in subscriptions`
+                        : 'Optimal efficiency achieved'}
                     </div>
                   </div>
                 </div>
 
                 <div>
-                  <label className='text-sm font-medium text-gray-600'>
+                  <label className='text-base font-medium text-gray-600'>
                     Profile Cache Efficiency
                   </label>
-                  <div className='mt-1 p-3 bg-blue-50 rounded-md'>
-                    <div className='text-sm text-blue-800'>
+                  <div className='mt-1 p-2 border rounded text-base'>
+                    <div className='text-gray-700'>
                       <strong>Cached Profiles:</strong> {userProfiles.size}{' '}
                       users
                     </div>
-                    <div className='text-sm text-blue-800 mt-1'>
+                    <div className='text-gray-700 mt-1'>
                       <strong>API Calls Saved:</strong> Eliminates duplicate
                       getUserProfile calls
                     </div>
-                    <div className='text-xs text-blue-600 mt-2 font-medium'>
+                    <div className='text-gray-600 mt-1'>
                       {userProfiles.size > 0
-                        ? `${userProfiles.size} profiles cached - no duplicate API calls when switching sections!`
+                        ? `${userProfiles.size} profiles cached - no duplicate API calls when switching sections`
                         : 'Profiles will be cached as you browse users'}
                     </div>
                   </div>
                 </div>
 
                 <div>
-                  <label className='text-sm font-medium text-gray-600'>
+                  <label className='text-base font-medium text-gray-600'>
                     Chat Request Subscriptions
                   </label>
-                  <div className='mt-1 p-3 bg-purple-50 rounded-md'>
-                    <div className='text-sm text-purple-800'>
-                      <strong>Incoming Requests:</strong>{' '}
-                      {incomingChatRequests.length} pending
-                    </div>
-                    <div className='text-sm text-purple-800 mt-1'>
-                      <strong>Sent Requests:</strong> {sentChatRequests.length}{' '}
+                  <div className='mt-1 p-2 border rounded text-base'>
+                    <div className='text-gray-700'>
+                      <strong>Incoming:</strong> {incomingChatRequests.length}{' '}
                       pending
                     </div>
-                    <div className='text-xs text-purple-600 mt-2 font-medium'>
+                    <div className='text-gray-700 mt-1'>
+                      <strong>Sent:</strong> {sentChatRequests.length} pending
+                    </div>
+                    <div className='text-gray-600 mt-1'>
                       Single subscription shared across: ChatRequests,
                       Notifications, OnlineUsers, DashboardSidebar
                     </div>
@@ -309,19 +218,19 @@ export default function DebugPage() {
                 </div>
 
                 <div>
-                  <label className='text-sm font-medium text-gray-600'>
+                  <label className='text-base font-medium text-gray-600'>
                     Presence Optimization
                   </label>
-                  <div className='mt-1 p-3 bg-green-50 rounded-md'>
-                    <div className='text-sm text-green-800'>
+                  <div className='mt-1 p-2 border rounded text-base'>
+                    <div className='text-gray-700'>
                       <strong>Global Presence:</strong> Single subscription for
                       all users
                     </div>
-                    <div className='text-sm text-green-800 mt-1'>
+                    <div className='text-gray-700 mt-1'>
                       <strong>Individual Presence:</strong> Eliminated (uses
                       global data)
                     </div>
-                    <div className='text-xs text-green-600 mt-2 font-medium'>
+                    <div className='text-gray-600 mt-1'>
                       ChatWindow now uses centralized presence data instead of
                       individual subscriptions
                     </div>
@@ -329,19 +238,19 @@ export default function DebugPage() {
                 </div>
 
                 <div>
-                  <label className='text-sm font-medium text-gray-600'>
+                  <label className='text-base font-medium text-gray-600'>
                     Notification Optimization
                   </label>
-                  <div className='mt-1 p-3 bg-blue-50 rounded-md'>
-                    <div className='text-sm text-blue-800'>
+                  <div className='mt-1 p-2 border rounded text-base'>
+                    <div className='text-gray-700'>
                       <strong>Before:</strong> NotificationsContent +
-                      DashboardSidebar = 2 subscriptions ❌
+                      DashboardSidebar = 2 subscriptions
                     </div>
-                    <div className='text-sm text-blue-800 mt-1'>
+                    <div className='text-gray-700 mt-1'>
                       <strong>After:</strong> Single shared notification
-                      subscription ✅
+                      subscription
                     </div>
-                    <div className='text-xs text-blue-600 mt-2 font-medium'>
+                    <div className='text-gray-600 mt-1'>
                       {notifications.length} notifications cached, count
                       auto-calculated
                     </div>
@@ -349,19 +258,19 @@ export default function DebugPage() {
                 </div>
 
                 <div>
-                  <label className='text-sm font-medium text-gray-600'>
+                  <label className='text-base font-medium text-gray-600'>
                     Conversation Optimization
                   </label>
-                  <div className='mt-1 p-3 bg-emerald-50 rounded-md'>
-                    <div className='text-sm text-emerald-800'>
+                  <div className='mt-1 p-2 border rounded text-base'>
+                    <div className='text-gray-700'>
                       <strong>Before:</strong> OnlineUsers + chat/[chatId] = 2
-                      separate subscriptions ❌
+                      separate subscriptions
                     </div>
-                    <div className='text-sm text-emerald-800 mt-1'>
+                    <div className='text-gray-700 mt-1'>
                       <strong>After:</strong> Single shared conversation
-                      subscription ✅
+                      subscription
                     </div>
-                    <div className='text-xs text-emerald-600 mt-2 font-medium'>
+                    <div className='text-gray-600 mt-1'>
                       {conversations.size} conversations cached, real-time
                       updates shared
                     </div>
@@ -371,23 +280,23 @@ export default function DebugPage() {
             </div>
 
             {/* Online Users Details */}
-            <div className='bg-white rounded-lg shadow-sm border p-6'>
-              <h3 className='text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2'>
-                <Users className='w-5 h-5' />
+            <div className='border rounded-lg p-4'>
+              <h3 className='text-base font-medium text-gray-900 mb-3 flex items-center gap-2'>
+                <Users className='w-4 h-4 text-gray-600' />
                 Online Users Data
               </h3>
 
               {error && (
-                <div className='mb-4 p-3 bg-red-50 border border-red-200 rounded-md'>
-                  <p className='text-red-800 text-sm'>Error: {error}</p>
+                <div className='mb-3 p-2 border border-gray-300 rounded text-base'>
+                  <p className='text-gray-700'>Error: {error}</p>
                 </div>
               )}
 
-              <div className='space-y-3'>
+              <div className='space-y-2'>
                 {isLoading ? (
                   <div className='text-center py-4'>
-                    <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto'></div>
-                    <p className='text-sm text-gray-500 mt-2'>
+                    <div className='animate-spin rounded-full h-6 w-6 border-b-2 border-gray-400 mx-auto'></div>
+                    <p className='text-base text-gray-500 mt-2'>
                       Loading online users...
                     </p>
                   </div>
@@ -396,23 +305,23 @@ export default function DebugPage() {
                     {onlineUsers.map(user => (
                       <div
                         key={user.userId}
-                        className='p-3 bg-gray-50 rounded-md'
+                        className='p-2 border rounded text-base'
                       >
                         <div className='flex items-center justify-between'>
                           <div>
                             <p className='font-medium text-gray-900'>
                               User {user.userId.slice(-4)}
                             </p>
-                            <p className='text-xs text-gray-500'>
+                            <p className='text-gray-500'>
                               Status: {user.status} • Online:{' '}
                               {user.isOnline ? 'Yes' : 'No'}
                             </p>
                           </div>
                           <div className='text-right'>
                             <div
-                              className={`w-3 h-3 rounded-full ${user.isOnline ? 'bg-green-500' : 'bg-gray-400'}`}
+                              className={`w-2 h-2 rounded-full ${user.isOnline ? 'bg-gray-600' : 'bg-gray-300'}`}
                             ></div>
-                            <p className='text-xs text-gray-500 mt-1'>
+                            <p className='text-gray-500 mt-1'>
                               {user.lastSeen
                                 ? new Date(user.lastSeen).toLocaleTimeString()
                                 : 'Never'}
@@ -424,8 +333,8 @@ export default function DebugPage() {
                   </div>
                 ) : (
                   <div className='text-center py-4 text-gray-500'>
-                    <Users className='w-12 h-12 mx-auto text-gray-300 mb-2' />
-                    <p>No users online</p>
+                    <Users className='w-8 h-8 mx-auto text-gray-300 mb-2' />
+                    <p className='text-base'>No users online</p>
                   </div>
                 )}
               </div>
@@ -433,39 +342,39 @@ export default function DebugPage() {
           </div>
 
           {/* Original Demo Component */}
-          <div className='bg-white rounded-lg shadow-sm border p-6'>
-            <h3 className='text-lg font-semibold text-gray-900 mb-4'>
+          <div className='border rounded-lg p-4'>
+            <h3 className='text-base font-medium text-gray-900 mb-3'>
               Original Demo Component
             </h3>
             <ZustandDemo />
           </div>
 
           {/* Benefits Section */}
-          <div className='bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border p-6'>
-            <h3 className='text-lg font-semibold text-gray-900 mb-4'>
-              🎯 Zustand Benefits Achieved
+          <div className='border rounded-lg p-4'>
+            <h3 className='text-base font-medium text-gray-900 mb-3'>
+              Zustand Benefits Achieved
             </h3>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
               <div className='space-y-2'>
-                <h4 className='font-medium text-gray-800'>
+                <h4 className='text-base font-medium text-gray-700'>
                   Performance Improvements
                 </h4>
-                <ul className='text-sm text-gray-600 space-y-1'>
-                  <li>✅ Eliminated duplicate GraphQL subscriptions</li>
-                  <li>✅ Reference counting prevents memory leaks</li>
-                  <li>✅ Centralized state reduces re-renders</li>
-                  <li>✅ Automatic cleanup on component unmount</li>
+                <ul className='text-base text-gray-600 space-y-1'>
+                  <li>• Eliminated duplicate GraphQL subscriptions</li>
+                  <li>• Reference counting prevents memory leaks</li>
+                  <li>• Centralized state reduces re-renders</li>
+                  <li>• Automatic cleanup on component unmount</li>
                 </ul>
               </div>
               <div className='space-y-2'>
-                <h4 className='font-medium text-gray-800'>
+                <h4 className='text-base font-medium text-gray-700'>
                   Developer Experience
                 </h4>
-                <ul className='text-sm text-gray-600 space-y-1'>
-                  <li>✅ Single source of truth for all data</li>
-                  <li>✅ Easy debugging with centralized logs</li>
-                  <li>✅ Consistent state across components</li>
-                  <li>✅ Simplified subscription management</li>
+                <ul className='text-base text-gray-600 space-y-1'>
+                  <li>• Single source of truth for all data</li>
+                  <li>• Easy debugging with centralized logs</li>
+                  <li>• Consistent state across components</li>
+                  <li>• Simplified subscription management</li>
                 </ul>
               </div>
             </div>

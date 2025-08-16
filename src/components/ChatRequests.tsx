@@ -129,15 +129,10 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
               className='flex items-center justify-between p-3 rounded-lg border border-zinc-200 hover:border-brand-200 hover:bg-brand-100/30 transition-all'
             >
               <div className='flex items-center gap-3'>
-                <UserAvatar
-                  email={request.requesterEmail}
-                  userId={request.requesterId}
-                  size='md'
-                />
+                <UserAvatar userId={request.requesterId} size='md' />
                 <div>
                   <div className='font-medium text-zinc-900 text-sm no-email-detection'>
-                    {request.requesterEmail ||
-                      `User ${request.requesterId.slice(-4)}`}
+                    {`User ${request.requesterId.slice(-4)}`}
                   </div>
                   <div className='text-sm text-zinc-500'>
                     Wants to chat • {formatTimeAgo(request.createdAt)}

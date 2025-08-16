@@ -141,14 +141,6 @@ export default function DashboardSidebar({
                 />
                 <h1 className='text-2xl font-bold text-zinc-900'>Loopn</h1>
               </Link>
-              <Link href='/debug'>
-                <button
-                  className='p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors'
-                  title='Debug Dashboard'
-                >
-                  <Bug className='w-4 h-4' />
-                </button>
-              </Link>
             </div>
           </div>
 
@@ -199,22 +191,33 @@ export default function DashboardSidebar({
 
           {/* Help and Account buttons at bottom */}
           <div className='border-t border-zinc-100 p-2 space-y-1'>
-            {/* Help Button */}
-            <button
-              onClick={() => onSectionChange(helpItem.id)}
-              className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border ${
-                activeSection === helpItem.id
-                  ? 'bg-brand-50 text-brand-700 border-brand-200'
-                  : 'text-zinc-700 hover:bg-zinc-50 hover:text-zinc-900 border-transparent'
-              }`}
-            >
-              <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
-                <HelpCircle className='w-5 h-5' />
-              </div>
-              <span className='font-medium text-sm flex-1'>
-                {helpItem.label}
-              </span>
-            </button>
+            {/* Help Button with Debug Button */}
+            <div className='flex items-center gap-2'>
+              <button
+                onClick={() => onSectionChange(helpItem.id)}
+                className={`relative flex-1 flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border ${
+                  activeSection === helpItem.id
+                    ? 'bg-brand-50 text-brand-700 border-brand-200'
+                    : 'text-zinc-700 hover:bg-zinc-50 hover:text-zinc-900 border-transparent'
+                }`}
+              >
+                <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
+                  <HelpCircle className='w-5 h-5' />
+                </div>
+                <span className='font-medium text-sm flex-1'>
+                  {helpItem.label}
+                </span>
+              </button>
+
+              <Link href='/debug'>
+                <button
+                  className='p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-lg transition-colors border border-transparent hover:border-gray-200'
+                  title='Debug Dashboard'
+                >
+                  <Bug className='w-4 h-4' />
+                </button>
+              </Link>
+            </div>
 
             {/* Account Button */}
             <button

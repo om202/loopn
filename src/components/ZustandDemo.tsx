@@ -17,7 +17,7 @@ export function ZustandDemo() {
     <div className='p-4 border rounded-lg bg-gray-50'>
       <h3 className='text-lg font-semibold mb-2'>🎯 Zustand Demo</h3>
 
-      <div className='space-y-2 text-sm'>
+      <div className='space-y-2 text-base'>
         <div>
           <strong>Online Users:</strong>{' '}
           {isLoading ? 'Loading...' : onlineUsers.length}
@@ -42,7 +42,7 @@ export function ZustandDemo() {
           <strong>Total Callbacks:</strong> {stats.totalCallbacks}
         </div>
 
-        <div className='mt-3 p-2 bg-blue-50 rounded text-xs'>
+        <div className='mt-3 p-2 bg-blue-50 rounded text-base'>
           <strong>💡 Benefits:</strong>
           <ul className='list-disc list-inside mt-1'>
             <li>Single subscription shared across components</li>
