@@ -343,42 +343,6 @@ export default function NotificationsContent() {
     setDecliningId(null);
   };
 
-  const handleMarkAllAsRead = async () => {
-    if (!user) return;
-    try {
-      const markPromises = notifications.map(notification => {
-        if (
-          notification.type === 'message' &&
-          notification.data &&
-          'conversationId' in notification.data
-        ) {
-          return notificationService.deleteNotificationsForConversation(
-            user.userId,
-            (notification.data as { conversationId: string }).conversationId
-          );
-        } else {
-          return notificationService.markNotificationAsRead(notification.id);
-        }
-      });
-      const results = await Promise.all(markPromises);
-
-      const failedResults = results.filter(result => result.error);
-      if (failedResults.length > 0) {
-        console.error(
-          'Some notifications failed to be processed:',
-          failedResults
-        );
-        setError('Some notifications failed to be processed');
-        return;
-      }
-
-      setNotifications([]);
-    } catch (error) {
-      console.error('Error processing notifications:', error);
-      setError('Failed to process notifications');
-    }
-  };
-
   const handleRemoveNotification = (notificationId: string) => {
     setNotifications(prev => prev.filter(notif => notif.id !== notificationId));
   };
@@ -394,18 +358,6 @@ export default function NotificationsContent() {
 
   return (
     <div className='h-full flex flex-col'>
-      {/* Mark all as read button - Fixed at top */}
-      {getFilteredNotifications().length > 0 && (
-        <div className='flex justify-end mb-4'>
-          <button
-            onClick={handleMarkAllAsRead}
-            className='text-sm text-brand-500 hover:text-brand-700 font-medium py-2 px-3 rounded-lg hover:bg-brand-50 transition-colors'
-          >
-            Mark all as read
-          </button>
-        </div>
-      )}
-
       {/* Content */}
       <div className='flex-1'>
         {error && (

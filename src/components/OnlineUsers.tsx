@@ -28,6 +28,8 @@ import { useUserCategorization } from '../hooks/useUserCategorization';
 import { useOnlineUsers } from '../hooks/useOnlineUsers';
 import { useChatRequests } from '../hooks/useChatRequests';
 import { useConversations } from '../hooks/useConversations';
+import { useNotifications } from '../hooks/useNotifications';
+import { notificationService } from '../services/notification.service';
 import { useSubscriptionStore } from '../stores/subscription-store';
 import {
   OnlineUsers_Shimmer,
@@ -111,6 +113,12 @@ export default function OnlineUsers({
 
   // Use centralized conversations
   const { getConversationByParticipant } = useConversations({
+    userId: user?.userId || '',
+    enabled: !!user?.userId,
+  });
+
+  // Use centralized notifications for mark all as read functionality
+  const { notifications: centralizedNotifications } = useNotifications({
     userId: user?.userId || '',
     enabled: !!user?.userId,
   });
@@ -420,6 +428,30 @@ export default function OnlineUsers({
     onProfessionalRequest?.(query);
   };
 
+  const handleMarkAllAsRead = async () => {
+    if (!user || !centralizedNotifications.length) return;
+    try {
+      const markPromises = centralizedNotifications.map(notification => {
+        if (
+          notification.type === 'message' &&
+          notification.data &&
+          typeof notification.data === 'object' &&
+          'conversationId' in notification.data
+        ) {
+          return notificationService.deleteNotificationsForConversation(
+            user.userId,
+            (notification.data as { conversationId: string }).conversationId
+          );
+        } else {
+          return notificationService.markNotificationAsRead(notification.id);
+        }
+      });
+      await Promise.all(markPromises);
+    } catch (error) {
+      console.error('Error processing notifications:', error);
+    }
+  };
+
   const handleOpenProfileSidebar = async (userPresence: UserPresence) => {
     // Toggle open/close and persist only the open state; selection is ephemeral
     if (profileSidebarOpen) {
@@ -546,13 +578,23 @@ export default function OnlineUsers({
         {/* Section Header - Fixed at top */}
         <div className='flex-shrink-0 mb-4 sm:mb-5 lg:mb-6'>
           {activeSection === 'notifications' && (
-            <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-zinc-900 mb-1'>
-                Notifications
-              </h2>
-              <p className='text-sm text-zinc-500'>
-                Keep up with your latest activity
-              </p>
+            <div className='flex items-start justify-between'>
+              <div>
+                <h2 className='text-xl sm:text-2xl font-bold text-zinc-900 mb-1'>
+                  Notifications
+                </h2>
+                <p className='text-sm text-zinc-500'>
+                  Keep up with your latest activity
+                </p>
+              </div>
+              {centralizedNotifications.length > 0 && (
+                <button
+                  onClick={handleMarkAllAsRead}
+                  className='text-sm text-brand-500 hover:text-brand-700 font-medium py-2 px-3 rounded-lg hover:bg-brand-50 transition-colors ml-4 flex-shrink-0'
+                >
+                  Mark all as read
+                </button>
+              )}
             </div>
           )}
           {activeSection === 'help' && (
