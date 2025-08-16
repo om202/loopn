@@ -28,11 +28,9 @@ export function useNotifications({
   useEffect(() => {
     if (!enabled || !userId) return;
 
-    console.log('[useNotifications] Setting up notifications subscription');
     const unsubscribe = subscribeToNotifications(userId);
 
     return () => {
-      console.log('[useNotifications] Cleaning up notifications subscription');
       unsubscribe();
     };
   }, [enabled, userId, subscribeToNotifications]);

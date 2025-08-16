@@ -63,7 +63,12 @@ export default function NotificationsContent() {
   const [decliningId, setDecliningId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [, setAcceptingRequestId] = useState<string | null>(null);
-  const isLoading = notificationsLoading;
+
+  // Use centralized loading state but manage notifications locally for now
+  // If we have notifications but still loading, force loading to false
+  const isLoading =
+    notificationsLoading &&
+    (!centralizedNotifications || centralizedNotifications.length === 0);
 
   const router = useRouter();
 
@@ -74,25 +79,7 @@ export default function NotificationsContent() {
     []
   );
 
-  useEffect(() => {
-    if (!user) {
-      return;
-    }
-
-    const loadNotifications = async () => {
-      const result = await notificationService.getUnreadNotifications(
-        user.userId
-      );
-      if (result.data) {
-        setNotifications(result.data);
-      } else if (result.error) {
-        setError(result.error);
-      }
-    };
-
-    const timeoutId = setTimeout(loadNotifications, 100);
-    return () => clearTimeout(timeoutId);
-  }, [user]);
+  // Old notification loading removed - now using centralized hook
 
   useEffect(() => {
     if (!realtimeChatRequests || chatRequestsLoading) {
@@ -200,16 +187,20 @@ export default function NotificationsContent() {
 
   // Process centralized notifications
   useEffect(() => {
-    if (!user || !centralizedNotifications) return;
+    if (!user) return;
 
+    // Always process notifications, even if empty array
+    const notificationsToProcess = centralizedNotifications || [];
     const groupedNotifications = groupMessageNotifications(
-      centralizedNotifications as UINotification[]
+      notificationsToProcess as UINotification[]
     );
     setNotifications(groupedNotifications);
 
     // Set error from centralized notifications if any
     if (notificationsError) {
       setError(notificationsError);
+    } else {
+      setError(null); // Clear any previous errors
     }
   }, [
     user,

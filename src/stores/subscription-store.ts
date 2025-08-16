@@ -543,7 +543,7 @@ export const useSubscriptionStore = create<SubscriptionState>()(
             return getClient().models.Notification.observeQuery({
               filter: {
                 userId: { eq: userId },
-                isRead: { eq: false },
+                // Remove isRead filter to get all notifications, then filter client-side
               },
             });
           },
@@ -553,8 +553,11 @@ export const useSubscriptionStore = create<SubscriptionState>()(
           const typedData = data as { items: Notification[] };
           const { items } = typedData;
 
+          // Filter for unread notifications only (client-side)
+          const unreadNotifications = items.filter(notif => !notif.isRead);
+
           // Sort by timestamp descending (newest first)
-          const sortedNotifications = items.sort(
+          const sortedNotifications = unreadNotifications.sort(
             (a, b) =>
               new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
           );
