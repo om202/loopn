@@ -30,17 +30,14 @@ export default function VectorSearchAdminPage() {
     null
   );
   const [status, setStatus] = useState<IndexingStatus | null>(null);
+  const [statusError, setStatusError] = useState<string | null>(null);
   const [isLoadingStatus, setIsLoadingStatus] = useState(false);
   const [testQuery, setTestQuery] = useState('');
   const [testResults, setTestResults] = useState<SearchResponse | null>(null);
   const [isTestingSearch, setIsTestingSearch] = useState(false);
 
   // Simple admin check - in production, you'd want proper admin authorization
-  const isAdmin = true; // Temporarily allow all users for testing
-  // const isAdmin =
-  //   user?.signInDetails?.loginId?.includes('admin') ||
-  //   user?.signInDetails?.loginId?.includes('@loopn.') ||
-  //   user?.signInDetails?.loginId?.includes('omprakash');
+  const isAdmin = true; // TODO: Implement proper admin authorization
 
   const handleIndexUsers = async () => {
     setIsIndexing(true);
@@ -129,8 +126,10 @@ export default function VectorSearchAdminPage() {
 
   const handleCheckStatus = async () => {
     setIsLoadingStatus(true);
+    setStatusError(null);
     try {
       // Count total users in DynamoDB
+      console.log('Counting users in DynamoDB...');
       const totalResponse = await client.models.UserProfile.list({
         filter: {
           isOnboardingComplete: {
@@ -139,11 +138,31 @@ export default function VectorSearchAdminPage() {
         },
       });
       const totalUsers = totalResponse.data?.length || 0;
+      console.log('Total users in DynamoDB:', totalUsers);
 
       // Test search to see how many are in OpenSearch
-      const searchResponse = await OpenSearchService.searchUsers('*', 1000);
-      const migratedUsers = searchResponse.total || 0;
+      // Use empty string instead of '*' for match_all query
+      console.log('Checking indexed users in OpenSearch...');
+      const searchResponse = await OpenSearchService.searchUsers('', 1000);
+      console.log('OpenSearch response:', searchResponse);
+
+      let migratedUsers = 0;
+      if (searchResponse.success) {
+        migratedUsers =
+          searchResponse.total || searchResponse.results?.length || 0;
+      } else {
+        console.error('OpenSearch query failed:', searchResponse.error);
+        setStatusError(`OpenSearch query failed: ${searchResponse.error}`);
+        migratedUsers = 0;
+      }
+
       const pendingUsers = Math.max(0, totalUsers - migratedUsers);
+
+      console.log('Status calculated:', {
+        totalUsers,
+        migratedUsers,
+        pendingUsers,
+      });
 
       setStatus({
         totalUsers,
@@ -152,6 +171,14 @@ export default function VectorSearchAdminPage() {
       });
     } catch (error) {
       console.error('Error checking status:', error);
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
+      setStatusError(`Failed to check status: ${errorMessage}`);
+      setStatus({
+        totalUsers: 0,
+        migratedUsers: 0,
+        pendingUsers: 0,
+      });
     } finally {
       setIsLoadingStatus(false);
     }
@@ -170,6 +197,27 @@ export default function VectorSearchAdminPage() {
       setTestResults(searchResult);
     } catch (error) {
       console.error('Error testing search:', error);
+      setTestResults({
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+      });
+    } finally {
+      setIsTestingSearch(false);
+    }
+  };
+
+  const handleTestWildcardSearch = async () => {
+    setIsTestingSearch(true);
+    setTestResults(null);
+
+    try {
+      console.log('Testing search to see all indexed users...');
+      // Use empty string for match_all query instead of '*'
+      const searchResult = await OpenSearchService.searchUsers('', 50);
+      console.log('All indexed users search result:', searchResult);
+      setTestResults(searchResult);
+    } catch (error) {
+      console.error('Error testing search for all users:', error);
       setTestResults({
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error',
@@ -222,6 +270,12 @@ export default function VectorSearchAdminPage() {
                   {isLoadingStatus ? 'Loading...' : 'Check Status'}
                 </button>
               </div>
+
+              {statusError && (
+                <div className='bg-red-50 border border-red-200 rounded-lg p-4 mb-4'>
+                  <p className='text-red-800 text-sm'>{statusError}</p>
+                </div>
+              )}
 
               {status && (
                 <div className='bg-gray-50 rounded-lg p-4'>
@@ -340,6 +394,13 @@ export default function VectorSearchAdminPage() {
                   className='px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50'
                 >
                   {isTestingSearch ? 'Searching...' : 'Test Search'}
+                </button>
+                <button
+                  onClick={handleTestWildcardSearch}
+                  disabled={isTestingSearch}
+                  className='px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50'
+                >
+                  {isTestingSearch ? 'Searching...' : 'Show All Indexed'}
                 </button>
               </div>
 

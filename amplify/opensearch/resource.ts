@@ -4,9 +4,12 @@ import { Stack, RemovalPolicy } from 'aws-cdk-lib';
 
 export function defineOpenSearch(stack: Stack, lambdaRole?: iam.IRole) {
   // Generate unique resource names based on stack to avoid conflicts
-  const stackHash = stack.stackName.slice(-8).toLowerCase().replace(/[^a-z0-9]/g, '');
+  const stackHash = stack.stackName
+    .slice(-8)
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, '');
   const collectionName = `usersearch${stackHash}`;
-  
+
   // Create security policy for the collection
   const securityPolicy = new opensearch.CfnSecurityPolicy(
     stack,
@@ -18,10 +21,10 @@ export function defineOpenSearch(stack: Stack, lambdaRole?: iam.IRole) {
         Rules: [
           {
             ResourceType: 'collection',
-            Resource: [`collection/${collectionName}`]
-          }
+            Resource: [`collection/${collectionName}`],
+          },
         ],
-        AWSOwnedKey: true
+        AWSOwnedKey: true,
       }),
     }
   );
@@ -103,7 +106,7 @@ export function defineOpenSearch(stack: Stack, lambdaRole?: iam.IRole) {
 
   // Apply removal policy to handle resource replacement
   userSearchCollection.applyRemovalPolicy(RemovalPolicy.DESTROY);
-  
+
   // Dependencies
   userSearchCollection.addDependency(securityPolicy);
   userSearchCollection.addDependency(networkPolicy);

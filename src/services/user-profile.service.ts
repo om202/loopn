@@ -72,7 +72,17 @@ export class UserProfileService {
       // Automatically index the user profile for vector search
       if (result.data) {
         try {
-          await OpenSearchService.indexUser(userId, { ...profileData, userId });
+          console.log('Indexing user profile for search:', userId);
+          const indexResult = await OpenSearchService.indexUser(userId, {
+            ...profileData,
+            userId,
+            email,
+          });
+          console.log('User indexing result:', indexResult);
+
+          if (!indexResult.success) {
+            console.error('Failed to index user:', indexResult.error);
+          }
         } catch (indexError) {
           console.error(
             'Failed to index user profile for vector search:',
