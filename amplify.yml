@@ -5,15 +5,6 @@ backend:
       commands:
         - nvm install 20.18.0
         - nvm use 20.18.0
-        # Clean up existing OpenSearch resources to avoid conflicts
-        - |
-          echo "Cleaning up existing OpenSearch resources..."
-          aws opensearchserverless delete-collection --name user-search --region $AWS_DEFAULT_REGION || true
-          aws opensearchserverless delete-security-policy --name user-search-network-policy --type network --region $AWS_DEFAULT_REGION || true
-          aws opensearchserverless delete-security-policy --name user-search-security-policy --type encryption --region $AWS_DEFAULT_REGION || true
-          aws opensearchserverless delete-access-policy --name user-search-data-access-policy --type data --region $AWS_DEFAULT_REGION || true
-          echo "Waiting for resources to be fully deleted..."
-          sleep 30
     build:
       commands:
         - yarn install --frozen-lockfile

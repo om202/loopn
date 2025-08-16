@@ -1,25 +1,17 @@
 import * as opensearch from 'aws-cdk-lib/aws-opensearchserverless';
 import * as iam from 'aws-cdk-lib/aws-iam';
-import { Stack } from 'aws-cdk-lib';
+import { Stack, RemovalPolicy } from 'aws-cdk-lib';
 
 export function defineOpenSearch(stack: Stack, lambdaRole?: iam.IRole) {
-  // Create OpenSearch Serverless collection for auto-scaling
-  const userSearchCollection = new opensearch.CfnCollection(
-    stack,
-    'UserSearchCollection',
-    {
-      name: 'user-search',
-      type: 'VECTORSEARCH',
-      description: 'Vector search collection for user profiles',
-    }
-  );
-
+  // Generate unique resource names based on stack to avoid conflicts
+  const stackHash = stack.stackName.slice(-8).toLowerCase();
+  
   // Create security policy for the collection
   const securityPolicy = new opensearch.CfnSecurityPolicy(
     stack,
     'UserSearchSecurityPolicy',
     {
-      name: 'user-search-security-policy',
+      name: `user-search-security-policy-${stackHash}`,
       type: 'encryption',
       policy: JSON.stringify({
         Rules: [
@@ -38,7 +30,7 @@ export function defineOpenSearch(stack: Stack, lambdaRole?: iam.IRole) {
     stack,
     'UserSearchNetworkPolicy',
     {
-      name: 'user-search-network-policy',
+      name: `user-search-network-policy-${stackHash}`,
       type: 'network',
       policy: JSON.stringify([
         {
@@ -63,7 +55,7 @@ export function defineOpenSearch(stack: Stack, lambdaRole?: iam.IRole) {
     stack,
     'UserSearchDataAccessPolicy',
     {
-      name: 'user-search-data-access-policy',
+      name: `user-search-data-access-policy-${stackHash}`,
       type: 'data',
       policy: JSON.stringify([
         {
@@ -97,6 +89,20 @@ export function defineOpenSearch(stack: Stack, lambdaRole?: iam.IRole) {
     }
   );
 
+  // Create OpenSearch Serverless collection for auto-scaling
+  const userSearchCollection = new opensearch.CfnCollection(
+    stack,
+    'UserSearchCollection',
+    {
+      name: 'user-search',
+      type: 'VECTORSEARCH',
+      description: 'Vector search collection for user profiles',
+    }
+  );
+
+  // Apply removal policy to handle resource replacement
+  userSearchCollection.applyRemovalPolicy(RemovalPolicy.DESTROY);
+  
   // Dependencies
   userSearchCollection.addDependency(securityPolicy);
   userSearchCollection.addDependency(networkPolicy);
