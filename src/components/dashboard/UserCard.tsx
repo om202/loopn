@@ -259,7 +259,11 @@ export default function UserCard({
                     onChatAction(userPresence.userId);
                   }
                 }}
-                className='px-2 py-1.5 text-sm font-medium rounded-xl border transition-colors bg-white text-brand-500 border-brand-200 hover:bg-brand-100 hover:border-brand-300 flex items-center justify-center flex-shrink-0 w-[40px] h-[40px] md:w-auto md:h-auto md:gap-1.5 md:min-w-[44px]'
+className={`px-2 py-1.5 text-sm font-medium rounded-xl border transition-colors flex items-center justify-center flex-shrink-0 w-[40px] h-[40px] md:w-auto md:h-auto md:gap-1.5 md:min-w-[44px] ${
+                  incomingRequestSenderIds.has(userPresence.userId)
+                    ? 'bg-brand-500 text-white border-brand-500 hover:bg-brand-600 hover:border-brand-600'
+                    : 'bg-white text-brand-500 border-brand-200 hover:bg-brand-100 hover:border-brand-300'
+                }`}
                 title={
                   existingConversations.has(userPresence.userId)
                     ? existingConversations.get(userPresence.userId)
@@ -310,7 +314,7 @@ export default function UserCard({
                   )
                 ) : incomingRequestSenderIds.has(userPresence.userId) ? (
                   <>
-                    <CheckCircle2 className='w-4 h-4 text-brand-500 flex-shrink-0' />
+                    <CheckCircle2 className='w-4 h-4 text-white flex-shrink-0' />
                     <span className='hidden md:inline text-sm font-medium'>
                       Accept Request
                     </span>
