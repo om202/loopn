@@ -25,7 +25,7 @@ import {
 import SearchUser from './SearchUser';
 import { useChatActions } from '../hooks/useChatActions';
 import { useUserCategorization } from '../hooks/useUserCategorization';
-import { useRealtimeOnlineUsers } from '../hooks/realtime';
+import { useOnlineUsers } from '../hooks/useOnlineUsers';
 import { useChatRequests } from '../hooks/realtime/useChatRequests';
 import { useRealtime } from '../contexts/RealtimeContext';
 import {
@@ -100,7 +100,7 @@ export default function OnlineUsers({
     onlineUsers: allOnlineUsers,
     isLoading: onlineUsersLoading,
     error: onlineUsersError,
-  } = useRealtimeOnlineUsers({
+  } = useOnlineUsers({
     enabled: !!user?.userId,
   });
 

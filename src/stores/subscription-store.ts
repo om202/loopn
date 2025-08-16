@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import type { Schema } from '../../amplify/data/resource';
 import type { UnsubscribeFn } from '@/lib/realtime/types';
+import { getClient } from '../lib/amplify-config';
 
 // Type definitions
 type UserPresence = Schema['UserPresence']['type'];
@@ -14,7 +15,12 @@ type MessageReaction = Schema['MessageReaction']['type'];
 // Subscription configuration
 interface SubscriptionConfig {
   key: string;
-  query: () => any;
+  query: () => {
+    subscribe: (callbacks: {
+      next: (data: unknown) => void;
+      error: (error: Error) => void;
+    }) => { unsubscribe: () => void };
+  };
   variables?: Record<string, unknown>;
 }
 
@@ -23,14 +29,14 @@ interface SubscriptionEntry {
   subscription: { unsubscribe: () => void };
   config: SubscriptionConfig;
   refCount: number;
-  callbacks: Set<(data: any) => void>;
+  callbacks: Set<(data: unknown) => void>;
 }
 
 // Main store state interface
 interface SubscriptionState {
   // Active subscriptions registry
   activeSubscriptions: Map<string, SubscriptionEntry>;
-  
+
   // Data caches
   onlineUsers: UserPresence[];
   conversations: Map<string, Conversation>;
@@ -41,7 +47,7 @@ interface SubscriptionState {
   notifications: Notification[];
   messages: Map<string, Message[]>; // conversationId -> messages
   reactions: Map<string, MessageReaction[]>; // messageId -> reactions
-  
+
   // Loading states
   loading: {
     onlineUsers: boolean;
@@ -49,7 +55,7 @@ interface SubscriptionState {
     chatRequests: boolean;
     notifications: boolean;
   };
-  
+
   // Error states
   errors: {
     onlineUsers: string | null;
@@ -57,32 +63,39 @@ interface SubscriptionState {
     chatRequests: string | null;
     notifications: string | null;
   };
-  
+
   // Actions
-  subscribe: (key: string, config: SubscriptionConfig, callback: (data: any) => void) => UnsubscribeFn;
-  unsubscribe: (key: string, callback: (data: any) => void) => void;
+  subscribe: (
+    key: string,
+    config: SubscriptionConfig,
+    callback: (data: unknown) => void
+  ) => UnsubscribeFn;
+  unsubscribe: (key: string, callback: (data: unknown) => void) => void;
   cleanup: () => void;
-  
+
+  // High-level subscription methods
+  subscribeToOnlineUsers: (userId: string) => UnsubscribeFn;
+
   // Data setters
   setOnlineUsers: (users: UserPresence[]) => void;
   setOnlineUsersLoading: (loading: boolean) => void;
   setOnlineUsersError: (error: string | null) => void;
-  
+
   updateConversations: (conversations: Conversation[]) => void;
   setConversationsLoading: (loading: boolean) => void;
   setConversationsError: (error: string | null) => void;
-  
+
   setChatRequests: (incoming: ChatRequest[], sent: ChatRequest[]) => void;
   setChatRequestsLoading: (loading: boolean) => void;
   setChatRequestsError: (error: string | null) => void;
-  
+
   setNotifications: (notifications: Notification[]) => void;
   setNotificationsLoading: (loading: boolean) => void;
   setNotificationsError: (error: string | null) => void;
-  
+
   updateMessages: (conversationId: string, messages: Message[]) => void;
   updateReactions: (messageId: string, reactions: MessageReaction[]) => void;
-  
+
   // Debug helpers
   getStats: () => {
     activeSubscriptions: number;
@@ -106,44 +119,50 @@ export const useSubscriptionStore = create<SubscriptionState>()(
       notifications: [],
       messages: new Map(),
       reactions: new Map(),
-      
+
       loading: {
         onlineUsers: false,
         conversations: false,
         chatRequests: false,
         notifications: false,
       },
-      
+
       errors: {
         onlineUsers: null,
         conversations: null,
         chatRequests: null,
         notifications: null,
       },
-      
+
       // Subscription management with reference counting
-      subscribe: (key: string, config: SubscriptionConfig, callback: (data: any) => void) => {
+      subscribe: (
+        key: string,
+        config: SubscriptionConfig,
+        callback: (data: unknown) => void
+      ) => {
         const state = get();
         const existing = state.activeSubscriptions.get(key);
-        
+
         if (existing) {
           // Increment reference count and add callback
           existing.refCount++;
           existing.callbacks.add(callback);
-          
-          console.log(`[SubscriptionStore] Reusing subscription ${key}, refCount: ${existing.refCount}`);
-          
+
+          console.log(
+            `[SubscriptionStore] Reusing subscription ${key}, refCount: ${existing.refCount}`
+          );
+
           // Return unsubscribe function
           return () => {
             get().unsubscribe(key, callback);
           };
         }
-        
+
         try {
           // Create new subscription
           const observable = config.query();
           const subscription = observable.subscribe({
-            next: (data: any) => {
+            next: (data: unknown) => {
               const currentEntry = get().activeSubscriptions.get(key);
               if (currentEntry) {
                 // Notify all callbacks
@@ -151,18 +170,24 @@ export const useSubscriptionStore = create<SubscriptionState>()(
                   try {
                     cb(data);
                   } catch (error) {
-                    console.error(`[SubscriptionStore] Callback error for ${key}:`, error);
+                    console.error(
+                      `[SubscriptionStore] Callback error for ${key}:`,
+                      error
+                    );
                   }
                 });
               }
             },
             error: (error: Error) => {
-              console.error(`[SubscriptionStore] Subscription error for ${key}:`, error);
+              console.error(
+                `[SubscriptionStore] Subscription error for ${key}:`,
+                error
+              );
               // Clean up failed subscription
               get().cleanup();
             },
           });
-          
+
           // Create subscription entry
           const entry: SubscriptionEntry = {
             subscription,
@@ -170,89 +195,103 @@ export const useSubscriptionStore = create<SubscriptionState>()(
             refCount: 1,
             callbacks: new Set([callback]),
           };
-          
+
           // Update store
           set(state => ({
-            activeSubscriptions: new Map(state.activeSubscriptions).set(key, entry),
+            activeSubscriptions: new Map(state.activeSubscriptions).set(
+              key,
+              entry
+            ),
           }));
-          
+
           console.log(`[SubscriptionStore] Created subscription ${key}`);
-          
+
           // Return unsubscribe function
           return () => {
             get().unsubscribe(key, callback);
           };
         } catch (error) {
-          console.error(`[SubscriptionStore] Failed to create subscription ${key}:`, error);
+          console.error(
+            `[SubscriptionStore] Failed to create subscription ${key}:`,
+            error
+          );
           return () => {}; // Return no-op function
         }
       },
-      
-      unsubscribe: (key: string, callback: (data: any) => void) => {
+
+      unsubscribe: (key: string, callback: (data: unknown) => void) => {
         const state = get();
         const entry = state.activeSubscriptions.get(key);
-        
+
         if (!entry) return;
-        
+
         // Remove callback and decrement reference count
         entry.callbacks.delete(callback);
         entry.refCount--;
-        
-        console.log(`[SubscriptionStore] Unsubscribing from ${key}, refCount: ${entry.refCount}`);
-        
+
+        console.log(
+          `[SubscriptionStore] Unsubscribing from ${key}, refCount: ${entry.refCount}`
+        );
+
         if (entry.refCount <= 0) {
           // No more references, clean up subscription
           try {
             entry.subscription.unsubscribe();
           } catch (error) {
-            console.error(`[SubscriptionStore] Error unsubscribing ${key}:`, error);
+            console.error(
+              `[SubscriptionStore] Error unsubscribing ${key}:`,
+              error
+            );
           }
-          
+
           // Remove from store
           const newSubscriptions = new Map(state.activeSubscriptions);
           newSubscriptions.delete(key);
-          
+
           set({ activeSubscriptions: newSubscriptions });
-          
+
           console.log(`[SubscriptionStore] Cleaned up subscription ${key}`);
         }
       },
-      
+
       cleanup: () => {
         const state = get();
-        
+
         // Unsubscribe from all active subscriptions
         state.activeSubscriptions.forEach((entry, key) => {
           try {
             entry.subscription.unsubscribe();
           } catch (error) {
-            console.error(`[SubscriptionStore] Error cleaning up ${key}:`, error);
+            console.error(
+              `[SubscriptionStore] Error cleaning up ${key}:`,
+              error
+            );
           }
         });
-        
+
         // Clear all subscriptions
         set({ activeSubscriptions: new Map() });
-        
+
         console.log('[SubscriptionStore] Cleaned up all subscriptions');
       },
-      
+
       // Data setters
       setOnlineUsers: (users: UserPresence[]) => {
         set({ onlineUsers: users });
       },
-      
+
       setOnlineUsersLoading: (loading: boolean) => {
         set(state => ({
-          loading: { ...state.loading, onlineUsers: loading }
+          loading: { ...state.loading, onlineUsers: loading },
         }));
       },
-      
+
       setOnlineUsersError: (error: string | null) => {
         set(state => ({
-          errors: { ...state.errors, onlineUsers: error }
+          errors: { ...state.errors, onlineUsers: error },
         }));
       },
-      
+
       updateConversations: (conversations: Conversation[]) => {
         const conversationMap = new Map<string, Conversation>();
         conversations.forEach(conv => {
@@ -260,63 +299,94 @@ export const useSubscriptionStore = create<SubscriptionState>()(
         });
         set({ conversations: conversationMap });
       },
-      
+
       setConversationsLoading: (loading: boolean) => {
         set(state => ({
-          loading: { ...state.loading, conversations: loading }
+          loading: { ...state.loading, conversations: loading },
         }));
       },
-      
+
       setConversationsError: (error: string | null) => {
         set(state => ({
-          errors: { ...state.errors, conversations: error }
+          errors: { ...state.errors, conversations: error },
         }));
       },
-      
+
       setChatRequests: (incoming: ChatRequest[], sent: ChatRequest[]) => {
         set({ chatRequests: { incoming, sent } });
       },
-      
+
       setChatRequestsLoading: (loading: boolean) => {
         set(state => ({
-          loading: { ...state.loading, chatRequests: loading }
+          loading: { ...state.loading, chatRequests: loading },
         }));
       },
-      
+
       setChatRequestsError: (error: string | null) => {
         set(state => ({
-          errors: { ...state.errors, chatRequests: error }
+          errors: { ...state.errors, chatRequests: error },
         }));
       },
-      
+
       setNotifications: (notifications: Notification[]) => {
         set({ notifications });
       },
-      
+
       setNotificationsLoading: (loading: boolean) => {
         set(state => ({
-          loading: { ...state.loading, notifications: loading }
+          loading: { ...state.loading, notifications: loading },
         }));
       },
-      
+
       setNotificationsError: (error: string | null) => {
         set(state => ({
-          errors: { ...state.errors, notifications: error }
+          errors: { ...state.errors, notifications: error },
         }));
       },
-      
+
       updateMessages: (conversationId: string, messages: Message[]) => {
         set(state => ({
-          messages: new Map(state.messages).set(conversationId, messages)
+          messages: new Map(state.messages).set(conversationId, messages),
         }));
       },
-      
+
       updateReactions: (messageId: string, reactions: MessageReaction[]) => {
         set(state => ({
-          reactions: new Map(state.reactions).set(messageId, reactions)
+          reactions: new Map(state.reactions).set(messageId, reactions),
         }));
       },
-      
+
+      // High-level subscription methods
+      subscribeToOnlineUsers: (_userId: string) => {
+        const key = 'online-users';
+
+        const config: SubscriptionConfig = {
+          key,
+          query: () => {
+            return getClient().models.UserPresence.observeQuery({});
+          },
+        };
+
+        const callback = (data: unknown) => {
+          const typedData = data as { items: UserPresence[] };
+          const { items } = typedData;
+          const onlineUsers = items.filter(
+            (user: UserPresence) => user.isOnline === true
+          );
+
+          // Update the store with new online users
+          get().setOnlineUsers(onlineUsers);
+          get().setOnlineUsersLoading(false);
+          get().setOnlineUsersError(null);
+        };
+
+        // Set loading state
+        get().setOnlineUsersLoading(true);
+        get().setOnlineUsersError(null);
+
+        return get().subscribe(key, config, callback);
+      },
+
       // Debug helpers
       getStats: () => {
         const state = get();
