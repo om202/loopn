@@ -10,7 +10,7 @@ import ProtectedRoute from '../../../components/protected-route';
 import TrialEndedByOtherDialog from '../../../components/TrialEndedByOtherDialog';
 import { getConversationIdFromParam } from '../../../lib/url-utils';
 import { chatService } from '../../../services/chat.service';
-import { useRealtime } from '../../../contexts/RealtimeContext';
+import { useConversations } from '../../../hooks/useConversations';
 
 type Conversation = Schema['Conversation']['type'];
 
@@ -27,7 +27,12 @@ export default function ChatPage({ params }: ChatPageProps) {
   const [showTrialEndedDialog, setShowTrialEndedDialog] = useState(false);
   const { user } = useAuthenticator();
   const router = useRouter();
-  const { subscribeToConversations } = useRealtime();
+
+  // Use centralized conversations
+  const { getConversationById } = useConversations({
+    userId: user?.userId || '',
+    enabled: !!user?.userId,
+  });
 
   const loadConversation = useCallback(async () => {
     try {
@@ -77,43 +82,34 @@ export default function ChatPage({ params }: ChatPageProps) {
     loadConversation();
   }, [user, loadConversation, router]);
 
+  // Monitor conversation updates from centralized store
   useEffect(() => {
     if (!user?.userId || !conversation?.id) {
       return;
     }
 
-    const subscription = subscribeToConversations(
-      user.userId,
-      (data: unknown) => {
-        const conversations = (data as { items?: Conversation[] }).items || [];
-        const updatedConversation = conversations.find(
-          (conv: { id: string }) => conv.id === conversation.id
-        );
-        if (updatedConversation) {
-          // Check if the chat trial was just ended by another user
-          const wasActive = conversation.chatStatus !== 'ENDED';
-          const isNowEnded = updatedConversation.chatStatus === 'ENDED';
-          const endedByOtherUser =
-            updatedConversation.endedByUserId &&
-            updatedConversation.endedByUserId !== user.userId;
+    // Check for updates to the current conversation
+    const updatedConversation = getConversationById(conversation.id);
+    if (updatedConversation && updatedConversation !== conversation) {
+      // Check if the chat trial was just ended by another user
+      const wasActive = conversation.chatStatus !== 'ENDED';
+      const isNowEnded = updatedConversation.chatStatus === 'ENDED';
+      const endedByOtherUser =
+        updatedConversation.endedByUserId &&
+        updatedConversation.endedByUserId !== user.userId;
 
-          if (wasActive && isNowEnded && endedByOtherUser) {
-            setShowTrialEndedDialog(true);
-          }
-
-          setConversation(updatedConversation);
-        }
+      if (wasActive && isNowEnded && endedByOtherUser) {
+        setShowTrialEndedDialog(true);
       }
-    );
 
-    return () => {
-      subscription();
-    };
+      setConversation(updatedConversation);
+    }
   }, [
     user?.userId,
     conversation?.id,
     conversation?.chatStatus,
-    subscribeToConversations,
+    conversation,
+    getConversationById,
   ]);
 
   const handleChatEnded = () => {

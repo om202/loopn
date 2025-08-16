@@ -27,6 +27,7 @@ export default function DebugPage() {
     incomingChatRequests,
     sentChatRequests,
     notifications,
+    conversations,
   } = useSubscriptionStore();
   const [startTime] = useState(Date.now());
   const [currentTime, setCurrentTime] = useState(Date.now());
@@ -190,6 +191,26 @@ export default function DebugPage() {
                 </span>
               </div>
             </div>
+
+            {/* Conversations */}
+            <div className='bg-white rounded-lg shadow-sm border p-6'>
+              <div className='flex items-center justify-between'>
+                <div>
+                  <p className='text-sm font-medium text-gray-600'>
+                    Conversations
+                  </p>
+                  <p className='text-3xl font-bold text-emerald-600'>
+                    {conversations.size}
+                  </p>
+                </div>
+                <MessageCircle className='w-8 h-8 text-emerald-600' />
+              </div>
+              <div className='mt-2'>
+                <span className='text-xs text-emerald-600 font-medium'>
+                  Shared subscription
+                </span>
+              </div>
+            </div>
           </div>
 
           {/* Detailed Analytics */}
@@ -323,6 +344,26 @@ export default function DebugPage() {
                     <div className='text-xs text-blue-600 mt-2 font-medium'>
                       {notifications.length} notifications cached, count
                       auto-calculated
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <label className='text-sm font-medium text-gray-600'>
+                    Conversation Optimization
+                  </label>
+                  <div className='mt-1 p-3 bg-emerald-50 rounded-md'>
+                    <div className='text-sm text-emerald-800'>
+                      <strong>Before:</strong> OnlineUsers + chat/[chatId] = 2
+                      separate subscriptions ❌
+                    </div>
+                    <div className='text-sm text-emerald-800 mt-1'>
+                      <strong>After:</strong> Single shared conversation
+                      subscription ✅
+                    </div>
+                    <div className='text-xs text-emerald-600 mt-2 font-medium'>
+                      {conversations.size} conversations cached, real-time
+                      updates shared
                     </div>
                   </div>
                 </div>

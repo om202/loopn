@@ -99,10 +99,8 @@ export default function NotificationsContent() {
             ? {
                 fullName: profileData.fullName || undefined,
                 email: profileData.email || undefined,
-                profilePictureUrl:
-                  profileData.profilePictureUrl || undefined,
-                hasProfilePicture:
-                  profileData.hasProfilePicture || false,
+                profilePictureUrl: profileData.profilePictureUrl || undefined,
+                hasProfilePicture: profileData.hasProfilePicture || false,
               }
             : undefined;
 

@@ -27,7 +27,7 @@ import { useChatActions } from '../hooks/useChatActions';
 import { useUserCategorization } from '../hooks/useUserCategorization';
 import { useOnlineUsers } from '../hooks/useOnlineUsers';
 import { useChatRequests } from '../hooks/useChatRequests';
-import { useRealtime } from '../contexts/RealtimeContext';
+import { useConversations } from '../hooks/useConversations';
 import { useSubscriptionStore } from '../stores/subscription-store';
 import {
   OnlineUsers_Shimmer,
@@ -57,9 +57,7 @@ export default function OnlineUsers({
   onProfessionalRequest,
 }: OnlineUsersProps) {
   const [allUsers, setAllUsers] = useState<UserPresence[]>([]);
-  const [existingConversations, setExistingConversations] = useState<
-    Map<string, Conversation>
-  >(new Map());
+  // Existing conversations now managed by centralized hook
   const [profileSidebarUser, setProfileSidebarUser] =
     useState<UserPresence | null>(null);
   const [profileSidebarFullProfile, setProfileSidebarFullProfile] = useState<
@@ -95,7 +93,7 @@ export default function OnlineUsers({
     await simplePresenceManager.setOffline();
     handleSignOut();
   };
-  const { subscribeToConversations } = useRealtime();
+  // Conversation subscription now handled by centralized hook
   const { fetchUserProfile } = useSubscriptionStore();
 
   const {
@@ -107,6 +105,12 @@ export default function OnlineUsers({
   });
 
   const { pendingReceiverIds, error: sentRequestsError } = useChatRequests({
+    userId: user?.userId || '',
+    enabled: !!user?.userId,
+  });
+
+  // Use centralized conversations
+  const { getConversationByParticipant } = useConversations({
     userId: user?.userId || '',
     enabled: !!user?.userId,
   });
@@ -252,7 +256,6 @@ export default function OnlineUsers({
         Boolean
       ) as UserPresence[];
 
-      setExistingConversations(conversationMap);
       return validUserPresences;
     } catch (error) {
       console.error('Error loading conversations:', error);
@@ -262,6 +265,21 @@ export default function OnlineUsers({
       setConversationsLoaded(true);
     }
   }, [user]);
+
+  // Create a conversations map for compatibility with existing hooks
+  const existingConversations = useMemo(() => {
+    const conversationMap = new Map<string, Conversation>();
+
+    // Populate map by checking each online user for existing conversations
+    onlineUsers.forEach(onlineUser => {
+      const conversation = getConversationByParticipant(onlineUser.userId);
+      if (conversation) {
+        conversationMap.set(onlineUser.userId, conversation);
+      }
+    });
+
+    return conversationMap;
+  }, [onlineUsers, getConversationByParticipant]);
 
   const userCategories = useUserCategorization({
     onlineUsers,
@@ -304,40 +322,7 @@ export default function OnlineUsers({
     };
   }, [user, loadConversations]);
 
-  useEffect(() => {
-    if (!user?.userId) {
-      return;
-    }
-
-    const subscription = subscribeToConversations(user.userId, data => {
-      const conversations = (data as { items?: Conversation[] }).items || [];
-      const conversationMap = new Map<string, Conversation>();
-
-      const sortedConversations = conversations.sort(
-        (a: Conversation, b: Conversation) => {
-          const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
-          const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
-          return dateB - dateA;
-        }
-      );
-
-      sortedConversations.forEach((conv: Conversation) => {
-        const otherUserId =
-          conv.participant1Id === user.userId
-            ? conv.participant2Id
-            : conv.participant1Id;
-        if (otherUserId && !conversationMap.has(otherUserId)) {
-          conversationMap.set(otherUserId, conv);
-        }
-      });
-
-      setExistingConversations(conversationMap);
-    });
-
-    return () => {
-      subscription();
-    };
-  }, [user?.userId, subscribeToConversations]);
+  // Conversation subscription now handled by centralized hook
 
   useEffect(() => {
     const timer = setInterval(() => {

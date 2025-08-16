@@ -80,6 +80,7 @@ interface SubscriptionState {
   subscribeToIncomingChatRequests: (userId: string) => UnsubscribeFn;
   subscribeToSentChatRequests: (userId: string) => UnsubscribeFn;
   subscribeToNotifications: (userId: string) => UnsubscribeFn;
+  subscribeToConversations: (userId: string) => UnsubscribeFn;
 
   // Data setters
   setOnlineUsers: (users: UserPresence[]) => void;
@@ -579,6 +580,47 @@ export const useSubscriptionStore = create<SubscriptionState>()(
         // Set loading state
         get().setNotificationsLoading(true);
         get().setNotificationsError(null);
+
+        return get().subscribe(key, config, callback);
+      },
+
+      subscribeToConversations: (userId: string) => {
+        const key = `conversations-${userId}`;
+
+        const config: SubscriptionConfig = {
+          key,
+          query: () => {
+            return getClient().models.Conversation.observeQuery({
+              filter: {
+                or: [
+                  { participant1Id: { eq: userId } },
+                  { participant2Id: { eq: userId } },
+                ],
+              },
+            });
+          },
+        };
+
+        const callback = (data: unknown) => {
+          const typedData = data as { items: Conversation[] };
+          const { items } = typedData;
+
+          // Sort conversations by creation date (newest first)
+          const sortedConversations = items.sort((a, b) => {
+            const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+            const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+            return dateB - dateA;
+          });
+
+          // Update the store with new conversations
+          get().updateConversations(sortedConversations);
+          get().setConversationsLoading(false);
+          get().setConversationsError(null);
+        };
+
+        // Set loading state
+        get().setConversationsLoading(true);
+        get().setConversationsError(null);
 
         return get().subscribe(key, config, callback);
       },
