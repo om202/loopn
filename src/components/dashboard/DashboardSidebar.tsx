@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { MessageCircle, Sparkles, Users, HelpCircle } from 'lucide-react';
+import { MessageCircle, Home, Users, HelpCircle } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAuthenticator } from '@aws-amplify/ui-react';
@@ -198,21 +198,21 @@ export default function DashboardSidebar({
   const sidebarItems = [
     {
       id: 'suggested' as const,
-      icon: Sparkles,
-      label: 'Suggested',
+      icon: Home,
+      label: 'Home',
       count: suggestedUsersCount,
-    },
-    {
-      id: 'all' as const,
-      icon: MessageCircle,
-      label: 'Chats',
-      count: onlineUsersCount + connectionsCount + chatTrialsCount,
     },
     {
       id: 'connections' as const,
       icon: Users,
       label: 'Connections',
       count: connectionsCount,
+    },
+    {
+      id: 'all' as const,
+      icon: MessageCircle,
+      label: 'Chats',
+      count: onlineUsersCount + connectionsCount + chatTrialsCount,
     },
     {
       id: 'notifications' as const,
@@ -293,15 +293,9 @@ export default function DashboardSidebar({
                     )}
                   </div>
                   <span className='font-medium text-sm flex-1'>{label}</span>
-                  {count > 0 && (
+                  {count > 0 && id === 'notifications' && (
                     <span
-                      className={`text-xs font-semibold flex items-center justify-center h-5 w-5 rounded-full text-center ${
-                        id === 'notifications'
-                          ? 'bg-b_red-500 text-white'
-                          : activeSection === id
-                            ? 'bg-brand-200 text-brand-800'
-                            : 'bg-zinc-200 text-zinc-600'
-                      }`}
+                      className='text-xs font-semibold flex items-center justify-center h-5 w-5 rounded-full text-center bg-b_red-500 text-white'
                     >
                       {count > 99 ? '99+' : count}
                     </span>
@@ -424,13 +418,9 @@ export default function DashboardSidebar({
                   )}
 
                   {/* Count indicator positioned on the icon */}
-                  {count > 0 && (
+                  {count > 0 && id === 'notifications' && (
                     <span
-                      className={`absolute -top-3 -right-3 bg-zinc-100 text-[9px] rounded-full w-5 h-5 flex items-center justify-center font-bold shadow-sm border leading-none ${
-                        id === 'notifications'
-                          ? 'border-b_red-500 text-b_red-600'
-                          : 'border-brand-200 text-brand-600'
-                      }`}
+                      className='absolute -top-3 -right-3 bg-zinc-100 text-[9px] rounded-full w-5 h-5 flex items-center justify-center font-bold shadow-sm border border-b_red-500 text-b_red-600 leading-none'
                       style={{ minWidth: '20px', minHeight: '20px' }}
                     >
                       {count > 9 ? '9+' : count}
@@ -444,7 +434,7 @@ export default function DashboardSidebar({
                   {id === 'account'
                     ? 'You'
                     : id === 'suggested'
-                      ? 'Suggest'
+                      ? 'Home'
                       : id === 'connections'
                         ? 'Connect'
                         : id === 'notifications'

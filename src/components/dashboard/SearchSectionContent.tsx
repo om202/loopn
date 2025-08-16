@@ -9,6 +9,7 @@ import {
 } from '../../services/opensearch.service';
 import { useChatActions } from '../../hooks/useChatActions';
 import UserCard from './UserCard';
+import LoadingContainer from '../LoadingContainer';
 import type { Schema } from '../../../amplify/data/resource';
 
 type UserPresence = Schema['UserPresence']['type'];
@@ -51,7 +52,6 @@ export default function SearchSectionContent({
   onCancelChatRequest: _onCancelChatRequest,
   setOptimisticPendingRequests,
 }: SearchSectionContentProps) {
-  const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -133,7 +133,6 @@ export default function SearchSectionContent({
   // Effect to handle search from external search bar
   React.useEffect(() => {
     if (shouldSearch && searchQuery.trim()) {
-      setQuery(searchQuery);
       performSearch(searchQuery.trim());
     }
   }, [shouldSearch, searchQuery, performSearch]);
@@ -150,22 +149,9 @@ export default function SearchSectionContent({
             <h3 className='text-lg font-medium text-zinc-900 mb-2'>
               Search Professionals
             </h3>
-            <p className='text-zinc-500 text-base max-w-sm'>
-              Search for any professional, in any way you like.
-            </p>
-            <div className='mt-4 text-sm text-zinc-500'>
-              <p>
-                Try: "React developer", "AI engineer", "Product manager from
-                tech".
-              </p>
-            </div>
           </div>
         ) : isSearching ? (
-          <div>
-            <div className='flex items-center gap-3 text-sm text-zinc-600'>
-              <span>Just a moment...</span>
-            </div>
-          </div>
+          <LoadingContainer />
         ) : error ? (
           <div className='flex flex-col items-center justify-center h-full text-center p-8'>
             <div className='text-red-600 text-sm mb-2'>Search Error</div>
@@ -177,19 +163,14 @@ export default function SearchSectionContent({
               <Search className='w-8 h-8 text-zinc-500' />
             </div>
             <h3 className='text-lg font-medium text-zinc-900 mb-2'>
-              No Results Found
+              Hmm… nothing matched.
             </h3>
             <p className='text-zinc-500 text-sm max-w-sm'>
-              No professionals found matching "{query}". Try using different
-              keywords or phrases.
+              Try different words.
             </p>
           </div>
         ) : (
           <div className='space-y-2.5 sm:space-y-3'>
-            <div className='text-sm text-zinc-600 mb-4'>
-              Found {searchResults.length} results for "{query}"
-            </div>
-
             {searchResults.map(result => (
               <div key={result.userId}>
                 <UserCard

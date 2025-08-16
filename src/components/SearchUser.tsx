@@ -147,7 +147,7 @@ export default function SearchUser({
         <input
           ref={inputRef}
           type='text'
-          placeholder='Ask Loopn or Search'
+          placeholder='Search or ask Loopn'
           value={query}
           onChange={handleInputChange}
           onFocus={handleInputFocus}

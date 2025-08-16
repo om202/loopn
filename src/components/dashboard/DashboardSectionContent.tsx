@@ -136,7 +136,7 @@ export default function DashboardSectionContent({
         };
       case 'suggested':
         return {
-          title: 'Suggested',
+          title: 'Discover',
           description: 'Find and connect with new people',
           emptyIcon: Sparkles,
           emptyMessage: 'No suggestions available',
