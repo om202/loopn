@@ -294,9 +294,7 @@ export default function DashboardSidebar({
                   </div>
                   <span className='font-medium text-sm flex-1'>{label}</span>
                   {count > 0 && id === 'notifications' && (
-                    <span
-                      className='text-xs font-semibold flex items-center justify-center h-5 w-5 rounded-full text-center bg-b_red-500 text-white'
-                    >
+                    <span className='text-xs font-semibold flex items-center justify-center h-5 w-5 rounded-full text-center bg-b_red-500 text-white'>
                       {count > 99 ? '99+' : count}
                     </span>
                   )}
