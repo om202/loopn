@@ -2,7 +2,7 @@
 
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { useRouter } from 'next/navigation';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { Bell } from 'lucide-react';
 
 import { createShortChatUrl } from '../../lib/url-utils';
@@ -11,7 +11,6 @@ import { messageService } from '../../services/message.service';
 import { notificationService } from '../../services/notification.service';
 
 import { useChatRequests } from '../../hooks/useChatRequests';
-import { useNotifications } from '../../hooks/useNotifications';
 import { useSubscriptionStore } from '../../stores/subscription-store';
 
 import NotificationItem from '../notifications/NotificationItem';
@@ -21,6 +20,8 @@ import type {
   NotificationFilter,
   ChatRequestNotification,
   ChatRequestWithUser,
+  MessageNotificationData,
+  Notification,
 } from '../notifications/types';
 
 const getDisplayName = (
@@ -41,6 +42,17 @@ const getDisplayName = (
 
 export default function NotificationsContent() {
   const { user } = useAuthenticator();
+  
+  // Use the subscription store directly for notifications
+  const {
+    notifications: storeNotifications,
+    loading,
+    errors,
+    subscribeToNotifications,
+    fetchUserProfile,
+  } = useSubscriptionStore();
+
+  // Use chat requests hook for chat request notifications
   const {
     incomingRequests: realtimeChatRequests,
     isLoadingIncoming: chatRequestsLoading,
@@ -49,50 +61,51 @@ export default function NotificationsContent() {
     enabled: !!user?.userId,
   });
 
-  // Use our centralized notifications hook
-  const {
-    notifications: centralizedNotifications,
-    isLoading: notificationsLoading,
-    error: notificationsError,
-  } = useNotifications({
-    userId: user?.userId || '',
-    enabled: !!user?.userId,
-  });
-
-  // Use centralized profile cache
-  const { fetchUserProfile } = useSubscriptionStore();
-
   const [notifications, setNotifications] = useState<UINotification[]>([]);
   const [activeFilter] = useState<NotificationFilter>('all');
   const [decliningId, setDecliningId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [, setAcceptingRequestId] = useState<string | null>(null);
 
-  // Use centralized loading state but manage notifications locally for now
-  // If we have notifications but still loading, force loading to false
-  const isLoading =
-    notificationsLoading &&
-    (!centralizedNotifications || centralizedNotifications.length === 0);
+  // Use the store's loading state directly
+  const isLoading = loading.notifications || chatRequestsLoading;
 
   const router = useRouter();
 
-  const groupMessageNotifications = useCallback(
-    (notifications: UINotification[]) => {
-      return notifications;
-    },
-    []
-  );
-
-  // Old notification loading removed - now using centralized hook
-
+  // Subscribe to notifications using the store
   useEffect(() => {
-    if (!realtimeChatRequests || chatRequestsLoading) {
-      return;
-    }
+    if (!user?.userId) return;
 
-    const processRequests = async () => {
-      const requestsWithUsers: ChatRequestWithUser[] = await Promise.all(
-        realtimeChatRequests.map(async request => {
+    const unsubscribe = subscribeToNotifications(user.userId);
+    return unsubscribe;
+  }, [user?.userId, subscribeToNotifications]);
+
+  // Process chat requests and store notifications into local UI format
+  useEffect(() => {
+    const processNotifications = async () => {
+      const uiNotifications: UINotification[] = [];
+
+      // Process store notifications (from subscription)
+      for (const storeNotif of storeNotifications) {
+        // Create a proper Notification object
+        const notification: Notification = {
+          id: storeNotif.id,
+          type: storeNotif.type,
+          title: storeNotif.title,
+          content: storeNotif.content,
+          timestamp: storeNotif.timestamp,
+          isRead: storeNotif.isRead,
+          userId: storeNotif.userId,
+          createdAt: storeNotif.createdAt,
+          updatedAt: storeNotif.updatedAt,
+          data: storeNotif.data as ChatRequestWithUser | MessageNotificationData | undefined,
+        };
+        uiNotifications.push(notification);
+      }
+
+      // Process chat requests into notifications
+      if (realtimeChatRequests && !chatRequestsLoading) {
+        for (const request of realtimeChatRequests) {
           // Fetch user profile from centralized cache
           const profileData = await fetchUserProfile(request.requesterId);
           const requesterProfile = profileData
@@ -104,61 +117,35 @@ export default function NotificationsContent() {
               }
             : undefined;
 
-          return {
-            ...request,
-            requesterEmail: undefined, // Email moved to UserProfile
-            requesterProfile,
-          };
-        })
+          const title = getDisplayName(requesterProfile, request.requesterId);
+          const content = 'wants to chat with you';
+
+          uiNotifications.push({
+            id: request.id,
+            type: 'chat_request' as const,
+            title,
+            content,
+            timestamp: request.createdAt,
+            isRead: false,
+            data: {
+              ...request,
+              requesterProfile,
+            },
+          });
+        }
+      }
+
+      // Sort by timestamp (newest first)
+      uiNotifications.sort(
+        (a, b) =>
+          new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
       );
 
-      setNotifications(prevNotifications => {
-        const currentRequestIds = new Set(requestsWithUsers.map(req => req.id));
-        const filteredNotifications = prevNotifications.filter(notif => {
-          if (notif.type === 'chat_request') {
-            const requestId =
-              notif.id || (notif.data && 'id' in notif.data && notif.data.id);
-            return currentRequestIds.has(requestId as string);
-          }
-          return true;
-        });
-
-        const chatNotifications: ChatRequestNotification[] = [];
-        for (const request of requestsWithUsers) {
-          const existingNotification = filteredNotifications.find(
-            notif => notif.type === 'chat_request' && notif.id === request.id
-          );
-
-          if (!existingNotification) {
-            const title = getDisplayName(
-              request.requesterProfile,
-              request.requesterId
-            );
-            const content = 'wants to chat with you';
-
-            chatNotifications.push({
-              id: request.id,
-              type: 'chat_request' as const,
-              title,
-              content,
-              timestamp: request.createdAt,
-              isRead: false,
-              data: request,
-            });
-          }
-        }
-
-        const newNotifications = [
-          ...filteredNotifications,
-          ...chatNotifications,
-        ];
-
-        return newNotifications;
-      });
+      setNotifications(uiNotifications);
     };
 
-    processRequests();
-  }, [realtimeChatRequests, chatRequestsLoading, fetchUserProfile]);
+    processNotifications();
+  }, [storeNotifications, realtimeChatRequests, chatRequestsLoading, fetchUserProfile]);
 
   useEffect(() => {
     if (!user) {
@@ -186,28 +173,7 @@ export default function NotificationsContent() {
   }, [user]);
 
   // Process centralized notifications
-  useEffect(() => {
-    if (!user) return;
 
-    // Always process notifications, even if empty array
-    const notificationsToProcess = centralizedNotifications || [];
-    const groupedNotifications = groupMessageNotifications(
-      notificationsToProcess as UINotification[]
-    );
-    setNotifications(groupedNotifications);
-
-    // Set error from centralized notifications if any
-    if (notificationsError) {
-      setError(notificationsError);
-    } else {
-      setError(null); // Clear any previous errors
-    }
-  }, [
-    user,
-    centralizedNotifications,
-    notificationsError,
-    groupMessageNotifications,
-  ]);
 
   const handleNotificationClick = async (notification: UINotification) => {
     if (
@@ -360,9 +326,9 @@ export default function NotificationsContent() {
     <div className='h-full flex flex-col'>
       {/* Content */}
       <div className='flex-1'>
-        {error && (
+        {(error || errors.notifications) && (
           <div className='p-4 text-b_red-700 bg-b_red-100 mb-4 rounded-2xl'>
-            {error}
+            {error || errors.notifications}
           </div>
         )}
 
