@@ -72,7 +72,7 @@ export class UserProfileService {
       // Automatically index the user profile for vector search
       if (result.data) {
         try {
-          await OpenSearchService.indexUser(userId, profileData);
+          await OpenSearchService.indexUser(userId, { ...profileData, userId });
         } catch (indexError) {
           console.error(
             'Failed to index user profile for vector search:',
@@ -134,7 +134,10 @@ export class UserProfileService {
               profilePictureUrl: fullProfile.profilePictureUrl || undefined,
               hasProfilePicture: fullProfile.hasProfilePicture || false,
             };
-            await OpenSearchService.indexUser(userId, profileData);
+            await OpenSearchService.indexUser(userId, {
+              ...profileData,
+              userId,
+            });
           }
         } catch (indexError) {
           console.error(
