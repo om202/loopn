@@ -403,9 +403,7 @@ export default function MessageList({
             <h3 className='text-lg font-medium text-zinc-900 mb-2'>
               No messages yet
             </h3>
-            <p className='text-zinc-500 max-w-sm'>
-              Send your first message
-            </p>
+            <p className='text-zinc-500 max-w-sm'>Send your first message</p>
           </div>
           <div ref={messagesEndRef} />
         </div>

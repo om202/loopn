@@ -93,13 +93,14 @@ export default function OnlineUsers({
   const {
     incomingChatRequests,
     sentChatRequests,
+    conversations,
     subscribeToIncomingChatRequests,
     subscribeToSentChatRequests,
     setIncomingChatRequests,
   } = useSubscriptionStore();
 
-  // Use centralized conversations
-  const { getConversationByParticipant } = useConversations({
+  // Use centralized conversations for subscription management
+  useConversations({
     userId: user?.userId || '',
     enabled: !!user?.userId,
   });
@@ -286,17 +287,21 @@ export default function OnlineUsers({
   const existingConversations = useMemo(() => {
     const conversationMap = new Map<string, Conversation>();
 
-    // Populate map by checking ALL users (online, offline, recently active) for existing conversations
-    // This ensures that users with active conversations show "Chat" button regardless of online status
-    allUsers.forEach(user => {
-      const conversation = getConversationByParticipant(user.userId);
-      if (conversation) {
-        conversationMap.set(user.userId, conversation);
-      }
+    // Get all conversations from the subscription store directly
+    const allConversations = Array.from(conversations.values());
+
+    // Map conversations by participant ID for quick lookup
+    allConversations.forEach(conversation => {
+      const otherUserId =
+        conversation.participant1Id === user?.userId
+          ? conversation.participant2Id
+          : conversation.participant1Id;
+
+      conversationMap.set(otherUserId, conversation);
     });
 
     return conversationMap;
-  }, [allUsers, getConversationByParticipant]);
+  }, [conversations, user?.userId]);
 
   const userCategories = useUserCategorization({
     onlineUsers,
