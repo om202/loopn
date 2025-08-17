@@ -16,6 +16,7 @@ import {
   Target,
   Shield,
   Globe,
+  Bug,
 } from 'lucide-react';
 import Image from 'next/image';
 import React, { useState } from 'react';
@@ -26,7 +27,7 @@ const dummyUsers = [
     id: '1',
     name: 'Zara Thompson',
     role: 'AI Researcher',
-    company: 'DeepMind',
+    company: 'TechFlow Labs',
     image: '/dummy-users/dummy-user6.jpg',
     isOnline: true,
     skills: ['Computer Vision', 'Robotics', 'Machine Learning'],
@@ -39,7 +40,7 @@ const dummyUsers = [
     id: '2',
     name: 'Kai Anderson',
     role: 'Quantum Computing Engineer',
-    company: 'IBM Research',
+    company: 'Quantum Dynamics',
     image: '/dummy-users/dummy-user7.jpg',
     isOnline: true,
     skills: ['Algorithms', 'Hardware', 'Quantum Physics'],
@@ -52,7 +53,7 @@ const dummyUsers = [
     id: '3',
     name: 'Ganesh Thapa',
     role: 'Space Systems Engineer',
-    company: 'SpaceX',
+    company: 'Stellar Dynamics',
     image: '/dummy-users/dummy-user8.jpg',
     isOnline: false,
     skills: ['Satellites', 'Mission Planning', 'Aerospace'],
@@ -65,7 +66,7 @@ const dummyUsers = [
     id: '4',
     name: 'Haoyu Lee',
     role: 'Biotech Engineer',
-    company: 'Moderna',
+    company: 'BioInnovate Corp',
     image: '/dummy-users/dummy-usr9.jpg',
     isOnline: true,
     skills: ['Gene Therapy', 'Lab Automation', 'Bioinformatics'],
@@ -78,7 +79,7 @@ const dummyUsers = [
     id: '5',
     name: 'Alex Chen',
     role: 'Full-Stack Developer',
-    company: 'Stripe',
+    company: 'PayFlow Systems',
     image: '/dummy-users/dummy-user2.jpg',
     isOnline: true,
     skills: ['React', 'Node.js', 'GraphQL'],
@@ -124,7 +125,7 @@ const dummyConnections = [
     id: '1',
     name: 'Dr. Sarah Kim',
     role: 'Data Scientist',
-    company: 'Google',
+    company: 'DataVision Inc',
     image: '/dummy-users/dummy-user2.jpg',
     isOnline: true,
     connectionDate: '2 weeks ago',
@@ -134,7 +135,7 @@ const dummyConnections = [
     id: '2',
     name: 'Marcus Johnson',
     role: 'Product Manager',
-    company: 'Meta',
+    company: 'ConnectTech',
     image: '/dummy-users/dummy-user3.jpg',
     isOnline: false,
     connectionDate: '1 month ago',
@@ -144,7 +145,7 @@ const dummyConnections = [
     id: '3',
     name: 'Lisa Wang',
     role: 'UX Designer',
-    company: 'Airbnb',
+    company: 'DesignHub',
     image: '/dummy-users/dummy-user4.jpg',
     isOnline: true,
     connectionDate: '3 weeks ago',
@@ -155,13 +156,13 @@ const dummyConnections = [
 const currentUser = {
   name: 'Jordan Blake',
   role: 'Blockchain Developer',
-  company: 'Coinbase',
+  company: 'CryptoTech Solutions',
   email: 'jordan.blake@example.com',
   image: '/dummy-users/dummy-user5.jpg',
   skills: ['Solidity', 'Web3', 'DeFi', 'Smart Contracts'],
   interests: ['Cryptocurrency', 'Decentralization', 'Financial Technology'],
   experience: '5 years',
-  education: 'MS Computer Science, Stanford University',
+  education: 'MS Computer Science',
   about:
     'Passionate blockchain developer focused on building the future of decentralized finance. I love working on innovative DeFi protocols and smart contract security.',
 };
@@ -252,18 +253,9 @@ export default function DashboardDemo() {
                   </div>
                 </div>
                 <div className='text-[15px] text-zinc-500 mb-1.5 truncate'>
-                  {user.role} at {user.company}
+                  {user.role}
                 </div>
-                <div className='flex flex-wrap gap-1'>
-                  {user.skills.slice(0, 2).map((skill, idx) => (
-                    <span
-                      key={idx}
-                      className='bg-brand-50 text-brand-700 text-xs px-2 py-0.5 rounded-full font-medium'
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
+
               </div>
 
               <div className='flex-shrink-0 flex items-center gap-1.5'>
@@ -314,12 +306,9 @@ export default function DashboardDemo() {
                   {connection.name}
                 </div>
                 <div className='text-sm text-zinc-500 mb-1'>
-                  {connection.role} at {connection.company}
+                  {connection.role}
                 </div>
-                <div className='text-xs text-zinc-400'>
-                  Connected {connection.connectionDate} •{' '}
-                  {connection.mutualConnections} mutual connections
-                </div>
+
               </div>
 
               <div className='flex-shrink-0 flex items-center gap-2'>
@@ -377,13 +366,7 @@ export default function DashboardDemo() {
                   </div>
                 </div>
 
-                {user.unreadCount > 0 && (
-                  <div className='flex-shrink-0'>
-                    <div className='w-5 h-5 bg-brand-500 text-white text-xs font-bold rounded-full flex items-center justify-center'>
-                      {user.unreadCount}
-                    </div>
-                  </div>
-                )}
+
               </div>
             </div>
           ))}
@@ -519,7 +502,7 @@ export default function DashboardDemo() {
               {currentUser.name}
             </h3>
             <p className='text-zinc-500'>
-              {currentUser.role} at {currentUser.company}
+              {currentUser.role}
             </p>
             <p className='text-sm text-zinc-400'>{currentUser.email}</p>
           </div>
@@ -635,7 +618,7 @@ export default function DashboardDemo() {
                     {user.name}
                   </div>
                   <div className='text-sm text-zinc-500 mb-2'>
-                    {user.role} at {user.company}
+                    {user.role}
                   </div>
                   <div className='flex flex-wrap gap-1'>
                     {user.skills.slice(0, 3).map((skill, idx) => (
@@ -663,7 +646,13 @@ export default function DashboardDemo() {
   );
 
   return (
-    <div className='bg-white md:rounded-2xl shadow-xl border border-zinc-200 md:max-w-7xl md:mx-auto overflow-hidden w-full'>
+    <div className='bg-white md:rounded-2xl shadow-xl border border-zinc-200 md:max-w-7xl md:mx-auto overflow-hidden w-full p-4'>
+      {/* Interactive Demo Header */}
+      <div className='text-center mb-4 flex items-center justify-center gap-2'>
+        <Target className='w-4 h-4 text-brand-500' />
+        <span className='text-brand-700 font-semibold text-sm'>Interactive Demo</span>
+      </div>
+      
       {/* Dashboard Layout - Desktop and Tablet */}
       <div className='hidden md:flex h-[650px]'>
         {/* Left Sidebar */}
@@ -681,9 +670,6 @@ export default function DashboardDemo() {
                 />
                 <div className='flex items-center gap-2'>
                   <h1 className='text-2xl font-bold text-zinc-900'>Loopn</h1>
-                  <span className='bg-brand-500 text-white text-[10px] font-semibold px-1.5 py-0.5 rounded-full tracking-wide uppercase'>
-                    beta
-                  </span>
                 </div>
               </div>
             </div>
@@ -794,19 +780,7 @@ export default function DashboardDemo() {
               </button>
 
               <button className='p-2 text-zinc-500 hover:text-zinc-900 hover:bg-zinc-50 rounded-lg transition-colors border border-transparent hover:border-zinc-200'>
-                <svg
-                  className='w-4 h-4'
-                  fill='none'
-                  stroke='currentColor'
-                  viewBox='0 0 24 24'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z'
-                  />
-                </svg>
+                <Bug className='w-4 h-4' />
               </button>
             </div>
 
@@ -839,7 +813,7 @@ export default function DashboardDemo() {
         </div>
 
         {/* Main Content Area */}
-        <div className='flex-1 bg-white rounded-2xl border border-zinc-200 p-2 sm:p-4 lg:p-6 overflow-hidden flex flex-col min-h-0 ml-4'>
+        <div className='flex-1 bg-white rounded-2xl border border-zinc-200 p-6 overflow-hidden flex flex-col min-h-0 ml-4'>
           {/* Search User - Always visible at top */}
           <div className='flex-shrink-0 mb-2 sm:mb-2'>
             <div className='max-w-md mx-auto relative'>
@@ -1182,16 +1156,7 @@ export default function DashboardDemo() {
                       <div className='text-xs mb-2 text-zinc-600'>
                         {user.role}
                       </div>
-                      <div className='flex flex-wrap gap-1'>
-                        {user.skills.slice(0, 2).map((skill, idx) => (
-                          <span
-                            key={idx}
-                            className='bg-brand-50 text-brand-700 text-xs px-2 py-0.5 rounded-full font-medium'
-                          >
-                            {skill}
-                          </span>
-                        ))}
-                      </div>
+
                     </div>
 
                     <div className='flex-shrink-0'>
@@ -1236,9 +1201,7 @@ export default function DashboardDemo() {
                       <div className='text-xs text-zinc-600 mb-1'>
                         {connection.role}
                       </div>
-                      <div className='text-xs text-zinc-400'>
-                        Connected {connection.connectionDate}
-                      </div>
+
                     </div>
 
                     <div className='flex-shrink-0'>
@@ -1291,13 +1254,7 @@ export default function DashboardDemo() {
                         </div>
                       </div>
 
-                      {user.unreadCount > 0 && (
-                        <div className='flex-shrink-0'>
-                          <div className='w-4 h-4 bg-brand-500 text-white text-xs font-bold rounded-full flex items-center justify-center'>
-                            {user.unreadCount}
-                          </div>
-                        </div>
-                      )}
+
                     </div>
                   </div>
                 ))}
@@ -1395,18 +1352,9 @@ export default function DashboardDemo() {
                           {user.name}
                         </div>
                         <div className='text-xs text-zinc-600 mb-2'>
-                          {user.role} at {user.company}
+                          {user.role}
                         </div>
-                        <div className='flex flex-wrap gap-1'>
-                          {user.skills.slice(0, 2).map((skill, idx) => (
-                            <span
-                              key={idx}
-                              className='bg-brand-50 text-brand-700 text-xs px-2 py-0.5 rounded-full font-medium'
-                            >
-                              {skill}
-                            </span>
-                          ))}
-                        </div>
+
                       </div>
 
                       <div className='flex-shrink-0'>

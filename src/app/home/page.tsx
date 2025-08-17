@@ -114,7 +114,7 @@ export default function HomePage() {
             </div>
             <div className='flex items-center'>
               <Link href={authLink}>
-                <button className='bg-white hover:bg-zinc-50 text-zinc-500 border border-zinc-200 px-6 py-2.5 rounded-lg font-bold transition-colors flex items-center gap-2'>
+                <button className='bg-white hover:bg-brand-50 text-brand-600 border border-zinc-200 px-6 py-2.5 rounded-lg transition-colors flex items-center gap-2' style={{ fontWeight: '700 !important' }}>
                   <LogIn className='w-4 h-4' />
                   {authText}
                 </button>
@@ -151,7 +151,7 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <h1 className='text-3xl sm:text-4xl lg:text-5xl font-bold text-zinc-900 mb-6 leading-tight'>
+              <h1 className='text-4xl sm:text-5xl lg:text-6xl font-bold text-zinc-900 mb-6 leading-tight'>
                 Simple and AI powered{' '}
                 <span className='text-brand-500 relative'>
                   Networking
@@ -175,7 +175,7 @@ export default function HomePage() {
                 </Link>
                 <button
                   onClick={scrollToHowItWorks}
-                  className='text-zinc-500 hover:text-zinc-700 text-xl font-semibold transition-colors flex items-center justify-center gap-2'
+                  className='text-zinc-500 hover:text-zinc-900 text-xl font-semibold transition-colors flex items-center justify-center gap-2'
                 >
                   See how it works
                   <ArrowRight className='w-4 h-4' />
@@ -452,7 +452,7 @@ export default function HomePage() {
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           {/* Section Header */}
           <div className='text-center max-w-4xl mx-auto mb-16'>
-            <h2 className='text-3xl sm:text-4xl lg:text-5xl font-medium text-zinc-900 mb-8'>
+            <h2 className='text-3xl sm:text-4xl lg:text-5xl font-semibold text-zinc-900 mb-8'>
               The future of networking is{' '}
               <span className='text-brand-500 relative'>
                 here.
@@ -472,7 +472,7 @@ export default function HomePage() {
           <div className='grid lg:grid-cols-3 gap-6 sm:gap-8 mb-16 mt-16'>
             {/* Feature 1 - Smart Matching */}
             <div className='group bg-white rounded-2xl p-6 sm:p-8 border border-zinc-200 h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
-              <h3 className='text-xl font-bold text-zinc-900 mb-4 flex items-center gap-3'>
+              <h3 className='text-2xl font-bold text-zinc-900 mb-4 flex items-center gap-3'>
                 <Brain className='w-6 h-6 text-zinc-600' />
                 Smart AI Matching
               </h3>
@@ -504,7 +504,7 @@ export default function HomePage() {
 
             {/* Feature 2 - Real-time Chat */}
             <div className='group bg-white rounded-2xl p-6 sm:p-8 border border-zinc-200 h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
-              <h3 className='text-xl font-bold text-zinc-900 mb-4 flex items-center gap-3'>
+              <h3 className='text-2xl font-bold text-zinc-900 mb-4 flex items-center gap-3'>
                 <Zap className='w-6 h-6 text-zinc-600' />
                 Instant Connections
               </h3>
@@ -536,7 +536,7 @@ export default function HomePage() {
 
             {/* Feature 3 - Quality Network */}
             <div className='group bg-white rounded-2xl p-6 sm:p-8 border border-zinc-200 h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
-              <h3 className='text-xl font-bold text-zinc-900 mb-4 flex items-center gap-3'>
+              <h3 className='text-2xl font-bold text-zinc-900 mb-4 flex items-center gap-3'>
                 <Shield className='w-6 h-6 text-zinc-600' />
                 Quality & Privacy
               </h3>
@@ -589,7 +589,7 @@ export default function HomePage() {
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           {/* Section Header */}
           <div className='text-center max-w-4xl mx-auto mb-16'>
-            <h2 className='text-3xl sm:text-4xl lg:text-5xl font-medium text-zinc-900 mb-8'>
+            <h2 className='text-3xl sm:text-4xl lg:text-5xl font-semibold text-zinc-900 mb-8'>
               Your Journey to Meaningful{' '}
               <span className='text-brand-500 relative'>
                 Connections
@@ -612,7 +612,7 @@ export default function HomePage() {
                 </div>
                 {/* Content */}
                 <div className='text-center mt-4'>
-                  <h3 className='text-xl font-bold text-zinc-900 mb-4 flex items-center justify-center gap-3'>
+                  <h3 className='text-2xl font-bold text-zinc-900 mb-4 flex items-center justify-center gap-3'>
                     <User className='w-6 h-6 text-zinc-600' />
                     Create Your Profile
                   </h3>
@@ -633,7 +633,7 @@ export default function HomePage() {
                 </div>
                 {/* Content */}
                 <div className='text-center mt-4'>
-                  <h3 className='text-xl font-bold text-zinc-900 mb-4 flex items-center justify-center gap-3'>
+                  <h3 className='text-2xl font-bold text-zinc-900 mb-4 flex items-center justify-center gap-3'>
                     <Brain className='w-6 h-6 text-zinc-600' />
                     Get Smart Matches
                   </h3>
@@ -654,7 +654,7 @@ export default function HomePage() {
                 </div>
                 {/* Content */}
                 <div className='text-center mt-4'>
-                  <h3 className='text-xl font-bold text-zinc-900 mb-4 flex items-center justify-center gap-3'>
+                  <h3 className='text-2xl font-bold text-zinc-900 mb-4 flex items-center justify-center gap-3'>
                     <MessageCircle className='w-6 h-6 text-zinc-600' />
                     Start Connecting
                   </h3>
@@ -679,7 +679,7 @@ export default function HomePage() {
 
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='text-center mb-16'>
-            <h2 className='text-3xl sm:text-4xl lg:text-5xl font-medium text-zinc-900 mb-8'>
+            <h2 className='text-3xl sm:text-4xl lg:text-5xl font-semibold text-zinc-900 mb-8'>
               Trusted by professionals{' '}
               <span className='text-brand-500 relative'>
                 worldwide
@@ -703,7 +703,7 @@ export default function HomePage() {
                   />
                 ))}
               </div>
-              <blockquote className='text-zinc-800 mb-6 text-sm sm:text-base leading-relaxed font-medium flex-grow'>
+              <blockquote className='text-zinc-900 mb-6 text-sm sm:text-base leading-relaxed font-medium flex-grow'>
                 &quot;Loopn made networking feel natural again. I&apos;ve built
                 genuine relationships through honest conversations about shared
                 interests.&quot;
@@ -737,7 +737,7 @@ export default function HomePage() {
                   />
                 ))}
               </div>
-              <blockquote className='text-zinc-800 mb-6 text-sm sm:text-base leading-relaxed font-medium flex-grow'>
+              <blockquote className='text-zinc-900 mb-6 text-sm sm:text-base leading-relaxed font-medium flex-grow'>
                 &quot;The smart matching is brilliant. I found a mentor through
                 meaningful conversations who&apos;s now a key connection in my
                 career.&quot;
@@ -771,7 +771,7 @@ export default function HomePage() {
                   />
                 ))}
               </div>
-              <blockquote className='text-zinc-800 mb-6 text-sm sm:text-base leading-relaxed font-medium flex-grow'>
+              <blockquote className='text-zinc-900 mb-6 text-sm sm:text-base leading-relaxed font-medium flex-grow'>
                 &quot;Finally, a platform where expertise matters more than
                 titles. Every conversation feels purposeful and
                 growth-oriented.&quot;
@@ -798,7 +798,7 @@ export default function HomePage() {
 
           {/* Trust Indicators */}
           <div className='mt-16 text-center'>
-            <h3 className='text-xl sm:text-2xl font-medium text-zinc-900 mb-4'>
+            <h3 className='text-xl sm:text-2xl font-semibold text-zinc-900 mb-4'>
               Built for Professionals in Every Field
             </h3>
             <p className='text-zinc-600 mb-8 text-xl'>
@@ -838,7 +838,7 @@ export default function HomePage() {
         </div>
 
         <div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center'>
-          <h2 className='text-3xl sm:text-4xl lg:text-5xl font-medium mb-6 leading-tight'>
+          <h2 className='text-2xl sm:text-3xl lg:text-4xl font-semibold text-zinc-900 mb-6 leading-tight'>
             Ready to Transform Your Network?
           </h2>
           <p className='text-xl text-zinc-500 mb-8 max-w-2xl mx-auto'>
