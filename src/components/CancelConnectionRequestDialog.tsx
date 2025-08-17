@@ -16,7 +16,7 @@ export default function CancelConnectionRequestDialog({
   isLoading = false,
 }: CancelConnectionRequestDialogProps) {
   return (
-    <DialogContainer isOpen={isOpen} onClose={onClose} maxWidth='xs'>
+    <DialogContainer isOpen={isOpen} onClose={onClose} maxWidth='sm'>
       <div className='p-4'>
         <h3 className='text-lg font-medium text-zinc-900 text-center mb-3'>
           Cancel Connection Request?
