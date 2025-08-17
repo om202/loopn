@@ -11,7 +11,6 @@ import {
   Zap,
   Brain,
   Shield,
-  Clock,
   Smile,
 } from 'lucide-react';
 import DashboardDemo from '@/components/DashboardDemo';
@@ -74,6 +73,17 @@ export default function HomePage() {
   const authText = isAuthenticated ? 'Go to Dashboard' : 'Sign In';
   const ctaText = isAuthenticated ? 'Go to Dashboard' : 'Create an account';
 
+  // Get current time for chat demo
+  const getCurrentTime = () => {
+    const now = new Date();
+    const timeString = now.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+    });
+    return `Today at ${timeString}`;
+  };
+
   const scrollToHowItWorks = () => {
     const element = document.getElementById('how-it-works');
     if (element) {
@@ -104,7 +114,7 @@ export default function HomePage() {
             </div>
             <div className='flex items-center'>
               <Link href={authLink}>
-                <button className='bg-white hover:bg-zinc-50 text-zinc-500 border border-zinc-200 px-6 py-2.5 rounded-lg font-medium transition-colors flex items-center gap-2'>
+                <button className='bg-white hover:bg-zinc-50 text-zinc-500 border border-zinc-200 px-6 py-2.5 rounded-lg font-bold transition-colors flex items-center gap-2'>
                   <LogIn className='w-4 h-4' />
                   {authText}
                 </button>
@@ -165,7 +175,7 @@ export default function HomePage() {
                 </Link>
                 <button
                   onClick={scrollToHowItWorks}
-                  className='text-zinc-500 hover:text-zinc-700 text-lg font-semibold transition-colors flex items-center justify-center gap-2'
+                  className='text-zinc-500 hover:text-zinc-700 text-xl font-semibold transition-colors flex items-center justify-center gap-2'
                 >
                   See how it works
                   <ArrowRight className='w-4 h-4' />
@@ -230,25 +240,6 @@ export default function HomePage() {
 
                         {/* Trial Chat Controls */}
                         <div className='flex items-center gap-1 sm:gap-2 text-sm sm:text-sm'>
-                          <div className='flex items-center gap-1 sm:gap-2 text-zinc-500 mr-1 sm:mr-2'>
-                            <button
-                              disabled
-                              className='flex items-center gap-1 hover:bg-zinc-100 rounded-full p-1 transition-colors cursor-not-allowed opacity-50'
-                              title='Learn about trial chat period'
-                            >
-                              <Clock className='w-3 sm:w-4 h-3 sm:h-4 text-brand-500' />
-                              <span className='font-medium hidden sm:inline'>
-                                Trial Chat
-                              </span>
-                            </button>
-                            <span className='text-zinc-900 text-sm font-bold whitespace-nowrap'>
-                              6d 14h
-                            </span>
-                          </div>
-
-                          {/* Line Separator */}
-                          <div className='w-0.5 h-6 sm:h-8 bg-zinc-100 mr-1 sm:mr-2 hidden sm:block'></div>
-
                           {/* Connect Button */}
                           <button
                             disabled
@@ -287,9 +278,9 @@ export default function HomePage() {
                 {/* Chat Messages - matching MessageList.tsx structure */}
                 <div className='bg-white px-4 py-4 space-y-4 max-h-[500px] md:max-h-96 overflow-hidden'>
                   {/* Date separator */}
-                  <div className='flex items-center justify-center my-6'>
+                  <div className='flex items-center justify-center my-3'>
                     <div className='text-zinc-500 text-sm'>
-                      Today at 2:30 PM
+                      {getCurrentTime()}
                     </div>
                   </div>
 
@@ -305,12 +296,11 @@ export default function HomePage() {
                           className='w-8 h-8 rounded-full object-cover'
                         />
                       </div>
-                      <div className='relative max-w-[85vw] sm:max-w-sm'>
-                        <div className='px-3 py-2 rounded-3xl bg-zinc-100 text-zinc-900 rounded-bl-sm'>
-                          <p className='text-sm font-medium leading-relaxed break-words select-none'>
-                            Hey! I noticed we're both working in product design.
-                            Would love to connect and share insights about UX
-                            research!
+                      <div className='relative max-w-[85vw] sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl'>
+                        <div className='p-2.5 rounded-2xl bg-zinc-100 text-zinc-900 border border-zinc-200 rounded-bl-md shadow-sm'>
+                          <p className='text-base leading-normal break-words select-none m-0 pr-2'>
+                            Hey! I see you work in UX. Any tips for fintech
+                            design?
                           </p>
                         </div>
                       </div>
@@ -319,19 +309,18 @@ export default function HomePage() {
 
                   {/* Second message - You */}
                   <div className='flex flex-col items-end space-y-2 opacity-0 animate-[slideUpFade_0.6s_ease-out_1.6s_forwards] mt-4'>
-                    <div className='relative max-w-[85vw] sm:max-w-sm'>
-                      <div className='px-3 py-2 rounded-3xl bg-brand-500 text-white border border-brand-500 rounded-br-sm'>
+                    <div className='relative max-w-[85vw] sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl'>
+                      <div className='p-2.5 rounded-2xl bg-brand-500 text-white border border-brand-500 rounded-br-md shadow-sm'>
                         <div className='relative'>
-                          <p className='text-sm font-medium leading-relaxed break-words pr-10 select-none'>
-                            Absolutely! Always excited to meet fellow designers.
-                            What kind of products are you currently working on?
+                          <p className='text-base leading-normal break-words select-none m-0 pr-10'>
+                            Thanks! Focus on trust & simplicity 👍
                           </p>
                           <div className='absolute bottom-0 right-0'>
                             <Image
                               src='/double_tick.svg'
                               alt='delivered'
-                              width={20}
-                              height={20}
+                              width={22}
+                              height={22}
                               className='opacity-50 filter brightness-0 invert select-none'
                             />
                           </div>
@@ -352,12 +341,10 @@ export default function HomePage() {
                           className='w-8 h-8 rounded-full object-cover'
                         />
                       </div>
-                      <div className='relative max-w-[85vw] sm:max-w-sm'>
-                        <div className='px-3 py-2 rounded-3xl bg-zinc-100 text-zinc-900 rounded-bl-sm'>
-                          <p className='text-sm font-medium leading-relaxed break-words select-none'>
-                            Currently building a fintech mobile app focused on
-                            investment education. Your experience with user
-                            research would be incredibly valuable!
+                      <div className='relative max-w-[85vw] sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl'>
+                        <div className='p-2.5 rounded-2xl bg-zinc-100 text-zinc-900 border border-zinc-200 rounded-bl-md shadow-sm'>
+                          <p className='text-base leading-normal break-words select-none m-0 pr-2'>
+                            Perfect! Working on investment education app
                           </p>
                         </div>
                       </div>
@@ -366,23 +353,43 @@ export default function HomePage() {
 
                   {/* Fourth message - You */}
                   <div className='flex flex-col items-end space-y-2 opacity-0 animate-[slideUpFade_0.6s_ease-out_3.2s_forwards] mt-4'>
-                    <div className='relative max-w-[85vw] sm:max-w-sm'>
-                      <div className='px-3 py-2 rounded-3xl bg-brand-500 text-white border border-brand-500 rounded-br-sm'>
+                    <div className='relative max-w-[85vw] sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl'>
+                      <div className='p-2.5 rounded-2xl bg-brand-500 text-white border border-brand-500 rounded-br-md shadow-sm'>
                         <div className='relative'>
-                          <p className='text-sm font-medium leading-relaxed break-words pr-10 select-none'>
-                            Perfect timing! I just wrapped up a comprehensive UX
-                            study on financial literacy apps. Happy to share key
-                            findings! 🎯
+                          <p className='text-base leading-normal break-words select-none m-0 pr-10'>
+                            Nice! Happy to share some research findings
                           </p>
                           <div className='absolute bottom-0 right-0'>
                             <Image
                               src='/double_tick.svg'
                               alt='delivered'
-                              width={20}
-                              height={20}
+                              width={22}
+                              height={22}
                               className='opacity-50 filter brightness-0 invert select-none'
                             />
                           </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Fifth message - Other user */}
+                  <div className='flex flex-col space-y-2 opacity-0 animate-[slideUpFade_0.6s_ease-out_4s_forwards] mt-1'>
+                    <div className='relative flex items-center gap-2 max-w-full'>
+                      <div className='flex-shrink-0 w-8 h-8'>
+                        <Image
+                          src='/dummy-user.jpg'
+                          alt='Ethan Cole'
+                          width={32}
+                          height={32}
+                          className='w-8 h-8 rounded-full object-cover'
+                        />
+                      </div>
+                      <div className='relative max-w-[85vw] sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl'>
+                        <div className='p-2.5 rounded-2xl bg-zinc-100 text-zinc-900 border border-zinc-200 rounded-bl-md shadow-sm'>
+                          <p className='text-base leading-normal break-words select-none m-0 pr-2'>
+                            Thanks!
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -452,7 +459,7 @@ export default function HomePage() {
                 <div className='absolute -bottom-1 left-0 w-full h-1 bg-brand-200 rounded-full opacity-60'></div>
               </span>
             </h2>
-            <p className='text-lg text-zinc-500 leading-relaxed'>
+            <p className='text-xl text-zinc-500 leading-relaxed'>
               Loopn removes the noise from traditional networking, helping you
               connect based on what truly matters — your expertise, goals, and
               shared interests.
@@ -589,7 +596,7 @@ export default function HomePage() {
                 <div className='absolute -bottom-1 left-0 w-full h-1 bg-brand-200 rounded-full opacity-60'></div>
               </span>
             </h2>
-            <p className='text-lg text-zinc-500 leading-relaxed'>
+            <p className='text-xl text-zinc-500 leading-relaxed'>
               Getting started with Loopn is quick and effortless.
             </p>
           </div>
@@ -679,7 +686,7 @@ export default function HomePage() {
                 <div className='absolute -bottom-1 left-0 w-full h-1 bg-brand-200 rounded-full opacity-60'></div>
               </span>
             </h2>
-            <p className='text-lg text-zinc-500 max-w-3xl mx-auto leading-relaxed'>
+            <p className='text-xl text-zinc-500 max-w-3xl mx-auto leading-relaxed'>
               Loopn is built for those who value authentic networking and
               meaningful connections.
             </p>
@@ -794,7 +801,7 @@ export default function HomePage() {
             <h3 className='text-xl sm:text-2xl font-medium text-zinc-900 mb-4'>
               Built for Professionals in Every Field
             </h3>
-            <p className='text-zinc-600 mb-8 text-sm sm:text-base'>
+            <p className='text-zinc-600 mb-8 text-xl'>
               From startups to global enterprises, Loopn connects experts across
               industries.
             </p>
@@ -834,7 +841,7 @@ export default function HomePage() {
           <h2 className='text-3xl sm:text-4xl lg:text-5xl font-medium mb-6 leading-tight'>
             Ready to Transform Your Network?
           </h2>
-          <p className='text-lg text-zinc-500 mb-8 max-w-2xl mx-auto'>
+          <p className='text-xl text-zinc-500 mb-8 max-w-2xl mx-auto'>
             Join Loopn today and start making connections that matter.
           </p>
 
