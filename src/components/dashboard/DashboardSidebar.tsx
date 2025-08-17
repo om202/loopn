@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { MessageCircle, Compass, Users, HelpCircle, Bug } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -8,6 +8,7 @@ import { useAuthenticator } from '@aws-amplify/ui-react';
 import { useAuth } from '@/contexts/AuthContext';
 
 import UserAvatar from '../UserAvatar';
+import BugReportDialog from '../BugReportDialog';
 import { useUserProfile } from '../../hooks/useUserProfile';
 import { useChatRequests } from '../../hooks/useChatRequests';
 import { useNotifications } from '../../hooks/useNotifications';
@@ -38,6 +39,7 @@ export default function DashboardSidebar({
   chatTrialsCount,
   suggestedUsersCount,
 }: DashboardSidebarProps) {
+  const [isBugReportOpen, setIsBugReportOpen] = useState(false);
   const { onboardingStatus } = useAuth();
   const { user } = useAuthenticator();
 
@@ -139,7 +141,12 @@ export default function DashboardSidebar({
                   height={32}
                   priority
                 />
-                <h1 className='text-2xl font-bold text-zinc-900'>Loopn</h1>
+                <div className='flex items-center gap-2'>
+                  <h1 className='text-2xl font-bold text-zinc-900'>Loopn</h1>
+                  <span className='bg-gradient-to-r from-brand-500 to-brand-600 text-white text-[10px] font-semibold px-1.5 py-0 rounded-md shadow-sm border border-brand-600/20 tracking-wide uppercase'>
+                    beta
+                  </span>
+                </div>
               </Link>
             </div>
           </div>
@@ -191,7 +198,7 @@ export default function DashboardSidebar({
 
           {/* Help and Account buttons at bottom */}
           <div className='border-t border-zinc-100 p-2 space-y-1'>
-            {/* Help Button with Debug Button */}
+            {/* Help Button with Bug Report Button */}
             <div className='flex items-center gap-2'>
               <button
                 onClick={() => onSectionChange(helpItem.id)}
@@ -209,14 +216,13 @@ export default function DashboardSidebar({
                 </span>
               </button>
 
-              <Link href='/debug'>
-                <button
-                  className='p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-lg transition-colors border border-transparent hover:border-gray-200'
-                  title='Debug Dashboard'
-                >
-                  <Bug className='w-4 h-4' />
-                </button>
-              </Link>
+              <button
+                onClick={() => setIsBugReportOpen(true)}
+                className='p-2 text-zinc-500 hover:text-zinc-700 hover:bg-zinc-50 rounded-lg transition-colors border border-transparent hover:border-zinc-200'
+                title='Report a Bug'
+              >
+                <Bug className='w-4 h-4' />
+              </button>
             </div>
 
             {/* Account Button */}
@@ -341,6 +347,12 @@ export default function DashboardSidebar({
           </div>
         </nav>
       </div>
+
+      {/* Bug Report Dialog */}
+      <BugReportDialog 
+        isOpen={isBugReportOpen} 
+        onClose={() => setIsBugReportOpen(false)} 
+      />
     </>
   );
 }

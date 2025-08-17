@@ -13,7 +13,11 @@ import {
   Sparkles,
 } from 'lucide-react';
 
-export default function HelpContent() {
+interface HelpContentProps {
+  onOpenBugReport?: () => void;
+}
+
+export default function HelpContent({ onOpenBugReport }: HelpContentProps = {}) {
   return (
     <div className='h-full'>
       {/* Getting Started */}
@@ -245,7 +249,10 @@ export default function HelpContent() {
           <button className='px-4 py-2 bg-brand-500 text-white rounded-lg text-base font-medium hover:bg-brand-600 transition-colors'>
             Contact Support
           </button>
-          <button className='px-4 py-2 bg-white text-zinc-900 border border-zinc-300 rounded-lg text-base font-medium hover:bg-zinc-50 transition-colors'>
+          <button 
+            onClick={onOpenBugReport}
+            className='px-4 py-2 bg-white text-zinc-900 border border-zinc-300 rounded-lg text-base font-medium hover:bg-zinc-50 transition-colors'
+          >
             Report a Bug
           </button>
         </div>

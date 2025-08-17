@@ -49,7 +49,7 @@ export default function DialogContainer({
     <div className='fixed inset-0 z-50 overflow-y-auto'>
       {/* Background overlay */}
       <div
-        className='fixed inset-0 bg-white/32 transition-opacity'
+        className='fixed inset-0 bg-zinc-900/16 transition-opacity'
         onClick={onClose}
       />
 

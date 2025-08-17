@@ -23,6 +23,7 @@ import {
   HelpContent,
 } from './dashboard';
 import SearchUser from './SearchUser';
+import BugReportDialog from './BugReportDialog';
 import { useChatActions } from '../hooks/useChatActions';
 import { useUserCategorization } from '../hooks/useUserCategorization';
 import { useOnlineUsers } from '../hooks/useOnlineUsers';
@@ -58,6 +59,7 @@ export default function OnlineUsers({
   onProfessionalRequest,
 }: OnlineUsersProps) {
   const [allUsers, setAllUsers] = useState<UserPresence[]>([]);
+  const [isBugReportOpen, setIsBugReportOpen] = useState(false);
   // Existing conversations now managed by centralized hook
   const [profileSidebarUser, setProfileSidebarUser] =
     useState<UserPresence | null>(null);
@@ -780,7 +782,7 @@ export default function OnlineUsers({
             {activeSection === 'notifications' ? (
               <NotificationsContent />
             ) : activeSection === 'help' ? (
-              <HelpContent />
+              <HelpContent onOpenBugReport={() => setIsBugReportOpen(true)} />
             ) : activeSection === 'account' ? (
               <AccountContent />
             ) : (
@@ -1121,6 +1123,12 @@ export default function OnlineUsers({
           </div>
         </div>
       )}
+
+      {/* Bug Report Dialog */}
+      <BugReportDialog 
+        isOpen={isBugReportOpen} 
+        onClose={() => setIsBugReportOpen(false)} 
+      />
     </div>
   );
 }

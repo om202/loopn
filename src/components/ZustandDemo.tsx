@@ -15,7 +15,7 @@ export function ZustandDemo() {
 
   return (
     <div className='p-4 border rounded-lg bg-gray-50'>
-      <h3 className='text-lg font-semibold mb-2'>🎯 Zustand Demo</h3>
+      <h3 className='text-lg font-semibold mb-2'>Zustand Demo</h3>
 
       <div className='space-y-2 text-base'>
         <div>
@@ -43,7 +43,7 @@ export function ZustandDemo() {
         </div>
 
         <div className='mt-3 p-2 bg-blue-50 rounded text-base'>
-          <strong>💡 Benefits:</strong>
+          <strong>Benefits:</strong>
           <ul className='list-disc list-inside mt-1'>
             <li>Single subscription shared across components</li>
             <li>Reference counting prevents duplicates</li>
