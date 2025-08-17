@@ -9,7 +9,6 @@ import {
   User,
   LogIn,
   Zap,
-  Users,
   Brain,
   Shield,
   Clock,
@@ -72,7 +71,7 @@ export default function HomePage() {
   const isAuthenticated = authStatus === 'authenticated' && user;
   const authLink = isAuthenticated ? '/dashboard' : '/auth';
   const authText = isAuthenticated ? 'Go to Dashboard' : 'Sign In';
-  const ctaText = isAuthenticated ? 'Go to Dashboard' : 'Join Loopn';
+  const ctaText = isAuthenticated ? 'Go to Dashboard' : 'Create an account';
 
   const scrollToHowItWorks = () => {
     const element = document.getElementById('how-it-works');
@@ -104,7 +103,7 @@ export default function HomePage() {
             </div>
             <div className='flex items-center'>
               <Link href={authLink}>
-                <button className='bg-white hover:bg-zinc-50 text-zinc-700 border border-zinc-200 px-6 py-2.5 rounded-lg font-medium transition-colors flex items-center gap-2'>
+                <button className='bg-white hover:bg-zinc-50 text-zinc-500 border border-zinc-200 px-6 py-2.5 rounded-lg font-medium transition-colors flex items-center gap-2'>
                   <LogIn className='w-4 h-4' />
                   {authText}
                 </button>
@@ -115,7 +114,7 @@ export default function HomePage() {
       </nav>
 
       {/* Hero Section */}
-      <section className='bg-zinc-100 py-16 lg:py-24 relative overflow-hidden'>
+      <section className='bg-white py-12 lg:py-16 relative overflow-hidden'>
         {/* Background Elements */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-20 left-10 w-72 h-72 bg-brand-100/30 rounded-full blur-3xl animate-float' />
@@ -126,62 +125,49 @@ export default function HomePage() {
           <div className='grid lg:grid-cols-2 gap-12 lg:gap-16 items-center'>
             {/* Left column - Content */}
             <div className='text-center lg:text-left'>
-              <div className='mb-8'>
-                <span className='inline-flex items-center gap-2 px-4 py-2 bg-white/80 text-zinc-700 rounded-full text-sm font-medium border border-zinc-200'>
-                  <Users className='w-4 h-4' />
-                  Join thousands of professionals
-                </span>
+              <div className='mb-6'>
+                <div className='flex items-center justify-center lg:justify-start gap-3'>
+                  <Image
+                    src='/loopn.svg'
+                    alt='Loopn'
+                    width={38}
+                    height={38}
+                    priority
+                  />
+                  <span className='text-2xl font-medium text-zinc-500'>Loopn</span>
+                </div>
               </div>
 
-              <h1 className='text-4xl sm:text-5xl lg:text-6xl font-bold text-zinc-900 mb-8 leading-tight'>
-                Connect. Grow.{' '}
+              <h1 className='text-3xl sm:text-4xl lg:text-5xl font-bold text-zinc-900 mb-6 leading-tight'>
+                Simple and AI powered{' '}
                 <span className='text-brand-500 relative'>
-                  Succeed.
+                  Networking
                   <div className='absolute -bottom-2 left-0 w-full h-1 bg-brand-200 rounded-full opacity-60'></div>
                 </span>
+                {' '}Platform
               </h1>
 
-              <p className='text-lg sm:text-xl text-zinc-700 mb-10 leading-relaxed max-w-2xl'>
+              <p className='text-lg sm:text-xl text-zinc-500 mb-16 leading-relaxed max-w-2xl'>
                 Loopn helps you build meaningful professional relationships
                 through smart AI matching and authentic conversations.
               </p>
 
-              {/* Value Propositions */}
-              <div className='flex flex-wrap gap-6 justify-center lg:justify-start mb-12'>
-                <div className='flex items-center gap-2 text-zinc-700'>
-                  <CheckCircle className='w-5 h-5 text-brand-500' />
-                  <span className='font-medium text-sm'>
-                    Smart AI Matching – Meet the right people faster
-                  </span>
-                </div>
-                <div className='flex items-center gap-2 text-zinc-700'>
-                  <CheckCircle className='w-5 h-5 text-brand-500' />
-                  <span className='font-medium text-sm'>
-                    Real-time Chat – Talk instantly, anytime
-                  </span>
-                </div>
-                <div className='flex items-center gap-2 text-zinc-700'>
-                  <CheckCircle className='w-5 h-5 text-brand-500' />
-                  <span className='font-medium text-sm'>
-                    Privacy First – You control what you share
-                  </span>
-                </div>
-              </div>
+
 
               {/* CTA Buttons */}
               <div className='flex flex-col sm:flex-row gap-4 justify-center lg:justify-start'>
                 <Link href={authLink} className='w-full sm:w-auto'>
-                  <button className='group w-full bg-brand-500 hover:bg-brand-600 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-0.5'>
-                    Join Loopn
+                  <button className='group w-full bg-brand-500 hover:bg-brand-600 text-white px-8 py-4 rounded-xl text-lg font-black transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-0.5 border border-brand-600'>
+                    {ctaText}
                     <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' />
                   </button>
                 </Link>
                 <button
                   onClick={scrollToHowItWorks}
-                  className='w-full sm:w-auto bg-white hover:bg-zinc-50 text-zinc-700 px-8 py-4 rounded-xl text-lg font-semibold border border-zinc-200 transition-all duration-300 flex items-center justify-center gap-3 hover:shadow-lg'
+                  className='text-zinc-500 hover:text-zinc-700 text-lg font-semibold transition-colors flex items-center justify-center gap-2'
                 >
                   See how it works
-                  <ArrowRight className='w-5 h-5' />
+                  <ArrowRight className='w-4 h-4' />
                 </button>
               </div>
             </div>
@@ -382,7 +368,7 @@ export default function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section className='py-20 sm:py-24 bg-white relative'>
+      <section className='py-12 sm:py-16 bg-white relative'>
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-1/4 left-0 w-72 h-72 bg-zinc-50/80 rounded-full blur-3xl' />
@@ -392,14 +378,14 @@ export default function HomePage() {
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           {/* Section Header */}
           <div className='text-center max-w-4xl mx-auto mb-16'>
-            <h2 className='text-3xl sm:text-4xl lg:text-5xl font-bold text-zinc-900 mb-8'>
-              The future of{' '}
+            <h2 className='text-3xl sm:text-4xl lg:text-5xl font-medium text-zinc-900 mb-8'>
+              The future of networking is{' '}
               <span className='text-brand-500 relative'>
-                networking is here.
+                here.
                 <div className='absolute -bottom-1 left-0 w-full h-1 bg-brand-200 rounded-full opacity-60'></div>
               </span>
             </h2>
-            <p className='text-lg text-zinc-700 leading-relaxed'>
+            <p className='text-lg text-zinc-500 leading-relaxed'>
               Loopn removes the noise from traditional networking, helping you
               connect based on what truly matters — your expertise, goals, and
               shared interests.
@@ -412,38 +398,30 @@ export default function HomePage() {
           <div className='grid lg:grid-cols-3 gap-6 sm:gap-8 mb-16 mt-16'>
             {/* Feature 1 - Smart Matching */}
             <div className='group bg-white rounded-2xl p-6 sm:p-8 border border-zinc-200 h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
-              <div className='w-14 h-14 bg-gradient-to-br from-brand-100 to-brand-200 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300'>
-                <Brain className='w-7 h-7 text-brand-600' />
-              </div>
-              <h3 className='text-xl font-bold text-zinc-900 mb-4'>
+              <h3 className='text-xl font-bold text-zinc-900 mb-4 flex items-center gap-3'>
+                <Brain className='w-6 h-6 text-zinc-600' />
                 Smart AI Matching
               </h3>
-              <p className='text-zinc-700 mb-6 leading-relaxed text-sm sm:text-base'>
+              <p className='text-zinc-500 mb-6 leading-relaxed text-base'>
                 Meet professionals who complement your skills and align with
                 your goals.
               </p>
               <ul className='space-y-3'>
-                <li className='flex items-center gap-3 text-zinc-700'>
-                  <div className='w-5 h-5 bg-brand-100 rounded-full flex items-center justify-center flex-shrink-0'>
-                    <CheckCircle className='w-3 h-3 text-brand-600' />
-                  </div>
-                  <span className='font-medium text-sm'>
+                <li className='flex items-center gap-3 text-zinc-500'>
+                  <CheckCircle className='w-4 h-4 text-zinc-600 flex-shrink-0' />
+                  <span className='font-medium text-base'>
                     AI-powered matching
                   </span>
                 </li>
-                <li className='flex items-center gap-3 text-zinc-700'>
-                  <div className='w-5 h-5 bg-brand-100 rounded-full flex items-center justify-center flex-shrink-0'>
-                    <CheckCircle className='w-3 h-3 text-brand-600' />
-                  </div>
-                  <span className='font-medium text-sm'>
+                <li className='flex items-center gap-3 text-zinc-500'>
+                  <CheckCircle className='w-4 h-4 text-zinc-600 flex-shrink-0' />
+                  <span className='font-medium text-base'>
                     Industry-focused connections
                   </span>
                 </li>
-                <li className='flex items-center gap-3 text-zinc-700'>
-                  <div className='w-5 h-5 bg-brand-100 rounded-full flex items-center justify-center flex-shrink-0'>
-                    <CheckCircle className='w-3 h-3 text-brand-600' />
-                  </div>
-                  <span className='font-medium text-sm'>
+                <li className='flex items-center gap-3 text-zinc-500'>
+                  <CheckCircle className='w-4 h-4 text-zinc-600 flex-shrink-0' />
+                  <span className='font-medium text-base'>
                     Goal-based alignment
                   </span>
                 </li>
@@ -452,38 +430,30 @@ export default function HomePage() {
 
             {/* Feature 2 - Real-time Chat */}
             <div className='group bg-white rounded-2xl p-6 sm:p-8 border border-zinc-200 h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
-              <div className='w-14 h-14 bg-gradient-to-br from-b_green-100 to-b_green-200 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300'>
-                <Zap className='w-7 h-7 text-b_green-600' />
-              </div>
-              <h3 className='text-xl font-bold text-zinc-900 mb-4'>
+              <h3 className='text-xl font-bold text-zinc-900 mb-4 flex items-center gap-3'>
+                <Zap className='w-6 h-6 text-zinc-600' />
                 Instant Connections
               </h3>
-              <p className='text-zinc-700 mb-6 leading-relaxed text-sm sm:text-base'>
+              <p className='text-zinc-500 mb-6 leading-relaxed text-base'>
                 Start meaningful conversations the moment you match — no delays,
                 no barriers.
               </p>
               <ul className='space-y-3'>
-                <li className='flex items-center gap-3 text-zinc-700'>
-                  <div className='w-5 h-5 bg-b_green-100 rounded-full flex items-center justify-center flex-shrink-0'>
-                    <CheckCircle className='w-3 h-3 text-b_green-600' />
-                  </div>
-                  <span className='font-medium text-sm'>
+                <li className='flex items-center gap-3 text-zinc-500'>
+                  <CheckCircle className='w-4 h-4 text-zinc-600 flex-shrink-0' />
+                  <span className='font-medium text-base'>
                     Real-time messaging
                   </span>
                 </li>
-                <li className='flex items-center gap-3 text-zinc-700'>
-                  <div className='w-5 h-5 bg-b_green-100 rounded-full flex items-center justify-center flex-shrink-0'>
-                    <CheckCircle className='w-3 h-3 text-b_green-600' />
-                  </div>
-                  <span className='font-medium text-sm'>
+                <li className='flex items-center gap-3 text-zinc-500'>
+                  <CheckCircle className='w-4 h-4 text-zinc-600 flex-shrink-0' />
+                  <span className='font-medium text-base'>
                     Professional conversation starters
                   </span>
                 </li>
-                <li className='flex items-center gap-3 text-zinc-700'>
-                  <div className='w-5 h-5 bg-b_green-100 rounded-full flex items-center justify-center flex-shrink-0'>
-                    <CheckCircle className='w-3 h-3 text-b_green-600' />
-                  </div>
-                  <span className='font-medium text-sm'>
+                <li className='flex items-center gap-3 text-zinc-500'>
+                  <CheckCircle className='w-4 h-4 text-zinc-600 flex-shrink-0' />
+                  <span className='font-medium text-base'>
                     Smooth, seamless experience
                   </span>
                 </li>
@@ -492,37 +462,29 @@ export default function HomePage() {
 
             {/* Feature 3 - Quality Network */}
             <div className='group bg-white rounded-2xl p-6 sm:p-8 border border-zinc-200 h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
-              <div className='w-14 h-14 bg-gradient-to-br from-purple-100 to-purple-200 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300'>
-                <Shield className='w-7 h-7 text-purple-600' />
-              </div>
-              <h3 className='text-xl font-bold text-zinc-900 mb-4'>
+              <h3 className='text-xl font-bold text-zinc-900 mb-4 flex items-center gap-3'>
+                <Shield className='w-6 h-6 text-zinc-600' />
                 Quality & Privacy
               </h3>
-              <p className='text-zinc-700 mb-6 leading-relaxed text-sm sm:text-base'>
+              <p className='text-zinc-500 mb-6 leading-relaxed text-base'>
                 Network with verified professionals in a safe, focused space.
               </p>
               <ul className='space-y-3'>
-                <li className='flex items-center gap-3 text-zinc-700'>
-                  <div className='w-5 h-5 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0'>
-                    <CheckCircle className='w-3 h-3 text-purple-600' />
-                  </div>
-                  <span className='font-medium text-sm'>
+                <li className='flex items-center gap-3 text-zinc-500'>
+                  <CheckCircle className='w-4 h-4 text-zinc-600 flex-shrink-0' />
+                  <span className='font-medium text-base'>
                     Verified members only
                   </span>
                 </li>
-                <li className='flex items-center gap-3 text-zinc-700'>
-                  <div className='w-5 h-5 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0'>
-                    <CheckCircle className='w-3 h-3 text-purple-600' />
-                  </div>
-                  <span className='font-medium text-sm'>
+                <li className='flex items-center gap-3 text-zinc-500'>
+                  <CheckCircle className='w-4 h-4 text-zinc-600 flex-shrink-0' />
+                  <span className='font-medium text-base'>
                     Privacy-first design
                   </span>
                 </li>
-                <li className='flex items-center gap-3 text-zinc-700'>
-                  <div className='w-5 h-5 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0'>
-                    <CheckCircle className='w-3 h-3 text-purple-600' />
-                  </div>
-                  <span className='font-medium text-sm'>
+                <li className='flex items-center gap-3 text-zinc-500'>
+                  <CheckCircle className='w-4 h-4 text-zinc-600 flex-shrink-0' />
+                  <span className='font-medium text-base'>
                     Quality over quantity
                   </span>
                 </li>
@@ -533,7 +495,7 @@ export default function HomePage() {
           {/* Bottom CTA */}
           <div className='text-center'>
             <Link href={authLink}>
-              <button className='group inline-flex items-center gap-3 bg-brand-500 hover:bg-brand-600 text-white px-10 py-4 rounded-xl text-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5'>
+              <button className='group inline-flex items-center gap-3 bg-brand-500 hover:bg-brand-600 text-white px-10 py-4 rounded-xl text-lg font-black transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 border border-brand-600'>
                 {ctaText}
                 <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' />
               </button>
@@ -545,7 +507,7 @@ export default function HomePage() {
       {/* How It Works */}
       <section
         id='how-it-works'
-        className='py-20 sm:py-24 bg-zinc-100 relative'
+        className='py-12 sm:py-16 bg-white relative'
       >
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
@@ -556,14 +518,14 @@ export default function HomePage() {
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           {/* Section Header */}
           <div className='text-center max-w-4xl mx-auto mb-16'>
-            <h2 className='text-3xl sm:text-4xl lg:text-5xl font-bold text-zinc-900 mb-8'>
+            <h2 className='text-3xl sm:text-4xl lg:text-5xl font-medium text-zinc-900 mb-8'>
               Your Journey to Meaningful{' '}
               <span className='text-brand-500 relative'>
                 Connections
                 <div className='absolute -bottom-1 left-0 w-full h-1 bg-brand-200 rounded-full opacity-60'></div>
               </span>
             </h2>
-            <p className='text-lg text-zinc-700 leading-relaxed'>
+            <p className='text-lg text-zinc-500 leading-relaxed'>
               Getting started with Loopn is quick and effortless.
             </p>
           </div>
@@ -574,19 +536,16 @@ export default function HomePage() {
             <div className='relative group'>
               <div className='bg-white rounded-2xl p-6 sm:p-8 border border-zinc-200 relative h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
                 {/* Step number */}
-                <div className='absolute -top-4 left-1/2 -translate-x-1/2 w-12 h-12 bg-brand-500 rounded-2xl flex items-center justify-center text-white font-bold text-lg shadow-lg z-20'>
+                <div className='absolute -top-4 left-1/2 -translate-x-1/2 w-12 h-12 border-1 border-brand-200 bg-white rounded-2xl flex items-center justify-center text-brand-500 font-bold text-lg z-20'>
                   1
                 </div>
-                {/* Icon */}
-                <div className='w-16 h-16 bg-brand-50 rounded-2xl flex items-center justify-center mb-6 mx-auto mt-4'>
-                  <User className='w-8 h-8 text-brand-600' />
-                </div>
                 {/* Content */}
-                <div className='text-center'>
-                  <h3 className='text-xl font-bold text-zinc-900 mb-4'>
+                <div className='text-center mt-4'>
+                  <h3 className='text-xl font-bold text-zinc-900 mb-4 flex items-center justify-center gap-3'>
+                    <User className='w-6 h-6 text-zinc-600' />
                     Create Your Profile
                   </h3>
-                  <p className='text-zinc-700 leading-relaxed text-sm sm:text-base'>
+                  <p className='text-zinc-500 leading-relaxed text-base'>
                     Showcase your expertise, goals, and what you're looking for
                     — so the right people can find you.
                   </p>
@@ -598,19 +557,16 @@ export default function HomePage() {
             <div className='relative group'>
               <div className='bg-white rounded-2xl p-6 sm:p-8 border border-zinc-200 relative h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
                 {/* Step number */}
-                <div className='absolute -top-4 left-1/2 -translate-x-1/2 w-12 h-12 bg-brand-500 rounded-2xl flex items-center justify-center text-white font-bold text-lg shadow-lg z-20'>
+                <div className='absolute -top-4 left-1/2 -translate-x-1/2 w-12 h-12 border-1 border-brand-200 bg-white rounded-2xl flex items-center justify-center text-brand-500 font-bold text-lg z-20'>
                   2
                 </div>
-                {/* Icon */}
-                <div className='w-16 h-16 bg-b_green-50 rounded-2xl flex items-center justify-center mb-6 mx-auto mt-4'>
-                  <Brain className='w-8 h-8 text-b_green-600' />
-                </div>
                 {/* Content */}
-                <div className='text-center'>
-                  <h3 className='text-xl font-bold text-zinc-900 mb-4'>
+                <div className='text-center mt-4'>
+                  <h3 className='text-xl font-bold text-zinc-900 mb-4 flex items-center justify-center gap-3'>
+                    <Brain className='w-6 h-6 text-zinc-600' />
                     Get Smart Matches
                   </h3>
-                  <p className='text-zinc-700 leading-relaxed text-sm sm:text-base'>
+                  <p className='text-zinc-500 leading-relaxed text-base'>
                     Our AI connects you with professionals who share your
                     interests and complement your skills.
                   </p>
@@ -622,19 +578,16 @@ export default function HomePage() {
             <div className='relative group'>
               <div className='bg-white rounded-2xl p-6 sm:p-8 border border-zinc-200 relative h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
                 {/* Step number */}
-                <div className='absolute -top-4 left-1/2 -translate-x-1/2 w-12 h-12 bg-brand-500 rounded-2xl flex items-center justify-center text-white font-bold text-lg shadow-lg z-20'>
+                <div className='absolute -top-4 left-1/2 -translate-x-1/2 w-12 h-12 border-1 border-brand-200 bg-white rounded-2xl flex items-center justify-center text-brand-500 font-bold text-lg z-20'>
                   3
                 </div>
-                {/* Icon */}
-                <div className='w-16 h-16 bg-purple-50 rounded-2xl flex items-center justify-center mb-6 mx-auto mt-4'>
-                  <MessageCircle className='w-8 h-8 text-purple-600' />
-                </div>
                 {/* Content */}
-                <div className='text-center'>
-                  <h3 className='text-xl font-bold text-zinc-900 mb-4'>
+                <div className='text-center mt-4'>
+                  <h3 className='text-xl font-bold text-zinc-900 mb-4 flex items-center justify-center gap-3'>
+                    <MessageCircle className='w-6 h-6 text-zinc-600' />
                     Start Connecting
                   </h3>
-                  <p className='text-zinc-700 leading-relaxed text-sm sm:text-base'>
+                  <p className='text-zinc-500 leading-relaxed text-base'>
                     Engage in real conversations, grow your network, and build
                     relationships that last.
                   </p>
@@ -646,7 +599,7 @@ export default function HomePage() {
       </section>
 
       {/* Testimonials */}
-      <section className='py-20 sm:py-24 bg-white relative'>
+      <section className='py-12 sm:py-16 bg-white relative'>
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-1/4 right-0 w-96 h-96 bg-brand-50/40 rounded-full blur-3xl' />
@@ -655,14 +608,14 @@ export default function HomePage() {
 
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='text-center mb-16'>
-            <h2 className='text-3xl sm:text-4xl lg:text-5xl font-bold text-zinc-900 mb-8'>
-              Trusted by{' '}
+            <h2 className='text-3xl sm:text-4xl lg:text-5xl font-medium text-zinc-900 mb-8'>
+              Trusted by professionals{' '}
               <span className='text-brand-500 relative'>
-                Professionals Worldwide
+                worldwide
                 <div className='absolute -bottom-1 left-0 w-full h-1 bg-brand-200 rounded-full opacity-60'></div>
               </span>
             </h2>
-            <p className='text-lg text-zinc-700 max-w-3xl mx-auto leading-relaxed'>
+            <p className='text-lg text-zinc-500 max-w-3xl mx-auto leading-relaxed'>
               Loopn is built for those who value authentic networking and
               meaningful connections.
             </p>
@@ -774,7 +727,7 @@ export default function HomePage() {
 
           {/* Trust Indicators */}
           <div className='mt-16 text-center'>
-            <h3 className='text-xl sm:text-2xl font-bold text-zinc-900 mb-4'>
+            <h3 className='text-xl sm:text-2xl font-medium text-zinc-900 mb-4'>
               Built for Professionals in Every Field
             </h3>
             <p className='text-zinc-600 mb-8 text-sm sm:text-base'>
@@ -806,7 +759,7 @@ export default function HomePage() {
       </section>
 
       {/* Final CTA Section */}
-      <section className='py-20 sm:py-24 bg-zinc-100 text-zinc-900 relative overflow-hidden'>
+      <section className='py-12 sm:py-16 bg-white text-zinc-900 relative overflow-hidden'>
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl' />
@@ -814,21 +767,21 @@ export default function HomePage() {
         </div>
 
         <div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center'>
-          <h2 className='text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 leading-tight'>
+          <h2 className='text-3xl sm:text-4xl lg:text-5xl font-medium mb-6 leading-tight'>
             Ready to Transform Your Network?
           </h2>
-          <p className='text-lg text-zinc-700 mb-8 max-w-2xl mx-auto'>
+          <p className='text-lg text-zinc-500 mb-8 max-w-2xl mx-auto'>
             Join Loopn today and start making connections that matter.
           </p>
 
           <div className='flex flex-col sm:flex-row gap-4 justify-center'>
             <Link href={authLink} className='w-full sm:w-auto'>
-              <button className='group w-full bg-white hover:bg-zinc-50 text-brand-600 px-10 py-4 rounded-xl text-lg font-bold transition-all duration-300 flex items-center justify-center gap-3'>
+              <button className='group w-full bg-white hover:bg-zinc-50 text-brand-600 px-10 py-4 rounded-xl text-lg font-black transition-all duration-300 flex items-center justify-center gap-3 border border-brand-600'>
                 {ctaText}
                 <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' />
               </button>
             </Link>
-            <button className='w-full sm:w-auto bg-white hover:bg-zinc-50 text-zinc-700 px-10 py-4 rounded-xl text-lg font-bold border border-zinc-200 transition-all duration-300 flex items-center justify-center gap-3'>
+            <button className='w-full sm:w-auto bg-white hover:bg-zinc-50 text-zinc-500 px-10 py-4 rounded-xl text-lg font-bold border border-zinc-200 transition-all duration-300 flex items-center justify-center gap-3'>
               <MessageCircle className='w-5 h-5' />
               Learn More
             </button>
@@ -837,7 +790,7 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className='bg-white py-16 border-t border-zinc-200'>
+      <footer className='bg-white py-12 border-t border-zinc-200'>
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='text-center'>
             <div className='flex items-center justify-center space-x-3 mb-6'>
