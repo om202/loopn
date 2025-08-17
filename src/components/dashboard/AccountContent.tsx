@@ -64,7 +64,7 @@ export default function AccountContent() {
             <h3 className='font-semibold text-zinc-900 mb-1'>
               {getUserDisplayName()}
             </h3>
-            <p className='text-sm text-zinc-500'>{getUserEmail()}</p>
+            <p className='text-sm text-zinc-500 font-medium'>{getUserEmail()}</p>
           </div>
         </div>
 
@@ -76,54 +76,54 @@ export default function AccountContent() {
               <span>Loading...</span>
             </div>
           ) : userProfile ? (
-            <div className='space-y-6'>
+            <div className='divide-y divide-zinc-100'>
               {/* Professional Info Section */}
               {(userProfile.jobRole ||
                 userProfile.companyName ||
                 userProfile.industry ||
                 userProfile.yearsOfExperience !== null) && (
-                <div>
-                  <h5 className='text-sm font-semibold text-zinc-900 mb-4 border-b border-zinc-100 pb-2'>
+                <div className='pb-4'>
+                  <h4 className='text-sm font-semibold text-zinc-500 mb-4 border-b border-zinc-100 pb-2'>
                     Profile Details
-                  </h5>
-                  <div className='grid grid-cols-1 gap-4'>
+                  </h4>
+                  <div className='divide-y divide-zinc-100'>
                     {userProfile.jobRole && (
-                      <div>
-                        <dt className='text-xs font-medium text-zinc-500 mb-1'>
+                      <div className='pb-3'>
+                        <dt className='text-sm font-medium text-zinc-500 mb-1.5'>
                           Role
                         </dt>
-                        <dd className='text-sm text-zinc-900'>
+                        <dd className='text-base text-zinc-900 font-medium'>
                           {userProfile.jobRole}
                         </dd>
                       </div>
                     )}
                     {userProfile.companyName && (
-                      <div>
-                        <dt className='text-xs font-medium text-zinc-500 mb-1'>
+                      <div className='py-3'>
+                        <dt className='text-sm font-medium text-zinc-500 mb-1.5'>
                           Company
                         </dt>
-                        <dd className='text-sm text-zinc-900'>
+                        <dd className='text-base text-zinc-900 font-medium'>
                           {userProfile.companyName}
                         </dd>
                       </div>
                     )}
                     {userProfile.industry && (
-                      <div>
-                        <dt className='text-xs font-medium text-zinc-500 mb-1'>
+                      <div className='py-3'>
+                        <dt className='text-sm font-medium text-zinc-500 mb-1.5'>
                           Industry
                         </dt>
-                        <dd className='text-sm text-zinc-900'>
+                        <dd className='text-base text-zinc-900 font-medium'>
                           {userProfile.industry}
                         </dd>
                       </div>
                     )}
                     {userProfile.yearsOfExperience !== null &&
                       userProfile.yearsOfExperience !== undefined && (
-                        <div>
-                          <dt className='text-xs font-medium text-zinc-500 mb-1'>
-                            Years of Experience
+                        <div className='pt-3'>
+                          <dt className='text-sm font-medium text-zinc-500 mb-1.5'>
+                            Experience
                           </dt>
-                          <dd className='text-sm text-zinc-900'>
+                          <dd className='text-base text-zinc-900 font-medium'>
                             {userProfile.yearsOfExperience} years
                           </dd>
                         </div>
@@ -134,28 +134,24 @@ export default function AccountContent() {
 
               {/* Education Section */}
               {userProfile.education && (
-                <div>
-                  <h5 className='text-sm font-semibold text-zinc-900 mb-4 border-b border-zinc-100 pb-2'>
+                <div className='py-4'>
+                  <h4 className='text-sm font-semibold text-zinc-900 mb-4'>
                     Education
-                  </h5>
-                  <div>
-                    <dd className='text-sm text-zinc-900'>
-                      {userProfile.education}
-                    </dd>
+                  </h4>
+                  <div className='text-base text-zinc-900 font-medium leading-relaxed'>
+                    {userProfile.education}
                   </div>
                 </div>
               )}
 
               {/* About Section */}
               {userProfile.about && (
-                <div>
-                  <h5 className='text-sm font-semibold text-zinc-900 mb-4 border-b border-zinc-100 pb-2'>
+                <div className='py-4'>
+                  <h4 className='text-sm font-medium text-zinc-500 mb-4'>
                     About
-                  </h5>
-                  <div>
-                    <dd className='text-sm text-zinc-900 leading-relaxed'>
-                      {userProfile.about}
-                    </dd>
+                  </h4>
+                  <div className='text-base text-zinc-900 leading-relaxed'>
+                    {userProfile.about}
                   </div>
                 </div>
               )}
@@ -164,21 +160,18 @@ export default function AccountContent() {
               {((userProfile.skills && userProfile.skills.length > 0) ||
                 (userProfile.interests &&
                   userProfile.interests.length > 0)) && (
-                <div>
-                  <h5 className='text-sm font-semibold text-zinc-900 mb-4 border-b border-zinc-100 pb-2'>
-                    Skills & Interests
-                  </h5>
-                  <div className='space-y-4'>
+                <div className='pt-4'>
+                  <div className='divide-y divide-zinc-100'>
                     {userProfile.skills && userProfile.skills.length > 0 && (
-                      <div>
-                        <dt className='text-xs font-medium text-zinc-500 mb-2'>
+                      <div className='pb-3'>
+                        <dt className='text-sm font-medium text-zinc-500 mb-3'>
                           Skills
                         </dt>
                         <dd className='flex flex-wrap gap-2'>
                           {userProfile.skills.map((skill, index) => (
                             <span
                               key={index}
-                              className='px-3 py-1.5 text-xs bg-brand-50 text-brand-700 rounded-md border border-brand-100'
+                              className='px-3 py-1.5 text-base bg-transparent text-zinc-700 border border-zinc-200 rounded-lg font-medium'
                             >
                               {skill}
                             </span>
@@ -188,15 +181,15 @@ export default function AccountContent() {
                     )}
                     {userProfile.interests &&
                       userProfile.interests.length > 0 && (
-                        <div>
-                          <dt className='text-xs font-medium text-zinc-500 mb-2'>
+                        <div className='pt-3'>
+                          <dt className='text-sm font-medium text-zinc-500 mb-3'>
                             Interests
                           </dt>
                           <dd className='flex flex-wrap gap-2'>
                             {userProfile.interests.map((interest, index) => (
                               <span
                                 key={index}
-                                className='px-3 py-1.5 text-xs bg-b_green-50 text-b_green-700 rounded-md border border-b_green-100'
+                                className='px-3 py-1.5 text-base bg-transparent text-zinc-700 border border-zinc-200 rounded-lg font-medium'
                               >
                                 {interest}
                               </span>
@@ -210,7 +203,7 @@ export default function AccountContent() {
             </div>
           ) : (
             <div className='text-sm text-zinc-500 text-center py-8'>
-              No profile details available yet.
+              No profile details available.
             </div>
           )}
         </div>

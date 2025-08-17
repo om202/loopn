@@ -191,7 +191,7 @@ export default function UserCard({
 
           {/* Profession */}
           {finalFullProfile?.jobRole && (
-            <div className='text-sm text-zinc-500 mb-1.5 truncate'>
+            <div className='text-[15px] text-zinc-500 mb-1.5 truncate'>
               {finalFullProfile.jobRole}
             </div>
           )}
@@ -236,7 +236,7 @@ export default function UserCard({
             // Handle pending request state differently - show as status text with clickable tick icon
             if (pendingRequests.has(userPresence.userId)) {
               return (
-                <div className='flex items-center gap-1.5 px-2 py-1.5 text-sm text-zinc-600'>
+                <div className='flex items-center gap-1.5 px-2 py-1.5 text-sm text-zinc-500'>
                   {/* Clickable Tick Icon for Cancel */}
                   <button
                     onClick={() => setShowCancelDialog(true)}
@@ -245,7 +245,7 @@ export default function UserCard({
                   >
                     <CheckCircle2 className='w-4 h-4 text-zinc-500 flex-shrink-0' />
                   </button>
-                  <span className='text-base font-medium'>Request Sent</span>
+                  <span className='text-base text-zinc-500'>Request Sent</span>
                 </div>
               );
             }

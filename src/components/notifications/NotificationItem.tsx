@@ -240,17 +240,18 @@ export default function NotificationItem({
             })}
           >
             {/* Name and Timestamp */}
-            <div className='flex items-center justify-between mb-0.5'>
+            <div className='flex items-center gap-2 mb-0.5'>
               <h4 className='text-base font-medium text-zinc-900 truncate no-email-detection'>
                 {notification.title}
               </h4>
-              <span className='text-sm text-zinc-500 font-medium ml-2 flex-shrink-0'>
+              <span className='text-sm text-zinc-500 font-medium flex-shrink-0'>•</span>
+              <span className='text-sm text-zinc-500 flex-shrink-0'>
                 {formatTimeAgo(notification.timestamp)}
               </span>
             </div>
             
             {/* Content */}
-            <p className='text-base text-zinc-700'>
+            <p className='text-base text-zinc-500'>
               {notification.content}
             </p>
           </div>

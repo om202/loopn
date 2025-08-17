@@ -706,7 +706,7 @@ export default function OnlineUsers({
                 onClick={handleSignOutClick}
                 className='flex items-center gap-2 px-4 py-2.5 text-b_red-600 hover:bg-b_red-50 rounded-lg border border-b_red-200 ml-4 flex-shrink-0'
               >
-                <span className='text-sm font-medium'>Log Out</span>
+                <span className='text-base font-medium'>Log Out</span>
               </button>
             </div>
           )}
@@ -845,7 +845,7 @@ export default function OnlineUsers({
                 />
                 <div className='mt-2'>
                   <div className='mb-1'>
-                    <div className='font-medium text-zinc-900 text-base'>
+                    <div className='font-semibold text-zinc-900 text-base'>
                       {profileSidebarUserProfile?.fullName ||
                         profileSidebarUserProfile?.email ||
                         `User${profileSidebarUser.userId.slice(-4)}`}
@@ -984,7 +984,7 @@ export default function OnlineUsers({
                       profileSidebarFullProfile.industry ||
                       profileSidebarFullProfile.yearsOfExperience !== null) && (
                       <div className='pb-4'>
-                        <h4 className='text-base font-semibold text-zinc-900 mb-4'>
+                        <h4 className='text-sm font-semibold text-zinc-500 mb-4 border-b border-zinc-100 pb-2'>
                           Profile Details
                         </h4>
                         <div className='divide-y divide-zinc-100'>

@@ -155,7 +155,7 @@ export default function SearchSectionContent({
             </h3>
           </div>
         ) : isSearching ? (
-          <LoadingContainer />
+          <LoadingContainer size='lg' />
         ) : error ? (
           <div className='flex flex-col items-center justify-center h-full text-center p-8'>
             <div className='text-red-600 text-sm mb-2'>Search Error</div>
