@@ -143,7 +143,7 @@ export default function DashboardSidebar({
                 />
                 <div className='flex items-center gap-2'>
                   <h1 className='text-2xl font-bold text-zinc-900'>Loopn</h1>
-                  <span className='bg-gradient-to-r from-brand-500 to-brand-600 text-white text-[10px] font-semibold px-1.5 py-0 rounded-md shadow-sm border border-brand-600/20 tracking-wide uppercase'>
+                  <span className='bg-brand-500 text-white text-[10px] font-semibold px-1.5 py-0 rounded-md shadow-sm border border-brand-600/20 tracking-wide uppercase'>
                     beta
                   </span>
                 </div>
@@ -158,7 +158,7 @@ export default function DashboardSidebar({
                 <button
                   key={id}
                   onClick={() => onSectionChange(id)}
-                  className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border ${
+                  className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                     activeSection === id
                       ? 'bg-brand-50 text-brand-700 border-brand-200'
                       : 'text-zinc-700 hover:bg-zinc-50 hover:text-zinc-900 border-transparent'
@@ -202,7 +202,7 @@ export default function DashboardSidebar({
             <div className='flex items-center gap-2'>
               <button
                 onClick={() => onSectionChange(helpItem.id)}
-                className={`relative flex-1 flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border ${
+                className={`relative flex-1 flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                   activeSection === helpItem.id
                     ? 'bg-brand-50 text-brand-700 border-brand-200'
                     : 'text-zinc-700 hover:bg-zinc-50 hover:text-zinc-900 border-transparent'
@@ -228,7 +228,7 @@ export default function DashboardSidebar({
             {/* Account Button */}
             <button
               onClick={() => onSectionChange(accountItem.id)}
-              className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border ${
+              className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                 activeSection === accountItem.id
                   ? 'bg-brand-50 text-brand-700 border-brand-200'
                   : 'text-zinc-700 hover:bg-zinc-50 hover:text-zinc-900 border-transparent'
@@ -272,7 +272,7 @@ export default function DashboardSidebar({
               <button
                 key={id}
                 onClick={() => onSectionChange(id)}
-                className={`relative flex-1 flex flex-col items-center justify-center gap-1.5 px-1 py-2.5 ${
+                className={`relative flex-1 flex flex-col items-center justify-center gap-1.5 px-1 py-2.5 transition-colors duration-150 ${
                   activeSection === id
                     ? 'text-brand-600'
                     : 'text-zinc-700 hover:text-zinc-800'
@@ -349,9 +349,9 @@ export default function DashboardSidebar({
       </div>
 
       {/* Bug Report Dialog */}
-      <BugReportDialog 
-        isOpen={isBugReportOpen} 
-        onClose={() => setIsBugReportOpen(false)} 
+      <BugReportDialog
+        isOpen={isBugReportOpen}
+        onClose={() => setIsBugReportOpen(false)}
       />
     </>
   );

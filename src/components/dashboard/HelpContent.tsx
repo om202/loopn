@@ -17,7 +17,9 @@ interface HelpContentProps {
   onOpenBugReport?: () => void;
 }
 
-export default function HelpContent({ onOpenBugReport }: HelpContentProps = {}) {
+export default function HelpContent({
+  onOpenBugReport,
+}: HelpContentProps = {}) {
   return (
     <div className='h-full'>
       {/* Getting Started */}
@@ -134,7 +136,9 @@ export default function HelpContent({ onOpenBugReport }: HelpContentProps = {}) 
           <div className='bg-white rounded-lg p-4 border border-zinc-200'>
             <div className='flex items-center gap-3 mb-2'>
               <Users className='w-4 h-4 text-brand-500' />
-              <h4 className='font-medium text-zinc-900 text-base'>Connections</h4>
+              <h4 className='font-medium text-zinc-900 text-base'>
+                Connections
+              </h4>
             </div>
             <p className='text-base text-zinc-900'>
               People you've successfully connected with (no time limit on chats)
@@ -249,7 +253,7 @@ export default function HelpContent({ onOpenBugReport }: HelpContentProps = {}) 
           <button className='px-4 py-2 bg-brand-500 text-white rounded-lg text-base font-medium hover:bg-brand-600 transition-colors'>
             Contact Support
           </button>
-          <button 
+          <button
             onClick={onOpenBugReport}
             className='px-4 py-2 bg-white text-zinc-900 border border-zinc-300 rounded-lg text-base font-medium hover:bg-zinc-50 transition-colors'
           >

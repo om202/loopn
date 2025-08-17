@@ -146,7 +146,7 @@ export default function SearchSectionContent({
       {/* Search Results */}
       <div className='flex-1 overflow-y-auto'>
         {!hasSearched ? (
-          <div className='flex flex-col items-center justify-center h-full text-center p-8'>
+          <div className='flex flex-col items-center justify-center h-full text-center p-8 transition-opacity duration-200 opacity-100'>
             <div className='w-16 h-16 mx-auto mb-4 bg-zinc-100 rounded-full flex items-center justify-center'>
               <Search className='w-8 h-8 text-zinc-500' />
             </div>
@@ -155,14 +155,16 @@ export default function SearchSectionContent({
             </h3>
           </div>
         ) : isSearching ? (
-          <LoadingContainer size='lg' />
+          <div className='transition-opacity duration-200 opacity-100'>
+            <LoadingContainer size='lg' />
+          </div>
         ) : error ? (
-          <div className='flex flex-col items-center justify-center h-full text-center p-8'>
+          <div className='flex flex-col items-center justify-center h-full text-center p-8 transition-opacity duration-200 opacity-100'>
             <div className='text-red-600 text-sm mb-2'>Search Error</div>
             <p className='text-zinc-600 text-sm'>{error}</p>
           </div>
         ) : searchResults.length === 0 ? (
-          <div className='flex flex-col items-center justify-center h-full text-center p-8'>
+          <div className='flex flex-col items-center justify-center h-full text-center p-8 transition-opacity duration-200 opacity-100'>
             <div className='w-16 h-16 mx-auto mb-4 bg-zinc-100 rounded-full flex items-center justify-center'>
               <Search className='w-8 h-8 text-zinc-500' />
             </div>
@@ -174,7 +176,7 @@ export default function SearchSectionContent({
             </p>
           </div>
         ) : (
-          <div className='space-y-2.5 sm:space-y-3'>
+          <div className='space-y-2.5 sm:space-y-3 transition-opacity duration-200 opacity-100'>
             {searchResults.map(result => (
               <div key={result.userId}>
                 <UserCard

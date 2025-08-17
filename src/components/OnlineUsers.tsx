@@ -735,7 +735,9 @@ export default function OnlineUsers({
               <h2 className='text-xl sm:text-2xl font-bold text-zinc-900 mb-1'>
                 Search
               </h2>
-              <p className='text-base text-zinc-500'>Search for professionals</p>
+              <p className='text-base text-zinc-500'>
+                Search for professionals
+              </p>
             </div>
           )}
           {activeSection === 'all' && (
@@ -1125,9 +1127,9 @@ export default function OnlineUsers({
       )}
 
       {/* Bug Report Dialog */}
-      <BugReportDialog 
-        isOpen={isBugReportOpen} 
-        onClose={() => setIsBugReportOpen(false)} 
+      <BugReportDialog
+        isOpen={isBugReportOpen}
+        onClose={() => setIsBugReportOpen(false)}
       />
     </div>
   );

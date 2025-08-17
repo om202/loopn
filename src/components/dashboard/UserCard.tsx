@@ -251,7 +251,7 @@ export default function UserCard({
             }
 
             return (
-                              <button
+              <button
                 onClick={() => {
                   if (incomingRequestSenderIds.has(userPresence.userId)) {
                     onAcceptChatRequest(userPresence.userId);

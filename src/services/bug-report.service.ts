@@ -12,8 +12,6 @@ const getClient = () => {
   return client;
 };
 
-
-
 export class BugReportService {
   static async submitBugReport(
     userId: string,
@@ -30,9 +28,12 @@ export class BugReportService {
 
       return { success: true };
     } catch (error) {
-      return { 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Failed to submit bug report' 
+      return {
+        success: false,
+        error:
+          error instanceof Error
+            ? error.message
+            : 'Failed to submit bug report',
       };
     }
   }

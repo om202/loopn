@@ -191,7 +191,7 @@ export default function SearchUser({
 
         <button
           type='submit'
-          className='absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-brand-400 text-white rounded-full hover:bg-brand-600 flex items-center justify-center'
+          className='absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-brand-400 text-white rounded-full hover:bg-brand-600 flex items-center justify-center transition-colors duration-150'
         >
           {isProcessing ? (
             <div className='w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin' />

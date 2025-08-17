@@ -64,9 +64,11 @@ export default function DialogContainer({
   };
 
   const dialogContent = (
-    <div className={`fixed inset-0 z-50 overflow-y-auto transition-opacity duration-100 ${
-      isVisible ? 'opacity-100' : 'opacity-0'
-    }`}>
+    <div
+      className={`fixed inset-0 z-50 overflow-y-auto transition-opacity duration-100 ${
+        isVisible ? 'opacity-100' : 'opacity-0'
+      }`}
+    >
       {/* Background overlay */}
       <div
         className={`fixed inset-0 bg-zinc-900/16 transition-opacity duration-100 ${
@@ -79,8 +81,8 @@ export default function DialogContainer({
       <div className='flex min-h-full items-center justify-center p-4'>
         <div
           className={`relative w-full ${maxWidthClasses[maxWidth]} transform overflow-hidden rounded-xl bg-white border border-zinc-200 shadow-lg transition-all duration-100 ${
-            isVisible 
-              ? 'opacity-100 scale-100 translate-y-0' 
+            isVisible
+              ? 'opacity-100 scale-100 translate-y-0'
               : 'opacity-0 scale-95 translate-y-4'
           }`}
         >

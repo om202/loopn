@@ -64,7 +64,9 @@ export default function AccountContent() {
             <h3 className='font-semibold text-zinc-900 mb-1'>
               {getUserDisplayName()}
             </h3>
-            <p className='text-sm text-zinc-500 font-medium'>{getUserEmail()}</p>
+            <p className='text-sm text-zinc-500 font-medium'>
+              {getUserEmail()}
+            </p>
           </div>
         </div>
 
