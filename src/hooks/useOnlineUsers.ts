@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useSubscriptionStore } from '../stores/subscription-store';
 import type { Schema } from '../../amplify/data/resource';
 
@@ -28,29 +28,16 @@ interface UseOnlineUsersReturn {
  * - Centralized state in Zustand store
  */
 export function useOnlineUsers({
-  enabled = true,
+  enabled: _enabled = true,
 }: UseOnlineUsersProps = {}): UseOnlineUsersReturn {
   const {
     onlineUsers: rawOnlineUsers,
     loading,
     errors,
-    subscribeToOnlineUsers,
   } = useSubscriptionStore();
 
-  useEffect(() => {
-    if (!enabled) return;
-
-    console.log('[useOnlineUsers] Setting up subscription');
-
-    // Subscribe to online users - this will be reference counted
-    // We pass a dummy userId since the subscription doesn't actually need it
-    const unsubscribe = subscribeToOnlineUsers('dummy');
-
-    return () => {
-      console.log('[useOnlineUsers] Cleaning up subscription');
-      unsubscribe();
-    };
-  }, [enabled, subscribeToOnlineUsers]);
+  // Note: Subscriptions are now managed globally by GlobalSubscriptionProvider
+  // This hook just provides access to the cached data
 
   // Sort online users by last seen (most recent first)
   const onlineUsers = useMemo(() => {

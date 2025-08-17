@@ -24,6 +24,7 @@ import { useChatActions } from '../hooks/useChatActions';
 import { useUserCategorization } from '../hooks/useUserCategorization';
 import { useOnlineUsers } from '../hooks/useOnlineUsers';
 import { useConversations } from '../hooks/useConversations';
+import { useChatRequests } from '../hooks/useChatRequests';
 import { useNotifications } from '../hooks/useNotifications';
 import { notificationService } from '../services/notification.service';
 import { useSubscriptionStore } from '../stores/subscription-store';
@@ -89,15 +90,8 @@ export default function OnlineUsers({
     enabled: !!user?.userId,
   });
 
-  // Use Zustand store for chat requests
-  const {
-    incomingChatRequests,
-    sentChatRequests,
-    conversations,
-    subscribeToIncomingChatRequests,
-    subscribeToSentChatRequests,
-    setIncomingChatRequests,
-  } = useSubscriptionStore();
+  // Use centralized hooks for all subscriptions (no direct subscription calls)
+  const { conversations } = useSubscriptionStore();
 
   // Use centralized conversations for subscription management
   useConversations({
@@ -105,37 +99,18 @@ export default function OnlineUsers({
     enabled: !!user?.userId,
   });
 
+  // Use centralized chat requests hook (handles subscriptions internally)
+  const { incomingRequests: incomingChatRequests, pendingReceiverIds } =
+    useChatRequests({
+      userId: user?.userId || '',
+      enabled: !!user?.userId,
+    });
+
   // Use centralized notifications for mark all as read functionality
   const { notifications: centralizedNotifications } = useNotifications({
     userId: user?.userId || '',
     enabled: !!user?.userId,
   });
-
-  // Subscribe to chat requests using Zustand store
-  useEffect(() => {
-    if (!user?.userId) return;
-
-    const unsubscribeIncoming = subscribeToIncomingChatRequests(user.userId);
-    const unsubscribeSent = subscribeToSentChatRequests(user.userId);
-
-    return () => {
-      unsubscribeIncoming();
-      unsubscribeSent();
-    };
-  }, [
-    user?.userId,
-    subscribeToIncomingChatRequests,
-    subscribeToSentChatRequests,
-  ]);
-
-  // Derive pending receiver IDs from sent requests
-  const pendingReceiverIds = useMemo(() => {
-    return new Set(
-      sentChatRequests
-        .filter(req => req.status === 'PENDING')
-        .map(req => req.receiverId)
-    );
-  }, [sentChatRequests]);
 
   // Combine real-time pending requests with optimistic updates
   const combinedPendingRequests = useMemo(() => {
@@ -436,12 +411,6 @@ export default function OnlineUsers({
       return;
     }
 
-    // Optimistic update: immediately remove from incoming requests to prevent flicker
-    const optimisticIncomingRequests = incomingChatRequests.filter(
-      req => req.requesterId !== requesterId
-    );
-    setIncomingChatRequests(optimisticIncomingRequests);
-
     try {
       const result = await chatService.respondToChatRequest(
         chatRequest.id,
@@ -450,8 +419,6 @@ export default function OnlineUsers({
 
       if (result.error) {
         setError(result.error);
-        // Revert optimistic update on error - restore the original request
-        setIncomingChatRequests(incomingChatRequests);
       } else {
         // The real-time subscription will automatically update the UI with the new conversation
         onChatRequestSent();
@@ -459,8 +426,6 @@ export default function OnlineUsers({
     } catch (error) {
       console.error('Error accepting chat request:', error);
       setError('Failed to accept chat request');
-      // Revert optimistic update on error - restore the original request
-      setIncomingChatRequests(incomingChatRequests);
     }
   };
 

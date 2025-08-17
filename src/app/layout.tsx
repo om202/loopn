@@ -5,6 +5,7 @@ import './globals.css';
 import AmplifyProvider from './amplify-provider';
 import { RealtimeProvider } from '@/contexts/RealtimeContext';
 import { AuthProvider } from '@/contexts/AuthContext';
+import { GlobalSubscriptionProvider } from '@/contexts/GlobalSubscriptionContext';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -73,7 +74,11 @@ export default function RootLayout({
       <body className={`${inter.variable} antialiased`}>
         <AmplifyProvider>
           <AuthProvider>
-            <RealtimeProvider>{children}</RealtimeProvider>
+            <RealtimeProvider>
+              <GlobalSubscriptionProvider>
+                {children}
+              </GlobalSubscriptionProvider>
+            </RealtimeProvider>
           </AuthProvider>
         </AmplifyProvider>
       </body>

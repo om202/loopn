@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useSubscriptionStore } from '../stores/subscription-store';
 import type { Schema } from '../../amplify/data/resource';
 
@@ -21,21 +21,12 @@ interface UseConversationsReturn {
 
 export function useConversations({
   userId,
-  enabled,
+  enabled: _enabled,
 }: UseConversationsProps): UseConversationsReturn {
-  const { conversations, loading, errors, subscribeToConversations } =
-    useSubscriptionStore();
+  const { conversations, loading, errors } = useSubscriptionStore();
 
-  // Subscribe to conversations
-  useEffect(() => {
-    if (!enabled || !userId) return;
-
-    const unsubscribe = subscribeToConversations(userId);
-
-    return () => {
-      unsubscribe();
-    };
-  }, [enabled, userId, subscribeToConversations]);
+  // Note: Subscriptions are now managed globally by GlobalSubscriptionProvider
+  // This hook just provides access to the cached data
 
   const isLoading = loading.conversations;
   const error = errors.conversations;

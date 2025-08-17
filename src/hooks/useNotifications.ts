@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useCallback } from 'react';
+import { useMemo, useCallback } from 'react';
 import { useSubscriptionStore } from '../stores/subscription-store';
 import type { Schema } from '../../amplify/data/resource';
 
@@ -18,22 +18,13 @@ interface UseNotificationsReturn {
 }
 
 export function useNotifications({
-  userId,
-  enabled,
+  userId: _userId,
+  enabled: _enabled,
 }: UseNotificationsProps): UseNotificationsReturn {
-  const { notifications, loading, errors, subscribeToNotifications } =
-    useSubscriptionStore();
+  const { notifications, loading, errors } = useSubscriptionStore();
 
-  // Subscribe to notifications
-  useEffect(() => {
-    if (!enabled || !userId) return;
-
-    const unsubscribe = subscribeToNotifications(userId);
-
-    return () => {
-      unsubscribe();
-    };
-  }, [enabled, userId, subscribeToNotifications]);
+  // Note: Subscriptions are now managed globally by GlobalSubscriptionProvider
+  // This hook just provides access to the cached data
 
   const isLoading = loading.notifications;
   const error = errors.notifications;

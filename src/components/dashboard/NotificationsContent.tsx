@@ -11,6 +11,7 @@ import { messageService } from '../../services/message.service';
 import { notificationService } from '../../services/notification.service';
 
 import { useChatRequests } from '../../hooks/useChatRequests';
+import { useNotifications } from '../../hooks/useNotifications';
 import { useSubscriptionStore } from '../../stores/subscription-store';
 
 import NotificationItem from '../notifications/NotificationItem';
@@ -43,14 +44,15 @@ const getDisplayName = (
 export default function NotificationsContent() {
   const { user } = useAuthenticator();
 
-  // Use the subscription store directly for notifications
-  const {
-    notifications: storeNotifications,
-    loading,
-    errors,
-    subscribeToNotifications,
-    fetchUserProfile,
-  } = useSubscriptionStore();
+  // Use centralized hooks for all subscriptions (no direct subscription calls)
+  const { fetchUserProfile } = useSubscriptionStore();
+
+  // Use centralized notifications hook (handles subscriptions internally)
+  const { notifications: storeNotifications, isLoading: notificationsLoading } =
+    useNotifications({
+      userId: user?.userId || '',
+      enabled: !!user?.userId,
+    });
 
   // Use chat requests hook for chat request notifications
   const {
@@ -73,7 +75,7 @@ export default function NotificationsContent() {
 
   // Debug logging to understand the loading issue
   console.log('NotificationsContent Debug:', {
-    'loading.notifications': loading.notifications,
+    notificationsLoading: notificationsLoading,
     chatRequestsLoading: chatRequestsLoading,
     'notifications.length': notifications.length,
     'storeNotifications.length': storeNotifications.length,
@@ -84,13 +86,8 @@ export default function NotificationsContent() {
 
   const router = useRouter();
 
-  // Subscribe to notifications using the store
+  // Set initial load to false after a reasonable timeout (no direct subscription needed)
   useEffect(() => {
-    if (!user?.userId) return;
-
-    const unsubscribe = subscribeToNotifications(user.userId);
-
-    // Set initial load to false after a reasonable timeout
     const timeoutId = setTimeout(() => {
       console.log('Setting initial load to false after timeout');
       setIsInitialLoad(false);
@@ -98,9 +95,8 @@ export default function NotificationsContent() {
 
     return () => {
       clearTimeout(timeoutId);
-      unsubscribe();
     };
-  }, [user?.userId, subscribeToNotifications]);
+  }, []);
 
   // Process chat requests and store notifications into local UI format
   useEffect(() => {
@@ -369,9 +365,9 @@ export default function NotificationsContent() {
     <div className='h-full flex flex-col'>
       {/* Content */}
       <div className='flex-1'>
-        {(error || errors.notifications) && (
+        {error && (
           <div className='p-4 text-b_red-700 bg-b_red-100 mb-4 rounded-2xl'>
-            {error || errors.notifications}
+            {error}
           </div>
         )}
 

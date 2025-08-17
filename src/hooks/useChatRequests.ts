@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useCallback } from 'react';
+import { useMemo, useCallback } from 'react';
 import { useSubscriptionStore } from '../stores/subscription-store';
 import type { Schema } from '../../amplify/data/resource';
 
@@ -34,49 +34,13 @@ interface UseChatRequestsReturn {
 }
 
 export function useChatRequests({
-  userId,
-  enabled,
+  enabled: _enabled,
 }: UseChatRequestsProps): UseChatRequestsReturn {
-  const {
-    incomingChatRequests,
-    sentChatRequests,
-    loading,
-    errors,
-    subscribeToIncomingChatRequests,
-    subscribeToSentChatRequests,
-  } = useSubscriptionStore();
+  const { incomingChatRequests, sentChatRequests, loading, errors } =
+    useSubscriptionStore();
 
-  // Subscribe to incoming chat requests
-  useEffect(() => {
-    if (!enabled || !userId) return;
-
-    console.log(
-      '[useChatRequests] Setting up incoming chat requests subscription'
-    );
-    const unsubscribe = subscribeToIncomingChatRequests(userId);
-
-    return () => {
-      console.log(
-        '[useChatRequests] Cleaning up incoming chat requests subscription'
-      );
-      unsubscribe();
-    };
-  }, [enabled, userId, subscribeToIncomingChatRequests]);
-
-  // Subscribe to sent chat requests
-  useEffect(() => {
-    if (!enabled || !userId) return;
-
-    console.log('[useChatRequests] Setting up sent chat requests subscription');
-    const unsubscribe = subscribeToSentChatRequests(userId);
-
-    return () => {
-      console.log(
-        '[useChatRequests] Cleaning up sent chat requests subscription'
-      );
-      unsubscribe();
-    };
-  }, [enabled, userId, subscribeToSentChatRequests]);
+  // Note: Subscriptions are now managed globally by GlobalSubscriptionProvider
+  // This hook just provides access to the cached data
 
   const isLoadingIncoming = loading.incomingChatRequests;
   const isLoadingSent = loading.sentChatRequests;
