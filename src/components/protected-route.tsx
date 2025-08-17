@@ -22,7 +22,7 @@ export default function ProtectedRoute({
       simplePresenceManager.setOffline().finally(() => {
         simplePresenceManager.cleanup();
       });
-      window.location.href = '/auth';
+      window.location.href = '/';
     }
 
     if (authStatus === 'authenticated' && user) {

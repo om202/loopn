@@ -253,7 +253,26 @@ export default function NotificationItem({
             </div>
 
             {/* Content */}
-            <p className='text-base text-zinc-500'>{notification.content}</p>
+            <div className='flex items-center gap-2'>
+              {(() => {
+                const content = notification.content;
+                const moreMatch = content.match(/^(.*?)\s*\(\+(\d+)\s+more\)$/);
+                
+                if (moreMatch) {
+                  const [, baseContent, count] = moreMatch;
+                  return (
+                    <>
+                      <p className='text-base text-zinc-500'>{baseContent}</p>
+                      <span className='inline-flex items-center px-2 py-1 text-xs font-medium bg-brand-50 text-brand-600 rounded-full'>
+                        +{count} more
+                      </span>
+                    </>
+                  );
+                }
+                
+                return <p className='text-base text-zinc-500'>{content}</p>;
+              })()}
+            </div>
           </div>
         </div>
 
