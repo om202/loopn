@@ -820,6 +820,91 @@ export class ChatService {
     }
   }
 
+  async getAcceptedConnectionForConversation(
+    conversationId: string
+  ): Promise<DataResult<UserConnection>> {
+    try {
+      const result = await getClient().models.UserConnection.list({
+        filter: {
+          conversationId: { eq: conversationId },
+          status: { eq: 'ACCEPTED' },
+        },
+      });
+
+      const acceptedConnection = result.data?.[0] || null;
+
+      return {
+        data: acceptedConnection,
+        error: null,
+      };
+    } catch (error) {
+      return {
+        data: null,
+        error:
+          error instanceof Error
+            ? error.message
+            : 'Failed to get accepted connection',
+      };
+    }
+  }
+
+  async removeConnection(
+    conversationId: string
+  ): Promise<
+    DataResult<{ connection: UserConnection; conversation: Conversation }>
+  > {
+    try {
+      // First, find the accepted connection for this conversation
+      const connectionResult =
+        await this.getAcceptedConnectionForConversation(conversationId);
+
+      if (!connectionResult.data) {
+        return {
+          data: null,
+          error: 'No accepted connection found for this conversation',
+        };
+      }
+
+      const connection = connectionResult.data;
+
+      // Delete the connection record
+      await getClient().models.UserConnection.delete({
+        id: connection.id,
+      });
+
+      // Update the conversation to remove the permanent connection status
+      const conversationResult = await getClient().models.Conversation.update({
+        id: conversationId,
+        isConnected: false,
+        chatStatus: 'ENDED', // End the chat when connection is removed
+        endedAt: new Date().toISOString(),
+      });
+
+      if (!conversationResult.data) {
+        return {
+          data: null,
+          error: 'Failed to update conversation after removing connection',
+        };
+      }
+
+      return {
+        data: {
+          connection,
+          conversation: conversationResult.data,
+        },
+        error: null,
+      };
+    } catch (error) {
+      return {
+        data: null,
+        error:
+          error instanceof Error
+            ? error.message
+            : 'Failed to remove connection',
+      };
+    }
+  }
+
   async getConnectionRequestsByUser(
     userId: string
   ): Promise<DataResult<UserConnection[]>> {

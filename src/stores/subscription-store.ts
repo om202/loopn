@@ -124,6 +124,11 @@ interface SubscriptionState {
     conversationId: string,
     connectionId: string
   ) => void;
+  updateConversationConnectionStatus: (
+    conversationId: string,
+    isConnected: boolean,
+    chatStatus?: 'ACTIVE' | 'PROBATION' | 'ENDED'
+  ) => void;
 
   // Debug helpers
   getStats: () => {
@@ -481,6 +486,33 @@ export const useSubscriptionStore = create<SubscriptionState>()(
               filteredRequests
             ),
           };
+        });
+      },
+
+      updateConversationConnectionStatus: (
+        conversationId: string,
+        isConnected: boolean,
+        chatStatus?: 'ACTIVE' | 'PROBATION' | 'ENDED'
+      ) => {
+        set(state => {
+          const conversation = state.conversations.get(conversationId);
+          if (conversation) {
+            const updatedConversation = {
+              ...conversation,
+              isConnected,
+              ...(chatStatus && { chatStatus }),
+              ...(chatStatus === 'ENDED' && {
+                endedAt: new Date().toISOString(),
+              }),
+            };
+            return {
+              conversations: new Map(state.conversations).set(
+                conversationId,
+                updatedConversation
+              ),
+            };
+          }
+          return state;
         });
       },
 

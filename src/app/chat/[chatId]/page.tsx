@@ -58,6 +58,7 @@ export default function ChatPage({ params }: ChatPageProps) {
   const {
     sendConnectionRequest,
     cancelConnectionRequest,
+    removeConnection,
     isLoading: sendingConnectionRequest,
     error: connectionError,
   } = useConnectionActions({
@@ -289,6 +290,28 @@ export default function ChatPage({ params }: ChatPageProps) {
     router.push('/dashboard');
   }, [router]);
 
+  const handleRemoveConnection = useCallback(async () => {
+    if (!user || !conversation || sendingConnectionRequest) {
+      return;
+    }
+
+    await removeConnection();
+
+    if (connectionError) {
+      setError(connectionError);
+    } else {
+      // After removing connection, navigate back to dashboard
+      router.push('/dashboard');
+    }
+  }, [
+    user,
+    conversation,
+    sendingConnectionRequest,
+    removeConnection,
+    connectionError,
+    router,
+  ]);
+
   if (error) {
     return (
       <ProtectedRoute requireOnboarding={true}>
@@ -335,6 +358,7 @@ export default function ChatPage({ params }: ChatPageProps) {
                 onSendConnectionRequest={handleSendConnectionRequest}
                 onCancelConnectionRequest={handleCancelConnectionRequest}
                 onReconnect={handleReconnect}
+                onRemoveConnection={handleRemoveConnection}
               />
             </div>
           </div>

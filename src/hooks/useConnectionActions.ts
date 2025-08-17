@@ -15,6 +15,7 @@ interface UseConnectionActionsReturn {
     status: 'ACCEPTED' | 'REJECTED'
   ) => Promise<void>;
   cancelConnectionRequest: (connectionId: string) => Promise<void>;
+  removeConnection: () => Promise<void>;
   isLoading: boolean;
   error: string | null;
 }
@@ -26,7 +27,8 @@ export function useConnectionActions({
 }: UseConnectionActionsProps): UseConnectionActionsReturn {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { removeConnectionRequest } = useSubscriptionStore();
+  const { removeConnectionRequest, updateConversationConnectionStatus } =
+    useSubscriptionStore();
 
   const sendConnectionRequest = useCallback(async () => {
     if (!conversationId || !currentUserId || !otherUserId) {
@@ -122,10 +124,40 @@ export function useConnectionActions({
     [conversationId, removeConnectionRequest]
   );
 
+  const removeConnection = useCallback(async () => {
+    if (!conversationId) {
+      setError('Missing conversation ID to remove connection');
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      // Optimistically update the store immediately for instant UI update
+      updateConversationConnectionStatus(conversationId, false, 'ENDED');
+
+      const result = await chatService.removeConnection(conversationId);
+
+      if (result.error) {
+        setError(result.error);
+        // If there's an error, we could revert the optimistic update here if needed
+      }
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : 'Failed to remove connection'
+      );
+      // If there's an error, we could revert the optimistic update here if needed
+    } finally {
+      setIsLoading(false);
+    }
+  }, [conversationId, updateConversationConnectionStatus]);
+
   return {
     sendConnectionRequest,
     respondToConnectionRequest,
     cancelConnectionRequest,
+    removeConnection,
     isLoading,
     error,
   };

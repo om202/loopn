@@ -9,6 +9,7 @@ import {
   Info,
   LogOut,
 } from 'lucide-react';
+import { useAuthenticator } from '@aws-amplify/ui-react';
 import Image from 'next/image';
 import UserAvatar from './UserAvatar';
 import Tooltip from './Tooltip';
@@ -20,7 +21,9 @@ import {
   ProfileDetails_Shimmer,
 } from './ShimmerLoader/exports';
 import { useRealtimeConnectionRequests } from '../hooks/realtime/useRealtimeConnectionRequests';
+import { useConnectionActions } from '../hooks/useConnectionActions';
 import CancelConnectionRequestDialog from './CancelConnectionRequestDialog';
+import RemoveConnectionDialog from './RemoveConnectionDialog';
 
 import type { Schema } from '../../amplify/data/resource';
 
@@ -49,6 +52,7 @@ interface ProfileSidebarProps {
   onSendConnectionRequest?: () => void;
   onCancelConnectionRequest?: (connectionId: string) => void;
   onReconnect?: () => void;
+  onRemoveConnection?: () => void;
 }
 
 export default function ProfileSidebar({
@@ -70,13 +74,24 @@ export default function ProfileSidebar({
   onSendConnectionRequest,
   onCancelConnectionRequest,
   onReconnect,
+  onRemoveConnection,
 }: ProfileSidebarProps) {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [profileLoading, setProfileLoading] = useState(false);
   const [showEndChatDialog, setShowEndChatDialog] = useState(false);
   const [showCancelRequestDialog, setShowCancelRequestDialog] = useState(false);
+  const [showRemoveConnectionDialog, setShowRemoveConnectionDialog] =
+    useState(false);
   const [optimisticRequestSent, setOptimisticRequestSent] = useState(false);
   const { fetchUserProfile } = useSubscriptionStore();
+  const { user } = useAuthenticator();
+
+  // Connection actions hook for removing connections
+  const connectionActions = useConnectionActions({
+    conversationId: conversation?.id || '',
+    currentUserId: user?.userId || '',
+    otherUserId: userId,
+  });
 
   // Get real-time connection requests for this conversation
   const {
@@ -122,6 +137,20 @@ export default function ProfileSidebar({
       setOptimisticRequestSent(false);
     } catch (error) {
       console.error('Failed to cancel connection request:', error);
+    }
+  };
+
+  // Handle remove connection
+  const handleRemoveConnection = async () => {
+    if (!conversation?.id || !user?.userId) return;
+
+    try {
+      await connectionActions.removeConnection();
+      setShowRemoveConnectionDialog(false);
+      // Optionally call the parent's onRemoveConnection callback
+      onRemoveConnection?.();
+    } catch (error) {
+      console.error('Failed to remove connection:', error);
     }
   };
 
@@ -308,16 +337,21 @@ export default function ProfileSidebar({
           {/* Connection Status */}
           {conversation.isConnected && (
             <div className='flex items-center justify-center text-sm text-zinc-500 mb-3'>
-              <svg
-                className='w-4 h-4 mr-2'
-                viewBox='30 30 160 160'
-                xmlns='http://www.w3.org/2000/svg'
+              <button
+                onClick={() => setShowRemoveConnectionDialog(true)}
+                className='flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-zinc-50 transition-colors'
               >
-                <circle cx='110' cy='110' r='80' fill='#D9D9D9' />
-                <circle cx='75' cy='110' r='35' fill='#0099fc' />
-                <circle cx='145' cy='110' r='35' fill='#0099fc' />
-              </svg>
-              <span className='font-medium'>Connected</span>
+                <svg
+                  className='w-4 h-4'
+                  viewBox='30 30 160 160'
+                  xmlns='http://www.w3.org/2000/svg'
+                >
+                  <circle cx='110' cy='110' r='80' fill='#D9D9D9' />
+                  <circle cx='75' cy='110' r='35' fill='#0099fc' />
+                  <circle cx='145' cy='110' r='35' fill='#0099fc' />
+                </svg>
+                <span className='font-medium'>Connected</span>
+              </button>
             </div>
           )}
 
@@ -624,6 +658,15 @@ export default function ProfileSidebar({
         onClose={() => setShowCancelRequestDialog(false)}
         onConfirm={handleCancelRequest}
         isLoading={false} // We can add loading state later if needed
+      />
+
+      {/* Remove Connection Dialog */}
+      <RemoveConnectionDialog
+        isOpen={showRemoveConnectionDialog}
+        onClose={() => setShowRemoveConnectionDialog(false)}
+        onConfirm={handleRemoveConnection}
+        isLoading={connectionActions?.isLoading || false}
+        userName={getUserDisplayName()}
       />
     </div>
   );
