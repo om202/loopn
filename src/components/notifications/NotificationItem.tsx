@@ -1,7 +1,6 @@
 'use client';
 
 import { useAuthenticator } from '@aws-amplify/ui-react';
-import { CheckCircle2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 import { notificationService } from '../../services/notification.service';
@@ -65,7 +64,17 @@ const getNotificationIcon = (type: string | null) => {
         </svg>
       );
     case 'connection':
-      return <CheckCircle2 className='w-6 h-6 text-b_green-500' />;
+      return (
+        <svg
+          className='w-6 h-6'
+          viewBox='30 30 160 160'
+          xmlns='http://www.w3.org/2000/svg'
+        >
+          <circle cx='110' cy='110' r='80' fill='#D9D9D9' />
+          <circle cx='75' cy='110' r='35' fill='#0099fc' />
+          <circle cx='145' cy='110' r='35' fill='#0099fc' />
+        </svg>
+      );
     case 'system':
       return (
         <svg
@@ -367,11 +376,11 @@ export default function NotificationItem({
             </>
           ) : notification.type === 'connection' ? (
             <>
-              {/* Check if this is an incoming connection request that needs response */}
-              {notification.data &&
-              'connectionRequestId' in notification.data &&
-              notification.title === 'Connection Request' &&
-              onRespondToConnectionRequest ? (
+                            {/* Check if this is an incoming connection request that needs response */}
+              {notification.data && 
+               'connectionRequestId' in notification.data && 
+               notification.title === 'Connect' &&
+               onRespondToConnectionRequest ? (
                 <>
                   <button
                     onClick={async e => {

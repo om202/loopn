@@ -676,8 +676,8 @@ export class ChatService {
           await notificationService.createNotification(
             receiverId,
             'connection',
-            'Connection Request',
-            `${requesterName} wants to connect with you`,
+            'Connect',
+            `${requesterName} wants to connect you on Loopn`,
             {
               connectionRequestId: result.data.id,
               requesterId,

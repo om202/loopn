@@ -71,6 +71,7 @@ export default function ProfileSidebar({
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [profileLoading, setProfileLoading] = useState(false);
   const [showEndChatDialog, setShowEndChatDialog] = useState(false);
+  const [optimisticRequestSent, setOptimisticRequestSent] = useState(false);
   const { fetchUserProfile } = useSubscriptionStore();
 
   // Get real-time connection requests for this conversation
@@ -265,9 +266,17 @@ export default function ProfileSidebar({
         <div className='px-6 pb-4 border-b border-zinc-100'>
           {/* Connection Status */}
           {conversation.isConnected && (
-            <div className='flex items-center text-sm text-b_green-500 mb-3'>
-              <CheckCircle2 className='w-4 h-4 mr-2' />
-              <span className='font-medium'>Connected - Chat forever!</span>
+            <div className='flex items-center justify-center text-sm text-zinc-500 mb-3'>
+              <svg
+                className='w-4 h-4 mr-2'
+                viewBox='30 30 160 160'
+                xmlns='http://www.w3.org/2000/svg'
+              >
+                <circle cx='110' cy='110' r='80' fill='#D9D9D9' />
+                <circle cx='75' cy='110' r='35' fill='#0099fc' />
+                <circle cx='145' cy='110' r='35' fill='#0099fc' />
+              </svg>
+              <span className='font-medium'>Connected</span>
             </div>
           )}
 
@@ -299,8 +308,16 @@ export default function ProfileSidebar({
                 {/* Connect Button */}
                 <div className='flex justify-center'>
                   {hasAcceptedConnection ? (
-                    <div className='px-6 py-2 text-sm font-medium rounded-lg border flex items-center justify-center gap-2 bg-green-50 text-green-600 border-green-200'>
-                      <CheckCircle2 className='w-4 h-4' />
+                    <div className='px-6 py-2 text-sm font-medium rounded-lg border border-zinc-200 flex items-center justify-center gap-2 text-zinc-500'>
+                      <svg
+                        className='w-4 h-4'
+                        viewBox='30 30 160 160'
+                        xmlns='http://www.w3.org/2000/svg'
+                      >
+                        <circle cx='110' cy='110' r='80' fill='#D9D9D9' />
+                        <circle cx='75' cy='110' r='35' fill='#0099fc' />
+                        <circle cx='145' cy='110' r='35' fill='#0099fc' />
+                      </svg>
                       <span>Connected</span>
                     </div>
                   ) : pendingRequest ? (
