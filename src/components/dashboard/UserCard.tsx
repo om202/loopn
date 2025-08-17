@@ -154,8 +154,8 @@ export default function UserCard({
       key={userPresence.userId}
       onClick={handleCardClick}
       className={`px-3 py-2 group transition-all duration-200 cursor-pointer ${
-        isSelected 
-          ? 'bg-brand-50 rounded-2xl border border-brand-200' 
+        isSelected
+          ? 'bg-brand-50 rounded-2xl border border-brand-200'
           : 'bg-white hover:bg-zinc-50 hover:rounded-2xl border border-transparent border-b-zinc-100 last:border-b-0'
       }`}
     >
@@ -210,9 +210,11 @@ export default function UserCard({
                 userPresence.userId
               );
               return (
-                <div className={`flex items-center justify-center w-[40px] h-[40px] md:w-auto md:h-auto md:min-w-[70px] rounded-xl border border-brand-100 md:px-2.5 md:py-2 ${
-                  isSelected ? 'bg-white' : 'bg-brand-50'
-                }`}>
+                <div
+                  className={`flex items-center justify-center w-[40px] h-[40px] md:w-auto md:h-auto md:min-w-[70px] rounded-xl border border-brand-100 md:px-2.5 md:py-2 ${
+                    isSelected ? 'bg-white' : 'bg-brand-50'
+                  }`}
+                >
                   <div
                     className='text-zinc-500 flex flex-col items-center gap-0.5 md:text-right'
                     title={`Reconnect in ${timeRemaining}`}
@@ -266,7 +268,7 @@ export default function UserCard({
                 className={`px-2 py-1.5 text-base font-medium rounded-xl border transition-colors flex items-center justify-center flex-shrink-0 w-[40px] h-[40px] md:w-auto md:h-auto md:gap-1.5 md:min-w-[44px] ${
                   incomingRequestSenderIds.has(userPresence.userId)
                     ? 'bg-brand-500 text-white border-brand-500 hover:bg-brand-600 hover:border-brand-600'
-                    : isSelected 
+                    : isSelected
                       ? 'bg-white text-brand-500 border-brand-100 hover:bg-brand-100 hover:border-brand-200'
                       : 'bg-brand-50 text-brand-500 border-brand-100 hover:bg-brand-100 hover:border-brand-200'
                 }`}
