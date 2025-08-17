@@ -54,20 +54,28 @@ export const handler = async (event: any): Promise<SearchResponse> => {
 
     switch (request.action) {
       case 'search_users':
-        return await searchUsers(
-          request.query!,
-          request.limit || 10,
-          request.filters
-        );
+        const filters =
+          request.filters && typeof request.filters === 'string'
+            ? JSON.parse(request.filters)
+            : request.filters;
+        return await searchUsers(request.query!, request.limit || 10, filters);
 
       case 'index_user':
-        return await indexUser(request.userId!, request.userProfile!);
+        const userProfile =
+          typeof request.userProfile === 'string'
+            ? JSON.parse(request.userProfile)
+            : request.userProfile;
+        return await indexUser(request.userId!, userProfile);
 
       case 'get_user':
         return await getUser(request.userId!);
 
       case 'update_user':
-        return await updateUser(request.userId!, request.userProfile!);
+        const updateUserProfile =
+          typeof request.userProfile === 'string'
+            ? JSON.parse(request.userProfile)
+            : request.userProfile;
+        return await updateUser(request.userId!, updateUserProfile);
 
       case 'delete_user':
         return await deleteUser(request.userId!);
@@ -169,16 +177,16 @@ async function initializeIndex(): Promise<SearchResponse> {
         index: USER_INDEX,
         body: indexMapping,
       });
-
-      console.log(`Created index: ${USER_INDEX}`);
-    } else {
-      console.log(`Index ${USER_INDEX} already exists`);
     }
 
     return { success: true };
   } catch (error) {
     console.error('Failed to initialize index:', error);
-    throw error;
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error.message : 'Failed to initialize index',
+    };
   }
 }
 
@@ -279,6 +287,21 @@ async function searchUsers(
     };
   } catch (error) {
     console.error('Search failed:', error);
+
+    // Handle index not found error specifically
+    if (
+      error instanceof Error &&
+      error.message.includes('index_not_found_exception')
+    ) {
+      return {
+        success: true,
+        results: [],
+        total: 0,
+        error:
+          'Index not initialized yet. Please run index initialization first.',
+      };
+    }
+
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Search failed',
@@ -312,12 +335,19 @@ async function indexUser(
   };
 
   try {
-    // Use document ID for efficient upsert (no expensive deleteByQuery needed)
+    // OpenSearch Serverless doesn't support custom document IDs
+    // Store userId in the document body instead
     await client.index({
       index: USER_INDEX,
-      id: userId, // Use userId as document ID for efficient upsert
       body: document,
     });
+
+    // Force index refresh to make documents immediately searchable
+    try {
+      await client.indices.refresh({ index: USER_INDEX });
+    } catch {
+      // Continue even if refresh fails
+    }
 
     return { success: true };
   } catch (error) {
@@ -378,11 +408,24 @@ async function updateUser(
   };
 
   try {
-    // Use document ID for efficient update (no expensive deleteByQuery needed)
+    // OpenSearch Serverless doesn't support custom document IDs
+    // First delete existing documents for this user
+    await client.deleteByQuery({
+      index: USER_INDEX,
+      body: {
+        query: {
+          term: { userId: userId },
+        },
+      },
+    });
+
+    // Then create new document with updated data
     await client.index({
       index: USER_INDEX,
-      id: userId, // Use userId as document ID for efficient upsert
-      body: updateDoc,
+      body: {
+        userId,
+        ...updateDoc,
+      },
     });
 
     return { success: true };
@@ -395,10 +438,15 @@ async function updateUser(
 // Delete a user
 async function deleteUser(userId: string): Promise<SearchResponse> {
   try {
-    // Use document ID for efficient deletion
-    await client.delete({
+    // OpenSearch Serverless doesn't support custom document IDs
+    // Use deleteByQuery to remove documents by userId
+    await client.deleteByQuery({
       index: USER_INDEX,
-      id: userId, // Use userId as document ID
+      body: {
+        query: {
+          term: { userId: userId },
+        },
+      },
     });
 
     return { success: true };

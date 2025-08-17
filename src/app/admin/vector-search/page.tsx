@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   OpenSearchService,
   SearchResponse,
@@ -8,8 +8,8 @@ import {
 } from '../../../services/opensearch.service';
 import { generateClient } from 'aws-amplify/data';
 import type { Schema } from '../../../../amplify/data/resource';
-
-const client = generateClient<Schema>();
+import { Amplify } from 'aws-amplify';
+import amplifyConfig from '../../../../amplify_outputs.json';
 
 interface IndexingResult {
   success: boolean;
@@ -35,21 +35,38 @@ export default function VectorSearchAdminPage() {
   const [testQuery, setTestQuery] = useState('');
   const [testResults, setTestResults] = useState<SearchResponse | null>(null);
   const [isTestingSearch, setIsTestingSearch] = useState(false);
+  const [client, setClient] = useState<ReturnType<
+    typeof generateClient<Schema>
+  > | null>(null);
 
   // Simple admin check - in production, you'd want proper admin authorization
   const isAdmin = true; // TODO: Implement proper admin authorization
 
+  // Initialize Amplify and client
+  useEffect(() => {
+    try {
+      Amplify.configure(amplifyConfig);
+      const amplifyClient = generateClient<Schema>();
+      setClient(amplifyClient);
+    } catch (error) {
+      console.error('Failed to configure Amplify:', error);
+    }
+  }, []);
+
   const handleIndexUsers = async () => {
+    if (!client) {
+      console.error('Client not initialized yet');
+      return;
+    }
+
     setIsIndexing(true);
     setIndexingResult(null);
 
     try {
       // First initialize the OpenSearch index
-      console.log('Initializing OpenSearch index...');
       await OpenSearchService.initializeIndex();
 
       // Then migrate all users
-      console.log('Starting user migration...');
       let migrated = 0;
       let failed = 0;
       const errors: string[] = [];
@@ -66,27 +83,42 @@ export default function VectorSearchAdminPage() {
             for (const user of response.data) {
               try {
                 if (user.isOnboardingComplete) {
-                  await OpenSearchService.indexUser(user.userId, {
-                    userId: user.userId,
-                    fullName: user.fullName ?? undefined,
-                    jobRole: user.jobRole ?? undefined,
-                    companyName: user.companyName ?? undefined,
-                    industry: user.industry ?? undefined,
-                    yearsOfExperience: user.yearsOfExperience ?? undefined,
-                    education: user.education ?? undefined,
-                    about: user.about ?? undefined,
-                    interests:
-                      user.interests?.filter(
-                        (item): item is string => item !== null
-                      ) ?? undefined,
-                    skills:
-                      user.skills?.filter(
-                        (item): item is string => item !== null
-                      ) ?? undefined,
-                    profilePictureUrl: user.profilePictureUrl ?? undefined,
-                    isOnboardingComplete: user.isOnboardingComplete,
-                  });
-                  migrated++;
+                  const indexResult = await OpenSearchService.indexUser(
+                    user.userId,
+                    {
+                      userId: user.userId,
+                      fullName: user.fullName ?? undefined,
+                      jobRole: user.jobRole ?? undefined,
+                      companyName: user.companyName ?? undefined,
+                      industry: user.industry ?? undefined,
+                      yearsOfExperience: user.yearsOfExperience ?? undefined,
+                      education: user.education ?? undefined,
+                      about: user.about ?? undefined,
+                      interests:
+                        user.interests?.filter(
+                          (item): item is string => item !== null
+                        ) ?? undefined,
+                      skills:
+                        user.skills?.filter(
+                          (item): item is string => item !== null
+                        ) ?? undefined,
+                      profilePictureUrl: user.profilePictureUrl ?? undefined,
+                      isOnboardingComplete: user.isOnboardingComplete,
+                    }
+                  );
+
+                  if (indexResult.success) {
+                    migrated++;
+                  } else {
+                    failed++;
+                    errors.push(
+                      `Failed to index ${user.userId}: ${indexResult.error}`
+                    );
+                  }
+                } else {
+                  console.log(
+                    `Skipping user ${user.userId} - onboarding not complete`
+                  );
                 }
               } catch (error) {
                 failed++;
@@ -125,11 +157,15 @@ export default function VectorSearchAdminPage() {
   };
 
   const handleCheckStatus = async () => {
+    if (!client) {
+      console.error('Client not initialized yet');
+      return;
+    }
+
     setIsLoadingStatus(true);
     setStatusError(null);
     try {
       // Count total users in DynamoDB
-      console.log('Counting users in DynamoDB...');
       const totalResponse = await client.models.UserProfile.list({
         filter: {
           isOnboardingComplete: {
@@ -138,31 +174,20 @@ export default function VectorSearchAdminPage() {
         },
       });
       const totalUsers = totalResponse.data?.length || 0;
-      console.log('Total users in DynamoDB:', totalUsers);
 
       // Test search to see how many are in OpenSearch
-      // Use empty string instead of '*' for match_all query
-      console.log('Checking indexed users in OpenSearch...');
       const searchResponse = await OpenSearchService.searchUsers('', 1000);
-      console.log('OpenSearch response:', searchResponse);
 
       let migratedUsers = 0;
       if (searchResponse.success) {
         migratedUsers =
           searchResponse.total || searchResponse.results?.length || 0;
       } else {
-        console.error('OpenSearch query failed:', searchResponse.error);
         setStatusError(`OpenSearch query failed: ${searchResponse.error}`);
         migratedUsers = 0;
       }
 
       const pendingUsers = Math.max(0, totalUsers - migratedUsers);
-
-      console.log('Status calculated:', {
-        totalUsers,
-        migratedUsers,
-        pendingUsers,
-      });
 
       setStatus({
         totalUsers,
@@ -191,9 +216,7 @@ export default function VectorSearchAdminPage() {
     setTestResults(null);
 
     try {
-      console.log('Testing OpenSearch intelligent search...');
       const searchResult = await OpenSearchService.searchUsers(testQuery, 10);
-      console.log('Frontend received search result:', searchResult);
       setTestResults(searchResult);
     } catch (error) {
       console.error('Error testing search:', error);
@@ -211,10 +234,8 @@ export default function VectorSearchAdminPage() {
     setTestResults(null);
 
     try {
-      console.log('Testing search to see all indexed users...');
       // Use empty string for match_all query instead of '*'
       const searchResult = await OpenSearchService.searchUsers('', 50);
-      console.log('All indexed users search result:', searchResult);
       setTestResults(searchResult);
     } catch (error) {
       console.error('Error testing search for all users:', error);
@@ -264,10 +285,14 @@ export default function VectorSearchAdminPage() {
                 </h2>
                 <button
                   onClick={handleCheckStatus}
-                  disabled={isLoadingStatus}
+                  disabled={isLoadingStatus || !client}
                   className='px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50'
                 >
-                  {isLoadingStatus ? 'Loading...' : 'Check Status'}
+                  {isLoadingStatus
+                    ? 'Loading...'
+                    : !client
+                      ? 'Initializing...'
+                      : 'Check Status'}
                 </button>
               </div>
 
@@ -328,12 +353,14 @@ export default function VectorSearchAdminPage() {
 
               <button
                 onClick={handleIndexUsers}
-                disabled={isIndexing}
+                disabled={isIndexing || !client}
                 className='px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50'
               >
                 {isIndexing
                   ? 'Migrating Users...'
-                  : 'Migrate All Users to OpenSearch'}
+                  : !client
+                    ? 'Initializing...'
+                    : 'Migrate All Users to OpenSearch'}
               </button>
 
               {indexingResult && (
@@ -390,17 +417,25 @@ export default function VectorSearchAdminPage() {
                 />
                 <button
                   onClick={handleTestSearch}
-                  disabled={isTestingSearch || !testQuery.trim()}
+                  disabled={isTestingSearch || !testQuery.trim() || !client}
                   className='px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50'
                 >
-                  {isTestingSearch ? 'Searching...' : 'Test Search'}
+                  {isTestingSearch
+                    ? 'Searching...'
+                    : !client
+                      ? 'Initializing...'
+                      : 'Test Search'}
                 </button>
                 <button
                   onClick={handleTestWildcardSearch}
-                  disabled={isTestingSearch}
+                  disabled={isTestingSearch || !client}
                   className='px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50'
                 >
-                  {isTestingSearch ? 'Searching...' : 'Show All Indexed'}
+                  {isTestingSearch
+                    ? 'Searching...'
+                    : !client
+                      ? 'Initializing...'
+                      : 'Show All Indexed'}
                 </button>
               </div>
 

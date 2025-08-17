@@ -1,7 +1,15 @@
 import { generateClient } from 'aws-amplify/data';
 import type { Schema } from '../../amplify/data/resource';
 
-const client = generateClient<Schema>();
+// Lazy client generation to avoid Amplify configuration issues
+let client: ReturnType<typeof generateClient<Schema>> | null = null;
+
+function getClient() {
+  if (!client) {
+    client = generateClient<Schema>();
+  }
+  return client;
+}
 
 export interface SearchFilters {
   industry?: string;
@@ -49,7 +57,7 @@ export class OpenSearchService {
     filters?: SearchFilters
   ): Promise<SearchResponse> {
     try {
-      const response = await client.queries.searchUsers({
+      const response = await getClient().queries.searchUsers({
         action: 'search_users',
         query: query.trim(),
         limit,
@@ -81,7 +89,7 @@ export class OpenSearchService {
     userProfile: UserProfile
   ): Promise<SearchResponse> {
     try {
-      const response = await client.queries.searchUsers({
+      const response = await getClient().queries.searchUsers({
         action: 'index_user',
         userId,
         userProfile: JSON.stringify(userProfile),
@@ -111,7 +119,7 @@ export class OpenSearchService {
     userProfile: UserProfile
   ): Promise<SearchResponse> {
     try {
-      const response = await client.queries.searchUsers({
+      const response = await getClient().queries.searchUsers({
         action: 'update_user',
         userId,
         userProfile: JSON.stringify(userProfile),
@@ -138,7 +146,7 @@ export class OpenSearchService {
    */
   static async getUser(userId: string): Promise<SearchResponse> {
     try {
-      const response = await client.queries.searchUsers({
+      const response = await getClient().queries.searchUsers({
         action: 'get_user',
         userId,
       });
@@ -164,7 +172,7 @@ export class OpenSearchService {
    */
   static async deleteUser(userId: string): Promise<SearchResponse> {
     try {
-      const response = await client.queries.searchUsers({
+      const response = await getClient().queries.searchUsers({
         action: 'delete_user',
         userId,
       });
@@ -190,7 +198,7 @@ export class OpenSearchService {
    */
   static async initializeIndex(): Promise<SearchResponse> {
     try {
-      const response = await client.queries.searchUsers({
+      const response = await getClient().queries.searchUsers({
         action: 'initialize_index',
       });
 
