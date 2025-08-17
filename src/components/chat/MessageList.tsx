@@ -404,7 +404,7 @@ export default function MessageList({
               No messages yet
             </h3>
             <p className='text-zinc-500 max-w-sm'>
-              Send your first message to begin chatting.
+              Send your first message
             </p>
           </div>
           <div ref={messagesEndRef} />

@@ -8,7 +8,7 @@ interface LoadingContainerProps {
 
 export default function LoadingContainer({
   className = '',
-  size = 'md',
+  size = 'lg',
   variant = 'spin',
 }: LoadingContainerProps) {
   const getSizeClasses = () => {
