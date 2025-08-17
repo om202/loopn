@@ -240,13 +240,11 @@ export default function UserCard({
             // Handle pending request state differently - show as status text with clickable tick icon
             if (pendingRequests.has(userPresence.userId)) {
               return (
-                <div className='flex items-center gap-1.5 px-2 py-1.5 text-sm text-zinc-500'>
+                <div className='flex items-center gap-1 px-2 py-1.5 text-sm text-zinc-500'>
                   {/* Clickable Tick Icon for Cancel */}
                   <button
                     onClick={() => setShowCancelDialog(true)}
-                    className={`hover:bg-zinc-100 rounded transition-colors p-0.5 ${
-                      isSelected ? 'bg-white' : 'bg-brand-50'
-                    }`}
+                    className={`hover:bg-zinc-100 rounded transition-colors p-0.5`}
                     title='Cancel Request'
                   >
                     <CheckCircle2 className='w-4 h-4 text-zinc-500 flex-shrink-0' />

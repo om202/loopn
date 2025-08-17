@@ -7,6 +7,7 @@ import { formatPresenceTime } from '../../lib/presence-utils';
 
 import UserCard from './UserCard';
 import SearchSectionContent from './SearchSectionContent';
+import LoadingContainer from '../LoadingContainer';
 
 type UserPresence = Schema['UserPresence']['type'];
 type Conversation = Schema['Conversation']['type'];
@@ -19,6 +20,7 @@ interface DashboardSectionContentProps {
   activeChatTrialUsers: UserPresence[];
   endedChatTrialUsers: UserPresence[];
   suggestedUsers: UserPresence[];
+  suggestedUsersLoading?: boolean;
   existingConversations: Map<string, Conversation>;
   pendingRequests: Set<string>;
   incomingRequestSenderIds: Set<string>;
@@ -46,6 +48,7 @@ export default function DashboardSectionContent({
   activeChatTrialUsers,
   endedChatTrialUsers,
   suggestedUsers,
+  suggestedUsersLoading = false,
   existingConversations,
   pendingRequests,
   incomingRequestSenderIds,
@@ -258,6 +261,15 @@ export default function DashboardSectionContent({
         onAcceptChatRequest={onAcceptChatRequest}
         setOptimisticPendingRequests={setOptimisticPendingRequests}
       />
+    );
+  }
+
+  // Show loading state for suggested users
+  if (activeSection === 'suggested' && suggestedUsersLoading) {
+    return (
+      <div className='flex items-center justify-center h-full'>
+        <LoadingContainer/>
+      </div>
     );
   }
 

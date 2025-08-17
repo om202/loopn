@@ -296,6 +296,8 @@ export default function OnlineUsers({
     []
   );
   const [suggestedUsers, setSuggestedUsers] = useState<UserPresence[]>([]);
+  const [suggestedUsersLoading, setSuggestedUsersLoading] = useState(true);
+  const [lastSuggestedUsersLoad, setLastSuggestedUsersLoad] = useState<number>(0);
 
   useEffect(() => {
     if (!user) {
@@ -347,17 +349,28 @@ export default function OnlineUsers({
     });
   }, [pendingReceiverIds]);
 
-  // Load all users for suggested section
+  // Load all users for suggested section with caching
   useEffect(() => {
     if (!user) {
       return;
     }
 
     const loadSuggestedUsers = async () => {
+      const now = Date.now();
+      const cacheExpiry = 2 * 60 * 1000; // 2 minutes cache
+      
+      // If we have cached data that's less than 2 minutes old, don't reload
+      if (lastSuggestedUsersLoad && (now - lastSuggestedUsersLoad) < cacheExpiry && suggestedUsers.length > 0) {
+        setSuggestedUsersLoading(false);
+        return;
+      }
+
+      setSuggestedUsersLoading(true);
       try {
         const result = await userPresenceService.getAllUsers();
         if (result.error) {
           console.error('Error loading suggested users:', result.error);
+          setSuggestedUsersLoading(false);
           return;
         }
 
@@ -366,13 +379,16 @@ export default function OnlineUsers({
           u => u?.userId && u.userId !== user.userId
         );
         setSuggestedUsers(filteredUsers);
+        setLastSuggestedUsersLoad(now);
+        setSuggestedUsersLoading(false);
       } catch (error) {
         console.error('Error loading suggested users:', error);
+        setSuggestedUsersLoading(false);
       }
     };
 
     loadSuggestedUsers();
-  }, [user]);
+  }, [user, lastSuggestedUsersLoad, suggestedUsers.length]);
 
   useEffect(() => {
     const combinedUsers = [...onlineUsers];
@@ -678,6 +694,7 @@ export default function OnlineUsers({
                 activeChatTrialUsers={userCategories.activeChatTrialUsers}
                 endedChatTrialUsers={userCategories.endedChatTrialUsers}
                 suggestedUsers={suggestedUsers}
+                suggestedUsersLoading={suggestedUsersLoading}
                 existingConversations={existingConversations}
                 pendingRequests={combinedPendingRequests}
                 incomingRequestSenderIds={incomingRequestSenderIds}
