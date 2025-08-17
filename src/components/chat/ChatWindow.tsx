@@ -4,11 +4,9 @@ import { useAuthenticator } from '@aws-amplify/ui-react';
 import { useState, useEffect, useCallback } from 'react';
 
 import type { Schema } from '../../../amplify/data/resource';
-import { chatService } from '../../services/chat.service';
 import { messageService } from '../../services/message.service';
 import { chatPresenceService } from '../../services/chat-presence.service';
 import { useRealtimeMessages } from '../../hooks/realtime';
-import { useOnlineUsers } from '../../hooks/useOnlineUsers';
 import LoadingContainer from '../LoadingContainer';
 
 import MessageInput from './MessageInput';
@@ -19,14 +17,12 @@ type Conversation = Schema['Conversation']['type'];
 
 interface ChatWindowProps {
   conversation: Conversation;
-  onChatEnded: () => void;
   isLoading?: boolean;
   error?: string | null;
 }
 
 export default function ChatWindow({
   conversation,
-  onChatEnded,
   isLoading: externalLoading = false,
   error: externalError = null,
 }: ChatWindowProps) {
@@ -89,19 +85,10 @@ export default function ChatWindow({
       ? conversation.participant2Id
       : conversation.participant1Id;
 
-  // Use our centralized online users data to get other participant's presence
-  const { getUserPresence } = useOnlineUsers({
-    enabled: !!otherParticipantId,
-  });
-
-  const otherUserPresence = otherParticipantId
-    ? getUserPresence(otherParticipantId)
-    : null;
+  // Note: Online users data available via useOnlineUsers hook if needed
 
   // Use the message error as the main error (presence is now centralized)
   const finalError = error;
-
-
 
   // Note: Message subscription logic moved to useRealtimeMessages hook
   // Note: Presence subscription logic moved to useRealtimePresence hook

@@ -437,6 +437,8 @@ export const useSubscriptionStore = create<SubscriptionState>()(
       // High-level subscription methods
       subscribeToOnlineUsers: (_userId: string) => {
         const key = 'online-users';
+        const state = get();
+        const existing = state.activeSubscriptions.get(key);
 
         const config: SubscriptionConfig = {
           key,
@@ -458,15 +460,19 @@ export const useSubscriptionStore = create<SubscriptionState>()(
           get().setOnlineUsersError(null);
         };
 
-        // Set loading state
-        get().setOnlineUsersLoading(true);
-        get().setOnlineUsersError(null);
+        // Only set loading state if creating a new subscription
+        if (!existing) {
+          get().setOnlineUsersLoading(true);
+          get().setOnlineUsersError(null);
+        }
 
         return get().subscribe(key, config, callback);
       },
 
       subscribeToIncomingChatRequests: (userId: string) => {
         const key = `incoming-chat-requests-${userId}`;
+        const state = get();
+        const existing = state.activeSubscriptions.get(key);
 
         const config: SubscriptionConfig = {
           key,
@@ -493,15 +499,19 @@ export const useSubscriptionStore = create<SubscriptionState>()(
           get().setIncomingChatRequestsError(null);
         };
 
-        // Set loading state
-        get().setIncomingChatRequestsLoading(true);
-        get().setIncomingChatRequestsError(null);
+        // Only set loading state if creating a new subscription
+        if (!existing) {
+          get().setIncomingChatRequestsLoading(true);
+          get().setIncomingChatRequestsError(null);
+        }
 
         return get().subscribe(key, config, callback);
       },
 
       subscribeToSentChatRequests: (userId: string) => {
         const key = `sent-chat-requests-${userId}`;
+        const state = get();
+        const existing = state.activeSubscriptions.get(key);
 
         const config: SubscriptionConfig = {
           key,
@@ -528,15 +538,19 @@ export const useSubscriptionStore = create<SubscriptionState>()(
           get().setSentChatRequestsError(null);
         };
 
-        // Set loading state
-        get().setSentChatRequestsLoading(true);
-        get().setSentChatRequestsError(null);
+        // Only set loading state if creating a new subscription
+        if (!existing) {
+          get().setSentChatRequestsLoading(true);
+          get().setSentChatRequestsError(null);
+        }
 
         return get().subscribe(key, config, callback);
       },
 
       subscribeToNotifications: (userId: string) => {
         const key = `notifications-${userId}`;
+        const state = get();
+        const existing = state.activeSubscriptions.get(key);
 
         const config: SubscriptionConfig = {
           key,
@@ -577,15 +591,19 @@ export const useSubscriptionStore = create<SubscriptionState>()(
           get().setNotificationsError(null);
         };
 
-        // Set loading state
-        get().setNotificationsLoading(true);
-        get().setNotificationsError(null);
+        // Only set loading state if creating a new subscription
+        if (!existing) {
+          get().setNotificationsLoading(true);
+          get().setNotificationsError(null);
+        }
 
         return get().subscribe(key, config, callback);
       },
 
       subscribeToConversations: (userId: string) => {
         const key = `conversations-${userId}`;
+        const state = get();
+        const existing = state.activeSubscriptions.get(key);
 
         const config: SubscriptionConfig = {
           key,
@@ -618,9 +636,11 @@ export const useSubscriptionStore = create<SubscriptionState>()(
           get().setConversationsError(null);
         };
 
-        // Set loading state
-        get().setConversationsLoading(true);
-        get().setConversationsError(null);
+        // Only set loading state if creating a new subscription
+        if (!existing) {
+          get().setConversationsLoading(true);
+          get().setConversationsError(null);
+        }
 
         return get().subscribe(key, config, callback);
       },

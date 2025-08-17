@@ -32,7 +32,8 @@ export default function ChatPage({ params }: ChatPageProps) {
     Schema['UserPresence']['type'] | null
   >(null);
   const [timeLeft, setTimeLeft] = useState<string>('');
-  const [sendingConnectionRequest, setSendingConnectionRequest] = useState(false);
+  const [sendingConnectionRequest, setSendingConnectionRequest] =
+    useState(false);
   const { user } = useAuthenticator();
   const router = useRouter();
 
@@ -214,7 +215,11 @@ export default function ChatPage({ params }: ChatPageProps) {
     }, 10000);
 
     return () => clearInterval(timer);
-  }, [conversation?.probationEndsAt, conversation?.isConnected, calculateTimeLeft]);
+  }, [
+    conversation?.probationEndsAt,
+    conversation?.isConnected,
+    calculateTimeLeft,
+  ]);
 
   const handleEndChat = useCallback(async () => {
     if (!user || !conversation) {
@@ -317,7 +322,6 @@ export default function ChatPage({ params }: ChatPageProps) {
                       updatedAt: '',
                     }
                   }
-                  onChatEnded={handleChatEnded}
                   isLoading={loading}
                   error={error}
                 />
