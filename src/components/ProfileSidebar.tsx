@@ -286,25 +286,29 @@ export default function ProfileSidebar({
                 </div>
 
                 {/* Connect Button */}
-                <button
-                  onClick={onSendConnectionRequest}
-                  disabled={sendingConnectionRequest}
-                  className='w-full px-4 py-2 text-sm font-medium rounded-lg border transition-colors flex items-center justify-center gap-2 bg-brand-100 text-brand-600 border-brand-200 hover:bg-brand-200 hover:border-brand-400 disabled:bg-brand-100 disabled:cursor-not-allowed'
-                >
-                  <svg
-                    width='16'
-                    height='16'
-                    viewBox='30 30 160 160'
-                    className='w-4 h-4'
-                    aria-hidden='true'
-                  >
-                    <circle cx='75' cy='110' r='35' fill='currentColor' />
-                    <circle cx='145' cy='110' r='35' fill='currentColor' />
-                  </svg>
-                  <span>
-                    {sendingConnectionRequest ? 'Connecting...' : 'Connect'}
-                  </span>
-                </button>
+                <div className="flex justify-center">
+                  <Tooltip content="Make permanent connection" position="bottom">
+                    <button
+                      onClick={onSendConnectionRequest}
+                      disabled={sendingConnectionRequest}
+                      className='px-6 py-2 text-sm font-medium rounded-lg border transition-colors flex items-center justify-center gap-2 bg-brand-100 text-brand-600 border-brand-200 hover:bg-brand-200 hover:border-brand-400 disabled:bg-brand-100 disabled:cursor-not-allowed'
+                    >
+                      <svg
+                        width='16'
+                        height='16'
+                        viewBox='30 30 160 160'
+                        className='w-4 h-4'
+                        aria-hidden='true'
+                      >
+                        <circle cx='75' cy='110' r='35' fill='currentColor' />
+                        <circle cx='145' cy='110' r='35' fill='currentColor' />
+                      </svg>
+                      <span>
+                        {sendingConnectionRequest ? 'Connecting...' : 'Connect'}
+                      </span>
+                    </button>
+                  </Tooltip>
+                </div>
               </div>
             )}
 

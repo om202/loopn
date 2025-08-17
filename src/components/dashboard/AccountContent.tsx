@@ -86,7 +86,7 @@ export default function AccountContent() {
                 userProfile.yearsOfExperience !== null) && (
                 <div className='pb-4'>
                   <h4 className='text-sm font-semibold text-zinc-500 mb-4 border-b border-zinc-100 pb-2'>
-                    Profile Details
+                    Profile
                   </h4>
                   <div className='divide-y divide-zinc-100'>
                     {userProfile.jobRole && (

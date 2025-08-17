@@ -396,7 +396,7 @@ export default function UserCard({
                   finalFullProfile.yearsOfExperience !== null) && (
                   <div>
                     <h4 className='text-sm font-semibold text-zinc-900 mb-3 border-b border-zinc-100 pb-2'>
-                      Profile Details
+                      Profile
                     </h4>
                     <div className='space-y-3'>
                       {finalFullProfile.jobRole && (
