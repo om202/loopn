@@ -2,10 +2,10 @@
 
 import CustomAuthenticator from '@/components/auth/CustomAuthenticator';
 import { useAuth } from '@/contexts/AuthContext';
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 
-export default function AuthPage() {
+function AuthPageContent() {
   const { authStatus, onboardingStatus } = useAuth();
   const searchParams = useSearchParams();
 
@@ -32,7 +32,15 @@ export default function AuthPage() {
 
   // Get initial view from URL params
   const initialView =
-    searchParams.get('view') === 'signup' ? 'signUp' : 'signIn';
+    searchParams?.get('view') === 'signup' ? 'signUp' : 'signIn';
 
   return <CustomAuthenticator initialView={initialView} />;
+}
+
+export default function AuthPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <AuthPageContent />
+    </Suspense>
+  );
 }

@@ -884,9 +884,7 @@ export default function DashboardDemo() {
             )}
             {activeSection === 'chats' && (
               <>
-                <h2 className='text-2xl font-bold text-zinc-900 mb-1'>
-                  Chats
-                </h2>
+                <h2 className='text-2xl font-bold text-zinc-900 mb-1'>Chats</h2>
                 <p className='text-base text-zinc-600'>
                   Your ongoing conversations
                 </p>
