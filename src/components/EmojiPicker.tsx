@@ -1,6 +1,5 @@
 'use client';
 
-import { useRef } from 'react';
 import EmojiPickerReact from 'emoji-picker-react';
 
 interface EmojiPickerProps {
@@ -14,8 +13,6 @@ export default function EmojiPicker({
   onClose,
   isOpen,
 }: EmojiPickerProps) {
-  const pickerRef = useRef<HTMLDivElement>(null);
-
   if (!isOpen) return null;
 
   const handleFullEmojiClick = (emojiData: { emoji: string }) => {

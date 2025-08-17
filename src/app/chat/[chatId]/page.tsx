@@ -6,11 +6,14 @@ import { useState, useEffect, useCallback } from 'react';
 
 import type { Schema } from '../../../../amplify/data/resource';
 import ChatWindow from '../../../components/chat/ChatWindow';
+import ProfileSidebar from '../../../components/ProfileSidebar';
 import ProtectedRoute from '../../../components/protected-route';
 import TrialEndedByOtherDialog from '../../../components/TrialEndedByOtherDialog';
 import { getConversationIdFromParam } from '../../../lib/url-utils';
 import { chatService } from '../../../services/chat.service';
 import { useConversations } from '../../../hooks/useConversations';
+import { useOnlineUsers } from '../../../hooks/useOnlineUsers';
+import { userPresenceService } from '../../../services/user.service';
 
 type Conversation = Schema['Conversation']['type'];
 
@@ -25,6 +28,9 @@ export default function ChatPage({ params }: ChatPageProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showTrialEndedDialog, setShowTrialEndedDialog] = useState(false);
+  const [otherUserPresence, setOtherUserPresence] = useState<
+    Schema['UserPresence']['type'] | null
+  >(null);
   const { user } = useAuthenticator();
   const router = useRouter();
 
@@ -33,6 +39,18 @@ export default function ChatPage({ params }: ChatPageProps) {
     userId: user?.userId || '',
     enabled: !!user?.userId,
   });
+
+  // Get online users for presence status
+  const { onlineUsers } = useOnlineUsers({
+    enabled: !!user?.userId,
+  });
+
+  // Get the other participant's ID
+  const otherParticipantId = conversation
+    ? conversation.participant1Id === user?.userId
+      ? conversation.participant2Id
+      : conversation.participant1Id
+    : '';
 
   const loadConversation = useCallback(async () => {
     try {
@@ -66,6 +84,24 @@ export default function ChatPage({ params }: ChatPageProps) {
       }
 
       setConversation(conv);
+
+      // Load other participant's presence
+      const otherUserId =
+        conv.participant1Id === user?.userId
+          ? conv.participant2Id
+          : conv.participant1Id;
+
+      if (otherUserId) {
+        try {
+          const presenceResult =
+            await userPresenceService.getUserPresence(otherUserId);
+          if (presenceResult.data) {
+            setOtherUserPresence(presenceResult.data);
+          }
+        } catch (error) {
+          console.error('Error loading other participant presence:', error);
+        }
+      }
     } catch {
       setError('Failed to load conversation');
     } finally {
@@ -148,24 +184,46 @@ export default function ChatPage({ params }: ChatPageProps) {
 
   return (
     <ProtectedRoute requireOnboarding={true}>
-      <div className='h-screen bg-white' style={{ height: '100dvh' }}>
-        <div className='h-full flex flex-col'>
-          <ChatWindow
-            conversation={
-              conversation || {
-                id: params.chatId,
-                participant1Id: '',
-                participant2Id: '',
-                isConnected: false,
-                probationEndsAt: null,
-                createdAt: '',
-                updatedAt: '',
-              }
-            }
-            onChatEnded={handleChatEnded}
-            isLoading={loading}
-            error={error}
-          />
+      <div
+        className='h-screen bg-white lg:bg-zinc-100'
+        style={{ height: '100dvh' }}
+      >
+        <div className='h-full flex'>
+          {/* Left Sidebar - Desktop Only */}
+          <div className='hidden lg:flex lg:w-80 xl:w-96 flex-shrink-0 h-full'>
+            <div className='w-full p-3 lg:p-4'>
+              <ProfileSidebar
+                userId={otherParticipantId}
+                userPresence={otherUserPresence}
+                onlineUsers={onlineUsers}
+              />
+            </div>
+          </div>
+
+          {/* Main Chat Area */}
+          <div className='flex-1 flex flex-col min-w-0'>
+            <div className='h-full lg:p-3 lg:pr-6'>
+              <div className='h-full lg:bg-white lg:rounded-2xl lg:border lg:border-zinc-200 overflow-hidden'>
+                <ChatWindow
+                  conversation={
+                    conversation || {
+                      id: params.chatId,
+                      participant1Id: '',
+                      participant2Id: '',
+                      isConnected: false,
+                      probationEndsAt: null,
+                      createdAt: '',
+                      updatedAt: '',
+                    }
+                  }
+                  onChatEnded={handleChatEnded}
+                  isLoading={loading}
+                  error={error}
+                  onBack={() => router.push('/dashboard')}
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

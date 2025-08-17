@@ -118,32 +118,34 @@ export default function MessageReactions({
   );
 
   return (
-    <div className={`flex flex-wrap gap-1 ${reactions && reactions.length > 0 ? '-mt-2 mb-0.5' : ''}`}>
-      {!reactions || reactions.length === 0 ? (
-        // No container when no reactions to avoid spacing
-        null
-      ) : (
-        reactionGroups.map(group => {
-          const isAnimating = animatingEmojis.has(group.emoji);
-          return (
-            <button
-              key={group.emoji}
-              onClick={() => onToggleReaction(group.emoji)}
-              className={`inline-flex items-center justify-center min-w-[24px] h-6 px-0.5 rounded-full transition-all duration-150 shadow-sm ${
-                group.hasCurrentUser
-                  ? 'bg-white border border-zinc-200'
-                  : 'bg-white border border-zinc-50'
-              } ${isAnimating ? 'reaction-animate' : ''}`}
-              title={`${group.count} reaction${group.count !== 1 ? 's' : ''}`}
-            >
-              <span>{group.emoji}</span>
-              {group.count > 1 && (
-                <span className='ml-1 text-sm font-medium'>{group.count}</span>
-              )}
-            </button>
-          );
-        })
-      )}
+    <div
+      className={`flex flex-wrap gap-1 ${reactions && reactions.length > 0 ? '-mt-2 mb-0.5' : ''}`}
+    >
+      {!reactions || reactions.length === 0
+        ? // No container when no reactions to avoid spacing
+          null
+        : reactionGroups.map(group => {
+            const isAnimating = animatingEmojis.has(group.emoji);
+            return (
+              <button
+                key={group.emoji}
+                onClick={() => onToggleReaction(group.emoji)}
+                className={`inline-flex items-center justify-center min-w-[24px] h-6 px-0.5 rounded-full transition-all duration-150 shadow-sm ${
+                  group.hasCurrentUser
+                    ? 'bg-white border border-zinc-200'
+                    : 'bg-white border border-zinc-50'
+                } ${isAnimating ? 'reaction-animate' : ''}`}
+                title={`${group.count} reaction${group.count !== 1 ? 's' : ''}`}
+              >
+                <span>{group.emoji}</span>
+                {group.count > 1 && (
+                  <span className='ml-1 text-sm font-medium'>
+                    {group.count}
+                  </span>
+                )}
+              </button>
+            );
+          })}
     </div>
   );
 }

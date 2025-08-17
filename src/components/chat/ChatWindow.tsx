@@ -23,6 +23,7 @@ interface ChatWindowProps {
   onChatEnded: () => void;
   isLoading?: boolean;
   error?: string | null;
+  onBack?: () => void;
 }
 
 export default function ChatWindow({
@@ -30,6 +31,7 @@ export default function ChatWindow({
   onChatEnded,
   isLoading: externalLoading = false,
   error: externalError = null,
+  onBack,
 }: ChatWindowProps) {
   const [newMessage, setNewMessage] = useState('');
   const [localError, setLocalError] = useState<string | null>(null);
@@ -366,7 +368,7 @@ export default function ChatWindow({
         onEndChat={handleEndChat}
         onSendConnectionRequest={handleSendConnectionRequest}
         onReconnect={handleReconnect}
-        onBack={() => window.history.back()}
+        onBack={onBack || (() => window.history.back())}
       />
 
       <MessageList

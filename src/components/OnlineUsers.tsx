@@ -3,12 +3,8 @@
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { fetchAuthSession } from 'aws-amplify/auth';
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { CheckCircle2, Clock, MessageCircle } from 'lucide-react';
-import UserAvatar from './UserAvatar';
-import {
-  formatPresenceTime,
-  simplePresenceManager,
-} from '../lib/presence-utils';
+import ProfileSidebar from './ProfileSidebar';
+import { simplePresenceManager } from '../lib/presence-utils';
 import { useAuth } from '../contexts/AuthContext';
 
 import type { Schema } from '../../amplify/data/resource';
@@ -31,11 +27,7 @@ import { useConversations } from '../hooks/useConversations';
 import { useNotifications } from '../hooks/useNotifications';
 import { notificationService } from '../services/notification.service';
 import { useSubscriptionStore } from '../stores/subscription-store';
-import {
-  OnlineUsers_Shimmer,
-  ShimmerProvider,
-  ProfileDetails_Shimmer,
-} from './ShimmerLoader/exports';
+import { OnlineUsers_Shimmer, ShimmerProvider } from './ShimmerLoader/exports';
 
 type UserPresence = Schema['UserPresence']['type'];
 type Conversation = Schema['Conversation']['type'];
@@ -63,16 +55,6 @@ export default function OnlineUsers({
   // Existing conversations now managed by centralized hook
   const [profileSidebarUser, setProfileSidebarUser] =
     useState<UserPresence | null>(null);
-  const [profileSidebarFullProfile, setProfileSidebarFullProfile] = useState<
-    Schema['UserProfile']['type'] | null
-  >(null);
-  const [profileSidebarUserProfile, setProfileSidebarUserProfile] = useState<{
-    fullName?: string;
-    email?: string;
-    profilePictureUrl?: string;
-    hasProfilePicture?: boolean;
-  } | null>(null);
-  const [profileSidebarLoading, setProfileSidebarLoading] = useState(false);
 
   // Current user profile for search context
   const [currentUserProfile, setCurrentUserProfile] = useState<
@@ -225,33 +207,8 @@ export default function OnlineUsers({
     if (profileSidebarOpen && !profileSidebarUser && allUsers.length > 0) {
       const firstUser = allUsers[0];
       setProfileSidebarUser(firstUser);
-      setProfileSidebarLoading(true);
-      setProfileSidebarFullProfile(null);
-
-      const loadProfile = async () => {
-        try {
-          // Use our centralized profile fetching (with caching)
-          const profile = await fetchUserProfile(firstUser.userId);
-
-          if (profile) {
-            setProfileSidebarFullProfile(profile);
-            setProfileSidebarUserProfile({
-              fullName: profile.fullName || undefined,
-              email: profile.email || undefined,
-              profilePictureUrl: profile.profilePictureUrl || undefined,
-              hasProfilePicture: profile.hasProfilePicture || false,
-            });
-          }
-        } catch (e) {
-          console.error('Failed to load profile summary for sidebar', e);
-        } finally {
-          setProfileSidebarLoading(false);
-        }
-      };
-
-      loadProfile();
     }
-  }, [profileSidebarOpen, profileSidebarUser, allUsers, fetchUserProfile]);
+  }, [profileSidebarOpen, profileSidebarUser, allUsers]);
 
   const isAuthSessionReady = async (): Promise<boolean> => {
     try {
@@ -549,8 +506,6 @@ export default function OnlineUsers({
         // ignore
       }
       setProfileSidebarUser(null);
-      setProfileSidebarFullProfile(null);
-      setProfileSidebarLoading(false);
       return;
     }
 
@@ -561,27 +516,6 @@ export default function OnlineUsers({
       // ignore
     }
     setProfileSidebarUser(userPresence);
-    setProfileSidebarLoading(true);
-    setProfileSidebarFullProfile(null);
-    setProfileSidebarUserProfile(null);
-    try {
-      // Use our centralized profile fetching (with caching)
-      const profile = await fetchUserProfile(userPresence.userId);
-
-      if (profile) {
-        setProfileSidebarFullProfile(profile);
-        setProfileSidebarUserProfile({
-          fullName: profile.fullName || undefined,
-          email: profile.email || undefined,
-          profilePictureUrl: profile.profilePictureUrl || undefined,
-          hasProfilePicture: profile.hasProfilePicture || false,
-        });
-      }
-    } catch (e) {
-      console.error('Failed to load profile summary for sidebar', e);
-    } finally {
-      setProfileSidebarLoading(false);
-    }
   };
 
   const handleUserCardClick = async (userPresence: UserPresence) => {
@@ -595,29 +529,8 @@ export default function OnlineUsers({
       }
     }
 
-    // Always update the selected user and load their profile
+    // Always update the selected user
     setProfileSidebarUser(userPresence);
-    setProfileSidebarLoading(true);
-    setProfileSidebarFullProfile(null);
-    setProfileSidebarUserProfile(null);
-    try {
-      // Use our centralized profile fetching (with caching)
-      const profile = await fetchUserProfile(userPresence.userId);
-
-      if (profile) {
-        setProfileSidebarFullProfile(profile);
-        setProfileSidebarUserProfile({
-          fullName: profile.fullName || undefined,
-          email: profile.email || undefined,
-          profilePictureUrl: profile.profilePictureUrl || undefined,
-          hasProfilePicture: profile.hasProfilePicture || false,
-        });
-      }
-    } catch (e) {
-      console.error('Failed to load profile summary for sidebar', e);
-    } finally {
-      setProfileSidebarLoading(false);
-    }
   };
 
   if (error || onlineUsersError || chatActions.error) {
@@ -821,308 +734,18 @@ export default function OnlineUsers({
       {/* Right push sidebar: desktop only */}
       {profileSidebarOpen && profileSidebarUser && (
         <div className='hidden md:flex w-[340px] xl:w-[350px] flex-shrink-0'>
-          <div className='bg-white rounded-2xl border border-zinc-200 w-full h-full flex flex-col relative'>
-            <div className='p-6 pb-2 flex justify-center'>
-              <div className='flex flex-col items-center text-center'>
-                <UserAvatar
-                  email={profileSidebarUserProfile?.email}
-                  userId={profileSidebarUser.userId}
-                  profilePictureUrl={
-                    profileSidebarUserProfile?.profilePictureUrl
-                  }
-                  hasProfilePicture={
-                    profileSidebarUserProfile?.hasProfilePicture
-                  }
-                  size='xl'
-                  showStatus
-                  status={
-                    onlineUsers.find(
-                      u => u.userId === profileSidebarUser.userId
-                    )
-                      ? 'ONLINE'
-                      : profileSidebarUser.lastSeen &&
-                          formatPresenceTime(profileSidebarUser.lastSeen) ===
-                            'Recently active'
-                        ? 'RECENTLY_ACTIVE'
-                        : 'OFFLINE'
-                  }
-                />
-                <div className='mt-2'>
-                  <div className='mb-1'>
-                    <div className='font-semibold text-zinc-900 text-base'>
-                      {profileSidebarUserProfile?.fullName ||
-                        profileSidebarUserProfile?.email ||
-                        `User${profileSidebarUser.userId.slice(-4)}`}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Action buttons section */}
-            <div className='px-6 pb-6 pt-2'>
-              <div className='w-full flex justify-center'>
-                {(() => {
-                  const conversation = existingConversations.get(
-                    profileSidebarUser.userId
-                  );
-                  const isEndedWithTimer =
-                    conversation?.chatStatus === 'ENDED' &&
-                    !userCategories.canUserReconnect(
-                      profileSidebarUser.userId
-                    ) &&
-                    userCategories.getReconnectTimeRemaining(
-                      profileSidebarUser.userId
-                    );
-
-                  if (isEndedWithTimer) {
-                    const timeRemaining =
-                      userCategories.getReconnectTimeRemaining(
-                        profileSidebarUser.userId
-                      );
-                    return (
-                      <div className='text-sm text-center p-3 bg-zinc-50 rounded-xl border border-zinc-200'>
-                        <div className='text-zinc-500 mb-1'>Reconnect in</div>
-                        <div className='text-zinc-600 flex items-center justify-center gap-1'>
-                          <Clock className='w-3 h-3' />
-                          <span className='font-medium'>{timeRemaining}</span>
-                        </div>
-                      </div>
-                    );
-                  }
-
-                  const isTrialConversation =
-                    existingConversations.has(profileSidebarUser.userId) &&
-                    !existingConversations.get(profileSidebarUser.userId)
-                      ?.isConnected;
-
-                  return (
-                    <div className='flex items-center gap-3'>
-                      <button
-                        onClick={() => {
-                          if (
-                            combinedPendingRequests.has(
-                              profileSidebarUser.userId
-                            )
-                          ) {
-                            handleCancelChatRequest(profileSidebarUser.userId);
-                          } else {
-                            handleChatAction(profileSidebarUser.userId);
-                          }
-                        }}
-                        className='px-2 py-1.5 text-base font-medium rounded-xl border transition-colors bg-brand-50 text-brand-500 border-brand-100 hover:bg-brand-100 hover:border-brand-200 flex items-center justify-center gap-2'
-                      >
-                        {combinedPendingRequests.has(
-                          profileSidebarUser.userId
-                        ) ? (
-                          <>
-                            <span className='text-zinc-600 text-base font-medium'>
-                              Cancel Request
-                            </span>
-                          </>
-                        ) : existingConversations.has(
-                            profileSidebarUser.userId
-                          ) ? (
-                          <>
-                            {existingConversations.get(
-                              profileSidebarUser.userId
-                            )?.chatStatus === 'ENDED' ? (
-                              userCategories.canUserReconnect(
-                                profileSidebarUser.userId
-                              ) ? (
-                                <>
-                                  <MessageCircle className='w-4 h-4' />
-                                  <span className='text-base font-medium'>
-                                    Send Request
-                                  </span>
-                                </>
-                              ) : (
-                                <>
-                                  <MessageCircle className='w-4 h-4' />
-                                  <span className='text-base font-medium'>
-                                    View Chat
-                                  </span>
-                                </>
-                              )
-                            ) : (
-                              <>
-                                <MessageCircle className='w-4 h-4' />
-                                <span className='text-base font-medium'>
-                                  Chat
-                                </span>
-                              </>
-                            )}
-                          </>
-                        ) : (
-                          <>
-                            <CheckCircle2 className='w-4 h-4' />
-                            <span className='text-base font-medium'>
-                              Send Request
-                            </span>
-                          </>
-                        )}
-                      </button>
-                      {isTrialConversation && (
-                        <span className='px-2 py-1.5 text-base font-medium text-zinc-500 rounded-xl flex-shrink-0 flex items-center gap-1'>
-                          <Clock className='w-4 h-4' />
-                          Trial
-                        </span>
-                      )}
-                    </div>
-                  );
-                })()}
-              </div>
-            </div>
-
-            <div className='flex-1 overflow-y-auto'>
-              <div className='px-6 pb-8'>
-                {profileSidebarLoading ? (
-                  <ShimmerProvider>
-                    <ProfileDetails_Shimmer />
-                  </ShimmerProvider>
-                ) : profileSidebarFullProfile ? (
-                  <div className='divide-y divide-zinc-100'>
-                    {/* Professional Info Section */}
-                    {(profileSidebarFullProfile.jobRole ||
-                      profileSidebarFullProfile.companyName ||
-                      profileSidebarFullProfile.industry ||
-                      profileSidebarFullProfile.yearsOfExperience !== null) && (
-                      <div className='pb-4'>
-                        <h4 className='text-sm font-semibold text-zinc-500 mb-4 border-b border-zinc-100 pb-2'>
-                          Profile Details
-                        </h4>
-                        <div className='divide-y divide-zinc-100'>
-                          {profileSidebarFullProfile.jobRole && (
-                            <div className='pb-3'>
-                              <dt className='text-sm font-medium text-zinc-500 mb-1.5'>
-                                Role
-                              </dt>
-                              <dd className='text-base text-zinc-900 font-medium'>
-                                {profileSidebarFullProfile.jobRole}
-                              </dd>
-                            </div>
-                          )}
-                          {profileSidebarFullProfile.companyName && (
-                            <div className='py-3'>
-                              <dt className='text-sm font-medium text-zinc-500 mb-1.5'>
-                                Company
-                              </dt>
-                              <dd className='text-base text-zinc-900 font-medium'>
-                                {profileSidebarFullProfile.companyName}
-                              </dd>
-                            </div>
-                          )}
-                          {profileSidebarFullProfile.industry && (
-                            <div className='py-3'>
-                              <dt className='text-sm font-medium text-zinc-500 mb-1.5'>
-                                Industry
-                              </dt>
-                              <dd className='text-base text-zinc-900 font-medium'>
-                                {profileSidebarFullProfile.industry}
-                              </dd>
-                            </div>
-                          )}
-                          {profileSidebarFullProfile.yearsOfExperience !==
-                            null &&
-                            profileSidebarFullProfile.yearsOfExperience !==
-                              undefined && (
-                              <div className='pt-3'>
-                                <dt className='text-sm font-medium text-zinc-500 mb-1.5'>
-                                  Experience
-                                </dt>
-                                <dd className='text-base text-zinc-900 font-medium'>
-                                  {profileSidebarFullProfile.yearsOfExperience}{' '}
-                                  years
-                                </dd>
-                              </div>
-                            )}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Education Section */}
-                    {profileSidebarFullProfile.education && (
-                      <div className='py-4'>
-                        <h4 className='text-sm font-semibold text-zinc-900 mb-4'>
-                          Education
-                        </h4>
-                        <div className='text-base text-zinc-900 font-medium leading-relaxed'>
-                          {profileSidebarFullProfile.education}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* About Section */}
-                    {profileSidebarFullProfile.about && (
-                      <div className='py-4'>
-                        <h4 className='text-sm font-medium text-zinc-500 mb-4'>
-                          About
-                        </h4>
-                        <div className='text-base text-zinc-900 leading-relaxed'>
-                          {profileSidebarFullProfile.about}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Skills & Interests Section */}
-                    {((profileSidebarFullProfile.skills &&
-                      profileSidebarFullProfile.skills.length > 0) ||
-                      (profileSidebarFullProfile.interests &&
-                        profileSidebarFullProfile.interests.length > 0)) && (
-                      <div className='pt-4'>
-                        <div className='divide-y divide-zinc-100'>
-                          {profileSidebarFullProfile.skills &&
-                            profileSidebarFullProfile.skills.length > 0 && (
-                              <div className='pb-3'>
-                                <dt className='text-sm font-medium text-zinc-500 mb-3'>
-                                  Skills
-                                </dt>
-                                <dd className='flex flex-wrap gap-2'>
-                                  {profileSidebarFullProfile.skills.map(
-                                    (skill, index) => (
-                                      <span
-                                        key={index}
-                                        className='px-3 py-1.5 text-base bg-transparent text-zinc-700 border border-zinc-200 rounded-lg font-medium'
-                                      >
-                                        {skill}
-                                      </span>
-                                    )
-                                  )}
-                                </dd>
-                              </div>
-                            )}
-                          {profileSidebarFullProfile.interests &&
-                            profileSidebarFullProfile.interests.length > 0 && (
-                              <div className='pt-3'>
-                                <dt className='text-sm font-medium text-zinc-500 mb-3'>
-                                  Interests
-                                </dt>
-                                <dd className='flex flex-wrap gap-2'>
-                                  {profileSidebarFullProfile.interests.map(
-                                    (interest, index) => (
-                                      <span
-                                        key={index}
-                                        className='px-3 py-1.5 text-base bg-transparent text-zinc-700 border border-zinc-200 rounded-lg font-medium'
-                                      >
-                                        {interest}
-                                      </span>
-                                    )
-                                  )}
-                                </dd>
-                              </div>
-                            )}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <div className='text-sm text-zinc-500 text-center py-8'>
-                    No profile details available.
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
+          <ProfileSidebar
+            userId={profileSidebarUser.userId}
+            userPresence={profileSidebarUser}
+            onlineUsers={onlineUsers}
+            showActionButtons={true}
+            existingConversations={existingConversations}
+            pendingRequests={combinedPendingRequests}
+            onChatAction={handleChatAction}
+            onCancelChatRequest={handleCancelChatRequest}
+            canUserReconnect={userCategories.canUserReconnect}
+            getReconnectTimeRemaining={userCategories.getReconnectTimeRemaining}
+          />
         </div>
       )}
 

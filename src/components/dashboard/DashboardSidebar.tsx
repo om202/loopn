@@ -319,8 +319,6 @@ export default function DashboardSidebar({
                       className: 'w-6 h-6',
                     })
                   )}
-
-
                 </div>
                 <div
                   className='text-[10px] font-medium leading-tight text-center flex items-center justify-center gap-1.5'
