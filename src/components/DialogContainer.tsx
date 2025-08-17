@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, ReactNode, ReactElement } from 'react';
+import { useEffect, useState, ReactNode, ReactElement } from 'react';
 import { createPortal } from 'react-dom';
 
 interface DialogContainerProps {
@@ -16,6 +16,24 @@ export default function DialogContainer({
   children,
   maxWidth = 'xs',
 }: DialogContainerProps): ReactElement | null {
+  const [isVisible, setIsVisible] = useState(false);
+  const [shouldRender, setShouldRender] = useState(false);
+
+  // Handle dialog visibility transitions
+  useEffect(() => {
+    if (isOpen) {
+      setShouldRender(true);
+      // Small delay to ensure DOM is ready for transition
+      const timer = setTimeout(() => setIsVisible(true), 10);
+      return () => clearTimeout(timer);
+    } else {
+      setIsVisible(false);
+      // Wait for transition to complete before removing from DOM
+      const timer = setTimeout(() => setShouldRender(false), 100);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
+
   // Handle escape key
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -36,7 +54,7 @@ export default function DialogContainer({
     };
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
+  if (!shouldRender) return null;
 
   const maxWidthClasses = {
     xs: 'max-w-xs',
@@ -46,17 +64,25 @@ export default function DialogContainer({
   };
 
   const dialogContent = (
-    <div className='fixed inset-0 z-50 overflow-y-auto'>
+    <div className={`fixed inset-0 z-50 overflow-y-auto transition-opacity duration-100 ${
+      isVisible ? 'opacity-100' : 'opacity-0'
+    }`}>
       {/* Background overlay */}
       <div
-        className='fixed inset-0 bg-zinc-900/16 transition-opacity'
+        className={`fixed inset-0 bg-zinc-900/16 transition-opacity duration-100 ${
+          isVisible ? 'opacity-100' : 'opacity-0'
+        }`}
         onClick={onClose}
       />
 
       {/* Dialog container */}
       <div className='flex min-h-full items-center justify-center p-4'>
         <div
-          className={`relative w-full ${maxWidthClasses[maxWidth]} transform overflow-hidden rounded-xl bg-white border border-zinc-200 shadow-lg transition-all`}
+          className={`relative w-full ${maxWidthClasses[maxWidth]} transform overflow-hidden rounded-xl bg-white border border-zinc-200 shadow-lg transition-all duration-100 ${
+            isVisible 
+              ? 'opacity-100 scale-100 translate-y-0' 
+              : 'opacity-0 scale-95 translate-y-4'
+          }`}
         >
           {children}
         </div>
