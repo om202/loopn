@@ -466,21 +466,28 @@ export default function OnlineUsers({
   const handleMarkAllAsRead = async () => {
     if (!user || !centralizedNotifications.length) return;
     try {
-      const markPromises = centralizedNotifications.map(notification => {
-        if (
-          notification.type === 'message' &&
-          notification.data &&
-          typeof notification.data === 'object' &&
-          'conversationId' in notification.data
-        ) {
-          return notificationService.deleteNotificationsForConversation(
-            user.userId,
-            (notification.data as { conversationId: string }).conversationId
-          );
-        } else {
-          return notificationService.markNotificationAsRead(notification.id);
-        }
-      });
+      const markPromises = centralizedNotifications
+        .filter(notification => notification.type !== 'connection') // Skip connection requests entirely
+        .map(notification => {
+          if (
+            notification.type === 'message' &&
+            notification.data &&
+            typeof notification.data === 'object' &&
+            'conversationId' in notification.data
+          ) {
+            // Delete message notifications for the entire conversation
+            return notificationService.deleteNotificationsForConversation(
+              user.userId,
+              (notification.data as { conversationId: string }).conversationId
+            );
+          } else if (notification.type === 'chat_request') {
+            // Delete chat requests as they should be removed on mark all as read
+            return notificationService.deleteNotification(notification.id);
+          } else {
+            // For other notification types (not connection requests), just mark as read
+            return notificationService.markNotificationAsRead(notification.id);
+          }
+        });
       await Promise.all(markPromises);
     } catch (error) {
       console.error('Error processing notifications:', error);
