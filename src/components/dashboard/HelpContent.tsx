@@ -250,14 +250,17 @@ export default function HelpContent({
           If you can't find the answer here, reach out to our support team.
         </p>
         <div className='flex flex-col sm:flex-row gap-3'>
-          <button className='px-4 py-2 bg-brand-500 text-white rounded-lg text-base font-medium hover:bg-brand-600 transition-colors'>
+          <button 
+            onClick={() => window.open('mailto:exonary.build@gmail.com?subject=Support Request - Loopn', '_blank')}
+            className='px-4 py-2 bg-brand-500 text-white rounded-lg text-base font-medium hover:bg-brand-600 transition-colors'
+          >
             Contact Support
           </button>
           <button
             onClick={onOpenBugReport}
             className='px-4 py-2 bg-white text-zinc-900 border border-zinc-300 rounded-lg text-base font-medium hover:bg-zinc-50 transition-colors'
           >
-            Report a Bug
+            Report Bug / Suggest
           </button>
         </div>
       </div>

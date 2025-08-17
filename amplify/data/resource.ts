@@ -284,11 +284,12 @@ const schema = a
         index('userId').sortKeys(['timestamp']),
       ]),
 
-    // Simple Bug Report
+    // Bug Report and Suggestions
     BugReport: a
       .model({
         id: a.id().required(),
         userId: a.string().required(),
+        type: a.enum(['bug', 'suggestion']),
         title: a.string().required(),
         description: a.string().required(),
         reportedAt: a.datetime().required(),

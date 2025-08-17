@@ -16,11 +16,13 @@ export class BugReportService {
   static async submitBugReport(
     userId: string,
     title: string,
-    description: string
+    description: string,
+    type: 'bug' | 'suggestion' = 'bug'
   ): Promise<{ success: boolean; error?: string }> {
     try {
       await getClient().models.BugReport.create({
         userId,
+        type,
         title,
         description,
         reportedAt: new Date().toISOString(),
@@ -33,7 +35,7 @@ export class BugReportService {
         error:
           error instanceof Error
             ? error.message
-            : 'Failed to submit bug report',
+            : `Failed to submit ${type === 'bug' ? 'bug report' : 'suggestion'}`,
       };
     }
   }

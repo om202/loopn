@@ -143,7 +143,7 @@ export default function DashboardSidebar({
                 />
                 <div className='flex items-center gap-2'>
                   <h1 className='text-2xl font-bold text-zinc-900'>Loopn</h1>
-                  <span className='bg-brand-500 text-white text-[10px] font-semibold px-1.5 py-0 rounded-md shadow-sm border border-brand-600/20 tracking-wide uppercase'>
+                  <span className='bg-brand-500 text-white text-[10px] font-semibold px-1.5 py-0.5 rounded-full tracking-wide uppercase'>
                     beta
                   </span>
                 </div>
@@ -219,7 +219,7 @@ export default function DashboardSidebar({
               <button
                 onClick={() => setIsBugReportOpen(true)}
                 className='p-2 text-zinc-500 hover:text-zinc-700 hover:bg-zinc-50 rounded-lg transition-colors border border-transparent hover:border-zinc-200'
-                title='Report a Bug'
+                title='Report Bug / Share Suggestion'
               >
                 <Bug className='w-4 h-4' />
               </button>
