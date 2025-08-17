@@ -34,7 +34,7 @@ export default function DeleteConfirmationDialog({
           </button>
           <button
             onClick={onConfirm}
-            className='flex-1 px-3 py-2 text-sm font-medium text-white bg-b_red-600 rounded-lg hover:bg-b_red-600 focus:outline-none transition-colors'
+            className='flex-1 px-3 py-2 text-sm font-medium text-b_red-600 bg-zinc-100 rounded-lg hover:bg-zinc-200 focus:outline-none transition-colors'
           >
             Delete
           </button>

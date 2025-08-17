@@ -391,7 +391,7 @@ export default function NotificationItem({
                         connectionData.connectionRequestId,
                         'ACCEPTED'
                       );
-                      onRemoveNotification(notification.id);
+                      // Note: onRemoveNotification is now handled inside onRespondToConnectionRequest
                     }}
                     className='px-3 py-2 bg-transparent text-b_green-500 text-sm font-medium rounded-lg hover:bg-b_green-50 transition-colors border border-b_green-500'
                   >
@@ -406,7 +406,7 @@ export default function NotificationItem({
                         connectionData.connectionRequestId,
                         'REJECTED'
                       );
-                      onRemoveNotification(notification.id);
+                      // Note: onRemoveNotification is now handled inside onRespondToConnectionRequest
                     }}
                     className='px-3 py-2 text-sm font-medium text-zinc-900 bg-white border border-zinc-200 rounded-lg hover:bg-zinc-100 transition-colors'
                   >

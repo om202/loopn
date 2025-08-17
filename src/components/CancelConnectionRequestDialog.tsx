@@ -36,7 +36,7 @@ export default function CancelConnectionRequestDialog({
           <button
             onClick={onConfirm}
             disabled={isLoading}
-            className='flex-1 px-3 py-2 text-base font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 focus:outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
+            className='flex-1 px-3 py-2 text-base font-medium text-b_red-600 bg-zinc-100 rounded-lg hover:bg-zinc-200 focus:outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
           >
             {isLoading ? 'Canceling...' : 'Cancel Request'}
           </button>

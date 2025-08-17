@@ -364,11 +364,38 @@ export default function NotificationsContent() {
     connectionRequestId: string,
     status: 'ACCEPTED' | 'REJECTED'
   ) => {
+    // Find the notification that corresponds to this connection request
+    const connectionNotification = notifications.find(
+      notif =>
+        notif.type === 'connection' &&
+        notif.data &&
+        'connectionRequestId' in notif.data &&
+        (notif.data as { connectionRequestId: string }).connectionRequestId ===
+          connectionRequestId
+    );
+
+    // Optimistically remove the notification from UI immediately
+    if (connectionNotification) {
+      setNotifications(prev =>
+        prev.filter(notif => notif.id !== connectionNotification.id)
+      );
+    }
+
     try {
       await respondToConnectionRequest(connectionRequestId, status);
+
+      // If successful, also remove the notification from the backend
+      if (connectionNotification && user) {
+        await notificationService.deleteNotification(connectionNotification.id);
+      }
     } catch (error) {
       console.error('Error responding to connection request:', error);
       setError('Failed to respond to connection request');
+
+      // If there was an error, restore the notification to the UI
+      if (connectionNotification) {
+        setNotifications(prev => [...prev, connectionNotification]);
+      }
     }
   };
 

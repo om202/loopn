@@ -556,7 +556,7 @@ export default function UserCard({
       <DialogContainer
         isOpen={showCancelDialog}
         onClose={() => setShowCancelDialog(false)}
-        maxWidth='xs'
+        maxWidth='sm'
       >
         <div className='p-4'>
           <h3 className='text-lg font-medium text-zinc-900 text-center mb-3'>
@@ -578,9 +578,9 @@ export default function UserCard({
                 onCancelChatRequest(userPresence.userId);
                 setShowCancelDialog(false);
               }}
-              className='flex-1 px-3 py-2 text-base font-medium text-white bg-b_red-600 rounded-lg hover:bg-b_red-600 focus:outline-none transition-colors'
+              className='flex-1 px-3 py-2 text-base font-medium text-b_red-600 bg-zinc-100 rounded-lg hover:bg-zinc-200 focus:outline-none transition-colors'
             >
-              Cancel
+              Cancel Request
             </button>
           </div>
         </div>
