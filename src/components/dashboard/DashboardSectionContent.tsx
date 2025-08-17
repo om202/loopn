@@ -23,6 +23,7 @@ interface DashboardSectionContentProps {
   suggestedUsersLoading?: boolean;
   existingConversations: Map<string, Conversation>;
   pendingRequests: Set<string>;
+  optimisticPendingRequests: Set<string>;
   incomingRequestSenderIds: Set<string>;
   onChatAction: (userId: string) => void;
   onCancelChatRequest: (userId: string) => void;
@@ -51,6 +52,7 @@ export default function DashboardSectionContent({
   suggestedUsersLoading = false,
   existingConversations,
   pendingRequests,
+  optimisticPendingRequests,
   incomingRequestSenderIds,
   onChatAction,
   onCancelChatRequest,
@@ -86,6 +88,7 @@ export default function DashboardSectionContent({
       onlineUsers={onlineUsers}
       existingConversations={existingConversations}
       pendingRequests={pendingRequests}
+      optimisticPendingRequests={optimisticPendingRequests}
       incomingRequestSenderIds={incomingRequestSenderIds}
       onChatAction={onChatAction}
       onCancelChatRequest={onCancelChatRequest}
@@ -253,6 +256,7 @@ export default function DashboardSectionContent({
         // Pass chat-related props
         existingConversations={existingConversations}
         pendingRequests={pendingRequests}
+        optimisticPendingRequests={optimisticPendingRequests}
         incomingRequestSenderIds={incomingRequestSenderIds}
         onlineUsers={onlineUsers}
         canUserReconnect={canUserReconnect}

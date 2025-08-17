@@ -28,6 +28,7 @@ interface UserCardProps {
   onlineUsers: UserPresence[];
   existingConversations: Map<string, Conversation>;
   pendingRequests: Set<string>;
+  optimisticPendingRequests?: Set<string>; // Track optimistic requests
   incomingRequestSenderIds: Set<string>;
   onChatAction: (userId: string) => void;
   onCancelChatRequest: (userId: string) => void;
@@ -77,6 +78,7 @@ export default function UserCard({
   onlineUsers,
   existingConversations,
   pendingRequests,
+  optimisticPendingRequests = new Set(),
   incomingRequestSenderIds,
   onChatAction,
   onCancelChatRequest,
@@ -237,20 +239,27 @@ export default function UserCard({
               );
             }
 
-            // Handle pending request state differently - show as status text with clickable tick icon
+            // Handle pending request state - show as clickable button for consistency
             if (pendingRequests.has(userPresence.userId)) {
+              // Check if this is an optimistic request (no real request data yet)
+              const isOptimisticRequest = optimisticPendingRequests.has(
+                userPresence.userId
+              );
+
               return (
-                <div className='flex items-center gap-1 px-2 py-1.5 text-sm text-zinc-500'>
-                  {/* Clickable Tick Icon for Cancel */}
-                  <button
-                    onClick={() => setShowCancelDialog(true)}
-                    className={`hover:bg-zinc-100 rounded transition-colors p-0.5`}
-                    title='Cancel Request'
-                  >
-                    <CheckCircle2 className='w-4 h-4 text-zinc-500 flex-shrink-0' />
-                  </button>
+                <button
+                  onClick={() => setShowCancelDialog(true)}
+                  disabled={isOptimisticRequest}
+                  className='flex items-center gap-1 px-2 py-1.5 text-sm text-zinc-500 hover:bg-zinc-50 rounded transition-colors disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:opacity-60'
+                  title={
+                    isOptimisticRequest
+                      ? 'Request being sent...'
+                      : 'Cancel Request'
+                  }
+                >
+                  <CheckCircle2 className='w-4 h-4 text-zinc-500 flex-shrink-0' />
                   <span className='text-base text-zinc-500'>Request Sent</span>
-                </div>
+                </button>
               );
             }
 

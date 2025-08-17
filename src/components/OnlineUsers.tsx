@@ -702,6 +702,7 @@ export default function OnlineUsers({
                 suggestedUsersLoading={suggestedUsersLoading}
                 existingConversations={existingConversations}
                 pendingRequests={combinedPendingRequests}
+                optimisticPendingRequests={optimisticPendingRequests}
                 incomingRequestSenderIds={incomingRequestSenderIds}
                 onChatAction={handleChatAction}
                 onCancelChatRequest={handleCancelChatRequest}

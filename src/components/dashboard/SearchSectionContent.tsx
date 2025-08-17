@@ -26,6 +26,7 @@ interface SearchSectionContentProps {
   // Chat-related props
   existingConversations: Map<string, Conversation>;
   pendingRequests: Set<string>;
+  optimisticPendingRequests: Set<string>;
   incomingRequestSenderIds: Set<string>;
   onlineUsers: UserPresence[];
   canUserReconnect: (userId: string) => boolean;
@@ -48,6 +49,7 @@ export default function SearchSectionContent({
   selectedUserId,
   existingConversations,
   pendingRequests,
+  optimisticPendingRequests,
   incomingRequestSenderIds,
   onlineUsers,
   canUserReconnect,
@@ -194,6 +196,7 @@ export default function SearchSectionContent({
                   onlineUsers={onlineUsers} // Pass real online users data
                   existingConversations={existingConversations} // Pass real conversations
                   pendingRequests={pendingRequests} // Pass real pending requests
+                  optimisticPendingRequests={optimisticPendingRequests} // Pass optimistic pending requests
                   incomingRequestSenderIds={incomingRequestSenderIds} // Pass incoming request data
                   onChatAction={handleChatAction} // Use proper chat action handler
                   onCancelChatRequest={handleCancelChatRequest} // Use proper cancel handler
