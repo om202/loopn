@@ -858,6 +858,30 @@ export class ChatService {
     }
   }
 
+  async cancelConnectionRequest(
+    connectionRequestId: string
+  ): Promise<DataResult<boolean>> {
+    try {
+      // Delete the connection request
+      await getClient().models.UserConnection.delete({
+        id: connectionRequestId,
+      });
+
+      return {
+        data: true,
+        error: null,
+      };
+    } catch (error) {
+      return {
+        data: false,
+        error:
+          error instanceof Error
+            ? error.message
+            : 'Failed to cancel connection request',
+      };
+    }
+  }
+
   // ===== CHAT RESTRICTIONS =====
 
   async hasActiveChatRestriction(

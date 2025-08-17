@@ -57,6 +57,7 @@ export default function ChatPage({ params }: ChatPageProps) {
   // Connection actions
   const {
     sendConnectionRequest,
+    cancelConnectionRequest,
     isLoading: sendingConnectionRequest,
     error: connectionError,
   } = useConnectionActions({
@@ -262,6 +263,27 @@ export default function ChatPage({ params }: ChatPageProps) {
     connectionError,
   ]);
 
+  const handleCancelConnectionRequest = useCallback(
+    async (connectionId: string) => {
+      if (!user || !conversation || sendingConnectionRequest) {
+        return;
+      }
+
+      await cancelConnectionRequest(connectionId);
+
+      if (connectionError) {
+        setError(connectionError);
+      }
+    },
+    [
+      user,
+      conversation,
+      sendingConnectionRequest,
+      cancelConnectionRequest,
+      connectionError,
+    ]
+  );
+
   const handleReconnect = useCallback(() => {
     // Navigate back to dashboard where user can send a new chat request
     router.push('/dashboard');
@@ -311,6 +333,7 @@ export default function ChatPage({ params }: ChatPageProps) {
                 onBack={() => router.push('/dashboard')}
                 onEndChat={handleEndChat}
                 onSendConnectionRequest={handleSendConnectionRequest}
+                onCancelConnectionRequest={handleCancelConnectionRequest}
                 onReconnect={handleReconnect}
               />
             </div>

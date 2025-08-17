@@ -20,6 +20,7 @@ import {
   ProfileDetails_Shimmer,
 } from './ShimmerLoader/exports';
 import { useRealtimeConnectionRequests } from '../hooks/realtime/useRealtimeConnectionRequests';
+import CancelConnectionRequestDialog from './CancelConnectionRequestDialog';
 
 import type { Schema } from '../../amplify/data/resource';
 
@@ -46,6 +47,7 @@ interface ProfileSidebarProps {
   onBack?: () => void;
   onEndChat?: () => void;
   onSendConnectionRequest?: () => void;
+  onCancelConnectionRequest?: (connectionId: string) => void;
   onReconnect?: () => void;
 }
 
@@ -66,11 +68,13 @@ export default function ProfileSidebar({
   onBack,
   onEndChat,
   onSendConnectionRequest,
+  onCancelConnectionRequest,
   onReconnect,
 }: ProfileSidebarProps) {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [profileLoading, setProfileLoading] = useState(false);
   const [showEndChatDialog, setShowEndChatDialog] = useState(false);
+  const [showCancelRequestDialog, setShowCancelRequestDialog] = useState(false);
   const [optimisticRequestSent, setOptimisticRequestSent] = useState(false);
   const { fetchUserProfile } = useSubscriptionStore();
 
@@ -83,6 +87,41 @@ export default function ProfileSidebar({
     conversationId: conversation?.id || '',
     enabled: !!conversation?.id,
   });
+
+  // Handle optimistic connect button click
+  const handleOptimisticConnect = async () => {
+    if (!onSendConnectionRequest) return;
+
+    // Immediately show optimistic state
+    setOptimisticRequestSent(true);
+
+    try {
+      await onSendConnectionRequest();
+    } catch (error) {
+      console.error('Failed to send permanent request', error);
+      // If request fails, reset optimistic state
+      setOptimisticRequestSent(false);
+    }
+  };
+
+  // Reset optimistic state when real pending request appears
+  useEffect(() => {
+    if (pendingRequest) {
+      setOptimisticRequestSent(false);
+    }
+  }, [pendingRequest]);
+
+  // Handle cancel connection request
+  const handleCancelRequest = async () => {
+    if (!pendingRequest?.id || !onCancelConnectionRequest) return;
+
+    try {
+      await onCancelConnectionRequest(pendingRequest.id);
+      setShowCancelRequestDialog(false);
+    } catch (error) {
+      console.error('Failed to cancel connection request:', error);
+    }
+  };
 
   // Load profile data when component mounts
   useEffect(() => {
@@ -320,18 +359,22 @@ export default function ProfileSidebar({
                       </svg>
                       <span>Connected</span>
                     </div>
-                  ) : pendingRequest ? (
-                    <div className='px-6 py-2 text-sm font-medium rounded-lg border flex items-center justify-center gap-2 bg-yellow-50 text-yellow-600 border-yellow-200'>
+                  ) : pendingRequest || optimisticRequestSent ? (
+                    <button
+                      onClick={() => setShowCancelRequestDialog(true)}
+                      disabled={optimisticRequestSent} // Disable if optimistic (no real request to cancel yet)
+                      className='px-6 py-2 text-sm font-medium rounded-lg border border-zinc-200 flex items-center justify-center gap-2 text-zinc-500 hover:bg-zinc-50 transition-colors disabled:cursor-not-allowed disabled:hover:bg-transparent'
+                    >
                       <Clock className='w-4 h-4' />
                       <span>Request Sent</span>
-                    </div>
+                    </button>
                   ) : (
                     <Tooltip
                       content='Make permanent connection'
                       position='bottom'
                     >
                       <button
-                        onClick={onSendConnectionRequest}
+                        onClick={handleOptimisticConnect}
                         disabled={
                           sendingConnectionRequest || connectionRequestsLoading
                         }
@@ -352,11 +395,7 @@ export default function ProfileSidebar({
                             fill='currentColor'
                           />
                         </svg>
-                        <span>
-                          {sendingConnectionRequest
-                            ? 'Connecting...'
-                            : 'Connect'}
-                        </span>
+                        <span>Connect</span>
                       </button>
                     </Tooltip>
                   )}
@@ -576,6 +615,14 @@ export default function ProfileSidebar({
           </div>
         </div>
       </DialogContainer>
+
+      {/* Cancel Connection Request Dialog */}
+      <CancelConnectionRequestDialog
+        isOpen={showCancelRequestDialog}
+        onClose={() => setShowCancelRequestDialog(false)}
+        onConfirm={handleCancelRequest}
+        isLoading={false} // We can add loading state later if needed
+      />
     </div>
   );
 }

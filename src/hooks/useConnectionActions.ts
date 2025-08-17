@@ -13,6 +13,7 @@ interface UseConnectionActionsReturn {
     connectionId: string,
     status: 'ACCEPTED' | 'REJECTED'
   ) => Promise<void>;
+  cancelConnectionRequest: (connectionId: string) => Promise<void>;
   isLoading: boolean;
   error: string | null;
 }
@@ -85,9 +86,36 @@ export function useConnectionActions({
     []
   );
 
+  const cancelConnectionRequest = useCallback(async (connectionId: string) => {
+    if (!connectionId) {
+      setError('Missing connection request ID');
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const result = await chatService.cancelConnectionRequest(connectionId);
+
+      if (result.error) {
+        setError(result.error);
+      }
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : 'Failed to cancel connection request'
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
   return {
     sendConnectionRequest,
     respondToConnectionRequest,
+    cancelConnectionRequest,
     isLoading,
     error,
   };

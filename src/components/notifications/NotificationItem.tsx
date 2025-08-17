@@ -376,11 +376,11 @@ export default function NotificationItem({
             </>
           ) : notification.type === 'connection' ? (
             <>
-                            {/* Check if this is an incoming connection request that needs response */}
-              {notification.data && 
-               'connectionRequestId' in notification.data && 
-               notification.title === 'Connect' &&
-               onRespondToConnectionRequest ? (
+              {/* Check if this is an incoming connection request that needs response */}
+              {notification.data &&
+              'connectionRequestId' in notification.data &&
+              notification.title === 'Connect' &&
+              onRespondToConnectionRequest ? (
                 <>
                   <button
                     onClick={async e => {
