@@ -395,7 +395,7 @@ export default function MessageList({
   if (messages.length === 0 && !isInitializing) {
     return (
       <div className='flex-1 overflow-y-auto bg-white'>
-        <div className='w-full px-4 sm:px-6 lg:px-32 xl:px-48 py-6 sm:py-8'>
+        <div className='w-full px-4 sm:px-6 lg:px-8 xl:px-12 py-6 sm:py-8'>
           <div className='flex flex-col items-center justify-center text-center py-20'>
             <div className='w-16 h-16 bg-zinc-100 rounded-full flex items-center justify-center mb-4'>
               <MessageCircle className='w-8 h-8 text-zinc-500' />
@@ -417,7 +417,7 @@ export default function MessageList({
     <div className='flex-1 overflow-y-auto bg-white'>
       <div
         ref={containerRef}
-        className='w-full px-4 sm:px-6 lg:px-32 xl:px-48 py-4 sm:py-6 flex flex-col gap-1'
+        className='w-full px-4 sm:px-6 lg:px-8 xl:px-12 py-4 sm:py-6 flex flex-col gap-1'
       >
         {/* Load More Messages Button/Indicator */}
         {hasMoreMessages ? (

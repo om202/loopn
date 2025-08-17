@@ -5,6 +5,7 @@ import { Clock, MessageCircle, CheckCircle2, ArrowLeft, Info, LogOut } from 'luc
 import Image from 'next/image';
 import UserAvatar from './UserAvatar';
 import Tooltip from './Tooltip';
+import DialogContainer from './DialogContainer';
 import { formatPresenceTime } from '../lib/presence-utils';
 import { useSubscriptionStore } from '../stores/subscription-store';
 import {
@@ -61,6 +62,7 @@ export default function ProfileSidebar({
 }: ProfileSidebarProps) {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [profileLoading, setProfileLoading] = useState(false);
+  const [showEndChatDialog, setShowEndChatDialog] = useState(false);
   const { fetchUserProfile } = useSubscriptionStore();
 
   // Load profile data when component mounts
@@ -236,16 +238,7 @@ export default function ProfileSidebar({
                 {getUserDisplayName()}
               </div>
             </div>
-            {getUserStatus() === 'ONLINE' && (
-              <div className='text-sm text-b_green-500'>Online</div>
-            )}
-            {userPresence?.lastSeen &&
-              formatPresenceTime(userPresence.lastSeen) !==
-                'Recently active' && (
-                <div className='text-sm text-zinc-500'>
-                  {formatPresenceTime(userPresence.lastSeen)}
-                </div>
-              )}
+
           </div>
         </div>
       </div>
@@ -263,7 +256,7 @@ export default function ProfileSidebar({
 
           {/* Trial Chat Status */}
           {!conversation.isConnected && conversation.chatStatus === 'ACTIVE' && timeLeft && timeLeft !== 'Expired' && (
-            <div className='mb-3 mt-3'>
+            <div className='mb-2 mt-1'>
               {/* Trial Chat Info with End Chat Icon - Centered */}
               <div className='flex items-center justify-center text-sm text-zinc-600 mb-2'>
                 <div className='flex items-center gap-2'>
@@ -273,7 +266,7 @@ export default function ProfileSidebar({
                   {onEndChat && (
                     <Tooltip content="End Chat" position="top">
                       <button
-                        onClick={onEndChat}
+                        onClick={() => setShowEndChatDialog(true)}
                         className='ml-2 p-1.5 text-zinc-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors'
                       >
                         <LogOut className='w-4 h-4' />
@@ -300,7 +293,7 @@ export default function ProfileSidebar({
 
           {/* Chat Ended Status */}
           {conversation.chatStatus === 'ENDED' && (
-            <div className='mb-3'>
+            <div className='mb-2'>
               <div className='flex items-center gap-2 text-sm text-zinc-600 mb-2'>
                 <Info className='w-4 h-4' />
                 <span className='font-medium text-zinc-900'>Chat Ended</span>
@@ -472,6 +465,41 @@ export default function ProfileSidebar({
           )}
         </div>
       </div>
+
+      {/* End Chat Confirmation Dialog */}
+      <DialogContainer
+        isOpen={showEndChatDialog}
+        onClose={() => setShowEndChatDialog(false)}
+        maxWidth='xs'
+      >
+        <div className='p-4'>
+          <h3 className='text-lg font-medium text-zinc-900 text-center mb-3'>
+            End trial chat?
+          </h3>
+          <p className='text-sm text-zinc-900 text-center mb-4'>
+            This will immediately end the chat. You won&apos;t be able to send
+            more messages, but chat history will remain accessible until the
+            trial period expires.
+          </p>
+          <div className='flex gap-2'>
+            <button
+              onClick={() => setShowEndChatDialog(false)}
+              className='flex-1 px-3 py-2 text-base font-medium text-zinc-900 bg-zinc-100 rounded-lg hover:bg-zinc-200 focus:outline-none transition-colors'
+            >
+              Cancel
+            </button>
+            <button
+              onClick={() => {
+                onEndChat?.();
+                setShowEndChatDialog(false);
+              }}
+              className='flex-1 px-3 py-2 text-base font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 focus:outline-none transition-colors'
+            >
+              End Chat
+            </button>
+          </div>
+        </div>
+      </DialogContainer>
     </div>
   );
 }

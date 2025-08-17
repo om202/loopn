@@ -307,7 +307,7 @@ export default function MessageBubble({
         <div
           className={`relative flex gap-2 min-w-0 ${isTouchDevice && showActionsOnMobile ? 'bg-brand-100 rounded-lg px-2 py-1' : ''}`}
         >
-          <div className='relative max-w-[85vw] sm:max-w-sm md:max-w-md lg:max-w-lg'>
+          <div className='relative max-w-[85vw] sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl'>
             {message.isDeleted ? (
               <div
                 className={`p-2.5 rounded-2xl border shadow-sm ${
