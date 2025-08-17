@@ -161,7 +161,7 @@ export default function DashboardSidebar({
                   className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                     activeSection === id
                       ? 'bg-brand-50 text-brand-700 border-brand-200'
-                      : 'text-zinc-700 hover:bg-zinc-50 hover:text-zinc-900 border-transparent'
+                      : 'text-zinc-900 hover:bg-zinc-50 hover:text-zinc-900 border-transparent'
                   }`}
                 >
                   <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -185,12 +185,14 @@ export default function DashboardSidebar({
                       })
                     )}
                   </div>
-                  <span className='font-medium text-base flex-1'>{label}</span>
-                  {count > 0 && id === 'notifications' && (
-                    <span className='text-xs font-semibold flex items-center justify-center h-5 w-5 rounded-full text-center bg-b_red-500 text-white'>
-                      {count > 99 ? '99+' : count}
-                    </span>
-                  )}
+                  <span className='font-medium text-base flex-1 flex items-center gap-3'>
+                    {label}
+                    {count > 0 && id === 'notifications' && (
+                      <span className='text-xs font-bold flex items-center justify-center h-6 w-6 rounded-full text-center bg-brand-50 text-brand-500 border border-brand-100'>
+                        {count > 99 ? '99+' : count}
+                      </span>
+                    )}
+                  </span>
                 </button>
               ))}
             </div>
@@ -205,7 +207,7 @@ export default function DashboardSidebar({
                 className={`relative flex-1 flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                   activeSection === helpItem.id
                     ? 'bg-brand-50 text-brand-700 border-brand-200'
-                    : 'text-zinc-700 hover:bg-zinc-50 hover:text-zinc-900 border-transparent'
+                    : 'text-zinc-900 hover:bg-zinc-50 hover:text-zinc-900 border-transparent'
                 }`}
               >
                 <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -218,7 +220,7 @@ export default function DashboardSidebar({
 
               <button
                 onClick={() => setIsBugReportOpen(true)}
-                className='p-2 text-zinc-500 hover:text-zinc-700 hover:bg-zinc-50 rounded-lg transition-colors border border-transparent hover:border-zinc-200'
+                className='p-2 text-zinc-500 hover:text-zinc-900 hover:bg-zinc-50 rounded-lg transition-colors border border-transparent hover:border-zinc-200'
                 title='Report Bug / Share Suggestion'
               >
                 <Bug className='w-4 h-4' />
@@ -275,7 +277,7 @@ export default function DashboardSidebar({
                 className={`relative flex-1 flex flex-col items-center justify-center gap-1.5 px-1 py-2.5 transition-colors duration-150 ${
                   activeSection === id
                     ? 'text-brand-600'
-                    : 'text-zinc-700 hover:text-zinc-800'
+                    : 'text-zinc-900 hover:text-zinc-900'
                 }`}
                 title={label}
               >
@@ -318,18 +320,10 @@ export default function DashboardSidebar({
                     })
                   )}
 
-                  {/* Count indicator positioned on the icon */}
-                  {count > 0 && id === 'notifications' && (
-                    <span
-                      className='absolute -top-3 -right-3 bg-zinc-100 text-[9px] rounded-full w-5 h-5 flex items-center justify-center font-bold shadow-sm border border-b_red-500 text-b_red-600 leading-none'
-                      style={{ minWidth: '20px', minHeight: '20px' }}
-                    >
-                      {count > 9 ? '9+' : count}
-                    </span>
-                  )}
+
                 </div>
                 <div
-                  className='text-[10px] font-medium leading-tight text-center'
+                  className='text-[10px] font-medium leading-tight text-center flex items-center justify-center gap-1.5'
                   style={{ textShadow: '0 1px 1px rgba(255, 255, 255, 0.8)' }}
                 >
                   {id === 'account'
@@ -341,6 +335,11 @@ export default function DashboardSidebar({
                         : id === 'notifications'
                           ? 'Notify'
                           : label}
+                  {count > 0 && id === 'notifications' && (
+                    <span className='text-[8px] font-bold flex items-center justify-center h-4 w-4 rounded-full text-center bg-brand-50 text-brand-500 border border-brand-100 leading-none'>
+                      {count > 9 ? '9+' : count}
+                    </span>
+                  )}
                 </div>
               </button>
             ))}

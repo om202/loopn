@@ -333,7 +333,7 @@ export default function DashboardDemo() {
             <div className='flex items-center gap-3'>
               <div className='relative'>
                 <Bell className='w-5 h-5 text-zinc-600' />
-                <div className='absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full flex items-center justify-center'>
+                <div className='absolute -top-1 -right-1 w-3 h-3 bg-brand-500 rounded-full flex items-center justify-center'>
                   <span className='text-white text-xs font-bold'>2</span>
                 </div>
               </div>
@@ -353,7 +353,7 @@ export default function DashboardDemo() {
           </div>
           <div className='flex-1 px-3 py-3 text-center text-sm font-medium text-zinc-600 relative'>
             Notifications
-            <div className='absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center'>
+            <div className='absolute -top-1 -right-1 w-4 h-4 bg-brand-500 rounded-full flex items-center justify-center'>
               <span className='text-white text-xs font-bold'>2</span>
             </div>
           </div>
