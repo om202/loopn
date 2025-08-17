@@ -255,7 +255,6 @@ export default function DashboardDemo() {
                 <div className='text-[15px] text-zinc-500 mb-1.5 truncate'>
                   {user.role}
                 </div>
-
               </div>
 
               <div className='flex-shrink-0 flex items-center gap-1.5'>
@@ -308,7 +307,6 @@ export default function DashboardDemo() {
                 <div className='text-sm text-zinc-500 mb-1'>
                   {connection.role}
                 </div>
-
               </div>
 
               <div className='flex-shrink-0 flex items-center gap-2'>
@@ -365,8 +363,6 @@ export default function DashboardDemo() {
                     {user.lastMessage}
                   </div>
                 </div>
-
-
               </div>
             </div>
           ))}
@@ -501,9 +497,7 @@ export default function DashboardDemo() {
             <h3 className='text-xl font-semibold text-zinc-900'>
               {currentUser.name}
             </h3>
-            <p className='text-zinc-500'>
-              {currentUser.role}
-            </p>
+            <p className='text-zinc-500'>{currentUser.role}</p>
             <p className='text-sm text-zinc-400'>{currentUser.email}</p>
           </div>
         </div>
@@ -617,9 +611,7 @@ export default function DashboardDemo() {
                   <div className='text-zinc-900 font-medium mb-1'>
                     {user.name}
                   </div>
-                  <div className='text-sm text-zinc-500 mb-2'>
-                    {user.role}
-                  </div>
+                  <div className='text-sm text-zinc-500 mb-2'>{user.role}</div>
                   <div className='flex flex-wrap gap-1'>
                     {user.skills.slice(0, 3).map((skill, idx) => (
                       <span
@@ -650,9 +642,11 @@ export default function DashboardDemo() {
       {/* Interactive Demo Header */}
       <div className='text-center mb-4 flex items-center justify-center gap-2'>
         <Target className='w-4 h-4 text-brand-500' />
-        <span className='text-brand-700 font-semibold text-sm'>Interactive Demo</span>
+        <span className='text-brand-700 font-semibold text-sm'>
+          Interactive Demo
+        </span>
       </div>
-      
+
       {/* Dashboard Layout - Desktop and Tablet */}
       <div className='hidden md:flex h-[650px]'>
         {/* Left Sidebar */}
@@ -1156,7 +1150,6 @@ export default function DashboardDemo() {
                       <div className='text-xs mb-2 text-zinc-600'>
                         {user.role}
                       </div>
-
                     </div>
 
                     <div className='flex-shrink-0'>
@@ -1201,7 +1194,6 @@ export default function DashboardDemo() {
                       <div className='text-xs text-zinc-600 mb-1'>
                         {connection.role}
                       </div>
-
                     </div>
 
                     <div className='flex-shrink-0'>
@@ -1253,8 +1245,6 @@ export default function DashboardDemo() {
                           {user.lastMessage}
                         </div>
                       </div>
-
-
                     </div>
                   </div>
                 ))}
@@ -1354,7 +1344,6 @@ export default function DashboardDemo() {
                         <div className='text-xs text-zinc-600 mb-2'>
                           {user.role}
                         </div>
-
                       </div>
 
                       <div className='flex-shrink-0'>

@@ -81,15 +81,17 @@ export function useUserCategorization({
 
   // Helper functions to categorize users
   const connectionUsers = useMemo(() => {
-    // For now, connections is empty since we only have chat trials
-    // When permanent connections are implemented, this will filter for permanent connections
-    return [];
-  }, []);
+    // Filter for permanent connections (conversations with isConnected: true)
+    return allUsers.filter(user => {
+      const conversation = existingConversations.get(user.userId);
+      return conversation && conversation.isConnected === true;
+    });
+  }, [allUsers, existingConversations]);
 
   const activeChatTrialUsers = useMemo(() => {
     return allUsers.filter(user => {
       const conversation = existingConversations.get(user.userId);
-      return conversation && conversation.chatStatus === 'ACTIVE';
+      return conversation && conversation.chatStatus === 'ACTIVE' && !conversation.isConnected;
     });
   }, [allUsers, existingConversations]);
 
