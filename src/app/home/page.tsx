@@ -70,6 +70,7 @@ export default function HomePage() {
 
   const isAuthenticated = authStatus === 'authenticated' && user;
   const authLink = isAuthenticated ? '/dashboard' : '/auth';
+  const signUpLink = isAuthenticated ? '/dashboard' : '/auth?view=signup';
   const authText = isAuthenticated ? 'Go to Dashboard' : 'Sign In';
   const ctaText = isAuthenticated ? 'Go to Dashboard' : 'Create an account';
 
@@ -109,15 +110,17 @@ export default function HomePage() {
                   height={32}
                   priority
                 />
-                <span className='text-xl font-bold text-zinc-900'>Loopn</span>
+                <div className='flex items-center gap-2'>
+                  <span className='text-xl font-bold text-zinc-900'>Loopn</span>
+                  <span className='bg-brand-500 text-white text-[10px] font-semibold px-1.5 py-0.5 rounded-full tracking-wide uppercase'>
+                    beta
+                  </span>
+                </div>
               </div>
             </div>
             <div className='flex items-center'>
               <Link href={authLink}>
-                <button
-                  className='bg-white hover:bg-brand-50 text-brand-600 border border-zinc-200 px-6 py-2.5 rounded-lg transition-colors flex items-center gap-2'
-                  style={{ fontWeight: '700 !important' }}
-                >
+                <button className='bg-white hover:bg-brand-50 text-brand-600 border border-zinc-200 px-6 py-2.5 rounded-lg transition-colors flex items-center gap-2'>
                   <LogIn className='w-4 h-4' />
                   {authText}
                 </button>
@@ -139,7 +142,7 @@ export default function HomePage() {
           <div className='grid lg:grid-cols-2 gap-12 lg:gap-16 items-center'>
             {/* Left column - Content */}
             <div className='text-center lg:text-left'>
-              <div className='mb-6'>
+              <div className='mb-8'>
                 <div className='flex items-center justify-center lg:justify-start gap-3'>
                   <Image
                     src='/loopn.svg'
@@ -154,7 +157,7 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <h1 className='text-4xl sm:text-5xl lg:text-6xl font-bold text-zinc-900 mb-6 leading-tight'>
+              <h1 className='text-4xl sm:text-5xl lg:text-5xl font-bold text-zinc-900 mb-8 leading-tight'>
                 Simple and AI powered{' '}
                 <span className='text-brand-500 relative'>
                   Networking
@@ -163,14 +166,17 @@ export default function HomePage() {
                 Platform
               </h1>
 
-              <p className='text-lg sm:text-xl text-zinc-500 mb-16 leading-relaxed max-w-2xl'>
+              <p className='text-lg sm:text-2xl text-zinc-500 mb-16 leading-relaxed max-w-2xl'>
                 Loopn helps you build meaningful professional relationships
-                through smart AI matching and authentic conversations.
+                through smart AI matching.
               </p>
 
               {/* CTA Buttons */}
               <div className='flex flex-col sm:flex-row gap-4 justify-center lg:justify-start'>
-                <Link href={authLink} className='w-full sm:w-auto'>
+                <Link
+                  href={isAuthenticated ? authLink : signUpLink}
+                  className='w-full sm:w-auto'
+                >
                   <button className='group w-full bg-brand-500 hover:bg-brand-600 text-white px-8 py-4 rounded-xl text-lg font-black transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-0.5 border border-brand-600'>
                     {ctaText}
                     <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' />
@@ -455,14 +461,7 @@ export default function HomePage() {
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           {/* Section Header */}
           <div className='text-center max-w-4xl mx-auto mb-16'>
-            <h2 className='text-3xl sm:text-4xl lg:text-5xl font-semibold text-zinc-900 mb-8'>
-              The future of networking is{' '}
-              <span className='text-brand-500 relative'>
-                here.
-                <div className='absolute -bottom-1 left-0 w-full h-1 bg-brand-200 rounded-full opacity-60'></div>
-              </span>
-            </h2>
-            <p className='text-xl text-zinc-500 leading-relaxed'>
+            <p className='text-2xl text-zinc-500 leading-relaxed'>
               Loopn removes the noise from traditional networking, helping you
               connect based on what truly matters — your expertise, goals, and
               shared interests.
@@ -571,7 +570,7 @@ export default function HomePage() {
 
           {/* Bottom CTA */}
           <div className='text-center'>
-            <Link href={authLink}>
+            <Link href={isAuthenticated ? authLink : signUpLink}>
               <button className='group inline-flex items-center gap-3 bg-brand-500 hover:bg-brand-600 text-white px-10 py-4 rounded-xl text-lg font-black transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 border border-brand-600'>
                 {ctaText}
                 <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' />
@@ -592,14 +591,7 @@ export default function HomePage() {
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           {/* Section Header */}
           <div className='text-center max-w-4xl mx-auto mb-16'>
-            <h2 className='text-3xl sm:text-4xl lg:text-5xl font-semibold text-zinc-900 mb-8'>
-              Your Journey to Meaningful{' '}
-              <span className='text-brand-500 relative'>
-                Connections
-                <div className='absolute -bottom-1 left-0 w-full h-1 bg-brand-200 rounded-full opacity-60'></div>
-              </span>
-            </h2>
-            <p className='text-xl text-zinc-500 leading-relaxed'>
+            <p className='text-2xl text-zinc-500 leading-relaxed'>
               Getting started with Loopn is quick and effortless.
             </p>
           </div>
@@ -682,14 +674,7 @@ export default function HomePage() {
 
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='text-center mb-16'>
-            <h2 className='text-3xl sm:text-4xl lg:text-5xl font-semibold text-zinc-900 mb-8'>
-              Trusted by professionals{' '}
-              <span className='text-brand-500 relative'>
-                worldwide
-                <div className='absolute -bottom-1 left-0 w-full h-1 bg-brand-200 rounded-full opacity-60'></div>
-              </span>
-            </h2>
-            <p className='text-xl text-zinc-500 max-w-3xl mx-auto leading-relaxed'>
+            <p className='text-2xl text-zinc-500 max-w-3xl mx-auto leading-relaxed'>
               Loopn is built for those who value authentic networking and
               meaningful connections.
             </p>
@@ -801,10 +786,10 @@ export default function HomePage() {
 
           {/* Trust Indicators */}
           <div className='mt-16 text-center'>
-            <h3 className='text-xl sm:text-2xl font-semibold text-zinc-900 mb-4'>
+            <h3 className='text-2xl sm:text-2xl font-semibold text-zinc-900 mb-4'>
               Built for Professionals in Every Field
             </h3>
-            <p className='text-zinc-600 mb-8 text-xl'>
+            <p className='text-zinc-600 mb-8 text-2xl'>
               From startups to global enterprises, Loopn connects experts across
               industries.
             </p>
@@ -849,7 +834,10 @@ export default function HomePage() {
           </p>
 
           <div className='flex flex-col sm:flex-row gap-4 justify-center'>
-            <Link href={authLink} className='w-full sm:w-auto'>
+            <Link
+              href={isAuthenticated ? authLink : signUpLink}
+              className='w-full sm:w-auto'
+            >
               <button className='group w-full bg-white hover:bg-zinc-50 text-brand-600 px-10 py-4 rounded-xl text-lg font-black transition-all duration-300 flex items-center justify-center gap-3 border border-brand-600'>
                 {ctaText}
                 <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' />
@@ -869,11 +857,15 @@ export default function HomePage() {
           <div className='text-center'>
             <div className='flex items-center justify-center space-x-3 mb-6'>
               <Image src='/loopn.svg' alt='Loopn' width={40} height={40} />
-              <span className='text-2xl font-bold text-zinc-900'>Loopn</span>
+              <div className='flex items-center gap-2'>
+                <span className='text-2xl font-bold text-zinc-900'>Loopn</span>
+                <span className='bg-brand-500 text-white text-[10px] font-semibold px-1.5 py-0.5 rounded-full tracking-wide uppercase'>
+                  beta
+                </span>
+              </div>
             </div>
-            <p className='text-zinc-600 text-center max-w-2xl mx-auto mb-8 leading-relaxed'>
-              Build meaningful connections through smart matching and genuine
-              conversations.
+            <p className='text-zinc-600 text-2xl text-center max-w-2xl mx-auto mb-8 leading-relaxed'>
+              Build meaningful connections through smart matching
             </p>
 
             {/* Footer Links */}

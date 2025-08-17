@@ -390,11 +390,11 @@ export default function DashboardDemo() {
               </div>
 
               <div className='flex-1 min-w-0'>
-                <div className='text-sm font-medium text-zinc-900 mb-1'>
-                  <span className='font-semibold'>{notification.title}</span>{' '}
+                <div className='text-base font-medium text-zinc-900 mb-1'>
+                  <span className=''>{notification.title}</span>{' '}
                   {notification.content}
                 </div>
-                <div className='text-xs text-zinc-500'>
+                <div className='text-sm text-zinc-500'>
                   {notification.timestamp}
                 </div>
               </div>
@@ -864,40 +864,40 @@ export default function DashboardDemo() {
           <div className='flex-shrink-0 mb-4 sm:mb-5 lg:mb-6'>
             {activeSection === 'discover' && (
               <>
-                <h2 className='text-xl font-bold text-zinc-900 mb-1'>
-                  Smart Matches for You
+                <h2 className='text-2xl font-bold text-zinc-900 mb-1'>
+                  Discover
                 </h2>
-                <p className='text-sm text-zinc-600'>
-                  AI-curated professionals based on your interests and goals
+                <p className='text-base text-zinc-600'>
+                  AI-curated professionals based on your interests
                 </p>
               </>
             )}
             {activeSection === 'connections' && (
               <>
-                <h2 className='text-xl font-bold text-zinc-900 mb-1'>
-                  Your Connections
+                <h2 className='text-2xl font-bold text-zinc-900 mb-1'>
+                  Connections
                 </h2>
-                <p className='text-sm text-zinc-600'>
+                <p className='text-base text-zinc-600'>
                   People you're connected with
                 </p>
               </>
             )}
             {activeSection === 'chats' && (
               <>
-                <h2 className='text-xl font-bold text-zinc-900 mb-1'>
-                  Recent Chats
+                <h2 className='text-2xl font-bold text-zinc-900 mb-1'>
+                  Chats
                 </h2>
-                <p className='text-sm text-zinc-600'>
+                <p className='text-base text-zinc-600'>
                   Your ongoing conversations
                 </p>
               </>
             )}
             {activeSection === 'notifications' && (
               <>
-                <h2 className='text-xl font-bold text-zinc-900 mb-1'>
+                <h2 className='text-2xl font-bold text-zinc-900 mb-1'>
                   Notifications
                 </h2>
-                <p className='text-sm text-zinc-600'>
+                <p className='text-base text-zinc-600'>
                   Stay updated with your network
                 </p>
               </>

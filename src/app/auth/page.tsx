@@ -3,9 +3,11 @@
 import CustomAuthenticator from '@/components/auth/CustomAuthenticator';
 import { useAuth } from '@/contexts/AuthContext';
 import { useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 export default function AuthPage() {
   const { authStatus, onboardingStatus } = useAuth();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     // Redirect based on auth and onboarding status
@@ -28,5 +30,9 @@ export default function AuthPage() {
     return null;
   }
 
-  return <CustomAuthenticator />;
+  // Get initial view from URL params
+  const initialView =
+    searchParams.get('view') === 'signup' ? 'signUp' : 'signIn';
+
+  return <CustomAuthenticator initialView={initialView} />;
 }

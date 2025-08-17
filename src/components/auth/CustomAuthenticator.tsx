@@ -21,8 +21,14 @@ interface AuthState {
   email?: string;
 }
 
-export default function CustomAuthenticator() {
-  const [authState, setAuthState] = useState<AuthState>({ view: 'signIn' });
+interface CustomAuthenticatorProps {
+  initialView?: AuthView;
+}
+
+export default function CustomAuthenticator({
+  initialView = 'signIn',
+}: CustomAuthenticatorProps) {
+  const [authState, setAuthState] = useState<AuthState>({ view: initialView });
 
   const AuthHeader = () => (
     <div className='text-center mb-8'>

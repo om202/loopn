@@ -91,7 +91,11 @@ export function useUserCategorization({
   const activeChatTrialUsers = useMemo(() => {
     return allUsers.filter(user => {
       const conversation = existingConversations.get(user.userId);
-      return conversation && conversation.chatStatus === 'ACTIVE' && !conversation.isConnected;
+      return (
+        conversation &&
+        conversation.chatStatus === 'ACTIVE' &&
+        !conversation.isConnected
+      );
     });
   }, [allUsers, existingConversations]);
 
