@@ -910,7 +910,7 @@ export default function OnlineUsers({
                             handleChatAction(profileSidebarUser.userId);
                           }
                         }}
-                        className='px-2 py-1.5 text-base font-medium rounded-xl border transition-colors bg-white text-brand-500 border-brand-200 hover:bg-brand-100 hover:border-brand-300 flex items-center justify-center gap-2'
+                        className='px-2 py-1.5 text-base font-medium rounded-xl border transition-colors bg-brand-50 text-brand-500 border-brand-100 hover:bg-brand-100 hover:border-brand-200 flex items-center justify-center gap-2'
                       >
                         {combinedPendingRequests.has(
                           profileSidebarUser.userId

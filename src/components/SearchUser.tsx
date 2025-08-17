@@ -174,7 +174,7 @@ export default function SearchUser({
             WebkitAppearance: 'none',
             MozAppearance: 'textfield',
           }}
-          className='w-full pl-10 pr-16 py-3 rounded-full focus:outline-none focus:ring-1 focus:ring-brand-200 focus:bg-white bg-zinc-100 hover:bg-brand-50 transition-colors placeholder-zinc-500'
+          className='w-full pl-10 pr-16 py-3 rounded-full border border-zinc-200 focus:outline-none focus:ring-1 focus:ring-brand-200 focus:bg-white bg-zinc-100 hover:bg-brand-50 transition-colors placeholder-zinc-500'
         />
 
         {/* Clear button - only show when there's text */}

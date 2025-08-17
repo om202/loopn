@@ -195,7 +195,7 @@ export default function IntelligentSearch({
               }
             }}
             placeholder={placeholder}
-            className='w-full pl-12 pr-12 py-4 text-lg border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none bg-white shadow-sm'
+            className='w-full pl-12 pr-12 py-4 text-lg border border-zinc-200 rounded-xl focus:border-brand-300 focus:outline-none bg-white shadow-sm'
           />
           {query && (
             <button
