@@ -118,10 +118,10 @@ export default function MessageReactions({
   );
 
   return (
-    <div className='flex flex-wrap gap-1 -mt-2 mb-1 min-h-[24px]'>
+    <div className={`flex flex-wrap gap-1 ${reactions && reactions.length > 0 ? '-mt-2 mb-0.5' : ''}`}>
       {!reactions || reactions.length === 0 ? (
-        // Empty container to maintain layout space
-        <div className='h-6 w-0' />
+        // No container when no reactions to avoid spacing
+        null
       ) : (
         reactionGroups.map(group => {
           const isAnimating = animatingEmojis.has(group.emoji);

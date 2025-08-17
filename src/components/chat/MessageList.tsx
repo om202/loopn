@@ -417,7 +417,7 @@ export default function MessageList({
     <div className='flex-1 overflow-y-auto bg-white'>
       <div
         ref={containerRef}
-        className='w-full px-4 sm:px-6 lg:px-32 xl:px-48 py-4 sm:py-6'
+        className='w-full px-4 sm:px-6 lg:px-32 xl:px-48 py-4 sm:py-6 flex flex-col gap-1'
       >
         {/* Load More Messages Button/Indicator */}
         {hasMoreMessages ? (
@@ -521,31 +521,31 @@ export default function MessageList({
           const isGroupedWithPrev = isPrevFromSameSender && prevTimeDiff <= 2;
           const isGroupedWithNext = isNextFromSameSender && nextTimeDiff <= 2;
 
-          let marginTop = 'mt-0.5';
-          let marginBottom = 'mb-0.5';
+          let marginTop = 'mt-0';
+          let marginBottom = 'mb-0';
 
           if (isGroupedWithPrev) {
-            // Within same group - no spacing at all
+            // Within same group - no spacing to touch
             marginTop = 'mt-0';
           } else {
-            // Between different groups - more spacing
+            // Between different groups - much more spacing
             if (prevTimeDiff > 60) {
-              marginTop = 'mt-4';
+              marginTop = 'mt-8';
             } else if (prevTimeDiff > 30) {
-              marginTop = 'mt-3';
+              marginTop = 'mt-7';
             } else if (prevTimeDiff > 10) {
-              marginTop = 'mt-2';
+              marginTop = 'mt-6';
             } else {
-              marginTop = 'mt-1.5';
+              marginTop = 'mt-5';
             }
           }
 
           if (isGroupedWithNext) {
-            // Within same group - no spacing at all
+            // Within same group - no spacing to touch
             marginBottom = 'mb-0';
           } else {
-            // Between different groups - more spacing
-            marginBottom = 'mb-2';
+            // Between different groups - much more spacing
+            marginBottom = 'mb-4';
           }
 
           const showAvatar = !isOwnMessage && !isGroupedWithPrev;

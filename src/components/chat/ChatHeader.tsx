@@ -1,8 +1,8 @@
 'use client';
 
-import Image from 'next/image';
 import { useState, useEffect, useCallback } from 'react';
 import { Info, Clock } from 'lucide-react';
+import Image from 'next/image';
 
 import type { Schema } from '../../../amplify/data/resource';
 import UserAvatar from '../UserAvatar';
@@ -62,48 +62,8 @@ export default function ChatHeader({
     email?: string;
     profilePictureUrl?: string;
     hasProfilePicture?: boolean;
+    jobRole?: string;
   } | null>(null);
-  const getPresenceDisplay = () => {
-    if (!otherUserPresence) {
-      return {
-        text: 'Unknown',
-        color: 'text-zinc-500',
-      };
-    }
-
-    // If user is busy, show "Busy" (takes priority over online status)
-    if (otherUserPresence.status === 'BUSY') {
-      return {
-        text: 'Busy',
-        color: 'text-b_red-500',
-      };
-    }
-
-    // If user is currently online, show "Online" in green
-    if (otherUserPresence.status === 'ONLINE') {
-      return {
-        text: 'Online',
-        color: 'text-b_green-500',
-      };
-    }
-
-    // For offline users, calculate status bucket
-    if (otherUserPresence.lastSeen) {
-      const presenceText = formatPresenceTime(otherUserPresence.lastSeen);
-      const color =
-        presenceText === 'Recently active' ? 'text-zinc-500' : 'text-zinc-500';
-      return {
-        text: presenceText,
-        color,
-      };
-    }
-
-    // Fallback for users without lastSeen data
-    return {
-      text: 'Offline',
-      color: 'text-zinc-500',
-    };
-  };
 
   // Load profile data when component mounts
   useEffect(() => {
@@ -122,6 +82,7 @@ export default function ChatHeader({
             profilePictureUrl:
               profileResult.data.profilePictureUrl || undefined,
             hasProfilePicture: profileResult.data.hasProfilePicture || false,
+            jobRole: profileResult.data.jobRole || undefined,
           });
         }
       } catch (error) {
@@ -241,49 +202,34 @@ export default function ChatHeader({
               <h1 className='text-sm sm:text-base font-medium text-zinc-900 truncate no-email-detection'>
                 {getUserDisplayName()}
               </h1>
-              <div className='flex items-center gap-1 sm:gap-2 mt-0.5'>
-                {conversation.isConnected ? (
-                  <div className='flex items-center text-sm sm:text-sm text-b_green-500'>
-                    <svg
-                      className='w-2.5 h-2.5 sm:w-3 sm:h-3 mr-1 flex-shrink-0'
-                      fill='currentColor'
-                      viewBox='0 0 20 20'
-                    >
-                      <path
-                        fillRule='evenodd'
-                        d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z'
-                        clipRule='evenodd'
-                      />
-                    </svg>
-                    <span className='hidden sm:inline'>
-                      Connected - Chat forever!
-                    </span>
-                    <span className='sm:hidden'>Connected</span>
-                  </div>
-                ) : (
-                  <div className='flex items-center gap-1 sm:gap-2 text-sm sm:text-sm'>
-                    <div
-                      className={`flex items-center ${getPresenceDisplay().color}`}
-                    >
-                      {getPresenceDisplay().text}
-                    </div>
 
-                    {/* Trial Chat Text Only */}
-                    {conversation.chatStatus === 'ACTIVE' &&
-                      !!timeLeft &&
-                      timeLeft !== 'Expired' && (
-                        <>
-                          <span className='text-zinc-500 hidden sm:inline'>
-                            •
-                          </span>
-                          <span className='text-brand-500 hidden sm:inline'>
-                            Trial Chat
-                          </span>
-                        </>
-                      )}
-                  </div>
-                )}
-              </div>
+              {/* Profession */}
+              {userProfile?.jobRole && (
+                <div className='text-xs sm:text-sm text-zinc-500 mb-1 truncate'>
+                  {userProfile.jobRole}
+                </div>
+              )}
+
+              {/* Connected Status */}
+              {conversation.isConnected && (
+                <div className='flex items-center text-xs sm:text-sm text-b_green-500 mb-1'>
+                  <svg
+                    className='w-2.5 h-2.5 sm:w-3 sm:h-3 mr-1 flex-shrink-0'
+                    fill='currentColor'
+                    viewBox='0 0 20 20'
+                  >
+                    <path
+                      fillRule='evenodd'
+                      d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z'
+                      clipRule='evenodd'
+                    />
+                  </svg>
+                  <span className='hidden sm:inline'>
+                    Connected - Chat forever!
+                  </span>
+                  <span className='sm:hidden'>Connected</span>
+                </div>
+              )}
             </div>
 
             {/* Trial Chat Status and Actions - Right Side */}
@@ -356,9 +302,9 @@ export default function ChatHeader({
                           title='Learn about trial chat period'
                         >
                           <Clock className='w-4 h-4 text-zinc-500 sm:hidden flex-shrink-0' />
-                          <Info className='w-3 sm:w-4 h-3 sm:h-4 text-brand-500 hidden sm:block' />
+                          <Clock className='w-3 sm:w-4 h-3 sm:h-4 text-brand-500 hidden sm:block' />
                           <span className='font-medium hidden sm:inline'>
-                            Time Left
+                            Trial Chat
                           </span>
                         </button>
                         <span className='text-zinc-900 text-sm font-bold whitespace-nowrap'>
@@ -373,24 +319,27 @@ export default function ChatHeader({
                       <button
                         onClick={onSendConnectionRequest}
                         disabled={sendingConnectionRequest}
-                        className='flex items-center gap-1 sm:gap-1.5 px-3 sm:px-3 lg:px-4 py-2 sm:py-2 bg-brand-500 hover:bg-brand-500 disabled:bg-brand-500 text-white rounded-lg shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:cursor-not-allowed flex-shrink-0'
+                        className='px-4 py-2 text-base font-medium rounded-xl border transition-colors flex items-center justify-center md:w-auto md:h-auto md:gap-1.5 bg-brand-100 text-brand-600 border-brand-200 hover:bg-brand-200 hover:border-brand-400 disabled:bg-brand-100 disabled:cursor-not-allowed'
                       >
-                        <Image
-                          src='/connect-icon.svg'
-                          alt='Connect'
-                          width={16}
-                          height={16}
-                          className='flex-shrink-0 sm:w-4 sm:h-4 lg:w-[18px] lg:h-[18px]'
-                        />
-                        <span className='text-sm sm:text-sm lg:text-base font-medium whitespace-nowrap'>
-                          <span className='hidden sm:inline'>
-                            {sendingConnectionRequest
-                              ? 'Connecting...'
-                              : 'Connect'}
-                          </span>
-                          <span className='sm:hidden'>
-                            {sendingConnectionRequest ? '...' : 'Connect'}
-                          </span>
+                        <svg
+                          width='16'
+                          height='16'
+                          viewBox='30 30 160 160'
+                          className='w-4 h-4 flex-shrink-0'
+                          aria-hidden='true'
+                        >
+                          <circle cx='75' cy='110' r='35' fill='currentColor' />
+                          <circle
+                            cx='145'
+                            cy='110'
+                            r='35'
+                            fill='currentColor'
+                          />
+                        </svg>
+                        <span className='hidden md:inline text-base font-medium'>
+                          {sendingConnectionRequest
+                            ? 'Connecting...'
+                            : 'Connect'}
                         </span>
                       </button>
                     </div>

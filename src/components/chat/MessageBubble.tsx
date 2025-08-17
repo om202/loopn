@@ -286,7 +286,7 @@ export default function MessageBubble({
       onTouchEnd={handleTouchEnd}
       onTouchCancel={handleLongPressEnd}
     >
-      <div className='relative flex items-center gap-2 max-w-full'>
+      <div className='relative flex items-center gap-3 max-w-full'>
         {/* Avatar container - always takes up space for other users to maintain consistent alignment */}
         {!isOwnMessage && (
           <div className='flex-shrink-0 w-8 h-8'>
@@ -310,10 +310,10 @@ export default function MessageBubble({
           <div className='relative max-w-[85vw] sm:max-w-sm md:max-w-md lg:max-w-lg'>
             {message.isDeleted ? (
               <div
-                className={`p-3 rounded-3xl border ${
+                className={`p-2.5 rounded-2xl border shadow-sm ${
                   isOwnMessage
-                    ? 'bg-zinc-100 text-zinc-500 border-zinc-200 rounded-br-sm'
-                    : 'bg-zinc-100 text-zinc-500 border-zinc-200 rounded-bl-sm'
+                    ? 'bg-zinc-100 text-zinc-500 border-zinc-200 rounded-br-md'
+                    : 'bg-zinc-100 text-zinc-500 border-zinc-200 rounded-bl-md'
                 }`}
               >
                 <p className='text-sm italic select-none'>Message deleted</p>
@@ -324,19 +324,19 @@ export default function MessageBubble({
               </div>
             ) : (
               <div
-                className={`p-3 rounded-3xl ${
+                className={`p-2.5 rounded-2xl shadow-sm ${
                   isOwnMessage
-                    ? 'bg-brand-500 text-white border border-brand-500 rounded-br-sm'
-                    : 'bg-zinc-100 text-zinc-900 rounded-bl-sm'
+                    ? 'bg-brand-500 text-white border border-brand-500 rounded-br-md'
+                    : 'bg-zinc-100 text-zinc-900 border border-zinc-200 rounded-bl-md'
                 }`}
               >
                 {repliedToMessage && (
                   <div
                     className={`mb-2 pt-2 pb-2 border-l-2 pl-3 pr-3 ${
                       isOwnMessage
-                        ? 'border-brand-300 bg-brand-500 bg-opacity-20'
-                        : 'border-zinc-400 bg-zinc-100'
-                    } rounded-r-lg`}
+                        ? 'border-brand-300 bg-brand-500 bg-opacity-15'
+                        : 'border-zinc-400 bg-zinc-50'
+                    } rounded-r-xl`}
                   >
                     <div
                       className={`text-sm ${
@@ -379,7 +379,7 @@ export default function MessageBubble({
 
             {!message.isDeleted && (
               <div
-                className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'} -mt-1`}
+                className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'} ${reactions && reactions.length > 0 ? '-mt-1.5' : ''}`}
               >
                 <MessageReactions
                   reactions={reactions}
@@ -397,23 +397,23 @@ export default function MessageBubble({
               className={`absolute ${
                 isTouchDevice
                   ? `bottom-full mb-2 ${isOwnMessage ? 'right-0' : 'left-0'}`
-                  : `top-1/2 -translate-y-6 ${isOwnMessage ? 'right-full mr-3' : 'left-full ml-3'}`
-              } ${showEmojiPicker || (isTouchDevice && showActionsOnMobile) ? 'flex opacity-100' : isTouchDevice ? 'hidden' : 'hidden group-hover:flex group-hover:opacity-100'} transition-all duration-150 ease-out items-center ${
+                  : `top-1/2 -translate-y-1/2 ${isOwnMessage ? 'right-full mr-3' : 'left-full ml-3'}`
+              } ${showEmojiPicker || (isTouchDevice && showActionsOnMobile) ? 'flex opacity-100' : isTouchDevice ? 'hidden' : 'hidden group-hover:flex group-hover:opacity-100'} transition-all duration-200 ease-out items-center ${
                 isOwnMessage ? 'flex-row-reverse' : 'flex-row'
               } z-10`}
             >
               <div
-                className={`${isTouchDevice && showActionsOnMobile ? 'bg-white/95 backdrop-blur-md border border-zinc-200 rounded-full p-1.5 gap-1.5 shadow-lg' : 'gap-2'} flex items-center ${
+                className={`bg-white/95 backdrop-blur-md border border-zinc-200 rounded-full px-2 py-1.5 gap-3 flex items-center ${
                   isOwnMessage ? 'flex-row-reverse' : 'flex-row'
                 }`}
               >
                 <button
                   onClick={handleReplyClick}
-                  className={`${isTouchDevice ? 'w-10 h-10' : 'w-8 h-8'} ${isTouchDevice && showActionsOnMobile ? 'bg-zinc-100 hover:bg-zinc-100 border border-zinc-200' : 'bg-zinc-100 hover:bg-zinc-100'} rounded-full transition-colors duration-150 flex items-center justify-center`}
+                  className='p-1 hover:bg-brand-100 hover:rounded-full rounded transition-all duration-200 flex items-center justify-center group'
                   title='Reply'
                 >
                   <svg
-                    className='w-4 h-4 text-zinc-900'
+                    className='w-4 h-4 text-zinc-500 group-hover:text-brand-600 group-hover:scale-110 transition-all duration-200'
                     fill='none'
                     stroke='currentColor'
                     viewBox='0 0 24 24'
@@ -430,11 +430,11 @@ export default function MessageBubble({
                 {isOwnMessage && onDeleteMessage && !message.isDeleted && (
                   <button
                     onClick={handleDeleteClick}
-                    className={`${isTouchDevice ? 'w-10 h-10' : 'w-8 h-8'} ${isTouchDevice && showActionsOnMobile ? 'bg-zinc-100 hover:bg-b_red-100 border border-zinc-200' : 'bg-zinc-100 hover:bg-b_red-100'} rounded-full transition-colors duration-150 flex items-center justify-center`}
+                    className='p-1 hover:bg-b_red-100 hover:rounded-full rounded transition-all duration-200 flex items-center justify-center group'
                     title='Delete message'
                   >
                     <svg
-                      className='w-4 h-4 text-zinc-900 hover:text-b_red-500'
+                      className='w-4 h-4 text-zinc-500 group-hover:text-b_red-500 group-hover:scale-110 transition-all duration-200'
                       fill='none'
                       stroke='currentColor'
                       viewBox='0 0 24 24'
@@ -453,17 +453,19 @@ export default function MessageBubble({
                   <button
                     onClick={onEmojiPickerToggle}
                     data-emoji-button
-                    className={`${isTouchDevice ? 'w-10 h-10' : 'w-8 h-8'} rounded-full transition-all duration-150 flex items-center justify-center ${
+                    className={`p-1 rounded transition-all duration-200 flex items-center justify-center group ${
                       showEmojiPicker
-                        ? 'bg-brand-500 text-white border border-brand-500'
-                        : isTouchDevice && showActionsOnMobile
-                          ? 'bg-zinc-100 hover:bg-zinc-100 text-zinc-900 border border-zinc-200'
-                          : 'bg-zinc-100 text-zinc-900'
+                        ? 'bg-b_yellow-100 rounded-full'
+                        : 'hover:bg-b_yellow-100 hover:rounded-full'
                     }`}
                     title='Add reaction'
                   >
                     <svg
-                      className='w-4 h-4'
+                      className={`w-4 h-4 group-hover:scale-110 transition-all duration-200 ${
+                        showEmojiPicker
+                          ? 'text-b_yellow-500'
+                          : 'text-zinc-500 group-hover:text-b_yellow-500'
+                      }`}
                       fill='none'
                       stroke='currentColor'
                       viewBox='0 0 24 24'
