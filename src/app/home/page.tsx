@@ -12,6 +12,7 @@ import {
   Brain,
   Shield,
   Clock,
+  Smile,
 } from 'lucide-react';
 import DashboardDemo from '@/components/DashboardDemo';
 import Image from 'next/image';
@@ -134,7 +135,9 @@ export default function HomePage() {
                     height={38}
                     priority
                   />
-                  <span className='text-2xl font-medium text-zinc-500'>Loopn</span>
+                  <span className='text-2xl font-medium text-zinc-500'>
+                    Loopn
+                  </span>
                 </div>
               </div>
 
@@ -143,16 +146,14 @@ export default function HomePage() {
                 <span className='text-brand-500 relative'>
                   Networking
                   <div className='absolute -bottom-2 left-0 w-full h-1 bg-brand-200 rounded-full opacity-60'></div>
-                </span>
-                {' '}Platform
+                </span>{' '}
+                Platform
               </h1>
 
               <p className='text-lg sm:text-xl text-zinc-500 mb-16 leading-relaxed max-w-2xl'>
                 Loopn helps you build meaningful professional relationships
                 through smart AI matching and authentic conversations.
               </p>
-
-
 
               {/* CTA Buttons */}
               <div className='flex flex-col sm:flex-row gap-4 justify-center lg:justify-start'>
@@ -178,60 +179,106 @@ export default function HomePage() {
               <div className='bg-white md:rounded-2xl shadow-xl border border-zinc-200 w-full sm:max-w-md lg:max-w-lg sm:mx-auto overflow-hidden'>
                 {/* Chat Header - matching ChatHeader.tsx */}
                 <div
-                  className='bg-white border-b border-zinc-200 relative z-10'
+                  className='flex-shrink-0 bg-white border-b border-zinc-200 relative z-10'
                   style={{ boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.04)' }}
                 >
-                  <div className='px-4 py-3'>
-                    <div className='flex items-center gap-3'>
-                      {/* User Avatar */}
-                      <div className='relative'>
-                        <Image
-                          src='/dummy-user.jpg'
-                          alt='Ethan Cole'
-                          width={40}
-                          height={40}
-                          className='w-10 h-10 rounded-full object-cover'
-                        />
-                        <div className='absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-b_green-400 border-2 border-white rounded-full'></div>
-                      </div>
-
-                      <div className='flex-1 min-w-0'>
-                        <h1 className='text-sm font-medium text-zinc-900 truncate'>
-                          Ethan Cole
-                        </h1>
-                        <div className='flex items-center gap-2 mt-0.5'>
-                          <div className='flex items-center text-sm text-b_green-500'>
-                            Online
-                          </div>
-                          <span className='text-zinc-500 text-sm'>•</span>
-                          <span className='text-brand-500 text-sm'>
-                            Trial Chat
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Trial controls */}
-                      <div className='flex items-center gap-2 text-sm'>
-                        <div className='flex items-center gap-1 text-zinc-500'>
-                          <Clock className='w-4 h-4 text-zinc-500' />
-                          <span className='text-zinc-900 font-bold whitespace-nowrap'>
-                            6d 14h
-                          </span>
-                        </div>
-                        <div className='w-0.5 h-6 bg-zinc-100'></div>
+                  <div className='w-full px-3 sm:px-4'>
+                    <div className='py-2 sm:py-3'>
+                      <div className='flex items-center gap-2 sm:gap-3'>
+                        {/* Back Button */}
                         <button
                           disabled
-                          className='flex items-center gap-1.5 px-3 py-2 bg-brand-500 text-white rounded-lg shadow-lg cursor-not-allowed opacity-80'
+                          className='p-1.5 sm:p-2 -ml-1 sm:-ml-2 text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 cursor-not-allowed opacity-50'
                         >
-                          <Image
-                            src='/connect-icon.svg'
-                            alt='Connect'
-                            width={16}
-                            height={16}
-                            className='flex-shrink-0'
-                          />
-                          <span className='text-sm font-medium'>Connect</span>
+                          <svg
+                            className='w-4 h-4 sm:w-5 sm:h-5'
+                            fill='none'
+                            stroke='currentColor'
+                            viewBox='0 0 24 24'
+                          >
+                            <path
+                              strokeLinecap='round'
+                              strokeLinejoin='round'
+                              strokeWidth={2}
+                              d='M15 19l-7-7 7-7'
+                            />
+                          </svg>
                         </button>
+
+                        {/* User Avatar */}
+                        <div className='relative'>
+                          <Image
+                            src='/dummy-user.jpg'
+                            alt='Ethan Cole'
+                            width={40}
+                            height={40}
+                            className='w-10 h-10 rounded-full object-cover'
+                          />
+                          <div className='absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-b_green-400 border-2 border-white rounded-full'></div>
+                        </div>
+
+                        <div className='flex-1 min-w-0'>
+                          <h1 className='text-sm sm:text-base font-medium text-zinc-900 truncate no-email-detection'>
+                            Ethan Cole
+                          </h1>
+
+                          {/* Profession */}
+                          <div className='text-xs sm:text-sm text-zinc-500 mb-1 truncate'>
+                            Product Designer
+                          </div>
+                        </div>
+
+                        {/* Trial Chat Controls */}
+                        <div className='flex items-center gap-1 sm:gap-2 text-sm sm:text-sm'>
+                          <div className='flex items-center gap-1 sm:gap-2 text-zinc-500 mr-1 sm:mr-2'>
+                            <button
+                              disabled
+                              className='flex items-center gap-1 hover:bg-zinc-100 rounded-full p-1 transition-colors cursor-not-allowed opacity-50'
+                              title='Learn about trial chat period'
+                            >
+                              <Clock className='w-3 sm:w-4 h-3 sm:h-4 text-brand-500' />
+                              <span className='font-medium hidden sm:inline'>
+                                Trial Chat
+                              </span>
+                            </button>
+                            <span className='text-zinc-900 text-sm font-bold whitespace-nowrap'>
+                              6d 14h
+                            </span>
+                          </div>
+
+                          {/* Line Separator */}
+                          <div className='w-0.5 h-6 sm:h-8 bg-zinc-100 mr-1 sm:mr-2 hidden sm:block'></div>
+
+                          {/* Connect Button */}
+                          <button
+                            disabled
+                            className='px-4 py-2 text-base font-medium rounded-xl border transition-colors flex items-center justify-center md:w-auto md:h-auto md:gap-1.5 bg-brand-100 text-brand-600 border-brand-200 hover:bg-brand-200 hover:border-brand-400 disabled:bg-brand-100 disabled:cursor-not-allowed opacity-80'
+                          >
+                            <svg
+                              width='16'
+                              height='16'
+                              viewBox='30 30 160 160'
+                              className='w-4 h-4 flex-shrink-0'
+                              aria-hidden='true'
+                            >
+                              <circle
+                                cx='75'
+                                cy='110'
+                                r='35'
+                                fill='currentColor'
+                              />
+                              <circle
+                                cx='145'
+                                cy='110'
+                                r='35'
+                                fill='currentColor'
+                              />
+                            </svg>
+                            <span className='hidden md:inline text-base font-medium'>
+                              Connect
+                            </span>
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -343,20 +390,40 @@ export default function HomePage() {
                 </div>
 
                 {/* Chat Input - matching MessageInput.tsx */}
-                <div className='px-4 pb-4 border-t border-zinc-200 bg-white'>
-                  <div className='pt-4'>
-                    <div className='bg-zinc-50 rounded-xl border border-zinc-200 px-4 py-3 flex items-center gap-3'>
-                      <input
-                        type='text'
-                        placeholder='Type your message...'
-                        className='flex-1 bg-transparent text-sm placeholder-zinc-500 focus:outline-none'
-                        disabled
-                      />
+                <div className='flex-shrink-0 bg-white border-t border-zinc-200 p-3 sm:p-4 shadow-lg relative'>
+                  <div className='w-full'>
+                    <div className='flex gap-3 items-end'>
+                      <div className='flex-1 relative'>
+                        <input
+                          type='text'
+                          placeholder='Type your message...'
+                          disabled
+                          style={{
+                            fontSize: '16px',
+                            WebkitAppearance: 'none',
+                            MozAppearance: 'textfield',
+                          }}
+                          className='w-full px-5 py-3 pr-14 border border-zinc-200 rounded-full focus:outline-none focus:ring-1 focus:ring-brand-500 focus:border-transparent text-base font-medium bg-zinc-100 hover:bg-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed placeholder-zinc-500'
+                        />
+                        <button
+                          type='button'
+                          disabled
+                          className='absolute right-2 top-1/2 transform -translate-y-1/2 text-zinc-500 hover:text-zinc-900 transition-all duration-200 p-2 rounded-full hover:bg-zinc-100 focus:outline-none disabled:opacity-50 cursor-not-allowed'
+                        >
+                          <Smile className='w-6 h-6' />
+                        </button>
+                      </div>
                       <button
                         disabled
-                        className='w-8 h-8 bg-brand-500 rounded-lg flex items-center justify-center cursor-not-allowed opacity-80'
+                        className='flex items-center justify-center w-12 h-12 bg-brand-500 text-white rounded-full hover:bg-brand-500 focus:bg-brand-500 transition-all duration-200 shadow-lg hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none'
                       >
-                        <ArrowRight className='w-4 h-4 text-white' />
+                        <Image
+                          src='/send_icon.svg'
+                          alt='Send'
+                          width={20}
+                          height={20}
+                          className='flex-shrink-0 brightness-0 invert translate-x-0.5 opacity-80 hover:opacity-100 transition-opacity duration-200'
+                        />
                       </button>
                     </div>
                   </div>
@@ -505,10 +572,7 @@ export default function HomePage() {
       </section>
 
       {/* How It Works */}
-      <section
-        id='how-it-works'
-        className='py-12 sm:py-16 bg-white relative'
-      >
+      <section id='how-it-works' className='py-12 sm:py-16 bg-white relative'>
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-1/3 right-0 w-96 h-96 bg-brand-50/60 rounded-full blur-3xl' />
