@@ -170,7 +170,7 @@ export default function ChatHeader({
     return `Reconnection Available - ${seconds}s`;
   }, [conversation.endedAt]);
 
-  // Update reconnection time every second for real-time countdown
+  // Update reconnection time with lazy updates for better performance
   useEffect(() => {
     if (conversation.chatStatus === 'ENDED' && conversation.endedAt) {
       const updateTime = () => {
@@ -180,8 +180,8 @@ export default function ChatHeader({
       // Update immediately
       updateTime();
 
-      // Update every second
-      const interval = setInterval(updateTime, 1000);
+      // Update every 10 seconds for lazy timer
+      const interval = setInterval(updateTime, 10000);
 
       return () => clearInterval(interval);
     } else {

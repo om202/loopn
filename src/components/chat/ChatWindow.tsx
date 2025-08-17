@@ -179,7 +179,7 @@ export default function ChatWindow({
     window.location.href = '/dashboard';
   }, []);
 
-  // Calculate time remaining in probation - now just updates the existing state
+  // Calculate time remaining in probation with lazy updates for better performance
   useEffect(() => {
     if (!conversation.probationEndsAt || conversation.isConnected) {
       return;
@@ -192,7 +192,7 @@ export default function ChatWindow({
       if (newTimeLeft === 'Expired') {
         clearInterval(timer);
       }
-    }, 1000);
+    }, 10000); // Update every 10 seconds for lazy timer
 
     return () => clearInterval(timer);
   }, [

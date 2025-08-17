@@ -387,7 +387,7 @@ export default function OnlineUsers({
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());
-    }, 1000);
+    }, 10000); // Update every 10 seconds for lazy timer
 
     return () => clearInterval(timer);
   }, []);
