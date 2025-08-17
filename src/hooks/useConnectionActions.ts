@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { chatService } from '../services/chat.service';
+import { useSubscriptionStore } from '../stores/subscription-store';
 
 interface UseConnectionActionsProps {
   conversationId: string;
@@ -25,6 +26,7 @@ export function useConnectionActions({
 }: UseConnectionActionsProps): UseConnectionActionsReturn {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { removeConnectionRequest } = useSubscriptionStore();
 
   const sendConnectionRequest = useCallback(async () => {
     if (!conversationId || !currentUserId || !otherUserId) {
@@ -86,31 +88,39 @@ export function useConnectionActions({
     []
   );
 
-  const cancelConnectionRequest = useCallback(async (connectionId: string) => {
-    if (!connectionId) {
-      setError('Missing connection request ID');
-      return;
-    }
-
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const result = await chatService.cancelConnectionRequest(connectionId);
-
-      if (result.error) {
-        setError(result.error);
+  const cancelConnectionRequest = useCallback(
+    async (connectionId: string) => {
+      if (!connectionId) {
+        setError('Missing connection request ID');
+        return;
       }
-    } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : 'Failed to cancel connection request'
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        // Optimistically remove from store immediately for instant UI update
+        removeConnectionRequest(conversationId, connectionId);
+
+        const result = await chatService.cancelConnectionRequest(connectionId);
+
+        if (result.error) {
+          setError(result.error);
+          // TODO: Could add rollback logic here if needed
+        }
+      } catch (err) {
+        setError(
+          err instanceof Error
+            ? err.message
+            : 'Failed to cancel connection request'
+        );
+        // TODO: Could add rollback logic here if needed
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [conversationId, removeConnectionRequest]
+  );
 
   return {
     sendConnectionRequest,

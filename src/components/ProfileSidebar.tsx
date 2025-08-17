@@ -118,6 +118,8 @@ export default function ProfileSidebar({
     try {
       await onCancelConnectionRequest(pendingRequest.id);
       setShowCancelRequestDialog(false);
+      // Reset optimistic state immediately for better UX
+      setOptimisticRequestSent(false);
     } catch (error) {
       console.error('Failed to cancel connection request:', error);
     }

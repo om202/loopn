@@ -862,10 +862,42 @@ export class ChatService {
     connectionRequestId: string
   ): Promise<DataResult<boolean>> {
     try {
+      // First get the connection request to get user IDs for notification cleanup
+      const connectionResult = await getClient().models.UserConnection.get({
+        id: connectionRequestId,
+      });
+
+      if (!connectionResult.data) {
+        return {
+          data: false,
+          error: 'Connection request not found',
+        };
+      }
+
       // Delete the connection request
       await getClient().models.UserConnection.delete({
         id: connectionRequestId,
       });
+
+      // Clean up notifications for both users
+      try {
+        await Promise.all([
+          notificationService.deleteNotificationsForConnectionRequest(
+            connectionResult.data.receiverId,
+            connectionRequestId
+          ),
+          notificationService.deleteNotificationsForConnectionRequest(
+            connectionResult.data.requesterId,
+            connectionRequestId
+          ),
+        ]);
+      } catch (notificationError) {
+        console.error(
+          'Failed to clean up connection request notifications:',
+          notificationError
+        );
+        // Don't fail the whole operation if notification cleanup fails
+      }
 
       return {
         data: true,

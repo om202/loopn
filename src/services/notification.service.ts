@@ -380,6 +380,43 @@ export class NotificationService {
   }
 
   /**
+   * Delete notifications for a specific connection request
+   * (useful when connection request is canceled/accepted/rejected)
+   */
+  async deleteNotificationsForConnectionRequest(
+    userId: string,
+    connectionRequestId: string
+  ) {
+    try {
+      const result = await this.getClient().models.Notification.list({
+        filter: {
+          userId: { eq: userId },
+          connectionRequestId: { eq: connectionRequestId },
+        },
+      });
+
+      if (result.data && result.data.length > 0) {
+        const deletePromises = result.data.map(notif =>
+          this.getClient().models.Notification.delete({ id: notif.id })
+        );
+
+        await Promise.all(deletePromises);
+      }
+
+      return { data: true, error: null };
+    } catch (error) {
+      console.error(
+        'Error deleting notifications for connection request:',
+        error
+      );
+      return {
+        data: false,
+        error: 'Failed to delete connection request notifications',
+      };
+    }
+  }
+
+  /**
    * Subscribe to notification changes (for real-time updates)
    * Only returns unread notifications to match getUnreadNotifications behavior
    */

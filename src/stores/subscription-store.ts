@@ -120,6 +120,10 @@ interface SubscriptionState {
   getConnectionRequestsForConversation: (
     conversationId: string
   ) => UserConnection[];
+  removeConnectionRequest: (
+    conversationId: string,
+    connectionId: string
+  ) => void;
 
   // Debug helpers
   getStats: () => {
@@ -459,6 +463,25 @@ export const useSubscriptionStore = create<SubscriptionState>()(
       getConnectionRequestsForConversation: (conversationId: string) => {
         const state = get();
         return state.connectionRequests.get(conversationId) || [];
+      },
+
+      removeConnectionRequest: (
+        conversationId: string,
+        connectionId: string
+      ) => {
+        set(state => {
+          const currentRequests =
+            state.connectionRequests.get(conversationId) || [];
+          const filteredRequests = currentRequests.filter(
+            req => req.id !== connectionId
+          );
+          return {
+            connectionRequests: new Map(state.connectionRequests).set(
+              conversationId,
+              filteredRequests
+            ),
+          };
+        });
       },
 
       // High-level subscription methods
