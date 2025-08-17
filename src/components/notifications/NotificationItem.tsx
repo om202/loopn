@@ -257,7 +257,7 @@ export default function NotificationItem({
               {(() => {
                 const content = notification.content;
                 const moreMatch = content.match(/^(.*?)\s*\(\+(\d+)\s+more\)$/);
-                
+
                 if (moreMatch) {
                   const [, baseContent, count] = moreMatch;
                   return (
@@ -269,7 +269,7 @@ export default function NotificationItem({
                     </>
                   );
                 }
-                
+
                 return <p className='text-base text-zinc-500'>{content}</p>;
               })()}
             </div>

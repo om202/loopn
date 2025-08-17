@@ -250,8 +250,13 @@ export default function HelpContent({
           If you can't find the answer here, reach out to our support team.
         </p>
         <div className='flex flex-col sm:flex-row gap-3'>
-          <button 
-            onClick={() => window.open('mailto:exonary.build@gmail.com?subject=Support Request - Loopn', '_blank')}
+          <button
+            onClick={() =>
+              window.open(
+                'mailto:exonary.build@gmail.com?subject=Support Request - Loopn',
+                '_blank'
+              )
+            }
             className='px-4 py-2 bg-brand-500 text-white rounded-lg text-base font-medium hover:bg-brand-600 transition-colors'
           >
             Contact Support

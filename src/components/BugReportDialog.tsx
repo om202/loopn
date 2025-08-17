@@ -41,10 +41,14 @@ export default function BugReportDialog({
       setDescription('');
       setIsSubmitting(false);
       onClose();
-      alert(`${type === 'bug' ? 'Bug report' : 'Suggestion'} submitted successfully!`);
+      alert(
+        `${type === 'bug' ? 'Bug report' : 'Suggestion'} submitted successfully!`
+      );
     } else {
       setIsSubmitting(false);
-      alert(`Failed to submit ${type === 'bug' ? 'bug report' : 'suggestion'}. Please try again.`);
+      alert(
+        `Failed to submit ${type === 'bug' ? 'bug report' : 'suggestion'}. Please try again.`
+      );
     }
   };
 
@@ -104,16 +108,22 @@ export default function BugReportDialog({
               } ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
             >
               <div className='flex items-center gap-2 mb-1'>
-                <Bug className={`w-4 h-4 ${type === 'bug' ? 'text-brand-600' : 'text-zinc-500'}`} />
-                <span className={`font-medium text-sm ${type === 'bug' ? 'text-brand-900' : 'text-zinc-900'}`}>
+                <Bug
+                  className={`w-4 h-4 ${type === 'bug' ? 'text-brand-600' : 'text-zinc-500'}`}
+                />
+                <span
+                  className={`font-medium text-sm ${type === 'bug' ? 'text-brand-900' : 'text-zinc-900'}`}
+                >
                   Bug Report
                 </span>
               </div>
-              <p className={`text-xs ${type === 'bug' ? 'text-brand-700' : 'text-zinc-500'}`}>
+              <p
+                className={`text-xs ${type === 'bug' ? 'text-brand-700' : 'text-zinc-500'}`}
+              >
                 Something isn't working
               </p>
             </button>
-            
+
             <button
               type='button'
               onClick={() => !isSubmitting && setType('suggestion')}
@@ -124,12 +134,18 @@ export default function BugReportDialog({
               } ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
             >
               <div className='flex items-center gap-2 mb-1'>
-                <Lightbulb className={`w-4 h-4 ${type === 'suggestion' ? 'text-brand-600' : 'text-zinc-500'}`} />
-                <span className={`font-medium text-sm ${type === 'suggestion' ? 'text-brand-900' : 'text-zinc-900'}`}>
+                <Lightbulb
+                  className={`w-4 h-4 ${type === 'suggestion' ? 'text-brand-600' : 'text-zinc-500'}`}
+                />
+                <span
+                  className={`font-medium text-sm ${type === 'suggestion' ? 'text-brand-900' : 'text-zinc-900'}`}
+                >
                   Suggestion
                 </span>
               </div>
-              <p className={`text-xs ${type === 'suggestion' ? 'text-brand-700' : 'text-zinc-500'}`}>
+              <p
+                className={`text-xs ${type === 'suggestion' ? 'text-brand-700' : 'text-zinc-500'}`}
+              >
                 Idea for improvement
               </p>
             </button>
@@ -149,8 +165,8 @@ export default function BugReportDialog({
             value={title}
             onChange={e => !isSubmitting && setTitle(e.target.value)}
             placeholder={
-              type === 'bug' 
-                ? 'Brief description of the bug' 
+              type === 'bug'
+                ? 'Brief description of the bug'
                 : 'Brief description of your suggestion'
             }
             className={`w-full px-3 py-2 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors ${
