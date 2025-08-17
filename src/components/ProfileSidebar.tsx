@@ -1,8 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Clock, MessageCircle, CheckCircle2 } from 'lucide-react';
+import { Clock, MessageCircle, CheckCircle2, ArrowLeft, Info, LogOut } from 'lucide-react';
+import Image from 'next/image';
 import UserAvatar from './UserAvatar';
+import Tooltip from './Tooltip';
 import { formatPresenceTime } from '../lib/presence-utils';
 import { useSubscriptionStore } from '../stores/subscription-store';
 import {
@@ -28,6 +30,14 @@ interface ProfileSidebarProps {
   onCancelChatRequest?: (userId: string) => void;
   canUserReconnect?: (userId: string) => boolean;
   getReconnectTimeRemaining?: (userId: string) => string | null;
+  // Chat-specific props
+  conversation?: Conversation;
+  timeLeft?: string;
+  sendingConnectionRequest?: boolean;
+  onBack?: () => void;
+  onEndChat?: () => void;
+  onSendConnectionRequest?: () => void;
+  onReconnect?: () => void;
 }
 
 export default function ProfileSidebar({
@@ -41,6 +51,13 @@ export default function ProfileSidebar({
   onCancelChatRequest,
   canUserReconnect,
   getReconnectTimeRemaining,
+  conversation,
+  timeLeft,
+  sendingConnectionRequest,
+  onBack,
+  onEndChat,
+  onSendConnectionRequest,
+  onReconnect,
 }: ProfileSidebarProps) {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [profileLoading, setProfileLoading] = useState(false);
@@ -188,6 +205,19 @@ export default function ProfileSidebar({
 
   return (
     <div className='bg-white rounded-2xl border border-zinc-200 w-full h-full flex flex-col relative'>
+      {/* Back Button - Top of sidebar */}
+      {onBack && (
+        <div className='p-4 pb-2 border-b border-zinc-100'>
+          <button
+            onClick={onBack}
+            className='flex items-center gap-2 text-zinc-500 hover:text-zinc-900 transition-colors'
+          >
+            <ArrowLeft className='w-4 h-4' />
+            <span className='text-sm font-medium'>Back to Dashboard</span>
+          </button>
+        </div>
+      )}
+
       {/* User Profile Header */}
       <div className='p-6 pb-2 flex justify-center'>
         <div className='flex flex-col items-center text-center'>
@@ -219,6 +249,79 @@ export default function ProfileSidebar({
           </div>
         </div>
       </div>
+
+      {/* Chat Header Section - when in chat context */}
+      {conversation && (
+        <div className='px-6 pb-4 border-b border-zinc-100'>
+          {/* Connection Status */}
+          {conversation.isConnected && (
+            <div className='flex items-center text-sm text-b_green-500 mb-3'>
+              <CheckCircle2 className='w-4 h-4 mr-2' />
+              <span className='font-medium'>Connected - Chat forever!</span>
+            </div>
+          )}
+
+          {/* Trial Chat Status */}
+          {!conversation.isConnected && conversation.chatStatus === 'ACTIVE' && timeLeft && timeLeft !== 'Expired' && (
+            <div className='mb-3 mt-3'>
+              {/* Trial Chat Info with End Chat Icon - Centered */}
+              <div className='flex items-center justify-center text-sm text-zinc-600 mb-2'>
+                <div className='flex items-center gap-2'>
+                  <Clock className='w-4 h-4 text-brand-500' />
+                  <span className='font-medium'>Trial Chat</span>
+                  <span className='font-bold text-zinc-900'>{timeLeft}</span>
+                  {onEndChat && (
+                    <Tooltip content="End Chat" position="top">
+                      <button
+                        onClick={onEndChat}
+                        className='ml-2 p-1.5 text-zinc-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors'
+                      >
+                        <LogOut className='w-4 h-4' />
+                      </button>
+                    </Tooltip>
+                  )}
+                </div>
+              </div>
+              
+              {/* Connect Button */}
+              <button
+                onClick={onSendConnectionRequest}
+                disabled={sendingConnectionRequest}
+                className='w-full px-4 py-2 text-sm font-medium rounded-lg border transition-colors flex items-center justify-center gap-2 bg-brand-100 text-brand-600 border-brand-200 hover:bg-brand-200 hover:border-brand-400 disabled:bg-brand-100 disabled:cursor-not-allowed'
+              >
+                <svg width='16' height='16' viewBox='30 30 160 160' className='w-4 h-4' aria-hidden='true'>
+                  <circle cx='75' cy='110' r='35' fill='currentColor' />
+                  <circle cx='145' cy='110' r='35' fill='currentColor' />
+                </svg>
+                <span>{sendingConnectionRequest ? 'Connecting...' : 'Connect'}</span>
+              </button>
+            </div>
+          )}
+
+          {/* Chat Ended Status */}
+          {conversation.chatStatus === 'ENDED' && (
+            <div className='mb-3'>
+              <div className='flex items-center gap-2 text-sm text-zinc-600 mb-2'>
+                <Info className='w-4 h-4' />
+                <span className='font-medium text-zinc-900'>Chat Ended</span>
+              </div>
+              
+              {/* Reconnect Button - if available */}
+              {onReconnect && (
+                <button
+                  onClick={onReconnect}
+                  className='w-full px-4 py-2 text-sm font-medium rounded-lg bg-zinc-500 hover:bg-zinc-600 text-white transition-colors flex items-center justify-center gap-2'
+                >
+                  <Image src='/connect-icon.svg' alt='Reconnect' width={16} height={16} />
+                  <span>Reconnect</span>
+                </button>
+              )}
+            </div>
+          )}
+
+
+        </div>
+      )}
 
       {/* Action buttons section */}
       {showActionButtons && (

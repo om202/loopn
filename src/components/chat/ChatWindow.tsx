@@ -11,7 +11,6 @@ import { useRealtimeMessages } from '../../hooks/realtime';
 import { useOnlineUsers } from '../../hooks/useOnlineUsers';
 import LoadingContainer from '../LoadingContainer';
 
-import ChatHeader from './ChatHeader';
 import MessageInput from './MessageInput';
 import MessageList from './MessageList';
 
@@ -23,7 +22,6 @@ interface ChatWindowProps {
   onChatEnded: () => void;
   isLoading?: boolean;
   error?: string | null;
-  onBack?: () => void;
 }
 
 export default function ChatWindow({
@@ -31,13 +29,9 @@ export default function ChatWindow({
   onChatEnded,
   isLoading: externalLoading = false,
   error: externalError = null,
-  onBack,
 }: ChatWindowProps) {
   const [newMessage, setNewMessage] = useState('');
   const [localError, setLocalError] = useState<string | null>(null);
-  const [timeLeft, setTimeLeft] = useState<string>('');
-  const [sendingConnectionRequest, setSendingConnectionRequest] =
-    useState(false);
   const [replyToMessage, setReplyToMessage] = useState<Message | null>(null);
 
   // Pagination state
@@ -107,101 +101,7 @@ export default function ChatWindow({
   // Use the message error as the main error (presence is now centralized)
   const finalError = error;
 
-  // Calculate initial time remaining immediately
-  const calculateTimeLeft = useCallback(() => {
-    if (!conversation.probationEndsAt || conversation.isConnected) {
-      return '';
-    }
 
-    const now = new Date();
-    const endTime = new Date(conversation.probationEndsAt);
-    const diff = endTime.getTime() - now.getTime();
-
-    if (diff <= 0) {
-      return 'Expired';
-    }
-
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-    // Show shorter format based on time remaining
-    if (days > 0) {
-      return `${days}d ${hours}h`;
-    }
-    if (hours > 0) {
-      return `${hours}h ${minutes}m`;
-    }
-    if (minutes > 5) {
-      return `${minutes}m`;
-    }
-    // Show seconds when less than 5 minutes
-    return `${minutes}m ${seconds}s`;
-  }, [conversation.probationEndsAt, conversation.isConnected]);
-
-  // Initialize time left immediately
-  useEffect(() => {
-    setTimeLeft(calculateTimeLeft());
-  }, [calculateTimeLeft]);
-
-  const handleEndChat = useCallback(async () => {
-    if (!user) {
-      return;
-    }
-
-    const result = await chatService.endChat(conversation.id, user.userId);
-    if (result.error) {
-      setLocalError(result.error);
-    } else {
-      onChatEnded();
-    }
-  }, [conversation.id, user, onChatEnded]);
-
-  const handleSendConnectionRequest = useCallback(async () => {
-    if (!user || sendingConnectionRequest) {
-      return;
-    }
-
-    setSendingConnectionRequest(true);
-    const result = await chatService.sendConnectionRequest(
-      user.userId,
-      otherParticipantId,
-      conversation.id
-    );
-
-    if (result.error) {
-      setLocalError(result.error);
-    }
-    setSendingConnectionRequest(false);
-  }, [user, otherParticipantId, conversation.id, sendingConnectionRequest]);
-
-  const handleReconnect = useCallback(() => {
-    // Navigate back to dashboard where user can send a new chat request
-    window.location.href = '/dashboard';
-  }, []);
-
-  // Calculate time remaining in probation with lazy updates for better performance
-  useEffect(() => {
-    if (!conversation.probationEndsAt || conversation.isConnected) {
-      return;
-    }
-
-    const timer = setInterval(() => {
-      const newTimeLeft = calculateTimeLeft();
-      setTimeLeft(newTimeLeft);
-
-      if (newTimeLeft === 'Expired') {
-        clearInterval(timer);
-      }
-    }, 10000); // Update every 10 seconds for lazy timer
-
-    return () => clearInterval(timer);
-  }, [
-    conversation.probationEndsAt,
-    conversation.isConnected,
-    calculateTimeLeft,
-  ]);
 
   // Note: Message subscription logic moved to useRealtimeMessages hook
   // Note: Presence subscription logic moved to useRealtimePresence hook
@@ -359,18 +259,6 @@ export default function ChatWindow({
 
   return (
     <div className='flex flex-col h-full bg-white'>
-      <ChatHeader
-        conversation={conversation}
-        otherParticipantId={otherParticipantId}
-        otherUserPresence={otherUserPresence}
-        timeLeft={timeLeft}
-        sendingConnectionRequest={sendingConnectionRequest}
-        onEndChat={handleEndChat}
-        onSendConnectionRequest={handleSendConnectionRequest}
-        onReconnect={handleReconnect}
-        onBack={onBack || (() => window.history.back())}
-      />
-
       <MessageList
         messages={messages}
         currentUserId={user?.userId || ''}
