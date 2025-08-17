@@ -283,6 +283,17 @@ const schema = a
         // Get all notifications for a user, sorted by time (newest first)
         index('userId').sortKeys(['timestamp']),
       ]),
+
+    // Simple Bug Report
+    BugReport: a
+      .model({
+        id: a.id().required(),
+        userId: a.string().required(),
+        title: a.string().required(),
+        description: a.string().required(),
+        reportedAt: a.datetime().required(),
+      })
+      .authorization(allow => [allow.authenticated()]),
   })
   .authorization(allow => [allow.resource(presenceCleanup)]);
 

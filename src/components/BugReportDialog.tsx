@@ -2,7 +2,9 @@
 
 import React, { useState } from 'react';
 import { X, Bug, Send } from 'lucide-react';
+import { useAuthenticator } from '@aws-amplify/ui-react';
 import DialogContainer from './DialogContainer';
+import { BugReportService } from '../services/bug-report.service';
 
 interface BugReportDialogProps {
   isOpen: boolean;
@@ -10,28 +12,33 @@ interface BugReportDialogProps {
 }
 
 export default function BugReportDialog({ isOpen, onClose }: BugReportDialogProps) {
+  const { user } = useAuthenticator();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() || !description.trim()) return;
+    if (!title.trim() || !description.trim() || !user) return;
 
     setIsSubmitting(true);
     
-    // TODO: Implement actual bug report submission
-    // For now, just simulate submission
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // Reset form and close
-    setTitle('');
-    setDescription('');
-    setIsSubmitting(false);
-    onClose();
-    
-    // Show success message (you might want to use a toast notification)
-    alert('Bug report submitted successfully! We\'ll look into it.');
+    const result = await BugReportService.submitBugReport(
+      user.userId,
+      title.trim(),
+      description.trim()
+    );
+
+    if (result.success) {
+      setTitle('');
+      setDescription('');
+      setIsSubmitting(false);
+      onClose();
+      alert('Bug report submitted successfully!');
+    } else {
+      setIsSubmitting(false);
+      alert('Failed to submit bug report. Please try again.');
+    }
   };
 
   const handleClose = () => {
