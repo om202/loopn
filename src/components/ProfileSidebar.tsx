@@ -19,6 +19,7 @@ import {
   ShimmerProvider,
   ProfileDetails_Shimmer,
 } from './ShimmerLoader/exports';
+import { useRealtimeConnectionRequests } from '../hooks/realtime/useRealtimeConnectionRequests';
 
 import type { Schema } from '../../amplify/data/resource';
 
@@ -71,6 +72,16 @@ export default function ProfileSidebar({
   const [profileLoading, setProfileLoading] = useState(false);
   const [showEndChatDialog, setShowEndChatDialog] = useState(false);
   const { fetchUserProfile } = useSubscriptionStore();
+
+  // Get real-time connection requests for this conversation
+  const {
+    pendingRequest,
+    hasAcceptedConnection,
+    isLoading: connectionRequestsLoading,
+  } = useRealtimeConnectionRequests({
+    conversationId: conversation?.id || '',
+    enabled: !!conversation?.id,
+  });
 
   // Load profile data when component mounts
   useEffect(() => {
@@ -286,28 +297,52 @@ export default function ProfileSidebar({
                 </div>
 
                 {/* Connect Button */}
-                <div className="flex justify-center">
-                  <Tooltip content="Make permanent connection" position="bottom">
-                    <button
-                      onClick={onSendConnectionRequest}
-                      disabled={sendingConnectionRequest}
-                      className='px-6 py-2 text-sm font-medium rounded-lg border transition-colors flex items-center justify-center gap-2 bg-brand-100 text-brand-600 border-brand-200 hover:bg-brand-200 hover:border-brand-400 disabled:bg-brand-100 disabled:cursor-not-allowed'
+                <div className='flex justify-center'>
+                  {hasAcceptedConnection ? (
+                    <div className='px-6 py-2 text-sm font-medium rounded-lg border flex items-center justify-center gap-2 bg-green-50 text-green-600 border-green-200'>
+                      <CheckCircle2 className='w-4 h-4' />
+                      <span>Connected</span>
+                    </div>
+                  ) : pendingRequest ? (
+                    <div className='px-6 py-2 text-sm font-medium rounded-lg border flex items-center justify-center gap-2 bg-yellow-50 text-yellow-600 border-yellow-200'>
+                      <Clock className='w-4 h-4' />
+                      <span>Request Sent</span>
+                    </div>
+                  ) : (
+                    <Tooltip
+                      content='Make permanent connection'
+                      position='bottom'
                     >
-                      <svg
-                        width='16'
-                        height='16'
-                        viewBox='30 30 160 160'
-                        className='w-4 h-4'
-                        aria-hidden='true'
+                      <button
+                        onClick={onSendConnectionRequest}
+                        disabled={
+                          sendingConnectionRequest || connectionRequestsLoading
+                        }
+                        className='px-6 py-2 text-sm font-medium rounded-lg border transition-colors flex items-center justify-center gap-2 bg-brand-100 text-brand-600 border-brand-200 hover:bg-brand-200 hover:border-brand-400 disabled:bg-brand-100 disabled:cursor-not-allowed'
                       >
-                        <circle cx='75' cy='110' r='35' fill='currentColor' />
-                        <circle cx='145' cy='110' r='35' fill='currentColor' />
-                      </svg>
-                      <span>
-                        {sendingConnectionRequest ? 'Connecting...' : 'Connect'}
-                      </span>
-                    </button>
-                  </Tooltip>
+                        <svg
+                          width='16'
+                          height='16'
+                          viewBox='30 30 160 160'
+                          className='w-4 h-4'
+                          aria-hidden='true'
+                        >
+                          <circle cx='75' cy='110' r='35' fill='currentColor' />
+                          <circle
+                            cx='145'
+                            cy='110'
+                            r='35'
+                            fill='currentColor'
+                          />
+                        </svg>
+                        <span>
+                          {sendingConnectionRequest
+                            ? 'Connecting...'
+                            : 'Connect'}
+                        </span>
+                      </button>
+                    </Tooltip>
+                  )}
                 </div>
               </div>
             )}

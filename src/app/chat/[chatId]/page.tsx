@@ -13,6 +13,7 @@ import { getConversationIdFromParam } from '../../../lib/url-utils';
 import { chatService } from '../../../services/chat.service';
 import { useConversations } from '../../../hooks/useConversations';
 import { useOnlineUsers } from '../../../hooks/useOnlineUsers';
+import { useConnectionActions } from '../../../hooks/useConnectionActions';
 import { userPresenceService } from '../../../services/user.service';
 
 type Conversation = Schema['Conversation']['type'];
@@ -32,8 +33,6 @@ export default function ChatPage({ params }: ChatPageProps) {
     Schema['UserPresence']['type'] | null
   >(null);
   const [timeLeft, setTimeLeft] = useState<string>('');
-  const [sendingConnectionRequest, setSendingConnectionRequest] =
-    useState(false);
   const { user } = useAuthenticator();
   const router = useRouter();
 
@@ -54,6 +53,17 @@ export default function ChatPage({ params }: ChatPageProps) {
       ? conversation.participant2Id
       : conversation.participant1Id
     : '';
+
+  // Connection actions
+  const {
+    sendConnectionRequest,
+    isLoading: sendingConnectionRequest,
+    error: connectionError,
+  } = useConnectionActions({
+    conversationId: conversation?.id || '',
+    currentUserId: user?.userId || '',
+    otherUserId: otherParticipantId,
+  });
 
   const loadConversation = useCallback(async () => {
     try {
@@ -239,18 +249,18 @@ export default function ChatPage({ params }: ChatPageProps) {
       return;
     }
 
-    setSendingConnectionRequest(true);
-    const result = await chatService.sendConnectionRequest(
-      user.userId,
-      otherParticipantId,
-      conversation.id
-    );
+    await sendConnectionRequest();
 
-    if (result.error) {
-      setError(result.error);
+    if (connectionError) {
+      setError(connectionError);
     }
-    setSendingConnectionRequest(false);
-  }, [user, otherParticipantId, conversation, sendingConnectionRequest]);
+  }, [
+    user,
+    conversation,
+    sendingConnectionRequest,
+    sendConnectionRequest,
+    connectionError,
+  ]);
 
   const handleReconnect = useCallback(() => {
     // Navigate back to dashboard where user can send a new chat request

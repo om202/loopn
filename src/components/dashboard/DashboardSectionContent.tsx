@@ -268,7 +268,7 @@ export default function DashboardSectionContent({
   if (activeSection === 'suggested' && suggestedUsersLoading) {
     return (
       <div className='flex items-center justify-center h-full'>
-        <LoadingContainer/>
+        <LoadingContainer />
       </div>
     );
   }

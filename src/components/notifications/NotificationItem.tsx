@@ -11,6 +11,7 @@ import type {
   UINotification,
   ChatRequestWithUser,
   MessageNotificationData,
+  ConnectionRequestNotificationData,
 } from './types';
 
 interface NotificationItemProps {
@@ -20,6 +21,10 @@ interface NotificationItemProps {
     chatRequestId: string,
     status: 'ACCEPTED' | 'REJECTED',
     chatRequest: ChatRequestWithUser
+  ) => void;
+  onRespondToConnectionRequest?: (
+    connectionRequestId: string,
+    status: 'ACCEPTED' | 'REJECTED'
   ) => void;
   onRemoveNotification: (notificationId: string) => void;
   decliningId: string | null;
@@ -111,6 +116,7 @@ export default function NotificationItem({
   notification,
   onNotificationClick,
   onRespondToRequest,
+  onRespondToConnectionRequest,
   onRemoveNotification,
   decliningId,
   onError,
@@ -361,37 +367,78 @@ export default function NotificationItem({
             </>
           ) : notification.type === 'connection' ? (
             <>
-              <button
-                onClick={e => {
-                  e.stopPropagation();
-                  onNotificationClick(notification);
-                }}
-                className='px-3 py-2 bg-transparent text-b_green-500 text-sm font-medium rounded-lg hover:bg-b_green-50 transition-colors border border-b_green-500'
-              >
-                Start Chat
-              </button>
-              <button
-                onClick={async e => {
-                  e.stopPropagation();
-                  if (!user) return;
-                  try {
-                    await notificationService.markNotificationAsRead(
-                      notification.id
-                    );
-                    // Remove from local state via parent callback
-                    onRemoveNotification(notification.id);
-                  } catch (error) {
-                    console.error(
-                      'Error marking connection notification as read:',
-                      error
-                    );
-                    onError('Failed to mark notification as read');
-                  }
-                }}
-                className='px-3 py-2 text-sm font-medium text-zinc-900 bg-white border border-zinc-200 rounded-lg hover:bg-zinc-100 transition-colors'
-              >
-                Mark as Read
-              </button>
+              {/* Check if this is an incoming connection request that needs response */}
+              {notification.data &&
+              'connectionRequestId' in notification.data &&
+              notification.title === 'Connection Request' &&
+              onRespondToConnectionRequest ? (
+                <>
+                  <button
+                    onClick={async e => {
+                      e.stopPropagation();
+                      const connectionData =
+                        notification.data as ConnectionRequestNotificationData;
+                      await onRespondToConnectionRequest(
+                        connectionData.connectionRequestId,
+                        'ACCEPTED'
+                      );
+                      onRemoveNotification(notification.id);
+                    }}
+                    className='px-3 py-2 bg-transparent text-b_green-500 text-sm font-medium rounded-lg hover:bg-b_green-50 transition-colors border border-b_green-500'
+                  >
+                    Accept
+                  </button>
+                  <button
+                    onClick={async e => {
+                      e.stopPropagation();
+                      const connectionData =
+                        notification.data as ConnectionRequestNotificationData;
+                      await onRespondToConnectionRequest(
+                        connectionData.connectionRequestId,
+                        'REJECTED'
+                      );
+                      onRemoveNotification(notification.id);
+                    }}
+                    className='px-3 py-2 text-sm font-medium text-zinc-900 bg-white border border-zinc-200 rounded-lg hover:bg-zinc-100 transition-colors'
+                  >
+                    Decline
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={e => {
+                      e.stopPropagation();
+                      onNotificationClick(notification);
+                    }}
+                    className='px-3 py-2 bg-transparent text-b_green-500 text-sm font-medium rounded-lg hover:bg-b_green-50 transition-colors border border-b_green-500'
+                  >
+                    View Chat
+                  </button>
+                  <button
+                    onClick={async e => {
+                      e.stopPropagation();
+                      if (!user) return;
+                      try {
+                        await notificationService.markNotificationAsRead(
+                          notification.id
+                        );
+                        // Remove from local state via parent callback
+                        onRemoveNotification(notification.id);
+                      } catch (error) {
+                        console.error(
+                          'Error marking connection notification as read:',
+                          error
+                        );
+                        onError('Failed to mark notification as read');
+                      }
+                    }}
+                    className='px-3 py-2 text-sm font-medium text-zinc-900 bg-white border border-zinc-200 rounded-lg hover:bg-zinc-100 transition-colors'
+                  >
+                    Mark as Read
+                  </button>
+                </>
+              )}
             </>
           ) : (
             <button

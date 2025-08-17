@@ -12,6 +12,7 @@ type ChatRequest = Schema['ChatRequest']['type'];
 type Notification = Schema['Notification']['type'];
 type Message = Schema['Message']['type'];
 type MessageReaction = Schema['MessageReaction']['type'];
+type UserConnection = Schema['UserConnection']['type'];
 
 // Subscription configuration
 interface SubscriptionConfig {
@@ -47,6 +48,7 @@ interface SubscriptionState {
   notifications: Notification[];
   messages: Map<string, Message[]>; // conversationId -> messages
   reactions: Map<string, MessageReaction[]>; // messageId -> reactions
+  connectionRequests: Map<string, UserConnection[]>; // conversationId -> connection requests
 
   // Loading states
   loading: {
@@ -111,6 +113,13 @@ interface SubscriptionState {
 
   updateMessages: (conversationId: string, messages: Message[]) => void;
   updateReactions: (messageId: string, reactions: MessageReaction[]) => void;
+  updateConnectionRequests: (
+    conversationId: string,
+    connections: UserConnection[]
+  ) => void;
+  getConnectionRequestsForConversation: (
+    conversationId: string
+  ) => UserConnection[];
 
   // Debug helpers
   getStats: () => {
@@ -134,6 +143,7 @@ export const useSubscriptionStore = create<SubscriptionState>()(
       notifications: [],
       messages: new Map(),
       reactions: new Map(),
+      connectionRequests: new Map(),
 
       loading: {
         onlineUsers: false,
@@ -432,6 +442,23 @@ export const useSubscriptionStore = create<SubscriptionState>()(
         set(state => ({
           reactions: new Map(state.reactions).set(messageId, reactions),
         }));
+      },
+
+      updateConnectionRequests: (
+        conversationId: string,
+        connections: UserConnection[]
+      ) => {
+        set(state => ({
+          connectionRequests: new Map(state.connectionRequests).set(
+            conversationId,
+            connections
+          ),
+        }));
+      },
+
+      getConnectionRequestsForConversation: (conversationId: string) => {
+        const state = get();
+        return state.connectionRequests.get(conversationId) || [];
       },
 
       // High-level subscription methods

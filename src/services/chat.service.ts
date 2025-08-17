@@ -642,12 +642,60 @@ export class ChatService {
     conversationId: string
   ): Promise<DataResult<UserConnection>> {
     try {
+      // Check if a connection request already exists for this conversation
+      const existingRequest =
+        await this.getConnectionRequestForConversation(conversationId);
+
+      if (existingRequest.data) {
+        return {
+          data: null,
+          error: 'A connection request already exists for this conversation',
+        };
+      }
+
       const result = await getClient().models.UserConnection.create({
         requesterId,
         receiverId,
         conversationId,
         status: 'PENDING',
+        requestedAt: new Date().toISOString(),
       });
+
+      // Create notification for the receiver
+      if (result.data) {
+        try {
+          // Get requester's profile for notification
+          const userProfileService = new UserProfileService();
+          const requesterProfile =
+            await userProfileService.getUserProfile(requesterId);
+          const requesterName =
+            requesterProfile.data?.fullName ||
+            requesterProfile.data?.email ||
+            `User${requesterId.slice(-4)}`;
+
+          await notificationService.createNotification(
+            receiverId,
+            'connection',
+            'Connection Request',
+            `${requesterName} wants to connect with you`,
+            {
+              connectionRequestId: result.data.id,
+              requesterId,
+              conversationId,
+            },
+            {
+              connectionRequestId: result.data.id,
+              conversationId,
+            }
+          );
+        } catch (notificationError) {
+          console.error(
+            'Failed to create connection request notification:',
+            notificationError
+          );
+          // Don't fail the whole operation if notification creation fails
+        }
+      }
 
       return {
         data: result.data,
@@ -669,11 +717,65 @@ export class ChatService {
     status: 'ACCEPTED' | 'REJECTED'
   ): Promise<DataResult<UserConnection>> {
     try {
+      // First get the connection request to get the conversation ID
+      const connectionResult = await getClient().models.UserConnection.get({
+        id: connectionId,
+      });
+
+      if (!connectionResult.data) {
+        return {
+          data: null,
+          error: 'Connection request not found',
+        };
+      }
+
+      // Update the connection request
       const result = await getClient().models.UserConnection.update({
         id: connectionId,
         status,
         respondedAt: new Date().toISOString(),
       });
+
+      // If accepted, update the conversation to be permanently connected
+      if (status === 'ACCEPTED' && connectionResult.data.conversationId) {
+        await getClient().models.Conversation.update({
+          id: connectionResult.data.conversationId,
+          isConnected: true,
+          chatStatus: 'ACTIVE',
+        });
+
+        // Create notification for the requester about acceptance
+        try {
+          const userProfileService = new UserProfileService();
+          const receiverProfile = await userProfileService.getUserProfile(
+            connectionResult.data.receiverId
+          );
+          const receiverName =
+            receiverProfile.data?.fullName ||
+            receiverProfile.data?.email ||
+            `User${connectionResult.data.receiverId.slice(-4)}`;
+
+          await notificationService.createNotification(
+            connectionResult.data.requesterId,
+            'connection',
+            'Connection Accepted',
+            `${receiverName} accepted your connection request`,
+            {
+              connectionRequestId: connectionResult.data.id,
+              conversationId: connectionResult.data.conversationId,
+            },
+            {
+              connectionRequestId: connectionResult.data.id,
+              conversationId: connectionResult.data.conversationId,
+            }
+          );
+        } catch (notificationError) {
+          console.error(
+            'Failed to create connection acceptance notification:',
+            notificationError
+          );
+        }
+      }
 
       return {
         data: result.data,
@@ -686,6 +788,72 @@ export class ChatService {
           error instanceof Error
             ? error.message
             : 'Failed to respond to connection request',
+      };
+    }
+  }
+
+  async getConnectionRequestForConversation(
+    conversationId: string
+  ): Promise<DataResult<UserConnection>> {
+    try {
+      const result = await getClient().models.UserConnection.list({
+        filter: {
+          conversationId: { eq: conversationId },
+          status: { eq: 'PENDING' },
+        },
+      });
+
+      const connectionRequest = result.data?.[0] || null;
+
+      return {
+        data: connectionRequest,
+        error: null,
+      };
+    } catch (error) {
+      return {
+        data: null,
+        error:
+          error instanceof Error
+            ? error.message
+            : 'Failed to get connection request',
+      };
+    }
+  }
+
+  async getConnectionRequestsByUser(
+    userId: string
+  ): Promise<DataResult<UserConnection[]>> {
+    try {
+      // Get both sent and received connection requests
+      const [sentResult, receivedResult] = await Promise.all([
+        getClient().models.UserConnection.list({
+          filter: {
+            requesterId: { eq: userId },
+          },
+        }),
+        getClient().models.UserConnection.list({
+          filter: {
+            receiverId: { eq: userId },
+          },
+        }),
+      ]);
+
+      const allConnections = [
+        ...(sentResult.data || []),
+        ...(receivedResult.data || []),
+      ];
+
+      return {
+        data: allConnections,
+        error: null,
+      };
+    } catch (error) {
+      return {
+        data: [],
+        error:
+          error instanceof Error
+            ? error.message
+            : 'Failed to get connection requests',
       };
     }
   }

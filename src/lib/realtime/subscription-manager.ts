@@ -177,4 +177,6 @@ export const createSubscriptionKey = {
   sentChatRequests: (userId: string) => `sentChatRequests:${userId}:PENDING`,
   conversations: (userId: string) => `conversations:${userId}`,
   onlineUsers: () => 'onlineUsers:global',
+  connectionRequests: (conversationId: string) =>
+    `connectionRequests:${conversationId}`,
 };

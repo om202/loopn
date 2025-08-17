@@ -58,6 +58,12 @@ interface RealtimeContextType {
   // Online users subscriptions
   subscribeToOnlineUsers: (callback: SubscriptionCallback) => UnsubscribeFn;
 
+  // Connection request subscriptions
+  subscribeToConnectionRequests: (
+    conversationId: string,
+    callback: SubscriptionCallback
+  ) => UnsubscribeFn;
+
   // Get subscription statistics
   getStats: () => {
     activeSubscriptions: number;
@@ -287,6 +293,24 @@ export function RealtimeProvider({ children }: RealtimeProviderProps) {
     );
   };
 
+  // Connection request subscriptions
+  const subscribeToConnectionRequests = (
+    conversationId: string,
+    callback: SubscriptionCallback
+  ): UnsubscribeFn => {
+    return subscriptionManager.subscribe(
+      {
+        key: createSubscriptionKey.connectionRequests(conversationId),
+        query: () =>
+          client.models.UserConnection.observeQuery({
+            filter: { conversationId: { eq: conversationId } },
+          }),
+        variables: { filter: { conversationId: { eq: conversationId } } },
+      },
+      callback
+    );
+  };
+
   // Get subscription statistics
   const getStats = () => subscriptionManager.getStats();
 
@@ -299,6 +323,7 @@ export function RealtimeProvider({ children }: RealtimeProviderProps) {
     subscribeSentChatRequests,
     subscribeToConversations,
     subscribeToOnlineUsers,
+    subscribeToConnectionRequests,
     getStats,
   };
 

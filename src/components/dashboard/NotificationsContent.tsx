@@ -12,6 +12,7 @@ import { notificationService } from '../../services/notification.service';
 
 import { useChatRequests } from '../../hooks/useChatRequests';
 import { useNotifications } from '../../hooks/useNotifications';
+import { useConnectionActions } from '../../hooks/useConnectionActions';
 import { useSubscriptionStore } from '../../stores/subscription-store';
 
 import NotificationItem from '../notifications/NotificationItem';
@@ -69,6 +70,13 @@ export default function NotificationsContent() {
   const [error, setError] = useState<string | null>(null);
   const [, setAcceptingRequestId] = useState<string | null>(null);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
+
+  // Connection actions hook - we'll use a dummy conversation ID since we don't need it for response actions
+  const { respondToConnectionRequest } = useConnectionActions({
+    conversationId: '',
+    currentUserId: user?.userId || '',
+    otherUserId: '',
+  });
 
   // Much simpler: only show loading during initial load before we've processed any data
   const isLoading = isInitialLoad && notifications.length === 0;
@@ -352,6 +360,18 @@ export default function NotificationsContent() {
     setNotifications(prev => prev.filter(notif => notif.id !== notificationId));
   };
 
+  const handleRespondToConnectionRequest = async (
+    connectionRequestId: string,
+    status: 'ACCEPTED' | 'REJECTED'
+  ) => {
+    try {
+      await respondToConnectionRequest(connectionRequestId, status);
+    } catch (error) {
+      console.error('Error responding to connection request:', error);
+      setError('Failed to respond to connection request');
+    }
+  };
+
   const getFilteredNotifications = () => {
     if (activeFilter === 'all') {
       return notifications;
@@ -391,6 +411,7 @@ export default function NotificationsContent() {
                 notification={notification}
                 onNotificationClick={handleNotificationClick}
                 onRespondToRequest={handleRespondToRequest}
+                onRespondToConnectionRequest={handleRespondToConnectionRequest}
                 onRemoveNotification={handleRemoveNotification}
                 decliningId={decliningId}
                 onError={setError}

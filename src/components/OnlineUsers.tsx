@@ -297,7 +297,8 @@ export default function OnlineUsers({
   );
   const [suggestedUsers, setSuggestedUsers] = useState<UserPresence[]>([]);
   const [suggestedUsersLoading, setSuggestedUsersLoading] = useState(true);
-  const [lastSuggestedUsersLoad, setLastSuggestedUsersLoad] = useState<number>(0);
+  const [lastSuggestedUsersLoad, setLastSuggestedUsersLoad] =
+    useState<number>(0);
 
   useEffect(() => {
     if (!user) {
@@ -358,9 +359,13 @@ export default function OnlineUsers({
     const loadSuggestedUsers = async () => {
       const now = Date.now();
       const cacheExpiry = 2 * 60 * 1000; // 2 minutes cache
-      
+
       // If we have cached data that's less than 2 minutes old, don't reload
-      if (lastSuggestedUsersLoad && (now - lastSuggestedUsersLoad) < cacheExpiry && suggestedUsers.length > 0) {
+      if (
+        lastSuggestedUsersLoad &&
+        now - lastSuggestedUsersLoad < cacheExpiry &&
+        suggestedUsers.length > 0
+      ) {
         setSuggestedUsersLoading(false);
         return;
       }

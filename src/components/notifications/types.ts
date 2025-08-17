@@ -26,12 +26,21 @@ export interface MessageNotificationData {
   };
 }
 
+export interface ConnectionRequestNotificationData {
+  connectionRequestId: string;
+  requesterId: string;
+  conversationId: string;
+}
+
 // Raw Amplify-generated type
 type AmplifyNotification = Schema['Notification']['type'];
 
 // Processed notification type with parsed data
 export interface Notification extends Omit<AmplifyNotification, 'data'> {
-  data?: ChatRequestWithUser | MessageNotificationData;
+  data?:
+    | ChatRequestWithUser
+    | MessageNotificationData
+    | ConnectionRequestNotificationData;
 }
 
 // Chat request notification - a virtual notification for displaying chat requests
