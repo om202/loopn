@@ -543,7 +543,7 @@ export default function ProfileSidebar({
               {/* Education Section */}
               {userProfile.education && (
                 <div className='py-4'>
-                  <h4 className='text-sm font-semibold text-zinc-900 mb-4'>
+                  <h4 className='text-sm font-semibold text-zinc-500 mb-4'>
                     Education
                   </h4>
                   <div className='text-base text-zinc-900 font-medium leading-relaxed'>

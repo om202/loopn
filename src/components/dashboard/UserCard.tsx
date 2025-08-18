@@ -456,7 +456,7 @@ export default function UserCard({
                 {/* Education Section */}
                 {finalFullProfile.education && (
                   <div>
-                    <h4 className='text-sm font-semibold text-zinc-900 mb-3 border-b border-zinc-100 pb-2'>
+                    <h4 className='text-sm font-semibold text-zinc-500 mb-3 border-b border-zinc-100 pb-2'>
                       Education
                     </h4>
                     <div>
