@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<services version="1.0">
+
+    <container id="default" version="1.0">
+        <search>
+            <chain id="default" inherits="vespa">
+                <searcher id="ai.vespa.example.UserProfileSearcher" />
+            </chain>
+        </search>
+        
+        <document-api />
+        <document-processing />
+        
+        <!-- HTTP API for search and document operations -->
+        <http>
+            <server id="default" port="8080" />
+        </http>
+        
+        <!-- Enable metrics and monitoring -->
+        <accesslog type="vespa" />
+        
+        <!-- Configure for user profile search -->
+        <config name="search.query-profiles">
+            <queryprofile id="default" type="root">
+                <field name="ranking">default</field>
+                <field name="timeout">5000</field>
+                <field name="hits">10</field>
+            </queryprofile>
+            
+            <queryprofile id="semantic" type="root">
+                <field name="ranking">semantic</field>
+                <field name="timeout">5000</field>
+                <field name="hits">10</field>
+            </queryprofile>
+            
+            <queryprofile id="hybrid" type="root">
+                <field name="ranking">hybrid</field>
+                <field name="timeout">5000</field>
+                <field name="hits">10</field>
+            </queryprofile>
+        </config>
+    </container>
+
+    <content id="user_profiles" version="1.0">
+        <redundancy>2</redundancy>
+        <documents>
+            <document type="user_profile" mode="index" />
+        </documents>
+        
+        <!-- Configure for optimal search performance -->
+        <engine>
+            <proton>
+                <searchable-copies>1</searchable-copies>
+                <flush>
+                    <memory>
+                        <maxmemory>2GB</maxmemory>
+                        <each>
+                            <maxmemory>200MB</maxmemory>
+                        </each>
+                    </memory>
+                </flush>
+                <resizing>
+                    <initialdocumentcount>10000</initialdocumentcount>
+                </resizing>
+            </proton>
+        </engine>
+        
+        <nodes>
+            <node distribution-key="0" hostalias="node1" />
+        </nodes>
+    </content>
+
+</services>

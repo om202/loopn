@@ -1,0 +1,193 @@
+schema user_profile {
+
+    document user_profile {
+        
+        # Primary identifier
+        field userId type string {
+            indexing: summary | attribute
+            attribute: fast-search
+        }
+        
+        # Basic profile information
+        field email type string {
+            indexing: summary | attribute
+        }
+        
+        field fullName type string {
+            indexing: summary | index | attribute
+            index: enable-bm25
+            match: text
+        }
+        
+        field jobRole type string {
+            indexing: summary | index | attribute
+            index: enable-bm25
+            match: text
+        }
+        
+        field companyName type string {
+            indexing: summary | index | attribute
+            index: enable-bm25
+            match: text
+        }
+        
+        field industry type string {
+            indexing: summary | attribute
+            attribute: fast-search
+        }
+        
+        field yearsOfExperience type int {
+            indexing: summary | attribute
+            attribute: fast-search
+        }
+        
+        field education type string {
+            indexing: summary | index
+            match: text
+        }
+        
+        field about type string {
+            indexing: summary | index
+            match: text
+        }
+        
+        # Arrays for interests and skills
+        field interests type array<string> {
+            indexing: summary | index | attribute
+            attribute: fast-search
+            match: word
+        }
+        
+        field skills type array<string> {
+            indexing: summary | index | attribute
+            attribute: fast-search
+            match: word
+        }
+        
+        # Profile picture and completion status
+        field profilePictureUrl type string {
+            indexing: summary
+        }
+        
+        field isOnboardingComplete type bool {
+            indexing: summary | attribute
+            attribute: fast-search
+        }
+        
+        # Combined searchable content for intelligent search
+        field searchableContent type string {
+            indexing: summary | index
+            match: text
+        }
+        
+        # Vector field for semantic search (1024 dimensions to match OpenSearch)
+        field profileVector type tensor<float>(x[1024]) {
+            indexing: summary | attribute | index
+            attribute: distance-metric: cosine
+            index {
+                hnsw {
+                    max-links-per-node: 16
+                    neighbors-to-explore-at-insert: 200
+                }
+            }
+        }
+        
+        # Timestamps
+        field createdAt type long {
+            indexing: summary | attribute
+        }
+        
+        field updatedAt type long {
+            indexing: summary | attribute
+        }
+    }
+    
+    # Derived fields for enhanced search
+    field nameAndRole type string {
+        indexing: input fullName . " " . input jobRole | summary | index
+        match: text
+    }
+    
+    field skillsAndInterests type string {
+        indexing: input skills . " " . input interests | summary | index
+        match: text
+    }
+    
+    # Ranking profiles for different search scenarios
+    rank-profile default {
+        first-phase {
+            expression: nativeRank(fullName, jobRole, skills, about, companyName, education, interests, searchableContent)
+        }
+        
+        second-phase {
+            expression: firstPhase + 0.1 * attribute(yearsOfExperience)
+        }
+        
+        match-features {
+            nativeRank(fullName)
+            nativeRank(jobRole)
+            nativeRank(skills)
+            attribute(yearsOfExperience)
+        }
+    }
+    
+    # Semantic search ranking profile using vectors
+    rank-profile semantic {
+        inputs {
+            query(queryVector) tensor<float>(x[1024])
+        }
+        
+        first-phase {
+            expression: closeness(field, profileVector)
+        }
+        
+        second-phase {
+            expression: firstPhase + 0.2 * nativeRank(fullName, jobRole, skills)
+        }
+    }
+    
+    # Hybrid search combining text and vector similarity
+    rank-profile hybrid {
+        inputs {
+            query(queryVector) tensor<float>(x[1024])
+        }
+        
+        first-phase {
+            expression: 0.7 * nativeRank(fullName, jobRole, skills, about, searchableContent) + 0.3 * closeness(field, profileVector)
+        }
+        
+        second-phase {
+            expression: firstPhase + 0.1 * attribute(yearsOfExperience) + 0.05 * elementCompleteness(skills).completeness
+        }
+        
+        match-features {
+            nativeRank(fullName)
+            nativeRank(jobRole)
+            nativeRank(skills)
+            closeness(field, profileVector)
+            attribute(yearsOfExperience)
+        }
+    }
+    
+    # Experience-based ranking
+    rank-profile experience_focused {
+        first-phase {
+            expression: nativeRank(fullName, jobRole, skills) + 0.3 * normalize(attribute(yearsOfExperience), 0, 30)
+        }
+        
+        second-phase {
+            expression: firstPhase + 0.1 * nativeRank(about, education)
+        }
+    }
+    
+    # Skills-focused ranking
+    rank-profile skills_focused {
+        first-phase {
+            expression: 0.6 * nativeRank(skills) + 0.3 * nativeRank(jobRole, about) + 0.1 * nativeRank(fullName)
+        }
+        
+        second-phase {
+            expression: firstPhase + 0.1 * elementCompleteness(skills).completeness
+        }
+    }
+}

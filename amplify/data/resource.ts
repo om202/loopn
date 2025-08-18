@@ -1,6 +1,6 @@
 import { type ClientSchema, a, defineData } from '@aws-amplify/backend';
 import { presenceCleanup } from '../functions/presence-cleanup/resource';
-import { openSearchClient } from '../functions/opensearch-client/resource';
+import { vespaClient } from '../functions/vespa-client/resource';
 
 /*== LOOPN CHAT APP SCHEMA ==============================================
 This schema implements the Loopn user story:
@@ -27,7 +27,7 @@ Models:
 
 const schema = a
   .schema({
-    // OpenSearch user search - simplified and intelligent
+    // Vespa AI user search - enhanced with vector search and hybrid ranking
     searchUsers: a
       .query()
       .arguments({
@@ -37,10 +37,12 @@ const schema = a
         userProfile: a.json(),
         limit: a.integer(),
         filters: a.json(),
+        rankingProfile: a.string(), // New: support for different ranking profiles
+        queryVector: a.json(), // New: support for vector search
       })
       .returns(a.json())
       .authorization(allow => [allow.authenticated()])
-      .handler(a.handler.function(openSearchClient)),
+      .handler(a.handler.function(vespaClient)),
 
     // Request to start chatting with someone (Step 1)
     ChatRequest: a

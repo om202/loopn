@@ -5,14 +5,15 @@ import { auth } from './auth/resource';
 import { data } from './data/resource';
 import { storage } from './storage/resource';
 import { presenceCleanup } from './functions/presence-cleanup/resource';
-import { openSearchClient } from './functions/opensearch-client/resource';
+import { vespaClient } from './functions/vespa-client/resource';
 import { autoConfirm } from './functions/auto-confirm/resource';
-import { defineOpenSearch } from './opensearch/resource';
+import { defineVespa } from './vespa/resource';
 
 /*
  * 📈 SCALING CONFIGURATION GUIDE
  *
  * Current setup is optimized for LOW USER COUNT (< 50 users)
+ * Now using Vespa AI for enhanced search performance and scalability
  *
  * WHEN TO SCALE UP:
  *
@@ -20,24 +21,24 @@ import { defineOpenSearch } from './opensearch/resource';
  *   - No changes needed
  *
  * 🔸 100-500 Users:
- *   - No changes needed (already at AWS minimum 128MB)
+ *   - vespaClient: memoryMB: 256 → 512 (for better vector processing)
  *
  * 🔹 500-1000 Users:
- *   - openSearchClient: memoryMB: 128 → 256
+ *   - vespaClient: memoryMB: 512 → 1024
  *   - presenceCleanup: memoryMB: 128 → 256, schedule: 'every 5m' → 'every 2m'
- *   - OpenSearch replicas: 0 → 1 (for production reliability)
+ *   - Consider Vespa Cloud scaling options
  *
  * 🔸 1000+ Users:
- *   - openSearchClient: memoryMB: 256 → 512
+ *   - vespaClient: memoryMB: 1024 → 2048
  *   - presenceCleanup: schedule: 'every 2m' → 'every 1m'
  *   - Consider DynamoDB provisioned capacity
  *   - Add CloudWatch alarms for performance monitoring
  *
  * 💰 ESTIMATED MONTHLY COSTS:
- *   - Current (< 50 users): $15-30/month
- *   - 100 users: $25-50/month
- *   - 500 users: $50-100/month
- *   - 1000+ users: $100-200/month
+ *   - Current (< 50 users): $20-40/month (Vespa Cloud + AWS)
+ *   - 100 users: $35-60/month
+ *   - 500 users: $60-120/month
+ *   - 1000+ users: $120-250/month
  */
 
 /**
@@ -48,35 +49,23 @@ const backend = defineBackend({
   data,
   storage,
   presenceCleanup,
-  openSearchClient,
+  vespaClient,
   autoConfirm,
 });
 
-// Set up OpenSearch Serverless in the search stack to avoid circular dependency
-const openSearchResources = defineOpenSearch(
-  backend.openSearchClient.resources.cfnResources.cfnFunction.stack,
-  backend.openSearchClient.resources.lambda.role
+// Set up Vespa AI search infrastructure
+const vespaResources = defineVespa(
+  backend.vespaClient.resources.cfnResources.cfnFunction.stack,
+  backend.vespaClient.resources.lambda.role
 );
 
-// Add IAM permissions for OpenSearch Serverless access
-backend.openSearchClient.resources.lambda.addToRolePolicy(
-  new PolicyStatement({
-    effect: Effect.ALLOW,
-    actions: ['aoss:APIAccessAll', 'aoss:DashboardsAccessAll'],
-    resources: [openSearchResources.collection.attrArn],
-  })
-);
-
-// Pass OpenSearch endpoint as environment variable
-backend.openSearchClient.addEnvironment(
-  'OPENSEARCH_ENDPOINT',
-  openSearchResources.endpoint
-);
-
-// Pass collection name for reference
-backend.openSearchClient.addEnvironment(
-  'OPENSEARCH_COLLECTION_NAME',
-  openSearchResources.collection.name!
+// Pass stack hash for parameter store access
+backend.vespaClient.addEnvironment(
+  'STACK_HASH',
+  backend.vespaClient.resources.cfnResources.cfnFunction.stack.stackName
+    .slice(-8)
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, '')
 );
 
 // Add environment variable to control email verification

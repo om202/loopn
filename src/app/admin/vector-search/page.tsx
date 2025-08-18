@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import {
-  OpenSearchService,
+  VespaService,
   SearchResponse,
   SearchResult,
-} from '../../../services/opensearch.service';
+  RankingProfile,
+} from '../../../services/vespa.service';
 import { generateClient } from 'aws-amplify/data';
 import type { Schema } from '../../../../amplify/data/resource';
 import { Amplify } from 'aws-amplify';
@@ -35,6 +36,7 @@ export default function VectorSearchAdminPage() {
   const [testQuery, setTestQuery] = useState('');
   const [testResults, setTestResults] = useState<SearchResponse | null>(null);
   const [isTestingSearch, setIsTestingSearch] = useState(false);
+  const [selectedRankingProfile, setSelectedRankingProfile] = useState<RankingProfile>('default');
   const [client, setClient] = useState<ReturnType<
     typeof generateClient<Schema>
   > | null>(null);
@@ -63,10 +65,7 @@ export default function VectorSearchAdminPage() {
     setIndexingResult(null);
 
     try {
-      // First initialize the OpenSearch index
-      await OpenSearchService.initializeIndex();
-
-      // Then migrate all users
+      // Migrate all users to Vespa
       let migrated = 0;
       let failed = 0;
       const errors: string[] = [];
@@ -83,7 +82,7 @@ export default function VectorSearchAdminPage() {
             for (const user of response.data) {
               try {
                 if (user.isOnboardingComplete) {
-                  const indexResult = await OpenSearchService.indexUser(
+                  const indexResult = await VespaService.indexUser(
                     user.userId,
                     {
                       userId: user.userId,
@@ -104,6 +103,8 @@ export default function VectorSearchAdminPage() {
                         ) ?? undefined,
                       profilePictureUrl: user.profilePictureUrl ?? undefined,
                       isOnboardingComplete: user.isOnboardingComplete,
+                      // Initialize with zero vector - in production you'd generate actual embeddings
+                      profileVector: new Array(1024).fill(0),
                     }
                   );
 
@@ -175,15 +176,15 @@ export default function VectorSearchAdminPage() {
       });
       const totalUsers = totalResponse.data?.length || 0;
 
-      // Test search to see how many are in OpenSearch
-      const searchResponse = await OpenSearchService.searchUsers('', 1000);
+      // Test search to see how many are in Vespa
+      const searchResponse = await VespaService.searchUsers('', 1000);
 
       let migratedUsers = 0;
       if (searchResponse.success) {
         migratedUsers =
           searchResponse.total || searchResponse.results?.length || 0;
       } else {
-        setStatusError(`OpenSearch query failed: ${searchResponse.error}`);
+        setStatusError(`Vespa query failed: ${searchResponse.error}`);
         migratedUsers = 0;
       }
 
@@ -216,7 +217,7 @@ export default function VectorSearchAdminPage() {
     setTestResults(null);
 
     try {
-      const searchResult = await OpenSearchService.searchUsers(testQuery, 10);
+      const searchResult = await VespaService.searchUsers(testQuery, 10, undefined, selectedRankingProfile);
       setTestResults(searchResult);
     } catch (error) {
       console.error('Error testing search:', error);
@@ -234,8 +235,8 @@ export default function VectorSearchAdminPage() {
     setTestResults(null);
 
     try {
-      // Use empty string for match_all query instead of '*'
-      const searchResult = await OpenSearchService.searchUsers('', 50);
+      // Use empty string for match_all query
+      const searchResult = await VespaService.searchUsers('', 50, undefined, selectedRankingProfile);
       setTestResults(searchResult);
     } catch (error) {
       console.error('Error testing search for all users:', error);
@@ -269,10 +270,10 @@ export default function VectorSearchAdminPage() {
         <div className='bg-white shadow-sm rounded-lg'>
           <div className='px-6 py-4 border-b border-gray-200'>
             <h1 className='text-2xl font-bold text-gray-900'>
-              OpenSearch Admin Panel
+              Vespa AI Admin Panel
             </h1>
             <p className='text-sm text-gray-600 mt-1'>
-              Manage intelligent search indexing and testing
+              Manage AI-powered search indexing and testing with advanced ranking profiles
             </p>
           </div>
 
@@ -315,7 +316,7 @@ export default function VectorSearchAdminPage() {
                       <div className='text-2xl font-bold text-green-600'>
                         {status.migratedUsers}
                       </div>
-                      <div className='text-sm text-gray-600'>In OpenSearch</div>
+                      <div className='text-sm text-gray-600'>In Vespa</div>
                     </div>
                     <div className='text-center'>
                       <div className='text-2xl font-bold text-orange-600'>
@@ -331,7 +332,7 @@ export default function VectorSearchAdminPage() {
             {/* Migration Section */}
             <div>
               <h2 className='text-lg font-semibold text-gray-900 mb-4'>
-                Migrate Users to OpenSearch
+                Migrate Users to Vespa AI
               </h2>
               <div className='bg-blue-50 border border-blue-200 rounded-md p-4 mb-4'>
                 <div className='flex'>
@@ -342,9 +343,9 @@ export default function VectorSearchAdminPage() {
                     <div className='mt-2 text-sm text-blue-700'>
                       <p>
                         This will migrate all user profiles from DynamoDB to
-                        OpenSearch for intelligent search. No additional AWS
-                        charges for embeddings - OpenSearch handles all the
-                        intelligence internally.
+                        Vespa AI for advanced search with vector similarity, hybrid ranking,
+                        and intelligent matching. Vespa provides superior performance
+                        and AI-powered search capabilities.
                       </p>
                     </div>
                   </div>
@@ -360,7 +361,7 @@ export default function VectorSearchAdminPage() {
                   ? 'Migrating Users...'
                   : !client
                     ? 'Initializing...'
-                    : 'Migrate All Users to OpenSearch'}
+                    : 'Migrate All Users to Vespa AI'}
               </button>
 
               {indexingResult && (
@@ -405,8 +406,27 @@ export default function VectorSearchAdminPage() {
             {/* Test Search Section */}
             <div>
               <h2 className='text-lg font-semibold text-gray-900 mb-4'>
-                Test Search
+                Test Search with AI Ranking
               </h2>
+              
+              {/* Ranking Profile Selector */}
+              <div className='mb-4'>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>
+                  Ranking Profile
+                </label>
+                <select
+                  value={selectedRankingProfile}
+                  onChange={(e) => setSelectedRankingProfile(e.target.value as RankingProfile)}
+                  className='px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
+                >
+                  <option value="default">Default - Balanced ranking</option>
+                  <option value="skills_focused">Skills Focused - Prioritize skill matches</option>
+                  <option value="experience_focused">Experience Focused - Prioritize experience level</option>
+                  <option value="semantic">Semantic - Vector similarity only</option>
+                  <option value="hybrid">Hybrid - Text + Vector combined</option>
+                </select>
+              </div>
+              
               <div className='flex gap-4 mb-4'>
                 <input
                   type='text'

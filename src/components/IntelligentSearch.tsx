@@ -4,10 +4,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { Search, X, Clock, User, Briefcase, MapPin } from 'lucide-react';
 import {
-  OpenSearchService,
+  VespaService,
   type SearchResult,
   type SearchFilters,
-} from '../services/opensearch.service';
+  type RankingProfile,
+} from '../services/vespa.service';
 import {
   getSearchHistory,
   addToSearchHistory,
@@ -19,12 +20,14 @@ interface IntelligentSearchProps {
   onUserSelect?: (user: SearchResult) => void;
   placeholder?: string;
   showFilters?: boolean;
+  rankingProfile?: RankingProfile; // New: allow customizing search ranking
 }
 
 export default function IntelligentSearch({
   onUserSelect,
   placeholder = "Search for anyone... (e.g., 'software engineer', 'co-founder', 'marketing expert')",
   showFilters = false,
+  rankingProfile = 'default',
 }: IntelligentSearchProps) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
@@ -75,10 +78,11 @@ export default function IntelligentSearch({
     setIsSearching(true);
 
     try {
-      const response = await OpenSearchService.searchUsers(
+      const response = await VespaService.searchUsers(
         searchQuery,
         10,
-        filters
+        filters,
+        rankingProfile
       );
 
       if (response.success && response.results) {
