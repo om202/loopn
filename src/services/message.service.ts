@@ -2,9 +2,11 @@ import type { Schema } from '../../amplify/data/resource';
 import { getClient } from '../lib/amplify-config';
 import { notificationService } from './notification.service';
 import { UserProfileService } from './user-profile.service';
+import { useSubscriptionStore } from '../stores/subscription-store';
 
 // Type definitions from schema
 type Message = Schema['Message']['type'];
+type Conversation = Schema['Conversation']['type'];
 // type _CreateMessageInput = Schema['Message']['createType'];
 // type _UpdateMessageInput = Schema['Message']['updateType'];
 
@@ -33,26 +35,34 @@ export class MessageService {
     conversationId: string,
     senderId: string,
     content: string,
-    replyToMessageId?: string
+    replyToMessageId?: string,
+    conversation?: Conversation
   ): Promise<DataResult<Message>> {
     try {
-      // Get conversation to determine receiverId
-      const conversationResult = await getClient().models.Conversation.get({
-        id: conversationId,
-      });
+      let receiverId: string;
 
-      if (!conversationResult.data) {
-        return {
-          data: null,
-          error: 'Conversation not found',
-        };
+      if (conversation) {
+        receiverId =
+          conversation.participant1Id === senderId
+            ? conversation.participant2Id
+            : conversation.participant1Id;
+      } else {
+        const conversationResult = await getClient().models.Conversation.get({
+          id: conversationId,
+        });
+
+        if (!conversationResult.data) {
+          return {
+            data: null,
+            error: 'Conversation not found',
+          };
+        }
+
+        receiverId =
+          conversationResult.data.participant1Id === senderId
+            ? conversationResult.data.participant2Id
+            : conversationResult.data.participant1Id;
       }
-
-      // Determine receiverId (the other participant)
-      const receiverId =
-        conversationResult.data.participant1Id === senderId
-          ? conversationResult.data.participant2Id
-          : conversationResult.data.participant1Id;
 
       const timestamp = new Date();
       const sortKey = `${timestamp.toISOString()}_${crypto.randomUUID()}`;
@@ -74,21 +84,49 @@ export class MessageService {
       // Create notification for the receiver (works for both online and offline users)
       if (result.data) {
         try {
-          // Get sender's profile information for notification
-          const senderProfileResult =
-            await new UserProfileService().getUserProfile(senderId);
-          const senderProfile = senderProfileResult.data
-            ? {
-                fullName: senderProfileResult.data.fullName || undefined,
-                email: senderProfileResult.data.email || undefined,
-              }
-            : null;
+          let senderProfile: { fullName?: string; email?: string } | null =
+            null;
+
+          const cachedProfile = useSubscriptionStore
+            .getState()
+            .getUserProfile(senderId);
+          if (cachedProfile) {
+            senderProfile = {
+              fullName: cachedProfile.fullName || undefined,
+              email: cachedProfile.email || undefined,
+            };
+          }
+
+          if (!senderProfile) {
+            const senderProfileResult =
+              await new UserProfileService().getUserProfile(senderId);
+            senderProfile = senderProfileResult.data
+              ? {
+                  fullName: senderProfileResult.data.fullName || undefined,
+                  email: senderProfileResult.data.email || undefined,
+                }
+              : null;
+          }
 
           const senderName = getDisplayName(senderProfile, senderId);
 
           // Truncate long messages for notification
           const notificationContent =
             content.length > 50 ? `${content.substring(0, 50)}...` : content;
+
+          let extendedProfileData = null;
+          const cachedExtendedProfile = useSubscriptionStore
+            .getState()
+            .getUserProfile(senderId);
+          if (cachedExtendedProfile) {
+            extendedProfileData = {
+              fullName: cachedExtendedProfile.fullName,
+              email: cachedExtendedProfile.email,
+              profilePictureUrl: cachedExtendedProfile.profilePictureUrl,
+              hasProfilePicture:
+                cachedExtendedProfile.hasProfilePicture || false,
+            };
+          }
 
           const notificationData = {
             conversationId,
@@ -99,10 +137,9 @@ export class MessageService {
               ? {
                   fullName: senderProfile.fullName,
                   email: senderProfile.email,
-                  profilePictureUrl:
-                    senderProfileResult.data?.profilePictureUrl,
+                  profilePictureUrl: extendedProfileData?.profilePictureUrl,
                   hasProfilePicture:
-                    senderProfileResult.data?.hasProfilePicture || false,
+                    extendedProfileData?.hasProfilePicture || false,
                 }
               : null,
           };

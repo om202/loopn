@@ -2,6 +2,7 @@ import { generateClient } from 'aws-amplify/data';
 
 import type { Schema } from '../../amplify/data/resource';
 import { chatPresenceService } from './chat-presence.service';
+import { useSubscriptionStore } from '../stores/subscription-store';
 import type { Notification } from '../components/notifications/types';
 
 type _AmplifyNotification = Schema['Notification']['type'];
@@ -35,10 +36,29 @@ export class NotificationService {
     try {
       // For message notifications, check if user is actively in the chat
       if (type === 'message' && options?.conversationId) {
-        const isUserActiveInChat = await chatPresenceService.isUserActiveInChat(
-          userId,
-          options.conversationId
-        );
+        let isUserActiveInChat = false;
+
+        const onlineUsers = useSubscriptionStore.getState().onlineUsers;
+        const userPresence = onlineUsers.find(u => u.userId === userId);
+
+        if (
+          userPresence &&
+          userPresence.activeChatId === options.conversationId
+        ) {
+          if (userPresence.lastChatActivity) {
+            const activityTime = new Date(
+              userPresence.lastChatActivity
+            ).getTime();
+            const now = new Date().getTime();
+            const fiveMinutes = 5 * 60 * 1000;
+            isUserActiveInChat = now - activityTime < fiveMinutes;
+          }
+        } else {
+          isUserActiveInChat = await chatPresenceService.isUserActiveInChat(
+            userId,
+            options.conversationId
+          );
+        }
 
         if (isUserActiveInChat) {
           // User is actively viewing this chat - don't create notification

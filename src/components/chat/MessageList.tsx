@@ -65,12 +65,11 @@ export default function MessageList({
   // Get message IDs for reactions subscription
   const messageIds = useMemo(() => messages.map(msg => msg.id), [messages]);
 
-  // Use our new realtime reactions hook
   const {
     messageReactions,
     isLoading: reactionsLoading,
-
     getReactionsForMessage,
+    loadReactionsForMessage,
     addOptimisticReaction,
     removeOptimisticReaction,
     updateReactionsForMessage,
@@ -238,11 +237,20 @@ export default function MessageList({
     ]
   );
 
-  const handleEmojiPickerToggle = useCallback((messageId: string) => {
-    setOpenEmojiPickerMessageId(prev =>
-      prev === messageId ? null : messageId
-    );
-  }, []);
+  const handleEmojiPickerToggle = useCallback(
+    (messageId: string) => {
+      setOpenEmojiPickerMessageId(prev => {
+        const newValue = prev === messageId ? null : messageId;
+
+        if (newValue === messageId) {
+          loadReactionsForMessage(messageId);
+        }
+
+        return newValue;
+      });
+    },
+    [loadReactionsForMessage]
+  );
 
   const handleMessageActionsChange = useCallback(
     (messageId: string | null, isActive: boolean) => {

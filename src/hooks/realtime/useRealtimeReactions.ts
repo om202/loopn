@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
-import { useRealtime } from '@/contexts/RealtimeContext';
+// import { useRealtime } from '@/contexts/RealtimeContext';
 import { reactionService } from '@/services/reaction.service';
 import type { Schema } from '../../../amplify/data/resource';
 
@@ -17,6 +17,7 @@ interface UseRealtimeReactionsReturn {
   error: string | null;
   // Utility functions
   getReactionsForMessage: (messageId: string) => MessageReaction[];
+  loadReactionsForMessage: (messageId: string) => Promise<void>;
   addOptimisticReaction: (messageId: string, reaction: MessageReaction) => void;
   removeOptimisticReaction: (messageId: string, reactionId: string) => void;
   updateReactionsForMessage: (
@@ -26,15 +27,14 @@ interface UseRealtimeReactionsReturn {
 }
 
 /**
- * Hook for subscribing to message reactions with batch loading and real-time updates
+ * Hook for subscribing to message reactions with lazy loading and real-time updates
+ * Only loads reactions when actually needed (e.g., when user interacts with reactions)
  */
 export function useRealtimeReactions({
   messageIds,
-  currentUserId,
+  currentUserId: _currentUserId,
   enabled = true,
 }: UseRealtimeReactionsProps): UseRealtimeReactionsReturn {
-  const { subscribeToReactions } = useRealtime();
-
   const [messageReactions, setMessageReactions] = useState<
     Record<string, MessageReaction[]>
   >({});
@@ -47,98 +47,59 @@ export function useRealtimeReactions({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const stableMessageIds = useMemo(() => messageIds, [messageIdsKey]);
 
-  // Load initial batch reactions when new messages appear
-  useEffect(() => {
-    const loadReactionsForNewMessages = async () => {
-      if (stableMessageIds.length === 0 || !enabled) {
-        setIsLoading(false);
-        return;
-      }
-
-      const messageIdsToLoad = stableMessageIds.filter(
-        msgId => !loadedMessageIds.has(msgId)
-      );
-
-      if (messageIdsToLoad.length === 0) {
-        setIsLoading(false);
+  // Lazy load reactions only when needed (don't load all reactions upfront)
+  const loadReactionsForMessage = useCallback(
+    async (messageId: string) => {
+      if (!enabled || loadedMessageIds.has(messageId)) {
         return;
       }
 
       setIsLoading(true);
-
       try {
-        const result =
-          await reactionService.getBatchMessageReactions(messageIdsToLoad);
+        const result = await reactionService.getMessageReactions(messageId);
 
         if (result.error) {
-          console.error('Error loading batch reactions:', result.error);
+          console.error(
+            'Error loading reactions for message:',
+            messageId,
+            result.error
+          );
           setError('Failed to load reactions');
         } else {
-          messageIdsToLoad.forEach(messageId => {
-            loadedMessageIds.add(messageId);
-          });
-
-          const newReactionsMap = result.data;
-          setMessageReactions(prev => ({ ...prev, ...newReactionsMap }));
+          loadedMessageIds.add(messageId);
+          setMessageReactions(prev => ({
+            ...prev,
+            [messageId]: result.data || [],
+          }));
           setError(null);
         }
       } catch (err) {
         console.error('Network error loading reactions:', err);
         setError('Failed to load reactions');
       }
-
       setIsLoading(false);
-    };
+    },
+    [enabled, loadedMessageIds]
+  );
 
-    loadReactionsForNewMessages();
-  }, [stableMessageIds, enabled, loadedMessageIds]);
-
-  // Subscribe to real-time reaction changes
+  // Only initialize empty reaction arrays for messages (no upfront loading)
   useEffect(() => {
     if (stableMessageIds.length === 0 || !enabled) {
       return;
     }
 
-    const unsubscribe = subscribeToReactions(stableMessageIds, data => {
-      try {
-        // Handle the observeQuery format from AppSync
-        const typedData = data as { items?: MessageReaction[] };
-        const reactions = typedData.items || [];
-
-        // Update all reactions for messages in this update
-        setMessageReactions(prev => {
-          const updated = { ...prev };
-
-          // Group reactions by messageId
-          const reactionsByMessage: Record<string, MessageReaction[]> = {};
-
-          reactions.forEach((reaction: MessageReaction) => {
-            if (!reactionsByMessage[reaction.messageId]) {
-              reactionsByMessage[reaction.messageId] = [];
-            }
-            reactionsByMessage[reaction.messageId].push(reaction);
-          });
-
-          // Update the state with new reactions
-          Object.keys(reactionsByMessage).forEach(messageId => {
-            updated[messageId] = reactionsByMessage[messageId];
-          });
-
-          return updated;
-        });
-      } catch (err) {
-        console.error(
-          '[useRealtimeReactions] Error processing reaction data:',
-          err
-        );
-        setError('Failed to process reaction updates');
+    // Initialize empty arrays for new messages (no API calls)
+    const newReactions: Record<string, MessageReaction[]> = {};
+    stableMessageIds.forEach(messageId => {
+      if (!messageReactions[messageId]) {
+        newReactions[messageId] = [];
       }
     });
 
-    return () => {
-      unsubscribe();
-    };
-  }, [stableMessageIds, currentUserId, enabled, subscribeToReactions]);
+    if (Object.keys(newReactions).length > 0) {
+      setMessageReactions(prev => ({ ...prev, ...newReactions }));
+    }
+  }, [stableMessageIds, enabled, messageReactions]);
 
   // Utility functions (memoized to prevent infinite loops)
   const getReactionsForMessage = useCallback(
@@ -189,6 +150,7 @@ export function useRealtimeReactions({
     isLoading,
     error,
     getReactionsForMessage,
+    loadReactionsForMessage,
     addOptimisticReaction,
     removeOptimisticReaction,
     updateReactionsForMessage,

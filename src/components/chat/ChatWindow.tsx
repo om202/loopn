@@ -118,7 +118,8 @@ export default function ChatWindow({
         conversation.id,
         user.userId,
         messageContent,
-        replyToMessage?.id
+        replyToMessage?.id,
+        conversation
       );
 
       if (result.error) {
