@@ -34,27 +34,15 @@ export function defineVespa(stack: Stack, lambdaRole?: iam.IRole) {
     }
   );
 
-  const vespaApiKeyParam = new ssm.StringParameter(
+  const vespaTokenParam = new ssm.StringParameter(
     stack,
-    'VespaApiKeyParameter',
+    'VespaTokenParameter',
     {
-      parameterName: `/loopn/${stackHash}/vespa/api-key`,
-      stringValue: 'vespa-cloud-api-key-placeholder',
-      description: 'Vespa Cloud API key for authentication',
+      parameterName: `/loopn/${stackHash}/vespa/token`,
+      stringValue: 'vespa-token-placeholder',
+      description: 'Vespa Cloud API token for authentication',
     }
   );
-
-  const vespaCertParam = new ssm.StringParameter(stack, 'VespaCertParameter', {
-    parameterName: `/loopn/${stackHash}/vespa/cert`,
-    stringValue: 'vespa-cert-placeholder',
-    description: 'Vespa Cloud client certificate',
-  });
-
-  const vespaKeyParam = new ssm.StringParameter(stack, 'VespaKeyParameter', {
-    parameterName: `/loopn/${stackHash}/vespa/key`,
-    stringValue: 'vespa-key-placeholder',
-    description: 'Vespa Cloud private key',
-  });
 
   // Grant Lambda function permission to read Vespa configuration
   if (lambdaRole) {
@@ -65,9 +53,7 @@ export function defineVespa(stack: Stack, lambdaRole?: iam.IRole) {
           actions: ['ssm:GetParameter', 'ssm:GetParameters'],
           resources: [
             vespaEndpointParam.parameterArn,
-            vespaApiKeyParam.parameterArn,
-            vespaCertParam.parameterArn,
-            vespaKeyParam.parameterArn,
+            vespaTokenParam.parameterArn,
           ],
         }),
       ],
@@ -78,12 +64,8 @@ export function defineVespa(stack: Stack, lambdaRole?: iam.IRole) {
 
   return {
     endpointParameter: vespaEndpointParam,
-    apiKeyParameter: vespaApiKeyParam,
-    certParameter: vespaCertParam,
-    keyParameter: vespaKeyParam,
+    tokenParameter: vespaTokenParam,
     endpointParameterName: vespaEndpointParam.parameterName,
-    apiKeyParameterName: vespaApiKeyParam.parameterName,
-    certParameterName: vespaCertParam.parameterName,
-    keyParameterName: vespaKeyParam.parameterName,
+    tokenParameterName: vespaTokenParam.parameterName,
   };
 }
