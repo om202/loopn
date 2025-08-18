@@ -8,7 +8,7 @@ import EmojiPicker from '../EmojiPicker';
 import MessageReactions from '../MessageReactions';
 import DeleteConfirmationDialog from '../DeleteConfirmationDialog';
 import { soundService } from '../../services/sound.service';
-import { UserProfileService } from '../../services/user-profile.service';
+import { useUserProfile } from '../../hooks/useUserProfile';
 import {
   isEmojiOnly,
   isEmoji,
@@ -92,53 +92,17 @@ export default function MessageBubble({
   const [showActionsOnMobile, setShowActionsOnMobile] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
   const longPressTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const [userProfile, setUserProfile] = useState<{
-    fullName?: string;
-    email?: string;
-    profilePictureUrl?: string;
-    hasProfilePicture?: boolean;
-  } | null>(null);
   const touchStartTimeRef = useRef<number>(0);
+
+  // Use optimized profile hook with caching instead of local state and API calls
+  const { profile: userProfile } = useUserProfile(
+    isOwnMessage ? '' : otherParticipantId
+  );
 
   // Detect touch device
   useEffect(() => {
     setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
   }, []);
-
-  // Load profile data for other participant's avatar
-  useEffect(() => {
-    let mounted = true;
-
-    const loadProfileData = async () => {
-      if (!otherParticipantId || isOwnMessage) {
-        return;
-      }
-
-      try {
-        const profileResult = await new UserProfileService().getUserProfile(
-          otherParticipantId
-        );
-
-        if (mounted && profileResult.data) {
-          setUserProfile({
-            fullName: profileResult.data.fullName || undefined,
-            email: profileResult.data.email || undefined,
-            profilePictureUrl:
-              profileResult.data.profilePictureUrl || undefined,
-            hasProfilePicture: profileResult.data.hasProfilePicture || false,
-          });
-        }
-      } catch (error) {
-        console.error('Error loading profile data for message bubble:', error);
-      }
-    };
-
-    loadProfileData();
-
-    return () => {
-      mounted = false;
-    };
-  }, [otherParticipantId, isOwnMessage]);
 
   // Long press handlers
   const handleLongPressStart = useCallback(() => {
