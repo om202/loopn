@@ -8,13 +8,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: [
-          'SatoshiVariable',
-          'Satoshi',
-          'system-ui',
-          '-apple-system',
-          'sans-serif',
-        ],
+        sans: ['Atkinson', 'system-ui', '-apple-system', 'sans-serif'],
       },
     },
   },

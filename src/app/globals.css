@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 
-/* Import Satoshi Font Family */
-@import url('/fonts/satoshi-optimized.css');
+/* Import Atkinson Hyperlegible Font Family */
+@import url('/fonts/atkinson-optimized.css');
 
 @theme {
   /* Custom brand colors - Clean Apple Blue (#007AFF) */
@@ -68,8 +68,6 @@
   --color-b_orange-800: oklch(0.38 0.18 70);
   --color-b_orange-900: oklch(0.32 0.15 70);
   --color-b_orange-950: oklch(0.25 0.11 70);
-
-
 }
 
 /* Set root font size to 15px instead of default 16px */
@@ -79,8 +77,7 @@ html {
 
 body {
   font-family:
-    'SatoshiVariable',
-    'Satoshi',
+    'Atkinson',
     system-ui,
     -apple-system,
     sans-serif;
@@ -242,17 +239,16 @@ a:hover,
   display: none;
 }
 
-/* Force Satoshi to override Amplify UI React default fonts */
+/* Force Atkinson to override Amplify UI React default fonts */
 * {
   font-family:
-    'SatoshiVariable',
-    'Satoshi',
+    'Atkinson',
     system-ui,
     -apple-system,
     sans-serif !important;
 }
 
-/* Ensure all Amplify UI components use Satoshi */
+/* Ensure all Amplify UI components use Atkinson */
 [data-amplify-authenticator] *,
 [data-amplify-theme] *,
 .amplify-authenticator *,
@@ -262,8 +258,7 @@ a:hover,
 .amplify-label *,
 .amplify-text * {
   font-family:
-    'SatoshiVariable',
-    'Satoshi',
+    'Atkinson',
     system-ui,
     -apple-system,
     sans-serif !important;
