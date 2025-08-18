@@ -142,20 +142,7 @@ export default function HomePage() {
           <div className='grid lg:grid-cols-2 gap-12 lg:gap-16 items-center'>
             {/* Left column - Content */}
             <div className='text-center lg:text-left'>
-              <div className='mb-8'>
-                <div className='flex items-center justify-center lg:justify-start gap-3'>
-                  <Image
-                    src='/loopn.svg'
-                    alt='Loopn'
-                    width={38}
-                    height={38}
-                    priority
-                  />
-                  <span className='text-2xl font-medium text-zinc-500'>
-                    Loopn
-                  </span>
-                </div>
-              </div>
+
 
               <h1 className='text-4xl sm:text-5xl lg:text-5xl font-bold text-zinc-900 mb-8 leading-tight'>
                 Simple and AI powered{' '}
