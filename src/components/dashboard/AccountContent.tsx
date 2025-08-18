@@ -54,7 +54,7 @@ export default function AccountContent() {
               onboardingStatus?.onboardingData?.profilePictureUrl
             }
             hasProfilePicture={
-              !!userProfile?.profilePictureUrl ||
+              userProfile?.hasProfilePicture ||
               !!onboardingStatus?.onboardingData?.profilePictureUrl
             }
             size='xl'
