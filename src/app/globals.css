@@ -1,5 +1,78 @@
 @import 'tailwindcss';
 
+/* Freesentation Font Family */
+@font-face {
+  font-family: 'Freesentation';
+  src: url('/fonts/Freesentation-1Thin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Freesentation';
+  src: url('/fonts/Freesentation-2ExtraLight.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Freesentation';
+  src: url('/fonts/Freesentation-3Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Freesentation';
+  src: url('/fonts/Freesentation-4Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Freesentation';
+  src: url('/fonts/Freesentation-5Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Freesentation';
+  src: url('/fonts/Freesentation-6SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Freesentation';
+  src: url('/fonts/Freesentation-7Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Freesentation';
+  src: url('/fonts/Freesentation-8ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Freesentation';
+  src: url('/fonts/Freesentation-9Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
   /* Custom brand colors - Clean Apple Blue (#007AFF) */
   --color-brand-50: oklch(0.98 0.015 235);
@@ -69,7 +142,7 @@
 
 body {
   font-family:
-    var(--font-inter),
+    'Freesentation',
     system-ui,
     -apple-system,
     sans-serif;
@@ -229,4 +302,29 @@ a:hover,
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+/* Force Freesentation to override Amplify UI React default fonts */
+* {
+  font-family:
+    'Freesentation',
+    system-ui,
+    -apple-system,
+    sans-serif !important;
+}
+
+/* Ensure all Amplify UI components use Freesentation */
+[data-amplify-authenticator] *,
+[data-amplify-theme] *,
+.amplify-authenticator *,
+.amplify-button *,
+.amplify-field *,
+.amplify-input *,
+.amplify-label *,
+.amplify-text * {
+  font-family:
+    'Freesentation',
+    system-ui,
+    -apple-system,
+    sans-serif !important;
 }

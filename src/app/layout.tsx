@@ -1,16 +1,10 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 
 import './globals.css';
 import AmplifyProvider from './amplify-provider';
 import { RealtimeProvider } from '@/contexts/RealtimeContext';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { GlobalSubscriptionProvider } from '@/contexts/GlobalSubscriptionContext';
-
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-});
 
 export const metadata: Metadata = {
   title: 'Loopn - Real-Time Messaging Platform',
@@ -71,7 +65,7 @@ export default function RootLayout({
         />
         <meta name='format-detection' content='telephone=no,email=no' />
       </head>
-      <body className={`${inter.variable} antialiased`}>
+      <body className='antialiased'>
         <AmplifyProvider>
           <AuthProvider>
             <RealtimeProvider>
