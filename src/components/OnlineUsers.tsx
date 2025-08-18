@@ -224,20 +224,16 @@ export default function OnlineUsers({
         }
       });
 
-      const userPresencePromises = Array.from(userIds).map(async userId => {
-        try {
-          const result = await userPresenceService.getUserPresence(userId);
-          return result.data;
-        } catch {
-          console.error('Error getting user presence for:', userId);
-          return null;
-        }
-      });
-
-      const userPresences = await Promise.all(userPresencePromises);
-      const validUserPresences = userPresences.filter(
-        Boolean
-      ) as UserPresence[];
+      // Create basic presence entries for conversation participants
+      // Real-time presence data will be merged later via the onlineUsers state
+      const validUserPresences = Array.from(userIds).map(userId => ({
+        userId,
+        isOnline: false, // Will be updated by real-time data if user is online
+        status: 'OFFLINE' as const,
+        lastSeen: null,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      }));
 
       return validUserPresences;
     } catch (error) {
@@ -372,7 +368,7 @@ export default function OnlineUsers({
 
         // Filter out current user and remove duplicates
         const filteredUsers = (result.data || []).filter(
-          u => u?.userId && u.userId !== user.userId
+          (u: UserPresence) => u?.userId && u.userId !== user.userId
         );
         setSuggestedUsers(filteredUsers);
         setLastSuggestedUsersLoad(now);
@@ -389,9 +385,15 @@ export default function OnlineUsers({
   useEffect(() => {
     const combinedUsers = [...onlineUsers];
     conversationUsers.forEach(userPresence => {
-      if (!combinedUsers.find(u => u.userId === userPresence.userId)) {
+      // Check if user is already in online users (has real-time presence data)
+      const existingUser = combinedUsers.find(
+        u => u.userId === userPresence.userId
+      );
+      if (!existingUser) {
+        // User is not currently online, add them with offline status
         combinedUsers.push(userPresence);
       }
+      // If user exists in onlineUsers, real-time data takes precedence
     });
     setAllUsers(combinedUsers);
   }, [onlineUsers, conversationUsers]);

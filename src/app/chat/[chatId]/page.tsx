@@ -14,7 +14,6 @@ import { chatService } from '../../../services/chat.service';
 import { useConversations } from '../../../hooks/useConversations';
 import { useOnlineUsers } from '../../../hooks/useOnlineUsers';
 import { useConnectionActions } from '../../../hooks/useConnectionActions';
-import { userPresenceService } from '../../../services/user.service';
 
 type Conversation = Schema['Conversation']['type'];
 
@@ -43,7 +42,7 @@ export default function ChatPage({ params }: ChatPageProps) {
   });
 
   // Get online users for presence status
-  const { onlineUsers } = useOnlineUsers({
+  const { onlineUsers, getUserPresence } = useOnlineUsers({
     enabled: !!user?.userId,
   });
 
@@ -100,29 +99,23 @@ export default function ChatPage({ params }: ChatPageProps) {
 
       setConversation(conv);
 
-      // Load other participant's presence
+      // Get other participant's presence from real-time data
       const otherUserId =
         conv.participant1Id === user?.userId
           ? conv.participant2Id
           : conv.participant1Id;
 
       if (otherUserId) {
-        try {
-          const presenceResult =
-            await userPresenceService.getUserPresence(otherUserId);
-          if (presenceResult.data) {
-            setOtherUserPresence(presenceResult.data);
-          }
-        } catch (error) {
-          console.error('Error loading other participant presence:', error);
-        }
+        // Use real-time presence data instead of making an API call
+        const presence = getUserPresence(otherUserId);
+        setOtherUserPresence(presence);
       }
     } catch {
       setError('Failed to load conversation');
     } finally {
       setLoading(false);
     }
-  }, [params.chatId, user?.userId]);
+  }, [params.chatId, user?.userId, getUserPresence]);
 
   useEffect(() => {
     if (!user) {
@@ -162,6 +155,14 @@ export default function ChatPage({ params }: ChatPageProps) {
     conversation,
     getConversationById,
   ]);
+
+  // Update other user presence when online users data changes
+  useEffect(() => {
+    if (otherParticipantId) {
+      const presence = getUserPresence(otherParticipantId);
+      setOtherUserPresence(presence);
+    }
+  }, [otherParticipantId, getUserPresence]);
 
   const handleChatEnded = useCallback(() => {
     router.push('/dashboard');
