@@ -355,7 +355,7 @@ export default function DashboardDemo() {
                     <div className='text-zinc-900 font-medium truncate'>
                       {user.name}
                     </div>
-                    <div className='text-xs text-zinc-500'>
+                    <div className='text-sm text-zinc-500'>
                       {user.lastMessageTime}
                     </div>
                   </div>
@@ -401,10 +401,10 @@ export default function DashboardDemo() {
 
               {notification.type === 'chat_request' && (
                 <div className='flex-shrink-0 flex items-center gap-2'>
-                  <button className='px-3 py-1.5 bg-brand-500 text-white text-xs font-medium rounded-lg hover:bg-brand-600 transition-colors'>
+                  <button className='px-3 py-1.5 bg-brand-500 text-white text-sm font-medium rounded-lg hover:bg-brand-600 transition-colors'>
                     Accept
                   </button>
-                  <button className='px-3 py-1.5 bg-zinc-100 text-zinc-700 text-xs font-medium rounded-lg hover:bg-zinc-200 transition-colors'>
+                  <button className='px-3 py-1.5 bg-zinc-100 text-zinc-700 text-sm font-medium rounded-lg hover:bg-zinc-200 transition-colors'>
                     Decline
                   </button>
                 </div>
@@ -616,7 +616,7 @@ export default function DashboardDemo() {
                     {user.skills.slice(0, 3).map((skill, idx) => (
                       <span
                         key={idx}
-                        className='bg-brand-50 text-brand-700 text-xs px-2 py-0.5 rounded-full font-medium'
+                        className='bg-brand-50 text-brand-700 text-sm px-2 py-0.5 rounded-full font-medium'
                       >
                         {skill}
                       </span>
@@ -703,7 +703,7 @@ export default function DashboardDemo() {
                 </div>
                 <span className='font-medium text-base flex-1 flex items-center gap-3'>
                   Connections
-                  <span className='text-xs font-bold flex items-center justify-center h-5 w-5 rounded-full text-center bg-zinc-100 text-zinc-600'>
+                  <span className='text-sm font-bold flex items-center justify-center h-5 w-5 rounded-full text-center bg-zinc-100 text-zinc-600'>
                     {dummyConnections.length}
                   </span>
                 </span>
@@ -723,7 +723,7 @@ export default function DashboardDemo() {
                 </div>
                 <span className='font-medium text-base flex-1 flex items-center gap-3'>
                   Chats
-                  <span className='text-xs font-bold flex items-center justify-center h-5 w-5 rounded-full text-center bg-brand-50 text-brand-500'>
+                  <span className='text-sm font-bold flex items-center justify-center h-5 w-5 rounded-full text-center bg-brand-50 text-brand-500'>
                     {dummyUsers
                       .filter(u => u.unreadCount > 0)
                       .reduce((sum, u) => sum + u.unreadCount, 0)}
@@ -745,7 +745,7 @@ export default function DashboardDemo() {
                 </div>
                 <span className='font-medium text-base flex-1 flex items-center gap-3'>
                   Notifications
-                  <span className='text-xs font-bold flex items-center justify-center h-6 w-6 rounded-full text-center bg-brand-50 text-brand-500 border border-brand-100'>
+                  <span className='text-sm font-bold flex items-center justify-center h-6 w-6 rounded-full text-center bg-brand-50 text-brand-500 border border-brand-100'>
                     {dummyNotifications.filter(n => !n.isRead).length}
                   </span>
                 </span>
@@ -957,7 +957,7 @@ export default function DashboardDemo() {
                 <h3 className='text-sm font-semibold text-zinc-900 truncate'>
                   Jordan Blake
                 </h3>
-                <p className='text-xs text-zinc-600 truncate'>
+                <p className='text-sm text-zinc-600 truncate'>
                   Blockchain Developer
                 </p>
               </div>
@@ -970,7 +970,7 @@ export default function DashboardDemo() {
                 <Bell className='w-5 h-5 text-zinc-600' />
                 {dummyNotifications.filter(n => !n.isRead).length > 0 && (
                   <div className='absolute -top-1 -right-1 w-3 h-3 bg-brand-500 rounded-full flex items-center justify-center'>
-                    <span className='text-white text-xs font-bold'>
+                    <span className='text-white text-sm font-bold'>
                       {dummyNotifications.filter(n => !n.isRead).length}
                     </span>
                   </div>
@@ -1019,7 +1019,7 @@ export default function DashboardDemo() {
             Notifications
             {dummyNotifications.filter(n => !n.isRead).length > 0 && (
               <div className='absolute -top-1 -right-1 w-4 h-4 bg-brand-500 rounded-full flex items-center justify-center'>
-                <span className='text-white text-xs font-bold'>
+                <span className='text-white text-sm font-bold'>
                   {dummyNotifications.filter(n => !n.isRead).length}
                 </span>
               </div>
@@ -1145,13 +1145,13 @@ export default function DashboardDemo() {
                           <div className='w-2 h-2 bg-brand-500 rounded-full animate-pulse'></div>
                         )}
                       </div>
-                      <div className='text-xs mb-2 text-zinc-600'>
+                      <div className='text-sm mb-2 text-zinc-600'>
                         {user.role}
                       </div>
                     </div>
 
                     <div className='flex-shrink-0'>
-                      <button className='px-3 py-2 text-xs font-medium rounded-lg border transition-colors bg-white text-brand-500 border-zinc-200 hover:bg-brand-100 hover:border-zinc-200 flex items-center gap-1.5'>
+                      <button className='px-3 py-2 text-sm font-medium rounded-lg border transition-colors bg-white text-brand-500 border-zinc-200 hover:bg-brand-100 hover:border-zinc-200 flex items-center gap-1.5'>
                         <CheckCircle2 className='w-3 h-3 text-brand-500 flex-shrink-0' />
                         Connect
                       </button>
@@ -1189,7 +1189,7 @@ export default function DashboardDemo() {
                       <div className='text-zinc-900 font-medium text-sm mb-1'>
                         {connection.name}
                       </div>
-                      <div className='text-xs text-zinc-600 mb-1'>
+                      <div className='text-sm text-zinc-600 mb-1'>
                         {connection.role}
                       </div>
                     </div>
@@ -1235,11 +1235,11 @@ export default function DashboardDemo() {
                           <div className='text-zinc-900 font-medium text-sm truncate'>
                             {user.name}
                           </div>
-                          <div className='text-xs text-zinc-500'>
+                          <div className='text-sm text-zinc-500'>
                             {user.lastMessageTime}
                           </div>
                         </div>
-                        <div className='text-xs text-zinc-500 truncate'>
+                        <div className='text-sm text-zinc-500 truncate'>
                           {user.lastMessage}
                         </div>
                       </div>
@@ -1274,17 +1274,17 @@ export default function DashboardDemo() {
                         </span>{' '}
                         {notification.content}
                       </div>
-                      <div className='text-xs text-zinc-500'>
+                      <div className='text-sm text-zinc-500'>
                         {notification.timestamp}
                       </div>
                     </div>
 
                     {notification.type === 'chat_request' && (
                       <div className='flex-shrink-0 flex flex-col gap-1'>
-                        <button className='px-2 py-1 bg-brand-500 text-white text-xs font-medium rounded hover:bg-brand-600 transition-colors'>
+                        <button className='px-2 py-1 bg-brand-500 text-white text-sm font-medium rounded hover:bg-brand-600 transition-colors'>
                           Accept
                         </button>
-                        <button className='px-2 py-1 bg-zinc-100 text-zinc-700 text-xs font-medium rounded hover:bg-zinc-200 transition-colors'>
+                        <button className='px-2 py-1 bg-zinc-100 text-zinc-700 text-sm font-medium rounded hover:bg-zinc-200 transition-colors'>
                           Decline
                         </button>
                       </div>
@@ -1339,13 +1339,13 @@ export default function DashboardDemo() {
                         <div className='text-zinc-900 font-medium text-sm mb-1'>
                           {user.name}
                         </div>
-                        <div className='text-xs text-zinc-600 mb-2'>
+                        <div className='text-sm text-zinc-600 mb-2'>
                           {user.role}
                         </div>
                       </div>
 
                       <div className='flex-shrink-0'>
-                        <button className='px-3 py-2 bg-brand-500 text-white text-xs font-medium rounded-lg hover:bg-brand-600 transition-colors'>
+                        <button className='px-3 py-2 bg-brand-500 text-white text-sm font-medium rounded-lg hover:bg-brand-600 transition-colors'>
                           Connect
                         </button>
                       </div>

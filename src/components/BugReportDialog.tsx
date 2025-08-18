@@ -118,7 +118,7 @@ export default function BugReportDialog({
                 </span>
               </div>
               <p
-                className={`text-xs ${type === 'bug' ? 'text-brand-700' : 'text-zinc-500'}`}
+                className={`text-sm ${type === 'bug' ? 'text-brand-700' : 'text-zinc-500'}`}
               >
                 Something isn't working
               </p>
@@ -144,7 +144,7 @@ export default function BugReportDialog({
                 </span>
               </div>
               <p
-                className={`text-xs ${type === 'suggestion' ? 'text-brand-700' : 'text-zinc-500'}`}
+                className={`text-sm ${type === 'suggestion' ? 'text-brand-700' : 'text-zinc-500'}`}
               >
                 Idea for improvement
               </p>

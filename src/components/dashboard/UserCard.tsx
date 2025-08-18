@@ -228,10 +228,10 @@ export default function UserCard({
                       </span>
                     </div>
                     <div className='hidden md:block text-sm'>
-                      <div className='text-zinc-500 text-xs'>Reconnect in</div>
+                      <div className='text-zinc-500 text-sm'>Reconnect in</div>
                       <div className='text-zinc-500 flex items-center justify-end gap-1'>
                         <Clock className='w-3 h-3 text-zinc-500' />
-                        <span className='text-xs'>{timeRemaining}</span>
+                        <span className='text-sm'>{timeRemaining}</span>
                       </div>
                     </div>
                   </div>
@@ -410,7 +410,7 @@ export default function UserCard({
                     <div className='space-y-3'>
                       {finalFullProfile.jobRole && (
                         <div>
-                          <dt className='text-xs font-medium text-zinc-500 mb-1'>
+                          <dt className='text-sm font-medium text-zinc-500 mb-1'>
                             Role
                           </dt>
                           <dd className='text-sm text-zinc-900'>
@@ -420,7 +420,7 @@ export default function UserCard({
                       )}
                       {finalFullProfile.companyName && (
                         <div>
-                          <dt className='text-xs font-medium text-zinc-500 mb-1'>
+                          <dt className='text-sm font-medium text-zinc-500 mb-1'>
                             Company
                           </dt>
                           <dd className='text-sm text-zinc-900'>
@@ -430,7 +430,7 @@ export default function UserCard({
                       )}
                       {finalFullProfile.industry && (
                         <div>
-                          <dt className='text-xs font-medium text-zinc-500 mb-1'>
+                          <dt className='text-sm font-medium text-zinc-500 mb-1'>
                             Industry
                           </dt>
                           <dd className='text-sm text-zinc-900'>
@@ -441,7 +441,7 @@ export default function UserCard({
                       {finalFullProfile.yearsOfExperience !== null &&
                         finalFullProfile.yearsOfExperience !== undefined && (
                           <div>
-                            <dt className='text-xs font-medium text-zinc-500 mb-1'>
+                            <dt className='text-sm font-medium text-zinc-500 mb-1'>
                               Experience
                             </dt>
                             <dd className='text-sm text-zinc-900'>
@@ -494,14 +494,14 @@ export default function UserCard({
                       {finalFullProfile.skills &&
                         finalFullProfile.skills.length > 0 && (
                           <div>
-                            <dt className='text-xs font-medium text-zinc-500 mb-2'>
+                            <dt className='text-sm font-medium text-zinc-500 mb-2'>
                               Skills
                             </dt>
                             <dd className='flex flex-wrap gap-2'>
                               {finalFullProfile.skills.map((skill, index) => (
                                 <span
                                   key={index}
-                                  className='px-2 py-1 text-xs bg-brand-50 text-brand-700 rounded-md border border-brand-100'
+                                  className='px-2 py-1 text-sm bg-brand-50 text-brand-700 rounded-md border border-brand-100'
                                 >
                                   {skill}
                                 </span>
@@ -512,7 +512,7 @@ export default function UserCard({
                       {finalFullProfile.interests &&
                         finalFullProfile.interests.length > 0 && (
                           <div>
-                            <dt className='text-xs font-medium text-zinc-500 mb-2'>
+                            <dt className='text-sm font-medium text-zinc-500 mb-2'>
                               Interests
                             </dt>
                             <dd className='flex flex-wrap gap-2'>
@@ -520,7 +520,7 @@ export default function UserCard({
                                 (interest, index) => (
                                   <span
                                     key={index}
-                                    className='px-2 py-1 text-xs bg-b_green-50 text-b_green-700 rounded-md border border-b_green-100'
+                                    className='px-2 py-1 text-sm bg-b_green-50 text-b_green-700 rounded-md border border-b_green-100'
                                   >
                                     {interest}
                                   </span>

@@ -278,7 +278,7 @@ export default function NotificationItem({
                   return (
                     <>
                       <p className='text-base text-zinc-500'>{baseContent}</p>
-                      <span className='inline-flex items-center px-2 py-1 text-xs font-medium bg-brand-50 text-brand-600 rounded-full'>
+                      <span className='inline-flex items-center px-2 py-1 text-sm font-medium bg-brand-50 text-brand-600 rounded-full'>
                         +{count} more
                       </span>
                     </>

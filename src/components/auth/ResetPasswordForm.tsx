@@ -83,14 +83,14 @@ export default function ResetPasswordForm({
             />
           </div>
           <div className='flex justify-between items-center mt-2'>
-            <p className='text-xs text-zinc-500'>
+            <p className='text-sm text-zinc-500'>
               Code sent to <span className='font-medium'>{email}</span>
             </p>
             <button
               type='button'
               onClick={handleResendCode}
               disabled={isLoading}
-              className='text-xs text-brand-500 hover:text-brand-700 font-medium transition-colors disabled:opacity-50'
+              className='text-sm text-brand-500 hover:text-brand-700 font-medium transition-colors disabled:opacity-50'
             >
               Resend code
             </button>
@@ -118,7 +118,7 @@ export default function ResetPasswordForm({
               required
             />
           </div>
-          <p className='text-xs text-zinc-500 mt-2'>
+          <p className='text-sm text-zinc-500 mt-2'>
             Must be at least 8 characters with uppercase, lowercase, numbers,
             and symbols
           </p>
@@ -150,7 +150,7 @@ export default function ResetPasswordForm({
             />
           </div>
           {confirmPassword && newPassword !== confirmPassword && (
-            <p className='text-xs text-b_red-500 mt-2'>
+            <p className='text-sm text-b_red-500 mt-2'>
               Passwords do not match
             </p>
           )}

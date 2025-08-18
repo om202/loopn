@@ -273,7 +273,7 @@ export default function OnboardingPage() {
               </div>
             </div>
             {/* Labels */}
-            <div className='mt-3 grid grid-cols-4 text-center text-xs sm:text-sm'>
+            <div className='mt-3 grid grid-cols-4 text-center text-sm sm:text-sm'>
               {['Profile', 'Use Loopn', 'Interests', 'Picture'].map(
                 (label, i) => (
                   <div
@@ -422,7 +422,7 @@ export default function OnboardingPage() {
                   {(formData.skills || []).map(skill => (
                     <span
                       key={skill}
-                      className='inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-brand-50 text-brand-700 border border-brand-200'
+                      className='inline-flex items-center gap-1 px-2 py-1 rounded-full text-sm bg-brand-50 text-brand-700 border border-brand-200'
                     >
                       {skill}
                       <button
@@ -459,7 +459,7 @@ export default function OnboardingPage() {
                     </li>
                     <li>How you’ll engage (intros, project help, long-term)</li>
                   </ul>
-                  <div className='text-xs mt-2'>
+                  <div className='text-sm mt-2'>
                     No skills here — add above.
                   </div>
                 </div>

@@ -205,14 +205,14 @@ export default function ChatHeader({
 
               {/* Profession */}
               {userProfile?.jobRole && (
-                <div className='text-xs sm:text-sm text-zinc-500 mb-1 truncate'>
+                <div className='text-sm sm:text-sm text-zinc-500 mb-1 truncate'>
                   {userProfile.jobRole}
                 </div>
               )}
 
               {/* Connected Status */}
               {conversation.isConnected && (
-                <div className='flex items-center text-xs sm:text-sm text-b_green-500 mb-1'>
+                <div className='flex items-center text-sm sm:text-sm text-b_green-500 mb-1'>
                   <svg
                     className='w-2.5 h-2.5 sm:w-3 sm:h-3 mr-1 flex-shrink-0'
                     fill='currentColor'

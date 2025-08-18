@@ -76,7 +76,7 @@ export default function ConfirmSignUpForm({
               required
             />
           </div>
-          <p className='text-xs text-zinc-500 mt-2 text-center'>
+          <p className='text-sm text-zinc-500 mt-2 text-center'>
             Enter the 6-digit code from your email
           </p>
         </div>

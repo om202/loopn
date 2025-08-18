@@ -13,7 +13,7 @@ interface SignUpFormProps {
 function PasswordRequirement({ met, text }: { met: boolean; text: string }) {
   return (
     <div
-      className={`flex items-center gap-2 text-xs ${met ? 'text-b_green-600' : 'text-zinc-500'}`}
+      className={`flex items-center gap-2 text-sm ${met ? 'text-b_green-600' : 'text-zinc-500'}`}
     >
       {met ? (
         <Check className='w-3 h-3 text-b_green-600' />
@@ -241,7 +241,7 @@ export default function SignUpForm({
             </button>
           </div>
           {confirmPassword && password !== confirmPassword && (
-            <p className='text-xs text-b_red-500 mt-2'>
+            <p className='text-sm text-b_red-500 mt-2'>
               Passwords do not match
             </p>
           )}

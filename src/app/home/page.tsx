@@ -242,7 +242,7 @@ export default function HomePage() {
                           </h1>
 
                           {/* Profession */}
-                          <div className='text-xs sm:text-sm text-zinc-500 mb-1 truncate'>
+                          <div className='text-sm sm:text-sm text-zinc-500 mb-1 truncate'>
                             Product Designer
                           </div>
                         </div>

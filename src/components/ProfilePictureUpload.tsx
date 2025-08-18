@@ -189,10 +189,10 @@ export default function ProfilePictureUpload({
                   <p className='text-sm font-medium text-zinc-700 mb-1'>
                     Add profile picture
                   </p>
-                  <p className='text-xs text-zinc-500'>
+                  <p className='text-sm text-zinc-500'>
                     Drag & drop or click to select
                   </p>
-                  <p className='text-xs text-zinc-500 mt-2'>
+                  <p className='text-sm text-zinc-500 mt-2'>
                     JPEG, PNG, WebP • Max 10MB
                   </p>
                 </>

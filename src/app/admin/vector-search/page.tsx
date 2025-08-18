@@ -463,7 +463,7 @@ export default function VectorSearchAdminPage() {
                                       {result.profile.fullName ||
                                         'Unknown Name'}
                                     </p>
-                                    <span className='px-2 py-1 bg-green-100 text-green-800 text-xs rounded'>
+                                    <span className='px-2 py-1 bg-green-100 text-green-800 text-sm rounded'>
                                       {Math.round(result.score * 100)}% match
                                     </span>
                                   </div>
@@ -479,7 +479,7 @@ export default function VectorSearchAdminPage() {
                                     </p>
                                   )}
                                   {result.profile.about && (
-                                    <p className='text-xs text-gray-500 mt-1 line-clamp-2'>
+                                    <p className='text-sm text-gray-500 mt-1 line-clamp-2'>
                                       {result.profile.about}
                                     </p>
                                   )}
@@ -498,14 +498,14 @@ export default function VectorSearchAdminPage() {
                                               ) => (
                                                 <span
                                                   key={skillIndex}
-                                                  className='px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded'
+                                                  className='px-2 py-1 bg-blue-100 text-blue-700 text-sm rounded'
                                                 >
                                                   {skill}
                                                 </span>
                                               )
                                             )}
                                           {result.profile.skills.length > 5 && (
-                                            <span className='text-xs text-gray-500 self-center'>
+                                            <span className='text-sm text-gray-500 self-center'>
                                               +
                                               {result.profile.skills.length - 5}{' '}
                                               more
@@ -516,11 +516,11 @@ export default function VectorSearchAdminPage() {
                                     )}
                                 </div>
                                 <div className='text-right'>
-                                  <p className='text-xs text-gray-500'>
+                                  <p className='text-sm text-gray-500'>
                                     Score: {result.score.toFixed(3)}
                                   </p>
                                   {result.profile.yearsOfExperience && (
-                                    <p className='text-xs text-gray-500'>
+                                    <p className='text-sm text-gray-500'>
                                       {result.profile.yearsOfExperience} years
                                       exp
                                     </p>
