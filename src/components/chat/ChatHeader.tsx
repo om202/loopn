@@ -9,7 +9,7 @@ import UserAvatar from '../UserAvatar';
 import TrialChatInfoDialog from '../TrialChatInfoDialog';
 import DialogContainer from '../DialogContainer';
 import { formatPresenceTime } from '../../lib/presence-utils';
-import { UserProfileService } from '../../services/user-profile.service';
+import { useUserProfile } from '../../hooks/useUserProfile';
 
 type Conversation = Schema['Conversation']['type'];
 type UserPresence = Schema['UserPresence']['type'];
@@ -27,7 +27,7 @@ interface ChatHeaderProps {
 }
 
 const getDisplayName = (
-  userProfile?: { fullName?: string; email?: string } | null,
+  userProfile?: { fullName?: string | null; email?: string | null } | null,
   userId?: string
 ) => {
   // Try to get full name from profile first
@@ -57,45 +57,8 @@ export default function ChatHeader({
   const [showEndChatDialog, setShowEndChatDialog] = useState(false);
   const [showChatEndedInfoDialog, setShowChatEndedInfoDialog] = useState(false);
   const [reconnectionTime, setReconnectionTime] = useState<string | null>(null);
-  const [userProfile, setUserProfile] = useState<{
-    fullName?: string;
-    email?: string;
-    profilePictureUrl?: string;
-    hasProfilePicture?: boolean;
-    jobRole?: string;
-  } | null>(null);
-
-  // Load profile data when component mounts
-  useEffect(() => {
-    let mounted = true;
-
-    const loadProfileData = async () => {
-      try {
-        const profileResult = await new UserProfileService().getUserProfile(
-          otherParticipantId
-        );
-
-        if (mounted && profileResult.data) {
-          setUserProfile({
-            fullName: profileResult.data.fullName || undefined,
-            email: profileResult.data.email || undefined,
-            profilePictureUrl:
-              profileResult.data.profilePictureUrl || undefined,
-            hasProfilePicture: profileResult.data.hasProfilePicture || false,
-            jobRole: profileResult.data.jobRole || undefined,
-          });
-        }
-      } catch (error) {
-        console.error('Error loading profile data:', error);
-      }
-    };
-
-    loadProfileData();
-
-    return () => {
-      mounted = false;
-    };
-  }, [otherParticipantId]);
+  // Use optimized profile hook with caching instead of local state and API calls
+  const { profile: userProfile } = useUserProfile(otherParticipantId);
 
   const getUserDisplayName = () => {
     return getDisplayName(userProfile, otherParticipantId);
@@ -183,7 +146,7 @@ export default function ChatHeader({
               email={userProfile?.email}
               userId={otherParticipantId}
               profilePictureUrl={userProfile?.profilePictureUrl}
-              hasProfilePicture={userProfile?.hasProfilePicture}
+              hasProfilePicture={userProfile?.hasProfilePicture || false}
               size='md'
               showStatus
               status={

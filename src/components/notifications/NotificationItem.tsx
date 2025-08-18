@@ -1,10 +1,9 @@
 'use client';
 
 import { useAuthenticator } from '@aws-amplify/ui-react';
-import { useState, useEffect } from 'react';
 
 import { notificationService } from '../../services/notification.service';
-import { UserProfileService } from '../../services/user-profile.service';
+import { useUserProfile } from '../../hooks/useUserProfile';
 import UserAvatar from '../UserAvatar';
 import type {
   UINotification,
@@ -131,60 +130,24 @@ export default function NotificationItem({
   onError,
 }: NotificationItemProps) {
   const { user } = useAuthenticator();
-  const [userProfile, setUserProfile] = useState<{
-    fullName?: string;
-    email?: string;
-    profilePictureUrl?: string;
-    hasProfilePicture?: boolean;
-  } | null>(null);
-
   const isClickable =
     notification.type === 'message' || notification.type === 'connection';
 
-  // Load profile data for user avatar - similar to UserCard
-  useEffect(() => {
-    let mounted = true;
-
-    const loadProfileData = async () => {
-      // Only load for chat_request notifications where we need user profile data
-      if (
-        notification.type !== 'chat_request' ||
-        !notification.data ||
-        !('requesterId' in notification.data)
-      ) {
-        return;
-      }
-
+  // Get user ID for profile fetching
+  const getUserIdForProfile = () => {
+    if (
+      notification.type === 'chat_request' &&
+      notification.data &&
+      'requesterId' in notification.data
+    ) {
       const chatRequestData = notification.data as ChatRequestWithUser;
-      const userId = chatRequestData.requesterId;
+      return chatRequestData.requesterId;
+    }
+    return '';
+  };
 
-      if (!userId) return;
-
-      try {
-        const profileResult = await new UserProfileService().getUserProfile(
-          userId
-        );
-
-        if (mounted && profileResult.data) {
-          setUserProfile({
-            fullName: profileResult.data.fullName || undefined,
-            email: profileResult.data.email || undefined,
-            profilePictureUrl:
-              profileResult.data.profilePictureUrl || undefined,
-            hasProfilePicture: profileResult.data.hasProfilePicture || false,
-          });
-        }
-      } catch (error) {
-        console.error('Error loading profile data for notification:', error);
-      }
-    };
-
-    loadProfileData();
-
-    return () => {
-      mounted = false;
-    };
-  }, [notification.type, notification.data]);
+  // Use optimized profile hook with caching instead of local state and API calls
+  const { profile: userProfile } = useUserProfile(getUserIdForProfile());
 
   return (
     <div

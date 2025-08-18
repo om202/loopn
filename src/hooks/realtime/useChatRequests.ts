@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import type { Schema } from '../../../amplify/data/resource';
 import { useRealtime } from '../../contexts/RealtimeContext';
-import { UserProfileService } from '../../services/user-profile.service';
+import { useSubscriptionStore } from '../../stores/subscription-store';
 
 export interface ChatRequestWithUser {
   id: string;
@@ -32,6 +32,7 @@ export function useRealtimeChatRequests({
   const [error, setError] = useState<string | null>(null);
 
   const { subscribeToChatRequests, subscribeSentChatRequests } = useRealtime();
+  const { fetchUserProfile } = useSubscriptionStore();
 
   useEffect(() => {
     if (!enabled || !userId) {
@@ -50,10 +51,7 @@ export function useRealtimeChatRequests({
         const requestsWithUsers = await Promise.all(
           requests.map(async request => {
             try {
-              const profileResult =
-                await new UserProfileService().getUserProfile(
-                  request.requesterId
-                );
+              const profile = await fetchUserProfile(request.requesterId);
               return {
                 id: request.id,
                 requesterId: request.requesterId,
@@ -61,7 +59,7 @@ export function useRealtimeChatRequests({
                 status: request.status,
                 createdAt: request.createdAt,
                 updatedAt: request.updatedAt,
-                requesterEmail: profileResult.data?.email || undefined,
+                requesterEmail: profile?.email || undefined,
               };
             } catch (userError) {
               console.warn(
@@ -98,7 +96,7 @@ export function useRealtimeChatRequests({
     return () => {
       unsubscribe();
     };
-  }, [userId, enabled, subscribeToChatRequests]);
+  }, [userId, enabled, subscribeToChatRequests, fetchUserProfile]);
 
   useEffect(() => {
     if (!enabled || !userId) {
@@ -116,10 +114,7 @@ export function useRealtimeChatRequests({
         const requestsWithUsers = await Promise.all(
           requests.map(async request => {
             try {
-              const profileResult =
-                await new UserProfileService().getUserProfile(
-                  request.receiverId
-                );
+              const profile = await fetchUserProfile(request.receiverId);
               return {
                 id: request.id,
                 requesterId: request.requesterId,
@@ -127,7 +122,7 @@ export function useRealtimeChatRequests({
                 status: request.status,
                 createdAt: request.createdAt,
                 updatedAt: request.updatedAt,
-                receiverEmail: profileResult.data?.email || undefined,
+                receiverEmail: profile?.email || undefined,
               };
             } catch (userError) {
               console.warn(
@@ -164,7 +159,7 @@ export function useRealtimeChatRequests({
     return () => {
       unsubscribe();
     };
-  }, [userId, enabled, subscribeSentChatRequests]);
+  }, [userId, enabled, subscribeSentChatRequests, fetchUserProfile]);
 
   const isLoading = isLoadingIncoming || isLoadingSent;
 
