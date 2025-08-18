@@ -167,16 +167,7 @@ export default function OnlineUsers({
   }, [user?.userId, fetchUserProfile]);
 
   // Persist and restore sidebar open/close state only (not the selected user)
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem('dashboard.profileSidebarOpen');
-      if (stored === 'true') {
-        setProfileSidebarOpen(true);
-      }
-    } catch {
-      // ignore
-    }
-  }, []);
+  // Profile sidebar starts closed by default (no localStorage persistence)
 
   // Auto-select first user when sidebar is restored and users are available
   useEffect(() => {
@@ -495,24 +486,14 @@ export default function OnlineUsers({
   };
 
   const handleOpenProfileSidebar = async (userPresence: UserPresence) => {
-    // Toggle open/close and persist only the open state; selection is ephemeral
+    // Toggle open/close (no localStorage persistence)
     if (profileSidebarOpen) {
       setProfileSidebarOpen(false);
-      try {
-        localStorage.setItem('dashboard.profileSidebarOpen', 'false');
-      } catch {
-        // ignore
-      }
       setProfileSidebarUser(null);
       return;
     }
 
     setProfileSidebarOpen(true);
-    try {
-      localStorage.setItem('dashboard.profileSidebarOpen', 'true');
-    } catch {
-      // ignore
-    }
     setProfileSidebarUser(userPresence);
   };
 
@@ -520,11 +501,6 @@ export default function OnlineUsers({
     // If sidebar is not open, open it
     if (!profileSidebarOpen) {
       setProfileSidebarOpen(true);
-      try {
-        localStorage.setItem('dashboard.profileSidebarOpen', 'true');
-      } catch {
-        // ignore
-      }
     }
 
     // Always update the selected user
