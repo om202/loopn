@@ -48,7 +48,12 @@ export interface SearchResponse {
 }
 
 // Ranking profiles available in Vespa
-export type RankingProfile = 'default' | 'semantic' | 'hybrid' | 'experience_focused' | 'skills_focused';
+export type RankingProfile =
+  | 'default'
+  | 'semantic'
+  | 'hybrid'
+  | 'experience_focused'
+  | 'skills_focused';
 
 export class VespaService {
   /**
@@ -117,7 +122,8 @@ export class VespaService {
       console.error('Semantic search failed:', error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Semantic search failed',
+        error:
+          error instanceof Error ? error.message : 'Semantic search failed',
       };
     }
   }
@@ -281,7 +287,12 @@ export class VespaService {
       return [];
     }
 
-    const response = await this.searchUsers(query, limit, undefined, rankingProfile);
+    const response = await this.searchUsers(
+      query,
+      limit,
+      undefined,
+      rankingProfile
+    );
     return response.results || [];
   }
 
@@ -344,7 +355,12 @@ export class VespaService {
       rankingProfile = 'experience_focused';
     }
 
-    const response = await this.searchUsers(searchQuery, limit, filters, rankingProfile);
+    const response = await this.searchUsers(
+      searchQuery,
+      limit,
+      filters,
+      rankingProfile
+    );
     return response.results || [];
   }
 
@@ -362,11 +378,12 @@ export class VespaService {
     experienceFocused: SearchResult[];
   }> {
     try {
-      const [defaultResults, skillsResults, experienceResults] = await Promise.all([
-        this.searchUsers(query, limit, filters, 'default'),
-        this.searchUsers(query, limit, filters, 'skills_focused'),
-        this.searchUsers(query, limit, filters, 'experience_focused'),
-      ]);
+      const [defaultResults, skillsResults, experienceResults] =
+        await Promise.all([
+          this.searchUsers(query, limit, filters, 'default'),
+          this.searchUsers(query, limit, filters, 'skills_focused'),
+          this.searchUsers(query, limit, filters, 'experience_focused'),
+        ]);
 
       return {
         default: defaultResults.results || [],

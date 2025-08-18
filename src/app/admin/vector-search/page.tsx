@@ -36,7 +36,8 @@ export default function VectorSearchAdminPage() {
   const [testQuery, setTestQuery] = useState('');
   const [testResults, setTestResults] = useState<SearchResponse | null>(null);
   const [isTestingSearch, setIsTestingSearch] = useState(false);
-  const [selectedRankingProfile, setSelectedRankingProfile] = useState<RankingProfile>('default');
+  const [selectedRankingProfile, setSelectedRankingProfile] =
+    useState<RankingProfile>('default');
   const [client, setClient] = useState<ReturnType<
     typeof generateClient<Schema>
   > | null>(null);
@@ -217,7 +218,12 @@ export default function VectorSearchAdminPage() {
     setTestResults(null);
 
     try {
-      const searchResult = await VespaService.searchUsers(testQuery, 10, undefined, selectedRankingProfile);
+      const searchResult = await VespaService.searchUsers(
+        testQuery,
+        10,
+        undefined,
+        selectedRankingProfile
+      );
       setTestResults(searchResult);
     } catch (error) {
       console.error('Error testing search:', error);
@@ -236,7 +242,12 @@ export default function VectorSearchAdminPage() {
 
     try {
       // Use empty string for match_all query
-      const searchResult = await VespaService.searchUsers('', 50, undefined, selectedRankingProfile);
+      const searchResult = await VespaService.searchUsers(
+        '',
+        50,
+        undefined,
+        selectedRankingProfile
+      );
       setTestResults(searchResult);
     } catch (error) {
       console.error('Error testing search for all users:', error);
@@ -273,7 +284,8 @@ export default function VectorSearchAdminPage() {
               Vespa AI Admin Panel
             </h1>
             <p className='text-sm text-gray-600 mt-1'>
-              Manage AI-powered search indexing and testing with advanced ranking profiles
+              Manage AI-powered search indexing and testing with advanced
+              ranking profiles
             </p>
           </div>
 
@@ -343,9 +355,9 @@ export default function VectorSearchAdminPage() {
                     <div className='mt-2 text-sm text-blue-700'>
                       <p>
                         This will migrate all user profiles from DynamoDB to
-                        Vespa AI for advanced search with vector similarity, hybrid ranking,
-                        and intelligent matching. Vespa provides superior performance
-                        and AI-powered search capabilities.
+                        Vespa AI for advanced search with vector similarity,
+                        hybrid ranking, and intelligent matching. Vespa provides
+                        superior performance and AI-powered search capabilities.
                       </p>
                     </div>
                   </div>
@@ -408,7 +420,7 @@ export default function VectorSearchAdminPage() {
               <h2 className='text-lg font-semibold text-gray-900 mb-4'>
                 Test Search with AI Ranking
               </h2>
-              
+
               {/* Ranking Profile Selector */}
               <div className='mb-4'>
                 <label className='block text-sm font-medium text-gray-700 mb-2'>
@@ -416,17 +428,27 @@ export default function VectorSearchAdminPage() {
                 </label>
                 <select
                   value={selectedRankingProfile}
-                  onChange={(e) => setSelectedRankingProfile(e.target.value as RankingProfile)}
+                  onChange={e =>
+                    setSelectedRankingProfile(e.target.value as RankingProfile)
+                  }
                   className='px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
                 >
-                  <option value="default">Default - Balanced ranking</option>
-                  <option value="skills_focused">Skills Focused - Prioritize skill matches</option>
-                  <option value="experience_focused">Experience Focused - Prioritize experience level</option>
-                  <option value="semantic">Semantic - Vector similarity only</option>
-                  <option value="hybrid">Hybrid - Text + Vector combined</option>
+                  <option value='default'>Default - Balanced ranking</option>
+                  <option value='skills_focused'>
+                    Skills Focused - Prioritize skill matches
+                  </option>
+                  <option value='experience_focused'>
+                    Experience Focused - Prioritize experience level
+                  </option>
+                  <option value='semantic'>
+                    Semantic - Vector similarity only
+                  </option>
+                  <option value='hybrid'>
+                    Hybrid - Text + Vector combined
+                  </option>
                 </select>
               </div>
-              
+
               <div className='flex gap-4 mb-4'>
                 <input
                   type='text'

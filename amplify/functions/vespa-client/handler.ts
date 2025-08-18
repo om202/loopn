@@ -1,5 +1,6 @@
 import { SSMClient, GetParameterCommand } from '@aws-sdk/client-ssm';
-import fetch from 'node-fetch';
+import https from 'https';
+import { URL } from 'url';
 
 // AWS SSM client for retrieving Vespa configuration
 const ssmClient = new SSMClient({ region: process.env.AWS_REGION! });
@@ -8,6 +9,8 @@ const ssmClient = new SSMClient({ region: process.env.AWS_REGION! });
 let vespaConfig: {
   endpoint: string;
   apiKey: string;
+  cert: string;
+  key: string;
 } | null = null;
 
 // Get Vespa configuration from Parameter Store
@@ -17,22 +20,42 @@ async function getVespaConfig() {
   }
 
   const stackHash = process.env.STACK_HASH || 'default';
-  
+
   try {
-    const [endpointParam, apiKeyParam] = await Promise.all([
-      ssmClient.send(new GetParameterCommand({
-        Name: `/loopn/${stackHash}/vespa/endpoint`,
-        WithDecryption: true,
-      })),
-      ssmClient.send(new GetParameterCommand({
-        Name: `/loopn/${stackHash}/vespa/api-key`,
-        WithDecryption: true,
-      })),
-    ]);
+    const [endpointParam, apiKeyParam, certParam, keyParam] = await Promise.all(
+      [
+        ssmClient.send(
+          new GetParameterCommand({
+            Name: `/loopn/${stackHash}/vespa/endpoint`,
+            WithDecryption: true,
+          })
+        ),
+        ssmClient.send(
+          new GetParameterCommand({
+            Name: `/loopn/${stackHash}/vespa/api-key`,
+            WithDecryption: true,
+          })
+        ),
+        ssmClient.send(
+          new GetParameterCommand({
+            Name: `/loopn/${stackHash}/vespa/cert`,
+            WithDecryption: true,
+          })
+        ),
+        ssmClient.send(
+          new GetParameterCommand({
+            Name: `/loopn/${stackHash}/vespa/key`,
+            WithDecryption: true,
+          })
+        ),
+      ]
+    );
 
     vespaConfig = {
       endpoint: endpointParam.Parameter?.Value!,
       apiKey: apiKeyParam.Parameter?.Value!,
+      cert: certParam.Parameter?.Value!,
+      key: keyParam.Parameter?.Value!,
     };
 
     return vespaConfig;
@@ -89,34 +112,54 @@ export const handler = async (event: any): Promise<SearchResponse> => {
 
     switch (request.action) {
       case 'search_users':
-        const filters = typeof request.filters === 'string' 
-          ? JSON.parse(request.filters) 
-          : request.filters;
-        return await searchUsers(config, request.query!, request.limit || 10, filters, request.rankingProfile);
+        const filters =
+          typeof request.filters === 'string'
+            ? JSON.parse(request.filters)
+            : request.filters;
+        return await searchUsers(
+          config,
+          request.query!,
+          request.limit || 10,
+          filters,
+          request.rankingProfile
+        );
 
       case 'index_user':
-        const userProfile = typeof request.userProfile === 'string'
-          ? JSON.parse(request.userProfile)
-          : request.userProfile;
+        const userProfile =
+          typeof request.userProfile === 'string'
+            ? JSON.parse(request.userProfile)
+            : request.userProfile;
         return await indexUser(config, request.userId!, userProfile);
 
       case 'get_user':
         return await getUser(config, request.userId!);
 
       case 'update_user':
-        const updateUserProfile = typeof request.userProfile === 'string'
-          ? JSON.parse(request.userProfile)
-          : request.userProfile;
+        const updateUserProfile =
+          typeof request.userProfile === 'string'
+            ? JSON.parse(request.userProfile)
+            : request.userProfile;
         return await updateUser(config, request.userId!, updateUserProfile);
 
       case 'delete_user':
         return await deleteUser(config, request.userId!);
 
       case 'semantic_search':
-        return await semanticSearch(config, request.queryVector!, request.limit || 10, request.filters);
+        return await semanticSearch(
+          config,
+          request.queryVector!,
+          request.limit || 10,
+          request.filters
+        );
 
       case 'hybrid_search':
-        return await hybridSearch(config, request.query!, request.queryVector!, request.limit || 10, request.filters);
+        return await hybridSearch(
+          config,
+          request.query!,
+          request.queryVector!,
+          request.limit || 10,
+          request.filters
+        );
 
       default:
         throw new Error(`Unknown action: ${request.action}`);
@@ -141,23 +184,23 @@ async function searchUsers(
   try {
     // Build Vespa YQL query
     let yqlQuery = 'select * from sources user_profile where ';
-    
+
     // Add text search
     if (query && query.trim()) {
       const searchFields = [
         'fullName',
-        'jobRole', 
+        'jobRole',
         'skills',
         'about',
         'companyName',
         'education',
         'interests',
-        'searchableContent'
+        'searchableContent',
       ];
-      
-      yqlQuery += `(${searchFields.map(field => 
-        `${field} contains "${query.replace(/"/g, '\\"')}"`
-      ).join(' OR ')})`;
+
+      yqlQuery += `(${searchFields
+        .map(field => `${field} contains "${query.replace(/"/g, '\\"')}"`)
+        .join(' OR ')})`;
     } else {
       yqlQuery += 'true';
     }
@@ -167,19 +210,19 @@ async function searchUsers(
       if (filters.industry) {
         yqlQuery += ` AND industry = "${filters.industry}"`;
       }
-      
+
       if (filters.minExperience !== undefined) {
         yqlQuery += ` AND yearsOfExperience >= ${filters.minExperience}`;
       }
-      
+
       if (filters.maxExperience !== undefined) {
         yqlQuery += ` AND yearsOfExperience <= ${filters.maxExperience}`;
       }
-      
+
       if (filters.skills && filters.skills.length > 0) {
-        const skillsFilter = filters.skills.map((skill: string) => 
-          `skills contains "${skill}"`
-        ).join(' OR ');
+        const skillsFilter = filters.skills
+          .map((skill: string) => `skills contains "${skill}"`)
+          .join(' OR ');
         yqlQuery += ` AND (${skillsFilter})`;
       }
     }
@@ -198,36 +241,39 @@ async function searchUsers(
     const response = await fetch(`${config.endpoint}/search/?${searchParams}`, {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${config.apiKey}`,
+        Authorization: `Bearer ${config.apiKey}`,
         'Content-Type': 'application/json',
       },
     });
 
     if (!response.ok) {
-      throw new Error(`Vespa search failed: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `Vespa search failed: ${response.status} ${response.statusText}`
+      );
     }
 
-    const data = await response.json() as any;
-    
-    const results = data.root.children?.map((hit: any) => ({
-      userId: hit.fields.userId,
-      score: hit.relevance,
-      profile: {
+    const data = (await response.json()) as any;
+
+    const results =
+      data.root.children?.map((hit: any) => ({
         userId: hit.fields.userId,
-        email: hit.fields.email,
-        fullName: hit.fields.fullName,
-        jobRole: hit.fields.jobRole,
-        companyName: hit.fields.companyName,
-        industry: hit.fields.industry,
-        yearsOfExperience: hit.fields.yearsOfExperience,
-        education: hit.fields.education,
-        about: hit.fields.about,
-        interests: hit.fields.interests,
-        skills: hit.fields.skills,
-        profilePictureUrl: hit.fields.profilePictureUrl,
-        isOnboardingComplete: hit.fields.isOnboardingComplete,
-      },
-    })) || [];
+        score: hit.relevance,
+        profile: {
+          userId: hit.fields.userId,
+          email: hit.fields.email,
+          fullName: hit.fields.fullName,
+          jobRole: hit.fields.jobRole,
+          companyName: hit.fields.companyName,
+          industry: hit.fields.industry,
+          yearsOfExperience: hit.fields.yearsOfExperience,
+          education: hit.fields.education,
+          about: hit.fields.about,
+          interests: hit.fields.interests,
+          skills: hit.fields.skills,
+          profilePictureUrl: hit.fields.profilePictureUrl,
+          isOnboardingComplete: hit.fields.isOnboardingComplete,
+        },
+      })) || [];
 
     return {
       success: true,
@@ -252,10 +298,10 @@ async function semanticSearch(
 ): Promise<SearchResponse> {
   try {
     let yqlQuery = 'select * from sources user_profile where ';
-    
+
     // Use nearestNeighbor for vector search
     yqlQuery += `({targetHits:${limit}}nearestNeighbor(profileVector, queryVector))`;
-    
+
     // Add filters
     if (filters) {
       if (filters.industry) {
@@ -268,7 +314,7 @@ async function semanticSearch(
         yqlQuery += ` AND yearsOfExperience <= ${filters.maxExperience}`;
       }
     }
-    
+
     yqlQuery += ' AND isOnboardingComplete = true';
 
     const searchParams = new URLSearchParams({
@@ -280,41 +326,47 @@ async function semanticSearch(
     });
 
     // Add query vector as input
-    searchParams.append('input.query(queryVector)', `[${queryVector.join(',')}]`);
+    searchParams.append(
+      'input.query(queryVector)',
+      `[${queryVector.join(',')}]`
+    );
 
     const response = await fetch(`${config.endpoint}/search/?${searchParams}`, {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${config.apiKey}`,
+        Authorization: `Bearer ${config.apiKey}`,
         'Content-Type': 'application/json',
       },
     });
 
     if (!response.ok) {
-      throw new Error(`Vespa semantic search failed: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `Vespa semantic search failed: ${response.status} ${response.statusText}`
+      );
     }
 
-    const data = await response.json() as any;
-    
-    const results = data.root.children?.map((hit: any) => ({
-      userId: hit.fields.userId,
-      score: hit.relevance,
-      profile: {
+    const data = (await response.json()) as any;
+
+    const results =
+      data.root.children?.map((hit: any) => ({
         userId: hit.fields.userId,
-        email: hit.fields.email,
-        fullName: hit.fields.fullName,
-        jobRole: hit.fields.jobRole,
-        companyName: hit.fields.companyName,
-        industry: hit.fields.industry,
-        yearsOfExperience: hit.fields.yearsOfExperience,
-        education: hit.fields.education,
-        about: hit.fields.about,
-        interests: hit.fields.interests,
-        skills: hit.fields.skills,
-        profilePictureUrl: hit.fields.profilePictureUrl,
-        isOnboardingComplete: hit.fields.isOnboardingComplete,
-      },
-    })) || [];
+        score: hit.relevance,
+        profile: {
+          userId: hit.fields.userId,
+          email: hit.fields.email,
+          fullName: hit.fields.fullName,
+          jobRole: hit.fields.jobRole,
+          companyName: hit.fields.companyName,
+          industry: hit.fields.industry,
+          yearsOfExperience: hit.fields.yearsOfExperience,
+          education: hit.fields.education,
+          about: hit.fields.about,
+          interests: hit.fields.interests,
+          skills: hit.fields.skills,
+          profilePictureUrl: hit.fields.profilePictureUrl,
+          isOnboardingComplete: hit.fields.isOnboardingComplete,
+        },
+      })) || [];
 
     return {
       success: true,
@@ -340,15 +392,23 @@ async function hybridSearch(
 ): Promise<SearchResponse> {
   try {
     let yqlQuery = 'select * from sources user_profile where ';
-    
+
     // Combine text search and vector search
-    const searchFields = ['fullName', 'jobRole', 'skills', 'about', 'companyName', 'education', 'interests'];
-    const textQuery = searchFields.map(field => 
-      `${field} contains "${query.replace(/"/g, '\\"')}"`
-    ).join(' OR ');
-    
+    const searchFields = [
+      'fullName',
+      'jobRole',
+      'skills',
+      'about',
+      'companyName',
+      'education',
+      'interests',
+    ];
+    const textQuery = searchFields
+      .map(field => `${field} contains "${query.replace(/"/g, '\\"')}"`)
+      .join(' OR ');
+
     yqlQuery += `((${textQuery}) OR ({targetHits:${limit}}nearestNeighbor(profileVector, queryVector)))`;
-    
+
     // Add filters
     if (filters) {
       if (filters.industry) {
@@ -361,7 +421,7 @@ async function hybridSearch(
         yqlQuery += ` AND yearsOfExperience <= ${filters.maxExperience}`;
       }
     }
-    
+
     yqlQuery += ' AND isOnboardingComplete = true';
 
     const searchParams = new URLSearchParams({
@@ -373,41 +433,47 @@ async function hybridSearch(
     });
 
     // Add query vector as input
-    searchParams.append('input.query(queryVector)', `[${queryVector.join(',')}]`);
+    searchParams.append(
+      'input.query(queryVector)',
+      `[${queryVector.join(',')}]`
+    );
 
     const response = await fetch(`${config.endpoint}/search/?${searchParams}`, {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${config.apiKey}`,
+        Authorization: `Bearer ${config.apiKey}`,
         'Content-Type': 'application/json',
       },
     });
 
     if (!response.ok) {
-      throw new Error(`Vespa hybrid search failed: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `Vespa hybrid search failed: ${response.status} ${response.statusText}`
+      );
     }
 
-    const data = await response.json() as any;
-    
-    const results = data.root.children?.map((hit: any) => ({
-      userId: hit.fields.userId,
-      score: hit.relevance,
-      profile: {
+    const data = (await response.json()) as any;
+
+    const results =
+      data.root.children?.map((hit: any) => ({
         userId: hit.fields.userId,
-        email: hit.fields.email,
-        fullName: hit.fields.fullName,
-        jobRole: hit.fields.jobRole,
-        companyName: hit.fields.companyName,
-        industry: hit.fields.industry,
-        yearsOfExperience: hit.fields.yearsOfExperience,
-        education: hit.fields.education,
-        about: hit.fields.about,
-        interests: hit.fields.interests,
-        skills: hit.fields.skills,
-        profilePictureUrl: hit.fields.profilePictureUrl,
-        isOnboardingComplete: hit.fields.isOnboardingComplete,
-      },
-    })) || [];
+        score: hit.relevance,
+        profile: {
+          userId: hit.fields.userId,
+          email: hit.fields.email,
+          fullName: hit.fields.fullName,
+          jobRole: hit.fields.jobRole,
+          companyName: hit.fields.companyName,
+          industry: hit.fields.industry,
+          yearsOfExperience: hit.fields.yearsOfExperience,
+          education: hit.fields.education,
+          about: hit.fields.about,
+          interests: hit.fields.interests,
+          skills: hit.fields.skills,
+          profilePictureUrl: hit.fields.profilePictureUrl,
+          isOnboardingComplete: hit.fields.isOnboardingComplete,
+        },
+      })) || [];
 
     return {
       success: true,
@@ -439,7 +505,9 @@ async function indexUser(
       userProfile.education,
       ...(userProfile.skills || []),
       ...(userProfile.interests || []),
-    ].filter(Boolean).join(' ');
+    ]
+      .filter(Boolean)
+      .join(' ');
 
     const document = {
       put: `id:user_profile:user_profile::${userId}`,
@@ -464,17 +532,22 @@ async function indexUser(
       },
     };
 
-    const response = await fetch(`${config.endpoint}/document/v1/user_profile/user_profile/docid/${userId}`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${config.apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(document),
-    });
+    const response = await fetch(
+      `${config.endpoint}/document/v1/user_profile/user_profile/docid/${userId}`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${config.apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(document),
+      }
+    );
 
     if (!response.ok) {
-      throw new Error(`Vespa indexing failed: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `Vespa indexing failed: ${response.status} ${response.statusText}`
+      );
     }
 
     return {
@@ -495,13 +568,16 @@ async function getUser(
   userId: string
 ): Promise<SearchResponse> {
   try {
-    const response = await fetch(`${config.endpoint}/document/v1/user_profile/user_profile/docid/${userId}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${config.apiKey}`,
-        'Content-Type': 'application/json',
-      },
-    });
+    const response = await fetch(
+      `${config.endpoint}/document/v1/user_profile/user_profile/docid/${userId}`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${config.apiKey}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
 
     if (response.status === 404) {
       return {
@@ -512,11 +588,13 @@ async function getUser(
     }
 
     if (!response.ok) {
-      throw new Error(`Vespa get user failed: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `Vespa get user failed: ${response.status} ${response.statusText}`
+      );
     }
 
-    const data = await response.json() as any;
-    
+    const data = (await response.json()) as any;
+
     const profile = {
       userId: data.fields.userId,
       email: data.fields.email,
@@ -535,11 +613,13 @@ async function getUser(
 
     return {
       success: true,
-      results: [{
-        userId,
-        score: 1.0,
-        profile,
-      }],
+      results: [
+        {
+          userId,
+          score: 1.0,
+          profile,
+        },
+      ],
       total: 1,
     };
   } catch (error) {
@@ -567,7 +647,9 @@ async function updateUser(
       userProfile.education,
       ...(userProfile.skills || []),
       ...(userProfile.interests || []),
-    ].filter(Boolean).join(' ');
+    ]
+      .filter(Boolean)
+      .join(' ');
 
     const document = {
       update: `id:user_profile:user_profile::${userId}`,
@@ -583,24 +665,33 @@ async function updateUser(
         interests: { assign: userProfile.interests || [] },
         skills: { assign: userProfile.skills || [] },
         profilePictureUrl: { assign: userProfile.profilePictureUrl },
-        isOnboardingComplete: { assign: userProfile.isOnboardingComplete || false },
+        isOnboardingComplete: {
+          assign: userProfile.isOnboardingComplete || false,
+        },
         searchableContent: { assign: searchableContent },
-        profileVector: { assign: userProfile.profileVector || new Array(1024).fill(0) },
+        profileVector: {
+          assign: userProfile.profileVector || new Array(1024).fill(0),
+        },
         updatedAt: { assign: Date.now() },
       },
     };
 
-    const response = await fetch(`${config.endpoint}/document/v1/user_profile/user_profile/docid/${userId}`, {
-      method: 'PUT',
-      headers: {
-        'Authorization': `Bearer ${config.apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(document),
-    });
+    const response = await fetch(
+      `${config.endpoint}/document/v1/user_profile/user_profile/docid/${userId}`,
+      {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${config.apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(document),
+      }
+    );
 
     if (!response.ok) {
-      throw new Error(`Vespa update failed: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `Vespa update failed: ${response.status} ${response.statusText}`
+      );
     }
 
     return {
@@ -621,16 +712,21 @@ async function deleteUser(
   userId: string
 ): Promise<SearchResponse> {
   try {
-    const response = await fetch(`${config.endpoint}/document/v1/user_profile/user_profile/docid/${userId}`, {
-      method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${config.apiKey}`,
-        'Content-Type': 'application/json',
-      },
-    });
+    const response = await fetch(
+      `${config.endpoint}/document/v1/user_profile/user_profile/docid/${userId}`,
+      {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${config.apiKey}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
 
     if (!response.ok && response.status !== 404) {
-      throw new Error(`Vespa delete failed: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `Vespa delete failed: ${response.status} ${response.statusText}`
+      );
     }
 
     return {

@@ -5,20 +5,24 @@ This guide will help you migrate from OpenSearch to Vespa AI for enhanced search
 ## 🚀 Quick Setup with Vespa Cloud
 
 ### Step 1: Create Vespa Cloud Account
+
 1. Go to [https://cloud.vespa.ai/](https://cloud.vespa.ai/)
 2. Sign up for a free account
 3. Create a new application
 
 ### Step 2: Deploy Vespa Application
+
 1. Install Vespa CLI:
+
    ```bash
    # macOS
    brew install vespa-cli
-   
+
    # Or download from https://github.com/vespa-engine/vespa/releases
    ```
 
 2. Login to Vespa Cloud:
+
    ```bash
    vespa auth login
    ```
@@ -30,6 +34,7 @@ This guide will help you migrate from OpenSearch to Vespa AI for enhanced search
    ```
 
 ### Step 3: Configure AWS Parameters
+
 After successful deployment, update the AWS Systems Manager parameters:
 
 ```bash
@@ -49,12 +54,14 @@ aws ssm put-parameter \
 ```
 
 ### Step 4: Deploy Updated Backend
+
 ```bash
 # Deploy the updated Amplify backend
 npx ampx sandbox
 ```
 
 ### Step 5: Test the Migration
+
 1. Go to `/admin/vector-search` in your app
 2. Click "Migrate All Users to Vespa AI"
 3. Test search functionality with different ranking profiles
@@ -62,6 +69,7 @@ npx ampx sandbox
 ## 🎯 Vespa Features You Now Have
 
 ### 1. Multiple Ranking Profiles
+
 - **Default**: Balanced text matching with experience boost
 - **Skills Focused**: Prioritizes skill matches
 - **Experience Focused**: Emphasizes years of experience
@@ -69,12 +77,14 @@ npx ampx sandbox
 - **Hybrid**: Combines text and vector search
 
 ### 2. Advanced Search Capabilities
+
 - **Fuzzy matching**: Handles typos automatically
 - **Field boosting**: Name matches score higher than descriptions
 - **Vector search**: Semantic similarity (when vectors are provided)
 - **Real-time updates**: Changes are immediately searchable
 
 ### 3. Better Performance
+
 - Up to 5x faster than OpenSearch for vector operations
 - No refresh delays - immediate consistency
 - Automatic scaling based on load
@@ -82,17 +92,20 @@ npx ampx sandbox
 ## 🔧 Configuration Files Created
 
 ### Vespa Schema (`vespa-config/schemas/user_profile.sd`)
+
 - Defines the user profile document structure
 - Configures search fields and indexing
 - Sets up vector fields for semantic search
 - Defines multiple ranking profiles
 
 ### Services Configuration (`vespa-config/services.xml`)
+
 - Configures Vespa container and content clusters
 - Sets up HTTP API endpoints
 - Defines query profiles for different search types
 
 ### Lambda Function (`amplify/functions/vespa-client/`)
+
 - Replaces OpenSearch client with Vespa integration
 - Handles all CRUD operations
 - Supports multiple search types (text, semantic, hybrid)
@@ -100,6 +113,7 @@ npx ampx sandbox
 ## 🚦 Migration Status
 
 ✅ **Completed:**
+
 - Vespa schema definition
 - Lambda function replacement
 - Service layer updates
@@ -107,6 +121,7 @@ npx ampx sandbox
 - Infrastructure configuration
 
 ⏳ **Next Steps:**
+
 1. Set up Vespa Cloud application
 2. Configure AWS parameters
 3. Deploy and test
@@ -115,23 +130,32 @@ npx ampx sandbox
 ## 🔍 Testing Different Search Types
 
 ### Text Search (Default)
+
 ```javascript
-const results = await VespaService.searchUsers("software engineer", 10);
+const results = await VespaService.searchUsers('software engineer', 10);
 ```
 
 ### Skills-Focused Search
+
 ```javascript
-const results = await VespaService.searchUsers("React TypeScript", 10, undefined, 'skills_focused');
+const results = await VespaService.searchUsers(
+  'React TypeScript',
+  10,
+  undefined,
+  'skills_focused'
+);
 ```
 
 ### Semantic Search (requires vectors)
+
 ```javascript
 const results = await VespaService.semanticSearch(queryVector, 10);
 ```
 
 ### Hybrid Search (best of both worlds)
+
 ```javascript
-const results = await VespaService.hybridSearch("AI engineer", queryVector, 10);
+const results = await VespaService.hybridSearch('AI engineer', queryVector, 10);
 ```
 
 ## 💡 Pro Tips
@@ -144,11 +168,13 @@ const results = await VespaService.hybridSearch("AI engineer", queryVector, 10);
 ## 🆘 Troubleshooting
 
 ### Common Issues:
+
 1. **Authentication errors**: Make sure your API key is correctly set in Parameter Store
 2. **Schema errors**: Validate your schema with `vespa validate`
 3. **Deployment failures**: Check Vespa Cloud console for detailed error messages
 
 ### Getting Help:
+
 - Vespa documentation: https://docs.vespa.ai/
 - Vespa Slack community: https://vespaai.slack.com/
 - GitHub issues: https://github.com/vespa-engine/vespa
