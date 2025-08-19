@@ -76,6 +76,13 @@ const bedrockClient = new BedrockRuntimeClient({
 // Generate embeddings for text using AWS Bedrock Titan Text Embeddings V2
 async function generateEmbedding(text: string): Promise<number[]> {
   console.log('Generating embedding for text:', text.substring(0, 100) + '...');
+
+  // Check if Bedrock is available in this region
+  if (!process.env.AWS_REGION) {
+    console.error('AWS_REGION not set - cannot use Bedrock');
+    throw new Error('AWS_REGION environment variable is required for Bedrock');
+  }
+
   try {
     const input = {
       modelId: 'amazon.titan-embed-text-v2:0', // AWS Titan Text Embeddings V2 model
@@ -88,6 +95,7 @@ async function generateEmbedding(text: string): Promise<number[]> {
       }),
     };
 
+    console.log('Calling Bedrock with region:', process.env.AWS_REGION);
     const command = new InvokeModelCommand(input);
     const response = await bedrockClient.send(command);
 
@@ -96,23 +104,38 @@ async function generateEmbedding(text: string): Promise<number[]> {
     }
 
     const responseBody = JSON.parse(new TextDecoder().decode(response.body));
+    console.log('Bedrock response keys:', Object.keys(responseBody));
+
     const embedding = responseBody.embedding;
 
     if (!embedding || !Array.isArray(embedding)) {
+      console.error('Invalid embedding response:', responseBody);
       throw new Error('Invalid embedding response from Bedrock');
     }
 
     // Titan V2 returns exactly 1024 dimensions as requested
     console.log(
-      'Successfully generated embedding with',
+      '✅ Successfully generated embedding with',
       embedding.length,
-      'dimensions'
+      'dimensions, first few values:',
+      embedding.slice(0, 5)
     );
     return embedding;
   } catch (error) {
-    console.error('Failed to generate embedding with Bedrock Titan V2:', error);
-    // Return zero vector as fallback
-    return new Array(1024).fill(0);
+    console.error(
+      '❌ Failed to generate embedding with Bedrock Titan V2:',
+      error
+    );
+    console.error('Error details:', {
+      name: error instanceof Error ? error.name : 'Unknown',
+      message: error instanceof Error ? error.message : String(error),
+      code: (error as any)?.code || 'Unknown',
+      region: process.env.AWS_REGION,
+    });
+
+    // DON'T return zero vector - throw error instead so we know when it fails
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    throw new Error(`Bedrock embedding failed: ${errorMessage}`);
   }
 }
 
@@ -349,8 +372,19 @@ async function searchUsers(
 ): Promise<SearchResponse> {
   try {
     // Generate query embedding for semantic search
-    const queryEmbedding =
-      query && query.trim() ? await generateEmbedding(query) : null;
+    let queryEmbedding = null;
+    if (query && query.trim()) {
+      try {
+        queryEmbedding = await generateEmbedding(query);
+      } catch (error) {
+        console.error(
+          'Query embedding failed, falling back to text search:',
+          error
+        );
+        // Fall back to text search if embedding fails
+        queryEmbedding = null;
+      }
+    }
 
     console.log('Search Debug:', {
       query,
@@ -385,6 +419,38 @@ async function searchUsers(
       } else if (queryEmbedding && rankingProfile === 'semantic') {
         // Pure semantic search
         yqlQuery += `({targetHits:${limit}}nearestNeighbor(profileVector, queryVector))`;
+      } else if (rankingProfile === 'semantic' && !queryEmbedding) {
+        // Semantic search requested but no embedding - fall back to skills-focused text search
+        console.log(
+          'Semantic search requested but no embedding available, using skills-focused text search'
+        );
+        const queryTerms = query
+          .toLowerCase()
+          .split(/\s+/)
+          .filter(term => term.length > 0);
+
+        if (queryTerms.length === 1) {
+          const singleTermQuery = searchFields
+            .map(
+              field =>
+                `(${field} contains "${queryTerms[0]}" OR ${field} matches "${queryTerms[0]}*")`
+            )
+            .join(' OR ');
+          yqlQuery += `(${singleTermQuery})`;
+        } else {
+          const multiTermQuery = queryTerms
+            .map(term => {
+              const termQuery = searchFields
+                .map(
+                  field =>
+                    `(${field} contains "${term}" OR ${field} matches "${term}*")`
+                )
+                .join(' OR ');
+              return `(${termQuery})`;
+            })
+            .join(' AND ');
+          yqlQuery += `(${multiTermQuery})`;
+        }
       } else {
         // Enhanced text search with proper matching
         const queryTerms = query
@@ -446,10 +512,16 @@ async function searchUsers(
     // Always filter for complete profiles
     yqlQuery += ' AND isOnboardingComplete = true';
 
+    // Use skills_focused ranking if semantic was requested but no embedding available
+    const actualRankingProfile =
+      rankingProfile === 'semantic' && !queryEmbedding
+        ? 'skills_focused'
+        : rankingProfile;
+
     const searchParams = new URLSearchParams({
       yql: yqlQuery,
       hits: limit.toString(),
-      ranking: rankingProfile,
+      ranking: actualRankingProfile,
       format: 'json',
       timeout: '5s',
     });
@@ -731,7 +803,14 @@ async function indexUser(
       .join(' ');
 
     // Generate AI embedding for the user profile
-    const profileEmbedding = await generateEmbedding(searchableContent);
+    let profileEmbedding;
+    try {
+      profileEmbedding = await generateEmbedding(searchableContent);
+    } catch (error) {
+      console.error('Profile embedding failed, skipping vector field:', error);
+      // Skip vector field if embedding fails - better than zero vector
+      profileEmbedding = null;
+    }
 
     const document = {
       put: `id:user_profile:user_profile::${userId}`,
@@ -750,7 +829,7 @@ async function indexUser(
         profilePictureUrl: userProfile.profilePictureUrl,
         isOnboardingComplete: userProfile.isOnboardingComplete || false,
         searchableContent,
-        profileVector: profileEmbedding, // Real AI-generated embedding!
+        ...(profileEmbedding && { profileVector: profileEmbedding }), // Only include if embedding succeeded
         createdAt: Date.now(),
         updatedAt: Date.now(),
       },

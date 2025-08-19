@@ -103,18 +103,12 @@ export default function SearchSectionContent({
       setSearchResults([]); // Clear previous results immediately
 
       try {
-        // Use skills-focused search for technical queries, hybrid for others
-        const isSkillsQuery =
-          /\b(react|javascript|python|java|node|angular|vue|typescript|developer|engineer|programmer|coding|software)\b/i.test(
-            searchTerm
-          );
-        const rankingProfile = isSkillsQuery ? 'skills_focused' : 'hybrid';
-
+        // Use semantic search for better AI-powered understanding
         const response = await VespaService.searchUsers(
           searchTerm.trim(),
           10,
           undefined, // no filters
-          rankingProfile
+          'semantic' // Use semantic ranking for best AI-powered results
         );
 
         if (!response.success) {
