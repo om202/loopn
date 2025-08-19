@@ -183,8 +183,8 @@ export class ChatService {
           await getClient().models.Notification.create({
             userId: chatRequestResult.data.requesterId,
             type: 'connection',
-            title: 'Chat Request Accepted!',
-            content: `${receiverName} accepted your chat request. You can now chat!`,
+            title: 'Connection Request Accepted!',
+            content: `${receiverName} accepted your connection request. You can now message!`,
             timestamp: new Date().toISOString(),
             isRead: false,
             data: JSON.stringify({
@@ -677,7 +677,7 @@ export class ChatService {
             receiverId,
             'connection',
             'Connect',
-            `${requesterName} wants to connect you on Loopn`,
+            `${requesterName} wants to connect with you on Loopn`,
             {
               connectionRequestId: result.data.id,
               requesterId,

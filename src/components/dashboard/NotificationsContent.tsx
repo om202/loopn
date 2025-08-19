@@ -280,7 +280,7 @@ export default function NotificationsContent() {
               chatRequest.requesterProfile,
               chatRequest.requesterId
             ),
-            content: 'wants to chat with you',
+            content: 'wants to connect with you',
             timestamp: chatRequest.createdAt,
             isRead: false,
             data: chatRequest,
@@ -289,7 +289,7 @@ export default function NotificationsContent() {
           setError(result.error);
         }
       } catch (error) {
-        console.error('Error responding to chat request:', error);
+        console.error('Error responding to connection request:', error);
         const chatNotification: ChatRequestNotification = {
           id: chatRequest.id,
           type: 'chat_request',
@@ -297,13 +297,13 @@ export default function NotificationsContent() {
             chatRequest.requesterProfile,
             chatRequest.requesterId
           ),
-          content: 'wants to chat with you',
+          content: 'wants to connect with you',
           timestamp: chatRequest.createdAt,
           isRead: false,
           data: chatRequest,
         };
         setNotifications(prev => [...prev, chatNotification]);
-        setError('Failed to respond to chat request');
+        setError('Failed to respond to connection request');
       } finally {
         setAcceptingRequestId(null);
       }
@@ -328,7 +328,7 @@ export default function NotificationsContent() {
             chatRequest.requesterProfile,
             chatRequest.requesterId
           ),
-          content: 'wants to chat with you',
+          content: 'wants to connect with you',
           timestamp: chatRequest.createdAt,
           isRead: false,
           data: chatRequest,
