@@ -75,6 +75,7 @@ const bedrockClient = new BedrockRuntimeClient({
 
 // Generate embeddings for text using AWS Bedrock Titan Text Embeddings V2
 async function generateEmbedding(text: string): Promise<number[]> {
+  console.log('Generating embedding for text:', text.substring(0, 100) + '...');
   try {
     const input = {
       modelId: 'amazon.titan-embed-text-v2:0', // AWS Titan Text Embeddings V2 model
@@ -102,6 +103,11 @@ async function generateEmbedding(text: string): Promise<number[]> {
     }
 
     // Titan V2 returns exactly 1024 dimensions as requested
+    console.log(
+      'Successfully generated embedding with',
+      embedding.length,
+      'dimensions'
+    );
     return embedding;
   } catch (error) {
     console.error('Failed to generate embedding with Bedrock Titan V2:', error);
@@ -345,6 +351,13 @@ async function searchUsers(
     // Generate query embedding for semantic search
     const queryEmbedding =
       query && query.trim() ? await generateEmbedding(query) : null;
+
+    console.log('Search Debug:', {
+      query,
+      rankingProfile,
+      hasEmbedding: !!queryEmbedding,
+      embeddingLength: queryEmbedding?.length || 0,
+    });
 
     // Build Vespa YQL query with hybrid search
     let yqlQuery = 'select * from sources user_profile where ';
