@@ -7,7 +7,6 @@ import {
   CheckCircle2,
   ArrowLeft,
   Info,
-  LogOut,
 } from 'lucide-react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import Image from 'next/image';
@@ -360,11 +359,10 @@ export default function ProfileSidebar({
             conversation.chatStatus === 'ACTIVE' &&
             timeLeft &&
             timeLeft !== 'Expired' && (
-              <div className='mb-2 mt-1'>
+              <div className='mb-1 mt-1'>
                 {/* Trial Chat Info with End Chat Icon - Centered */}
                 <div className='flex items-center justify-center text-sm text-zinc-600 mb-2'>
                   <div className='flex items-center gap-2'>
-                    <Clock className='w-4 h-4 text-brand-500' />
                     <span className='font-medium'>Trial Chat</span>
                     <span className='font-bold text-zinc-900'>{timeLeft}</span>
                     {onEndChat && (
@@ -373,7 +371,13 @@ export default function ProfileSidebar({
                           onClick={() => setShowEndChatDialog(true)}
                           className='ml-2 p-1.5 text-zinc-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors'
                         >
-                          <LogOut className='w-4 h-4' />
+                          <Image
+                            src='/end-icon.svg'
+                            alt='End Chat'
+                            width={16}
+                            height={16}
+                            className='w-4 h-4'
+                          />
                         </button>
                       </Tooltip>
                     )}
@@ -478,13 +482,13 @@ export default function ProfileSidebar({
 
       {/* Professional Details */}
       <div className='flex-1 overflow-y-auto'>
-        <div className='px-6 pb-8 pt-6'>
+        <div className='px-6 pb-8 pt-3'>
           {profileLoading ? (
             <ShimmerProvider>
               <ProfileDetails_Shimmer />
             </ShimmerProvider>
           ) : userProfile ? (
-            <div className='divide-y divide-zinc-100'>
+            <div>
               {/* Professional Info Section */}
               {(userProfile.jobRole ||
                 userProfile.companyName ||
@@ -500,7 +504,7 @@ export default function ProfileSidebar({
                         <dt className='text-sm font-medium text-zinc-500 mb-1.5'>
                           Role
                         </dt>
-                        <dd className='text-base text-zinc-900 font-medium'>
+                        <dd className='text-base text-zinc-900'>
                           {userProfile.jobRole}
                         </dd>
                       </div>
@@ -510,7 +514,7 @@ export default function ProfileSidebar({
                         <dt className='text-sm font-medium text-zinc-500 mb-1.5'>
                           Company
                         </dt>
-                        <dd className='text-base text-zinc-900 font-medium'>
+                        <dd className='text-base text-zinc-900'>
                           {userProfile.companyName}
                         </dd>
                       </div>
@@ -520,7 +524,7 @@ export default function ProfileSidebar({
                         <dt className='text-sm font-medium text-zinc-500 mb-1.5'>
                           Industry
                         </dt>
-                        <dd className='text-base text-zinc-900 font-medium'>
+                        <dd className='text-base text-zinc-900'>
                           {userProfile.industry}
                         </dd>
                       </div>
@@ -531,7 +535,7 @@ export default function ProfileSidebar({
                           <dt className='text-sm font-medium text-zinc-500 mb-1.5'>
                             Experience
                           </dt>
-                          <dd className='text-base text-zinc-900 font-medium'>
+                          <dd className='text-base text-zinc-900'>
                             {userProfile.yearsOfExperience} years
                           </dd>
                         </div>
@@ -546,7 +550,7 @@ export default function ProfileSidebar({
                   <h4 className='text-sm font-semibold text-zinc-500 mb-4'>
                     Education
                   </h4>
-                  <div className='text-base text-zinc-900 font-medium leading-relaxed'>
+                  <div className='text-base text-zinc-900 leading-relaxed'>
                     {userProfile.education}
                   </div>
                 </div>

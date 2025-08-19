@@ -6,6 +6,7 @@ import { useState, useEffect, useCallback } from 'react';
 
 import type { Schema } from '../../../../amplify/data/resource';
 import ChatWindow from '../../../components/chat/ChatWindow';
+import ChatHeader from '../../../components/chat/ChatHeader';
 import ProfileSidebar from '../../../components/ProfileSidebar';
 import ProtectedRoute from '../../../components/protected-route';
 import TrialEndedByOtherDialog from '../../../components/TrialEndedByOtherDialog';
@@ -343,7 +344,8 @@ export default function ChatPage({ params }: ChatPageProps) {
         className='h-screen bg-white lg:bg-zinc-100'
         style={{ height: '100dvh' }}
       >
-        <div className='h-full flex'>
+        <div className='h-full flex justify-center'>
+          <div className='w-full max-w-[1440px] h-full flex'>
           {/* Left Sidebar - Desktop Only */}
           <div className='hidden lg:flex lg:w-80 xl:w-96 flex-shrink-0 h-full'>
             <div className='w-full p-3 lg:p-4 h-full'>
@@ -366,7 +368,24 @@ export default function ChatPage({ params }: ChatPageProps) {
 
           {/* Main Chat Area */}
           <div className='flex-1 flex flex-col min-w-0 h-full'>
-            <div className='h-full p-3 lg:p-4 lg:pl-1'>
+            {/* Mobile ChatHeader - shown only on small screens */}
+            {conversation && (
+              <div className='lg:hidden flex-shrink-0'>
+                <ChatHeader
+                  conversation={conversation}
+                  otherParticipantId={otherParticipantId}
+                  otherUserPresence={otherUserPresence}
+                  timeLeft={timeLeft}
+                  sendingConnectionRequest={sendingConnectionRequest}
+                  onEndChat={handleEndChat}
+                  onSendConnectionRequest={handleSendConnectionRequest}
+                  onReconnect={handleReconnect}
+                  onBack={() => router.push('/dashboard')}
+                />
+              </div>
+            )}
+            
+            <div className='flex-1 p-3 lg:p-4 lg:pl-0 min-h-0'>
               <div className='h-full lg:bg-white lg:rounded-2xl lg:border lg:border-zinc-200 overflow-hidden'>
                 <ChatWindow
                   conversation={
@@ -385,6 +404,7 @@ export default function ChatPage({ params }: ChatPageProps) {
                 />
               </div>
             </div>
+          </div>
           </div>
         </div>
       </div>

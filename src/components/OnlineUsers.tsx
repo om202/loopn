@@ -529,7 +529,7 @@ export default function OnlineUsers({
   }
 
   return (
-    <div className='flex lg:gap-4 h-full pb-20 lg:pb-0'>
+    <div className='flex lg:gap-4 h-full pb-16 lg:pb-0'>
       <DashboardSidebar
         activeSection={activeSection}
         onSectionChange={setActiveSection}
@@ -542,9 +542,9 @@ export default function OnlineUsers({
         suggestedUsersCount={suggestedUsers.length}
       />
 
-      <div className='flex-1 bg-white sm:rounded-2xl sm:border sm:border-zinc-200 p-2 sm:p-4 lg:p-6 ultra-compact overflow-hidden flex flex-col min-h-0'>
+      <div className='flex-1 bg-white sm:rounded-2xl sm:border sm:border-zinc-200 p-3 sm:p-4 lg:p-6 ultra-compact overflow-hidden flex flex-col min-h-0'>
         {/* Search User - Always visible at top */}
-        <div className='flex-shrink-0 mb-2 sm:mb-2'>
+        <div className='flex-shrink-0 mb-4 sm:mb-6'>
           <SearchUser
             onProfessionalRequest={handleProfessionalRequest}
             userProfile={currentUserProfile || undefined}
@@ -556,7 +556,7 @@ export default function OnlineUsers({
           {activeSection === 'notifications' && (
             <div className='flex items-start justify-between'>
               <div>
-                <h2 className='text-xl sm:text-2xl font-bold text-zinc-900 mb-1'>
+                <h2 className='text-2xl sm:text-2xl font-bold text-zinc-900 mb-1'>
                   Notifications
                 </h2>
                 <p className='text-base text-zinc-500'>
@@ -586,7 +586,7 @@ export default function OnlineUsers({
           {activeSection === 'account' && (
             <div className='flex items-start justify-between'>
               <div>
-                <h2 className='text-xl sm:text-2xl font-bold text-zinc-900 mb-1'>
+                <h2 className='text-2xl sm:text-2xl font-bold text-zinc-900 mb-1'>
                   Account
                 </h2>
                 <p className='text-base text-zinc-500'>
@@ -622,10 +622,10 @@ export default function OnlineUsers({
           {activeSection === 'search' && (
             <div>
               <h2 className='text-xl sm:text-2xl font-bold text-zinc-900 mb-1'>
-                Search
+                {searchQuery ? 'Search Results' : 'Search'}
               </h2>
               <p className='text-base text-zinc-500'>
-                Search for professionals
+                {searchQuery ? `"${searchQuery}"` : 'Search for professionals'}
               </p>
             </div>
           )}

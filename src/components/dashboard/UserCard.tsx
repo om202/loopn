@@ -240,7 +240,8 @@ export default function UserCard({
             }
 
             // Handle pending request state - show as clickable button for consistency
-            if (pendingRequests.has(userPresence.userId)) {
+            // BUT: If user has incoming request, prioritize "Accept Request" over "Request Sent"
+            if (pendingRequests.has(userPresence.userId) && !incomingRequestSenderIds.has(userPresence.userId)) {
               // Check if this is an optimistic request (no real request data yet)
               const isOptimisticRequest = optimisticPendingRequests.has(
                 userPresence.userId
@@ -272,7 +273,7 @@ export default function UserCard({
                     onChatAction(userPresence.userId);
                   }
                 }}
-                className={`px-2 py-1.5 text-base font-medium rounded-xl border transition-colors flex items-center justify-center flex-shrink-0 w-[40px] h-[40px] md:w-auto md:h-auto md:gap-1.5 md:min-w-[44px] ${
+                className={`px-2 py-1.5 text-base font-medium rounded-xl border transition-colors flex items-center justify-center flex-shrink-0 gap-1.5 min-w-[44px] ${
                   incomingRequestSenderIds.has(userPresence.userId)
                     ? 'bg-brand-500 text-white border-brand-500 hover:bg-brand-600 hover:border-brand-600'
                     : isSelected
@@ -280,25 +281,34 @@ export default function UserCard({
                       : 'bg-brand-50 text-brand-500 border-brand-100 hover:bg-brand-100 hover:border-brand-200'
                 }`}
                 title={
-                  existingConversations.has(userPresence.userId)
-                    ? existingConversations.get(userPresence.userId)
-                        ?.chatStatus === 'ENDED'
-                      ? canUserReconnect(userPresence.userId)
-                        ? 'Send Request'
-                        : 'View Chat'
-                      : 'Continue Chat'
-                    : incomingRequestSenderIds.has(userPresence.userId)
-                      ? 'Accept Request'
+                  incomingRequestSenderIds.has(userPresence.userId)
+                    ? 'Accept Request'
+                    : existingConversations.has(userPresence.userId)
+                      ? existingConversations.get(userPresence.userId)
+                          ?.chatStatus === 'ENDED'
+                        ? canUserReconnect(userPresence.userId)
+                          ? 'Send Request'
+                          : 'View Chat'
+                        : 'Continue Chat'
                       : 'Send Request'
                 }
               >
-                {existingConversations.has(userPresence.userId) ? (
+{incomingRequestSenderIds.has(userPresence.userId) ? (
+                  // Prioritize incoming requests over existing conversations
+                  <>
+                    <CheckCircle2 className='w-4 h-4 text-white flex-shrink-0' />
+                    <span className='text-base font-medium'>
+                      <span className='hidden sm:inline'>Accept Request</span>
+                      <span className='sm:hidden'>Accept</span>
+                    </span>
+                  </>
+                ) : existingConversations.has(userPresence.userId) ? (
                   existingConversations.get(userPresence.userId)?.chatStatus ===
                   'ENDED' ? (
                     canUserReconnect(userPresence.userId) ? (
                       <>
                         <CheckCircle2 className='w-4 h-4 text-brand-500 flex-shrink-0' />
-                        <span className='hidden md:inline text-base font-medium'>
+                        <span className='text-base font-medium'>
                           Send Request
                         </span>
                       </>
@@ -312,7 +322,7 @@ export default function UserCard({
                         ) : (
                           <>
                             <MessageCircle className='w-4 h-4 text-brand-500 flex-shrink-0' />
-                            <span className='hidden md:inline text-base font-medium'>
+                            <span className='text-base font-medium'>
                               View
                             </span>
                           </>
@@ -322,22 +332,15 @@ export default function UserCard({
                   ) : (
                     <>
                       <MessageCircle className='w-4 h-4 text-brand-500 flex-shrink-0' />
-                      <span className='hidden md:inline text-base font-medium'>
+                      <span className='text-base font-medium'>
                         Chat
                       </span>
                     </>
                   )
-                ) : incomingRequestSenderIds.has(userPresence.userId) ? (
-                  <>
-                    <CheckCircle2 className='w-4 h-4 text-white flex-shrink-0' />
-                    <span className='hidden md:inline text-base font-medium'>
-                      Accept Request
-                    </span>
-                  </>
                 ) : (
                   <>
                     <CheckCircle2 className='w-4 h-4 text-brand-500 flex-shrink-0' />
-                    <span className='hidden md:inline text-base font-medium'>
+                    <span className='text-base font-medium'>
                       Send Request
                     </span>
                   </>

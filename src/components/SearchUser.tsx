@@ -115,7 +115,7 @@ export default function SearchUser({
   };
 
   return (
-    <div className='max-w-md mx-auto relative'>
+    <div className='w-full sm:max-w-md sm:mx-auto relative'>
       <form
         onSubmit={handleSubmit}
         className='relative'

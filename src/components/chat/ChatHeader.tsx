@@ -282,7 +282,7 @@ export default function ChatHeader({
                       <button
                         onClick={onSendConnectionRequest}
                         disabled={sendingConnectionRequest}
-                        className='px-4 py-2 text-base font-medium rounded-xl border transition-colors flex items-center justify-center md:w-auto md:h-auto md:gap-1.5 bg-brand-100 text-brand-600 border-brand-200 hover:bg-brand-200 hover:border-brand-400 disabled:bg-brand-100 disabled:cursor-not-allowed'
+                        className='px-3 py-2 text-sm font-medium rounded-xl border transition-colors flex items-center justify-center gap-1 bg-brand-100 text-brand-600 border-brand-200 hover:bg-brand-200 hover:border-brand-400 disabled:bg-brand-100 disabled:cursor-not-allowed'
                       >
                         <svg
                           width='16'
@@ -299,7 +299,7 @@ export default function ChatHeader({
                             fill='currentColor'
                           />
                         </svg>
-                        <span className='hidden md:inline text-base font-medium'>
+                        <span className='text-sm font-medium'>
                           {sendingConnectionRequest
                             ? 'Connecting...'
                             : 'Connect'}

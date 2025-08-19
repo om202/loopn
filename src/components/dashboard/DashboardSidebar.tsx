@@ -263,7 +263,7 @@ export default function DashboardSidebar({
       </div>
 
       {/* Mobile Bottom Bar */}
-      <div className='lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-zinc-200'>
+      <div className='lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-zinc-100 border-t border-zinc-200'>
         <nav className='flex items-stretch px-4 py-2'>
           <div className='flex w-full'>
             {[
@@ -283,19 +283,28 @@ export default function DashboardSidebar({
               >
                 <div className='relative w-6 h-6 flex-shrink-0 flex items-center justify-center'>
                   {icon === 'NotificationBell' ? (
-                    <svg
-                      className='w-6 h-6'
-                      fill='none'
-                      stroke='currentColor'
-                      viewBox='0 0 24 24'
-                    >
-                      <path
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        strokeWidth={2}
-                        d='M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9'
-                      />
-                    </svg>
+                    <>
+                      <svg
+                        className='w-6 h-6'
+                        fill='none'
+                        stroke='currentColor'
+                        viewBox='0 0 24 24'
+                      >
+                        <path
+                          strokeLinecap='round'
+                          strokeLinejoin='round'
+                          strokeWidth={2}
+                          d='M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9'
+                        />
+                      </svg>
+                      {count > 0 && id === 'notifications' && (
+                        <div className='absolute -top-1 -right-1 w-4 h-4 bg-b_red-500 rounded-full flex items-center justify-center'>
+                          <span className='text-white text-[10px] font-bold leading-none'>
+                            {count > 99 ? '99+' : count}
+                          </span>
+                        </div>
+                      )}
+                    </>
                   ) : icon === 'UserAvatar' ? (
                     <div className='w-6 h-6 flex items-center justify-center'>
                       <UserAvatar
@@ -321,7 +330,7 @@ export default function DashboardSidebar({
                   )}
                 </div>
                 <div
-                  className='text-[10px] font-medium leading-tight text-center flex items-center justify-center gap-1.5'
+                  className='text-xs font-medium leading-tight text-center flex items-center justify-center gap-1.5'
                   style={{ textShadow: '0 1px 1px rgba(255, 255, 255, 0.8)' }}
                 >
                   {id === 'account'
@@ -333,11 +342,6 @@ export default function DashboardSidebar({
                         : id === 'notifications'
                           ? 'Notify'
                           : label}
-                  {count > 0 && id === 'notifications' && (
-                    <span className='text-[8px] font-bold flex items-center justify-center h-3.5 w-3.5 rounded-full text-center bg-b_red-500 text-white leading-none'>
-                      {count > 9 ? '9+' : count}
-                    </span>
-                  )}
                 </div>
               </button>
             ))}

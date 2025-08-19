@@ -94,7 +94,7 @@ export default function AccountContent() {
                         <dt className='text-sm font-medium text-zinc-500 mb-1.5'>
                           Role
                         </dt>
-                        <dd className='text-base text-zinc-900 font-medium'>
+                        <dd className='text-base text-zinc-900'>
                           {userProfile.jobRole}
                         </dd>
                       </div>
@@ -104,7 +104,7 @@ export default function AccountContent() {
                         <dt className='text-sm font-medium text-zinc-500 mb-1.5'>
                           Company
                         </dt>
-                        <dd className='text-base text-zinc-900 font-medium'>
+                        <dd className='text-base text-zinc-900'>
                           {userProfile.companyName}
                         </dd>
                       </div>
@@ -114,7 +114,7 @@ export default function AccountContent() {
                         <dt className='text-sm font-medium text-zinc-500 mb-1.5'>
                           Industry
                         </dt>
-                        <dd className='text-base text-zinc-900 font-medium'>
+                        <dd className='text-base text-zinc-900'>
                           {userProfile.industry}
                         </dd>
                       </div>
@@ -125,7 +125,7 @@ export default function AccountContent() {
                           <dt className='text-sm font-medium text-zinc-500 mb-1.5'>
                             Experience
                           </dt>
-                          <dd className='text-base text-zinc-900 font-medium'>
+                          <dd className='text-base text-zinc-900'>
                             {userProfile.yearsOfExperience} years
                           </dd>
                         </div>
@@ -140,7 +140,7 @@ export default function AccountContent() {
                   <h4 className='text-sm font-semibold text-zinc-500 mb-4'>
                     Education
                   </h4>
-                  <div className='text-base text-zinc-900 font-medium leading-relaxed'>
+                  <div className='text-base text-zinc-900 leading-relaxed'>
                     {userProfile.education}
                   </div>
                 </div>
