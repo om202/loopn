@@ -37,7 +37,7 @@ export default function VectorSearchAdminPage() {
   const [testResults, setTestResults] = useState<SearchResponse | null>(null);
   const [isTestingSearch, setIsTestingSearch] = useState(false);
   const [selectedRankingProfile, setSelectedRankingProfile] =
-    useState<RankingProfile>('default');
+    useState<RankingProfile>('hybrid');
   const [client, setClient] = useState<ReturnType<
     typeof generateClient<Schema>
   > | null>(null);
@@ -432,18 +432,18 @@ export default function VectorSearchAdminPage() {
                   }
                   className='px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
                 >
+                  <option value='hybrid'>
+                    🚀 Hybrid AI - Text + Vector (Recommended)
+                  </option>
+                  <option value='semantic'>
+                    🧠 Semantic - Pure AI Vector similarity
+                  </option>
                   <option value='default'>Default - Balanced ranking</option>
                   <option value='skills_focused'>
                     Skills Focused - Prioritize skill matches
                   </option>
                   <option value='experience_focused'>
                     Experience Focused - Prioritize experience level
-                  </option>
-                  <option value='semantic'>
-                    Semantic - Vector similarity only
-                  </option>
-                  <option value='hybrid'>
-                    Hybrid - Text + Vector combined
                   </option>
                 </select>
               </div>

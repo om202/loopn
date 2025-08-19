@@ -131,7 +131,7 @@ schema user_profile {
         }
     }
     
-    # Semantic search ranking profile using vectors
+    # Pure semantic search using vector similarity
     rank-profile semantic {
         inputs {
             query(queryVector) tensor<float>(x[1024])
@@ -141,29 +141,32 @@ schema user_profile {
             expression: closeness(field, profileVector)
         }
         
-        second-phase {
-            expression: firstPhase + 0.2 * nativeRank(fullName, jobRole, skills)
+        match-features {
+            closeness(field, profileVector)
+            attribute(yearsOfExperience)
         }
     }
     
-    # Hybrid search combining text and vector similarity
-    rank-profile hybrid {
+    # Vespa native hybrid search using BM25 + vector similarity
+    rank-profile hybrid inherits default {
         inputs {
             query(queryVector) tensor<float>(x[1024])
         }
         
         first-phase {
-            expression: 0.7 * nativeRank(fullName, jobRole, skills, about, searchableContent) + 0.3 * closeness(field, profileVector)
+            expression: bm25(fullName) + bm25(jobRole) + bm25(skills) + bm25(about) + bm25(searchableContent) + closeness(field, profileVector)
         }
         
         second-phase {
-            expression: firstPhase + 0.1 * attribute(yearsOfExperience) + 0.05 * elementCompleteness(skills).completeness
+            expression: firstPhase
         }
         
         match-features {
-            nativeRank(fullName)
-            nativeRank(jobRole)
-            nativeRank(skills)
+            bm25(fullName)
+            bm25(jobRole) 
+            bm25(skills)
+            bm25(about)
+            bm25(searchableContent)
             closeness(field, profileVector)
             attribute(yearsOfExperience)
         }
