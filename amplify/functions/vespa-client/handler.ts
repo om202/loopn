@@ -1,69 +1,52 @@
 import { SSMClient, GetParameterCommand } from '@aws-sdk/client-ssm';
 import fetch from 'node-fetch';
+import https from 'https';
 
-// Helper function to make HTTP requests with token authentication
+// Helper function to make HTTP requests with mTLS or Bearer token authentication
 async function makeHttpRequest(
-  config: { endpoint: string; token: string },
+  config: { endpoint: string; token?: string; cert?: string; key?: string },
   method: string,
   requestPath: string,
   body?: string
 ): Promise<any> {
-  // Mock mode for testing when Vespa Cloud is not set up
-  if (config.endpoint === 'mock://localhost') {
-    console.log(`Mock Vespa request: ${method} ${requestPath}`);
-
-    // Return mock responses based on the request path
-    if (requestPath.includes('/search/')) {
-      return {
-        ok: true,
-        status: 200,
-        statusText: 'OK',
-        json: () =>
-          Promise.resolve({
-            root: {
-              fields: { totalCount: 0 },
-              children: [],
-            },
-          }),
-        text: () =>
-          Promise.resolve('{"root":{"fields":{"totalCount":0},"children":[]}}'),
-      };
-    } else if (requestPath.includes('/document/')) {
-      return {
-        ok: true,
-        status: 200,
-        statusText: 'OK',
-        json: () => Promise.resolve({ pathId: 'mock-doc-id' }),
-        text: () => Promise.resolve('{"pathId":"mock-doc-id"}'),
-      };
-    }
-
-    return {
-      ok: true,
-      status: 200,
-      statusText: 'OK',
-      json: () => Promise.resolve({}),
-      text: () => Promise.resolve('{}'),
-    };
-  }
+  // NO MORE MOCK MODE - removed entirely
 
   const url = config.endpoint + requestPath;
 
   try {
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${config.token}`,
     };
 
     if (body) {
       headers['Content-Length'] = Buffer.byteLength(body).toString();
     }
 
-    const response = await fetch(url, {
+    const fetchOptions: any = {
       method,
       headers,
       ...(body && { body }),
-    });
+    };
+
+    // Use mTLS if certificates are provided, otherwise use Bearer token
+    if (config.cert && config.key) {
+      // Create HTTPS agent with client certificates for mTLS
+      const agent = new https.Agent({
+        cert: config.cert,
+        key: config.key,
+        rejectUnauthorized: true,
+      });
+      fetchOptions.agent = agent;
+    } else if (config.token) {
+      // Use Bearer token authentication
+      headers.Authorization = `Bearer ${config.token}`;
+    } else {
+      throw new Error(
+        'No authentication method provided (neither mTLS certificates nor token)'
+      );
+    }
+
+    const response = await fetch(url, fetchOptions);
 
     return {
       ok: response.ok,
@@ -81,14 +64,19 @@ async function makeHttpRequest(
 // AWS SSM client for retrieving Vespa configuration
 const ssmClient = new SSMClient({ region: process.env.AWS_REGION! });
 
-// Cache for Vespa configuration
+// Cache for Vespa configuration - reset cache to pick up new parameters
 let vespaConfig: {
   endpoint: string;
-  token: string;
+  token?: string;
+  cert?: string;
+  key?: string;
 } | null = null;
 
 // Get Vespa configuration from Parameter Store
 async function getVespaConfig() {
+  // Force refresh to pick up new parameters
+  vespaConfig = null;
+
   if (vespaConfig) {
     return vespaConfig;
   }
@@ -96,47 +84,62 @@ async function getVespaConfig() {
   const stackHash = process.env.STACK_HASH || 'default';
 
   try {
-    const [endpointParam, tokenParam] = await Promise.all([
+    // Get all possible parameters
+    const parameterPromises = [
       ssmClient.send(
         new GetParameterCommand({
           Name: `/loopn/${stackHash}/vespa/endpoint`,
           WithDecryption: true,
         })
       ),
-      ssmClient.send(
-        new GetParameterCommand({
-          Name: `/loopn/${stackHash}/vespa/token`,
-          WithDecryption: true,
-        })
-      ),
-    ]);
+      // Try to get token (for Bearer auth)
+      ssmClient
+        .send(
+          new GetParameterCommand({
+            Name: `/loopn/${stackHash}/vespa/token`,
+            WithDecryption: true,
+          })
+        )
+        .catch(() => null),
+      // Try to get certificates (for mTLS auth)
+      ssmClient
+        .send(
+          new GetParameterCommand({
+            Name: `/loopn/${stackHash}/vespa/cert`,
+            WithDecryption: true,
+          })
+        )
+        .catch(() => null),
+      ssmClient
+        .send(
+          new GetParameterCommand({
+            Name: `/loopn/${stackHash}/vespa/key`,
+            WithDecryption: true,
+          })
+        )
+        .catch(() => null),
+    ];
 
-    const endpoint = endpointParam.Parameter?.Value;
-    const token = tokenParam.Parameter?.Value;
+    const [endpointParam, tokenParam, certParam, keyParam] =
+      await Promise.all(parameterPromises);
+
+    const endpoint = endpointParam?.Parameter?.Value;
+    const token = tokenParam?.Parameter?.Value;
+    const cert = certParam?.Parameter?.Value;
+    const key = keyParam?.Parameter?.Value;
+
+    console.log('Debug - Parameter retrieval:', {
+      endpoint: endpoint ? 'found' : 'missing',
+      token: token ? 'found' : 'missing',
+      cert: cert ? 'found' : 'missing',
+      key: key ? 'found' : 'missing',
+      stackHash,
+    });
 
     if (!endpoint) {
       throw new Error(
         `Vespa endpoint parameter not found at /loopn/${stackHash}/vespa/endpoint`
       );
-    }
-
-    if (!token) {
-      throw new Error(
-        `Vespa token parameter not found at /loopn/${stackHash}/vespa/token`
-      );
-    }
-
-    // Check for placeholder values - for now, allow mock mode for testing
-    if (token.includes('placeholder') || !token || token.trim() === '') {
-      console.log(
-        'Vespa token not configured, running in mock mode for testing'
-      );
-      // Return mock config for testing
-      vespaConfig = {
-        endpoint: 'mock://localhost',
-        token: 'mock-token',
-      };
-      return vespaConfig;
     }
 
     if (!endpoint || endpoint.includes('placeholder')) {
@@ -145,12 +148,31 @@ async function getVespaConfig() {
       );
     }
 
-    vespaConfig = {
-      endpoint: endpoint.replace(/\/$/, ''), // Remove trailing slash
-      token,
-    };
+    // Check if we have mTLS certificates
+    if (cert && key) {
+      console.log('Using mTLS authentication with client certificates');
+      vespaConfig = {
+        endpoint: endpoint.replace(/\/$/, ''), // Remove trailing slash
+        cert,
+        key,
+      };
+      return vespaConfig;
+    }
 
-    return vespaConfig;
+    // Check if we have a valid token
+    if (token && !token.includes('placeholder') && token.trim() !== '') {
+      console.log('Using Bearer token authentication');
+      vespaConfig = {
+        endpoint: endpoint.replace(/\/$/, ''), // Remove trailing slash
+        token,
+      };
+      return vespaConfig;
+    }
+
+    // Provide clear instructions for setup
+    throw new Error(
+      `No valid authentication found. Need either mTLS certificates or valid token at /loopn/${stackHash}/vespa/`
+    );
   } catch (error) {
     console.error('Failed to get Vespa configuration:', error);
     throw error;
@@ -267,7 +289,7 @@ export const handler = async (event: any): Promise<SearchResponse> => {
 
 // Search users using Vespa's intelligent search capabilities
 async function searchUsers(
-  config: { endpoint: string; token: string },
+  config: { endpoint: string; token?: string; cert?: string; key?: string },
   query: string,
   limit: number = 10,
   filters?: Record<string, any>,
@@ -381,7 +403,7 @@ async function searchUsers(
 
 // Semantic search using vector similarity
 async function semanticSearch(
-  config: { endpoint: string; token: string },
+  config: { endpoint: string; token?: string; cert?: string; key?: string },
   queryVector: number[],
   limit: number = 10,
   filters?: Record<string, any>
@@ -472,7 +494,7 @@ async function semanticSearch(
 
 // Hybrid search combining text and vector similarity
 async function hybridSearch(
-  config: { endpoint: string; token: string },
+  config: { endpoint: string; token?: string; cert?: string; key?: string },
   query: string,
   queryVector: number[],
   limit: number = 10,
@@ -577,7 +599,7 @@ async function hybridSearch(
 
 // Index a user profile
 async function indexUser(
-  config: { endpoint: string; token: string },
+  config: { endpoint: string; token?: string; cert?: string; key?: string },
   userId: string,
   userProfile: UserProfile
 ): Promise<SearchResponse> {
@@ -645,7 +667,7 @@ async function indexUser(
 
 // Get a specific user
 async function getUser(
-  config: { endpoint: string; token: string },
+  config: { endpoint: string; token?: string; cert?: string; key?: string },
   userId: string
 ): Promise<SearchResponse> {
   try {
@@ -709,7 +731,7 @@ async function getUser(
 
 // Update a user profile
 async function updateUser(
-  config: { endpoint: string; token: string },
+  config: { endpoint: string; token?: string; cert?: string; key?: string },
   userId: string,
   userProfile: UserProfile
 ): Promise<SearchResponse> {
@@ -779,7 +801,7 @@ async function updateUser(
 
 // Delete a user
 async function deleteUser(
-  config: { endpoint: string; token: string },
+  config: { endpoint: string; token?: string; cert?: string; key?: string },
   userId: string
 ): Promise<SearchResponse> {
   try {

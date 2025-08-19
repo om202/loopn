@@ -54,6 +54,9 @@ export function defineVespa(stack: Stack, lambdaRole?: iam.IRole) {
           resources: [
             vespaEndpointParam.parameterArn,
             vespaTokenParam.parameterArn,
+            // Allow access to cert and key parameters (created manually)
+            `arn:aws:ssm:${stack.region}:${stack.account}:parameter/loopn/${stackHash}/vespa/cert`,
+            `arn:aws:ssm:${stack.region}:${stack.account}:parameter/loopn/${stackHash}/vespa/key`,
           ],
         }),
       ],
