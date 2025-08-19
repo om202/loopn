@@ -217,6 +217,8 @@ export default function UserAvatar({
           className={`rounded-full overflow-hidden flex-shrink-0 relative ${
             imageLoaded && hasProfilePicture && !imageError
               ? 'border border-brand-500'
+              : (!hasProfilePicture || imageError)
+              ? 'border border-zinc-400'
               : 'border border-transparent'
           }`}
           style={{
@@ -276,8 +278,8 @@ export default function UserAvatar({
 
           {/* Fallback state - show when no profile picture or error */}
           {(!hasProfilePicture || imageError) && (
-            <div className='bg-gray-100 w-full h-full flex items-center justify-center absolute inset-0'>
-              <User className='w-3/5 h-3/5 text-gray-400' />
+            <div className='bg-gradient-to-br from-zinc-400 to-brand-400 w-full h-full flex items-center justify-center absolute inset-0'>
+              <User className='w-3/5 h-3/5 text-white drop-shadow-sm' style={{ filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.3))' }} />
             </div>
           )}
         </div>

@@ -115,18 +115,29 @@ export default function SearchUser({
   };
 
   return (
-    <div className='w-full sm:max-w-md sm:mx-auto relative'>
-      <form
-        onSubmit={handleSubmit}
-        className='relative'
-        autoComplete='off'
-        data-form-type='other'
-        data-lpignore='true'
-        data-1p-ignore
-        data-bwignore
-        role='search'
-        aria-label='Professional search form'
-      >
+    <div className='w-full sm:max-w-2xl sm:mx-auto relative'>
+      {/* Mobile Logo + Search Layout */}
+      <div className='flex items-center gap-3 sm:block'>
+        {/* Logo - only visible on mobile */}
+        <div className='flex-shrink-0 sm:hidden'>
+          <img 
+            src='/loopn.svg' 
+            alt='Loopn' 
+            className='w-8 h-8'
+          />
+        </div>
+        
+        <form
+          onSubmit={handleSubmit}
+          className='relative flex-1 sm:flex-none'
+          autoComplete='off'
+          data-form-type='other'
+          data-lpignore='true'
+          data-1p-ignore
+          data-bwignore
+          role='search'
+          aria-label='Professional search form'
+        >
         <input
           autoComplete='off'
           name='username-fake'
@@ -199,43 +210,44 @@ export default function SearchUser({
             <Search className='w-4 h-4 text-brand-500' />
           )}
         </button>
-      </form>
+        </form>
 
-      {/* Search History Dropdown */}
-      {showHistory && searchHistory.length > 0 && (
-        <div
-          ref={dropdownRef}
-          className='absolute top-full left-0 right-0 bg-white border border-zinc-200 rounded-2xl shadow-lg z-50 max-h-64 overflow-y-auto mt-2'
-        >
-          <div className='py-2'>
-            <div className='px-4 py-2 text-sm font-medium text-zinc-500 border-b border-zinc-100'>
-              Recent searches
-            </div>
-            {searchHistory.map(item => (
-              <div
-                key={item.id}
-                className='flex items-center justify-between px-4 py-3 hover:bg-zinc-50 cursor-pointer group'
-                onClick={() => handleHistoryItemClick(item.query)}
-              >
-                <div className='flex items-center gap-3 flex-1 min-w-0'>
-                  <Clock className='w-4 h-4 text-zinc-500 flex-shrink-0' />
-                  <span className='text-sm text-zinc-700 truncate'>
-                    {item.query}
-                  </span>
-                </div>
-                <button
-                  type='button'
-                  onClick={e => handleDeleteHistoryItem(e, item.id)}
-                  className='flex-shrink-0 p-1 text-zinc-500 hover:text-zinc-600 opacity-0 group-hover:opacity-100 transition-opacity'
-                  aria-label={`Remove "${item.query}" from search history`}
-                >
-                  <X className='w-4 h-4' />
-                </button>
+        {/* Search History Dropdown */}
+        {showHistory && searchHistory.length > 0 && (
+          <div
+            ref={dropdownRef}
+            className='absolute top-full left-0 right-0 bg-white border border-zinc-200 rounded-2xl shadow-lg z-50 max-h-64 overflow-y-auto mt-2'
+          >
+            <div className='py-2'>
+              <div className='px-4 py-2 text-sm font-medium text-zinc-500 border-b border-zinc-100'>
+                Recent searches
               </div>
-            ))}
+              {searchHistory.map(item => (
+                <div
+                  key={item.id}
+                  className='flex items-center justify-between px-4 py-3 hover:bg-zinc-50 cursor-pointer group'
+                  onClick={() => handleHistoryItemClick(item.query)}
+                >
+                  <div className='flex items-center gap-3 flex-1 min-w-0'>
+                    <Clock className='w-4 h-4 text-zinc-500 flex-shrink-0' />
+                    <span className='text-sm text-zinc-700 truncate'>
+                      {item.query}
+                    </span>
+                  </div>
+                  <button
+                    type='button'
+                    onClick={e => handleDeleteHistoryItem(e, item.id)}
+                    className='flex-shrink-0 p-1 text-zinc-500 hover:text-zinc-600 opacity-0 group-hover:opacity-100 transition-opacity'
+                    aria-label={`Remove "${item.query}" from search history`}
+                  >
+                    <X className='w-4 h-4' />
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
