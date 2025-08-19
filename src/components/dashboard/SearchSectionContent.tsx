@@ -4,9 +4,9 @@ import React, { useState, useCallback } from 'react';
 import { Search } from 'lucide-react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import {
-  OpenSearchService,
+  VespaService,
   SearchResult,
-} from '../../services/opensearch.service';
+} from '../../services/vespa.service';
 import { useChatActions } from '../../hooks/useChatActions';
 import UserCard from './UserCard';
 import LoadingContainer from '../LoadingContainer';
@@ -106,7 +106,7 @@ export default function SearchSectionContent({
       setSearchResults([]); // Clear previous results immediately
 
       try {
-        const response = await OpenSearchService.searchUsers(
+        const response = await VespaService.searchUsers(
           searchTerm.trim(),
           10
         );

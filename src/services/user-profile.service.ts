@@ -1,6 +1,6 @@
 import type { Schema } from '../../amplify/data/resource';
 import { getClient } from '../lib/amplify-config';
-import { OpenSearchService } from './opensearch.service';
+import { VespaService } from './vespa.service';
 
 type UserProfile = Schema['UserProfile']['type'];
 type DataResult<T> = { data: T | null; error: string | null };
@@ -73,7 +73,7 @@ export class UserProfileService {
       if (result.data) {
         try {
           console.log('Indexing user profile for search:', userId);
-          const indexResult = await OpenSearchService.indexUser(userId, {
+          const indexResult = await VespaService.indexUser(userId, {
             ...profileData,
             userId,
           });
@@ -143,7 +143,7 @@ export class UserProfileService {
               profilePictureUrl: fullProfile.profilePictureUrl || undefined,
               hasProfilePicture: fullProfile.hasProfilePicture || false,
             };
-            await OpenSearchService.indexUser(userId, {
+            await VespaService.indexUser(userId, {
               ...profileData,
               userId,
             });
