@@ -10,10 +10,16 @@
         <http>
             <server id="default" port="4080" />
         </http>
+        
+        <!-- Minimal resources for startup testing -->
+        <nodes>
+            <resources vcpu="0.5" memory="8Gb" disk="10Gb" />
+            <node hostalias="container1" />
+        </nodes>
     </container>
 
     <content id="user_profiles" version="1.0">
-        <redundancy>2</redundancy>
+        <redundancy>1</redundancy>
         <documents>
             <document type="user_profile" mode="index" />
         </documents>
@@ -25,6 +31,7 @@
         </engine>
         
         <nodes>
+            <resources vcpu="0.5" memory="8Gb" disk="10Gb" />
             <node distribution-key="0" hostalias="node1" />
         </nodes>
     </content>
