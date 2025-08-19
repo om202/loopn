@@ -120,13 +120,9 @@ export default function SearchUser({
       <div className='flex items-center gap-3 sm:block'>
         {/* Logo - only visible on mobile */}
         <div className='flex-shrink-0 sm:hidden'>
-          <img 
-            src='/loopn.svg' 
-            alt='Loopn' 
-            className='w-8 h-8'
-          />
+          <img src='/loopn.svg' alt='Loopn' className='w-8 h-8' />
         </div>
-        
+
         <form
           onSubmit={handleSubmit}
           className='relative flex-1 sm:flex-none'
@@ -138,78 +134,78 @@ export default function SearchUser({
           role='search'
           aria-label='Professional search form'
         >
-        <input
-          autoComplete='off'
-          name='username-fake'
-          type='text'
-          style={{ display: 'none' }}
-          tabIndex={-1}
-          aria-hidden='true'
-        />
-        <input
-          autoComplete='off'
-          name='password-fake'
-          type='password'
-          style={{ display: 'none' }}
-          tabIndex={-1}
-          aria-hidden='true'
-        />
-        <Sparkles className='absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 z-10' />
-        <input
-          ref={inputRef}
-          type='text'
-          placeholder='Search or ask Loopn'
-          value={query}
-          onChange={handleInputChange}
-          onFocus={handleInputFocus}
-          disabled={isProcessing}
-          autoComplete='off'
-          autoCorrect='off'
-          autoCapitalize='off'
-          spellCheck='false'
-          data-lpignore='true'
-          data-1p-ignore
-          data-bwignore
-          data-form-type='other'
-          data-ms-editor='false'
-          data-ms-spell-check='false'
-          data-gramm='false'
-          data-gramm_editor='false'
-          data-enable-grammarly='false'
-          name='professional-lookup-field'
-          id='professional-lookup-input'
-          role='textbox'
-          aria-label='Search for professionals'
-          style={{
-            fontSize: '16px',
-            WebkitAppearance: 'none',
-            MozAppearance: 'textfield',
-          }}
-          className='w-full pl-10 pr-16 py-3 rounded-full border border-zinc-200 focus:outline-none focus:ring-1 focus:ring-brand-200 focus:bg-white bg-zinc-100 hover:bg-brand-50 transition-colors placeholder-zinc-500'
-        />
+          <input
+            autoComplete='off'
+            name='username-fake'
+            type='text'
+            style={{ display: 'none' }}
+            tabIndex={-1}
+            aria-hidden='true'
+          />
+          <input
+            autoComplete='off'
+            name='password-fake'
+            type='password'
+            style={{ display: 'none' }}
+            tabIndex={-1}
+            aria-hidden='true'
+          />
+          <Sparkles className='absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 z-10' />
+          <input
+            ref={inputRef}
+            type='text'
+            placeholder='Search or ask Loopn'
+            value={query}
+            onChange={handleInputChange}
+            onFocus={handleInputFocus}
+            disabled={isProcessing}
+            autoComplete='off'
+            autoCorrect='off'
+            autoCapitalize='off'
+            spellCheck='false'
+            data-lpignore='true'
+            data-1p-ignore
+            data-bwignore
+            data-form-type='other'
+            data-ms-editor='false'
+            data-ms-spell-check='false'
+            data-gramm='false'
+            data-gramm_editor='false'
+            data-enable-grammarly='false'
+            name='professional-lookup-field'
+            id='professional-lookup-input'
+            role='textbox'
+            aria-label='Search for professionals'
+            style={{
+              fontSize: '16px',
+              WebkitAppearance: 'none',
+              MozAppearance: 'textfield',
+            }}
+            className='w-full pl-10 pr-16 py-3 rounded-full border border-zinc-200 focus:outline-none focus:ring-1 focus:ring-brand-200 focus:bg-white bg-zinc-100 hover:bg-brand-50 transition-colors placeholder-zinc-500'
+          />
 
-        {/* Clear button - only show when there's text */}
-        {query.trim() && (
-          <button
-            type='button'
-            onClick={handleClearInput}
-            className='absolute right-11 top-1/2 -translate-y-1/2 w-6 h-6 text-zinc-500 hover:text-zinc-600 flex items-center justify-center transition-colors'
-            aria-label='Clear search'
-          >
-            <X className='w-4 h-4' />
-          </button>
-        )}
-
-        <button
-          type='submit'
-          className='absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full hover:bg-gray-50 flex items-center justify-center transition-colors duration-150 shadow-sm border border-gray-200'
-        >
-          {isProcessing ? (
-            <div className='w-4 h-4 border-2 border-brand-500 border-t-transparent rounded-full animate-spin' />
-          ) : (
-            <Search className='w-4 h-4 text-brand-500' />
+          {/* Clear button - only show when there's text */}
+          {query.trim() && (
+            <button
+              type='button'
+              onClick={handleClearInput}
+              className='absolute right-11 top-1/2 -translate-y-1/2 w-6 h-6 text-zinc-500 hover:text-zinc-600 flex items-center justify-center transition-colors'
+              aria-label='Clear search'
+            >
+              <X className='w-4 h-4' />
+            </button>
           )}
-        </button>
+
+          <button
+            type='submit'
+            className='absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full hover:bg-gray-50 flex items-center justify-center transition-colors duration-150 shadow-sm border border-gray-200'
+          >
+            {isProcessing ? (
+              <div className='w-4 h-4 border-2 border-brand-500 border-t-transparent rounded-full animate-spin' />
+            ) : (
+              <Search className='w-4 h-4 text-brand-500' />
+            )}
+          </button>
         </form>
 
         {/* Search History Dropdown */}
