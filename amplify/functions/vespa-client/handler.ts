@@ -32,8 +32,12 @@ async function makeHttpRequest(
       ...(body && { body }),
     };
 
-    // Use mTLS if certificates are provided, otherwise use Bearer token
-    if (config.cert && config.key) {
+    // FORCE Bearer token authentication to avoid certificate issues
+    if (config.token) {
+      console.log('🔑 Using Bearer token authentication (preferred)');
+      headers.Authorization = `Bearer ${config.token}`;
+    } else if (config.cert && config.key) {
+      console.log('🔒 Using mTLS authentication with client certificates');
       // Create HTTPS agent with client certificates for mTLS
       const agent = new https.Agent({
         cert: config.cert,
@@ -41,9 +45,6 @@ async function makeHttpRequest(
         rejectUnauthorized: true,
       });
       fetchOptions.agent = agent;
-    } else if (config.token) {
-      // Use Bearer token authentication
-      headers.Authorization = `Bearer ${config.token}`;
     } else {
       throw new Error(
         'No authentication method provided (neither mTLS certificates nor token)'
