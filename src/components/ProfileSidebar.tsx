@@ -4,10 +4,11 @@ import { useState, useEffect } from 'react';
 import {
   Clock,
   MessageCircle,
-  CheckCircle2,
   ArrowLeft,
   Info,
   Plus,
+  UserPlus,
+  UserX,
 } from 'lucide-react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import Image from 'next/image';
@@ -298,7 +299,7 @@ export default function ProfileSidebar({
     <div className='bg-white rounded-2xl border border-zinc-200 w-full h-full flex flex-col relative'>
       {/* Back Button - Top of sidebar */}
       {onBack && (
-        <div className='p-4 pb-2 border-b border-zinc-100'>
+        <div className='p-4 pb-2 border-b border-zinc-100 flex items-center justify-between'>
           <button
             onClick={onBack}
             className='flex items-center gap-2 text-zinc-500 hover:text-zinc-900 transition-colors'
@@ -306,6 +307,17 @@ export default function ProfileSidebar({
             <ArrowLeft className='w-4 h-4' />
             <span className='text-sm font-medium'>Back</span>
           </button>
+          
+          {/* Remove Connection Button - Top Right */}
+          {onEndChat && (
+            <button
+              onClick={() => setShowEndChatDialog(true)}
+              className='text-sm text-zinc-600 hover:text-zinc-800 transition-colors font-medium flex items-center gap-2'
+            >
+              <UserX className='w-4 h-4' />
+              Remove
+            </button>
+          )}
         </div>
       )}
 
@@ -362,31 +374,12 @@ export default function ProfileSidebar({
             timeLeft !== 'Expired' && (
               <div className='mb-1 mt-1'>
                 {/* Trial Chat Info with End Chat Icon - Centered */}
-                <div className='flex items-center justify-center text-sm text-zinc-600 mb-2'>
-                  <div className='flex items-center gap-2'>
-                    <span className='font-medium'>Trial Chat</span>
-                    <span className='font-bold text-zinc-900'>{timeLeft}</span>
-                    {onEndChat && (
-                      <Tooltip content='End Chat' position='top'>
-                        <button
-                          onClick={() => setShowEndChatDialog(true)}
-                          className='ml-2 p-1.5 text-zinc-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors'
-                        >
-                          <Image
-                            src='/end-icon.svg'
-                            alt='End Chat'
-                            width={16}
-                            height={16}
-                            className='w-4 h-4'
-                          />
-                        </button>
-                      </Tooltip>
-                    )}
-                  </div>
+                <div className='text-center text-sm text-zinc-600 mb-3'>
+                  <span className='font-medium'>Connection Expires in <span className='font-bold text-zinc-900'>{timeLeft}</span></span>
                 </div>
 
                 {/* Connect Button */}
-                <div className='flex justify-center'>
+                <div className='flex justify-center mb-3'>
                   {hasAcceptedConnection ? (
                     <div className='px-6 py-2 text-sm font-medium rounded-lg border border-zinc-200 flex items-center justify-center gap-2 text-zinc-500'>
                       <svg
@@ -411,7 +404,7 @@ export default function ProfileSidebar({
                     </button>
                   ) : (
                     <Tooltip
-                      content='Make permanent connection'
+                      content='Add to your professional network'
                       position='bottom'
                     >
                       <button
@@ -421,26 +414,14 @@ export default function ProfileSidebar({
                         }
                         className='px-6 py-2 text-sm font-medium rounded-lg border transition-colors flex items-center justify-center gap-2 bg-brand-100 text-brand-600 border-brand-200 hover:bg-brand-200 hover:border-brand-400 disabled:bg-brand-100 disabled:cursor-not-allowed'
                       >
-                        <svg
-                          width='16'
-                          height='16'
-                          viewBox='30 30 160 160'
-                          className='w-4 h-4'
-                          aria-hidden='true'
-                        >
-                          <circle cx='75' cy='110' r='35' fill='currentColor' />
-                          <circle
-                            cx='145'
-                            cy='110'
-                            r='35'
-                            fill='currentColor'
-                          />
-                        </svg>
-                        <span>Connect</span>
+                        <UserPlus className='w-4 h-4' />
+                        <span>Add to Network</span>
                       </button>
                     </Tooltip>
                   )}
                 </div>
+
+
               </div>
             )}
 
@@ -626,16 +607,14 @@ export default function ProfileSidebar({
       <DialogContainer
         isOpen={showEndChatDialog}
         onClose={() => setShowEndChatDialog(false)}
-        maxWidth='xs'
+        maxWidth='sm'
       >
         <div className='p-4'>
           <h3 className='text-lg font-medium text-zinc-900 text-center mb-3'>
-            End trial chat?
+            Remove {getUserDisplayName()} from your connection?
           </h3>
-          <p className='text-sm text-zinc-900 text-center mb-4'>
-            This will immediately end the chat. You won&apos;t be able to send
-            more messages, but chat history will remain accessible until the
-            trial period expires.
+          <p className='text-sm text-zinc-600 text-center mb-4'>
+            This will end your trial chat immediately. Chat history will remain accessible until the trial expires.
           </p>
           <div className='flex gap-2'>
             <button
@@ -651,7 +630,7 @@ export default function ProfileSidebar({
               }}
               className='flex-1 px-3 py-2 text-base font-medium text-b_red-600 bg-zinc-100 rounded-lg hover:bg-zinc-200 focus:outline-none transition-colors'
             >
-              End Chat
+              Remove Connection
             </button>
           </div>
         </div>
