@@ -393,6 +393,11 @@ async function searchUsers(
       hasEmbedding: !!queryEmbedding,
       embeddingLength: queryEmbedding?.length || 0,
     });
+    
+    // Log the first few values of the query embedding for debugging
+    if (queryEmbedding) {
+      console.log('Query embedding sample:', queryEmbedding.slice(0, 5));
+    }
 
     // Build Vespa YQL query with hybrid search
     let yqlQuery = 'select * from sources user_profile where ';
@@ -537,6 +542,13 @@ async function searchUsers(
         `[${queryEmbedding.join(',')}]`
       );
     }
+    
+    // Log the actual query being sent to Vespa
+    console.log('Vespa Query Debug:', {
+      yql: yqlQuery,
+      ranking: actualRankingProfile,
+      hasQueryVector: searchParams.has('input.query(queryVector)')
+    });
 
     const response = await makeHttpRequest(
       config,

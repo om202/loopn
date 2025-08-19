@@ -148,11 +148,11 @@ schema user_profile {
         }
         
         first-phase {
-            expression: closeness(field, profileVector)
+            expression: closeness(profileVector, queryVector)
         }
         
         match-features {
-            closeness(field, profileVector)
+            closeness(profileVector, queryVector)
             attribute(yearsOfExperience)
         }
     }
@@ -172,7 +172,7 @@ schema user_profile {
                     1.5 * bm25(about) + 
                     1.5 * bm25(searchableContent)
                 ) + 
-                0.3 * closeness(field, profileVector)
+                0.3 * closeness(profileVector, queryVector)
         }
         
         second-phase {
@@ -185,7 +185,7 @@ schema user_profile {
             bm25(skills)
             bm25(about)
             bm25(searchableContent)
-            closeness(field, profileVector)
+            closeness(profileVector, queryVector)
             attribute(yearsOfExperience)
         }
     }
