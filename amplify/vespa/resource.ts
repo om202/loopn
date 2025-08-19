@@ -44,7 +44,7 @@ export function defineVespa(stack: Stack, lambdaRole?: iam.IRole) {
     }
   );
 
-  // Grant Lambda function permission to read Vespa configuration
+  // Grant Lambda function permission to read Vespa configuration and use Bedrock
   if (lambdaRole) {
     const vespaPolicy = new iam.Policy(stack, 'VespaParameterPolicy', {
       statements: [
@@ -57,6 +57,13 @@ export function defineVespa(stack: Stack, lambdaRole?: iam.IRole) {
             // Allow access to cert and key parameters (created manually)
             `arn:aws:ssm:${stack.region}:${stack.account}:parameter/loopn/${stackHash}/vespa/cert`,
             `arn:aws:ssm:${stack.region}:${stack.account}:parameter/loopn/${stackHash}/vespa/key`,
+          ],
+        }),
+        new iam.PolicyStatement({
+          effect: iam.Effect.ALLOW,
+          actions: ['bedrock:InvokeModel'],
+          resources: [
+            `arn:aws:bedrock:${stack.region}::foundation-model/amazon.titan-embed-text-v2:0`,
           ],
         }),
       ],

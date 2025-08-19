@@ -104,8 +104,7 @@ export default function VectorSearchAdminPage() {
                         ) ?? undefined,
                       profilePictureUrl: user.profilePictureUrl ?? undefined,
                       isOnboardingComplete: user.isOnboardingComplete,
-                      // Initialize with zero vector - in production you'd generate actual embeddings
-                      profileVector: new Array(1024).fill(0),
+                      // Note: Real AI embeddings are now generated automatically in the backend
                     }
                   );
 

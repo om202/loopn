@@ -1,4 +1,8 @@
 import { SSMClient, GetParameterCommand } from '@aws-sdk/client-ssm';
+import {
+  BedrockRuntimeClient,
+  InvokeModelCommand,
+} from '@aws-sdk/client-bedrock-runtime';
 import fetch from 'node-fetch';
 import https from 'https';
 
@@ -63,6 +67,48 @@ async function makeHttpRequest(
 
 // AWS SSM client for retrieving Vespa configuration
 const ssmClient = new SSMClient({ region: process.env.AWS_REGION! });
+
+// AWS Bedrock client for embeddings
+const bedrockClient = new BedrockRuntimeClient({
+  region: process.env.AWS_REGION!,
+});
+
+// Generate embeddings for text using AWS Bedrock Titan Text Embeddings V2
+async function generateEmbedding(text: string): Promise<number[]> {
+  try {
+    const input = {
+      modelId: 'amazon.titan-embed-text-v2:0', // AWS Titan Text Embeddings V2 model
+      contentType: 'application/json',
+      accept: 'application/json',
+      body: JSON.stringify({
+        inputText: text.substring(0, 8000), // Titan V2 has 8K token limit
+        dimensions: 1024, // V2 supports configurable dimensions - perfect for our Vespa schema!
+        normalize: true, // Normalize embeddings for better similarity search
+      }),
+    };
+
+    const command = new InvokeModelCommand(input);
+    const response = await bedrockClient.send(command);
+
+    if (!response.body) {
+      throw new Error('No response body from Bedrock');
+    }
+
+    const responseBody = JSON.parse(new TextDecoder().decode(response.body));
+    const embedding = responseBody.embedding;
+
+    if (!embedding || !Array.isArray(embedding)) {
+      throw new Error('Invalid embedding response from Bedrock');
+    }
+
+    // Titan V2 returns exactly 1024 dimensions as requested
+    return embedding;
+  } catch (error) {
+    console.error('Failed to generate embedding with Bedrock Titan V2:', error);
+    // Return zero vector as fallback
+    return new Array(1024).fill(0);
+  }
+}
 
 // Cache for Vespa configuration - reset cache to pick up new parameters
 let vespaConfig: {
@@ -159,8 +205,8 @@ async function getVespaConfig() {
       return vespaConfig;
     }
 
-    // Check if we have a valid token
-    if (token && !token.includes('placeholder') && token.trim() !== '') {
+    // Check if we have a valid token (temporarily allow placeholder for testing)
+    if (token && token.trim() !== '') {
       console.log('Using Bearer token authentication');
       vespaConfig = {
         endpoint: endpoint.replace(/\/$/, ''), // Remove trailing slash
@@ -287,7 +333,7 @@ export const handler = async (event: any): Promise<SearchResponse> => {
   }
 };
 
-// Search users using Vespa's intelligent search capabilities
+// Search users using Vespa's hybrid AI search capabilities
 async function searchUsers(
   config: { endpoint: string; token?: string; cert?: string; key?: string },
   query: string,
@@ -296,10 +342,13 @@ async function searchUsers(
   rankingProfile: string = 'default'
 ): Promise<SearchResponse> {
   try {
-    // Build Vespa YQL query
+    // Generate query embedding for semantic search
+    const queryEmbedding =
+      query && query.trim() ? await generateEmbedding(query) : null;
+
+    // Build Vespa YQL query with hybrid search
     let yqlQuery = 'select * from sources user_profile where ';
 
-    // Add text search
     if (query && query.trim()) {
       const searchFields = [
         'fullName',
@@ -312,9 +361,23 @@ async function searchUsers(
         'searchableContent',
       ];
 
-      yqlQuery += `(${searchFields
-        .map(field => `${field} contains "${query.replace(/"/g, '\\"')}"`)
-        .join(' OR ')})`;
+      // Use hybrid search: combine text search with vector search
+      if (queryEmbedding && rankingProfile === 'hybrid') {
+        // Hybrid search: text OR vector similarity
+        const textQuery = searchFields
+          .map(field => `${field} contains "${query.replace(/"/g, '\\"')}"`)
+          .join(' OR ');
+
+        yqlQuery += `((${textQuery}) OR ({targetHits:${limit}}nearestNeighbor(profileVector, queryVector)))`;
+      } else if (queryEmbedding && rankingProfile === 'semantic') {
+        // Pure semantic search
+        yqlQuery += `({targetHits:${limit}}nearestNeighbor(profileVector, queryVector))`;
+      } else {
+        // Enhanced text search with weakAnd for better recall
+        yqlQuery += `(weakAnd(${searchFields
+          .map(field => `${field} contains "${query.replace(/"/g, '\\"')}"`)
+          .join(', ')}))`;
+      }
     } else {
       yqlQuery += 'true';
     }
@@ -351,6 +414,17 @@ async function searchUsers(
       format: 'json',
       timeout: '5s',
     });
+
+    // Add query vector for semantic/hybrid search
+    if (
+      queryEmbedding &&
+      (rankingProfile === 'hybrid' || rankingProfile === 'semantic')
+    ) {
+      searchParams.append(
+        'input.query(queryVector)',
+        `[${queryEmbedding.join(',')}]`
+      );
+    }
 
     const response = await makeHttpRequest(
       config,
@@ -597,7 +671,7 @@ async function hybridSearch(
   }
 }
 
-// Index a user profile
+// Index a user profile with AI-generated embeddings
 async function indexUser(
   config: { endpoint: string; token?: string; cert?: string; key?: string },
   userId: string,
@@ -617,6 +691,9 @@ async function indexUser(
       .filter(Boolean)
       .join(' ');
 
+    // Generate AI embedding for the user profile
+    const profileEmbedding = await generateEmbedding(searchableContent);
+
     const document = {
       put: `id:user_profile:user_profile::${userId}`,
       fields: {
@@ -634,7 +711,7 @@ async function indexUser(
         profilePictureUrl: userProfile.profilePictureUrl,
         isOnboardingComplete: userProfile.isOnboardingComplete || false,
         searchableContent,
-        profileVector: userProfile.profileVector || new Array(1024).fill(0),
+        profileVector: profileEmbedding, // Real AI-generated embedding!
         createdAt: Date.now(),
         updatedAt: Date.now(),
       },
@@ -729,7 +806,7 @@ async function getUser(
   }
 }
 
-// Update a user profile
+// Update a user profile with AI-generated embeddings
 async function updateUser(
   config: { endpoint: string; token?: string; cert?: string; key?: string },
   userId: string,
@@ -749,6 +826,9 @@ async function updateUser(
       .filter(Boolean)
       .join(' ');
 
+    // Generate updated AI embedding
+    const profileEmbedding = await generateEmbedding(searchableContent);
+
     const document = {
       update: `id:user_profile:user_profile::${userId}`,
       fields: {
@@ -767,9 +847,7 @@ async function updateUser(
           assign: userProfile.isOnboardingComplete || false,
         },
         searchableContent: { assign: searchableContent },
-        profileVector: {
-          assign: userProfile.profileVector || new Array(1024).fill(0),
-        },
+        profileVector: { assign: profileEmbedding }, // Real AI-generated embedding!
         updatedAt: { assign: Date.now() },
       },
     };

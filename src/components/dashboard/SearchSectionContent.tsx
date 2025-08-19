@@ -3,10 +3,7 @@
 import React, { useState, useCallback } from 'react';
 import { Search } from 'lucide-react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
-import {
-  VespaService,
-  SearchResult,
-} from '../../services/vespa.service';
+import { VespaService, SearchResult } from '../../services/vespa.service';
 import { useChatActions } from '../../hooks/useChatActions';
 import UserCard from './UserCard';
 import LoadingContainer from '../LoadingContainer';
@@ -106,9 +103,12 @@ export default function SearchSectionContent({
       setSearchResults([]); // Clear previous results immediately
 
       try {
+        // Use hybrid search for better AI-powered results
         const response = await VespaService.searchUsers(
           searchTerm.trim(),
-          10
+          10,
+          undefined, // no filters
+          'hybrid' // Use hybrid ranking for best results
         );
 
         if (!response.success) {
