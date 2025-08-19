@@ -7,6 +7,7 @@ import {
   CheckCircle2,
   ArrowLeft,
   Info,
+  Plus,
 } from 'lucide-react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import Image from 'next/image';
@@ -260,8 +261,8 @@ export default function ProfileSidebar({
               {existingConversations.get(userId)?.chatStatus === 'ENDED' ? (
                 canUserReconnect && canUserReconnect(userId) ? (
                   <>
-                    <MessageCircle className='w-4 h-4' />
-                    <span className='text-base font-medium'>Send Request</span>
+                    <Plus className='w-4 h-4' />
+                    <span className='text-base font-medium'>Connect</span>
                   </>
                 ) : (
                   <>
@@ -272,14 +273,14 @@ export default function ProfileSidebar({
               ) : (
                 <>
                   <MessageCircle className='w-4 h-4' />
-                  <span className='text-base font-medium'>Chat</span>
+                  <span className='text-base font-medium'>Message</span>
                 </>
               )}
             </>
           ) : (
             <>
-              <CheckCircle2 className='w-4 h-4' />
-              <span className='text-base font-medium'>Send Request</span>
+              <Plus className='w-4 h-4' />
+              <span className='text-base font-medium'>Connect</span>
             </>
           )}
         </button>

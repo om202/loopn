@@ -7,6 +7,8 @@ import {
   MessageCircle,
   MoreHorizontal,
   User,
+  Plus,
+  Check,
 } from 'lucide-react';
 
 import type { Schema } from '../../../amplify/data/resource';
@@ -275,42 +277,37 @@ export default function UserCard({
                   }
                 }}
                 className={`px-2 py-1.5 text-base font-medium rounded-xl border transition-colors flex items-center justify-center flex-shrink-0 gap-1.5 min-w-[44px] ${
-                  incomingRequestSenderIds.has(userPresence.userId)
-                    ? 'bg-brand-500 text-white border-brand-500 hover:bg-brand-600 hover:border-brand-600'
-                    : isSelected
-                      ? 'bg-white text-brand-500 border-brand-100 hover:bg-brand-100 hover:border-brand-200'
-                      : 'bg-brand-50 text-brand-500 border-brand-100 hover:bg-brand-100 hover:border-brand-200'
+                  isSelected
+                    ? 'bg-white text-brand-500 border-brand-100 hover:bg-brand-100 hover:border-brand-200'
+                    : 'bg-brand-50 text-brand-500 border-brand-100 hover:bg-brand-100 hover:border-brand-200'
                 }`}
                 title={
                   incomingRequestSenderIds.has(userPresence.userId)
-                    ? 'Accept Request'
+                    ? 'Accept'
                     : existingConversations.has(userPresence.userId)
                       ? existingConversations.get(userPresence.userId)
                           ?.chatStatus === 'ENDED'
                         ? canUserReconnect(userPresence.userId)
-                          ? 'Send Request'
+                          ? 'Connect'
                           : 'View Chat'
-                        : 'Continue Chat'
-                      : 'Send Request'
+                        : 'Message'
+                      : 'Connect'
                 }
               >
                 {incomingRequestSenderIds.has(userPresence.userId) ? (
                   // Prioritize incoming requests over existing conversations
                   <>
-                    <CheckCircle2 className='w-4 h-4 text-white flex-shrink-0' />
-                    <span className='text-base font-medium'>
-                      <span className='hidden sm:inline'>Accept Request</span>
-                      <span className='sm:hidden'>Accept</span>
-                    </span>
+                    <Check className='w-4 h-4 text-brand-500 flex-shrink-0 font-bold stroke-[2.5]' />
+                    <span className='text-base font-semibold'>Accept</span>
                   </>
                 ) : existingConversations.has(userPresence.userId) ? (
                   existingConversations.get(userPresence.userId)?.chatStatus ===
                   'ENDED' ? (
                     canUserReconnect(userPresence.userId) ? (
                       <>
-                        <CheckCircle2 className='w-4 h-4 text-brand-500 flex-shrink-0' />
+                        <Plus className='w-4 h-4 text-brand-500 flex-shrink-0' />
                         <span className='text-base font-medium'>
-                          Send Request
+                          Connect
                         </span>
                       </>
                     ) : (
@@ -331,13 +328,13 @@ export default function UserCard({
                   ) : (
                     <>
                       <MessageCircle className='w-4 h-4 text-brand-500 flex-shrink-0' />
-                      <span className='text-base font-medium'>Chat</span>
+                      <span className='text-base font-medium'>Message</span>
                     </>
                   )
                 ) : (
                   <>
-                    <CheckCircle2 className='w-4 h-4 text-brand-500 flex-shrink-0' />
-                    <span className='text-base font-medium'>Send Request</span>
+                    <Plus className='w-4 h-4 text-brand-500 flex-shrink-0' />
+                    <span className='text-base font-medium'>Connect</span>
                   </>
                 )}
               </button>
@@ -362,16 +359,16 @@ export default function UserCard({
             onClick={() => onOpenProfileSidebar?.(userPresence)}
             className={`hidden md:flex p-1.5 text-base font-medium rounded-full border transition-colors items-center justify-center w-[32px] h-[32px] ${
               isProfileSidebarOpen
-                ? 'bg-zinc-100 border-zinc-100'
+                ? 'bg-zinc-100 border-zinc-200'
                 : isSelected
-                  ? 'bg-zinc-50 border-zinc-100 hover:bg-zinc-100'
-                  : 'bg-white border-zinc-100 hover:bg-zinc-100'
+                  ? 'bg-zinc-50 border-zinc-200 hover:bg-zinc-100'
+                  : 'border-transparent hover:bg-zinc-100 hover:border-zinc-200'
             }`}
             disabled={loadingProfile}
             aria-label='Open profile sidebar'
             aria-pressed={isProfileSidebarOpen}
           >
-            <MoreHorizontal className='w-5 h-5 text-zinc-500' />
+            <MoreHorizontal className='w-5 h-5 text-brand-500' />
           </button>
         </div>
       </div>
