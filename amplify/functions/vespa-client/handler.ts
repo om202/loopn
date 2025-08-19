@@ -386,10 +386,36 @@ async function searchUsers(
         // Pure semantic search
         yqlQuery += `({targetHits:${limit}}nearestNeighbor(profileVector, queryVector))`;
       } else {
-        // Enhanced text search with weakAnd for better recall
-        yqlQuery += `(weakAnd(${searchFields
-          .map(field => `${field} contains "${query.replace(/"/g, '\\"')}"`)
-          .join(', ')}))`;
+        // Enhanced text search with proper matching
+        const queryTerms = query
+          .toLowerCase()
+          .split(/\s+/)
+          .filter(term => term.length > 0);
+
+        if (queryTerms.length === 1) {
+          // Single term - use OR across fields with exact and partial matching
+          const singleTermQuery = searchFields
+            .map(
+              field =>
+                `(${field} contains "${queryTerms[0]}" OR ${field} matches "${queryTerms[0]}*")`
+            )
+            .join(' OR ');
+          yqlQuery += `(${singleTermQuery})`;
+        } else {
+          // Multiple terms - use AND for better precision
+          const multiTermQuery = queryTerms
+            .map(term => {
+              const termQuery = searchFields
+                .map(
+                  field =>
+                    `(${field} contains "${term}" OR ${field} matches "${term}*")`
+                )
+                .join(' OR ');
+              return `(${termQuery})`;
+            })
+            .join(' AND ');
+          yqlQuery += `(${multiTermQuery})`;
+        }
       }
     } else {
       yqlQuery += 'true';

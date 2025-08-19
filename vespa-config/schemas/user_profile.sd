@@ -116,17 +116,27 @@ schema user_profile {
     # Ranking profiles for different search scenarios
     rank-profile default {
         first-phase {
-            expression: nativeRank(fullName, jobRole, skills, about, companyName, education, interests, searchableContent)
+            expression: 
+                3.0 * bm25(jobRole) + 
+                2.5 * bm25(skills) + 
+                2.0 * bm25(fullName) + 
+                1.5 * bm25(about) + 
+                1.0 * bm25(companyName) + 
+                1.0 * bm25(education) + 
+                1.0 * bm25(interests) + 
+                1.5 * bm25(searchableContent)
         }
         
         second-phase {
-            expression: firstPhase + 0.1 * attribute(yearsOfExperience)
+            expression: firstPhase + 0.1 * normalize(attribute(yearsOfExperience), 0, 30)
         }
         
         match-features {
-            nativeRank(fullName)
-            nativeRank(jobRole)
-            nativeRank(skills)
+            bm25(fullName)
+            bm25(jobRole)
+            bm25(skills)
+            bm25(about)
+            bm25(searchableContent)
             attribute(yearsOfExperience)
         }
     }
@@ -153,17 +163,27 @@ schema user_profile {
         }
         
         first-phase {
-            expression: 0.7 * nativeRank(fullName, jobRole, skills, about, searchableContent) + 0.3 * closeness(field, profileVector)
+            expression: 
+                0.7 * (
+                    3.0 * bm25(jobRole) + 
+                    2.5 * bm25(skills) + 
+                    2.0 * bm25(fullName) + 
+                    1.5 * bm25(about) + 
+                    1.5 * bm25(searchableContent)
+                ) + 
+                0.3 * closeness(field, profileVector)
         }
         
         second-phase {
-            expression: firstPhase + 0.1 * attribute(yearsOfExperience) + 0.05 * elementCompleteness(skills).completeness
+            expression: firstPhase + 0.1 * normalize(attribute(yearsOfExperience), 0, 30)
         }
         
         match-features {
-            nativeRank(fullName)
-            nativeRank(jobRole)
-            nativeRank(skills)
+            bm25(fullName)
+            bm25(jobRole)
+            bm25(skills)
+            bm25(about)
+            bm25(searchableContent)
             closeness(field, profileVector)
             attribute(yearsOfExperience)
         }
@@ -183,11 +203,24 @@ schema user_profile {
     # Skills-focused ranking
     rank-profile skills_focused {
         first-phase {
-            expression: 0.6 * nativeRank(skills) + 0.3 * nativeRank(jobRole, about) + 0.1 * nativeRank(fullName)
+            expression: 
+                5.0 * bm25(skills) + 
+                2.0 * bm25(jobRole) + 
+                1.5 * bm25(about) + 
+                1.0 * bm25(fullName) +
+                0.5 * bm25(searchableContent)
         }
         
         second-phase {
-            expression: firstPhase + 0.1 * elementCompleteness(skills).completeness
+            expression: firstPhase + 0.2 * elementCompleteness(skills).completeness + 0.1 * normalize(attribute(yearsOfExperience), 0, 30)
+        }
+        
+        match-features {
+            bm25(skills)
+            bm25(jobRole)
+            bm25(about)
+            elementCompleteness(skills).completeness
+            attribute(yearsOfExperience)
         }
     }
 }
