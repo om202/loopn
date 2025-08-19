@@ -220,8 +220,10 @@ export default function DashboardSectionContent({
         };
       case 'search':
         return {
-          title: 'Search',
-          description: 'Search for professionals',
+          title: searchQuery ? 'Search Results' : 'Search',
+          description: searchQuery
+            ? `"${searchQuery}"`
+            : 'Search for professionals',
           emptyIcon: Search,
           emptyMessage: 'Start searching for professionals',
         };

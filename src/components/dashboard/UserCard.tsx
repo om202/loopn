@@ -241,7 +241,10 @@ export default function UserCard({
 
             // Handle pending request state - show as clickable button for consistency
             // BUT: If user has incoming request, prioritize "Accept Request" over "Request Sent"
-            if (pendingRequests.has(userPresence.userId) && !incomingRequestSenderIds.has(userPresence.userId)) {
+            if (
+              pendingRequests.has(userPresence.userId) &&
+              !incomingRequestSenderIds.has(userPresence.userId)
+            ) {
               // Check if this is an optimistic request (no real request data yet)
               const isOptimisticRequest = optimisticPendingRequests.has(
                 userPresence.userId
@@ -293,7 +296,7 @@ export default function UserCard({
                       : 'Send Request'
                 }
               >
-{incomingRequestSenderIds.has(userPresence.userId) ? (
+                {incomingRequestSenderIds.has(userPresence.userId) ? (
                   // Prioritize incoming requests over existing conversations
                   <>
                     <CheckCircle2 className='w-4 h-4 text-white flex-shrink-0' />
@@ -322,9 +325,7 @@ export default function UserCard({
                         ) : (
                           <>
                             <MessageCircle className='w-4 h-4 text-brand-500 flex-shrink-0' />
-                            <span className='text-base font-medium'>
-                              View
-                            </span>
+                            <span className='text-base font-medium'>View</span>
                           </>
                         );
                       })()
@@ -332,17 +333,13 @@ export default function UserCard({
                   ) : (
                     <>
                       <MessageCircle className='w-4 h-4 text-brand-500 flex-shrink-0' />
-                      <span className='text-base font-medium'>
-                        Chat
-                      </span>
+                      <span className='text-base font-medium'>Chat</span>
                     </>
                   )
                 ) : (
                   <>
                     <CheckCircle2 className='w-4 h-4 text-brand-500 flex-shrink-0' />
-                    <span className='text-base font-medium'>
-                      Send Request
-                    </span>
+                    <span className='text-base font-medium'>Send Request</span>
                   </>
                 )}
               </button>
