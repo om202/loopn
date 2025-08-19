@@ -303,7 +303,7 @@ export default function ProfileSidebar({
             className='flex items-center gap-2 text-zinc-500 hover:text-zinc-900 transition-colors'
           >
             <ArrowLeft className='w-4 h-4' />
-            <span className='text-sm font-medium'>Back to Dashboard</span>
+            <span className='text-sm font-medium'>Back</span>
           </button>
         </div>
       )}

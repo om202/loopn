@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 import { Search, X, Clock, Sparkles } from 'lucide-react';
 import {
   getSearchHistory,
@@ -120,7 +121,13 @@ export default function SearchUser({
       <div className='flex items-center gap-3 sm:block'>
         {/* Logo - only visible on mobile */}
         <div className='flex-shrink-0 sm:hidden'>
-          <img src='/loopn.svg' alt='Loopn' className='w-8 h-8' />
+          <Image
+            src='/loopn.svg'
+            alt='Loopn'
+            width={38}
+            height={38}
+            className='w-12 h-12'
+          />
         </div>
 
         <form

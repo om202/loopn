@@ -15,10 +15,8 @@ import { useUserProfile } from '../../hooks/useUserProfile';
 
 import DialogContainer from '../DialogContainer';
 import UserAvatar from '../UserAvatar';
-import {
-  ShimmerProvider,
-  ProfileDetails_Shimmer,
-} from '../ShimmerLoader/exports';
+
+import ProfileSidebar from '../ProfileSidebar';
 
 type UserPresence = Schema['UserPresence']['type'];
 type Conversation = Schema['Conversation']['type'];
@@ -378,175 +376,26 @@ export default function UserCard({
         </div>
       </div>
 
-      {/* Profile Summary Dialog */}
+      {/* Mobile Profile Dialog - Using ProfileSidebar */}
       <DialogContainer
         isOpen={showProfileDialog}
         onClose={() => setShowProfileDialog(false)}
         maxWidth='md'
       >
-        <div className='p-6'>
-          <h3 className='text-lg font-medium text-zinc-900 mb-4'>
-            Profile Summary
-          </h3>
-          <div className='mb-4'>
-            <div className='text-sm text-zinc-500 mb-2'>
-              {getDisplayName(userPresence, userProfile)}
-            </div>
-            {loadingProfile ? (
-              <ShimmerProvider>
-                <ProfileDetails_Shimmer />
-              </ShimmerProvider>
-            ) : finalFullProfile ? (
-              <div className='space-y-5'>
-                {/* Professional Info Section */}
-                {(finalFullProfile.jobRole ||
-                  finalFullProfile.companyName ||
-                  finalFullProfile.industry ||
-                  finalFullProfile.yearsOfExperience !== null) && (
-                  <div>
-                    <h4 className='text-sm font-semibold text-zinc-900 mb-3 border-b border-zinc-100 pb-2'>
-                      Profile
-                    </h4>
-                    <div className='space-y-3'>
-                      {finalFullProfile.jobRole && (
-                        <div>
-                          <dt className='text-sm font-medium text-zinc-500 mb-1'>
-                            Role
-                          </dt>
-                          <dd className='text-sm text-zinc-900'>
-                            {finalFullProfile.jobRole}
-                          </dd>
-                        </div>
-                      )}
-                      {finalFullProfile.companyName && (
-                        <div>
-                          <dt className='text-sm font-medium text-zinc-500 mb-1'>
-                            Company
-                          </dt>
-                          <dd className='text-sm text-zinc-900'>
-                            {finalFullProfile.companyName}
-                          </dd>
-                        </div>
-                      )}
-                      {finalFullProfile.industry && (
-                        <div>
-                          <dt className='text-sm font-medium text-zinc-500 mb-1'>
-                            Industry
-                          </dt>
-                          <dd className='text-sm text-zinc-900'>
-                            {finalFullProfile.industry}
-                          </dd>
-                        </div>
-                      )}
-                      {finalFullProfile.yearsOfExperience !== null &&
-                        finalFullProfile.yearsOfExperience !== undefined && (
-                          <div>
-                            <dt className='text-sm font-medium text-zinc-500 mb-1'>
-                              Experience
-                            </dt>
-                            <dd className='text-sm text-zinc-900'>
-                              {finalFullProfile.yearsOfExperience} years
-                            </dd>
-                          </div>
-                        )}
-                    </div>
-                  </div>
-                )}
-
-                {/* Education Section */}
-                {finalFullProfile.education && (
-                  <div>
-                    <h4 className='text-sm font-semibold text-zinc-500 mb-3 border-b border-zinc-100 pb-2'>
-                      Education
-                    </h4>
-                    <div>
-                      <dd className='text-sm text-zinc-900'>
-                        {finalFullProfile.education}
-                      </dd>
-                    </div>
-                  </div>
-                )}
-
-                {/* About Section */}
-                {finalFullProfile.about && (
-                  <div>
-                    <h4 className='text-sm font-semibold text-zinc-900 mb-3 border-b border-zinc-100 pb-2'>
-                      About
-                    </h4>
-                    <div>
-                      <dd className='text-sm text-zinc-900 leading-relaxed'>
-                        {finalFullProfile.about}
-                      </dd>
-                    </div>
-                  </div>
-                )}
-
-                {/* Skills & Interests Section */}
-                {((finalFullProfile.skills &&
-                  finalFullProfile.skills.length > 0) ||
-                  (finalFullProfile.interests &&
-                    finalFullProfile.interests.length > 0)) && (
-                  <div>
-                    <h4 className='text-sm font-semibold text-zinc-900 mb-3 border-b border-zinc-100 pb-2'>
-                      Skills & Interests
-                    </h4>
-                    <div className='space-y-3'>
-                      {finalFullProfile.skills &&
-                        finalFullProfile.skills.length > 0 && (
-                          <div>
-                            <dt className='text-sm font-medium text-zinc-500 mb-2'>
-                              Skills
-                            </dt>
-                            <dd className='flex flex-wrap gap-2'>
-                              {finalFullProfile.skills.map((skill, index) => (
-                                <span
-                                  key={index}
-                                  className='px-2 py-1 text-sm bg-brand-50 text-brand-700 rounded-md border border-brand-100'
-                                >
-                                  {skill}
-                                </span>
-                              ))}
-                            </dd>
-                          </div>
-                        )}
-                      {finalFullProfile.interests &&
-                        finalFullProfile.interests.length > 0 && (
-                          <div>
-                            <dt className='text-sm font-medium text-zinc-500 mb-2'>
-                              Interests
-                            </dt>
-                            <dd className='flex flex-wrap gap-2'>
-                              {finalFullProfile.interests.map(
-                                (interest, index) => (
-                                  <span
-                                    key={index}
-                                    className='px-2 py-1 text-sm bg-b_green-50 text-b_green-700 rounded-md border border-b_green-100'
-                                  >
-                                    {interest}
-                                  </span>
-                                )
-                              )}
-                            </dd>
-                          </div>
-                        )}
-                    </div>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className='text-sm text-zinc-500 text-center py-4'>
-                No profile details available.
-              </div>
-            )}
-          </div>
-          <div className='flex'>
-            <button
-              onClick={() => setShowProfileDialog(false)}
-              className='w-full px-4 py-2 text-sm font-medium text-white bg-brand-500 border border-zinc-200 rounded-lg focus:outline-none transition-colors'
-            >
-              OK
-            </button>
-          </div>
+        <div className='h-[80vh] max-h-[600px]'>
+          <ProfileSidebar
+            userId={userPresence.userId}
+            userPresence={userPresence}
+            onlineUsers={onlineUsers}
+            showActionButtons={true}
+            existingConversations={existingConversations}
+            pendingRequests={pendingRequests}
+            onChatAction={onChatAction}
+            onCancelChatRequest={onCancelChatRequest}
+            canUserReconnect={canUserReconnect}
+            getReconnectTimeRemaining={getReconnectTimeRemaining}
+            onBack={() => setShowProfileDialog(false)}
+          />
         </div>
       </DialogContainer>
 

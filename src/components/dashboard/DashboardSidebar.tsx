@@ -264,7 +264,7 @@ export default function DashboardSidebar({
 
       {/* Mobile Bottom Bar */}
       <div className='lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-zinc-100 border-t border-zinc-200'>
-        <nav className='flex items-stretch px-4 py-2'>
+        <nav className='flex items-stretch px-2 py-1'>
           <div className='flex w-full'>
             {[
               // Filter out help for mobile
@@ -274,18 +274,18 @@ export default function DashboardSidebar({
               <button
                 key={id}
                 onClick={() => onSectionChange(id)}
-                className={`relative flex-1 flex flex-col items-center justify-center gap-1.5 px-1 py-2.5 transition-colors duration-150 ${
+                className={`relative flex-1 flex flex-col items-center justify-center gap-1 px-1 py-2 transition-colors duration-150 ${
                   activeSection === id
                     ? 'text-brand-600'
                     : 'text-zinc-900 hover:text-zinc-900'
                 }`}
                 title={label}
               >
-                <div className='relative w-6 h-6 flex-shrink-0 flex items-center justify-center'>
+                <div className='relative w-8 h-8 flex-shrink-0 flex items-center justify-center'>
                   {icon === 'NotificationBell' ? (
                     <>
                       <svg
-                        className='w-6 h-6'
+                        className='w-8 h-8'
                         fill='none'
                         stroke='currentColor'
                         viewBox='0 0 24 24'
@@ -306,7 +306,7 @@ export default function DashboardSidebar({
                       )}
                     </>
                   ) : icon === 'UserAvatar' ? (
-                    <div className='w-6 h-6 flex items-center justify-center'>
+                    <div className='w-8 h-8 flex items-center justify-center'>
                       <UserAvatar
                         email={getUserEmail()}
                         userId={user?.userId}
@@ -318,14 +318,14 @@ export default function DashboardSidebar({
                           !!userProfile?.profilePictureUrl ||
                           !!onboardingStatus?.onboardingData?.profilePictureUrl
                         }
-                        size='xs'
+                        size='sm'
                         showStatus={true}
                         status='ONLINE'
                       />
                     </div>
                   ) : (
                     React.createElement(icon, {
-                      className: 'w-6 h-6',
+                      className: 'w-8 h-8',
                     })
                   )}
                 </div>
