@@ -307,7 +307,7 @@ export default function ProfileSidebar({
             <ArrowLeft className='w-4 h-4' />
             <span className='text-sm font-medium'>Back</span>
           </button>
-          
+
           {/* Remove Connection Button - Top Right */}
           {onEndChat && (
             <button
@@ -375,7 +375,10 @@ export default function ProfileSidebar({
               <div className='mb-1 mt-1'>
                 {/* Trial Chat Info with End Chat Icon - Centered */}
                 <div className='text-center text-sm text-zinc-600 mb-3'>
-                  <span className='font-medium'>Connection Expires in <span className='font-bold text-zinc-900'>{timeLeft}</span></span>
+                  <span className='font-medium'>
+                    Connection Expires in{' '}
+                    <span className='font-bold text-zinc-900'>{timeLeft}</span>
+                  </span>
                 </div>
 
                 {/* Connect Button */}
@@ -420,8 +423,6 @@ export default function ProfileSidebar({
                     </Tooltip>
                   )}
                 </div>
-
-
               </div>
             )}
 
@@ -614,7 +615,8 @@ export default function ProfileSidebar({
             Remove {getUserDisplayName()} from your connection?
           </h3>
           <p className='text-sm text-zinc-600 text-center mb-4'>
-            This will end your trial chat immediately. Chat history will remain accessible until the trial expires.
+            This will end your trial chat immediately. Chat history will remain
+            accessible until the trial expires.
           </p>
           <div className='flex gap-2'>
             <button

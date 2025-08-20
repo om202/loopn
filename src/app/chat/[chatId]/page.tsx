@@ -345,7 +345,7 @@ export default function ChatPage({ params }: ChatPageProps) {
         style={{ height: '100dvh' }}
       >
         <div className='h-full flex justify-center'>
-          <div className='w-full max-w-[1440px] h-full flex'>
+          <div className='w-full max-w-[1280px] h-full flex'>
             {/* Left Sidebar - Desktop Only */}
             <div className='hidden lg:flex lg:w-80 xl:w-96 flex-shrink-0 h-full'>
               <div className='w-full p-3 lg:p-4 h-full'>

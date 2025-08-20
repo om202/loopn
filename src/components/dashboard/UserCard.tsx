@@ -306,9 +306,7 @@ export default function UserCard({
                     canUserReconnect(userPresence.userId) ? (
                       <>
                         <Plus className='w-4 h-4 text-brand-500 flex-shrink-0' />
-                        <span className='text-base font-medium'>
-                          Connect
-                        </span>
+                        <span className='text-base font-medium'>Connect</span>
                       </>
                     ) : (
                       (() => {
