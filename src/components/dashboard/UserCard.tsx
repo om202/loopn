@@ -361,7 +361,7 @@ export default function UserCard({
                 ? 'bg-zinc-100 border-zinc-200'
                 : isSelected
                   ? 'bg-zinc-50 border-zinc-200 hover:bg-zinc-100'
-                  : 'border-transparent hover:bg-zinc-100 hover:border-zinc-200'
+                  : 'border-transparent hover:bg-zinc-100 hover:border-zinc-200 group-hover:bg-white group-hover:border-zinc-200'
             }`}
             disabled={loadingProfile}
             aria-label='Open profile sidebar'

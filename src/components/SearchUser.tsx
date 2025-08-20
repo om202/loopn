@@ -24,6 +24,7 @@ export default function SearchUser({
   const [isProcessing, setIsProcessing] = useState(false);
   const [searchHistory, setSearchHistory] = useState<SearchHistoryItem[]>([]);
   const [showHistory, setShowHistory] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -78,9 +79,14 @@ export default function SearchUser({
   };
 
   const handleInputFocus = () => {
+    setIsFocused(true);
     if (searchHistory.length > 0) {
       setShowHistory(true);
     }
+  };
+
+  const handleInputBlur = () => {
+    setIsFocused(false);
   };
 
   const handleHistoryItemClick = (historyQuery: string) => {
@@ -117,7 +123,7 @@ export default function SearchUser({
   };
 
   return (
-    <div className='w-full sm:max-w-2xl sm:mx-auto relative'>
+    <div className='w-full sm:max-w-xl sm:mx-auto relative'>
       {/* Mobile Logo + Search Layout */}
       <div className='flex items-center gap-3 sm:block'>
         {/* Logo - only visible on mobile */}
@@ -166,6 +172,7 @@ export default function SearchUser({
             value={query}
             onChange={handleInputChange}
             onFocus={handleInputFocus}
+            onBlur={handleInputBlur}
             disabled={isProcessing}
             autoComplete='off'
             autoCorrect='off'
@@ -206,12 +213,23 @@ export default function SearchUser({
 
           <button
             type='submit'
-            className='absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full hover:bg-gray-50 flex items-center justify-center transition-colors duration-150 shadow-sm border border-gray-200'
+            className={`absolute right-2 top-1/2 -translate-y-1/2 bg-white rounded-full hover:bg-gray-50 flex items-center justify-center transition-all duration-300 ease-out border border-gray-200 overflow-hidden ${
+              isFocused ? 'w-24 h-8 px-4' : 'w-8 h-8'
+            }`}
           >
             {isProcessing ? (
-              <div className='w-4 h-4 border-2 border-brand-500 border-t-transparent rounded-full animate-spin' />
+              <div className='w-4 h-4 border-2 border-brand-500 border-t-transparent rounded-full animate-spin flex-shrink-0' />
             ) : (
-              <Search className='w-4 h-4 text-brand-500' />
+              <>
+                <Search className='w-4 h-4 text-brand-500 flex-shrink-0' />
+                {isFocused && (
+                  <span 
+                    className='text-sm font-medium text-brand-500 whitespace-nowrap transition-all duration-300 ease-out ml-2'
+                  >
+                    Search
+                  </span>
+                )}
+              </>
             )}
           </button>
         </form>

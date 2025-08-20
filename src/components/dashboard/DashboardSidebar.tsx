@@ -128,7 +128,7 @@ export default function DashboardSidebar({
       <div className='hidden lg:block w-64 flex-shrink-0'>
         <div className='bg-white rounded-2xl border border-zinc-200 h-full flex flex-col'>
           {/* Logo at top */}
-          <div className='px-4 py-6 border-b border-zinc-100'>
+          <div className='px-4 py-4 border-b border-zinc-100'>
             <div className='flex items-center justify-between'>
               <Link
                 href='/?stay=true'
