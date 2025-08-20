@@ -322,10 +322,10 @@ export default function ChatPage({ params }: ChatPageProps) {
           style={{ minHeight: '100dvh' }}
         >
           <div className='text-center'>
-            <h1 className='text-2xl font-bold text-zinc-900 mb-4'>
+            <h1 className='text-2xl font-bold text-slate-900 mb-4'>
               Chat Not Found
             </h1>
-            <p className='text-zinc-900 mb-4'>{error}</p>
+            <p className='text-slate-900 mb-4'>{error}</p>
             <button
               onClick={() => router.push('/dashboard')}
               className='px-4 py-2 bg-brand-500 text-white rounded-lg hover:bg-brand-500'
@@ -341,7 +341,7 @@ export default function ChatPage({ params }: ChatPageProps) {
   return (
     <ProtectedRoute requireOnboarding={true}>
       <div
-        className='h-screen bg-white lg:bg-zinc-100'
+        className='h-screen bg-white lg:bg-slate-100'
         style={{ height: '100dvh' }}
       >
         <div className='h-full flex justify-center'>
@@ -386,7 +386,7 @@ export default function ChatPage({ params }: ChatPageProps) {
               )}
 
               <div className='flex-1 p-3 lg:p-4 lg:pl-0 min-h-0'>
-                <div className='h-full lg:bg-white lg:rounded-2xl lg:border lg:border-zinc-200 overflow-hidden'>
+                <div className='h-full lg:bg-white lg:rounded-2xl lg:border lg:border-slate-200 overflow-hidden'>
                   <ChatWindow
                     conversation={
                       conversation || {

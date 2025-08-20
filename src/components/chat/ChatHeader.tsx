@@ -115,7 +115,7 @@ export default function ChatHeader({
 
   return (
     <div
-      className='flex-shrink-0 bg-white border-b border-zinc-200 relative z-10'
+      className='flex-shrink-0 bg-white border-b border-slate-200 relative z-10'
       style={{ boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.04)' }}
     >
       <div className='w-full px-3 sm:px-4 lg:px-6'>
@@ -124,7 +124,7 @@ export default function ChatHeader({
             {/* Back Button */}
             <button
               onClick={onBack}
-              className='p-1.5 sm:p-2 -ml-1 sm:-ml-2 text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2'
+              className='p-1.5 sm:p-2 -ml-1 sm:-ml-2 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2'
             >
               <svg
                 className='w-4 h-4 sm:w-5 sm:h-5'
@@ -162,13 +162,13 @@ export default function ChatHeader({
             />
 
             <div className='flex-1 min-w-0'>
-              <h1 className='text-sm sm:text-base font-medium text-zinc-900 truncate no-email-detection'>
+              <h1 className='text-sm sm:text-base font-medium text-slate-900 truncate no-email-detection'>
                 {getUserDisplayName()}
               </h1>
 
               {/* Profession */}
               {userProfile?.jobRole && (
-                <div className='text-sm sm:text-sm text-zinc-500 mb-1 truncate'>
+                <div className='text-sm sm:text-sm text-slate-500 mb-1 truncate'>
                   {userProfile.jobRole}
                 </div>
               )}
@@ -201,15 +201,15 @@ export default function ChatHeader({
                 {/* Chat Ended State */}
                 {conversation.chatStatus === 'ENDED' && (
                   <div className='flex items-center gap-2 sm:gap-3 md:gap-4'>
-                    <div className='flex items-center gap-1 sm:gap-2 text-sm sm:text-sm text-zinc-900'>
+                    <div className='flex items-center gap-1 sm:gap-2 text-sm sm:text-sm text-slate-900'>
                       <button
                         onClick={() => setShowChatEndedInfoDialog(true)}
-                        className='flex items-center gap-1 text-zinc-500 hover:text-zinc-900 transition-colors p-1 rounded-full hover:bg-zinc-100 flex-shrink-0'
+                        className='flex items-center gap-1 text-slate-500 hover:text-slate-900 transition-colors p-1 rounded-full hover:bg-slate-100 flex-shrink-0'
                         title='Learn about ended chats'
                       >
                         <Info className='w-3 sm:w-4 h-3 sm:h-4' />
                       </button>
-                      <span className='font-medium text-zinc-900 whitespace-nowrap'>
+                      <span className='font-medium text-slate-900 whitespace-nowrap'>
                         <span className='hidden sm:inline'>Chat Ended</span>
                         <span className='sm:hidden'>Ended</span>
                       </span>
@@ -217,8 +217,8 @@ export default function ChatHeader({
                         <span
                           className={`text-sm sm:text-sm ${
                             reconnectionTime === 'Can reconnect now'
-                              ? 'text-zinc-500 font-medium'
-                              : 'text-zinc-500'
+                              ? 'text-slate-500 font-medium'
+                              : 'text-slate-500'
                           } hidden md:inline`}
                         >
                           {reconnectionTime}
@@ -230,12 +230,12 @@ export default function ChatHeader({
                     {reconnectionTime === 'Can reconnect now' && (
                       <>
                         {/* Line Separator - hidden on small screens */}
-                        <div className='w-px h-4 sm:h-6 bg-zinc-100 hidden sm:block'></div>
+                        <div className='w-px h-4 sm:h-6 bg-slate-100 hidden sm:block'></div>
 
                         {/* Reconnect Button */}
                         <button
                           onClick={onReconnect}
-                          className='flex items-center gap-1 sm:gap-1.5 px-3 sm:px-3 lg:px-4 py-2 sm:py-2 bg-zinc-500 hover:bg-zinc-500 text-white rounded-lg shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 flex-shrink-0'
+                          className='flex items-center gap-1 sm:gap-1.5 px-3 sm:px-3 lg:px-4 py-2 sm:py-2 bg-slate-500 hover:bg-slate-500 text-white rounded-lg shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 flex-shrink-0'
                         >
                           <Image
                             src='/connect-icon.svg'
@@ -258,25 +258,25 @@ export default function ChatHeader({
                   !!timeLeft &&
                   timeLeft !== 'Expired' && (
                     <div className='flex items-center gap-1 sm:gap-2 text-sm sm:text-sm'>
-                      <div className='flex items-center gap-1 sm:gap-2 text-zinc-500 mr-1 sm:mr-2'>
+                      <div className='flex items-center gap-1 sm:gap-2 text-slate-500 mr-1 sm:mr-2'>
                         <button
                           onClick={() => setShowTrialInfoDialog(true)}
-                          className='flex items-center gap-1 hover:bg-zinc-100 rounded-full p-1 transition-colors'
+                          className='flex items-center gap-1 hover:bg-slate-100 rounded-full p-1 transition-colors'
                           title='Learn about trial chat period'
                         >
-                          <Clock className='w-4 h-4 text-zinc-500 sm:hidden flex-shrink-0' />
+                          <Clock className='w-4 h-4 text-slate-500 sm:hidden flex-shrink-0' />
                           <Clock className='w-3 sm:w-4 h-3 sm:h-4 text-brand-500 hidden sm:block' />
                           <span className='font-medium hidden sm:inline'>
                             Trial Chat
                           </span>
                         </button>
-                        <span className='text-zinc-900 text-sm font-bold whitespace-nowrap'>
+                        <span className='text-slate-900 text-sm font-bold whitespace-nowrap'>
                           {timeLeft}
                         </span>
                       </div>
 
                       {/* Line Separator - hidden on small screens */}
-                      <div className='w-0.5 h-6 sm:h-8 bg-zinc-100 mr-1 sm:mr-2 hidden sm:block'></div>
+                      <div className='w-0.5 h-6 sm:h-8 bg-slate-100 mr-1 sm:mr-2 hidden sm:block'></div>
 
                       {/* Connect Button */}
                       <button
@@ -327,10 +327,10 @@ export default function ChatHeader({
         maxWidth='xs'
       >
         <div className='p-4'>
-          <h3 className='text-lg font-medium text-zinc-900 text-center mb-3'>
+          <h3 className='text-lg font-medium text-slate-900 text-center mb-3'>
             End trial chat?
           </h3>
-          <p className='text-sm text-zinc-900 text-center mb-4'>
+          <p className='text-sm text-slate-900 text-center mb-4'>
             This will immediately end the chat. You won&apos;t be able to send
             more messages, but chat history will remain accessible until the
             trial period expires.
@@ -338,7 +338,7 @@ export default function ChatHeader({
           <div className='flex gap-2'>
             <button
               onClick={() => setShowEndChatDialog(false)}
-              className='flex-1 px-3 py-2 text-base font-medium text-zinc-900 bg-zinc-100 rounded-lg hover:bg-zinc-100 focus:outline-none transition-colors'
+              className='flex-1 px-3 py-2 text-base font-medium text-slate-900 bg-slate-100 rounded-lg hover:bg-slate-100 focus:outline-none transition-colors'
             >
               Cancel
             </button>
@@ -347,7 +347,7 @@ export default function ChatHeader({
                 onEndChat();
                 setShowEndChatDialog(false);
               }}
-              className='flex-1 px-3 py-2 text-base font-medium text-b_red-600 bg-zinc-100 rounded-lg hover:bg-zinc-200 focus:outline-none transition-colors'
+              className='flex-1 px-3 py-2 text-base font-medium text-b_red-600 bg-slate-100 rounded-lg hover:bg-slate-200 focus:outline-none transition-colors'
             >
               End Chat
             </button>
@@ -362,11 +362,11 @@ export default function ChatHeader({
         maxWidth='md'
       >
         <div className='p-6'>
-          <h3 className='text-lg font-semibold text-zinc-900 mb-4'>
+          <h3 className='text-lg font-semibold text-slate-900 mb-4'>
             Chat Ended
           </h3>
 
-          <div className='text-base text-zinc-900 space-y-3'>
+          <div className='text-base text-slate-900 space-y-3'>
             <p>
               <strong>What happened?</strong>
               <br />
@@ -394,7 +394,7 @@ export default function ChatHeader({
               period (testing mode)
             </p>
 
-            <p className='text-zinc-900'>
+            <p className='text-slate-900'>
               💡 <strong>Note:</strong> Ending a chat early helps both parties
               move on respectfully when the conversation isn&apos;t working out.
             </p>
@@ -403,7 +403,7 @@ export default function ChatHeader({
           <div className='mt-6'>
             <button
               onClick={() => setShowChatEndedInfoDialog(false)}
-              className='w-full px-4 py-2 text-base font-medium text-white bg-zinc-500 rounded-lg hover:bg-zinc-500 focus:outline-none transition-colors'
+              className='w-full px-4 py-2 text-base font-medium text-white bg-slate-500 rounded-lg hover:bg-slate-500 focus:outline-none transition-colors'
             >
               Got it
             </button>

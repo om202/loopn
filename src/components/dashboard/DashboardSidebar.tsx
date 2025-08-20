@@ -126,9 +126,9 @@ export default function DashboardSidebar({
     <>
       {/* Desktop Sidebar */}
       <div className='hidden lg:block w-64 flex-shrink-0'>
-        <div className='bg-white rounded-2xl border border-zinc-200 h-full flex flex-col'>
+        <div className='bg-white rounded-2xl border border-slate-200 h-full flex flex-col'>
           {/* Logo at top */}
-          <div className='px-4 py-4 border-b border-zinc-100'>
+          <div className='px-4 py-4 border-b border-slate-100'>
             <div className='flex items-center justify-between'>
               <Link
                 href='/?stay=true'
@@ -142,7 +142,7 @@ export default function DashboardSidebar({
                   priority
                 />
                 <div className='flex items-center gap-2'>
-                  <h1 className='text-2xl font-bold text-zinc-900'>Loopn</h1>
+                  <h1 className='text-2xl font-bold text-slate-900'>Loopn</h1>
                 </div>
               </Link>
             </div>
@@ -158,7 +158,7 @@ export default function DashboardSidebar({
                   className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                     activeSection === id
                       ? 'bg-brand-50 text-brand-700 border-brand-200'
-                      : 'text-zinc-900 hover:bg-zinc-50 hover:text-zinc-900 border-transparent'
+                      : 'text-slate-900 hover:bg-slate-50 hover:text-slate-900 border-transparent'
                   }`}
                 >
                   <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -196,7 +196,7 @@ export default function DashboardSidebar({
           </nav>
 
           {/* Help and Account buttons at bottom */}
-          <div className='border-t border-zinc-100 p-2 space-y-1'>
+          <div className='border-t border-slate-100 p-2 space-y-1'>
             {/* Help Button with Bug Report Button */}
             <div className='flex items-center gap-2'>
               <button
@@ -204,7 +204,7 @@ export default function DashboardSidebar({
                 className={`relative flex-1 flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                   activeSection === helpItem.id
                     ? 'bg-brand-50 text-brand-700 border-brand-200'
-                    : 'text-zinc-900 hover:bg-zinc-50 hover:text-zinc-900 border-transparent'
+                    : 'text-slate-900 hover:bg-slate-50 hover:text-slate-900 border-transparent'
                 }`}
               >
                 <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -217,7 +217,7 @@ export default function DashboardSidebar({
 
               <button
                 onClick={() => setIsBugReportOpen(true)}
-                className='p-2 text-zinc-500 hover:text-zinc-900 hover:bg-zinc-50 rounded-lg transition-colors border border-transparent hover:border-zinc-200'
+                className='p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition-colors border border-transparent hover:border-slate-200'
                 title='Report Bug / Share Suggestion'
               >
                 <Bug className='w-4 h-4' />
@@ -230,7 +230,7 @@ export default function DashboardSidebar({
               className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                 activeSection === accountItem.id
                   ? 'bg-brand-50 text-brand-700 border-brand-200'
-                  : 'text-zinc-700 hover:bg-zinc-50 hover:text-zinc-900 border-transparent'
+                  : 'text-slate-700 hover:bg-slate-50 hover:text-slate-900 border-transparent'
               }`}
             >
               <div className='flex-shrink-0 flex items-center justify-center'>
@@ -252,7 +252,7 @@ export default function DashboardSidebar({
               </div>
               <div className='flex-1'>
                 <div className='font-medium text-base'>{accountItem.label}</div>
-                <div className='text-sm text-zinc-500'>You</div>
+                <div className='text-sm text-slate-500'>You</div>
               </div>
             </button>
           </div>
@@ -260,7 +260,7 @@ export default function DashboardSidebar({
       </div>
 
       {/* Mobile Bottom Bar */}
-      <div className='lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-zinc-100 border-t border-zinc-200'>
+      <div className='lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-slate-100 border-t border-slate-200'>
         <nav className='flex items-stretch px-2 py-1'>
           <div className='flex w-full'>
             {[
@@ -274,7 +274,7 @@ export default function DashboardSidebar({
                 className={`relative flex-1 flex flex-col items-center justify-center gap-1 px-1 py-2 transition-colors duration-150 ${
                   activeSection === id
                     ? 'text-brand-600'
-                    : 'text-zinc-900 hover:text-zinc-900'
+                    : 'text-slate-900 hover:text-slate-900'
                 }`}
                 title={label}
               >

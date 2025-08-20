@@ -34,8 +34,8 @@ export default function SignInForm({
   return (
     <div className='w-full'>
       {/* Sign up prompt at the top */}
-      <div className='text-center mb-6 p-4 bg-zinc-50 rounded-xl border border-zinc-200'>
-        <span className='text-sm text-zinc-700 mr-3 font-medium'>
+      <div className='text-center mb-6 p-4 bg-slate-50 rounded-xl border border-slate-200'>
+        <span className='text-sm text-slate-700 mr-3 font-medium'>
           New to Loopn?
         </span>
         <button
@@ -60,20 +60,20 @@ export default function SignInForm({
         <div>
           <label
             htmlFor='email'
-            className='block text-sm font-medium text-zinc-900 mb-3'
+            className='block text-sm font-medium text-slate-900 mb-3'
           >
             Email address
           </label>
           <div className='relative'>
             <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-              <Mail className='h-5 w-5 text-zinc-500' />
+              <Mail className='h-5 w-5 text-slate-500' />
             </div>
             <input
               id='email'
               type='email'
               value={email}
               onChange={e => setEmail(e.target.value)}
-              className='w-full pl-10 pr-4 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white'
+              className='w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white'
               placeholder='Enter your email'
               required
             />
@@ -83,27 +83,27 @@ export default function SignInForm({
         <div>
           <label
             htmlFor='password'
-            className='block text-sm font-medium text-zinc-900 mb-3'
+            className='block text-sm font-medium text-slate-900 mb-3'
           >
             Password
           </label>
           <div className='relative'>
             <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-              <Lock className='h-5 w-5 text-zinc-500' />
+              <Lock className='h-5 w-5 text-slate-500' />
             </div>
             <input
               id='password'
               type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={e => setPassword(e.target.value)}
-              className='w-full pl-10 pr-12 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white'
+              className='w-full pl-10 pr-12 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white'
               placeholder='Enter your password'
               required
             />
             <button
               type='button'
               onClick={() => setShowPassword(!showPassword)}
-              className='absolute inset-y-0 right-0 pr-3 flex items-center text-zinc-500 hover:text-zinc-700 transition-colors'
+              className='absolute inset-y-0 right-0 pr-3 flex items-center text-slate-500 hover:text-slate-700 transition-colors'
             >
               {showPassword ? (
                 <EyeOff className='h-5 w-5' />

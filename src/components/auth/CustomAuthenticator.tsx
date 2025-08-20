@@ -35,10 +35,10 @@ export default function CustomAuthenticator({
       <Link href='/home' className='inline-block'>
         <div className='flex items-center justify-center space-x-3 mb-6 cursor-pointer hover:opacity-80 transition-opacity'>
           <Image src='/loopn.svg' alt='Loopn' width={48} height={48} priority />
-          <h1 className='text-3xl font-bold text-zinc-900'>Loopn</h1>
+          <h1 className='text-3xl font-bold text-slate-900'>Loopn</h1>
         </div>
       </Link>
-      <p className='text-zinc-900 text-base'>
+      <p className='text-slate-900 text-base'>
         {authState.view === 'signIn' && 'Please sign in to continue'}
         {authState.view === 'signUp' && 'Create your account to get started'}
         {authState.view === 'confirmSignUp' && 'Confirm your email address'}
@@ -104,10 +104,10 @@ export default function CustomAuthenticator({
   };
 
   return (
-    <div className='min-h-screen bg-zinc-100 flex items-center justify-center px-4 py-8'>
+    <div className='min-h-screen bg-slate-100 flex items-center justify-center px-4 py-8'>
       <div className='w-full max-w-md'>
         {/* Main Auth Card */}
-        <div className='bg-white rounded-2xl border border-zinc-200 p-6 lg:p-8 shadow-lg'>
+        <div className='bg-white rounded-2xl border border-slate-200 p-6 lg:p-8 shadow-lg'>
           <AuthHeader />
           {renderCurrentView()}
         </div>

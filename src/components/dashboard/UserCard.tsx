@@ -157,7 +157,7 @@ export default function UserCard({
       className={`px-3 py-2 group transition-all duration-200 cursor-pointer ${
         isSelected
           ? 'bg-brand-50 rounded-2xl border border-brand-200'
-          : 'bg-white hover:bg-zinc-50 hover:rounded-2xl border border-transparent border-b-zinc-100 last:border-b-0'
+          : 'bg-white hover:bg-slate-50 hover:rounded-2xl border border-transparent border-b-slate-100 last:border-b-0'
       }`}
     >
       <div className='flex items-center gap-3'>
@@ -185,14 +185,14 @@ export default function UserCard({
 
         <div className='flex-1 min-w-0'>
           <div className='flex items-center gap-2 mb-1'>
-            <div className='text-zinc-900 truncate no-email-detection font-medium'>
+            <div className='text-slate-900 truncate no-email-detection font-medium'>
               {getDisplayName(userPresence, userProfile)}
             </div>
           </div>
 
           {/* Profession */}
           {(finalFullProfile?.jobRole || finalFullProfile?.companyName) && (
-            <div className='text-[15px] text-zinc-500 mb-1.5 truncate'>
+            <div className='text-[15px] text-slate-500 mb-1.5 truncate'>
               {finalFullProfile?.jobRole && finalFullProfile?.companyName
                 ? `${finalFullProfile.jobRole} at ${finalFullProfile.companyName}`
                 : finalFullProfile?.jobRole || finalFullProfile?.companyName}
@@ -219,19 +219,19 @@ export default function UserCard({
                   }`}
                 >
                   <div
-                    className='text-zinc-500 flex flex-col items-center gap-0.5 md:text-right'
+                    className='text-slate-500 flex flex-col items-center gap-0.5 md:text-right'
                     title={`Reconnect in ${timeRemaining}`}
                   >
                     <div className='md:hidden flex flex-col items-center gap-0.5'>
-                      <Clock className='w-4 h-4 text-zinc-500' />
+                      <Clock className='w-4 h-4 text-slate-500' />
                       <span className='text-[10px] leading-none'>
                         {timeRemaining}
                       </span>
                     </div>
                     <div className='hidden md:block text-sm'>
-                      <div className='text-zinc-500 text-sm'>Reconnect in</div>
-                      <div className='text-zinc-500 flex items-center justify-end gap-1'>
-                        <Clock className='w-3 h-3 text-zinc-500' />
+                      <div className='text-slate-500 text-sm'>Reconnect in</div>
+                      <div className='text-slate-500 flex items-center justify-end gap-1'>
+                        <Clock className='w-3 h-3 text-slate-500' />
                         <span className='text-sm'>{timeRemaining}</span>
                       </div>
                     </div>
@@ -255,15 +255,15 @@ export default function UserCard({
                 <button
                   onClick={() => setShowCancelDialog(true)}
                   disabled={isOptimisticRequest}
-                  className='flex items-center gap-1 px-2 py-1.5 text-sm text-zinc-500 hover:bg-zinc-50 rounded transition-colors disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:opacity-60'
+                  className='flex items-center gap-1 px-2 py-1.5 text-sm text-slate-500 hover:bg-slate-50 rounded transition-colors disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:opacity-60'
                   title={
                     isOptimisticRequest
                       ? 'Request being sent...'
                       : 'Cancel Request'
                   }
                 >
-                  <Clock className='w-4 h-4 text-zinc-500 flex-shrink-0' />
-                  <span className='text-base text-zinc-500'>Pending</span>
+                  <Clock className='w-4 h-4 text-slate-500 flex-shrink-0' />
+                  <span className='text-base text-slate-500'>Pending</span>
                 </button>
               );
             }
@@ -315,7 +315,7 @@ export default function UserCard({
                           userPresence.userId
                         );
                         return timeRemaining ? (
-                          <Clock className='w-4 h-4 text-zinc-500 flex-shrink-0' />
+                          <Clock className='w-4 h-4 text-slate-500 flex-shrink-0' />
                         ) : (
                           <>
                             <MessageCircle className='w-4 h-4 text-brand-500 flex-shrink-0' />
@@ -344,13 +344,13 @@ export default function UserCard({
           {/* Mobile: Profile dialog button */}
           <button
             onClick={() => setShowProfileDialog(true)}
-            className={`md:hidden px-2.5 py-2 text-base font-medium rounded-xl border transition-colors text-zinc-900 border-brand-100 hover:bg-brand-100 hover:border-brand-100 flex items-center justify-center flex-shrink-0 w-[40px] h-[40px] ${
+            className={`md:hidden px-2.5 py-2 text-base font-medium rounded-xl border transition-colors text-slate-900 border-brand-100 hover:bg-brand-100 hover:border-brand-100 flex items-center justify-center flex-shrink-0 w-[40px] h-[40px] ${
               isSelected ? 'bg-white' : 'bg-brand-50'
             }`}
             disabled={loadingProfile}
             title='View Profile'
           >
-            <User className='w-4 h-4 text-zinc-900 flex-shrink-0' />
+            <User className='w-4 h-4 text-slate-900 flex-shrink-0' />
           </button>
 
           {/* Desktop: profile icon opens sidebar via parent */}
@@ -358,10 +358,10 @@ export default function UserCard({
             onClick={() => onOpenProfileSidebar?.(userPresence)}
             className={`hidden md:flex p-1.5 text-base font-medium rounded-full border transition-colors items-center justify-center w-[32px] h-[32px] ${
               isProfileSidebarOpen
-                ? 'bg-zinc-100 border-zinc-200'
+                ? 'bg-slate-100 border-slate-200'
                 : isSelected
-                  ? 'bg-zinc-50 border-zinc-200 hover:bg-zinc-100'
-                  : 'border-transparent hover:bg-zinc-100 hover:border-zinc-200 group-hover:bg-white group-hover:border-zinc-200'
+                  ? 'bg-slate-50 border-slate-200 hover:bg-slate-100'
+                  : 'border-transparent hover:bg-slate-100 hover:border-slate-200 group-hover:bg-white group-hover:border-slate-200'
             }`}
             disabled={loadingProfile}
             aria-label='Open profile sidebar'
@@ -404,17 +404,17 @@ export default function UserCard({
         maxWidth='sm'
       >
         <div className='p-4'>
-          <h3 className='text-lg font-medium text-zinc-900 text-center mb-3'>
+          <h3 className='text-lg font-medium text-slate-900 text-center mb-3'>
             Cancel Chat Request?
           </h3>
-          <p className='text-sm text-zinc-900 text-center mb-4'>
+          <p className='text-sm text-slate-900 text-center mb-4'>
             This will cancel your pending chat request to{' '}
             {getDisplayName(userPresence, userProfile)}.
           </p>
           <div className='flex gap-2'>
             <button
               onClick={() => setShowCancelDialog(false)}
-              className='flex-1 px-3 py-2 text-base font-medium text-zinc-900 bg-zinc-100 rounded-lg hover:bg-zinc-100 focus:outline-none transition-colors'
+              className='flex-1 px-3 py-2 text-base font-medium text-slate-900 bg-slate-100 rounded-lg hover:bg-slate-100 focus:outline-none transition-colors'
             >
               Done
             </button>
@@ -423,7 +423,7 @@ export default function UserCard({
                 onCancelChatRequest(userPresence.userId);
                 setShowCancelDialog(false);
               }}
-              className='flex-1 px-3 py-2 text-base font-medium text-b_red-600 bg-zinc-100 rounded-lg hover:bg-zinc-200 focus:outline-none transition-colors'
+              className='flex-1 px-3 py-2 text-base font-medium text-b_red-600 bg-slate-100 rounded-lg hover:bg-slate-200 focus:outline-none transition-colors'
             >
               Cancel Request
             </button>
