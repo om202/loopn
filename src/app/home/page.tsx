@@ -112,9 +112,6 @@ export default function HomePage() {
                 />
                 <div className='flex items-center gap-2'>
                   <span className='text-xl font-bold text-zinc-900'>Loopn</span>
-                  <span className='bg-brand-500 text-white text-[10px] font-semibold px-1.5 py-0.5 rounded-full tracking-wide uppercase'>
-                    beta
-                  </span>
                 </div>
               </div>
             </div>
@@ -844,9 +841,6 @@ export default function HomePage() {
               <Image src='/loopn.svg' alt='Loopn' width={40} height={40} />
               <div className='flex items-center gap-2'>
                 <span className='text-2xl font-bold text-zinc-900'>Loopn</span>
-                <span className='bg-brand-500 text-white text-[10px] font-semibold px-1.5 py-0.5 rounded-full tracking-wide uppercase'>
-                  beta
-                </span>
               </div>
             </div>
             <p className='text-zinc-600 text-2xl text-center max-w-2xl mx-auto mb-8 leading-relaxed'>

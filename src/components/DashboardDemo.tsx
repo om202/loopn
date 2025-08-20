@@ -827,7 +827,7 @@ export default function DashboardDemo() {
                 </svg>
                 <input
                   type='text'
-                  placeholder='Search or ask Loopn'
+                  placeholder='Ask Anything or Search'
                   value={searchQuery}
                   onChange={e => handleSearch(e.target.value)}
                   style={{

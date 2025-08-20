@@ -143,9 +143,6 @@ export default function DashboardSidebar({
                 />
                 <div className='flex items-center gap-2'>
                   <h1 className='text-2xl font-bold text-zinc-900'>Loopn</h1>
-                  <span className='bg-brand-500 text-white text-[10px] font-semibold px-1.5 py-0.5 rounded-full tracking-wide uppercase'>
-                    beta
-                  </span>
                 </div>
               </Link>
             </div>

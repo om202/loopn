@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { Search, X, Clock, Sparkles } from 'lucide-react';
+import { Search, X, Clock } from 'lucide-react';
+import GradientSparkles from './GradientSparkles';
 import {
   getSearchHistory,
   addToSearchHistory,
@@ -157,11 +158,11 @@ export default function SearchUser({
             tabIndex={-1}
             aria-hidden='true'
           />
-          <Sparkles className='absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 z-10' />
+          <GradientSparkles className='absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 z-10' />
           <input
             ref={inputRef}
             type='text'
-            placeholder='Search or ask Loopn'
+            placeholder='Ask Anything or Search'
             value={query}
             onChange={handleInputChange}
             onFocus={handleInputFocus}
@@ -188,7 +189,7 @@ export default function SearchUser({
               WebkitAppearance: 'none',
               MozAppearance: 'textfield',
             }}
-            className='w-full pl-10 pr-16 py-3 rounded-full border border-zinc-200 focus:outline-none focus:ring-1 focus:ring-brand-200 focus:bg-white bg-zinc-100 hover:bg-brand-50 transition-colors placeholder-zinc-500'
+            className='w-full pl-10 pr-16 py-3 rounded-full border border-zinc-200 focus:outline-none focus:ring-1 focus:ring-brand-200 focus:bg-white bg-white hover:bg-brand-50 transition-colors placeholder-zinc-500'
           />
 
           {/* Clear button - only show when there's text */}

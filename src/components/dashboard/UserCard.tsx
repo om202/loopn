@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import {
-  CheckCircle2,
   Clock,
   MessageCircle,
   MoreHorizontal,
@@ -263,8 +262,8 @@ export default function UserCard({
                       : 'Cancel Request'
                   }
                 >
-                  <CheckCircle2 className='w-4 h-4 text-zinc-500 flex-shrink-0' />
-                  <span className='text-base text-zinc-500'>Request Sent</span>
+                  <Clock className='w-4 h-4 text-zinc-500 flex-shrink-0' />
+                  <span className='text-base text-zinc-500'>Pending</span>
                 </button>
               );
             }
