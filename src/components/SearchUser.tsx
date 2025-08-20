@@ -196,7 +196,7 @@ export default function SearchUser({
               WebkitAppearance: 'none',
               MozAppearance: 'textfield',
             }}
-            className='w-full pl-10 pr-16 py-3 rounded-full border border-slate-200 focus:outline-none focus:ring-1 focus:ring-brand-200 focus:bg-white bg-white hover:bg-brand-50 transition-colors placeholder-slate-500'
+            className='w-full pl-10 pr-16 py-3 rounded-full border border-slate-200 focus:outline-none focus:ring-1 focus:ring-brand-200 focus:bg-white bg-white hover:bg-brand-50 transition-colors placeholder-slate-1000'
           />
 
           {/* Clear button - only show when there's text */}
@@ -204,7 +204,7 @@ export default function SearchUser({
             <button
               type='button'
               onClick={handleClearInput}
-              className={`absolute top-1/2 -translate-y-1/2 w-6 h-6 text-slate-500 hover:text-slate-600 flex items-center justify-center transition-all duration-300 ${
+              className={`absolute top-1/2 -translate-y-1/2 w-6 h-6 text-slate-1000 hover:text-slate-600 flex items-center justify-center transition-all duration-300 ${
                 isFocused ? 'right-28' : 'right-11'
               }`}
               aria-label='Clear search'
@@ -242,17 +242,17 @@ export default function SearchUser({
             className='absolute top-full left-0 right-0 bg-white border border-slate-200 rounded-2xl shadow-lg z-50 max-h-64 overflow-y-auto mt-2'
           >
             <div className='py-2'>
-              <div className='px-4 py-2 text-sm font-medium text-slate-500 border-b border-slate-100'>
+              <div className='px-4 py-2 text-sm font-medium text-slate-1000 border-b border-slate-100'>
                 Recent searches
               </div>
               {searchHistory.map(item => (
                 <div
                   key={item.id}
-                  className='flex items-center justify-between px-4 py-3 hover:bg-slate-50 cursor-pointer group'
+                  className='flex items-center justify-between px-4 py-3 hover:bg-slate-100 cursor-pointer group'
                   onClick={() => handleHistoryItemClick(item.query)}
                 >
                   <div className='flex items-center gap-3 flex-1 min-w-0'>
-                    <Clock className='w-4 h-4 text-slate-500 flex-shrink-0' />
+                    <Clock className='w-4 h-4 text-slate-1000 flex-shrink-0' />
                     <span className='text-sm text-slate-700 truncate'>
                       {item.query}
                     </span>
@@ -260,7 +260,7 @@ export default function SearchUser({
                   <button
                     type='button'
                     onClick={e => handleDeleteHistoryItem(e, item.id)}
-                    className='flex-shrink-0 p-1 text-slate-500 hover:text-slate-600 opacity-0 group-hover:opacity-100 transition-opacity'
+                    className='flex-shrink-0 p-1 text-slate-1000 hover:text-slate-600 opacity-0 group-hover:opacity-100 transition-opacity'
                     aria-label={`Remove "${item.query}" from search history`}
                   >
                     <X className='w-4 h-4' />

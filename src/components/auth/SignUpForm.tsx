@@ -13,12 +13,12 @@ interface SignUpFormProps {
 function PasswordRequirement({ met, text }: { met: boolean; text: string }) {
   return (
     <div
-      className={`flex items-center gap-2 text-sm ${met ? 'text-b_green-600' : 'text-slate-500'}`}
+      className={`flex items-center gap-2 text-sm ${met ? 'text-b_green-600' : 'text-slate-1000'}`}
     >
       {met ? (
         <Check className='w-3 h-3 text-b_green-600' />
       ) : (
-        <X className='w-3 h-3 text-slate-500' />
+        <X className='w-3 h-3 text-slate-1000' />
       )}
       <span>{text}</span>
     </div>
@@ -85,7 +85,7 @@ export default function SignUpForm({
   return (
     <div className='w-full'>
       {/* Sign in prompt at the top */}
-      <div className='text-center mb-6 p-4 bg-slate-50 rounded-xl border border-slate-200'>
+      <div className='text-center mb-6 p-4 bg-slate-100 rounded-xl border border-slate-200'>
         <span className='text-sm text-slate-700 mr-3 font-medium'>
           Already have an account?
         </span>
@@ -117,7 +117,7 @@ export default function SignUpForm({
           </label>
           <div className='relative'>
             <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-              <Mail className='h-5 w-5 text-slate-500' />
+              <Mail className='h-5 w-5 text-slate-1000' />
             </div>
             <input
               id='email'
@@ -140,7 +140,7 @@ export default function SignUpForm({
           </label>
           <div className='relative'>
             <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-              <Lock className='h-5 w-5 text-slate-500' />
+              <Lock className='h-5 w-5 text-slate-1000' />
             </div>
             <input
               id='password'
@@ -162,7 +162,7 @@ export default function SignUpForm({
             <button
               type='button'
               onClick={() => setShowPassword(!showPassword)}
-              className='absolute inset-y-0 right-0 pr-3 flex items-center text-slate-500 hover:text-slate-700 transition-colors'
+              className='absolute inset-y-0 right-0 pr-3 flex items-center text-slate-1000 hover:text-slate-700 transition-colors'
             >
               {showPassword ? (
                 <EyeOff className='h-5 w-5' />
@@ -213,7 +213,7 @@ export default function SignUpForm({
           </label>
           <div className='relative'>
             <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-              <Lock className='h-5 w-5 text-slate-500' />
+              <Lock className='h-5 w-5 text-slate-1000' />
             </div>
             <input
               id='confirmPassword'
@@ -231,7 +231,7 @@ export default function SignUpForm({
             <button
               type='button'
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className='absolute inset-y-0 right-0 pr-3 flex items-center text-slate-500 hover:text-slate-700 transition-colors'
+              className='absolute inset-y-0 right-0 pr-3 flex items-center text-slate-1000 hover:text-slate-700 transition-colors'
             >
               {showConfirmPassword ? (
                 <EyeOff className='h-5 w-5' />

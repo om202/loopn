@@ -173,7 +173,7 @@ export default function ProfilePictureUpload({
                 <>
                   <div className='w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mb-3 mx-auto'>
                     <svg
-                      className='w-6 h-6 text-slate-500'
+                      className='w-6 h-6 text-slate-1000'
                       fill='none'
                       viewBox='0 0 24 24'
                       stroke='currentColor'
@@ -189,10 +189,10 @@ export default function ProfilePictureUpload({
                   <p className='text-sm font-medium text-slate-700 mb-1'>
                     Add profile picture
                   </p>
-                  <p className='text-sm text-slate-500'>
+                  <p className='text-sm text-slate-1000'>
                     Drag & drop or click to select
                   </p>
-                  <p className='text-sm text-slate-500 mt-2'>
+                  <p className='text-sm text-slate-1000 mt-2'>
                     JPEG, PNG, WebP • Max 10MB
                   </p>
                 </>
@@ -218,7 +218,7 @@ export default function ProfilePictureUpload({
         />
 
         {/* Instructions */}
-        <div className='text-center text-sm text-slate-500 max-w-sm'>
+        <div className='text-center text-sm text-slate-1000 max-w-sm'>
           <p>
             Upload a profile picture to help others recognize you. This is
             optional but recommended.

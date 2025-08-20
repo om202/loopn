@@ -107,7 +107,7 @@ export default function MessageInput({
             {onCancelReply && (
               <button
                 onClick={onCancelReply}
-                className='absolute top-0 right-0 p-1 text-slate-500 hover:text-slate-900 transition-colors rounded-full hover:bg-slate-100'
+                className='absolute top-0 right-0 p-1 text-slate-1000 hover:text-slate-900 transition-colors rounded-full hover:bg-slate-100'
                 title='Cancel reply'
               >
                 <X className='w-4 h-4' />
@@ -197,13 +197,13 @@ export default function MessageInput({
                     WebkitAppearance: 'none',
                     MozAppearance: 'textfield',
                   }}
-                  className='w-full px-5 py-3 pr-14 border border-slate-200 rounded-full focus:outline-none focus:ring-1 focus:ring-brand-500 focus:border-transparent text-base font-medium bg-slate-100 hover:bg-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed placeholder-slate-500'
+                  className='w-full px-5 py-3 pr-14 border border-slate-200 rounded-full focus:outline-none focus:ring-1 focus:ring-brand-500 focus:border-transparent text-base font-medium bg-slate-100 hover:bg-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed placeholder-slate-1000'
                 />
                 <button
                   type='button'
                   onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                   disabled={disabled}
-                  className={`absolute right-2 top-1/2 transform -translate-y-1/2 text-slate-500 hover:text-slate-900 transition-all duration-200 p-2 rounded-full hover:bg-slate-100 focus:outline-none disabled:opacity-50 ${
+                  className={`absolute right-2 top-1/2 transform -translate-y-1/2 text-slate-1000 hover:text-slate-900 transition-all duration-200 p-2 rounded-full hover:bg-slate-100 focus:outline-none disabled:opacity-50 ${
                     showEmojiPicker ? 'text-brand-500 bg-brand-100' : ''
                   }`}
                 >

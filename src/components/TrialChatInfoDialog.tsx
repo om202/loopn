@@ -33,7 +33,7 @@ export default function TrialChatInfoDialog({
             messages are deleted.
           </p>
 
-          <p className='text-slate-500'>
+          <p className='text-slate-1000'>
             Send a connection request if you want to keep chatting beyond the
             trial period.
           </p>

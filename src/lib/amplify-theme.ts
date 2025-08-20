@@ -42,7 +42,7 @@ export const amplifyTheme: Theme = {
       },
       tabs: {
         item: {
-          color: 'rgb(107, 114, 128)', // slate-500
+          color: 'rgb(107, 114, 128)', // slate-1000
           _active: {
             borderColor: 'rgb(79, 70, 229)',
             color: 'rgb(79, 70, 229)',

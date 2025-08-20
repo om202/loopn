@@ -158,7 +158,7 @@ export default function DashboardSidebar({
                   className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                     activeSection === id
                       ? 'bg-brand-50 text-brand-700 border-brand-200'
-                      : 'text-slate-900 hover:bg-slate-50 hover:text-slate-900 border-transparent'
+                      : 'text-slate-900 hover:bg-slate-100 hover:text-slate-900 border-transparent'
                   }`}
                 >
                   <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -204,7 +204,7 @@ export default function DashboardSidebar({
                 className={`relative flex-1 flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                   activeSection === helpItem.id
                     ? 'bg-brand-50 text-brand-700 border-brand-200'
-                    : 'text-slate-900 hover:bg-slate-50 hover:text-slate-900 border-transparent'
+                    : 'text-slate-900 hover:bg-slate-100 hover:text-slate-900 border-transparent'
                 }`}
               >
                 <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -217,7 +217,7 @@ export default function DashboardSidebar({
 
               <button
                 onClick={() => setIsBugReportOpen(true)}
-                className='p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition-colors border border-transparent hover:border-slate-200'
+                className='p-2 text-slate-1000 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors border border-transparent hover:border-slate-200'
                 title='Report Bug / Share Suggestion'
               >
                 <Bug className='w-4 h-4' />
@@ -230,7 +230,7 @@ export default function DashboardSidebar({
               className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                 activeSection === accountItem.id
                   ? 'bg-brand-50 text-brand-700 border-brand-200'
-                  : 'text-slate-700 hover:bg-slate-50 hover:text-slate-900 border-transparent'
+                  : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900 border-transparent'
               }`}
             >
               <div className='flex-shrink-0 flex items-center justify-center'>
@@ -252,7 +252,7 @@ export default function DashboardSidebar({
               </div>
               <div className='flex-1'>
                 <div className='font-medium text-base'>{accountItem.label}</div>
-                <div className='text-sm text-slate-500'>You</div>
+                <div className='text-sm text-slate-1000'>You</div>
               </div>
             </button>
           </div>

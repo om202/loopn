@@ -103,7 +103,7 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
         <div className='flex flex-col items-center justify-center text-center p-8'>
           <div className='w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-full flex items-center justify-center'>
             <svg
-              className='w-8 h-8 text-slate-500'
+              className='w-8 h-8 text-slate-1000'
               fill='none'
               stroke='currentColor'
               viewBox='0 0 24 24'
@@ -119,7 +119,7 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
           <h3 className='text-lg font-medium text-slate-900 mb-2'>
             No chat requests
           </h3>
-          <p className='text-slate-500'>Incoming requests will appear here</p>
+          <p className='text-slate-1000'>Incoming requests will appear here</p>
         </div>
       ) : (
         <div className='p-4 space-y-3'>
@@ -134,7 +134,7 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
                   <div className='font-medium text-slate-900 text-sm no-email-detection'>
                     {`User ${request.requesterId.slice(-4)}`}
                   </div>
-                  <div className='text-sm text-slate-500'>
+                  <div className='text-sm text-slate-1000'>
                     Wants to chat • {formatTimeAgo(request.createdAt)}
                   </div>
                 </div>

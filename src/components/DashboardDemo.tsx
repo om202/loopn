@@ -227,7 +227,7 @@ export default function DashboardDemo() {
         {dummyUsers.map((user, index) => (
           <div
             key={user.id}
-            className='px-3 py-2 group transition-all duration-200 cursor-pointer bg-white hover:bg-slate-50 hover:rounded-2xl border border-transparent border-b-slate-100 opacity-0 animate-[slideUpFade_0.6s_ease-out_forwards]'
+            className='px-3 py-2 group transition-all duration-200 cursor-pointer bg-white hover:bg-slate-100 hover:rounded-2xl border border-transparent border-b-slate-100 opacity-0 animate-[slideUpFade_0.6s_ease-out_forwards]'
             style={{ animationDelay: `${0.5 + index * 0.5}s` }}
           >
             <div className='flex items-center gap-3'>
@@ -252,7 +252,7 @@ export default function DashboardDemo() {
                     {user.name}
                   </div>
                 </div>
-                <div className='text-[15px] text-slate-500 mb-1.5 truncate'>
+                <div className='text-[15px] text-slate-1000 mb-1.5 truncate'>
                   {user.role}
                 </div>
               </div>
@@ -266,7 +266,7 @@ export default function DashboardDemo() {
                 </button>
 
                 <button className='md:flex p-1.5 text-base font-medium rounded-full border transition-colors items-center justify-center w-[32px] h-[32px] bg-white border-slate-100 hover:bg-slate-100'>
-                  <MoreHorizontal className='w-5 h-5 text-slate-500' />
+                  <MoreHorizontal className='w-5 h-5 text-slate-1000' />
                 </button>
               </div>
             </div>
@@ -282,7 +282,7 @@ export default function DashboardDemo() {
         {dummyConnections.map(connection => (
           <div
             key={connection.id}
-            className='px-3 py-3 bg-white hover:bg-slate-50 rounded-xl border border-slate-200 transition-all duration-200 cursor-pointer'
+            className='px-3 py-3 bg-white hover:bg-slate-100 rounded-xl border border-slate-200 transition-all duration-200 cursor-pointer'
           >
             <div className='flex items-center gap-3'>
               <div className='flex-shrink-0'>
@@ -304,7 +304,7 @@ export default function DashboardDemo() {
                 <div className='text-slate-900 font-medium mb-1'>
                   {connection.name}
                 </div>
-                <div className='text-sm text-slate-500 mb-1'>
+                <div className='text-sm text-slate-1000 mb-1'>
                   {connection.role}
                 </div>
               </div>
@@ -313,7 +313,7 @@ export default function DashboardDemo() {
                 <button className='p-2 text-brand-500 hover:bg-brand-50 rounded-lg transition-colors'>
                   <MessageCircle className='w-5 h-5' />
                 </button>
-                <button className='p-2 text-slate-500 hover:bg-slate-100 rounded-lg transition-colors'>
+                <button className='p-2 text-slate-1000 hover:bg-slate-100 rounded-lg transition-colors'>
                   <MoreHorizontal className='w-5 h-5' />
                 </button>
               </div>
@@ -332,7 +332,7 @@ export default function DashboardDemo() {
           .map(user => (
             <div
               key={user.id}
-              className='px-3 py-3 hover:bg-slate-50 rounded-xl transition-all duration-200 cursor-pointer'
+              className='px-3 py-3 hover:bg-slate-100 rounded-xl transition-all duration-200 cursor-pointer'
             >
               <div className='flex items-center gap-3'>
                 <div className='flex-shrink-0'>
@@ -355,11 +355,11 @@ export default function DashboardDemo() {
                     <div className='text-slate-900 font-medium truncate'>
                       {user.name}
                     </div>
-                    <div className='text-sm text-slate-500'>
+                    <div className='text-sm text-slate-1000'>
                       {user.lastMessageTime}
                     </div>
                   </div>
-                  <div className='text-sm text-slate-500 truncate'>
+                  <div className='text-sm text-slate-1000 truncate'>
                     {user.lastMessage}
                   </div>
                 </div>
@@ -394,7 +394,7 @@ export default function DashboardDemo() {
                   <span className=''>{notification.title}</span>{' '}
                   {notification.content}
                 </div>
-                <div className='text-sm text-slate-500'>
+                <div className='text-sm text-slate-1000'>
                   {notification.timestamp}
                 </div>
               </div>
@@ -426,39 +426,39 @@ export default function DashboardDemo() {
           <h3 className='text-lg font-medium text-slate-900 mb-2'>
             Help & Support
           </h3>
-          <p className='text-slate-500'>Get help with using Loopn</p>
+          <p className='text-slate-1000'>Get help with using Loopn</p>
         </div>
 
         <div className='space-y-3'>
-          <div className='p-4 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors cursor-pointer'>
+          <div className='p-4 bg-white border border-slate-200 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer'>
             <div className='flex items-center gap-3'>
               <div className='w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center'>
                 <Globe className='w-5 h-5 text-blue-600' />
               </div>
               <div>
                 <div className='font-medium text-slate-900'>Getting Started</div>
-                <div className='text-sm text-slate-500'>
+                <div className='text-sm text-slate-1000'>
                   Learn the basics of Loopn
                 </div>
               </div>
             </div>
           </div>
 
-          <div className='p-4 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors cursor-pointer'>
+          <div className='p-4 bg-white border border-slate-200 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer'>
             <div className='flex items-center gap-3'>
               <div className='w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center'>
                 <MessageCircle className='w-5 h-5 text-green-600' />
               </div>
               <div>
                 <div className='font-medium text-slate-900'>Chat Features</div>
-                <div className='text-sm text-slate-500'>
+                <div className='text-sm text-slate-1000'>
                   How to use messaging and connections
                 </div>
               </div>
             </div>
           </div>
 
-          <div className='p-4 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors cursor-pointer'>
+          <div className='p-4 bg-white border border-slate-200 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer'>
             <div className='flex items-center gap-3'>
               <div className='w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center'>
                 <Shield className='w-5 h-5 text-purple-600' />
@@ -467,7 +467,7 @@ export default function DashboardDemo() {
                 <div className='font-medium text-slate-900'>
                   Privacy & Safety
                 </div>
-                <div className='text-sm text-slate-500'>
+                <div className='text-sm text-slate-1000'>
                   Keep your account secure
                 </div>
               </div>
@@ -497,7 +497,7 @@ export default function DashboardDemo() {
             <h3 className='text-xl font-semibold text-slate-900'>
               {currentUser.name}
             </h3>
-            <p className='text-slate-500'>{currentUser.role}</p>
+            <p className='text-slate-1000'>{currentUser.role}</p>
             <p className='text-sm text-slate-400'>{currentUser.email}</p>
           </div>
         </div>
@@ -506,8 +506,8 @@ export default function DashboardDemo() {
         <div className='space-y-4'>
           <div className='p-4 bg-white border border-slate-200 rounded-xl'>
             <div className='flex items-center gap-2 mb-3'>
-              <Briefcase className='w-4 h-4 text-slate-500' />
-              <span className='text-sm font-medium text-slate-500'>
+              <Briefcase className='w-4 h-4 text-slate-1000' />
+              <span className='text-sm font-medium text-slate-1000'>
                 Experience
               </span>
             </div>
@@ -516,8 +516,8 @@ export default function DashboardDemo() {
 
           <div className='p-4 bg-white border border-slate-200 rounded-xl'>
             <div className='flex items-center gap-2 mb-3'>
-              <GraduationCap className='w-4 h-4 text-slate-500' />
-              <span className='text-sm font-medium text-slate-500'>
+              <GraduationCap className='w-4 h-4 text-slate-1000' />
+              <span className='text-sm font-medium text-slate-1000'>
                 Education
               </span>
             </div>
@@ -526,8 +526,8 @@ export default function DashboardDemo() {
 
           <div className='p-4 bg-white border border-slate-200 rounded-xl'>
             <div className='flex items-center gap-2 mb-3'>
-              <Award className='w-4 h-4 text-slate-500' />
-              <span className='text-sm font-medium text-slate-500'>Skills</span>
+              <Award className='w-4 h-4 text-slate-1000' />
+              <span className='text-sm font-medium text-slate-1000'>Skills</span>
             </div>
             <div className='flex flex-wrap gap-2'>
               {currentUser.skills.map((skill, index) => (
@@ -543,8 +543,8 @@ export default function DashboardDemo() {
 
           <div className='p-4 bg-white border border-slate-200 rounded-xl'>
             <div className='flex items-center gap-2 mb-3'>
-              <Target className='w-4 h-4 text-slate-500' />
-              <span className='text-sm font-medium text-slate-500'>
+              <Target className='w-4 h-4 text-slate-1000' />
+              <span className='text-sm font-medium text-slate-1000'>
                 Interests
               </span>
             </div>
@@ -562,8 +562,8 @@ export default function DashboardDemo() {
 
           <div className='p-4 bg-white border border-slate-200 rounded-xl'>
             <div className='flex items-center gap-2 mb-3'>
-              <User className='w-4 h-4 text-slate-500' />
-              <span className='text-sm font-medium text-slate-500'>About</span>
+              <User className='w-4 h-4 text-slate-1000' />
+              <span className='text-sm font-medium text-slate-1000'>About</span>
             </div>
             <p className='text-slate-900 leading-relaxed'>{currentUser.about}</p>
           </div>
@@ -577,19 +577,19 @@ export default function DashboardDemo() {
       {searchResults.length === 0 ? (
         <div className='flex flex-col items-center justify-center h-full text-center p-8'>
           <div className='w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-full flex items-center justify-center'>
-            <Search className='w-8 h-8 text-slate-500' />
+            <Search className='w-8 h-8 text-slate-1000' />
           </div>
           <h3 className='text-lg font-medium text-slate-900 mb-2'>
             No results found
           </h3>
-          <p className='text-slate-500'>Try searching for something else</p>
+          <p className='text-slate-1000'>Try searching for something else</p>
         </div>
       ) : (
         <div className='space-y-3'>
           {searchResults.map(user => (
             <div
               key={user.id}
-              className='px-3 py-3 bg-white hover:bg-slate-50 rounded-xl border border-slate-200 transition-all duration-200 cursor-pointer'
+              className='px-3 py-3 bg-white hover:bg-slate-100 rounded-xl border border-slate-200 transition-all duration-200 cursor-pointer'
             >
               <div className='flex items-center gap-3'>
                 <div className='flex-shrink-0'>
@@ -611,7 +611,7 @@ export default function DashboardDemo() {
                   <div className='text-slate-900 font-medium mb-1'>
                     {user.name}
                   </div>
-                  <div className='text-sm text-slate-500 mb-2'>{user.role}</div>
+                  <div className='text-sm text-slate-1000 mb-2'>{user.role}</div>
                   <div className='flex flex-wrap gap-1'>
                     {user.skills.slice(0, 3).map((skill, idx) => (
                       <span
@@ -678,7 +678,7 @@ export default function DashboardDemo() {
                 className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                   activeSection === 'discover'
                     ? 'bg-brand-50 text-brand-700 border-brand-200'
-                    : 'text-slate-900 hover:bg-slate-50 hover:text-slate-900 border-transparent'
+                    : 'text-slate-900 hover:bg-slate-100 hover:text-slate-900 border-transparent'
                 }`}
               >
                 <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -695,7 +695,7 @@ export default function DashboardDemo() {
                 className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                   activeSection === 'connections'
                     ? 'bg-brand-50 text-brand-700 border-brand-200'
-                    : 'text-slate-900 hover:bg-slate-50 hover:text-slate-900 border-transparent'
+                    : 'text-slate-900 hover:bg-slate-100 hover:text-slate-900 border-transparent'
                 }`}
               >
                 <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -715,7 +715,7 @@ export default function DashboardDemo() {
                 className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                   activeSection === 'chats'
                     ? 'bg-brand-50 text-brand-700 border-brand-200'
-                    : 'text-slate-900 hover:bg-slate-50 hover:text-slate-900 border-transparent'
+                    : 'text-slate-900 hover:bg-slate-100 hover:text-slate-900 border-transparent'
                 }`}
               >
                 <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -737,7 +737,7 @@ export default function DashboardDemo() {
                 className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                   activeSection === 'notifications'
                     ? 'bg-brand-50 text-brand-700 border-brand-200'
-                    : 'text-slate-900 hover:bg-slate-50 hover:text-slate-900 border-transparent'
+                    : 'text-slate-900 hover:bg-slate-100 hover:text-slate-900 border-transparent'
                 }`}
               >
                 <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -762,7 +762,7 @@ export default function DashboardDemo() {
                 className={`relative flex-1 flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                   activeSection === 'help'
                     ? 'bg-brand-50 text-brand-700 border-brand-200'
-                    : 'text-slate-900 hover:bg-slate-50 hover:text-slate-900 border-transparent'
+                    : 'text-slate-900 hover:bg-slate-100 hover:text-slate-900 border-transparent'
                 }`}
               >
                 <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -773,7 +773,7 @@ export default function DashboardDemo() {
                 </span>
               </button>
 
-              <button className='p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition-colors border border-transparent hover:border-slate-200'>
+              <button className='p-2 text-slate-1000 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors border border-transparent hover:border-slate-200'>
                 <Bug className='w-4 h-4' />
               </button>
             </div>
@@ -784,7 +784,7 @@ export default function DashboardDemo() {
               className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                 activeSection === 'account'
                   ? 'bg-brand-50 text-brand-700 border-brand-200'
-                  : 'text-slate-900 hover:bg-slate-50 hover:text-slate-900 border-transparent'
+                  : 'text-slate-900 hover:bg-slate-100 hover:text-slate-900 border-transparent'
               }`}
             >
               <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -835,7 +835,7 @@ export default function DashboardDemo() {
                     WebkitAppearance: 'none',
                     MozAppearance: 'textfield',
                   }}
-                  className='w-full pl-10 pr-16 py-3 rounded-full border border-slate-200 focus:outline-none focus:ring-1 focus:ring-brand-200 focus:bg-white bg-slate-100 hover:bg-brand-50 transition-colors placeholder-slate-500'
+                  className='w-full pl-10 pr-16 py-3 rounded-full border border-slate-200 focus:outline-none focus:ring-1 focus:ring-brand-200 focus:bg-white bg-slate-100 hover:bg-brand-50 transition-colors placeholder-slate-1000'
                 />
                 <button
                   type='button'
@@ -987,7 +987,7 @@ export default function DashboardDemo() {
         </div>
 
         {/* Mobile Navigation Tabs */}
-        <div className='flex bg-slate-50 border-b border-slate-200'>
+        <div className='flex bg-slate-100 border-b border-slate-200'>
           <button
             onClick={() => setActiveSection('discover')}
             className={`flex-1 px-3 py-3 text-center text-sm font-medium ${
@@ -1038,7 +1038,7 @@ export default function DashboardDemo() {
         </div>
 
         {/* Mobile Content */}
-        <div className='p-4 bg-slate-50 min-h-[500px]'>
+        <div className='p-4 bg-slate-100 min-h-[500px]'>
           {/* Mobile Search */}
           {activeSection === 'search' && (
             <div className='mb-4'>
@@ -1117,7 +1117,7 @@ export default function DashboardDemo() {
               {dummyUsers.slice(0, 4).map((user, index) => (
                 <div
                   key={user.id}
-                  className='rounded-xl border px-3 py-3 group transition-all duration-200 cursor-pointer bg-white border-slate-200 hover:bg-slate-50 opacity-0 animate-[slideUpFade_0.6s_ease-out_forwards]'
+                  className='rounded-xl border px-3 py-3 group transition-all duration-200 cursor-pointer bg-white border-slate-200 hover:bg-slate-100 opacity-0 animate-[slideUpFade_0.6s_ease-out_forwards]'
                   style={{ animationDelay: `${0.5 + index * 0.5}s` }}
                 >
                   <div className='flex items-center gap-3'>
@@ -1167,7 +1167,7 @@ export default function DashboardDemo() {
               {dummyConnections.map(connection => (
                 <div
                   key={connection.id}
-                  className='rounded-xl border px-3 py-3 bg-white border-slate-200 hover:bg-slate-50 transition-all duration-200 cursor-pointer'
+                  className='rounded-xl border px-3 py-3 bg-white border-slate-200 hover:bg-slate-100 transition-all duration-200 cursor-pointer'
                 >
                   <div className='flex items-center gap-3'>
                     <div className='flex-shrink-0'>
@@ -1212,7 +1212,7 @@ export default function DashboardDemo() {
                 .map(user => (
                   <div
                     key={user.id}
-                    className='px-3 py-3 bg-white hover:bg-slate-50 rounded-xl transition-all duration-200 cursor-pointer'
+                    className='px-3 py-3 bg-white hover:bg-slate-100 rounded-xl transition-all duration-200 cursor-pointer'
                   >
                     <div className='flex items-center gap-3'>
                       <div className='flex-shrink-0'>
@@ -1235,11 +1235,11 @@ export default function DashboardDemo() {
                           <div className='text-slate-900 font-medium text-sm truncate'>
                             {user.name}
                           </div>
-                          <div className='text-sm text-slate-500'>
+                          <div className='text-sm text-slate-1000'>
                             {user.lastMessageTime}
                           </div>
                         </div>
-                        <div className='text-sm text-slate-500 truncate'>
+                        <div className='text-sm text-slate-1000 truncate'>
                           {user.lastMessage}
                         </div>
                       </div>
@@ -1274,7 +1274,7 @@ export default function DashboardDemo() {
                         </span>{' '}
                         {notification.content}
                       </div>
-                      <div className='text-sm text-slate-500'>
+                      <div className='text-sm text-slate-1000'>
                         {notification.timestamp}
                       </div>
                     </div>
@@ -1300,14 +1300,14 @@ export default function DashboardDemo() {
               {searchResults.length === 0 ? (
                 <div className='text-center py-8'>
                   <div className='w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-full flex items-center justify-center'>
-                    <Search className='w-8 h-8 text-slate-500' />
+                    <Search className='w-8 h-8 text-slate-1000' />
                   </div>
                   <h3 className='text-lg font-medium text-slate-900 mb-2'>
                     {searchQuery
                       ? 'No results found'
                       : 'Search for professionals'}
                   </h3>
-                  <p className='text-slate-500'>
+                  <p className='text-slate-1000'>
                     {searchQuery
                       ? 'Try searching for something else'
                       : 'Enter a name, role, or skill to get started'}
@@ -1317,7 +1317,7 @@ export default function DashboardDemo() {
                 searchResults.map(user => (
                   <div
                     key={user.id}
-                    className='rounded-xl border px-3 py-3 bg-white border-slate-200 hover:bg-slate-50 transition-all duration-200 cursor-pointer'
+                    className='rounded-xl border px-3 py-3 bg-white border-slate-200 hover:bg-slate-100 transition-all duration-200 cursor-pointer'
                   >
                     <div className='flex items-center gap-3'>
                       <div className='flex-shrink-0'>

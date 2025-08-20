@@ -327,7 +327,7 @@ function NewRequestDialog({
             {/* Maybe Later Button */}
             <button
               onClick={handleMaybeLater}
-              className='w-full px-4 py-3 text-sm text-slate-500 hover:text-slate-900 transition-colors'
+              className='w-full px-4 py-3 text-sm text-slate-1000 hover:text-slate-900 transition-colors'
             >
               Maybe Later
             </button>

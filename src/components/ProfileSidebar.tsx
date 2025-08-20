@@ -225,8 +225,8 @@ export default function ProfileSidebar({
     if (isEndedWithTimer) {
       const timeRemaining = getReconnectTimeRemaining!(userId);
       return (
-        <div className='text-sm text-center p-3 bg-slate-50 rounded-xl border border-slate-200'>
-          <div className='text-slate-500 mb-1'>Reconnect in</div>
+        <div className='text-sm text-center p-3 bg-slate-100 rounded-xl border border-slate-200'>
+          <div className='text-slate-1000 mb-1'>Reconnect in</div>
           <div className='text-slate-600 flex items-center justify-center gap-1'>
             <Clock className='w-3 h-3' />
             <span className='font-medium'>{timeRemaining}</span>
@@ -286,7 +286,7 @@ export default function ProfileSidebar({
           )}
         </button>
         {isTrialConversation && (
-          <span className='px-2 py-1.5 text-base font-medium text-slate-500 rounded-xl flex-shrink-0 flex items-center gap-1'>
+          <span className='px-2 py-1.5 text-base font-medium text-slate-1000 rounded-xl flex-shrink-0 flex items-center gap-1'>
             <Clock className='w-4 h-4' />
             Trial
           </span>
@@ -302,7 +302,7 @@ export default function ProfileSidebar({
         <div className='p-4 pb-2 border-b border-slate-100 flex items-center justify-between'>
           <button
             onClick={onBack}
-            className='flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors'
+            className='flex items-center gap-2 text-slate-1000 hover:text-slate-900 transition-colors'
           >
             <ArrowLeft className='w-4 h-4' />
             <span className='text-sm font-medium'>Back</span>
@@ -348,10 +348,10 @@ export default function ProfileSidebar({
         <div className='px-6 pb-4 border-b border-slate-100'>
           {/* Connection Status */}
           {conversation.isConnected && (
-            <div className='flex items-center justify-center text-sm text-slate-500 mb-3'>
+            <div className='flex items-center justify-center text-sm text-slate-1000 mb-3'>
               <button
                 onClick={() => setShowRemoveConnectionDialog(true)}
-                className='flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-50 transition-colors'
+                className='flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-100 transition-colors'
               >
                 <svg
                   className='w-4 h-4'
@@ -384,7 +384,7 @@ export default function ProfileSidebar({
                 {/* Connect Button */}
                 <div className='flex justify-center mb-3'>
                   {hasAcceptedConnection ? (
-                    <div className='px-6 py-2 text-sm font-medium rounded-lg border border-slate-200 flex items-center justify-center gap-2 text-slate-500'>
+                    <div className='px-6 py-2 text-sm font-medium rounded-lg border border-slate-200 flex items-center justify-center gap-2 text-slate-1000'>
                       <svg
                         className='w-4 h-4'
                         viewBox='30 30 160 160'
@@ -400,7 +400,7 @@ export default function ProfileSidebar({
                     <button
                       onClick={() => setShowCancelRequestDialog(true)}
                       disabled={optimisticRequestSent} // Disable if optimistic (no real request to cancel yet)
-                      className='px-6 py-2 text-sm font-medium rounded-lg border border-slate-200 flex items-center justify-center gap-2 text-slate-500 hover:bg-slate-50 transition-colors disabled:cursor-not-allowed disabled:hover:bg-transparent'
+                      className='px-6 py-2 text-sm font-medium rounded-lg border border-slate-200 flex items-center justify-center gap-2 text-slate-1000 hover:bg-slate-100 transition-colors disabled:cursor-not-allowed disabled:hover:bg-transparent'
                     >
                       <Clock className='w-4 h-4' />
                       <span>Request Sent</span>
@@ -438,7 +438,7 @@ export default function ProfileSidebar({
               {onReconnect && (
                 <button
                   onClick={onReconnect}
-                  className='w-full px-4 py-2 text-sm font-medium rounded-lg bg-slate-500 hover:bg-slate-600 text-white transition-colors flex items-center justify-center gap-2'
+                  className='w-full px-4 py-2 text-sm font-medium rounded-lg bg-slate-1000 hover:bg-slate-600 text-white transition-colors flex items-center justify-center gap-2'
                 >
                   <Image
                     src='/connect-icon.svg'
@@ -478,13 +478,13 @@ export default function ProfileSidebar({
                 userProfile.industry ||
                 userProfile.yearsOfExperience !== null) && (
                 <div className='pb-4'>
-                  <h4 className='text-sm font-semibold text-slate-500 mb-4 border-b border-slate-100 pb-2'>
+                  <h4 className='text-sm font-semibold text-slate-1000 mb-4 border-b border-slate-100 pb-2'>
                     Profile Details
                   </h4>
                   <div className='divide-y divide-slate-100'>
                     {userProfile.jobRole && (
                       <div className='pb-3'>
-                        <dt className='text-sm font-medium text-slate-500 mb-1.5'>
+                        <dt className='text-sm font-medium text-slate-1000 mb-1.5'>
                           Role
                         </dt>
                         <dd className='text-base text-slate-900'>
@@ -494,7 +494,7 @@ export default function ProfileSidebar({
                     )}
                     {userProfile.companyName && (
                       <div className='py-3'>
-                        <dt className='text-sm font-medium text-slate-500 mb-1.5'>
+                        <dt className='text-sm font-medium text-slate-1000 mb-1.5'>
                           Company
                         </dt>
                         <dd className='text-base text-slate-900'>
@@ -504,7 +504,7 @@ export default function ProfileSidebar({
                     )}
                     {userProfile.industry && (
                       <div className='py-3'>
-                        <dt className='text-sm font-medium text-slate-500 mb-1.5'>
+                        <dt className='text-sm font-medium text-slate-1000 mb-1.5'>
                           Industry
                         </dt>
                         <dd className='text-base text-slate-900'>
@@ -515,7 +515,7 @@ export default function ProfileSidebar({
                     {userProfile.yearsOfExperience !== null &&
                       userProfile.yearsOfExperience !== undefined && (
                         <div className='pt-3'>
-                          <dt className='text-sm font-medium text-slate-500 mb-1.5'>
+                          <dt className='text-sm font-medium text-slate-1000 mb-1.5'>
                             Experience
                           </dt>
                           <dd className='text-base text-slate-900'>
@@ -530,7 +530,7 @@ export default function ProfileSidebar({
               {/* Education Section */}
               {userProfile.education && (
                 <div className='py-4'>
-                  <h4 className='text-sm font-semibold text-slate-500 mb-4'>
+                  <h4 className='text-sm font-semibold text-slate-1000 mb-4'>
                     Education
                   </h4>
                   <div className='text-base text-slate-900 leading-relaxed'>
@@ -542,7 +542,7 @@ export default function ProfileSidebar({
               {/* About Section */}
               {userProfile.about && (
                 <div className='py-4'>
-                  <h4 className='text-sm font-medium text-slate-500 mb-4'>
+                  <h4 className='text-sm font-medium text-slate-1000 mb-4'>
                     About
                   </h4>
                   <div className='text-base text-slate-900 leading-relaxed'>
@@ -559,7 +559,7 @@ export default function ProfileSidebar({
                   <div className='divide-y divide-slate-100'>
                     {userProfile.skills && userProfile.skills.length > 0 && (
                       <div className='pb-3'>
-                        <dt className='text-sm font-medium text-slate-500 mb-3'>
+                        <dt className='text-sm font-medium text-slate-1000 mb-3'>
                           Skills
                         </dt>
                         <dd className='flex flex-wrap gap-2'>
@@ -577,7 +577,7 @@ export default function ProfileSidebar({
                     {userProfile.interests &&
                       userProfile.interests.length > 0 && (
                         <div className='pt-3'>
-                          <dt className='text-sm font-medium text-slate-500 mb-3'>
+                          <dt className='text-sm font-medium text-slate-1000 mb-3'>
                             Interests
                           </dt>
                           <dd className='flex flex-wrap gap-2'>
@@ -597,7 +597,7 @@ export default function ProfileSidebar({
               )}
             </div>
           ) : (
-            <div className='text-sm text-slate-500 text-center py-8'>
+            <div className='text-sm text-slate-1000 text-center py-8'>
               No profile details available.
             </div>
           )}

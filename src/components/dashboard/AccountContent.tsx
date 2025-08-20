@@ -64,7 +64,7 @@ export default function AccountContent() {
             <h3 className='font-semibold text-slate-900 mb-1'>
               {getUserDisplayName()}
             </h3>
-            <p className='text-sm text-slate-500 font-medium'>
+            <p className='text-sm text-slate-1000 font-medium'>
               {getUserEmail()}
             </p>
           </div>
@@ -73,7 +73,7 @@ export default function AccountContent() {
         {/* Profile Details */}
         <div className='mt-5'>
           {loadingProfile ? (
-            <div className='flex items-center gap-2 text-sm text-slate-500'>
+            <div className='flex items-center gap-2 text-sm text-slate-1000'>
               <div className='w-3 h-3 bg-slate-200 rounded-full animate-pulse'></div>
               <span>Loading...</span>
             </div>
@@ -85,13 +85,13 @@ export default function AccountContent() {
                 userProfile.industry ||
                 userProfile.yearsOfExperience !== null) && (
                 <div className='pb-4'>
-                  <h4 className='text-sm font-semibold text-slate-500 mb-4 border-b border-slate-100 pb-2'>
+                  <h4 className='text-sm font-semibold text-slate-1000 mb-4 border-b border-slate-100 pb-2'>
                     Profile
                   </h4>
                   <div className='divide-y divide-slate-100'>
                     {userProfile.jobRole && (
                       <div className='pb-3'>
-                        <dt className='text-sm font-medium text-slate-500 mb-1.5'>
+                        <dt className='text-sm font-medium text-slate-1000 mb-1.5'>
                           Role
                         </dt>
                         <dd className='text-base text-slate-900'>
@@ -101,7 +101,7 @@ export default function AccountContent() {
                     )}
                     {userProfile.companyName && (
                       <div className='py-3'>
-                        <dt className='text-sm font-medium text-slate-500 mb-1.5'>
+                        <dt className='text-sm font-medium text-slate-1000 mb-1.5'>
                           Company
                         </dt>
                         <dd className='text-base text-slate-900'>
@@ -111,7 +111,7 @@ export default function AccountContent() {
                     )}
                     {userProfile.industry && (
                       <div className='py-3'>
-                        <dt className='text-sm font-medium text-slate-500 mb-1.5'>
+                        <dt className='text-sm font-medium text-slate-1000 mb-1.5'>
                           Industry
                         </dt>
                         <dd className='text-base text-slate-900'>
@@ -122,7 +122,7 @@ export default function AccountContent() {
                     {userProfile.yearsOfExperience !== null &&
                       userProfile.yearsOfExperience !== undefined && (
                         <div className='pt-3'>
-                          <dt className='text-sm font-medium text-slate-500 mb-1.5'>
+                          <dt className='text-sm font-medium text-slate-1000 mb-1.5'>
                             Experience
                           </dt>
                           <dd className='text-base text-slate-900'>
@@ -137,7 +137,7 @@ export default function AccountContent() {
               {/* Education Section */}
               {userProfile.education && (
                 <div className='py-4'>
-                  <h4 className='text-sm font-semibold text-slate-500 mb-4'>
+                  <h4 className='text-sm font-semibold text-slate-1000 mb-4'>
                     Education
                   </h4>
                   <div className='text-base text-slate-900 leading-relaxed'>
@@ -149,7 +149,7 @@ export default function AccountContent() {
               {/* About Section */}
               {userProfile.about && (
                 <div className='py-4'>
-                  <h4 className='text-sm font-medium text-slate-500 mb-4'>
+                  <h4 className='text-sm font-medium text-slate-1000 mb-4'>
                     About
                   </h4>
                   <div className='text-base text-slate-900 leading-relaxed'>
@@ -166,7 +166,7 @@ export default function AccountContent() {
                   <div className='divide-y divide-slate-100'>
                     {userProfile.skills && userProfile.skills.length > 0 && (
                       <div className='pb-3'>
-                        <dt className='text-sm font-medium text-slate-500 mb-3'>
+                        <dt className='text-sm font-medium text-slate-1000 mb-3'>
                           Skills
                         </dt>
                         <dd className='flex flex-wrap gap-2'>
@@ -184,7 +184,7 @@ export default function AccountContent() {
                     {userProfile.interests &&
                       userProfile.interests.length > 0 && (
                         <div className='pt-3'>
-                          <dt className='text-sm font-medium text-slate-500 mb-3'>
+                          <dt className='text-sm font-medium text-slate-1000 mb-3'>
                             Interests
                           </dt>
                           <dd className='flex flex-wrap gap-2'>
@@ -204,7 +204,7 @@ export default function AccountContent() {
               )}
             </div>
           ) : (
-            <div className='text-sm text-slate-500 text-center py-8'>
+            <div className='text-sm text-slate-1000 text-center py-8'>
               No profile details available.
             </div>
           )}

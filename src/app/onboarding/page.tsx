@@ -281,7 +281,7 @@ export default function OnboardingPage() {
                     className={
                       i + 1 === currentStep
                         ? 'text-slate-900 font-medium'
-                        : 'text-slate-500'
+                        : 'text-slate-1000'
                     }
                   >
                     {label}
@@ -414,7 +414,7 @@ export default function OnboardingPage() {
                 <label className='block text-sm font-medium text-slate-700 mb-3'>
                   Key skills
                 </label>
-                <p className='text-sm text-slate-500 mb-3'>
+                <p className='text-sm text-slate-1000 mb-3'>
                   Add what you&apos;re good at. Type a skill and press Enter (or
                   comma).
                 </p>
@@ -451,7 +451,7 @@ export default function OnboardingPage() {
                 <label className='block text-sm font-medium text-slate-700 mb-3'>
                   How do you want to use Loopn? *
                 </label>
-                <div className='text-sm text-slate-500 mb-3'>
+                <div className='text-sm text-slate-1000 mb-3'>
                   <ul className='list-disc pl-5 space-y-1'>
                     <li>What you want (mentorship, collabs, clients)</li>
                     <li>
@@ -477,7 +477,7 @@ export default function OnboardingPage() {
                     {wordCount} words (minimum 24)
                   </span>
                   <span
-                    className={`${wordCount > 80 ? 'text-b_red-500' : 'text-slate-500'}`}
+                    className={`${wordCount > 80 ? 'text-b_red-500' : 'text-slate-1000'}`}
                   >
                     {wordCount}/80 words
                   </span>
