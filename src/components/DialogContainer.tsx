@@ -71,7 +71,7 @@ export default function DialogContainer({
     >
       {/* Background overlay */}
       <div
-        className={`fixed inset-0 bg-slate-900/16 transition-opacity duration-100 ${
+        className={`fixed inset-0 bg-slate-950/16 transition-opacity duration-100 ${
           isVisible ? 'opacity-100' : 'opacity-0'
         }`}
         onClick={onClose}

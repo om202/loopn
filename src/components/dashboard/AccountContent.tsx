@@ -61,7 +61,7 @@ export default function AccountContent() {
             className='mb-4'
           />
           <div>
-            <h3 className='font-semibold text-slate-900 mb-1'>
+            <h3 className='font-semibold text-slate-950 mb-1'>
               {getUserDisplayName()}
             </h3>
             <p className='text-sm text-slate-1000 font-medium'>
@@ -94,7 +94,7 @@ export default function AccountContent() {
                         <dt className='text-sm font-medium text-slate-1000 mb-1.5'>
                           Role
                         </dt>
-                        <dd className='text-base text-slate-900'>
+                        <dd className='text-base text-slate-950'>
                           {userProfile.jobRole}
                         </dd>
                       </div>
@@ -104,7 +104,7 @@ export default function AccountContent() {
                         <dt className='text-sm font-medium text-slate-1000 mb-1.5'>
                           Company
                         </dt>
-                        <dd className='text-base text-slate-900'>
+                        <dd className='text-base text-slate-950'>
                           {userProfile.companyName}
                         </dd>
                       </div>
@@ -114,7 +114,7 @@ export default function AccountContent() {
                         <dt className='text-sm font-medium text-slate-1000 mb-1.5'>
                           Industry
                         </dt>
-                        <dd className='text-base text-slate-900'>
+                        <dd className='text-base text-slate-950'>
                           {userProfile.industry}
                         </dd>
                       </div>
@@ -125,7 +125,7 @@ export default function AccountContent() {
                           <dt className='text-sm font-medium text-slate-1000 mb-1.5'>
                             Experience
                           </dt>
-                          <dd className='text-base text-slate-900'>
+                          <dd className='text-base text-slate-950'>
                             {userProfile.yearsOfExperience} years
                           </dd>
                         </div>
@@ -140,7 +140,7 @@ export default function AccountContent() {
                   <h4 className='text-sm font-semibold text-slate-1000 mb-4'>
                     Education
                   </h4>
-                  <div className='text-base text-slate-900 leading-relaxed'>
+                  <div className='text-base text-slate-950 leading-relaxed'>
                     {userProfile.education}
                   </div>
                 </div>
@@ -152,7 +152,7 @@ export default function AccountContent() {
                   <h4 className='text-sm font-medium text-slate-1000 mb-4'>
                     About
                   </h4>
-                  <div className='text-base text-slate-900 leading-relaxed'>
+                  <div className='text-base text-slate-950 leading-relaxed'>
                     {userProfile.about}
                   </div>
                 </div>

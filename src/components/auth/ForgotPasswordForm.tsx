@@ -44,7 +44,7 @@ export default function ForgotPasswordForm({
         <div>
           <label
             htmlFor='email'
-            className='block text-sm font-medium text-slate-900 mb-3'
+            className='block text-sm font-medium text-slate-950 mb-3'
           >
             Email address
           </label>
