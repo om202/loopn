@@ -204,7 +204,9 @@ export default function SearchUser({
             <button
               type='button'
               onClick={handleClearInput}
-              className='absolute right-11 top-1/2 -translate-y-1/2 w-6 h-6 text-zinc-500 hover:text-zinc-600 flex items-center justify-center transition-colors'
+              className={`absolute top-1/2 -translate-y-1/2 w-6 h-6 text-zinc-500 hover:text-zinc-600 flex items-center justify-center transition-all duration-300 ${
+                isFocused ? 'right-28' : 'right-11'
+              }`}
               aria-label='Clear search'
             >
               <X className='w-4 h-4' />
@@ -213,6 +215,7 @@ export default function SearchUser({
 
           <button
             type='submit'
+            onMouseDown={(e) => e.preventDefault()}
             className={`absolute right-2 top-1/2 -translate-y-1/2 bg-white rounded-full hover:bg-gray-50 flex items-center justify-center transition-all duration-300 ease-out border border-gray-200 overflow-hidden ${
               isFocused ? 'w-24 h-8 px-4' : 'w-8 h-8'
             }`}
