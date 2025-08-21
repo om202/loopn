@@ -367,30 +367,28 @@ export default function OnlineUsers({
         }
 
         // Filter out current user, users with existing conversations (except reconnectable), and remove duplicates
-        const filteredUsers = (result.data || []).filter(
-          (u: UserPresence) => {
-            // Exclude current user
-            if (!u?.userId || u.userId === user.userId) {
-              return false;
-            }
-            
-            const conversation = existingConversations.get(u.userId);
-            
-            // If no conversation exists, include the user
-            if (!conversation) {
-              return true;
-            }
-            
-            // If conversation exists, only include if it's ended and user can reconnect
-            const isEndedAndReconnectable = 
-              conversation.chatStatus === 'ENDED' && 
-              userCategories.canUserReconnect(u.userId);
-            
-            // Exclude users with active conversations or permanent connections
-            // Include users who can be reconnected
-            return isEndedAndReconnectable;
+        const filteredUsers = (result.data || []).filter((u: UserPresence) => {
+          // Exclude current user
+          if (!u?.userId || u.userId === user.userId) {
+            return false;
           }
-        );
+
+          const conversation = existingConversations.get(u.userId);
+
+          // If no conversation exists, include the user
+          if (!conversation) {
+            return true;
+          }
+
+          // If conversation exists, only include if it's ended and user can reconnect
+          const isEndedAndReconnectable =
+            conversation.chatStatus === 'ENDED' &&
+            userCategories.canUserReconnect(u.userId);
+
+          // Exclude users with active conversations or permanent connections
+          // Include users who can be reconnected
+          return isEndedAndReconnectable;
+        });
         setSuggestedUsers(filteredUsers);
         setLastSuggestedUsersLoad(now);
         setSuggestedUsersLoading(false);
@@ -401,7 +399,13 @@ export default function OnlineUsers({
     };
 
     loadSuggestedUsers();
-  }, [user, lastSuggestedUsersLoad, suggestedUsers.length, existingConversations, userCategories]);
+  }, [
+    user,
+    lastSuggestedUsersLoad,
+    suggestedUsers.length,
+    existingConversations,
+    userCategories,
+  ]);
 
   useEffect(() => {
     const combinedUsers = [...onlineUsers];

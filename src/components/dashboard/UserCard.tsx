@@ -190,12 +190,14 @@ export default function UserCard({
             </div>
             {/* Show clock icon for temporary connections (active chat trials) */}
             {(() => {
-              const conversation = existingConversations.get(userPresence.userId);
-              const isTemporaryConnection = 
-                conversation && 
-                conversation.chatStatus === 'ACTIVE' && 
+              const conversation = existingConversations.get(
+                userPresence.userId
+              );
+              const isTemporaryConnection =
+                conversation &&
+                conversation.chatStatus === 'ACTIVE' &&
                 !conversation.isConnected;
-              
+
               return isTemporaryConnection ? (
                 <Clock className='w-4 h-4 text-neutral-500 flex-shrink-0' />
               ) : null;
