@@ -366,9 +366,18 @@ export default function OnlineUsers({
           return;
         }
 
-        // Filter out current user and remove duplicates
+        // Filter out current user, users with existing conversations, and remove duplicates
         const filteredUsers = (result.data || []).filter(
-          (u: UserPresence) => u?.userId && u.userId !== user.userId
+          (u: UserPresence) => {
+            // Exclude current user
+            if (!u?.userId || u.userId === user.userId) {
+              return false;
+            }
+            
+            // Exclude users who already have conversations (temporary or permanent connections)
+            const hasExistingConversation = existingConversations.has(u.userId);
+            return !hasExistingConversation;
+          }
         );
         setSuggestedUsers(filteredUsers);
         setLastSuggestedUsersLoad(now);
@@ -380,7 +389,7 @@ export default function OnlineUsers({
     };
 
     loadSuggestedUsers();
-  }, [user, lastSuggestedUsersLoad, suggestedUsers.length]);
+  }, [user, lastSuggestedUsersLoad, suggestedUsers.length, existingConversations]);
 
   useEffect(() => {
     const combinedUsers = [...onlineUsers];
