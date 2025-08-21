@@ -566,7 +566,7 @@ export default function ProfileSidebar({
                           {userProfile.skills.map((skill, index) => (
                             <span
                               key={index}
-                              className='px-3 py-1.5 text-base bg-transparent text-zinc-500 border border-slate-200 rounded-lg font-medium'
+                              className='px-3 py-1.5 text-base bg-transparent text-zinc-950 border border-slate-200 rounded-lg font-medium'
                             >
                               {skill}
                             </span>
@@ -584,7 +584,7 @@ export default function ProfileSidebar({
                             {userProfile.interests.map((interest, index) => (
                               <span
                                 key={index}
-                                className='px-3 py-1.5 text-base bg-transparent text-zinc-500 border border-slate-200 rounded-lg font-medium'
+                                className='px-3 py-1.5 text-base bg-transparent text-zinc-950 border border-slate-200 rounded-lg font-medium'
                               >
                                 {interest}
                               </span>
