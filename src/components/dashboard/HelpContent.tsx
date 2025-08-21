@@ -37,20 +37,20 @@ export default function HelpContent({
             </p>
             <div className='space-y-2'>
               <div className='flex items-start gap-2'>
-                <CheckCircle className='w-4 h-4 text-brand-500 mt-0.5 flex-shrink-0' />
+                <CheckCircle className='w-4 h-4 text-brand-600 mt-0.5 flex-shrink-0' />
                 <span className='text-base text-neutral-950'>
                   Go to Account → Complete your profile with skills and
                   interests
                 </span>
               </div>
               <div className='flex items-start gap-2'>
-                <CheckCircle className='w-4 h-4 text-brand-500 mt-0.5 flex-shrink-0' />
+                <CheckCircle className='w-4 h-4 text-brand-600 mt-0.5 flex-shrink-0' />
                 <span className='text-base text-neutral-950'>
                   Add a clear profile picture
                 </span>
               </div>
               <div className='flex items-start gap-2'>
-                <CheckCircle className='w-4 h-4 text-brand-500 mt-0.5 flex-shrink-0' />
+                <CheckCircle className='w-4 h-4 text-brand-600 mt-0.5 flex-shrink-0' />
                 <span className='text-base text-neutral-950'>
                   Write a brief "About" section
                 </span>
@@ -67,7 +67,7 @@ export default function HelpContent({
             </p>
             <div className='space-y-2'>
               <div className='flex items-start gap-2'>
-                <span className='text-brand-500 font-medium text-base mt-0.5 flex-shrink-0'>
+                <span className='text-brand-600 font-medium text-base mt-0.5 flex-shrink-0'>
                   1.
                 </span>
                 <span className='text-base text-neutral-950'>
@@ -75,7 +75,7 @@ export default function HelpContent({
                 </span>
               </div>
               <div className='flex items-start gap-2'>
-                <span className='text-brand-500 font-medium text-base mt-0.5 flex-shrink-0'>
+                <span className='text-brand-600 font-medium text-base mt-0.5 flex-shrink-0'>
                   2.
                 </span>
                 <span className='text-base text-neutral-950'>
@@ -83,7 +83,7 @@ export default function HelpContent({
                 </span>
               </div>
               <div className='flex items-start gap-2'>
-                <span className='text-brand-500 font-medium text-base mt-0.5 flex-shrink-0'>
+                <span className='text-brand-600 font-medium text-base mt-0.5 flex-shrink-0'>
                   3.
                 </span>
                 <span className='text-base text-neutral-950'>
@@ -103,7 +103,7 @@ export default function HelpContent({
         <div className='space-y-3'>
           <div className='bg-white rounded-lg p-4 border border-gray-200'>
             <div className='flex items-center gap-3 mb-2'>
-              <Sparkles className='w-4 h-4 text-brand-500' />
+              <Sparkles className='w-4 h-4 text-brand-600' />
               <h4 className='font-medium text-neutral-950 text-base'>Discover</h4>
             </div>
             <p className='text-base text-neutral-950'>
@@ -114,7 +114,7 @@ export default function HelpContent({
 
           <div className='bg-white rounded-lg p-4 border border-gray-200'>
             <div className='flex items-center gap-3 mb-2'>
-              <Search className='w-4 h-4 text-brand-500' />
+              <Search className='w-4 h-4 text-brand-600' />
               <h4 className='font-medium text-neutral-950 text-base'>Search</h4>
             </div>
             <p className='text-base text-neutral-950'>
@@ -124,7 +124,7 @@ export default function HelpContent({
 
           <div className='bg-white rounded-lg p-4 border border-gray-200'>
             <div className='flex items-center gap-3 mb-2'>
-              <MessageCircle className='w-4 h-4 text-brand-500' />
+              <MessageCircle className='w-4 h-4 text-brand-600' />
               <h4 className='font-medium text-neutral-950 text-base'>Chats</h4>
             </div>
             <p className='text-base text-neutral-950'>
@@ -135,7 +135,7 @@ export default function HelpContent({
 
           <div className='bg-white rounded-lg p-4 border border-gray-200'>
             <div className='flex items-center gap-3 mb-2'>
-              <Users className='w-4 h-4 text-brand-500' />
+              <Users className='w-4 h-4 text-brand-600' />
               <h4 className='font-medium text-neutral-950 text-base'>
                 Connections
               </h4>
@@ -147,7 +147,7 @@ export default function HelpContent({
 
           <div className='bg-white rounded-lg p-4 border border-gray-200'>
             <div className='flex items-center gap-3 mb-2'>
-              <Bell className='w-4 h-4 text-brand-500' />
+              <Bell className='w-4 h-4 text-brand-600' />
               <h4 className='font-medium text-neutral-950 text-base'>
                 Notifications
               </h4>
@@ -167,7 +167,7 @@ export default function HelpContent({
         <div className='space-y-3'>
           <div className='bg-white rounded-lg p-4 border border-gray-200'>
             <div className='flex items-start gap-3'>
-              <AlertCircle className='w-4 h-4 text-brand-500 mt-0.5 flex-shrink-0' />
+              <AlertCircle className='w-4 h-4 text-brand-600 mt-0.5 flex-shrink-0' />
               <div>
                 <h4 className='font-medium text-neutral-950 text-base mb-1'>
                   My trial chat expired
@@ -188,7 +188,7 @@ export default function HelpContent({
 
           <div className='bg-white rounded-lg p-4 border border-gray-200'>
             <div className='flex items-start gap-3'>
-              <AlertCircle className='w-4 h-4 text-brand-500 mt-0.5 flex-shrink-0' />
+              <AlertCircle className='w-4 h-4 text-brand-600 mt-0.5 flex-shrink-0' />
               <div>
                 <h4 className='font-medium text-neutral-950 text-base mb-1'>
                   Someone isn't responding
@@ -207,7 +207,7 @@ export default function HelpContent({
 
           <div className='bg-white rounded-lg p-4 border border-gray-200'>
             <div className='flex items-start gap-3'>
-              <Clock className='w-4 h-4 text-brand-500 mt-0.5 flex-shrink-0' />
+              <Clock className='w-4 h-4 text-brand-600 mt-0.5 flex-shrink-0' />
               <div>
                 <h4 className='font-medium text-neutral-950 text-base mb-1'>
                   What does the timer mean?
@@ -222,7 +222,7 @@ export default function HelpContent({
 
           <div className='bg-white rounded-lg p-4 border border-gray-200'>
             <div className='flex items-start gap-3'>
-              <X className='w-4 h-4 text-brand-500 mt-0.5 flex-shrink-0' />
+              <X className='w-4 h-4 text-brand-600 mt-0.5 flex-shrink-0' />
               <div>
                 <h4 className='font-medium text-neutral-950 text-base mb-1'>
                   How do I end a chat?

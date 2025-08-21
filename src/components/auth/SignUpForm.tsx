@@ -95,7 +95,7 @@ export default function SignUpForm({
             clearError();
             onSwitchToSignIn();
           }}
-          className='text-sm text-brand-500 hover:text-brand-700 transition-colors'
+          className='text-sm text-brand-600 hover:text-brand-600 transition-colors'
         >
           Sign in
         </button>

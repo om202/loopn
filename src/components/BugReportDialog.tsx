@@ -103,7 +103,7 @@ export default function BugReportDialog({
               onClick={() => !isSubmitting && setType('bug')}
               className={`p-3 rounded-lg border transition-all text-left ${
                 type === 'bug'
-                  ? 'border-brand-100 bg-brand-50'
+                  ? 'border-brand-200 bg-brand-50'
                   : 'border-gray-200 hover:border-gray-300'
               } ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
             >
@@ -118,7 +118,7 @@ export default function BugReportDialog({
                 </span>
               </div>
               <p
-                className={`text-sm ${type === 'bug' ? 'text-brand-700' : 'text-neutral-500'}`}
+                className={`text-sm ${type === 'bug' ? 'text-brand-600' : 'text-neutral-500'}`}
               >
                 Something isn't working
               </p>
@@ -129,7 +129,7 @@ export default function BugReportDialog({
               onClick={() => !isSubmitting && setType('suggestion')}
               className={`p-3 rounded-lg border transition-all text-left ${
                 type === 'suggestion'
-                  ? 'border-brand-100 bg-brand-50'
+                  ? 'border-brand-200 bg-brand-50'
                   : 'border-gray-200 hover:border-gray-300'
               } ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
             >
@@ -144,7 +144,7 @@ export default function BugReportDialog({
                 </span>
               </div>
               <p
-                className={`text-sm ${type === 'suggestion' ? 'text-brand-700' : 'text-neutral-500'}`}
+                className={`text-sm ${type === 'suggestion' ? 'text-brand-600' : 'text-neutral-500'}`}
               >
                 Idea for improvement
               </p>

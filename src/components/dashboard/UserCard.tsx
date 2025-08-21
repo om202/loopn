@@ -214,7 +214,7 @@ export default function UserCard({
               );
               return (
                 <div
-                  className={`flex items-center justify-center w-[40px] h-[40px] md:w-auto md:h-auto md:min-w-[70px] rounded-xl border border-brand-100 md:px-2.5 md:py-2 ${
+                  className={`flex items-center justify-center w-[40px] h-[40px] md:w-auto md:h-auto md:min-w-[70px] rounded-xl border border-brand-200 md:px-2.5 md:py-2 ${
                     isSelected ? 'bg-white' : 'bg-brand-50'
                   }`}
                 >
@@ -279,8 +279,8 @@ export default function UserCard({
                 }}
                 className={`px-2 py-1.5 text-base font-medium rounded-xl border transition-colors flex items-center justify-center flex-shrink-0 gap-1.5 min-w-[44px] ${
                   isSelected
-                    ? 'bg-white text-brand-500 border-brand-100 hover:bg-brand-100 hover:border-brand-200'
-                    : 'bg-brand-50 text-brand-500 border-brand-100 hover:bg-brand-100 hover:border-brand-200'
+                    ? 'bg-white text-brand-600 border-brand-200 hover:bg-brand-100 hover:border-brand-200'
+                    : 'bg-brand-50 text-brand-600 border-brand-200 hover:bg-brand-100 hover:border-brand-200'
                 }`}
                 title={
                   incomingRequestSenderIds.has(userPresence.userId)
@@ -298,7 +298,7 @@ export default function UserCard({
                 {incomingRequestSenderIds.has(userPresence.userId) ? (
                   // Prioritize incoming requests over existing conversations
                   <>
-                    <Check className='w-4 h-4 text-brand-500 flex-shrink-0 font-bold stroke-[2.5]' />
+                    <Check className='w-4 h-4 text-brand-600 flex-shrink-0 font-bold stroke-[2.5]' />
                     <span className='text-base font-semibold'>Accept</span>
                   </>
                 ) : existingConversations.has(userPresence.userId) ? (
@@ -306,7 +306,7 @@ export default function UserCard({
                   'ENDED' ? (
                     canUserReconnect(userPresence.userId) ? (
                       <>
-                        <Plus className='w-4 h-4 text-brand-500 flex-shrink-0' />
+                        <Plus className='w-4 h-4 text-brand-600 flex-shrink-0' />
                         <span className='text-base font-medium'>Connect</span>
                       </>
                     ) : (
@@ -318,7 +318,7 @@ export default function UserCard({
                           <Clock className='w-4 h-4 text-neutral-500 flex-shrink-0' />
                         ) : (
                           <>
-                            <MessageCircle className='w-4 h-4 text-brand-500 flex-shrink-0' />
+                            <MessageCircle className='w-4 h-4 text-brand-600 flex-shrink-0' />
                             <span className='text-base font-medium'>View</span>
                           </>
                         );
@@ -326,13 +326,13 @@ export default function UserCard({
                     )
                   ) : (
                     <>
-                      <MessageCircle className='w-4 h-4 text-brand-500 flex-shrink-0' />
+                      <MessageCircle className='w-4 h-4 text-brand-600 flex-shrink-0' />
                       <span className='text-base font-medium'>Message</span>
                     </>
                   )
                 ) : (
                   <>
-                    <Plus className='w-4 h-4 text-brand-500 flex-shrink-0' />
+                    <Plus className='w-4 h-4 text-brand-600 flex-shrink-0' />
                     <span className='text-base font-medium'>Connect</span>
                   </>
                 )}
@@ -344,7 +344,7 @@ export default function UserCard({
           {/* Mobile: Profile dialog button */}
           <button
             onClick={() => setShowProfileDialog(true)}
-            className={`md:hidden px-2.5 py-2 text-base font-medium rounded-xl border transition-colors text-neutral-950 border-brand-100 hover:bg-brand-100 hover:border-brand-100 flex items-center justify-center flex-shrink-0 w-[40px] h-[40px] ${
+            className={`md:hidden px-2.5 py-2 text-base font-medium rounded-xl border transition-colors text-neutral-950 border-brand-200 hover:bg-brand-100 hover:border-brand-200 flex items-center justify-center flex-shrink-0 w-[40px] h-[40px] ${
               isSelected ? 'bg-white' : 'bg-brand-50'
             }`}
             disabled={loadingProfile}
@@ -367,7 +367,7 @@ export default function UserCard({
             aria-label='Open profile sidebar'
             aria-pressed={isProfileSidebarOpen}
           >
-            <MoreHorizontal className='w-5 h-5 text-brand-500' />
+            <MoreHorizontal className='w-5 h-5 text-brand-600' />
           </button>
         </div>
       </div>

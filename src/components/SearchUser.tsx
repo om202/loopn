@@ -224,9 +224,9 @@ export default function SearchUser({
               <div className='w-4 h-4 border-2 border-brand-500 border-t-transparent rounded-full animate-spin flex-shrink-0' />
             ) : (
               <>
-                <Search className='w-4 h-4 text-brand-500 flex-shrink-0' />
+                <Search className='w-4 h-4 text-brand-600 flex-shrink-0' />
                 {isFocused && (
-                  <span className='text-sm font-medium text-brand-500 whitespace-nowrap transition-all duration-300 ease-out ml-2'>
+                  <span className='text-sm font-medium text-brand-600 whitespace-nowrap transition-all duration-300 ease-out ml-2'>
                     Search
                   </span>
                 )}

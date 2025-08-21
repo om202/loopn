@@ -141,7 +141,7 @@ export default function HomePage() {
             <div className='text-center lg:text-left'>
               <h1 className='text-4xl sm:text-5xl lg:text-5xl font-bold text-neutral-950 mb-8 leading-tight'>
                 Simple and AI powered{' '}
-                <span className='text-brand-500 relative'>
+                <span className='text-brand-600 relative'>
                   Networking
                   <div className='absolute -bottom-2 left-0 w-full h-1 bg-brand-200 rounded-full opacity-60'></div>
                 </span>{' '}
@@ -584,7 +584,7 @@ export default function HomePage() {
             <div className='relative group'>
               <div className='bg-white rounded-2xl p-6 sm:p-8 border border-gray-200 relative h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
                 {/* Step number */}
-                <div className='absolute -top-4 left-1/2 -translate-x-1/2 w-12 h-12 border-1 border-brand-200 bg-white rounded-2xl flex items-center justify-center text-brand-500 font-bold text-lg z-20'>
+                <div className='absolute -top-4 left-1/2 -translate-x-1/2 w-12 h-12 border-1 border-brand-200 bg-white rounded-2xl flex items-center justify-center text-brand-600 font-bold text-lg z-20'>
                   1
                 </div>
                 {/* Content */}
@@ -605,7 +605,7 @@ export default function HomePage() {
             <div className='relative group'>
               <div className='bg-white rounded-2xl p-6 sm:p-8 border border-gray-200 relative h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
                 {/* Step number */}
-                <div className='absolute -top-4 left-1/2 -translate-x-1/2 w-12 h-12 border-1 border-brand-200 bg-white rounded-2xl flex items-center justify-center text-brand-500 font-bold text-lg z-20'>
+                <div className='absolute -top-4 left-1/2 -translate-x-1/2 w-12 h-12 border-1 border-brand-200 bg-white rounded-2xl flex items-center justify-center text-brand-600 font-bold text-lg z-20'>
                   2
                 </div>
                 {/* Content */}
@@ -626,7 +626,7 @@ export default function HomePage() {
             <div className='relative group'>
               <div className='bg-white rounded-2xl p-6 sm:p-8 border border-gray-200 relative h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
                 {/* Step number */}
-                <div className='absolute -top-4 left-1/2 -translate-x-1/2 w-12 h-12 border-1 border-brand-200 bg-white rounded-2xl flex items-center justify-center text-brand-500 font-bold text-lg z-20'>
+                <div className='absolute -top-4 left-1/2 -translate-x-1/2 w-12 h-12 border-1 border-brand-200 bg-white rounded-2xl flex items-center justify-center text-brand-600 font-bold text-lg z-20'>
                   3
                 </div>
                 {/* Content */}

@@ -4,70 +4,70 @@
 @import url('/fonts/atkinson-optimized.css');
 
 @theme {
-  /* Custom brand colors - Clean Apple Blue (#007AFF) */
-  --color-brand-50: oklch(0.98 0.015 235);
-  --color-brand-100: oklch(0.95 0.035 235);
-  --color-brand-200: oklch(0.9 0.07 235);
-  --color-brand-300: oklch(0.83 0.12 235);
-  --color-brand-400: oklch(0.74 0.17 235);
-  --color-brand-500: oklch(0.64 0.22 235);
-  --color-brand-600: oklch(0.55 0.24 235);
-  --color-brand-700: oklch(0.46 0.21 235);
-  --color-brand-800: oklch(0.38 0.18 235);
-  --color-brand-900: oklch(0.32 0.15 235);
-  --color-brand-950: oklch(0.25 0.11 235);
+  /* Custom brand colors - Punchier Blue */
+  --color-brand-50: oklch(0.98 0.025 235);
+  --color-brand-100: oklch(0.95 0.05 235);
+  --color-brand-200: oklch(0.9 0.09 235);
+  --color-brand-300: oklch(0.83 0.15 235);
+  --color-brand-400: oklch(0.74 0.22 235);
+  --color-brand-500: oklch(0.64 0.28 235);
+  --color-brand-600: oklch(0.55 0.30 235);
+  --color-brand-700: oklch(0.46 0.27 235);
+  --color-brand-800: oklch(0.38 0.24 235);
+  --color-brand-900: oklch(0.32 0.20 235);
+  --color-brand-950: oklch(0.25 0.16 235);
 
-  /* Custom red colors - exact same OKLCH as brand blue, only hue changed */
-  --color-b_red-50: oklch(0.98 0.015 50);
-  --color-b_red-100: oklch(0.95 0.035 50);
-  --color-b_red-200: oklch(0.9 0.07 50);
-  --color-b_red-300: oklch(0.83 0.12 50);
-  --color-b_red-400: oklch(0.74 0.17 50);
-  --color-b_red-500: oklch(0.64 0.22 50);
-  --color-b_red-600: oklch(0.55 0.24 50);
-  --color-b_red-700: oklch(0.46 0.21 50);
-  --color-b_red-800: oklch(0.38 0.18 50);
-  --color-b_red-900: oklch(0.32 0.15 50);
-  --color-b_red-950: oklch(0.25 0.11 50);
+  /* Custom red colors - punchier OKLCH values */
+  --color-b_red-50: oklch(0.98 0.025 50);
+  --color-b_red-100: oklch(0.95 0.05 50);
+  --color-b_red-200: oklch(0.9 0.09 50);
+  --color-b_red-300: oklch(0.83 0.15 50);
+  --color-b_red-400: oklch(0.74 0.22 50);
+  --color-b_red-500: oklch(0.64 0.28 50);
+  --color-b_red-600: oklch(0.55 0.30 50);
+  --color-b_red-700: oklch(0.46 0.27 50);
+  --color-b_red-800: oklch(0.38 0.24 50);
+  --color-b_red-900: oklch(0.32 0.20 50);
+  --color-b_red-950: oklch(0.25 0.16 50);
 
-  /* Custom green colors - exact same OKLCH as brand blue, only hue changed */
-  --color-b_green-50: oklch(0.98 0.015 150);
-  --color-b_green-100: oklch(0.95 0.035 150);
-  --color-b_green-200: oklch(0.9 0.07 150);
-  --color-b_green-300: oklch(0.83 0.12 150);
-  --color-b_green-400: oklch(0.74 0.17 150);
-  --color-b_green-500: oklch(0.64 0.22 150);
-  --color-b_green-600: oklch(0.55 0.24 150);
-  --color-b_green-700: oklch(0.46 0.21 150);
-  --color-b_green-800: oklch(0.38 0.18 150);
-  --color-b_green-900: oklch(0.32 0.15 150);
-  --color-b_green-950: oklch(0.25 0.11 150);
+  /* Custom green colors - punchier OKLCH values */
+  --color-b_green-50: oklch(0.98 0.025 150);
+  --color-b_green-100: oklch(0.95 0.05 150);
+  --color-b_green-200: oklch(0.9 0.09 150);
+  --color-b_green-300: oklch(0.83 0.15 150);
+  --color-b_green-400: oklch(0.74 0.22 150);
+  --color-b_green-500: oklch(0.64 0.28 150);
+  --color-b_green-600: oklch(0.55 0.30 150);
+  --color-b_green-700: oklch(0.46 0.27 150);
+  --color-b_green-800: oklch(0.38 0.24 150);
+  --color-b_green-900: oklch(0.32 0.20 150);
+  --color-b_green-950: oklch(0.25 0.16 150);
 
-  /* Custom yellow colors - exact same OKLCH as brand blue, only hue changed */
-  --color-b_yellow-50: oklch(0.98 0.015 90);
-  --color-b_yellow-100: oklch(0.95 0.035 90);
-  --color-b_yellow-200: oklch(0.9 0.07 90);
-  --color-b_yellow-300: oklch(0.83 0.12 90);
-  --color-b_yellow-400: oklch(0.74 0.17 90);
-  --color-b_yellow-500: oklch(0.64 0.22 90);
-  --color-b_yellow-600: oklch(0.55 0.24 90);
-  --color-b_yellow-700: oklch(0.46 0.21 90);
-  --color-b_yellow-800: oklch(0.38 0.18 90);
-  --color-b_yellow-900: oklch(0.32 0.15 90);
-  --color-b_yellow-950: oklch(0.25 0.11 90);
+  /* Custom yellow colors - punchier OKLCH values */
+  --color-b_yellow-50: oklch(0.98 0.025 90);
+  --color-b_yellow-100: oklch(0.95 0.05 90);
+  --color-b_yellow-200: oklch(0.9 0.09 90);
+  --color-b_yellow-300: oklch(0.83 0.15 90);
+  --color-b_yellow-400: oklch(0.74 0.22 90);
+  --color-b_yellow-500: oklch(0.64 0.28 90);
+  --color-b_yellow-600: oklch(0.55 0.30 90);
+  --color-b_yellow-700: oklch(0.46 0.27 90);
+  --color-b_yellow-800: oklch(0.38 0.24 90);
+  --color-b_yellow-900: oklch(0.32 0.20 90);
+  --color-b_yellow-950: oklch(0.25 0.16 90);
 
-  /* Custom orange colors - exact same OKLCH as brand blue, only hue changed */
-  --color-b_orange-50: oklch(0.98 0.015 70);
-  --color-b_orange-100: oklch(0.95 0.035 70);
-  --color-b_orange-200: oklch(0.9 0.07 70);
-  --color-b_orange-300: oklch(0.83 0.12 70);
-  --color-b_orange-400: oklch(0.74 0.17 70);
-  --color-b_orange-500: oklch(0.64 0.22 70);
-  --color-b_orange-600: oklch(0.55 0.24 70);
-  --color-b_orange-700: oklch(0.46 0.21 70);
-  --color-b_orange-800: oklch(0.38 0.18 70);
-  --color-b_orange-900: oklch(0.32 0.15 70);
-  --color-b_orange-950: oklch(0.25 0.11 70);
+  /* Custom orange colors - punchier OKLCH values */
+  --color-b_orange-50: oklch(0.98 0.025 70);
+  --color-b_orange-100: oklch(0.95 0.05 70);
+  --color-b_orange-200: oklch(0.9 0.09 70);
+  --color-b_orange-300: oklch(0.83 0.15 70);
+  --color-b_orange-400: oklch(0.74 0.22 70);
+  --color-b_orange-500: oklch(0.64 0.28 70);
+  --color-b_orange-600: oklch(0.55 0.30 70);
+  --color-b_orange-700: oklch(0.46 0.27 70);
+  --color-b_orange-800: oklch(0.38 0.24 70);
+  --color-b_orange-900: oklch(0.32 0.20 70);
+  --color-b_orange-950: oklch(0.25 0.16 70);
 }
 
 /* Set root font size to 15px instead of default 16px */
