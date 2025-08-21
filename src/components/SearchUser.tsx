@@ -164,7 +164,7 @@ export default function SearchUser({
             tabIndex={-1}
             aria-hidden='true'
           />
-          <GradientSparkles className='absolute left-3 top-1/2 -translate-y-1/2 w-5.5 h-5.5' />
+          <GradientSparkles className='absolute left-3 top-1/2 -translate-y-1/2 w-5.5 h-5.5 text-brand-500' />
           <input
             ref={inputRef}
             type='text'
@@ -196,7 +196,7 @@ export default function SearchUser({
               WebkitAppearance: 'none',
               MozAppearance: 'textfield',
             }}
-            className='w-full pl-10 pr-16 py-3 rounded-full border border-gray-200 focus:outline-none focus:ring-1 focus:ring-brand-200 focus:bg-white bg-white hover:bg-brand-50 transition-colors placeholder-gray-1000'
+            className='w-full pl-10 pr-16 py-3 rounded-full border border-gray-200 focus:outline-none focus:ring-1 focus:ring-brand-200 bg-gray-50 text-gray-900 hover:bg-gray-100 transition-colors placeholder-gray-500'
           />
 
           {/* Clear button - only show when there's text */}
@@ -204,7 +204,7 @@ export default function SearchUser({
             <button
               type='button'
               onClick={handleClearInput}
-              className={`absolute top-1/2 -translate-y-1/2 w-6 h-6 text-neutral-500 hover:text-neutral-500 flex items-center justify-center transition-all duration-300 ${
+              className={`absolute top-1/2 -translate-y-1/2 w-6 h-6 text-brand-500 hover:text-brand-700 flex items-center justify-center transition-all duration-300 ${
                 isFocused ? 'right-28' : 'right-11'
               }`}
               aria-label='Clear search'
@@ -216,7 +216,7 @@ export default function SearchUser({
           <button
             type='submit'
             onMouseDown={(e) => e.preventDefault()}
-            className={`absolute right-2 top-1/2 -translate-y-1/2 bg-white rounded-full hover:bg-gray-50 flex items-center justify-center transition-all duration-300 ease-out border border-gray-200 overflow-hidden ${
+            className={`absolute right-2 top-1/2 -translate-y-1/2 bg-white rounded-full hover:bg-brand-100 flex items-center justify-center transition-all duration-300 ease-out border border-brand-200 overflow-hidden ${
               isFocused ? 'w-24 h-8 px-4' : 'w-8 h-8'
             }`}
           >
@@ -224,9 +224,9 @@ export default function SearchUser({
               <div className='w-4 h-4 border-2 border-brand-500 border-t-transparent rounded-full animate-spin flex-shrink-0' />
             ) : (
               <>
-                <Search className='w-4 h-4 text-brand-600 flex-shrink-0' />
+                <Search className='w-4 h-4 text-brand-500 flex-shrink-0' />
                 {isFocused && (
-                  <span className='text-sm font-medium text-brand-600 whitespace-nowrap transition-all duration-300 ease-out ml-2'>
+                  <span className='text-sm font-medium text-brand-500 whitespace-nowrap transition-all duration-300 ease-out ml-2'>
                     Search
                   </span>
                 )}
