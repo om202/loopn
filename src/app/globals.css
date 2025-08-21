@@ -71,9 +71,9 @@
 }
 
 /* Set root font size to 15px instead of default 16px */
-html {
+/* html {
   font-size: 15px;
-}
+} */
 
 body {
   font-family:
