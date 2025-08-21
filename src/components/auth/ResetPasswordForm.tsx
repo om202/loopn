@@ -63,13 +63,13 @@ export default function ResetPasswordForm({
         <div>
           <label
             htmlFor='confirmationCode'
-            className='block text-sm font-medium text-slate-950 mb-3'
+            className='block text-sm font-medium text-zinc-950 mb-3'
           >
             Verification code
           </label>
           <div className='relative'>
             <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-              <Shield className='h-5 w-5 text-slate-1000' />
+              <Shield className='h-5 w-5 text-zinc-500' />
             </div>
             <input
               id='confirmationCode'
@@ -83,7 +83,7 @@ export default function ResetPasswordForm({
             />
           </div>
           <div className='flex justify-between items-center mt-2'>
-            <p className='text-sm text-slate-1000'>
+            <p className='text-sm text-zinc-500'>
               Code sent to <span className='font-medium'>{email}</span>
             </p>
             <button
@@ -100,13 +100,13 @@ export default function ResetPasswordForm({
         <div>
           <label
             htmlFor='newPassword'
-            className='block text-sm font-medium text-slate-950 mb-3'
+            className='block text-sm font-medium text-zinc-950 mb-3'
           >
             New password
           </label>
           <div className='relative'>
             <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-              <Lock className='h-5 w-5 text-slate-1000' />
+              <Lock className='h-5 w-5 text-zinc-500' />
             </div>
             <input
               id='newPassword'
@@ -118,7 +118,7 @@ export default function ResetPasswordForm({
               required
             />
           </div>
-          <p className='text-sm text-slate-1000 mt-2'>
+          <p className='text-sm text-zinc-500 mt-2'>
             Must be at least 8 characters with uppercase, lowercase, numbers,
             and symbols
           </p>
@@ -127,13 +127,13 @@ export default function ResetPasswordForm({
         <div>
           <label
             htmlFor='confirmPassword'
-            className='block text-sm font-medium text-slate-950 mb-3'
+            className='block text-sm font-medium text-zinc-950 mb-3'
           >
             Confirm new password
           </label>
           <div className='relative'>
             <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-              <Lock className='h-5 w-5 text-slate-1000' />
+              <Lock className='h-5 w-5 text-zinc-500' />
             </div>
             <input
               id='confirmPassword'

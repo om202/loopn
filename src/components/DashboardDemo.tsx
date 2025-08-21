@@ -248,11 +248,11 @@ export default function DashboardDemo() {
 
               <div className='flex-1 min-w-0'>
                 <div className='flex items-center gap-2 mb-1'>
-                  <div className='text-slate-950 truncate no-email-detection font-medium'>
+                  <div className='text-zinc-950 truncate no-email-detection font-medium'>
                     {user.name}
                   </div>
                 </div>
-                <div className='text-[15px] text-slate-1000 mb-1.5 truncate'>
+                <div className='text-[15px] text-zinc-500 mb-1.5 truncate'>
                   {user.role}
                 </div>
               </div>
@@ -266,7 +266,7 @@ export default function DashboardDemo() {
                 </button>
 
                 <button className='md:flex p-1.5 text-base font-medium rounded-full border transition-colors items-center justify-center w-[32px] h-[32px] bg-white border-slate-100 hover:bg-slate-100'>
-                  <MoreHorizontal className='w-5 h-5 text-slate-1000' />
+                  <MoreHorizontal className='w-5 h-5 text-zinc-500' />
                 </button>
               </div>
             </div>
@@ -301,10 +301,10 @@ export default function DashboardDemo() {
               </div>
 
               <div className='flex-1 min-w-0'>
-                <div className='text-slate-950 font-medium mb-1'>
+                <div className='text-zinc-950 font-medium mb-1'>
                   {connection.name}
                 </div>
-                <div className='text-sm text-slate-1000 mb-1'>
+                <div className='text-sm text-zinc-500 mb-1'>
                   {connection.role}
                 </div>
               </div>
@@ -313,7 +313,7 @@ export default function DashboardDemo() {
                 <button className='p-2 text-brand-500 hover:bg-brand-50 rounded-lg transition-colors'>
                   <MessageCircle className='w-5 h-5' />
                 </button>
-                <button className='p-2 text-slate-1000 hover:bg-slate-100 rounded-lg transition-colors'>
+                <button className='p-2 text-zinc-500 hover:bg-slate-100 rounded-lg transition-colors'>
                   <MoreHorizontal className='w-5 h-5' />
                 </button>
               </div>
@@ -352,14 +352,14 @@ export default function DashboardDemo() {
 
                 <div className='flex-1 min-w-0'>
                   <div className='flex items-center justify-between mb-1'>
-                    <div className='text-slate-950 font-medium truncate'>
+                    <div className='text-zinc-950 font-medium truncate'>
                       {user.name}
                     </div>
-                    <div className='text-sm text-slate-1000'>
+                    <div className='text-sm text-zinc-500'>
                       {user.lastMessageTime}
                     </div>
                   </div>
-                  <div className='text-sm text-slate-1000 truncate'>
+                  <div className='text-sm text-zinc-500 truncate'>
                     {user.lastMessage}
                   </div>
                 </div>
@@ -390,11 +390,11 @@ export default function DashboardDemo() {
               </div>
 
               <div className='flex-1 min-w-0'>
-                <div className='text-base font-medium text-slate-950 mb-1'>
+                <div className='text-base font-medium text-zinc-950 mb-1'>
                   <span className=''>{notification.title}</span>{' '}
                   {notification.content}
                 </div>
-                <div className='text-sm text-slate-1000'>
+                <div className='text-sm text-zinc-500'>
                   {notification.timestamp}
                 </div>
               </div>
@@ -404,7 +404,7 @@ export default function DashboardDemo() {
                   <button className='px-3 py-1.5 bg-brand-500 text-white text-sm font-medium rounded-lg hover:bg-brand-600 transition-colors'>
                     Accept
                   </button>
-                  <button className='px-3 py-1.5 bg-slate-100 text-slate-700 text-sm font-medium rounded-lg hover:bg-slate-200 transition-colors'>
+                  <button className='px-3 py-1.5 bg-slate-100 text-zinc-700 text-sm font-medium rounded-lg hover:bg-slate-200 transition-colors'>
                     Decline
                   </button>
                 </div>
@@ -423,10 +423,10 @@ export default function DashboardDemo() {
           <div className='w-16 h-16 mx-auto mb-4 bg-brand-100 rounded-full flex items-center justify-center'>
             <HelpCircle className='w-8 h-8 text-brand-500' />
           </div>
-          <h3 className='text-lg font-medium text-slate-950 mb-2'>
+          <h3 className='text-lg font-medium text-zinc-950 mb-2'>
             Help & Support
           </h3>
-          <p className='text-slate-1000'>Get help with using Loopn</p>
+          <p className='text-zinc-500'>Get help with using Loopn</p>
         </div>
 
         <div className='space-y-3'>
@@ -436,8 +436,8 @@ export default function DashboardDemo() {
                 <Globe className='w-5 h-5 text-blue-600' />
               </div>
               <div>
-                <div className='font-medium text-slate-950'>Getting Started</div>
-                <div className='text-sm text-slate-1000'>
+                <div className='font-medium text-zinc-950'>Getting Started</div>
+                <div className='text-sm text-zinc-500'>
                   Learn the basics of Loopn
                 </div>
               </div>
@@ -450,8 +450,8 @@ export default function DashboardDemo() {
                 <MessageCircle className='w-5 h-5 text-green-600' />
               </div>
               <div>
-                <div className='font-medium text-slate-950'>Chat Features</div>
-                <div className='text-sm text-slate-1000'>
+                <div className='font-medium text-zinc-950'>Chat Features</div>
+                <div className='text-sm text-zinc-500'>
                   How to use messaging and connections
                 </div>
               </div>
@@ -464,10 +464,10 @@ export default function DashboardDemo() {
                 <Shield className='w-5 h-5 text-purple-600' />
               </div>
               <div>
-                <div className='font-medium text-slate-950'>
+                <div className='font-medium text-zinc-950'>
                   Privacy & Safety
                 </div>
-                <div className='text-sm text-slate-1000'>
+                <div className='text-sm text-zinc-500'>
                   Keep your account secure
                 </div>
               </div>
@@ -494,11 +494,11 @@ export default function DashboardDemo() {
             <div className='absolute -bottom-1 -right-1 w-6 h-6 bg-green-400 border-3 border-white rounded-full'></div>
           </div>
           <div>
-            <h3 className='text-xl font-semibold text-slate-950'>
+            <h3 className='text-xl font-semibold text-zinc-950'>
               {currentUser.name}
             </h3>
-            <p className='text-slate-1000'>{currentUser.role}</p>
-            <p className='text-sm text-slate-400'>{currentUser.email}</p>
+            <p className='text-zinc-500'>{currentUser.role}</p>
+            <p className='text-sm text-zinc-400'>{currentUser.email}</p>
           </div>
         </div>
 
@@ -506,28 +506,28 @@ export default function DashboardDemo() {
         <div className='space-y-4'>
           <div className='p-4 bg-white border border-slate-200 rounded-xl'>
             <div className='flex items-center gap-2 mb-3'>
-              <Briefcase className='w-4 h-4 text-slate-1000' />
-              <span className='text-sm font-medium text-slate-1000'>
+              <Briefcase className='w-4 h-4 text-zinc-500' />
+              <span className='text-sm font-medium text-zinc-500'>
                 Experience
               </span>
             </div>
-            <p className='text-slate-950'>{currentUser.experience}</p>
+            <p className='text-zinc-950'>{currentUser.experience}</p>
           </div>
 
           <div className='p-4 bg-white border border-slate-200 rounded-xl'>
             <div className='flex items-center gap-2 mb-3'>
-              <GraduationCap className='w-4 h-4 text-slate-1000' />
-              <span className='text-sm font-medium text-slate-1000'>
+              <GraduationCap className='w-4 h-4 text-zinc-500' />
+              <span className='text-sm font-medium text-zinc-500'>
                 Education
               </span>
             </div>
-            <p className='text-slate-950'>{currentUser.education}</p>
+            <p className='text-zinc-950'>{currentUser.education}</p>
           </div>
 
           <div className='p-4 bg-white border border-slate-200 rounded-xl'>
             <div className='flex items-center gap-2 mb-3'>
-              <Award className='w-4 h-4 text-slate-1000' />
-              <span className='text-sm font-medium text-slate-1000'>Skills</span>
+              <Award className='w-4 h-4 text-zinc-500' />
+              <span className='text-sm font-medium text-zinc-500'>Skills</span>
             </div>
             <div className='flex flex-wrap gap-2'>
               {currentUser.skills.map((skill, index) => (
@@ -543,8 +543,8 @@ export default function DashboardDemo() {
 
           <div className='p-4 bg-white border border-slate-200 rounded-xl'>
             <div className='flex items-center gap-2 mb-3'>
-              <Target className='w-4 h-4 text-slate-1000' />
-              <span className='text-sm font-medium text-slate-1000'>
+              <Target className='w-4 h-4 text-zinc-500' />
+              <span className='text-sm font-medium text-zinc-500'>
                 Interests
               </span>
             </div>
@@ -552,7 +552,7 @@ export default function DashboardDemo() {
               {currentUser.interests.map((interest, index) => (
                 <span
                   key={index}
-                  className='px-3 py-1 bg-slate-100 text-slate-700 text-sm rounded-full font-medium'
+                  className='px-3 py-1 bg-slate-100 text-zinc-700 text-sm rounded-full font-medium'
                 >
                   {interest}
                 </span>
@@ -562,10 +562,10 @@ export default function DashboardDemo() {
 
           <div className='p-4 bg-white border border-slate-200 rounded-xl'>
             <div className='flex items-center gap-2 mb-3'>
-              <User className='w-4 h-4 text-slate-1000' />
-              <span className='text-sm font-medium text-slate-1000'>About</span>
+              <User className='w-4 h-4 text-zinc-500' />
+              <span className='text-sm font-medium text-zinc-500'>About</span>
             </div>
-            <p className='text-slate-950 leading-relaxed'>{currentUser.about}</p>
+            <p className='text-zinc-950 leading-relaxed'>{currentUser.about}</p>
           </div>
         </div>
       </div>
@@ -577,12 +577,12 @@ export default function DashboardDemo() {
       {searchResults.length === 0 ? (
         <div className='flex flex-col items-center justify-center h-full text-center p-8'>
           <div className='w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-full flex items-center justify-center'>
-            <Search className='w-8 h-8 text-slate-1000' />
+            <Search className='w-8 h-8 text-zinc-500' />
           </div>
-          <h3 className='text-lg font-medium text-slate-950 mb-2'>
+          <h3 className='text-lg font-medium text-zinc-950 mb-2'>
             No results found
           </h3>
-          <p className='text-slate-1000'>Try searching for something else</p>
+          <p className='text-zinc-500'>Try searching for something else</p>
         </div>
       ) : (
         <div className='space-y-3'>
@@ -608,10 +608,10 @@ export default function DashboardDemo() {
                 </div>
 
                 <div className='flex-1 min-w-0'>
-                  <div className='text-slate-950 font-medium mb-1'>
+                  <div className='text-zinc-950 font-medium mb-1'>
                     {user.name}
                   </div>
-                  <div className='text-sm text-slate-1000 mb-2'>{user.role}</div>
+                  <div className='text-sm text-zinc-500 mb-2'>{user.role}</div>
                   <div className='flex flex-wrap gap-1'>
                     {user.skills.slice(0, 3).map((skill, idx) => (
                       <span
@@ -663,7 +663,7 @@ export default function DashboardDemo() {
                   priority
                 />
                 <div className='flex items-center gap-2'>
-                  <h1 className='text-2xl font-bold text-slate-950'>Loopn</h1>
+                  <h1 className='text-2xl font-bold text-zinc-950'>Loopn</h1>
                 </div>
               </div>
             </div>
@@ -678,7 +678,7 @@ export default function DashboardDemo() {
                 className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                   activeSection === 'discover'
                     ? 'bg-brand-50 text-brand-700 border-brand-200'
-                    : 'text-slate-950 hover:bg-slate-100 hover:text-slate-950 border-transparent'
+                    : 'text-zinc-950 hover:bg-slate-100 hover:text-zinc-950 border-transparent'
                 }`}
               >
                 <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -695,7 +695,7 @@ export default function DashboardDemo() {
                 className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                   activeSection === 'connections'
                     ? 'bg-brand-50 text-brand-700 border-brand-200'
-                    : 'text-slate-950 hover:bg-slate-100 hover:text-slate-950 border-transparent'
+                    : 'text-zinc-950 hover:bg-slate-100 hover:text-zinc-950 border-transparent'
                 }`}
               >
                 <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -703,7 +703,7 @@ export default function DashboardDemo() {
                 </div>
                 <span className='font-medium text-base flex-1 flex items-center gap-3'>
                   Connections
-                  <span className='text-sm font-bold flex items-center justify-center h-5 w-5 rounded-full text-center bg-slate-100 text-slate-600'>
+                  <span className='text-sm font-bold flex items-center justify-center h-5 w-5 rounded-full text-center bg-slate-100 text-zinc-500'>
                     {dummyConnections.length}
                   </span>
                 </span>
@@ -715,7 +715,7 @@ export default function DashboardDemo() {
                 className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                   activeSection === 'chats'
                     ? 'bg-brand-50 text-brand-700 border-brand-200'
-                    : 'text-slate-950 hover:bg-slate-100 hover:text-slate-950 border-transparent'
+                    : 'text-zinc-950 hover:bg-slate-100 hover:text-zinc-950 border-transparent'
                 }`}
               >
                 <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -737,7 +737,7 @@ export default function DashboardDemo() {
                 className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                   activeSection === 'notifications'
                     ? 'bg-brand-50 text-brand-700 border-brand-200'
-                    : 'text-slate-950 hover:bg-slate-100 hover:text-slate-950 border-transparent'
+                    : 'text-zinc-950 hover:bg-slate-100 hover:text-zinc-950 border-transparent'
                 }`}
               >
                 <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -762,7 +762,7 @@ export default function DashboardDemo() {
                 className={`relative flex-1 flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                   activeSection === 'help'
                     ? 'bg-brand-50 text-brand-700 border-brand-200'
-                    : 'text-slate-950 hover:bg-slate-100 hover:text-slate-950 border-transparent'
+                    : 'text-zinc-950 hover:bg-slate-100 hover:text-zinc-950 border-transparent'
                 }`}
               >
                 <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -773,7 +773,7 @@ export default function DashboardDemo() {
                 </span>
               </button>
 
-              <button className='p-2 text-slate-1000 hover:text-slate-950 hover:bg-slate-100 rounded-lg transition-colors border border-transparent hover:border-slate-200'>
+              <button className='p-2 text-zinc-500 hover:text-zinc-950 hover:bg-slate-100 rounded-lg transition-colors border border-transparent hover:border-slate-200'>
                 <Bug className='w-4 h-4' />
               </button>
             </div>
@@ -784,7 +784,7 @@ export default function DashboardDemo() {
               className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                 activeSection === 'account'
                   ? 'bg-brand-50 text-brand-700 border-brand-200'
-                  : 'text-slate-950 hover:bg-slate-100 hover:text-slate-950 border-transparent'
+                  : 'text-zinc-950 hover:bg-slate-100 hover:text-zinc-950 border-transparent'
               }`}
             >
               <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -864,68 +864,68 @@ export default function DashboardDemo() {
           <div className='flex-shrink-0 mb-4 sm:mb-5 lg:mb-6'>
             {activeSection === 'discover' && (
               <>
-                <h2 className='text-2xl font-bold text-slate-950 mb-1'>
+                <h2 className='text-2xl font-bold text-zinc-950 mb-1'>
                   Discover
                 </h2>
-                <p className='text-base text-slate-600'>
+                <p className='text-base text-zinc-500'>
                   AI-curated professionals based on your interests
                 </p>
               </>
             )}
             {activeSection === 'connections' && (
               <>
-                <h2 className='text-2xl font-bold text-slate-950 mb-1'>
+                <h2 className='text-2xl font-bold text-zinc-950 mb-1'>
                   Connections
                 </h2>
-                <p className='text-base text-slate-600'>
+                <p className='text-base text-zinc-500'>
                   People you're connected with
                 </p>
               </>
             )}
             {activeSection === 'chats' && (
               <>
-                <h2 className='text-2xl font-bold text-slate-950 mb-1'>Chats</h2>
-                <p className='text-base text-slate-600'>
+                <h2 className='text-2xl font-bold text-zinc-950 mb-1'>Chats</h2>
+                <p className='text-base text-zinc-500'>
                   Your ongoing conversations
                 </p>
               </>
             )}
             {activeSection === 'notifications' && (
               <>
-                <h2 className='text-2xl font-bold text-slate-950 mb-1'>
+                <h2 className='text-2xl font-bold text-zinc-950 mb-1'>
                   Notifications
                 </h2>
-                <p className='text-base text-slate-600'>
+                <p className='text-base text-zinc-500'>
                   Stay updated with your network
                 </p>
               </>
             )}
             {activeSection === 'help' && (
               <>
-                <h2 className='text-xl font-bold text-slate-950 mb-1'>
+                <h2 className='text-xl font-bold text-zinc-950 mb-1'>
                   Help & Support
                 </h2>
-                <p className='text-sm text-slate-600'>
+                <p className='text-sm text-zinc-500'>
                   Get help with using Loopn
                 </p>
               </>
             )}
             {activeSection === 'account' && (
               <>
-                <h2 className='text-xl font-bold text-slate-950 mb-1'>
+                <h2 className='text-xl font-bold text-zinc-950 mb-1'>
                   Your Profile
                 </h2>
-                <p className='text-sm text-slate-600'>
+                <p className='text-sm text-zinc-500'>
                   Manage your account and profile
                 </p>
               </>
             )}
             {activeSection === 'search' && (
               <>
-                <h2 className='text-xl font-bold text-slate-950 mb-1'>
+                <h2 className='text-xl font-bold text-zinc-950 mb-1'>
                   Search Results
                 </h2>
-                <p className='text-sm text-slate-600'>
+                <p className='text-sm text-zinc-500'>
                   Found {searchResults.length} results for "{searchQuery}"
                 </p>
               </>
@@ -954,10 +954,10 @@ export default function DashboardDemo() {
                 <div className='absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-400 border-2 border-white rounded-full'></div>
               </div>
               <div className='flex-1 min-w-0'>
-                <h3 className='text-sm font-semibold text-slate-950 truncate'>
+                <h3 className='text-sm font-semibold text-zinc-950 truncate'>
                   Jordan Blake
                 </h3>
-                <p className='text-sm text-slate-600 truncate'>
+                <p className='text-sm text-zinc-500 truncate'>
                   Blockchain Developer
                 </p>
               </div>
@@ -967,7 +967,7 @@ export default function DashboardDemo() {
                 onClick={() => setActiveSection('notifications')}
                 className='relative'
               >
-                <Bell className='w-5 h-5 text-slate-600' />
+                <Bell className='w-5 h-5 text-zinc-500' />
                 {dummyNotifications.filter(n => !n.isRead).length > 0 && (
                   <div className='absolute -top-1 -right-1 w-3 h-3 bg-brand-500 rounded-full flex items-center justify-center'>
                     <span className='text-white text-sm font-bold'>
@@ -977,10 +977,10 @@ export default function DashboardDemo() {
                 )}
               </button>
               <button onClick={() => setActiveSection('search')}>
-                <Search className='w-5 h-5 text-slate-600' />
+                <Search className='w-5 h-5 text-zinc-500' />
               </button>
               <button onClick={() => setActiveSection('chats')}>
-                <MessageCircle className='w-5 h-5 text-slate-600' />
+                <MessageCircle className='w-5 h-5 text-zinc-500' />
               </button>
             </div>
           </div>
@@ -993,7 +993,7 @@ export default function DashboardDemo() {
             className={`flex-1 px-3 py-3 text-center text-sm font-medium ${
               activeSection === 'discover'
                 ? 'text-brand-600 bg-white border-b-2 border-brand-500'
-                : 'text-slate-600'
+                : 'text-zinc-500'
             }`}
           >
             Discover
@@ -1003,7 +1003,7 @@ export default function DashboardDemo() {
             className={`flex-1 px-3 py-3 text-center text-sm font-medium ${
               activeSection === 'connections'
                 ? 'text-brand-600 bg-white border-b-2 border-brand-500'
-                : 'text-slate-600'
+                : 'text-zinc-500'
             }`}
           >
             Connections
@@ -1013,7 +1013,7 @@ export default function DashboardDemo() {
             className={`flex-1 px-3 py-3 text-center text-sm font-medium relative ${
               activeSection === 'notifications'
                 ? 'text-brand-600 bg-white border-b-2 border-brand-500'
-                : 'text-slate-600'
+                : 'text-zinc-500'
             }`}
           >
             Notifications
@@ -1030,7 +1030,7 @@ export default function DashboardDemo() {
             className={`flex-1 px-3 py-3 text-center text-sm font-medium ${
               activeSection === 'chats'
                 ? 'text-brand-600 bg-white border-b-2 border-brand-500'
-                : 'text-slate-600'
+                : 'text-zinc-500'
             }`}
           >
             Chats
@@ -1059,50 +1059,50 @@ export default function DashboardDemo() {
           <div className='mb-4'>
             {activeSection === 'discover' && (
               <>
-                <h2 className='text-lg font-bold text-slate-950 mb-1'>
+                <h2 className='text-lg font-bold text-zinc-950 mb-1'>
                   Smart Matches for You
                 </h2>
-                <p className='text-sm text-slate-600'>
+                <p className='text-sm text-zinc-500'>
                   AI-curated professionals based on your interests
                 </p>
               </>
             )}
             {activeSection === 'connections' && (
               <>
-                <h2 className='text-lg font-bold text-slate-950 mb-1'>
+                <h2 className='text-lg font-bold text-zinc-950 mb-1'>
                   Your Connections
                 </h2>
-                <p className='text-sm text-slate-600'>
+                <p className='text-sm text-zinc-500'>
                   People you're connected with
                 </p>
               </>
             )}
             {activeSection === 'chats' && (
               <>
-                <h2 className='text-lg font-bold text-slate-950 mb-1'>
+                <h2 className='text-lg font-bold text-zinc-950 mb-1'>
                   Recent Chats
                 </h2>
-                <p className='text-sm text-slate-600'>
+                <p className='text-sm text-zinc-500'>
                   Your ongoing conversations
                 </p>
               </>
             )}
             {activeSection === 'notifications' && (
               <>
-                <h2 className='text-lg font-bold text-slate-950 mb-1'>
+                <h2 className='text-lg font-bold text-zinc-950 mb-1'>
                   Notifications
                 </h2>
-                <p className='text-sm text-slate-600'>
+                <p className='text-sm text-zinc-500'>
                   Stay updated with your network
                 </p>
               </>
             )}
             {activeSection === 'search' && (
               <>
-                <h2 className='text-lg font-bold text-slate-950 mb-1'>
+                <h2 className='text-lg font-bold text-zinc-950 mb-1'>
                   Search Results
                 </h2>
-                <p className='text-sm text-slate-600'>
+                <p className='text-sm text-zinc-500'>
                   {searchQuery
                     ? `Found ${searchResults.length} results for "${searchQuery}"`
                     : 'Search for professionals'}
@@ -1138,14 +1138,14 @@ export default function DashboardDemo() {
 
                     <div className='flex-1 min-w-0'>
                       <div className='flex items-center gap-2 mb-1'>
-                        <div className='text-slate-950 truncate no-email-detection font-medium text-sm'>
+                        <div className='text-zinc-950 truncate no-email-detection font-medium text-sm'>
                           {user.name}
                         </div>
                         {user.isOnline && (
                           <div className='w-2 h-2 bg-brand-500 rounded-full animate-pulse'></div>
                         )}
                       </div>
-                      <div className='text-sm mb-2 text-slate-600'>
+                      <div className='text-sm mb-2 text-zinc-500'>
                         {user.role}
                       </div>
                     </div>
@@ -1186,10 +1186,10 @@ export default function DashboardDemo() {
                     </div>
 
                     <div className='flex-1 min-w-0'>
-                      <div className='text-slate-950 font-medium text-sm mb-1'>
+                      <div className='text-zinc-950 font-medium text-sm mb-1'>
                         {connection.name}
                       </div>
-                      <div className='text-sm text-slate-600 mb-1'>
+                      <div className='text-sm text-zinc-500 mb-1'>
                         {connection.role}
                       </div>
                     </div>
@@ -1232,14 +1232,14 @@ export default function DashboardDemo() {
 
                       <div className='flex-1 min-w-0'>
                         <div className='flex items-center justify-between mb-1'>
-                          <div className='text-slate-950 font-medium text-sm truncate'>
+                          <div className='text-zinc-950 font-medium text-sm truncate'>
                             {user.name}
                           </div>
-                          <div className='text-sm text-slate-1000'>
+                          <div className='text-sm text-zinc-500'>
                             {user.lastMessageTime}
                           </div>
                         </div>
-                        <div className='text-sm text-slate-1000 truncate'>
+                        <div className='text-sm text-zinc-500 truncate'>
                           {user.lastMessage}
                         </div>
                       </div>
@@ -1268,13 +1268,13 @@ export default function DashboardDemo() {
                     </div>
 
                     <div className='flex-1 min-w-0'>
-                      <div className='text-sm font-medium text-slate-950 mb-1'>
+                      <div className='text-sm font-medium text-zinc-950 mb-1'>
                         <span className='font-semibold'>
                           {notification.title}
                         </span>{' '}
                         {notification.content}
                       </div>
-                      <div className='text-sm text-slate-1000'>
+                      <div className='text-sm text-zinc-500'>
                         {notification.timestamp}
                       </div>
                     </div>
@@ -1284,7 +1284,7 @@ export default function DashboardDemo() {
                         <button className='px-2 py-1 bg-brand-500 text-white text-sm font-medium rounded hover:bg-brand-600 transition-colors'>
                           Accept
                         </button>
-                        <button className='px-2 py-1 bg-slate-100 text-slate-700 text-sm font-medium rounded hover:bg-slate-200 transition-colors'>
+                        <button className='px-2 py-1 bg-slate-100 text-zinc-700 text-sm font-medium rounded hover:bg-slate-200 transition-colors'>
                           Decline
                         </button>
                       </div>
@@ -1300,14 +1300,14 @@ export default function DashboardDemo() {
               {searchResults.length === 0 ? (
                 <div className='text-center py-8'>
                   <div className='w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-full flex items-center justify-center'>
-                    <Search className='w-8 h-8 text-slate-1000' />
+                    <Search className='w-8 h-8 text-zinc-500' />
                   </div>
-                  <h3 className='text-lg font-medium text-slate-950 mb-2'>
+                  <h3 className='text-lg font-medium text-zinc-950 mb-2'>
                     {searchQuery
                       ? 'No results found'
                       : 'Search for professionals'}
                   </h3>
-                  <p className='text-slate-1000'>
+                  <p className='text-zinc-500'>
                     {searchQuery
                       ? 'Try searching for something else'
                       : 'Enter a name, role, or skill to get started'}
@@ -1336,10 +1336,10 @@ export default function DashboardDemo() {
                       </div>
 
                       <div className='flex-1 min-w-0'>
-                        <div className='text-slate-950 font-medium text-sm mb-1'>
+                        <div className='text-zinc-950 font-medium text-sm mb-1'>
                           {user.name}
                         </div>
-                        <div className='text-sm text-slate-600 mb-2'>
+                        <div className='text-sm text-zinc-500 mb-2'>
                           {user.role}
                         </div>
                       </div>

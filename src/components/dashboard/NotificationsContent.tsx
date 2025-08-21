@@ -423,12 +423,12 @@ export default function NotificationsContent() {
         ) : getFilteredNotifications().length === 0 ? (
           <div className='flex flex-col items-center justify-center min-h-full text-center'>
             <div className='w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-full flex items-center justify-center'>
-              <Bell className='w-8 h-8 text-slate-1000' />
+              <Bell className='w-8 h-8 text-zinc-500' />
             </div>
-            <h3 className='text-lg font-medium text-slate-950 mb-2'>
+            <h3 className='text-lg font-medium text-zinc-950 mb-2'>
               You&apos;re all caught up
             </h3>
-            <p className='text-slate-1000'>No new notifications</p>
+            <p className='text-zinc-500'>No new notifications</p>
           </div>
         ) : (
           <div className='space-y-4'>

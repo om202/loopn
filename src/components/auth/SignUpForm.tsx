@@ -13,12 +13,12 @@ interface SignUpFormProps {
 function PasswordRequirement({ met, text }: { met: boolean; text: string }) {
   return (
     <div
-      className={`flex items-center gap-2 text-sm ${met ? 'text-b_green-600' : 'text-slate-1000'}`}
+      className={`flex items-center gap-2 text-sm ${met ? 'text-b_green-600' : 'text-zinc-500'}`}
     >
       {met ? (
         <Check className='w-3 h-3 text-b_green-600' />
       ) : (
-        <X className='w-3 h-3 text-slate-1000' />
+        <X className='w-3 h-3 text-zinc-500' />
       )}
       <span>{text}</span>
     </div>
@@ -86,7 +86,7 @@ export default function SignUpForm({
     <div className='w-full'>
       {/* Sign in prompt at the top */}
       <div className='text-center mb-6 p-4 bg-slate-100 rounded-xl border border-slate-200'>
-        <span className='text-sm text-slate-700 mr-3 font-medium'>
+        <span className='text-sm text-zinc-700 mr-3 font-medium'>
           Already have an account?
         </span>
         <button
@@ -111,13 +111,13 @@ export default function SignUpForm({
         <div>
           <label
             htmlFor='email'
-            className='block text-sm font-medium text-slate-950 mb-3'
+            className='block text-sm font-medium text-zinc-950 mb-3'
           >
             Email address
           </label>
           <div className='relative'>
             <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-              <Mail className='h-5 w-5 text-slate-1000' />
+              <Mail className='h-5 w-5 text-zinc-500' />
             </div>
             <input
               id='email'
@@ -134,13 +134,13 @@ export default function SignUpForm({
         <div>
           <label
             htmlFor='password'
-            className='block text-sm font-medium text-slate-950 mb-3'
+            className='block text-sm font-medium text-zinc-950 mb-3'
           >
             Password
           </label>
           <div className='relative'>
             <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-              <Lock className='h-5 w-5 text-slate-1000' />
+              <Lock className='h-5 w-5 text-zinc-500' />
             </div>
             <input
               id='password'
@@ -162,7 +162,7 @@ export default function SignUpForm({
             <button
               type='button'
               onClick={() => setShowPassword(!showPassword)}
-              className='absolute inset-y-0 right-0 pr-3 flex items-center text-slate-1000 hover:text-slate-700 transition-colors'
+              className='absolute inset-y-0 right-0 pr-3 flex items-center text-zinc-500 hover:text-zinc-700 transition-colors'
             >
               {showPassword ? (
                 <EyeOff className='h-5 w-5' />
@@ -175,7 +175,7 @@ export default function SignUpForm({
           {/* Real-time password validation */}
           {showPasswordHints && (
             <div className='mt-3 p-3 bg-slate-100 rounded-lg border border-slate-200'>
-              <p className='text-sm font-medium text-slate-950 mb-2'>
+              <p className='text-sm font-medium text-zinc-950 mb-2'>
                 Password requirements:
               </p>
               <div className='space-y-1'>
@@ -207,13 +207,13 @@ export default function SignUpForm({
         <div>
           <label
             htmlFor='confirmPassword'
-            className='block text-sm font-medium text-slate-950 mb-3'
+            className='block text-sm font-medium text-zinc-950 mb-3'
           >
             Confirm password
           </label>
           <div className='relative'>
             <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-              <Lock className='h-5 w-5 text-slate-1000' />
+              <Lock className='h-5 w-5 text-zinc-500' />
             </div>
             <input
               id='confirmPassword'
@@ -231,7 +231,7 @@ export default function SignUpForm({
             <button
               type='button'
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className='absolute inset-y-0 right-0 pr-3 flex items-center text-slate-1000 hover:text-slate-700 transition-colors'
+              className='absolute inset-y-0 right-0 pr-3 flex items-center text-zinc-500 hover:text-zinc-700 transition-colors'
             >
               {showConfirmPassword ? (
                 <EyeOff className='h-5 w-5' />
