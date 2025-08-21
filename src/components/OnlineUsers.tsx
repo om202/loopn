@@ -542,7 +542,7 @@ export default function OnlineUsers({
         suggestedUsersCount={suggestedUsers.length}
       />
 
-      <div className='flex-1 bg-white sm:rounded-2xl sm:border sm:border-slate-200 p-3 sm:p-4 lg:p-6 ultra-compact overflow-hidden flex flex-col min-h-0'>
+      <div className='flex-1 bg-white sm:rounded-2xl sm:border sm:border-gray-200 p-3 sm:p-4 lg:p-6 ultra-compact overflow-hidden flex flex-col min-h-0'>
         {/* Search User - Always visible at top */}
         <div className='flex-shrink-0 mb-4 sm:mb-6'>
           <SearchUser
@@ -641,10 +641,10 @@ export default function OnlineUsers({
 
         <div className='relative flex-1 overflow-hidden'>
           {/* Top border - shows when scrolled down */}
-          <div className='absolute top-0 left-0 right-0 h-px bg-slate-200 opacity-0 transition-opacity duration-200 z-10 scroll-top-border'></div>
+          <div className='absolute top-0 left-0 right-0 h-px bg-gray-200 opacity-0 transition-opacity duration-200 z-10 scroll-top-border'></div>
 
           {/* Bottom border - shows when not at bottom */}
-          <div className='absolute bottom-0 left-0 right-0 h-px bg-slate-200 opacity-0 transition-opacity duration-200 z-10 scroll-bottom-border'></div>
+          <div className='absolute bottom-0 left-0 right-0 h-px bg-gray-200 opacity-0 transition-opacity duration-200 z-10 scroll-bottom-border'></div>
 
           <div
             className='overflow-y-auto flex-1 h-full'

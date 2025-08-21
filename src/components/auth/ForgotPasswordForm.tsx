@@ -57,7 +57,7 @@ export default function ForgotPasswordForm({
               type='email'
               value={email}
               onChange={e => setEmail(e.target.value)}
-              className='w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white'
+              className='w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white'
               placeholder='Enter your email'
               required
             />
@@ -72,7 +72,7 @@ export default function ForgotPasswordForm({
           {isLoading ? 'Sending reset code...' : 'Send Reset Code'}
         </button>
 
-        <div className='text-center pt-2 border-t border-slate-200'>
+        <div className='text-center pt-2 border-t border-gray-200'>
           <button
             type='button'
             onClick={onSwitchToSignIn}

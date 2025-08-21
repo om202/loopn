@@ -6,9 +6,9 @@ import UserAvatar_Shimmer from './UserAvatar_Shimmer';
 export default function DashboardSidebar_Shimmer() {
   return (
     <div className='w-full lg:w-64 xl:w-72 flex-shrink-0'>
-      <div className='bg-white sm:rounded-2xl sm:border sm:border-slate-200 h-full flex flex-col'>
+      <div className='bg-white sm:rounded-2xl sm:border sm:border-gray-200 h-full flex flex-col'>
         {/* Header shimmer */}
-        <div className='p-4 sm:p-6 border-b border-slate-200'>
+        <div className='p-4 sm:p-6 border-b border-gray-200'>
           <div className='flex items-center gap-3'>
             <UserAvatar_Shimmer size='lg' />
             <div className='hidden lg:block flex-1'>
@@ -37,7 +37,7 @@ export default function DashboardSidebar_Shimmer() {
         </div>
 
         {/* Footer shimmer */}
-        <div className='p-4 sm:p-6 border-t border-slate-200'>
+        <div className='p-4 sm:p-6 border-t border-gray-200'>
           <div className='flex items-center gap-3'>
             <UserAvatar_Shimmer size='sm' />
             <div className='hidden lg:block flex-1'>

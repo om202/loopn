@@ -157,7 +157,7 @@ export default function UserCard({
       className={`px-3 py-2 group transition-all duration-200 cursor-pointer ${
         isSelected
           ? 'bg-brand-50 rounded-2xl border border-brand-200'
-          : 'bg-white hover:bg-slate-100 hover:rounded-2xl border border-transparent border-b-slate-100 last:border-b-0'
+          : 'bg-white hover:bg-gray-100 hover:rounded-2xl border border-transparent border-b-gray-100 last:border-b-0'
       }`}
     >
       <div className='flex items-center gap-3'>
@@ -255,7 +255,7 @@ export default function UserCard({
                 <button
                   onClick={() => setShowCancelDialog(true)}
                   disabled={isOptimisticRequest}
-                  className='flex items-center gap-1 px-2 py-1.5 text-sm text-neutral-500 hover:bg-slate-100 rounded transition-colors disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:opacity-60'
+                  className='flex items-center gap-1 px-2 py-1.5 text-sm text-neutral-500 hover:bg-gray-100 rounded transition-colors disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:opacity-60'
                   title={
                     isOptimisticRequest
                       ? 'Request being sent...'
@@ -358,10 +358,10 @@ export default function UserCard({
             onClick={() => onOpenProfileSidebar?.(userPresence)}
             className={`hidden md:flex p-1.5 text-base font-medium rounded-full border transition-colors items-center justify-center w-[32px] h-[32px] ${
               isProfileSidebarOpen
-                ? 'bg-slate-100 border-slate-200'
+                ? 'bg-gray-100 border-gray-200'
                 : isSelected
-                  ? 'bg-slate-100 border-slate-200 hover:bg-slate-100'
-                  : 'border-transparent hover:bg-slate-100 hover:border-slate-200 group-hover:bg-white group-hover:border-slate-200'
+                  ? 'bg-gray-100 border-gray-200 hover:bg-gray-100'
+                  : 'border-transparent hover:bg-gray-100 hover:border-gray-200 group-hover:bg-white group-hover:border-gray-200'
             }`}
             disabled={loadingProfile}
             aria-label='Open profile sidebar'
@@ -414,7 +414,7 @@ export default function UserCard({
           <div className='flex gap-2'>
             <button
               onClick={() => setShowCancelDialog(false)}
-              className='flex-1 px-3 py-2 text-base font-medium text-neutral-950 bg-slate-100 rounded-lg hover:bg-slate-100 focus:outline-none transition-colors'
+              className='flex-1 px-3 py-2 text-base font-medium text-neutral-950 bg-gray-100 rounded-lg hover:bg-gray-100 focus:outline-none transition-colors'
             >
               Done
             </button>
@@ -423,7 +423,7 @@ export default function UserCard({
                 onCancelChatRequest(userPresence.userId);
                 setShowCancelDialog(false);
               }}
-              className='flex-1 px-3 py-2 text-base font-medium text-b_red-600 bg-slate-100 rounded-lg hover:bg-slate-200 focus:outline-none transition-colors'
+              className='flex-1 px-3 py-2 text-base font-medium text-b_red-600 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none transition-colors'
             >
               Cancel Request
             </button>

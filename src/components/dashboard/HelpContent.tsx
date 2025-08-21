@@ -28,7 +28,7 @@ export default function HelpContent({
           Getting Started
         </h3>
         <div className='space-y-3'>
-          <div className='bg-white rounded-lg p-4 border border-slate-200'>
+          <div className='bg-white rounded-lg p-4 border border-gray-200'>
             <h4 className='font-medium text-neutral-950 text-base mb-2'>
               I'm not getting any matches
             </h4>
@@ -58,7 +58,7 @@ export default function HelpContent({
             </div>
           </div>
 
-          <div className='bg-white rounded-lg p-4 border border-slate-200'>
+          <div className='bg-white rounded-lg p-4 border border-gray-200'>
             <h4 className='font-medium text-neutral-950 text-base mb-2'>
               How do I start a conversation?
             </h4>
@@ -101,7 +101,7 @@ export default function HelpContent({
           Understanding the Dashboard
         </h3>
         <div className='space-y-3'>
-          <div className='bg-white rounded-lg p-4 border border-slate-200'>
+          <div className='bg-white rounded-lg p-4 border border-gray-200'>
             <div className='flex items-center gap-3 mb-2'>
               <Sparkles className='w-4 h-4 text-brand-500' />
               <h4 className='font-medium text-neutral-950 text-base'>Discover</h4>
@@ -112,7 +112,7 @@ export default function HelpContent({
             </p>
           </div>
 
-          <div className='bg-white rounded-lg p-4 border border-slate-200'>
+          <div className='bg-white rounded-lg p-4 border border-gray-200'>
             <div className='flex items-center gap-3 mb-2'>
               <Search className='w-4 h-4 text-brand-500' />
               <h4 className='font-medium text-neutral-950 text-base'>Search</h4>
@@ -122,7 +122,7 @@ export default function HelpContent({
             </p>
           </div>
 
-          <div className='bg-white rounded-lg p-4 border border-slate-200'>
+          <div className='bg-white rounded-lg p-4 border border-gray-200'>
             <div className='flex items-center gap-3 mb-2'>
               <MessageCircle className='w-4 h-4 text-brand-500' />
               <h4 className='font-medium text-neutral-950 text-base'>Chats</h4>
@@ -133,7 +133,7 @@ export default function HelpContent({
             </p>
           </div>
 
-          <div className='bg-white rounded-lg p-4 border border-slate-200'>
+          <div className='bg-white rounded-lg p-4 border border-gray-200'>
             <div className='flex items-center gap-3 mb-2'>
               <Users className='w-4 h-4 text-brand-500' />
               <h4 className='font-medium text-neutral-950 text-base'>
@@ -145,7 +145,7 @@ export default function HelpContent({
             </p>
           </div>
 
-          <div className='bg-white rounded-lg p-4 border border-slate-200'>
+          <div className='bg-white rounded-lg p-4 border border-gray-200'>
             <div className='flex items-center gap-3 mb-2'>
               <Bell className='w-4 h-4 text-brand-500' />
               <h4 className='font-medium text-neutral-950 text-base'>
@@ -165,7 +165,7 @@ export default function HelpContent({
           Common Issues
         </h3>
         <div className='space-y-3'>
-          <div className='bg-white rounded-lg p-4 border border-slate-200'>
+          <div className='bg-white rounded-lg p-4 border border-gray-200'>
             <div className='flex items-start gap-3'>
               <AlertCircle className='w-4 h-4 text-brand-500 mt-0.5 flex-shrink-0' />
               <div>
@@ -186,7 +186,7 @@ export default function HelpContent({
             </div>
           </div>
 
-          <div className='bg-white rounded-lg p-4 border border-slate-200'>
+          <div className='bg-white rounded-lg p-4 border border-gray-200'>
             <div className='flex items-start gap-3'>
               <AlertCircle className='w-4 h-4 text-brand-500 mt-0.5 flex-shrink-0' />
               <div>
@@ -205,7 +205,7 @@ export default function HelpContent({
             </div>
           </div>
 
-          <div className='bg-white rounded-lg p-4 border border-slate-200'>
+          <div className='bg-white rounded-lg p-4 border border-gray-200'>
             <div className='flex items-start gap-3'>
               <Clock className='w-4 h-4 text-brand-500 mt-0.5 flex-shrink-0' />
               <div>
@@ -220,7 +220,7 @@ export default function HelpContent({
             </div>
           </div>
 
-          <div className='bg-white rounded-lg p-4 border border-slate-200'>
+          <div className='bg-white rounded-lg p-4 border border-gray-200'>
             <div className='flex items-start gap-3'>
               <X className='w-4 h-4 text-brand-500 mt-0.5 flex-shrink-0' />
               <div>
@@ -242,7 +242,7 @@ export default function HelpContent({
       </div>
 
       {/* Contact Support */}
-      <div className='bg-white rounded-lg p-4 border border-slate-200'>
+      <div className='bg-white rounded-lg p-4 border border-gray-200'>
         <h3 className='text-lg font-semibold text-neutral-950 mb-2'>
           Still Need Help?
         </h3>
@@ -263,7 +263,7 @@ export default function HelpContent({
           </button>
           <button
             onClick={onOpenBugReport}
-            className='px-4 py-2 bg-white text-neutral-950 border border-slate-300 rounded-lg text-base font-medium hover:bg-slate-100 transition-colors'
+            className='px-4 py-2 bg-white text-neutral-950 border border-gray-300 rounded-lg text-base font-medium hover:bg-gray-100 transition-colors'
           >
             Report Bug / Suggest
           </button>

@@ -19,7 +19,7 @@ export default function OnlineUsers_Shimmer({
       <DashboardSidebar_Shimmer />
 
       {/* Main content shimmer */}
-      <div className='flex-1 bg-white sm:rounded-2xl sm:border sm:border-slate-200 p-2 sm:p-4 lg:p-6 ultra-compact overflow-hidden flex flex-col min-h-0'>
+      <div className='flex-1 bg-white sm:rounded-2xl sm:border sm:border-gray-200 p-2 sm:p-4 lg:p-6 ultra-compact overflow-hidden flex flex-col min-h-0'>
         {/* Search User shimmer - Always visible at top */}
         <div className='flex-shrink-0 mb-4 sm:mb-6'>
           <SearchUser_Shimmer />
@@ -33,7 +33,7 @@ export default function OnlineUsers_Shimmer({
 
       {/* Right push sidebar shimmer - desktop only */}
       <div className='hidden md:flex w-[340px] xl:w-[350px] flex-shrink-0'>
-        <div className='bg-white rounded-2xl border border-slate-200 w-full h-full flex flex-col'>
+        <div className='bg-white rounded-2xl border border-gray-200 w-full h-full flex flex-col'>
           {/* Profile header shimmer */}
           <div className='p-6 pb-4 flex justify-center'>
             <div className='flex flex-col items-center text-center'>

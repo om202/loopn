@@ -341,7 +341,7 @@ export default function ChatPage({ params }: ChatPageProps) {
   return (
     <ProtectedRoute requireOnboarding={true}>
       <div
-        className='h-screen bg-white lg:bg-slate-100'
+        className='h-screen bg-white lg:bg-gray-100'
         style={{ height: '100dvh' }}
       >
         <div className='h-full flex justify-center'>
@@ -386,7 +386,7 @@ export default function ChatPage({ params }: ChatPageProps) {
               )}
 
               <div className='flex-1 p-3 lg:p-4 lg:pl-0 min-h-0'>
-                <div className='h-full lg:bg-white lg:rounded-2xl lg:border lg:border-slate-200 overflow-hidden'>
+                <div className='h-full lg:bg-white lg:rounded-2xl lg:border lg:border-gray-200 overflow-hidden'>
                   <ChatWindow
                     conversation={
                       conversation || {

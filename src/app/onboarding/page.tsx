@@ -219,10 +219,10 @@ export default function OnboardingPage() {
   // Removed suggestions; free-form skills entry only
 
   return (
-    <div className='min-h-screen bg-slate-100 py-8 px-3 sm:px-4'>
+    <div className='min-h-screen bg-gray-100 py-8 px-3 sm:px-4'>
       <div className='max-w-2xl mx-auto'>
         {/* Main content card */}
-        <div className='bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 lg:p-8'>
+        <div className='bg-white rounded-2xl border border-gray-200 p-4 sm:p-6 lg:p-8'>
           {/* Sign Out Button - Top Right of Card */}
           <div className='flex justify-end mb-6'>
             <button
@@ -255,7 +255,7 @@ export default function OnboardingPage() {
           <div className='mb-8 sm:mb-10'>
             <div className='relative'>
               {/* Solid connector line between steps (center-aligned) */}
-              <div className='absolute left-5 right-5 top-1/2 -translate-y-1/2 border-t border-slate-200 z-0' />
+              <div className='absolute left-5 right-5 top-1/2 -translate-y-1/2 border-t border-gray-200 z-0' />
               <div className='grid grid-cols-4 items-center'>
                 {[1, 2, 3, 4].map(step => (
                   <div key={step} className='flex justify-center'>
@@ -263,7 +263,7 @@ export default function OnboardingPage() {
                       className={`relative z-10 w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold border ${
                         step <= currentStep
                           ? 'bg-brand-500 text-white border-brand-500'
-                          : 'bg-white text-neutral-500 border-slate-200'
+                          : 'bg-white text-neutral-500 border-gray-200'
                       }`}
                     >
                       {step}
@@ -312,7 +312,7 @@ export default function OnboardingPage() {
                   value={formData.fullName}
                   onChange={e => updateFormData('fullName', e.target.value)}
                   placeholder='e.g., John Smith'
-                  className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+                  className='w-full px-3 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                 />
               </div>
 
@@ -325,7 +325,7 @@ export default function OnboardingPage() {
                   value={formData.jobRole}
                   onChange={e => updateFormData('jobRole', e.target.value)}
                   placeholder='e.g., Software Engineer, Product Manager'
-                  className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+                  className='w-full px-3 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                 />
               </div>
 
@@ -338,7 +338,7 @@ export default function OnboardingPage() {
                   value={formData.companyName}
                   onChange={e => updateFormData('companyName', e.target.value)}
                   placeholder='e.g., Google, Microsoft, Startup Inc'
-                  className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+                  className='w-full px-3 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                 />
               </div>
 
@@ -349,7 +349,7 @@ export default function OnboardingPage() {
                 <select
                   value={formData.industry}
                   onChange={e => updateFormData('industry', e.target.value)}
-                  className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+                  className='w-full px-3 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                 >
                   <option value=''>Select an industry</option>
                   {INDUSTRY_OPTIONS.map(industry => (
@@ -372,7 +372,7 @@ export default function OnboardingPage() {
                       parseInt(e.target.value)
                     )
                   }
-                  className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+                  className='w-full px-3 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                 >
                   {YEARS_OF_EXPERIENCE_OPTIONS.map(option => (
                     <option key={option.value} value={option.value}>
@@ -389,7 +389,7 @@ export default function OnboardingPage() {
                 <select
                   value={formData.education}
                   onChange={e => updateFormData('education', e.target.value)}
-                  className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+                  className='w-full px-3 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                 >
                   <option value=''>Select education level</option>
                   {EDUCATION_OPTIONS.map(education => (
@@ -442,7 +442,7 @@ export default function OnboardingPage() {
                   onChange={e => setSkillInput(e.target.value)}
                   onKeyDown={handleSkillKeyDown}
                   placeholder='ReactJS, AI Expert, Marriage Law, Public Speaking'
-                  className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+                  className='w-full px-3 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                 />
               </div>
 
@@ -468,7 +468,7 @@ export default function OnboardingPage() {
                   onChange={e => updateFormData('about', e.target.value)}
                   placeholder="I'm here to find collaborators for side projects and swap ideas on product strategy. Looking to meet founders and PMs for partnerships and knowledge sharing. Open to quick intros and follow-up chats."
                   rows={4}
-                  className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+                  className='w-full px-3 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                 />
                 <div className='flex justify-between text-sm mt-2'>
                   <span
@@ -501,7 +501,7 @@ export default function OnboardingPage() {
                 {INTERESTS_GROUPS.map((group, idx) => (
                   <div
                     key={group.title}
-                    className={`${idx !== 0 ? 'pt-6 mt-6 border-t border-slate-200' : ''}`}
+                    className={`${idx !== 0 ? 'pt-6 mt-6 border-t border-gray-200' : ''}`}
                   >
                     <div className='text-sm font-medium text-neutral-950 mb-4'>
                       {group.title}
@@ -514,7 +514,7 @@ export default function OnboardingPage() {
                           className={`px-2.5 py-2 rounded-xl text-sm transition-colors border text-center ${
                             formData.interests?.includes(interest)
                               ? 'bg-brand-500 text-white border-brand-500'
-                              : 'bg-white text-neutral-500 border-slate-200 hover:bg-brand-50'
+                              : 'bg-white text-neutral-500 border-gray-200 hover:bg-brand-50'
                           }`}
                         >
                           {interest}
@@ -572,7 +572,7 @@ export default function OnboardingPage() {
             <button
               onClick={prevStep}
               disabled={currentStep === 1}
-              className={`px-6 py-3 rounded-xl font-medium border bg-white text-neutral-950 border-slate-200 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-500 disabled:opacity-50 disabled:cursor-not-allowed`}
+              className={`px-6 py-3 rounded-xl font-medium border bg-white text-neutral-950 border-gray-200 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-500 disabled:opacity-50 disabled:cursor-not-allowed`}
             >
               Previous
             </button>

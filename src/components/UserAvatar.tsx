@@ -125,7 +125,7 @@ export default function UserAvatar({
       case 'RECENTLY_ACTIVE':
         return (
           <div
-            className={`${recentlyActiveSize} bg-slate-300 rounded-full border-2 border-white box-content flex items-center justify-center`}
+            className={`${recentlyActiveSize} bg-gray-300 rounded-full border-2 border-white box-content flex items-center justify-center`}
           >
             <Clock
               className={`${recentlyActiveIconSize} text-neutral-950`}
@@ -218,7 +218,7 @@ export default function UserAvatar({
             imageLoaded && hasProfilePicture && !imageError
               ? 'border border-brand-500'
               : !hasProfilePicture || imageError
-                ? 'border border-slate-400'
+                ? 'border border-gray-400'
                 : 'border border-transparent'
           }`}
           style={{
@@ -278,7 +278,7 @@ export default function UserAvatar({
 
           {/* Fallback state - show when no profile picture or error */}
           {(!hasProfilePicture || imageError) && (
-            <div className='bg-gradient-to-br from-slate-400 to-brand-400 w-full h-full flex items-center justify-center absolute inset-0'>
+            <div className='bg-gradient-to-br from-gray-400 to-brand-400 w-full h-full flex items-center justify-center absolute inset-0'>
               <User
                 className='w-3/5 h-3/5 text-white drop-shadow-sm'
                 style={{ filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.3))' }}

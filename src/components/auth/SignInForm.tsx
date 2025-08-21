@@ -34,7 +34,7 @@ export default function SignInForm({
   return (
     <div className='w-full'>
       {/* Sign up prompt at the top */}
-      <div className='text-center mb-6 p-4 bg-slate-100 rounded-xl border border-slate-200'>
+      <div className='text-center mb-6 p-4 bg-gray-100 rounded-xl border border-gray-200'>
         <span className='text-sm text-neutral-500 mr-3 font-medium'>
           New to Loopn?
         </span>
@@ -73,7 +73,7 @@ export default function SignInForm({
               type='email'
               value={email}
               onChange={e => setEmail(e.target.value)}
-              className='w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white'
+              className='w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white'
               placeholder='Enter your email'
               required
             />
@@ -96,7 +96,7 @@ export default function SignInForm({
               type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={e => setPassword(e.target.value)}
-              className='w-full pl-10 pr-12 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white'
+              className='w-full pl-10 pr-12 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white'
               placeholder='Enter your password'
               required
             />

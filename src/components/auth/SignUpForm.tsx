@@ -85,7 +85,7 @@ export default function SignUpForm({
   return (
     <div className='w-full'>
       {/* Sign in prompt at the top */}
-      <div className='text-center mb-6 p-4 bg-slate-100 rounded-xl border border-slate-200'>
+      <div className='text-center mb-6 p-4 bg-gray-100 rounded-xl border border-gray-200'>
         <span className='text-sm text-neutral-500 mr-3 font-medium'>
           Already have an account?
         </span>
@@ -124,7 +124,7 @@ export default function SignUpForm({
               type='email'
               value={email}
               onChange={e => setEmail(e.target.value)}
-              className='w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white'
+              className='w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white'
               placeholder='Enter your email'
               required
             />
@@ -154,7 +154,7 @@ export default function SignUpForm({
                   ? isPasswordValid
                     ? 'border-b_green-200 focus:ring-b_green-500'
                     : 'border-b_red-200 focus:ring-b_red-500'
-                  : 'border-slate-200 focus:ring-brand-500'
+                  : 'border-gray-200 focus:ring-brand-500'
               }`}
               placeholder='Create a password'
               required
@@ -174,7 +174,7 @@ export default function SignUpForm({
 
           {/* Real-time password validation */}
           {showPasswordHints && (
-            <div className='mt-3 p-3 bg-slate-100 rounded-lg border border-slate-200'>
+            <div className='mt-3 p-3 bg-gray-100 rounded-lg border border-gray-200'>
               <p className='text-sm font-medium text-neutral-950 mb-2'>
                 Password requirements:
               </p>
@@ -223,7 +223,7 @@ export default function SignUpForm({
               className={`w-full pl-10 pr-12 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:border-transparent transition-colors bg-white ${
                 confirmPassword && password !== confirmPassword
                   ? 'border-b_red-200 focus:ring-b_red-500'
-                  : 'border-slate-200 focus:ring-brand-500'
+                  : 'border-gray-200 focus:ring-brand-500'
               }`}
               placeholder='Confirm your password'
               required

@@ -74,21 +74,21 @@ export default function AccountContent() {
         <div className='mt-5'>
           {loadingProfile ? (
             <div className='flex items-center gap-2 text-sm text-neutral-500'>
-              <div className='w-3 h-3 bg-slate-200 rounded-full animate-pulse'></div>
+              <div className='w-3 h-3 bg-gray-200 rounded-full animate-pulse'></div>
               <span>Loading...</span>
             </div>
           ) : userProfile ? (
-            <div className='divide-y divide-slate-100'>
+            <div className='divide-y divide-gray-100'>
               {/* Professional Info Section */}
               {(userProfile.jobRole ||
                 userProfile.companyName ||
                 userProfile.industry ||
                 userProfile.yearsOfExperience !== null) && (
                 <div className='pb-4'>
-                  <h4 className='text-sm font-semibold text-neutral-500 mb-4 border-b border-slate-100 pb-2'>
+                  <h4 className='text-sm font-semibold text-neutral-500 mb-4 border-b border-gray-100 pb-2'>
                     Profile
                   </h4>
-                  <div className='divide-y divide-slate-100'>
+                  <div className='divide-y divide-gray-100'>
                     {userProfile.jobRole && (
                       <div className='pb-3'>
                         <dt className='text-sm font-medium text-neutral-500 mb-1.5'>
@@ -163,7 +163,7 @@ export default function AccountContent() {
                 (userProfile.interests &&
                   userProfile.interests.length > 0)) && (
                 <div className='pt-4'>
-                  <div className='divide-y divide-slate-100'>
+                  <div className='divide-y divide-gray-100'>
                     {userProfile.skills && userProfile.skills.length > 0 && (
                       <div className='pb-3'>
                         <dt className='text-sm font-medium text-neutral-500 mb-3'>
@@ -173,7 +173,7 @@ export default function AccountContent() {
                           {userProfile.skills.map((skill, index) => (
                             <span
                               key={index}
-                              className='px-3 py-1.5 text-base bg-transparent text-neutral-950 border border-slate-200 rounded-lg font-medium'
+                              className='px-3 py-1.5 text-base bg-transparent text-neutral-950 border border-gray-200 rounded-lg font-medium'
                             >
                               {skill}
                             </span>
@@ -191,7 +191,7 @@ export default function AccountContent() {
                             {userProfile.interests.map((interest, index) => (
                               <span
                                 key={index}
-                                className='px-3 py-1.5 text-base bg-transparent text-neutral-950 border border-slate-200 rounded-lg font-medium'
+                                className='px-3 py-1.5 text-base bg-transparent text-neutral-950 border border-gray-200 rounded-lg font-medium'
                               >
                                 {interest}
                               </span>

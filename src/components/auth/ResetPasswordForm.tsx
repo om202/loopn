@@ -76,7 +76,7 @@ export default function ResetPasswordForm({
               type='text'
               value={confirmationCode}
               onChange={e => setConfirmationCode(e.target.value)}
-              className='w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white text-center text-lg tracking-widest'
+              className='w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white text-center text-lg tracking-widest'
               placeholder='000000'
               maxLength={6}
               required
@@ -113,7 +113,7 @@ export default function ResetPasswordForm({
               type='password'
               value={newPassword}
               onChange={e => setNewPassword(e.target.value)}
-              className='w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white'
+              className='w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white'
               placeholder='Enter new password'
               required
             />
@@ -143,7 +143,7 @@ export default function ResetPasswordForm({
               className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:border-transparent transition-colors bg-white ${
                 confirmPassword && newPassword !== confirmPassword
                   ? 'border-b_red-200 focus:ring-b_red-500'
-                  : 'border-slate-200 focus:ring-brand-500'
+                  : 'border-gray-200 focus:ring-brand-500'
               }`}
               placeholder='Confirm new password'
               required
@@ -170,7 +170,7 @@ export default function ResetPasswordForm({
           {isLoading ? 'Resetting password...' : 'Reset Password'}
         </button>
 
-        <div className='text-center pt-2 border-t border-slate-200'>
+        <div className='text-center pt-2 border-t border-gray-200'>
           <button
             type='button'
             onClick={onSwitchToSignIn}

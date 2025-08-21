@@ -70,7 +70,7 @@ export default function ConfirmSignUpForm({
               type='text'
               value={confirmationCode}
               onChange={e => setConfirmationCode(e.target.value)}
-              className='w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white text-center text-lg tracking-widest'
+              className='w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white text-center text-lg tracking-widest'
               placeholder='000000'
               maxLength={6}
               required
@@ -103,7 +103,7 @@ export default function ConfirmSignUpForm({
           </button>
         </div>
 
-        <div className='text-center pt-2 border-t border-slate-200'>
+        <div className='text-center pt-2 border-t border-gray-200'>
           <button
             type='button'
             onClick={onSwitchToSignIn}

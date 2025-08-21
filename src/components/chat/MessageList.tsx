@@ -405,7 +405,7 @@ export default function MessageList({
       <div className='flex-1 overflow-y-auto bg-white'>
         <div className='w-full px-4 sm:px-6 lg:px-8 xl:px-12 py-6 sm:py-8'>
           <div className='flex flex-col items-center justify-center text-center py-20'>
-            <div className='w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4'>
+            <div className='w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4'>
               <MessageCircle className='w-8 h-8 text-neutral-500' />
             </div>
             <h3 className='text-lg font-medium text-neutral-950 mb-2'>
@@ -430,7 +430,7 @@ export default function MessageList({
           <div ref={loadMoreRef} className='flex justify-center py-4'>
             {isLoadingMore ? (
               <div className='flex items-center space-x-2 text-neutral-500'>
-                <div className='animate-spin h-4 w-4 border-2 border-slate-400 border-t-transparent rounded-full'></div>
+                <div className='animate-spin h-4 w-4 border-2 border-gray-400 border-t-transparent rounded-full'></div>
                 <span className='text-sm'>Loading older messages...</span>
               </div>
             ) : (

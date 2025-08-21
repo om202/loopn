@@ -28,13 +28,13 @@ export default function DeleteConfirmationDialog({
         <div className='flex gap-2'>
           <button
             onClick={onCancel}
-            className='flex-1 px-3 py-2 text-sm font-medium text-neutral-950 bg-slate-100 rounded-lg hover:bg-slate-100 focus:outline-none transition-colors'
+            className='flex-1 px-3 py-2 text-sm font-medium text-neutral-950 bg-gray-100 rounded-lg hover:bg-gray-100 focus:outline-none transition-colors'
           >
             Cancel
           </button>
           <button
             onClick={onConfirm}
-            className='flex-1 px-3 py-2 text-sm font-medium text-b_red-600 bg-slate-100 rounded-lg hover:bg-slate-200 focus:outline-none transition-colors'
+            className='flex-1 px-3 py-2 text-sm font-medium text-b_red-600 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none transition-colors'
           >
             Delete
           </button>

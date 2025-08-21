@@ -227,7 +227,7 @@ export default function DashboardDemo() {
         {dummyUsers.map((user, index) => (
           <div
             key={user.id}
-            className='px-3 py-2 group transition-all duration-200 cursor-pointer bg-white hover:bg-slate-100 hover:rounded-2xl border border-transparent border-b-slate-100 opacity-0 animate-[slideUpFade_0.6s_ease-out_forwards]'
+            className='px-3 py-2 group transition-all duration-200 cursor-pointer bg-white hover:bg-gray-100 hover:rounded-2xl border border-transparent border-b-gray-100 opacity-0 animate-[slideUpFade_0.6s_ease-out_forwards]'
             style={{ animationDelay: `${0.5 + index * 0.5}s` }}
           >
             <div className='flex items-center gap-3'>
@@ -265,7 +265,7 @@ export default function DashboardDemo() {
                   </span>
                 </button>
 
-                <button className='md:flex p-1.5 text-base font-medium rounded-full border transition-colors items-center justify-center w-[32px] h-[32px] bg-white border-slate-100 hover:bg-slate-100'>
+                <button className='md:flex p-1.5 text-base font-medium rounded-full border transition-colors items-center justify-center w-[32px] h-[32px] bg-white border-gray-100 hover:bg-gray-100'>
                   <MoreHorizontal className='w-5 h-5 text-neutral-500' />
                 </button>
               </div>
@@ -282,7 +282,7 @@ export default function DashboardDemo() {
         {dummyConnections.map(connection => (
           <div
             key={connection.id}
-            className='px-3 py-3 bg-white hover:bg-slate-100 rounded-xl border border-slate-200 transition-all duration-200 cursor-pointer'
+            className='px-3 py-3 bg-white hover:bg-gray-100 rounded-xl border border-gray-200 transition-all duration-200 cursor-pointer'
           >
             <div className='flex items-center gap-3'>
               <div className='flex-shrink-0'>
@@ -313,7 +313,7 @@ export default function DashboardDemo() {
                 <button className='p-2 text-brand-500 hover:bg-brand-50 rounded-lg transition-colors'>
                   <MessageCircle className='w-5 h-5' />
                 </button>
-                <button className='p-2 text-neutral-500 hover:bg-slate-100 rounded-lg transition-colors'>
+                <button className='p-2 text-neutral-500 hover:bg-gray-100 rounded-lg transition-colors'>
                   <MoreHorizontal className='w-5 h-5' />
                 </button>
               </div>
@@ -332,7 +332,7 @@ export default function DashboardDemo() {
           .map(user => (
             <div
               key={user.id}
-              className='px-3 py-3 hover:bg-slate-100 rounded-xl transition-all duration-200 cursor-pointer'
+              className='px-3 py-3 hover:bg-gray-100 rounded-xl transition-all duration-200 cursor-pointer'
             >
               <div className='flex items-center gap-3'>
                 <div className='flex-shrink-0'>
@@ -376,7 +376,7 @@ export default function DashboardDemo() {
         {dummyNotifications.map(notification => (
           <div
             key={notification.id}
-            className={`px-4 py-3 rounded-xl border transition-all duration-200 cursor-pointer ${notification.isRead ? 'bg-white border-slate-200' : 'bg-brand-50 border-brand-200'}`}
+            className={`px-4 py-3 rounded-xl border transition-all duration-200 cursor-pointer ${notification.isRead ? 'bg-white border-gray-200' : 'bg-brand-50 border-brand-200'}`}
           >
             <div className='flex items-center gap-3'>
               <div className='flex-shrink-0'>
@@ -404,7 +404,7 @@ export default function DashboardDemo() {
                   <button className='px-3 py-1.5 bg-brand-500 text-white text-sm font-medium rounded-lg hover:bg-brand-600 transition-colors'>
                     Accept
                   </button>
-                  <button className='px-3 py-1.5 bg-slate-100 text-neutral-500 text-sm font-medium rounded-lg hover:bg-slate-200 transition-colors'>
+                  <button className='px-3 py-1.5 bg-gray-100 text-neutral-500 text-sm font-medium rounded-lg hover:bg-gray-200 transition-colors'>
                     Decline
                   </button>
                 </div>
@@ -430,7 +430,7 @@ export default function DashboardDemo() {
         </div>
 
         <div className='space-y-3'>
-          <div className='p-4 bg-white border border-slate-200 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer'>
+          <div className='p-4 bg-white border border-gray-200 rounded-xl hover:bg-gray-100 transition-colors cursor-pointer'>
             <div className='flex items-center gap-3'>
               <div className='w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center'>
                 <Globe className='w-5 h-5 text-blue-600' />
@@ -444,7 +444,7 @@ export default function DashboardDemo() {
             </div>
           </div>
 
-          <div className='p-4 bg-white border border-slate-200 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer'>
+          <div className='p-4 bg-white border border-gray-200 rounded-xl hover:bg-gray-100 transition-colors cursor-pointer'>
             <div className='flex items-center gap-3'>
               <div className='w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center'>
                 <MessageCircle className='w-5 h-5 text-green-600' />
@@ -458,7 +458,7 @@ export default function DashboardDemo() {
             </div>
           </div>
 
-          <div className='p-4 bg-white border border-slate-200 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer'>
+          <div className='p-4 bg-white border border-gray-200 rounded-xl hover:bg-gray-100 transition-colors cursor-pointer'>
             <div className='flex items-center gap-3'>
               <div className='w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center'>
                 <Shield className='w-5 h-5 text-purple-600' />
@@ -504,7 +504,7 @@ export default function DashboardDemo() {
 
         {/* Profile Details */}
         <div className='space-y-4'>
-          <div className='p-4 bg-white border border-slate-200 rounded-xl'>
+          <div className='p-4 bg-white border border-gray-200 rounded-xl'>
             <div className='flex items-center gap-2 mb-3'>
               <Briefcase className='w-4 h-4 text-neutral-500' />
               <span className='text-sm font-medium text-neutral-500'>
@@ -514,7 +514,7 @@ export default function DashboardDemo() {
             <p className='text-neutral-950'>{currentUser.experience}</p>
           </div>
 
-          <div className='p-4 bg-white border border-slate-200 rounded-xl'>
+          <div className='p-4 bg-white border border-gray-200 rounded-xl'>
             <div className='flex items-center gap-2 mb-3'>
               <GraduationCap className='w-4 h-4 text-neutral-500' />
               <span className='text-sm font-medium text-neutral-500'>
@@ -524,7 +524,7 @@ export default function DashboardDemo() {
             <p className='text-neutral-950'>{currentUser.education}</p>
           </div>
 
-          <div className='p-4 bg-white border border-slate-200 rounded-xl'>
+          <div className='p-4 bg-white border border-gray-200 rounded-xl'>
             <div className='flex items-center gap-2 mb-3'>
               <Award className='w-4 h-4 text-neutral-500' />
               <span className='text-sm font-medium text-neutral-500'>Skills</span>
@@ -541,7 +541,7 @@ export default function DashboardDemo() {
             </div>
           </div>
 
-          <div className='p-4 bg-white border border-slate-200 rounded-xl'>
+          <div className='p-4 bg-white border border-gray-200 rounded-xl'>
             <div className='flex items-center gap-2 mb-3'>
               <Target className='w-4 h-4 text-neutral-500' />
               <span className='text-sm font-medium text-neutral-500'>
@@ -552,7 +552,7 @@ export default function DashboardDemo() {
               {currentUser.interests.map((interest, index) => (
                 <span
                   key={index}
-                  className='px-3 py-1 bg-slate-100 text-neutral-500 text-sm rounded-full font-medium'
+                  className='px-3 py-1 bg-gray-100 text-neutral-500 text-sm rounded-full font-medium'
                 >
                   {interest}
                 </span>
@@ -560,7 +560,7 @@ export default function DashboardDemo() {
             </div>
           </div>
 
-          <div className='p-4 bg-white border border-slate-200 rounded-xl'>
+          <div className='p-4 bg-white border border-gray-200 rounded-xl'>
             <div className='flex items-center gap-2 mb-3'>
               <User className='w-4 h-4 text-neutral-500' />
               <span className='text-sm font-medium text-neutral-500'>About</span>
@@ -576,7 +576,7 @@ export default function DashboardDemo() {
     <div className='flex-1 overflow-y-auto'>
       {searchResults.length === 0 ? (
         <div className='flex flex-col items-center justify-center h-full text-center p-8'>
-          <div className='w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-full flex items-center justify-center'>
+          <div className='w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center'>
             <Search className='w-8 h-8 text-neutral-500' />
           </div>
           <h3 className='text-lg font-medium text-neutral-950 mb-2'>
@@ -589,7 +589,7 @@ export default function DashboardDemo() {
           {searchResults.map(user => (
             <div
               key={user.id}
-              className='px-3 py-3 bg-white hover:bg-slate-100 rounded-xl border border-slate-200 transition-all duration-200 cursor-pointer'
+              className='px-3 py-3 bg-white hover:bg-gray-100 rounded-xl border border-gray-200 transition-all duration-200 cursor-pointer'
             >
               <div className='flex items-center gap-3'>
                 <div className='flex-shrink-0'>
@@ -638,7 +638,7 @@ export default function DashboardDemo() {
   );
 
   return (
-    <div className='bg-white md:rounded-2xl shadow-xl border border-slate-200 md:max-w-7xl md:mx-auto overflow-hidden w-full p-4'>
+    <div className='bg-white md:rounded-2xl shadow-xl border border-gray-200 md:max-w-7xl md:mx-auto overflow-hidden w-full p-4'>
       {/* Interactive Demo Header */}
       <div className='text-center mb-4 flex items-center justify-center gap-2'>
         <Target className='w-4 h-4 text-brand-500' />
@@ -650,9 +650,9 @@ export default function DashboardDemo() {
       {/* Dashboard Layout - Desktop and Tablet */}
       <div className='hidden md:flex h-[650px]'>
         {/* Left Sidebar */}
-        <div className='w-64 bg-white rounded-2xl border border-slate-200 flex flex-col'>
+        <div className='w-64 bg-white rounded-2xl border border-gray-200 flex flex-col'>
           {/* Logo at top */}
-          <div className='px-4 py-6 border-b border-slate-100'>
+          <div className='px-4 py-6 border-b border-gray-100'>
             <div className='flex items-center justify-between'>
               <div className='flex items-center gap-3'>
                 <Image
@@ -678,7 +678,7 @@ export default function DashboardDemo() {
                 className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                   activeSection === 'discover'
                     ? 'bg-brand-50 text-brand-700 border-brand-200'
-                    : 'text-neutral-950 hover:bg-slate-100 hover:text-neutral-950 border-transparent'
+                    : 'text-neutral-950 hover:bg-gray-100 hover:text-neutral-950 border-transparent'
                 }`}
               >
                 <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -695,7 +695,7 @@ export default function DashboardDemo() {
                 className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                   activeSection === 'connections'
                     ? 'bg-brand-50 text-brand-700 border-brand-200'
-                    : 'text-neutral-950 hover:bg-slate-100 hover:text-neutral-950 border-transparent'
+                    : 'text-neutral-950 hover:bg-gray-100 hover:text-neutral-950 border-transparent'
                 }`}
               >
                 <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -703,7 +703,7 @@ export default function DashboardDemo() {
                 </div>
                 <span className='font-medium text-base flex-1 flex items-center gap-3'>
                   Connections
-                  <span className='text-sm font-bold flex items-center justify-center h-5 w-5 rounded-full text-center bg-slate-100 text-neutral-500'>
+                  <span className='text-sm font-bold flex items-center justify-center h-5 w-5 rounded-full text-center bg-gray-100 text-neutral-500'>
                     {dummyConnections.length}
                   </span>
                 </span>
@@ -715,7 +715,7 @@ export default function DashboardDemo() {
                 className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                   activeSection === 'chats'
                     ? 'bg-brand-50 text-brand-700 border-brand-200'
-                    : 'text-neutral-950 hover:bg-slate-100 hover:text-neutral-950 border-transparent'
+                    : 'text-neutral-950 hover:bg-gray-100 hover:text-neutral-950 border-transparent'
                 }`}
               >
                 <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -737,7 +737,7 @@ export default function DashboardDemo() {
                 className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                   activeSection === 'notifications'
                     ? 'bg-brand-50 text-brand-700 border-brand-200'
-                    : 'text-neutral-950 hover:bg-slate-100 hover:text-neutral-950 border-transparent'
+                    : 'text-neutral-950 hover:bg-gray-100 hover:text-neutral-950 border-transparent'
                 }`}
               >
                 <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -754,7 +754,7 @@ export default function DashboardDemo() {
           </nav>
 
           {/* Help and Account buttons at bottom */}
-          <div className='border-t border-slate-100 p-2 space-y-1'>
+          <div className='border-t border-gray-100 p-2 space-y-1'>
             {/* Help Button */}
             <div className='flex items-center gap-2'>
               <button
@@ -762,7 +762,7 @@ export default function DashboardDemo() {
                 className={`relative flex-1 flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                   activeSection === 'help'
                     ? 'bg-brand-50 text-brand-700 border-brand-200'
-                    : 'text-neutral-950 hover:bg-slate-100 hover:text-neutral-950 border-transparent'
+                    : 'text-neutral-950 hover:bg-gray-100 hover:text-neutral-950 border-transparent'
                 }`}
               >
                 <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -773,7 +773,7 @@ export default function DashboardDemo() {
                 </span>
               </button>
 
-              <button className='p-2 text-neutral-500 hover:text-neutral-950 hover:bg-slate-100 rounded-lg transition-colors border border-transparent hover:border-slate-200'>
+              <button className='p-2 text-neutral-500 hover:text-neutral-950 hover:bg-gray-100 rounded-lg transition-colors border border-transparent hover:border-gray-200'>
                 <Bug className='w-4 h-4' />
               </button>
             </div>
@@ -784,7 +784,7 @@ export default function DashboardDemo() {
               className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                 activeSection === 'account'
                   ? 'bg-brand-50 text-brand-700 border-brand-200'
-                  : 'text-neutral-950 hover:bg-slate-100 hover:text-neutral-950 border-transparent'
+                  : 'text-neutral-950 hover:bg-gray-100 hover:text-neutral-950 border-transparent'
               }`}
             >
               <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -807,7 +807,7 @@ export default function DashboardDemo() {
         </div>
 
         {/* Main Content Area */}
-        <div className='flex-1 bg-white rounded-2xl border border-slate-200 p-6 overflow-hidden flex flex-col min-h-0 ml-4'>
+        <div className='flex-1 bg-white rounded-2xl border border-gray-200 p-6 overflow-hidden flex flex-col min-h-0 ml-4'>
           {/* Search User - Always visible at top */}
           <div className='flex-shrink-0 mb-2 sm:mb-2'>
             <div className='max-w-md mx-auto relative'>
@@ -835,7 +835,7 @@ export default function DashboardDemo() {
                     WebkitAppearance: 'none',
                     MozAppearance: 'textfield',
                   }}
-                  className='w-full pl-10 pr-16 py-3 rounded-full border border-slate-200 focus:outline-none focus:ring-1 focus:ring-brand-200 focus:bg-white bg-slate-100 hover:bg-brand-50 transition-colors placeholder-slate-1000'
+                  className='w-full pl-10 pr-16 py-3 rounded-full border border-gray-200 focus:outline-none focus:ring-1 focus:ring-brand-200 focus:bg-white bg-gray-100 hover:bg-brand-50 transition-colors placeholder-gray-1000'
                 />
                 <button
                   type='button'
@@ -940,7 +940,7 @@ export default function DashboardDemo() {
       {/* Mobile Dashboard Layout */}
       <div className='md:hidden'>
         {/* Mobile Header */}
-        <div className='p-4 border-b border-slate-200 bg-white'>
+        <div className='p-4 border-b border-gray-200 bg-white'>
           <div className='flex items-center justify-between'>
             <div className='flex items-center gap-3'>
               <div className='relative'>
@@ -987,7 +987,7 @@ export default function DashboardDemo() {
         </div>
 
         {/* Mobile Navigation Tabs */}
-        <div className='flex bg-slate-100 border-b border-slate-200'>
+        <div className='flex bg-gray-100 border-b border-gray-200'>
           <button
             onClick={() => setActiveSection('discover')}
             className={`flex-1 px-3 py-3 text-center text-sm font-medium ${
@@ -1038,7 +1038,7 @@ export default function DashboardDemo() {
         </div>
 
         {/* Mobile Content */}
-        <div className='p-4 bg-slate-100 min-h-[500px]'>
+        <div className='p-4 bg-gray-100 min-h-[500px]'>
           {/* Mobile Search */}
           {activeSection === 'search' && (
             <div className='mb-4'>
@@ -1049,7 +1049,7 @@ export default function DashboardDemo() {
                   placeholder='Search professionals...'
                   value={searchQuery}
                   onChange={e => handleSearch(e.target.value)}
-                  className='w-full pl-10 pr-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-1 focus:ring-brand-200 bg-white'
+                  className='w-full pl-10 pr-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-1 focus:ring-brand-200 bg-white'
                 />
               </div>
             </div>
@@ -1117,7 +1117,7 @@ export default function DashboardDemo() {
               {dummyUsers.slice(0, 4).map((user, index) => (
                 <div
                   key={user.id}
-                  className='rounded-xl border px-3 py-3 group transition-all duration-200 cursor-pointer bg-white border-slate-200 hover:bg-slate-100 opacity-0 animate-[slideUpFade_0.6s_ease-out_forwards]'
+                  className='rounded-xl border px-3 py-3 group transition-all duration-200 cursor-pointer bg-white border-gray-200 hover:bg-gray-100 opacity-0 animate-[slideUpFade_0.6s_ease-out_forwards]'
                   style={{ animationDelay: `${0.5 + index * 0.5}s` }}
                 >
                   <div className='flex items-center gap-3'>
@@ -1151,7 +1151,7 @@ export default function DashboardDemo() {
                     </div>
 
                     <div className='flex-shrink-0'>
-                      <button className='px-3 py-2 text-sm font-medium rounded-lg border transition-colors bg-white text-brand-500 border-slate-200 hover:bg-brand-100 hover:border-slate-200 flex items-center gap-1.5'>
+                      <button className='px-3 py-2 text-sm font-medium rounded-lg border transition-colors bg-white text-brand-500 border-gray-200 hover:bg-brand-100 hover:border-gray-200 flex items-center gap-1.5'>
                         <CheckCircle2 className='w-3 h-3 text-brand-500 flex-shrink-0' />
                         Connect
                       </button>
@@ -1167,7 +1167,7 @@ export default function DashboardDemo() {
               {dummyConnections.map(connection => (
                 <div
                   key={connection.id}
-                  className='rounded-xl border px-3 py-3 bg-white border-slate-200 hover:bg-slate-100 transition-all duration-200 cursor-pointer'
+                  className='rounded-xl border px-3 py-3 bg-white border-gray-200 hover:bg-gray-100 transition-all duration-200 cursor-pointer'
                 >
                   <div className='flex items-center gap-3'>
                     <div className='flex-shrink-0'>
@@ -1212,7 +1212,7 @@ export default function DashboardDemo() {
                 .map(user => (
                   <div
                     key={user.id}
-                    className='px-3 py-3 bg-white hover:bg-slate-100 rounded-xl transition-all duration-200 cursor-pointer'
+                    className='px-3 py-3 bg-white hover:bg-gray-100 rounded-xl transition-all duration-200 cursor-pointer'
                   >
                     <div className='flex items-center gap-3'>
                       <div className='flex-shrink-0'>
@@ -1254,7 +1254,7 @@ export default function DashboardDemo() {
               {dummyNotifications.map(notification => (
                 <div
                   key={notification.id}
-                  className={`px-3 py-3 rounded-xl border transition-all duration-200 cursor-pointer ${notification.isRead ? 'bg-white border-slate-200' : 'bg-brand-50 border-brand-200'}`}
+                  className={`px-3 py-3 rounded-xl border transition-all duration-200 cursor-pointer ${notification.isRead ? 'bg-white border-gray-200' : 'bg-brand-50 border-brand-200'}`}
                 >
                   <div className='flex items-center gap-3'>
                     <div className='flex-shrink-0'>
@@ -1284,7 +1284,7 @@ export default function DashboardDemo() {
                         <button className='px-2 py-1 bg-brand-500 text-white text-sm font-medium rounded hover:bg-brand-600 transition-colors'>
                           Accept
                         </button>
-                        <button className='px-2 py-1 bg-slate-100 text-neutral-500 text-sm font-medium rounded hover:bg-slate-200 transition-colors'>
+                        <button className='px-2 py-1 bg-gray-100 text-neutral-500 text-sm font-medium rounded hover:bg-gray-200 transition-colors'>
                           Decline
                         </button>
                       </div>
@@ -1299,7 +1299,7 @@ export default function DashboardDemo() {
             <div className='space-y-3'>
               {searchResults.length === 0 ? (
                 <div className='text-center py-8'>
-                  <div className='w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-full flex items-center justify-center'>
+                  <div className='w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center'>
                     <Search className='w-8 h-8 text-neutral-500' />
                   </div>
                   <h3 className='text-lg font-medium text-neutral-950 mb-2'>
@@ -1317,7 +1317,7 @@ export default function DashboardDemo() {
                 searchResults.map(user => (
                   <div
                     key={user.id}
-                    className='rounded-xl border px-3 py-3 bg-white border-slate-200 hover:bg-slate-100 transition-all duration-200 cursor-pointer'
+                    className='rounded-xl border px-3 py-3 bg-white border-gray-200 hover:bg-gray-100 transition-all duration-200 cursor-pointer'
                   >
                     <div className='flex items-center gap-3'>
                       <div className='flex-shrink-0'>

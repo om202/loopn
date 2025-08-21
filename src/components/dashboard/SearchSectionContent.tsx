@@ -149,7 +149,7 @@ export default function SearchSectionContent({
       <div className='flex-1 overflow-y-auto'>
         {!hasSearched ? (
           <div className='flex flex-col items-center justify-center h-full text-center p-8 transition-opacity duration-200 opacity-100'>
-            <div className='w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-full flex items-center justify-center'>
+            <div className='w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center'>
               <Search className='w-8 h-8 text-neutral-500' />
             </div>
             <h3 className='text-lg font-medium text-neutral-950 mb-2'>
@@ -167,7 +167,7 @@ export default function SearchSectionContent({
           </div>
         ) : searchResults.length === 0 ? (
           <div className='flex flex-col items-center justify-center h-full text-center p-8 transition-opacity duration-200 opacity-100'>
-            <div className='w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-full flex items-center justify-center'>
+            <div className='w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center'>
               <Search className='w-8 h-8 text-neutral-500' />
             </div>
             <h3 className='text-lg font-medium text-neutral-950 mb-2'>

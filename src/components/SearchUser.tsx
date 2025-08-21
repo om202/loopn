@@ -164,7 +164,7 @@ export default function SearchUser({
             tabIndex={-1}
             aria-hidden='true'
           />
-          <GradientSparkles className='absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 z-10' />
+          <GradientSparkles className='absolute left-3 top-1/2 -translate-y-1/2 w-5.5 h-5.5' />
           <input
             ref={inputRef}
             type='text'
@@ -196,7 +196,7 @@ export default function SearchUser({
               WebkitAppearance: 'none',
               MozAppearance: 'textfield',
             }}
-            className='w-full pl-10 pr-16 py-3 rounded-full border border-slate-200 focus:outline-none focus:ring-1 focus:ring-brand-200 focus:bg-white bg-white hover:bg-brand-50 transition-colors placeholder-slate-1000'
+            className='w-full pl-10 pr-16 py-3 rounded-full border border-gray-200 focus:outline-none focus:ring-1 focus:ring-brand-200 focus:bg-white bg-white hover:bg-brand-50 transition-colors placeholder-gray-1000'
           />
 
           {/* Clear button - only show when there's text */}
@@ -239,16 +239,16 @@ export default function SearchUser({
         {showHistory && searchHistory.length > 0 && (
           <div
             ref={dropdownRef}
-            className='absolute top-full left-0 right-0 bg-white border border-slate-200 rounded-2xl shadow-lg z-50 max-h-64 overflow-y-auto mt-2'
+            className='absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-2xl shadow-lg z-50 max-h-64 overflow-y-auto mt-2'
           >
             <div className='py-2'>
-              <div className='px-4 py-2 text-sm font-medium text-neutral-500 border-b border-slate-100'>
+              <div className='px-4 py-2 text-sm font-medium text-neutral-500 border-b border-gray-100'>
                 Recent searches
               </div>
               {searchHistory.map(item => (
                 <div
                   key={item.id}
-                  className='flex items-center justify-between px-4 py-3 hover:bg-slate-100 cursor-pointer group'
+                  className='flex items-center justify-between px-4 py-3 hover:bg-gray-100 cursor-pointer group'
                   onClick={() => handleHistoryItemClick(item.query)}
                 >
                   <div className='flex items-center gap-3 flex-1 min-w-0'>
