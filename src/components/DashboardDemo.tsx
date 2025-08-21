@@ -436,7 +436,9 @@ export default function DashboardDemo() {
                 <Globe className='w-5 h-5 text-blue-600' />
               </div>
               <div>
-                <div className='font-medium text-neutral-950'>Getting Started</div>
+                <div className='font-medium text-neutral-950'>
+                  Getting Started
+                </div>
                 <div className='text-sm text-neutral-500'>
                   Learn the basics of Loopn
                 </div>
@@ -450,7 +452,9 @@ export default function DashboardDemo() {
                 <MessageCircle className='w-5 h-5 text-green-600' />
               </div>
               <div>
-                <div className='font-medium text-neutral-950'>Chat Features</div>
+                <div className='font-medium text-neutral-950'>
+                  Chat Features
+                </div>
                 <div className='text-sm text-neutral-500'>
                   How to use messaging and connections
                 </div>
@@ -527,7 +531,9 @@ export default function DashboardDemo() {
           <div className='p-4 bg-white border border-gray-200 rounded-xl'>
             <div className='flex items-center gap-2 mb-3'>
               <Award className='w-4 h-4 text-neutral-500' />
-              <span className='text-sm font-medium text-neutral-500'>Skills</span>
+              <span className='text-sm font-medium text-neutral-500'>
+                Skills
+              </span>
             </div>
             <div className='flex flex-wrap gap-2'>
               {currentUser.skills.map((skill, index) => (
@@ -563,9 +569,13 @@ export default function DashboardDemo() {
           <div className='p-4 bg-white border border-gray-200 rounded-xl'>
             <div className='flex items-center gap-2 mb-3'>
               <User className='w-4 h-4 text-neutral-500' />
-              <span className='text-sm font-medium text-neutral-500'>About</span>
+              <span className='text-sm font-medium text-neutral-500'>
+                About
+              </span>
             </div>
-            <p className='text-neutral-950 leading-relaxed'>{currentUser.about}</p>
+            <p className='text-neutral-950 leading-relaxed'>
+              {currentUser.about}
+            </p>
           </div>
         </div>
       </div>
@@ -611,7 +621,9 @@ export default function DashboardDemo() {
                   <div className='text-neutral-950 font-medium mb-1'>
                     {user.name}
                   </div>
-                  <div className='text-sm text-neutral-500 mb-2'>{user.role}</div>
+                  <div className='text-sm text-neutral-500 mb-2'>
+                    {user.role}
+                  </div>
                   <div className='flex flex-wrap gap-1'>
                     {user.skills.slice(0, 3).map((skill, idx) => (
                       <span
@@ -884,7 +896,9 @@ export default function DashboardDemo() {
             )}
             {activeSection === 'chats' && (
               <>
-                <h2 className='text-2xl font-bold text-neutral-950 mb-1'>Chats</h2>
+                <h2 className='text-2xl font-bold text-neutral-950 mb-1'>
+                  Chats
+                </h2>
                 <p className='text-base text-neutral-500'>
                   Your ongoing conversations
                 </p>

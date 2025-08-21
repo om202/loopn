@@ -251,7 +251,9 @@ export default function DashboardSidebar({
                 />
               </div>
               <div className='flex-1'>
-                <div className='font-semibold text-neutral-950 text-base'>{accountItem.label}</div>
+                <div className='font-semibold text-neutral-950 text-base'>
+                  {accountItem.label}
+                </div>
                 <div className='text-sm text-neutral-500'>Account</div>
               </div>
             </button>

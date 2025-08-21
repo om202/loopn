@@ -104,7 +104,9 @@ export default function HelpContent({
           <div className='bg-white rounded-lg p-4 border border-gray-200'>
             <div className='flex items-center gap-3 mb-2'>
               <Sparkles className='w-4 h-4 text-brand-600' />
-              <h4 className='font-medium text-neutral-950 text-base'>Discover</h4>
+              <h4 className='font-medium text-neutral-950 text-base'>
+                Discover
+              </h4>
             </div>
             <p className='text-base text-neutral-950'>
               People the AI thinks you might want to connect with based on your
