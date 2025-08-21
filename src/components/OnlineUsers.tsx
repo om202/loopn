@@ -366,7 +366,7 @@ export default function OnlineUsers({
           return;
         }
 
-        // Filter out current user, users with existing conversations, and remove duplicates
+        // Filter out current user, users with existing conversations (except reconnectable), and remove duplicates
         const filteredUsers = (result.data || []).filter(
           (u: UserPresence) => {
             // Exclude current user
@@ -374,9 +374,21 @@ export default function OnlineUsers({
               return false;
             }
             
-            // Exclude users who already have conversations (temporary or permanent connections)
-            const hasExistingConversation = existingConversations.has(u.userId);
-            return !hasExistingConversation;
+            const conversation = existingConversations.get(u.userId);
+            
+            // If no conversation exists, include the user
+            if (!conversation) {
+              return true;
+            }
+            
+            // If conversation exists, only include if it's ended and user can reconnect
+            const isEndedAndReconnectable = 
+              conversation.chatStatus === 'ENDED' && 
+              userCategories.canUserReconnect(u.userId);
+            
+            // Exclude users with active conversations or permanent connections
+            // Include users who can be reconnected
+            return isEndedAndReconnectable;
           }
         );
         setSuggestedUsers(filteredUsers);
@@ -389,7 +401,7 @@ export default function OnlineUsers({
     };
 
     loadSuggestedUsers();
-  }, [user, lastSuggestedUsersLoad, suggestedUsers.length, existingConversations]);
+  }, [user, lastSuggestedUsersLoad, suggestedUsers.length, existingConversations, userCategories]);
 
   useEffect(() => {
     const combinedUsers = [...onlineUsers];

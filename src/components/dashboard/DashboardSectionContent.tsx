@@ -75,10 +75,24 @@ export default function DashboardSectionContent({
     ...endedChatTrialUsers,
   ];
 
-  // Remove duplicates based on userId
+  // Remove duplicates based on userId and filter out reconnectable users
   const uniqueAllChatUsers = allChatUsers.filter(
-    (user, index, array) =>
-      array.findIndex(u => u.userId === user.userId) === index
+    (user, index, array) => {
+      // Remove duplicates
+      const isFirstOccurrence = array.findIndex(u => u.userId === user.userId) === index;
+      if (!isFirstOccurrence) {
+        return false;
+      }
+      
+      // Filter out users who can be reconnected (they should appear in Discover instead)
+      const conversation = existingConversations.get(user.userId);
+      const isReconnectable = 
+        conversation && 
+        conversation.chatStatus === 'ENDED' && 
+        canUserReconnect(user.userId);
+      
+      return !isReconnectable;
+    }
   );
   // Helper function to render user cards
   const renderUserCard = (userPresence: UserPresence) => (
