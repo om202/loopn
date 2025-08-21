@@ -404,7 +404,7 @@ export default function DashboardDemo() {
                   <button className='px-3 py-1.5 bg-brand-500 text-white text-sm font-medium rounded-lg hover:bg-brand-600 transition-colors'>
                     Accept
                   </button>
-                  <button className='px-3 py-1.5 bg-slate-100 text-zinc-700 text-sm font-medium rounded-lg hover:bg-slate-200 transition-colors'>
+                  <button className='px-3 py-1.5 bg-slate-100 text-zinc-500 text-sm font-medium rounded-lg hover:bg-slate-200 transition-colors'>
                     Decline
                   </button>
                 </div>
@@ -552,7 +552,7 @@ export default function DashboardDemo() {
               {currentUser.interests.map((interest, index) => (
                 <span
                   key={index}
-                  className='px-3 py-1 bg-slate-100 text-zinc-700 text-sm rounded-full font-medium'
+                  className='px-3 py-1 bg-slate-100 text-zinc-500 text-sm rounded-full font-medium'
                 >
                   {interest}
                 </span>
@@ -1284,7 +1284,7 @@ export default function DashboardDemo() {
                         <button className='px-2 py-1 bg-brand-500 text-white text-sm font-medium rounded hover:bg-brand-600 transition-colors'>
                           Accept
                         </button>
-                        <button className='px-2 py-1 bg-slate-100 text-zinc-700 text-sm font-medium rounded hover:bg-slate-200 transition-colors'>
+                        <button className='px-2 py-1 bg-slate-100 text-zinc-500 text-sm font-medium rounded hover:bg-slate-200 transition-colors'>
                           Decline
                         </button>
                       </div>

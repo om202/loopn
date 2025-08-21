@@ -35,7 +35,7 @@ export default function SignInForm({
     <div className='w-full'>
       {/* Sign up prompt at the top */}
       <div className='text-center mb-6 p-4 bg-slate-100 rounded-xl border border-slate-200'>
-        <span className='text-sm text-zinc-700 mr-3 font-medium'>
+        <span className='text-sm text-zinc-500 mr-3 font-medium'>
           New to Loopn?
         </span>
         <button
@@ -103,7 +103,7 @@ export default function SignInForm({
             <button
               type='button'
               onClick={() => setShowPassword(!showPassword)}
-              className='absolute inset-y-0 right-0 pr-3 flex items-center text-zinc-500 hover:text-zinc-700 transition-colors'
+              className='absolute inset-y-0 right-0 pr-3 flex items-center text-zinc-500 hover:text-zinc-500 transition-colors'
             >
               {showPassword ? (
                 <EyeOff className='h-5 w-5' />

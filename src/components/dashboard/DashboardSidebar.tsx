@@ -230,7 +230,7 @@ export default function DashboardSidebar({
               className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                 activeSection === accountItem.id
                   ? 'bg-brand-50 text-brand-700 border-brand-200'
-                  : 'text-zinc-700 hover:bg-slate-100 hover:text-zinc-950 border-transparent'
+                  : 'text-zinc-500 hover:bg-slate-100 hover:text-zinc-950 border-transparent'
               }`}
             >
               <div className='flex-shrink-0 flex items-center justify-center'>

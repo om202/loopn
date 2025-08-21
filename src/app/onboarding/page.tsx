@@ -304,7 +304,7 @@ export default function OnboardingPage() {
               </h2>
 
               <div>
-                <label className='block text-sm font-medium text-zinc-700 mb-3'>
+                <label className='block text-sm font-medium text-zinc-500 mb-3'>
                   Full Name *
                 </label>
                 <input
@@ -317,7 +317,7 @@ export default function OnboardingPage() {
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-zinc-700 mb-3'>
+                <label className='block text-sm font-medium text-zinc-500 mb-3'>
                   Title *
                 </label>
                 <input
@@ -330,7 +330,7 @@ export default function OnboardingPage() {
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-zinc-700 mb-3'>
+                <label className='block text-sm font-medium text-zinc-500 mb-3'>
                   Company *
                 </label>
                 <input
@@ -343,7 +343,7 @@ export default function OnboardingPage() {
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-zinc-700 mb-3'>
+                <label className='block text-sm font-medium text-zinc-500 mb-3'>
                   Industry *
                 </label>
                 <select
@@ -361,7 +361,7 @@ export default function OnboardingPage() {
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-zinc-700 mb-3'>
+                <label className='block text-sm font-medium text-zinc-500 mb-3'>
                   Years of Experience
                 </label>
                 <select
@@ -383,7 +383,7 @@ export default function OnboardingPage() {
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-zinc-700 mb-3'>
+                <label className='block text-sm font-medium text-zinc-500 mb-3'>
                   Education
                 </label>
                 <select
@@ -411,7 +411,7 @@ export default function OnboardingPage() {
 
               {/* Skills Section (moved above About) */}
               <div>
-                <label className='block text-sm font-medium text-zinc-700 mb-3'>
+                <label className='block text-sm font-medium text-zinc-500 mb-3'>
                   Key skills
                 </label>
                 <p className='text-sm text-zinc-500 mb-3'>
@@ -448,7 +448,7 @@ export default function OnboardingPage() {
 
               {/* About Section */}
               <div>
-                <label className='block text-sm font-medium text-zinc-700 mb-3'>
+                <label className='block text-sm font-medium text-zinc-500 mb-3'>
                   How do you want to use Loopn? *
                 </label>
                 <div className='text-sm text-zinc-500 mb-3'>
@@ -514,7 +514,7 @@ export default function OnboardingPage() {
                           className={`px-2.5 py-2 rounded-xl text-sm transition-colors border text-center ${
                             formData.interests?.includes(interest)
                               ? 'bg-brand-500 text-white border-brand-500'
-                              : 'bg-white text-zinc-700 border-slate-200 hover:bg-brand-50'
+                              : 'bg-white text-zinc-500 border-slate-200 hover:bg-brand-50'
                           }`}
                         >
                           {interest}

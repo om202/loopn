@@ -205,7 +205,7 @@ export default function BugReportDialog({
           <button
             type='button'
             onClick={() => !isSubmitting && handleClose()}
-            className={`flex-1 px-4 py-2 text-zinc-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-100 transition-colors ${
+            className={`flex-1 px-4 py-2 text-zinc-500 bg-white border border-slate-300 rounded-lg hover:bg-slate-100 transition-colors ${
               isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
             }`}
           >

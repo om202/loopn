@@ -312,7 +312,7 @@ export default function ProfileSidebar({
           {onEndChat && (
             <button
               onClick={() => setShowEndChatDialog(true)}
-              className='text-sm text-zinc-500 hover:text-zinc-800 transition-colors font-medium flex items-center gap-2'
+              className='text-sm text-zinc-500 hover:text-zinc-950 transition-colors font-medium flex items-center gap-2'
             >
               <UserX className='w-4 h-4' />
               Remove
@@ -566,7 +566,7 @@ export default function ProfileSidebar({
                           {userProfile.skills.map((skill, index) => (
                             <span
                               key={index}
-                              className='px-3 py-1.5 text-base bg-transparent text-zinc-700 border border-slate-200 rounded-lg font-medium'
+                              className='px-3 py-1.5 text-base bg-transparent text-zinc-500 border border-slate-200 rounded-lg font-medium'
                             >
                               {skill}
                             </span>
@@ -584,7 +584,7 @@ export default function ProfileSidebar({
                             {userProfile.interests.map((interest, index) => (
                               <span
                                 key={index}
-                                className='px-3 py-1.5 text-base bg-transparent text-zinc-700 border border-slate-200 rounded-lg font-medium'
+                                className='px-3 py-1.5 text-base bg-transparent text-zinc-500 border border-slate-200 rounded-lg font-medium'
                               >
                                 {interest}
                               </span>

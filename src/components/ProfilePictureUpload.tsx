@@ -186,7 +186,7 @@ export default function ProfilePictureUpload({
                       />
                     </svg>
                   </div>
-                  <p className='text-sm font-medium text-zinc-700 mb-1'>
+                  <p className='text-sm font-medium text-zinc-500 mb-1'>
                     Add profile picture
                   </p>
                   <p className='text-sm text-zinc-500'>

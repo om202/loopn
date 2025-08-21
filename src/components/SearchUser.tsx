@@ -253,7 +253,7 @@ export default function SearchUser({
                 >
                   <div className='flex items-center gap-3 flex-1 min-w-0'>
                     <Clock className='w-4 h-4 text-zinc-500 flex-shrink-0' />
-                    <span className='text-sm text-zinc-700 truncate'>
+                    <span className='text-sm text-zinc-500 truncate'>
                       {item.query}
                     </span>
                   </div>
