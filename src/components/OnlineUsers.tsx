@@ -556,10 +556,10 @@ export default function OnlineUsers({
           {activeSection === 'notifications' && (
             <div className='flex items-start justify-between'>
               <div>
-                <h2 className='text-2xl sm:text-2xl font-bold text-zinc-950 mb-1'>
+                <h2 className='text-2xl sm:text-2xl font-bold text-neutral-950 mb-1'>
                   Notifications
                 </h2>
-                <p className='text-base text-zinc-500'>
+                <p className='text-base text-neutral-500'>
                   Keep up with your latest activity
                 </p>
               </div>
@@ -575,10 +575,10 @@ export default function OnlineUsers({
           )}
           {activeSection === 'help' && (
             <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-zinc-950 mb-1'>
+              <h2 className='text-xl sm:text-2xl font-bold text-neutral-950 mb-1'>
                 Help & Support
               </h2>
-              <p className='text-base text-zinc-500'>
+              <p className='text-base text-neutral-500'>
                 Common questions and troubleshooting
               </p>
             </div>
@@ -586,10 +586,10 @@ export default function OnlineUsers({
           {activeSection === 'account' && (
             <div className='flex items-start justify-between'>
               <div>
-                <h2 className='text-2xl sm:text-2xl font-bold text-zinc-950 mb-1'>
+                <h2 className='text-2xl sm:text-2xl font-bold text-neutral-950 mb-1'>
                   Account
                 </h2>
-                <p className='text-base text-zinc-500'>
+                <p className='text-base text-neutral-500'>
                   Manage your profile and settings
                 </p>
               </div>
@@ -603,38 +603,38 @@ export default function OnlineUsers({
           )}
           {activeSection === 'connections' && (
             <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-zinc-950 mb-1'>
+              <h2 className='text-xl sm:text-2xl font-bold text-neutral-950 mb-1'>
                 Connections
               </h2>
-              <p className='text-base text-zinc-500'>Your connections</p>
+              <p className='text-base text-neutral-500'>Your connections</p>
             </div>
           )}
           {activeSection === 'suggested' && (
             <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-zinc-950 mb-1'>
+              <h2 className='text-xl sm:text-2xl font-bold text-neutral-950 mb-1'>
                 Discover
               </h2>
-              <p className='text-base text-zinc-500'>
+              <p className='text-base text-neutral-500'>
                 Find and connect with new people
               </p>
             </div>
           )}
           {activeSection === 'search' && (
             <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-zinc-950 mb-1'>
+              <h2 className='text-xl sm:text-2xl font-bold text-neutral-950 mb-1'>
                 {searchQuery ? 'Search Results' : 'Search'}
               </h2>
-              <p className='text-base text-zinc-500'>
+              <p className='text-base text-neutral-500'>
                 {searchQuery ? `"${searchQuery}"` : 'Search for professionals'}
               </p>
             </div>
           )}
           {activeSection === 'all' && (
             <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-zinc-950 mb-1'>
+              <h2 className='text-xl sm:text-2xl font-bold text-neutral-950 mb-1'>
                 Chats
               </h2>
-              <p className='text-base text-zinc-500'>Your conversations</p>
+              <p className='text-base text-neutral-500'>Your conversations</p>
             </div>
           )}
         </div>

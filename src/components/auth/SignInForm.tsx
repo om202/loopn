@@ -35,7 +35,7 @@ export default function SignInForm({
     <div className='w-full'>
       {/* Sign up prompt at the top */}
       <div className='text-center mb-6 p-4 bg-slate-100 rounded-xl border border-slate-200'>
-        <span className='text-sm text-zinc-500 mr-3 font-medium'>
+        <span className='text-sm text-neutral-500 mr-3 font-medium'>
           New to Loopn?
         </span>
         <button
@@ -60,13 +60,13 @@ export default function SignInForm({
         <div>
           <label
             htmlFor='email'
-            className='block text-sm font-medium text-zinc-950 mb-3'
+            className='block text-sm font-medium text-neutral-950 mb-3'
           >
             Email address
           </label>
           <div className='relative'>
             <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-              <Mail className='h-5 w-5 text-zinc-500' />
+              <Mail className='h-5 w-5 text-neutral-500' />
             </div>
             <input
               id='email'
@@ -83,13 +83,13 @@ export default function SignInForm({
         <div>
           <label
             htmlFor='password'
-            className='block text-sm font-medium text-zinc-950 mb-3'
+            className='block text-sm font-medium text-neutral-950 mb-3'
           >
             Password
           </label>
           <div className='relative'>
             <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-              <Lock className='h-5 w-5 text-zinc-500' />
+              <Lock className='h-5 w-5 text-neutral-500' />
             </div>
             <input
               id='password'
@@ -103,7 +103,7 @@ export default function SignInForm({
             <button
               type='button'
               onClick={() => setShowPassword(!showPassword)}
-              className='absolute inset-y-0 right-0 pr-3 flex items-center text-zinc-500 hover:text-zinc-500 transition-colors'
+              className='absolute inset-y-0 right-0 pr-3 flex items-center text-neutral-500 hover:text-neutral-500 transition-colors'
             >
               {showPassword ? (
                 <EyeOff className='h-5 w-5' />

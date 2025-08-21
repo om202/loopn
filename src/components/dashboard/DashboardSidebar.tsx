@@ -142,7 +142,7 @@ export default function DashboardSidebar({
                   priority
                 />
                 <div className='flex items-center gap-2'>
-                  <h1 className='text-2xl font-bold text-zinc-950'>Loopn</h1>
+                  <h1 className='text-2xl font-bold text-neutral-950'>Loopn</h1>
                 </div>
               </Link>
             </div>
@@ -158,7 +158,7 @@ export default function DashboardSidebar({
                   className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                     activeSection === id
                       ? 'bg-brand-50 text-brand-700 border-brand-200'
-                      : 'text-zinc-950 hover:bg-slate-100 hover:text-zinc-950 border-transparent'
+                      : 'text-neutral-950 hover:bg-slate-100 hover:text-neutral-950 border-transparent'
                   }`}
                 >
                   <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -204,7 +204,7 @@ export default function DashboardSidebar({
                 className={`relative flex-1 flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                   activeSection === helpItem.id
                     ? 'bg-brand-50 text-brand-700 border-brand-200'
-                    : 'text-zinc-950 hover:bg-slate-100 hover:text-zinc-950 border-transparent'
+                    : 'text-neutral-950 hover:bg-slate-100 hover:text-neutral-950 border-transparent'
                 }`}
               >
                 <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -217,7 +217,7 @@ export default function DashboardSidebar({
 
               <button
                 onClick={() => setIsBugReportOpen(true)}
-                className='p-2 text-zinc-500 hover:text-zinc-950 hover:bg-slate-100 rounded-lg transition-colors border border-transparent hover:border-slate-200'
+                className='p-2 text-neutral-500 hover:text-neutral-950 hover:bg-slate-100 rounded-lg transition-colors border border-transparent hover:border-slate-200'
                 title='Report Bug / Share Suggestion'
               >
                 <Bug className='w-4 h-4' />
@@ -230,7 +230,7 @@ export default function DashboardSidebar({
               className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                 activeSection === accountItem.id
                   ? 'bg-brand-50 text-brand-700 border-brand-200'
-                  : 'text-zinc-500 hover:bg-slate-100 hover:text-zinc-950 border-transparent'
+                  : 'text-neutral-500 hover:bg-slate-100 hover:text-neutral-950 border-transparent'
               }`}
             >
               <div className='flex-shrink-0 flex items-center justify-center'>
@@ -251,8 +251,8 @@ export default function DashboardSidebar({
                 />
               </div>
               <div className='flex-1'>
-                <div className='font-medium text-base'>{accountItem.label}</div>
-                <div className='text-sm text-zinc-500'>You</div>
+                <div className='font-semibold text-neutral-950 text-base'>{accountItem.label}</div>
+                <div className='text-sm text-neutral-500'>Account</div>
               </div>
             </button>
           </div>
@@ -274,7 +274,7 @@ export default function DashboardSidebar({
                 className={`relative flex-1 flex flex-col items-center justify-center gap-1 px-1 py-2 transition-colors duration-150 ${
                   activeSection === id
                     ? 'text-brand-600'
-                    : 'text-zinc-950 hover:text-zinc-950'
+                    : 'text-neutral-950 hover:text-neutral-950'
                 }`}
                 title={label}
               >

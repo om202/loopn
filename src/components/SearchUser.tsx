@@ -204,7 +204,7 @@ export default function SearchUser({
             <button
               type='button'
               onClick={handleClearInput}
-              className={`absolute top-1/2 -translate-y-1/2 w-6 h-6 text-zinc-500 hover:text-zinc-500 flex items-center justify-center transition-all duration-300 ${
+              className={`absolute top-1/2 -translate-y-1/2 w-6 h-6 text-neutral-500 hover:text-neutral-500 flex items-center justify-center transition-all duration-300 ${
                 isFocused ? 'right-28' : 'right-11'
               }`}
               aria-label='Clear search'
@@ -242,7 +242,7 @@ export default function SearchUser({
             className='absolute top-full left-0 right-0 bg-white border border-slate-200 rounded-2xl shadow-lg z-50 max-h-64 overflow-y-auto mt-2'
           >
             <div className='py-2'>
-              <div className='px-4 py-2 text-sm font-medium text-zinc-500 border-b border-slate-100'>
+              <div className='px-4 py-2 text-sm font-medium text-neutral-500 border-b border-slate-100'>
                 Recent searches
               </div>
               {searchHistory.map(item => (
@@ -252,15 +252,15 @@ export default function SearchUser({
                   onClick={() => handleHistoryItemClick(item.query)}
                 >
                   <div className='flex items-center gap-3 flex-1 min-w-0'>
-                    <Clock className='w-4 h-4 text-zinc-500 flex-shrink-0' />
-                    <span className='text-sm text-zinc-500 truncate'>
+                    <Clock className='w-4 h-4 text-neutral-500 flex-shrink-0' />
+                    <span className='text-sm text-neutral-500 truncate'>
                       {item.query}
                     </span>
                   </div>
                   <button
                     type='button'
                     onClick={e => handleDeleteHistoryItem(e, item.id)}
-                    className='flex-shrink-0 p-1 text-zinc-500 hover:text-zinc-500 opacity-0 group-hover:opacity-100 transition-opacity'
+                    className='flex-shrink-0 p-1 text-neutral-500 hover:text-neutral-500 opacity-0 group-hover:opacity-100 transition-opacity'
                     aria-label={`Remove "${item.query}" from search history`}
                   >
                     <X className='w-4 h-4' />
