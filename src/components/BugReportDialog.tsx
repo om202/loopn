@@ -82,7 +82,7 @@ export default function BugReportDialog({
         </div>
         <button
           onClick={() => !isSubmitting && handleClose()}
-          className={`p-2 hover:bg-gray-100 rounded-lg transition-colors ${
+          className={`p-2 hover:bg-stone-100 rounded-lg transition-colors ${
             isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
           }`}
         >
@@ -205,7 +205,7 @@ export default function BugReportDialog({
           <button
             type='button'
             onClick={() => !isSubmitting && handleClose()}
-            className={`flex-1 px-4 py-2 text-neutral-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors ${
+            className={`flex-1 px-4 py-2 text-neutral-500 bg-white border border-gray-300 rounded-lg hover:bg-stone-100 transition-colors ${
               isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
             }`}
           >

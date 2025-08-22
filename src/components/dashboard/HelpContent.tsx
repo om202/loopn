@@ -265,7 +265,7 @@ export default function HelpContent({
           </button>
           <button
             onClick={onOpenBugReport}
-            className='px-4 py-2 bg-white text-black border border-gray-300 rounded-lg text-base font-medium hover:bg-gray-100 transition-colors'
+            className='px-4 py-2 bg-white text-black border border-gray-300 rounded-lg text-base font-medium hover:bg-stone-100 transition-colors'
           >
             Report Bug / Suggest
           </button>

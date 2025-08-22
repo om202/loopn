@@ -219,7 +219,7 @@ export default function OnboardingPage() {
   // Removed suggestions; free-form skills entry only
 
   return (
-    <div className='min-h-screen bg-gray-100 py-8 px-3 sm:px-4'>
+    <div className='min-h-screen bg-stone-100 py-8 px-3 sm:px-4'>
       <div className='max-w-2xl mx-auto'>
         {/* Main content card */}
         <div className='bg-white rounded-2xl border border-gray-200 p-4 sm:p-6 lg:p-8'>
@@ -572,7 +572,7 @@ export default function OnboardingPage() {
             <button
               onClick={prevStep}
               disabled={currentStep === 1}
-              className={`px-6 py-3 rounded-xl font-medium border bg-white text-black border-gray-200 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-500 disabled:opacity-50 disabled:cursor-not-allowed`}
+              className={`px-6 py-3 rounded-xl font-medium border bg-white text-black border-gray-200 hover:bg-stone-100 focus:outline-none focus:ring-2 focus:ring-brand-500 disabled:opacity-50 disabled:cursor-not-allowed`}
             >
               Previous
             </button>

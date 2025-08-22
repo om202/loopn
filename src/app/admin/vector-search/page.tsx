@@ -261,7 +261,7 @@ export default function VectorSearchAdminPage() {
 
   if (!isAdmin) {
     return (
-      <div className='min-h-screen bg-gray-50 flex items-center justify-center'>
+      <div className='min-h-screen bg-stone-50 flex items-center justify-center'>
         <div className='text-center'>
           <h1 className='text-2xl font-bold text-gray-900 mb-2'>
             Access Denied
@@ -275,7 +275,7 @@ export default function VectorSearchAdminPage() {
   }
 
   return (
-    <div className='min-h-screen bg-gray-50 py-8'>
+    <div className='min-h-screen bg-stone-50 py-8'>
       <div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='bg-white shadow-sm rounded-lg'>
           <div className='px-6 py-4 border-b border-gray-200'>
@@ -315,7 +315,7 @@ export default function VectorSearchAdminPage() {
               )}
 
               {status && (
-                <div className='bg-gray-50 rounded-lg p-4'>
+                <div className='bg-stone-50 rounded-lg p-4'>
                   <div className='grid grid-cols-3 gap-4'>
                     <div className='text-center'>
                       <div className='text-2xl font-bold text-gray-900'>
@@ -481,7 +481,7 @@ export default function VectorSearchAdminPage() {
               </div>
 
               {testResults && (
-                <div className='bg-gray-50 rounded-lg p-4'>
+                <div className='bg-stone-50 rounded-lg p-4'>
                   {testResults.success ? (
                     <div>
                       <p className='font-medium mb-2'>

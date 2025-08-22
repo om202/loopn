@@ -422,7 +422,7 @@ export default function NotificationsContent() {
           <LoadingContainer size='lg' variant='spin' />
         ) : getFilteredNotifications().length === 0 ? (
           <div className='flex flex-col items-center justify-center min-h-full text-center'>
-            <div className='w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center'>
+            <div className='w-16 h-16 mx-auto mb-4 bg-stone-100 rounded-full flex items-center justify-center'>
               <Bell className='w-8 h-8 text-neutral-500' />
             </div>
             <h3 className='text-lg font-medium text-black mb-2'>

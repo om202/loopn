@@ -158,7 +158,7 @@ export default function DashboardSidebar({
                   className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                     activeSection === id
                       ? 'bg-brand-50 text-brand-600 border-brand-200'
-                      : 'text-black hover:bg-gray-100 hover:text-black border-transparent'
+                      : 'text-black hover:bg-stone-100 hover:text-black border-transparent'
                   }`}
                 >
                   <div className='w-6 h-6 flex-shrink-0 flex items-center justify-center'>
@@ -204,7 +204,7 @@ export default function DashboardSidebar({
                 className={`relative flex-1 flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                   activeSection === helpItem.id
                     ? 'bg-brand-50 text-brand-600 border-brand-200'
-                    : 'text-black hover:bg-gray-100 hover:text-black border-transparent'
+                    : 'text-black hover:bg-stone-100 hover:text-black border-transparent'
                 }`}
               >
                 <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -217,7 +217,7 @@ export default function DashboardSidebar({
 
               <button
                 onClick={() => setIsBugReportOpen(true)}
-                className='p-2 text-neutral-500 hover:text-black hover:bg-gray-100 rounded-lg transition-colors border border-transparent hover:border-gray-200'
+                className='p-2 text-neutral-500 hover:text-black hover:bg-stone-100 rounded-lg transition-colors border border-transparent hover:border-gray-200'
                 title='Report Bug / Share Suggestion'
               >
                 <Bug className='w-4 h-4' />
@@ -230,7 +230,7 @@ export default function DashboardSidebar({
               className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                 activeSection === accountItem.id
                   ? 'bg-brand-50 text-brand-600 border-brand-200'
-                  : 'text-neutral-500 hover:bg-gray-100 hover:text-black border-transparent'
+                  : 'text-neutral-500 hover:bg-stone-100 hover:text-black border-transparent'
               }`}
             >
               <div className='flex-shrink-0 flex items-center justify-center'>
@@ -262,7 +262,7 @@ export default function DashboardSidebar({
       </div>
 
       {/* Mobile Bottom Bar */}
-      <div className='lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-gray-100 border-t border-gray-200'>
+      <div className='lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-stone-100 border-t border-gray-200'>
         <nav className='flex items-stretch px-2 py-1'>
           <div className='flex w-full'>
             {[

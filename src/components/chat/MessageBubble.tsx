@@ -276,8 +276,8 @@ export default function MessageBubble({
               <div
                 className={`p-2.5 rounded-2xl border shadow-sm ${
                   isOwnMessage
-                    ? 'bg-gray-100 text-neutral-500 border-gray-200 rounded-br-md'
-                    : 'bg-gray-100 text-neutral-500 border-gray-200 rounded-bl-md'
+                    ? 'bg-stone-100 text-neutral-500 border-gray-200 rounded-br-md'
+                    : 'bg-stone-100 text-neutral-500 border-gray-200 rounded-bl-md'
                 }`}
               >
                 <p className='text-sm italic select-none'>Message deleted</p>
@@ -291,7 +291,7 @@ export default function MessageBubble({
                 className={`p-2.5 rounded-2xl shadow-sm ${
                   isOwnMessage
                     ? 'bg-brand-500 text-white border border-brand-500 rounded-br-md'
-                    : 'bg-gray-100 text-black border border-gray-200 rounded-bl-md'
+                    : 'bg-stone-100 text-black border border-gray-200 rounded-bl-md'
                 }`}
               >
                 {repliedToMessage && (
@@ -299,7 +299,7 @@ export default function MessageBubble({
                     className={`mb-2 pt-2 pb-2 border-l-2 pl-3 pr-3 ${
                       isOwnMessage
                         ? 'border-brand-300 bg-brand-500 bg-opacity-15'
-                        : 'border-gray-400 bg-gray-100'
+                        : 'border-gray-400 bg-stone-100'
                     } rounded-r-xl`}
                   >
                     <div

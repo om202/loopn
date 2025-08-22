@@ -14,7 +14,7 @@ export default function DashboardPage() {
 
   return (
     <ProtectedRoute requireOnboarding={true}>
-      <div className='h-screen sm:bg-gray-100 flex flex-col overflow-hidden'>
+      <div className='h-screen sm:bg-stone-100 flex flex-col overflow-hidden'>
         {/* Main Content Area with LinkedIn-style max width */}
         <div className='flex-1 w-full flex justify-center px-1 sm:px-3 lg:px-6 py-1 sm:py-3 lg:py-4 min-h-0'>
           <div className='w-full space-y-2 sm:space-y-4'>

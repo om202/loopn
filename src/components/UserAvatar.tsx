@@ -125,7 +125,7 @@ export default function UserAvatar({
       case 'RECENTLY_ACTIVE':
         return (
           <div
-            className={`${recentlyActiveSize} bg-gray-300 rounded-full border-2 border-white box-content flex items-center justify-center`}
+            className={`${recentlyActiveSize} bg-stone-300 rounded-full border-2 border-white box-content flex items-center justify-center`}
           >
             <Clock
               className={`${recentlyActiveIconSize} text-black`}

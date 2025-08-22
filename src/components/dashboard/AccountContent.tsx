@@ -74,7 +74,7 @@ export default function AccountContent() {
         <div className='mt-5'>
           {loadingProfile ? (
             <div className='flex items-center gap-2 text-sm text-neutral-500'>
-              <div className='w-3 h-3 bg-gray-200 rounded-full animate-pulse'></div>
+              <div className='w-3 h-3 bg-stone-200 rounded-full animate-pulse'></div>
               <span>Loading...</span>
             </div>
           ) : userProfile ? (

@@ -225,7 +225,7 @@ export default function ProfileSidebar({
     if (isEndedWithTimer) {
       const timeRemaining = getReconnectTimeRemaining!(userId);
       return (
-        <div className='text-sm text-center p-3 bg-gray-100 rounded-xl border border-gray-200'>
+        <div className='text-sm text-center p-3 bg-stone-100 rounded-xl border border-gray-200'>
           <div className='text-neutral-500 mb-1'>Reconnect in</div>
           <div className='text-neutral-500 flex items-center justify-center gap-1'>
             <Clock className='w-3 h-3' />
@@ -351,7 +351,7 @@ export default function ProfileSidebar({
             <div className='flex items-center justify-center text-sm text-neutral-500 mb-3'>
               <button
                 onClick={() => setShowRemoveConnectionDialog(true)}
-                className='flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors'
+                className='flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-stone-100 transition-colors'
               >
                 <svg
                   className='w-4 h-4'
@@ -402,7 +402,7 @@ export default function ProfileSidebar({
                     <button
                       onClick={() => setShowCancelRequestDialog(true)}
                       disabled={optimisticRequestSent} // Disable if optimistic (no real request to cancel yet)
-                      className='px-6 py-2 text-sm font-medium rounded-lg border border-gray-200 flex items-center justify-center gap-2 text-neutral-500 hover:bg-gray-100 transition-colors disabled:cursor-not-allowed disabled:hover:bg-transparent'
+                      className='px-6 py-2 text-sm font-medium rounded-lg border border-gray-200 flex items-center justify-center gap-2 text-neutral-500 hover:bg-stone-100 transition-colors disabled:cursor-not-allowed disabled:hover:bg-transparent'
                     >
                       <Clock className='w-4 h-4' />
                       <span>Request Sent</span>
@@ -440,7 +440,7 @@ export default function ProfileSidebar({
               {onReconnect && (
                 <button
                   onClick={onReconnect}
-                  className='w-full px-4 py-2 text-sm font-medium rounded-lg bg-gray-1000 hover:bg-gray-600 text-white transition-colors flex items-center justify-center gap-2'
+                  className='w-full px-4 py-2 text-sm font-medium rounded-lg bg-stone-1000 hover:bg-stone-600 text-white transition-colors flex items-center justify-center gap-2'
                 >
                   <Image
                     src='/connect-icon.svg'
@@ -623,7 +623,7 @@ export default function ProfileSidebar({
           <div className='flex gap-2'>
             <button
               onClick={() => setShowEndChatDialog(false)}
-              className='flex-1 px-3 py-2 text-base font-medium text-black bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none transition-colors'
+              className='flex-1 px-3 py-2 text-base font-medium text-black bg-stone-100 rounded-lg hover:bg-stone-200 focus:outline-none transition-colors'
             >
               Cancel
             </button>
@@ -632,7 +632,7 @@ export default function ProfileSidebar({
                 onEndChat?.();
                 setShowEndChatDialog(false);
               }}
-              className='flex-1 px-3 py-2 text-base font-medium text-b_red-600 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none transition-colors'
+              className='flex-1 px-3 py-2 text-base font-medium text-b_red-600 bg-stone-100 rounded-lg hover:bg-stone-200 focus:outline-none transition-colors'
             >
               Remove Connection
             </button>

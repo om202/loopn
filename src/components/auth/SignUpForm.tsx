@@ -85,7 +85,7 @@ export default function SignUpForm({
   return (
     <div className='w-full'>
       {/* Sign in prompt at the top */}
-      <div className='text-center mb-6 p-4 bg-gray-100 rounded-xl border border-gray-200'>
+      <div className='text-center mb-6 p-4 bg-stone-100 rounded-xl border border-gray-200'>
         <span className='text-sm text-neutral-500 mr-3 font-medium'>
           Already have an account?
         </span>
@@ -174,7 +174,7 @@ export default function SignUpForm({
 
           {/* Real-time password validation */}
           {showPasswordHints && (
-            <div className='mt-3 p-3 bg-gray-100 rounded-lg border border-gray-200'>
+            <div className='mt-3 p-3 bg-stone-100 rounded-lg border border-gray-200'>
               <p className='text-sm font-medium text-black mb-2'>
                 Password requirements:
               </p>

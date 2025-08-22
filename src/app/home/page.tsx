@@ -191,7 +191,7 @@ export default function HomePage() {
                         {/* Back Button */}
                         <button
                           disabled
-                          className='p-1.5 sm:p-2 -ml-1 sm:-ml-2 text-neutral-500 hover:text-black hover:bg-gray-100 rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 cursor-not-allowed opacity-50'
+                          className='p-1.5 sm:p-2 -ml-1 sm:-ml-2 text-neutral-500 hover:text-black hover:bg-stone-100 rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 cursor-not-allowed opacity-50'
                         >
                           <svg
                             className='w-4 h-4 sm:w-5 sm:h-5'
@@ -290,7 +290,7 @@ export default function HomePage() {
                         />
                       </div>
                       <div className='relative max-w-[85vw] sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl'>
-                        <div className='p-2.5 rounded-2xl bg-gray-100 text-black border border-gray-200 rounded-bl-md shadow-sm'>
+                        <div className='p-2.5 rounded-2xl bg-stone-100 text-black border border-gray-200 rounded-bl-md shadow-sm'>
                           <p className='text-base leading-normal break-words select-none m-0 pr-2'>
                             Hey! I see you work in UX. Any tips for fintech
                             design?
@@ -335,7 +335,7 @@ export default function HomePage() {
                         />
                       </div>
                       <div className='relative max-w-[85vw] sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl'>
-                        <div className='p-2.5 rounded-2xl bg-gray-100 text-black border border-gray-200 rounded-bl-md shadow-sm'>
+                        <div className='p-2.5 rounded-2xl bg-stone-100 text-black border border-gray-200 rounded-bl-md shadow-sm'>
                           <p className='text-base leading-normal break-words select-none m-0 pr-2'>
                             Perfect! Working on investment education app
                           </p>
@@ -379,7 +379,7 @@ export default function HomePage() {
                         />
                       </div>
                       <div className='relative max-w-[85vw] sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl'>
-                        <div className='p-2.5 rounded-2xl bg-gray-100 text-black border border-gray-200 rounded-bl-md shadow-sm'>
+                        <div className='p-2.5 rounded-2xl bg-stone-100 text-black border border-gray-200 rounded-bl-md shadow-sm'>
                           <p className='text-base leading-normal break-words select-none m-0 pr-2'>
                             Thanks!
                           </p>
@@ -403,12 +403,12 @@ export default function HomePage() {
                             WebkitAppearance: 'none',
                             MozAppearance: 'textfield',
                           }}
-                          className='w-full px-5 py-3 pr-14 border border-gray-200 rounded-full focus:outline-none focus:ring-1 focus:ring-brand-500 focus:border-transparent text-base font-medium bg-gray-100 hover:bg-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed placeholder-gray-1000'
+                          className='w-full px-5 py-3 pr-14 border border-gray-200 rounded-full focus:outline-none focus:ring-1 focus:ring-brand-500 focus:border-transparent text-base font-medium bg-stone-100 hover:bg-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed placeholder-gray-1000'
                         />
                         <button
                           type='button'
                           disabled
-                          className='absolute right-2 top-1/2 transform -translate-y-1/2 text-neutral-500 hover:text-black transition-all duration-200 p-2 rounded-full hover:bg-gray-100 focus:outline-none disabled:opacity-50 cursor-not-allowed'
+                          className='absolute right-2 top-1/2 transform -translate-y-1/2 text-neutral-500 hover:text-black transition-all duration-200 p-2 rounded-full hover:bg-stone-100 focus:outline-none disabled:opacity-50 cursor-not-allowed'
                         >
                           <Smile className='w-6 h-6' />
                         </button>
@@ -438,7 +438,7 @@ export default function HomePage() {
       <section className='py-12 sm:py-16 bg-white relative'>
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
-          <div className='absolute top-1/4 left-0 w-72 h-72 bg-gray-100/80 rounded-full blur-3xl' />
+          <div className='absolute top-1/4 left-0 w-72 h-72 bg-stone-100/80 rounded-full blur-3xl' />
           <div className='absolute bottom-1/4 right-1/4 w-80 h-80 bg-brand-50/60 rounded-full blur-3xl' />
         </div>
 
@@ -569,7 +569,7 @@ export default function HomePage() {
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-1/3 right-0 w-96 h-96 bg-brand-50/60 rounded-full blur-3xl' />
-          <div className='absolute bottom-1/3 left-0 w-80 h-80 bg-gray-100/80 rounded-full blur-3xl' />
+          <div className='absolute bottom-1/3 left-0 w-80 h-80 bg-stone-100/80 rounded-full blur-3xl' />
         </div>
 
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
@@ -653,7 +653,7 @@ export default function HomePage() {
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-1/4 right-0 w-96 h-96 bg-brand-50/40 rounded-full blur-3xl' />
-          <div className='absolute bottom-1/4 left-0 w-80 h-80 bg-gray-100/80 rounded-full blur-3xl' />
+          <div className='absolute bottom-1/4 left-0 w-80 h-80 bg-stone-100/80 rounded-full blur-3xl' />
         </div>
 
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
@@ -822,12 +822,12 @@ export default function HomePage() {
               href={isAuthenticated ? authLink : signUpLink}
               className='w-full sm:w-auto'
             >
-              <button className='group w-full bg-white hover:bg-gray-100 text-brand-600 px-10 py-4 rounded-xl text-lg font-black transition-all duration-300 flex items-center justify-center gap-3 border border-brand-600'>
+              <button className='group w-full bg-white hover:bg-stone-100 text-brand-600 px-10 py-4 rounded-xl text-lg font-black transition-all duration-300 flex items-center justify-center gap-3 border border-brand-600'>
                 {ctaText}
                 <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' />
               </button>
             </Link>
-            <button className='w-full sm:w-auto bg-white hover:bg-gray-100 text-neutral-500 px-10 py-4 rounded-xl text-lg font-bold border border-gray-200 transition-all duration-300 flex items-center justify-center gap-3'>
+            <button className='w-full sm:w-auto bg-white hover:bg-stone-100 text-neutral-500 px-10 py-4 rounded-xl text-lg font-bold border border-gray-200 transition-all duration-300 flex items-center justify-center gap-3'>
               <MessageCircle className='w-5 h-5' />
               Learn More
             </button>

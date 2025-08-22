@@ -101,7 +101,7 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
 
       {chatRequests.length === 0 ? (
         <div className='flex flex-col items-center justify-center text-center p-8'>
-          <div className='w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center'>
+          <div className='w-16 h-16 mx-auto mb-4 bg-stone-100 rounded-full flex items-center justify-center'>
             <svg
               className='w-8 h-8 text-neutral-500'
               fill='none'
@@ -148,7 +148,7 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
                   disabled={
                     decliningId === request.id || acceptingId === request.id
                   }
-                  className='px-3 py-2 bg-gray-100 text-black text-sm font-medium rounded-lg hover:bg-gray-100 disabled:opacity-50 transition-colors'
+                  className='px-3 py-2 bg-stone-100 text-black text-sm font-medium rounded-lg hover:bg-stone-100 disabled:opacity-50 transition-colors'
                 >
                   {decliningId === request.id ? 'Declining...' : 'Decline'}
                 </button>

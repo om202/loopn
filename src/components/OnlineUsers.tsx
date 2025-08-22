@@ -666,10 +666,10 @@ export default function OnlineUsers({
 
         <div className='relative flex-1 overflow-hidden'>
           {/* Top border - shows when scrolled down */}
-          <div className='absolute top-0 left-0 right-0 h-px bg-gray-200 opacity-0 transition-opacity duration-200 z-10 scroll-top-border'></div>
+          <div className='absolute top-0 left-0 right-0 h-px bg-stone-200 opacity-0 transition-opacity duration-200 z-10 scroll-top-border'></div>
 
           {/* Bottom border - shows when not at bottom */}
-          <div className='absolute bottom-0 left-0 right-0 h-px bg-gray-200 opacity-0 transition-opacity duration-200 z-10 scroll-bottom-border'></div>
+          <div className='absolute bottom-0 left-0 right-0 h-px bg-stone-200 opacity-0 transition-opacity duration-200 z-10 scroll-bottom-border'></div>
 
           <div
             className='overflow-y-auto flex-1 h-full'

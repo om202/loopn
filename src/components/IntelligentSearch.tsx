@@ -224,7 +224,7 @@ export default function IntelligentSearch({
 
       {/* Filters Panel */}
       {showFilters && showFiltersPanel && (
-        <div className='mt-4 p-4 bg-gray-50 rounded-lg border'>
+        <div className='mt-4 p-4 bg-stone-50 rounded-lg border'>
           <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
             <div>
               <label className='block text-sm font-medium text-gray-700 mb-1'>
@@ -318,7 +318,7 @@ export default function IntelligentSearch({
                 {searchHistory.slice(0, 5).map(item => (
                   <div
                     key={item.id}
-                    className='flex items-center justify-between p-2 hover:bg-gray-50 rounded cursor-pointer group'
+                    className='flex items-center justify-between p-2 hover:bg-stone-50 rounded cursor-pointer group'
                     onClick={() => handleHistoryClick(item)}
                   >
                     <span className='text-gray-700'>{item.query}</span>
@@ -350,7 +350,7 @@ export default function IntelligentSearch({
                   {results.map(user => (
                     <div
                       key={user.userId}
-                      className='p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors border border-gray-200'
+                      className='p-3 hover:bg-stone-50 rounded-lg cursor-pointer transition-colors border border-gray-200'
                       onClick={() => handleUserSelect(user)}
                     >
                       <div className='flex items-start space-x-3'>

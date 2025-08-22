@@ -34,7 +34,7 @@ export default function SignInForm({
   return (
     <div className='w-full'>
       {/* Sign up prompt at the top */}
-      <div className='text-center mb-6 p-4 bg-gray-100 rounded-xl border border-gray-200'>
+      <div className='text-center mb-6 p-4 bg-stone-100 rounded-xl border border-gray-200'>
         <span className='text-sm text-neutral-500 mr-3 font-medium'>
           New to Loopn?
         </span>

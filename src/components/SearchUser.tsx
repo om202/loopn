@@ -196,7 +196,7 @@ export default function SearchUser({
               WebkitAppearance: 'none',
               MozAppearance: 'textfield',
             }}
-            className='w-full pl-10 pr-16 py-3 rounded-full border border-gray-200 focus:outline-none focus:ring-1 focus:ring-brand-200 bg-gray-50 text-gray-900 hover:bg-gray-100 transition-colors placeholder-gray-500'
+            className='w-full pl-10 pr-16 py-3 rounded-full border border-gray-200 focus:outline-none focus:ring-1 focus:ring-brand-200 bg-stone-50 text-gray-900 hover:bg-stone-100 transition-colors placeholder-gray-500'
           />
 
           {/* Clear button - only show when there's text */}
@@ -248,7 +248,7 @@ export default function SearchUser({
               {searchHistory.map(item => (
                 <div
                   key={item.id}
-                  className='flex items-center justify-between px-4 py-3 hover:bg-gray-100 cursor-pointer group'
+                  className='flex items-center justify-between px-4 py-3 hover:bg-stone-100 cursor-pointer group'
                   onClick={() => handleHistoryItemClick(item.query)}
                 >
                   <div className='flex items-center gap-3 flex-1 min-w-0'>

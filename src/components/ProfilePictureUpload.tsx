@@ -171,7 +171,7 @@ export default function ProfilePictureUpload({
                 </div>
               ) : (
                 <>
-                  <div className='w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-3 mx-auto'>
+                  <div className='w-12 h-12 bg-stone-100 rounded-full flex items-center justify-center mb-3 mx-auto'>
                     <svg
                       className='w-6 h-6 text-neutral-500'
                       fill='none'
