@@ -567,7 +567,7 @@ export default function OnlineUsers({
         suggestedUsersCount={suggestedUsers.length}
       />
 
-      <div className='flex-1 bg-white sm:rounded-2xl sm:border sm:border-gray-200 p-3 sm:p-4 lg:p-6 ultra-compact overflow-hidden flex flex-col min-h-0'>
+      <div className='flex-1 bg-white sm:rounded-2xl shadow-md p-3 sm:p-4 lg:p-6 ultra-compact overflow-hidden flex flex-col min-h-0'>
         {/* Search User - Always visible at top */}
         <div className='flex-shrink-0 mb-4 sm:mb-6 mx-auto max-w-[950px] w-full'>
           <SearchUser
