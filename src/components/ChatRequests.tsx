@@ -92,7 +92,7 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
   return (
     <div className='bg-white rounded-xl shadow-lg border border-gray-200'>
       <div className='p-4 border-b border-gray-200'>
-        <div className='flex items-center gap-2 text-neutral-950'>
+        <div className='flex items-center gap-2 text-black'>
           <span className='font-medium'>
             Chat Requests ({chatRequests.length})
           </span>
@@ -116,7 +116,7 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
               />
             </svg>
           </div>
-          <h3 className='text-lg font-medium text-neutral-950 mb-2'>
+          <h3 className='text-lg font-medium text-black mb-2'>
             No chat requests
           </h3>
           <p className='text-neutral-500'>Incoming requests will appear here</p>
@@ -131,7 +131,7 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
               <div className='flex items-center gap-3'>
                 <UserAvatar userId={request.requesterId} size='md' />
                 <div>
-                  <div className='font-medium text-neutral-950 text-sm no-email-detection'>
+                  <div className='font-medium text-black text-sm no-email-detection'>
                     {`User ${request.requesterId.slice(-4)}`}
                   </div>
                   <div className='text-sm text-neutral-500'>
@@ -148,7 +148,7 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
                   disabled={
                     decliningId === request.id || acceptingId === request.id
                   }
-                  className='px-3 py-2 bg-gray-100 text-neutral-950 text-sm font-medium rounded-lg hover:bg-gray-100 disabled:opacity-50 transition-colors'
+                  className='px-3 py-2 bg-gray-100 text-black text-sm font-medium rounded-lg hover:bg-gray-100 disabled:opacity-50 transition-colors'
                 >
                   {decliningId === request.id ? 'Declining...' : 'Decline'}
                 </button>

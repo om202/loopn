@@ -244,10 +244,10 @@ export default function OnboardingPage() {
                   height={48}
                   priority
                 />
-                <h1 className='text-3xl font-bold text-neutral-950'>Loopn</h1>
+                <h1 className='text-3xl font-bold text-black'>Loopn</h1>
               </div>
             </Link>
-            <p className='text-neutral-950 text-base mb-6'>
+            <p className='text-black text-base mb-6'>
               Let's set up your profile
             </p>
           </div>
@@ -280,7 +280,7 @@ export default function OnboardingPage() {
                     key={label}
                     className={
                       i + 1 === currentStep
-                        ? 'text-neutral-950 font-medium'
+                        ? 'text-black font-medium'
                         : 'text-neutral-500'
                     }
                   >
@@ -299,7 +299,7 @@ export default function OnboardingPage() {
           {/* Step 1: Professional Information */}
           {currentStep === 1 && (
             <div className='space-y-6'>
-              <h2 className='text-xl font-semibold text-neutral-950 mb-4'>
+              <h2 className='text-xl font-semibold text-black mb-4'>
                 Profile
               </h2>
 
@@ -405,7 +405,7 @@ export default function OnboardingPage() {
           {/* Step 2: About Section */}
           {currentStep === 2 && (
             <div className='space-y-6'>
-              <h2 className='text-xl font-semibold text-neutral-950 mb-4'>
+              <h2 className='text-xl font-semibold text-black mb-4'>
                 About You
               </h2>
 
@@ -489,7 +489,7 @@ export default function OnboardingPage() {
           {/* Step 3: Interests */}
           {currentStep === 3 && (
             <div className='space-y-6'>
-              <h2 className='text-xl font-semibold text-neutral-950 mb-4'>
+              <h2 className='text-xl font-semibold text-black mb-4'>
                 Your Interests
               </h2>
               <p className='text-sm text-neutral-500 mb-4'>
@@ -503,7 +503,7 @@ export default function OnboardingPage() {
                     key={group.title}
                     className={`${idx !== 0 ? 'pt-6 mt-6 border-t border-gray-200' : ''}`}
                   >
-                    <div className='text-sm font-medium text-neutral-950 mb-4'>
+                    <div className='text-sm font-medium text-black mb-4'>
                       {group.title}
                     </div>
                     <div className='grid grid-cols-2 md:grid-cols-3 gap-3'>
@@ -548,7 +548,7 @@ export default function OnboardingPage() {
           {/* Step 4: Profile Picture */}
           {currentStep === 4 && (
             <div className='space-y-6'>
-              <h2 className='text-xl font-semibold text-neutral-950 mb-4'>
+              <h2 className='text-xl font-semibold text-black mb-4'>
                 Profile Picture
               </h2>
               <p className='text-sm text-neutral-500 mb-6'>
@@ -572,7 +572,7 @@ export default function OnboardingPage() {
             <button
               onClick={prevStep}
               disabled={currentStep === 1}
-              className={`px-6 py-3 rounded-xl font-medium border bg-white text-neutral-950 border-gray-200 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-500 disabled:opacity-50 disabled:cursor-not-allowed`}
+              className={`px-6 py-3 rounded-xl font-medium border bg-white text-black border-gray-200 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-500 disabled:opacity-50 disabled:cursor-not-allowed`}
             >
               Previous
             </button>

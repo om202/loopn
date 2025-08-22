@@ -44,7 +44,7 @@ export default function AccountContent() {
   return (
     <div className='h-full flex flex-col'>
       {/* Profile Section */}
-      <div className='mx-auto max-w-[840px] w-full'>
+      <div className='mx-auto max-w-[950px] w-full'>
         <div className='flex flex-col items-start mb-8'>
           <UserAvatar
             email={getUserEmail()}
@@ -61,7 +61,7 @@ export default function AccountContent() {
             className='mb-4'
           />
           <div>
-            <h3 className='font-semibold text-neutral-950 mb-1'>
+            <h3 className='font-semibold text-black mb-1'>
               {getUserDisplayName()}
             </h3>
             <p className='text-sm text-neutral-500 font-medium'>
@@ -94,7 +94,7 @@ export default function AccountContent() {
                         <dt className='text-sm font-medium text-neutral-500 mb-1.5'>
                           Role
                         </dt>
-                        <dd className='text-base text-neutral-950'>
+                        <dd className='text-base text-black'>
                           {userProfile.jobRole}
                         </dd>
                       </div>
@@ -104,7 +104,7 @@ export default function AccountContent() {
                         <dt className='text-sm font-medium text-neutral-500 mb-1.5'>
                           Company
                         </dt>
-                        <dd className='text-base text-neutral-950'>
+                        <dd className='text-base text-black'>
                           {userProfile.companyName}
                         </dd>
                       </div>
@@ -114,7 +114,7 @@ export default function AccountContent() {
                         <dt className='text-sm font-medium text-neutral-500 mb-1.5'>
                           Industry
                         </dt>
-                        <dd className='text-base text-neutral-950'>
+                        <dd className='text-base text-black'>
                           {userProfile.industry}
                         </dd>
                       </div>
@@ -125,7 +125,7 @@ export default function AccountContent() {
                           <dt className='text-sm font-medium text-neutral-500 mb-1.5'>
                             Experience
                           </dt>
-                          <dd className='text-base text-neutral-950'>
+                          <dd className='text-base text-black'>
                             {userProfile.yearsOfExperience} years
                           </dd>
                         </div>
@@ -140,7 +140,7 @@ export default function AccountContent() {
                   <h4 className='text-sm font-semibold text-neutral-500 mb-4'>
                     Education
                   </h4>
-                  <div className='text-base text-neutral-950 leading-relaxed'>
+                  <div className='text-base text-black leading-relaxed'>
                     {userProfile.education}
                   </div>
                 </div>
@@ -152,7 +152,7 @@ export default function AccountContent() {
                   <h4 className='text-sm font-medium text-neutral-500 mb-4'>
                     About
                   </h4>
-                  <div className='text-base text-neutral-950 leading-relaxed'>
+                  <div className='text-base text-black leading-relaxed'>
                     {userProfile.about}
                   </div>
                 </div>
@@ -173,7 +173,7 @@ export default function AccountContent() {
                           {userProfile.skills.map((skill, index) => (
                             <span
                               key={index}
-                              className='px-3 py-1.5 text-base bg-transparent text-neutral-950 border border-gray-200 rounded-lg font-medium'
+                              className='px-3 py-1.5 text-base bg-transparent text-black border border-gray-200 rounded-lg font-medium'
                             >
                               {skill}
                             </span>
@@ -191,7 +191,7 @@ export default function AccountContent() {
                             {userProfile.interests.map((interest, index) => (
                               <span
                                 key={index}
-                                className='px-3 py-1.5 text-base bg-transparent text-neutral-950 border border-gray-200 rounded-lg font-medium'
+                                className='px-3 py-1.5 text-base bg-transparent text-black border border-gray-200 rounded-lg font-medium'
                               >
                                 {interest}
                               </span>

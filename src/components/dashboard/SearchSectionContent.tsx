@@ -146,13 +146,13 @@ export default function SearchSectionContent({
   return (
     <div className='h-full flex flex-col'>
       {/* Search Results */}
-      <div className='flex-1 overflow-y-auto mx-auto max-w-[840px] w-full'>
+      <div className='flex-1 overflow-y-auto mx-auto max-w-[950px] w-full'>
         {!hasSearched ? (
           <div className='flex flex-col items-center justify-center h-full text-center p-8 transition-opacity duration-200 opacity-100'>
             <div className='w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center'>
               <Search className='w-8 h-8 text-neutral-500' />
             </div>
-            <h3 className='text-lg font-medium text-neutral-950 mb-2'>
+            <h3 className='text-lg font-medium text-black mb-2'>
               Search Professionals
             </h3>
           </div>
@@ -170,7 +170,7 @@ export default function SearchSectionContent({
             <div className='w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center'>
               <Search className='w-8 h-8 text-neutral-500' />
             </div>
-            <h3 className='text-lg font-medium text-neutral-950 mb-2'>
+            <h3 className='text-lg font-medium text-black mb-2'>
               Hmm… nothing matched.
             </h3>
             <p className='text-neutral-500 text-sm max-w-sm'>
