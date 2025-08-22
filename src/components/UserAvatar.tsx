@@ -215,11 +215,9 @@ export default function UserAvatar({
       <div className={`relative ${className} cursor-pointer`}>
         <div
           className={`rounded-full overflow-hidden flex-shrink-0 relative ${
-            imageLoaded && hasProfilePicture && !imageError
-              ? 'border border-brand-500'
-              : !hasProfilePicture || imageError
-                ? 'border border-gray-400'
-                : 'border border-transparent'
+            !hasProfilePicture || imageError
+              ? 'border border-gray-400'
+              : 'border border-transparent'
           }`}
           style={{
             width: `${getAvatarSize()}px`,
