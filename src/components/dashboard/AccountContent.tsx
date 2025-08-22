@@ -85,7 +85,7 @@ export default function AccountContent() {
                 userProfile.industry ||
                 userProfile.yearsOfExperience !== null) && (
                 <div className='pb-4'>
-                  <h4 className='text-sm font-semibold text-neutral-500 mb-4 border-b border-gray-100 pb-2'>
+                  <h4 className='text-sm font-semibold text-neutral-500 mb-4 border-b border-gray-200 pb-2'>
                     Profile
                   </h4>
                   <div className='divide-y divide-gray-100'>

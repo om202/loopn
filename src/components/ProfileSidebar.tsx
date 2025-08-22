@@ -299,7 +299,7 @@ export default function ProfileSidebar({
     <div className='bg-white rounded-2xl border border-gray-200 w-full h-full flex flex-col relative'>
       {/* Back Button - Top of sidebar */}
       {onBack && (
-        <div className='p-4 pb-2 border-b border-gray-100 flex items-center justify-between'>
+        <div className='p-4 pb-2 border-b border-gray-200 flex items-center justify-between'>
           <button
             onClick={onBack}
             className='flex items-center gap-2 text-neutral-500 hover:text-black transition-colors'
@@ -345,7 +345,7 @@ export default function ProfileSidebar({
 
       {/* Chat Header Section - when in chat context */}
       {conversation && (
-        <div className='px-6 pb-4 border-b border-gray-100'>
+        <div className='px-6 pb-4 border-b border-gray-200'>
           {/* Connection Status */}
           {conversation.isConnected && (
             <div className='flex items-center justify-center text-sm text-neutral-500 mb-3'>
@@ -480,7 +480,7 @@ export default function ProfileSidebar({
                 userProfile.industry ||
                 userProfile.yearsOfExperience !== null) && (
                 <div className='pb-4'>
-                  <h4 className='text-sm font-semibold text-neutral-500 mb-4 border-b border-gray-100 pb-2'>
+                  <h4 className='text-sm font-semibold text-neutral-500 mb-4 border-b border-gray-200 pb-2'>
                     Profile Details
                   </h4>
                   <div className='divide-y divide-gray-100'>

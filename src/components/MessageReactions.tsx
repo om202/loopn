@@ -133,7 +133,7 @@ export default function MessageReactions({
                 className={`inline-flex items-center justify-center min-w-[24px] h-6 px-0.5 rounded-full transition-all duration-150 shadow-sm ${
                   group.hasCurrentUser
                     ? 'bg-white border border-gray-200'
-                    : 'bg-white border border-gray-100'
+                    : 'bg-white border border-gray-200'
                 } ${isAnimating ? 'reaction-animate' : ''}`}
                 title={`${group.count} reaction${group.count !== 1 ? 's' : ''}`}
               >

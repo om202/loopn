@@ -350,7 +350,7 @@ export default function IntelligentSearch({
                   {results.map(user => (
                     <div
                       key={user.userId}
-                      className='p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors border border-gray-100'
+                      className='p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors border border-gray-200'
                       onClick={() => handleUserSelect(user)}
                     >
                       <div className='flex items-start space-x-3'>

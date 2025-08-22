@@ -128,7 +128,7 @@ export default function DashboardSidebar({
       <div className='hidden lg:block w-64 flex-shrink-0'>
         <div className='bg-white rounded-2xl border border-gray-200 h-full flex flex-col'>
           {/* Logo at top */}
-          <div className='px-4 py-4 border-b border-gray-100'>
+          <div className='px-4 py-4 border-b border-gray-200'>
             <div className='flex items-center justify-between'>
               <Link
                 href='/?stay=true'
@@ -196,7 +196,7 @@ export default function DashboardSidebar({
           </nav>
 
           {/* Help and Account buttons at bottom */}
-          <div className='border-t border-gray-100 p-2 space-y-1'>
+          <div className='border-t border-gray-200 p-2 space-y-1'>
             {/* Help Button with Bug Report Button */}
             <div className='flex items-center gap-2'>
               <button

@@ -265,7 +265,7 @@ export default function DashboardDemo() {
                   </span>
                 </button>
 
-                <button className='md:flex p-1.5 text-base font-medium rounded-full border transition-colors items-center justify-center w-[32px] h-[32px] bg-white border-gray-100 hover:bg-gray-100'>
+                <button className='md:flex p-1.5 text-base font-medium rounded-full border transition-colors items-center justify-center w-[32px] h-[32px] bg-white border-gray-200 hover:bg-gray-100'>
                   <MoreHorizontal className='w-5 h-5 text-neutral-500' />
                 </button>
               </div>
@@ -664,7 +664,7 @@ export default function DashboardDemo() {
         {/* Left Sidebar */}
         <div className='w-64 bg-white rounded-2xl border border-gray-200 flex flex-col'>
           {/* Logo at top */}
-          <div className='px-4 py-6 border-b border-gray-100'>
+          <div className='px-4 py-6 border-b border-gray-200'>
             <div className='flex items-center justify-between'>
               <div className='flex items-center gap-3'>
                 <Image
@@ -766,7 +766,7 @@ export default function DashboardDemo() {
           </nav>
 
           {/* Help and Account buttons at bottom */}
-          <div className='border-t border-gray-100 p-2 space-y-1'>
+          <div className='border-t border-gray-200 p-2 space-y-1'>
             {/* Help Button */}
             <div className='flex items-center gap-2'>
               <button
