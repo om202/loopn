@@ -161,10 +161,10 @@ export default function DashboardSidebar({
                       : 'text-black hover:bg-gray-100 hover:text-black border-transparent'
                   }`}
                 >
-                  <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
+                  <div className='w-6 h-6 flex-shrink-0 flex items-center justify-center'>
                     {icon === 'NotificationBell' ? (
                       <svg
-                        className='w-5 h-5'
+                        className='w-6 h-6'
                         fill='none'
                         stroke='currentColor'
                         viewBox='0 0 24 24'
@@ -178,11 +178,11 @@ export default function DashboardSidebar({
                       </svg>
                     ) : (
                       React.createElement(icon, {
-                        className: 'w-5 h-5',
+                        className: 'w-6 h-6',
                       })
                     )}
                   </div>
-                  <span className='font-medium text-base flex-1 flex items-center gap-3'>
+                  <span className='font-medium text-lg flex-1 flex items-center gap-3'>
                     {label}
                     {count > 0 && id === 'notifications' && (
                       <span className='text-sm font-bold flex items-center justify-center h-5 w-5 rounded-full text-center bg-b_red-500 text-white'>
@@ -280,11 +280,11 @@ export default function DashboardSidebar({
                 }`}
                 title={label}
               >
-                <div className='relative w-8 h-8 flex-shrink-0 flex items-center justify-center'>
+                <div className='relative w-9 h-9 flex-shrink-0 flex items-center justify-center'>
                   {icon === 'NotificationBell' ? (
                     <>
                       <svg
-                        className='w-8 h-8'
+                        className='w-9 h-9'
                         fill='none'
                         stroke='currentColor'
                         viewBox='0 0 24 24'
@@ -297,7 +297,7 @@ export default function DashboardSidebar({
                         />
                       </svg>
                       {count > 0 && id === 'notifications' && (
-                        <div className='absolute -top-1 -right-1 w-4 h-4 bg-b_red-500 rounded-full flex items-center justify-center'>
+                        <div className='absolute -top-1 -right-1 w-5 h-5 bg-b_red-500 rounded-full flex items-center justify-center'>
                           <span className='text-white text-[10px] font-bold leading-none'>
                             {count > 99 ? '99+' : count}
                           </span>
@@ -305,7 +305,7 @@ export default function DashboardSidebar({
                       )}
                     </>
                   ) : icon === 'UserAvatar' ? (
-                    <div className='w-8 h-8 flex items-center justify-center'>
+                    <div className='w-9 h-9 flex items-center justify-center'>
                       <UserAvatar
                         email={getUserEmail()}
                         userId={user?.userId}
@@ -324,12 +324,12 @@ export default function DashboardSidebar({
                     </div>
                   ) : (
                     React.createElement(icon, {
-                      className: 'w-8 h-8',
+                      className: 'w-9 h-9',
                     })
                   )}
                 </div>
                 <div
-                  className='text-xs font-medium leading-tight text-center flex items-center justify-center gap-1.5'
+                  className='text-sm font-medium leading-tight text-center flex items-center justify-center gap-1.5'
                   style={{ textShadow: '0 1px 1px rgba(255, 255, 255, 0.8)' }}
                 >
                   {id === 'account'
