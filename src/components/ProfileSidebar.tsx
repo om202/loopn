@@ -342,7 +342,7 @@ export default function ProfileSidebar({
           />
           <div className='mt-1'>
             <div className='mb-0'>
-              <div className='font-bold text-black text-lg flex items-center justify-center gap-2'>
+              <div className='font-medium text-black text-lg flex items-center justify-center gap-2'>
                 {getUserDisplayName()}
                 {isTrialConversation() && (
                   <Tooltip content='Trial Chat' position='bottom'>
@@ -495,7 +495,7 @@ export default function ProfileSidebar({
                 (userProfile.interests &&
                   userProfile.interests.length > 0)) && (
                 <div className='pb-6'>
-                  <h4 className='text-sm font-semibold text-neutral-500 mb-4'>
+                  <h4 className='text-sm font-medium text-neutral-500 mb-4'>
                     Profile Details
                   </h4>
                   <div className='divide-y divide-gray-100'>
@@ -576,7 +576,7 @@ export default function ProfileSidebar({
                           {userProfile.skills.map((skill, index) => (
                             <span
                               key={index}
-                              className='px-3 py-1.5 text-base bg-transparent text-black border border-gray-200 rounded-lg font-medium'
+                              className='px-3 py-1.5 text-base bg-transparent text-black border border-gray-200 rounded-lg'
                             >
                               {skill}
                             </span>
@@ -595,7 +595,7 @@ export default function ProfileSidebar({
                             {userProfile.interests.map((interest, index) => (
                               <span
                                 key={index}
-                                className='px-3 py-1.5 text-base bg-transparent text-black border border-gray-200 rounded-lg font-medium'
+                                className='px-3 py-1.5 text-base bg-transparent text-black border border-gray-200 rounded-lg'
                               >
                                 {interest}
                               </span>

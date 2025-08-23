@@ -178,7 +178,7 @@ export default function UserCard({
 
         <div className='flex-1 min-w-0'>
           <div className='flex items-center gap-2 mb-1'>
-            <div className='text-black truncate no-email-detection font-semibold'>
+            <div className='text-black truncate no-email-detection font-medium'>
               {getDisplayName(userPresence, userProfile)}
             </div>
             {/* Show clock icon for temporary connections (active chat trials) */}

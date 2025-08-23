@@ -71,7 +71,7 @@ export default function AccountContent() {
             className='mb-4'
           />
           <div>
-            <h3 className='font-semibold text-black mb-1'>
+            <h3 className='font-medium text-black mb-1'>
               {getUserDisplayName()}
             </h3>
             <p className='text-sm text-neutral-500 font-medium'>

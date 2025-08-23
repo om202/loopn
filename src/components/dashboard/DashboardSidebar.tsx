@@ -157,8 +157,8 @@ export default function DashboardSidebar({
                   onClick={() => onSectionChange(id)}
                   className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group transition-colors duration-150 ${
                     activeSection === id
-                      ? 'text-brand-600'
-                      : 'text-black hover:bg-stone-100 hover:text-black'
+                      ? 'text-brand-600 hover:bg-stone-100'
+                      : 'text-black hover:bg-stone-100'
                   }`}
                 >
                   <div className='w-6 h-6 flex-shrink-0 flex items-center justify-center'>
@@ -182,7 +182,7 @@ export default function DashboardSidebar({
                       })
                     )}
                   </div>
-                  <span className='font-medium text-lg flex-1 flex items-center gap-3'>
+                  <span className='text-base flex-1 flex items-center gap-3'>
                     {label}
                     {count > 0 && id === 'notifications' && (
                       <span className='text-sm font-bold flex items-center justify-center h-5 w-5 rounded-full text-center bg-b_red-500 text-white'>
@@ -203,14 +203,14 @@ export default function DashboardSidebar({
                 onClick={() => onSectionChange(helpItem.id)}
                 className={`relative flex-1 flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group transition-colors duration-150 ${
                   activeSection === helpItem.id
-                    ? 'text-brand-600'
+                    ? 'text-brand-600 '
                     : 'text-black hover:bg-stone-100 hover:text-black'
                 }`}
               >
                 <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
                   <HelpCircle className='w-5 h-5' />
                 </div>
-                <span className='font-medium text-base flex-1'>
+                <span className='text-base flex-1'>
                   {helpItem.label}
                 </span>
               </button>
@@ -251,7 +251,7 @@ export default function DashboardSidebar({
                 />
               </div>
               <div className='flex-1'>
-                <div className='font-semibold text-black text-base'>
+                <div className='font-medium text-black text-base'>
                   {accountItem.label}
                 </div>
                 <div className='text-sm text-neutral-500'>Account</div>
