@@ -75,12 +75,24 @@
   font-size: 15px;
 } */
 
+/* Enable smooth scrolling for the entire app */
+html {
+  scroll-behavior: smooth;
+  /* Enable font smoothing for better text rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
 body {
   font-family:
     'Atkinson',
     system-ui,
     -apple-system,
     sans-serif;
+  /* Additional font smoothing for body */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Custom reaction animation */

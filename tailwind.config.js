@@ -10,6 +10,9 @@ module.exports = {
       fontFamily: {
         sans: ['Ronzino', 'system-ui', '-apple-system', 'sans-serif'],
       },
+      scrollBehavior: {
+        smooth: 'smooth',
+      },
     },
   },
   plugins: [],
