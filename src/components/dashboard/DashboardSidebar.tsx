@@ -157,7 +157,7 @@ export default function DashboardSidebar({
                   onClick={() => onSectionChange(id)}
                   className={`relative w-full flex items-center gap-3 px-2 py-2 rounded-lg text-left group ${
                     activeSection === id
-                      ? 'bg-brand-600 text-white hover:bg-brand-700'
+                      ? 'text-brand-600 font-medium hover:bg-gray-100'
                       : 'text-black hover:bg-gray-100'
                   }`}
                 >
@@ -182,7 +182,7 @@ export default function DashboardSidebar({
                       })
                     )}
                   </div>
-                  <span className='text-base flex-1 flex items-center gap-3'>
+                  <span className={`text-base flex-1 flex items-center gap-3 ${activeSection === id ? 'font-medium' : ''}`}>
                     {label}
                     {count > 0 && id === 'notifications' && (
                       <span className='text-sm font-bold flex items-center justify-center h-5 w-5 rounded-full text-center bg-b_red-500 text-white'>
@@ -203,14 +203,14 @@ export default function DashboardSidebar({
                 onClick={() => onSectionChange(helpItem.id)}
                 className={`relative flex-1 flex items-center gap-3 px-2 py-2 rounded-lg text-left group ${
                   activeSection === helpItem.id
-                    ? 'bg-brand-600 text-white hover:bg-brand-700'
+                    ? 'text-brand-600 font-medium hover:bg-gray-100'
                     : 'text-black hover:bg-gray-100 hover:text-black'
                 }`}
               >
                 <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
                   <HelpCircle className='w-5 h-5' />
                 </div>
-                <span className='text-base flex-1'>{helpItem.label}</span>
+                <span className={`text-base flex-1 ${activeSection === helpItem.id ? 'font-medium' : ''}`}>{helpItem.label}</span>
               </button>
 
               <button
@@ -227,7 +227,7 @@ export default function DashboardSidebar({
               onClick={() => onSectionChange(accountItem.id)}
               className={`relative w-full flex items-center gap-3 px-2 py-2 rounded-lg text-left group ${
                 activeSection === accountItem.id
-                  ? 'bg-brand-600 text-white hover:bg-brand-700'
+                  ? 'text-brand-600 font-medium hover:bg-gray-100'
                   : 'text-gray-500 hover:bg-gray-100 hover:text-black'
               }`}
             >
@@ -249,7 +249,7 @@ export default function DashboardSidebar({
                 />
               </div>
               <div className='flex-1'>
-                <div className='font-medium text-black text-base'>
+                <div className={`text-black text-base ${activeSection === accountItem.id ? 'font-medium' : 'font-medium'}`}>
                   {accountItem.label}
                 </div>
                 <div className='text-sm text-gray-500'>Account</div>
