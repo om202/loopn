@@ -34,8 +34,8 @@ export default function SignInForm({
   return (
     <div className='w-full'>
       {/* Sign up prompt at the top */}
-      <div className='text-center mb-6 p-4 bg-stone-100 rounded-xl border border-gray-200'>
-        <span className='text-sm text-neutral-500 mr-3 font-medium'>
+      <div className='text-center mb-6 p-4 bg-gray-100 rounded-xl border border-gray-200'>
+        <span className='text-sm text-gray-500 mr-3 font-medium'>
           New to Loopn?
         </span>
         <button
@@ -66,7 +66,7 @@ export default function SignInForm({
           </label>
           <div className='relative'>
             <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-              <Mail className='h-5 w-5 text-neutral-500' />
+              <Mail className='h-5 w-5 text-gray-500' />
             </div>
             <input
               id='email'
@@ -89,7 +89,7 @@ export default function SignInForm({
           </label>
           <div className='relative'>
             <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-              <Lock className='h-5 w-5 text-neutral-500' />
+              <Lock className='h-5 w-5 text-gray-500' />
             </div>
             <input
               id='password'
@@ -103,7 +103,7 @@ export default function SignInForm({
             <button
               type='button'
               onClick={() => setShowPassword(!showPassword)}
-              className='absolute inset-y-0 right-0 pr-3 flex items-center text-neutral-500 hover:text-neutral-500 transition-colors'
+              className='absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-500 transition-colors'
             >
               {showPassword ? (
                 <EyeOff className='h-5 w-5' />

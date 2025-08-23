@@ -10,7 +10,7 @@ interface CircularIconProps {
 export default function CircularIcon({
   icon,
   size = 'md',
-  bgColor = 'bg-stone-100',
+  bgColor = 'bg-gray-100',
   className = '',
 }: CircularIconProps) {
   const getSizeClasses = () => {

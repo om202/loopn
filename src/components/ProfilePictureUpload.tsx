@@ -165,15 +165,15 @@ export default function ProfilePictureUpload({
               {isProcessing ? (
                 <div className='flex flex-col items-center space-y-3'>
                   <div className='w-8 h-8 border-2 border-brand-500 border-t-transparent rounded-full animate-spin'></div>
-                  <span className='text-sm text-neutral-500'>
+                  <span className='text-sm text-gray-500'>
                     Processing image...
                   </span>
                 </div>
               ) : (
                 <>
-                  <div className='w-12 h-12 bg-stone-100 rounded-full flex items-center justify-center mb-3 mx-auto'>
+                  <div className='w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-3 mx-auto'>
                     <svg
-                      className='w-6 h-6 text-neutral-500'
+                      className='w-6 h-6 text-gray-500'
                       fill='none'
                       viewBox='0 0 24 24'
                       stroke='currentColor'
@@ -186,13 +186,13 @@ export default function ProfilePictureUpload({
                       />
                     </svg>
                   </div>
-                  <p className='text-sm font-medium text-neutral-500 mb-1'>
+                  <p className='text-sm font-medium text-gray-500 mb-1'>
                     Add profile picture
                   </p>
-                  <p className='text-sm text-neutral-500'>
+                  <p className='text-sm text-gray-500'>
                     Drag & drop or click to select
                   </p>
-                  <p className='text-sm text-neutral-500 mt-2'>
+                  <p className='text-sm text-gray-500 mt-2'>
                     JPEG, PNG, WebP • Max 10MB
                   </p>
                 </>
@@ -218,7 +218,7 @@ export default function ProfilePictureUpload({
         />
 
         {/* Instructions */}
-        <div className='text-center text-sm text-neutral-500 max-w-sm'>
+        <div className='text-center text-sm text-gray-500 max-w-sm'>
           <p>
             Upload a profile picture to help others recognize you. This is
             optional but recommended.

@@ -261,12 +261,12 @@ export default function VectorSearchAdminPage() {
 
   if (!isAdmin) {
     return (
-      <div className='min-h-screen bg-stone-50 flex items-center justify-center'>
+      <div className='min-h-screen bg-gray-50 flex items-center justify-center'>
         <div className='text-center'>
-          <h1 className='text-2xl font-bold text-neutral-900 mb-2'>
+          <h1 className='text-2xl font-bold text-gray-900 mb-2'>
             Access Denied
           </h1>
-          <p className='text-neutral-600'>
+          <p className='text-gray-600'>
             You don't have permission to access this admin panel.
           </p>
         </div>
@@ -275,14 +275,14 @@ export default function VectorSearchAdminPage() {
   }
 
   return (
-    <div className='min-h-screen bg-stone-50 py-8'>
+    <div className='min-h-screen bg-gray-50 py-8'>
       <div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='bg-white shadow-sm rounded-lg'>
           <div className='px-6 py-4 border-b border-gray-200'>
-            <h1 className='text-2xl font-bold text-neutral-900'>
+            <h1 className='text-2xl font-bold text-gray-900'>
               Vespa AI Admin Panel
             </h1>
-            <p className='text-sm text-neutral-600 mt-1'>
+            <p className='text-sm text-gray-600 mt-1'>
               Manage AI-powered search indexing and testing with advanced
               ranking profiles
             </p>
@@ -292,7 +292,7 @@ export default function VectorSearchAdminPage() {
             {/* Status Section */}
             <div>
               <div className='flex items-center justify-between mb-4'>
-                <h2 className='text-lg font-semibold text-neutral-900'>
+                <h2 className='text-lg font-semibold text-gray-900'>
                   Migration Status
                 </h2>
                 <button
@@ -315,27 +315,25 @@ export default function VectorSearchAdminPage() {
               )}
 
               {status && (
-                <div className='bg-stone-50 rounded-lg p-4'>
+                <div className='bg-gray-50 rounded-lg p-4'>
                   <div className='grid grid-cols-3 gap-4'>
                     <div className='text-center'>
-                      <div className='text-2xl font-bold text-neutral-900'>
+                      <div className='text-2xl font-bold text-gray-900'>
                         {status.totalUsers}
                       </div>
-                      <div className='text-sm text-neutral-600'>
-                        Total Users
-                      </div>
+                      <div className='text-sm text-gray-600'>Total Users</div>
                     </div>
                     <div className='text-center'>
                       <div className='text-2xl font-bold text-green-600'>
                         {status.migratedUsers}
                       </div>
-                      <div className='text-sm text-neutral-600'>In Vespa</div>
+                      <div className='text-sm text-gray-600'>In Vespa</div>
                     </div>
                     <div className='text-center'>
                       <div className='text-2xl font-bold text-orange-600'>
                         {status.pendingUsers}
                       </div>
-                      <div className='text-sm text-neutral-600'>Pending</div>
+                      <div className='text-sm text-gray-600'>Pending</div>
                     </div>
                   </div>
                 </div>
@@ -344,7 +342,7 @@ export default function VectorSearchAdminPage() {
 
             {/* Migration Section */}
             <div>
-              <h2 className='text-lg font-semibold text-neutral-900 mb-4'>
+              <h2 className='text-lg font-semibold text-gray-900 mb-4'>
                 Migrate Users to Vespa AI
               </h2>
               <div className='bg-blue-50 border border-blue-200 rounded-md p-4 mb-4'>
@@ -418,13 +416,13 @@ export default function VectorSearchAdminPage() {
 
             {/* Test Search Section */}
             <div>
-              <h2 className='text-lg font-semibold text-neutral-900 mb-4'>
+              <h2 className='text-lg font-semibold text-gray-900 mb-4'>
                 Test Search with AI Ranking
               </h2>
 
               {/* Ranking Profile Selector */}
               <div className='mb-4'>
-                <label className='block text-sm font-medium text-neutral-700 mb-2'>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>
                   Ranking Profile
                 </label>
                 <select
@@ -483,7 +481,7 @@ export default function VectorSearchAdminPage() {
               </div>
 
               {testResults && (
-                <div className='bg-stone-50 rounded-lg p-4'>
+                <div className='bg-gray-50 rounded-lg p-4'>
                   {testResults.success ? (
                     <div>
                       <p className='font-medium mb-2'>
@@ -510,19 +508,19 @@ export default function VectorSearchAdminPage() {
                                       {Math.round(result.score * 100)}% match
                                     </span>
                                   </div>
-                                  <p className='text-sm text-neutral-600'>
+                                  <p className='text-sm text-gray-600'>
                                     {result.profile.jobRole ||
                                       'No role specified'}
                                   </p>
                                   {result.profile.companyName && (
-                                    <p className='text-sm text-neutral-500'>
+                                    <p className='text-sm text-gray-500'>
                                       {result.profile.companyName}
                                       {result.profile.industry &&
                                         ` • ${result.profile.industry}`}
                                     </p>
                                   )}
                                   {result.profile.about && (
-                                    <p className='text-sm text-neutral-500 mt-1 line-clamp-2'>
+                                    <p className='text-sm text-gray-500 mt-1 line-clamp-2'>
                                       {result.profile.about}
                                     </p>
                                   )}
@@ -548,7 +546,7 @@ export default function VectorSearchAdminPage() {
                                               )
                                             )}
                                           {result.profile.skills.length > 5 && (
-                                            <span className='text-sm text-neutral-500 self-center'>
+                                            <span className='text-sm text-gray-500 self-center'>
                                               +
                                               {result.profile.skills.length - 5}{' '}
                                               more
@@ -559,11 +557,11 @@ export default function VectorSearchAdminPage() {
                                     )}
                                 </div>
                                 <div className='text-right'>
-                                  <p className='text-sm text-neutral-500'>
+                                  <p className='text-sm text-gray-500'>
                                     Score: {result.score.toFixed(3)}
                                   </p>
                                   {result.profile.yearsOfExperience && (
-                                    <p className='text-sm text-neutral-500'>
+                                    <p className='text-sm text-gray-500'>
                                       {result.profile.yearsOfExperience} years
                                       exp
                                     </p>

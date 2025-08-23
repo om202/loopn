@@ -13,12 +13,12 @@ interface SignUpFormProps {
 function PasswordRequirement({ met, text }: { met: boolean; text: string }) {
   return (
     <div
-      className={`flex items-center gap-2 text-sm ${met ? 'text-b_green-600' : 'text-neutral-500'}`}
+      className={`flex items-center gap-2 text-sm ${met ? 'text-b_green-600' : 'text-gray-500'}`}
     >
       {met ? (
         <Check className='w-3 h-3 text-b_green-600' />
       ) : (
-        <X className='w-3 h-3 text-neutral-500' />
+        <X className='w-3 h-3 text-gray-500' />
       )}
       <span>{text}</span>
     </div>
@@ -85,8 +85,8 @@ export default function SignUpForm({
   return (
     <div className='w-full'>
       {/* Sign in prompt at the top */}
-      <div className='text-center mb-6 p-4 bg-stone-100 rounded-xl border border-gray-200'>
-        <span className='text-sm text-neutral-500 mr-3 font-medium'>
+      <div className='text-center mb-6 p-4 bg-gray-100 rounded-xl border border-gray-200'>
+        <span className='text-sm text-gray-500 mr-3 font-medium'>
           Already have an account?
         </span>
         <button
@@ -117,7 +117,7 @@ export default function SignUpForm({
           </label>
           <div className='relative'>
             <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-              <Mail className='h-5 w-5 text-neutral-500' />
+              <Mail className='h-5 w-5 text-gray-500' />
             </div>
             <input
               id='email'
@@ -140,7 +140,7 @@ export default function SignUpForm({
           </label>
           <div className='relative'>
             <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-              <Lock className='h-5 w-5 text-neutral-500' />
+              <Lock className='h-5 w-5 text-gray-500' />
             </div>
             <input
               id='password'
@@ -162,7 +162,7 @@ export default function SignUpForm({
             <button
               type='button'
               onClick={() => setShowPassword(!showPassword)}
-              className='absolute inset-y-0 right-0 pr-3 flex items-center text-neutral-500 hover:text-neutral-500 transition-colors'
+              className='absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-500 transition-colors'
             >
               {showPassword ? (
                 <EyeOff className='h-5 w-5' />
@@ -174,7 +174,7 @@ export default function SignUpForm({
 
           {/* Real-time password validation */}
           {showPasswordHints && (
-            <div className='mt-3 p-3 bg-stone-100 rounded-lg border border-gray-200'>
+            <div className='mt-3 p-3 bg-gray-100 rounded-lg border border-gray-200'>
               <p className='text-sm font-medium text-black mb-2'>
                 Password requirements:
               </p>
@@ -213,7 +213,7 @@ export default function SignUpForm({
           </label>
           <div className='relative'>
             <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-              <Lock className='h-5 w-5 text-neutral-500' />
+              <Lock className='h-5 w-5 text-gray-500' />
             </div>
             <input
               id='confirmPassword'
@@ -231,7 +231,7 @@ export default function SignUpForm({
             <button
               type='button'
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className='absolute inset-y-0 right-0 pr-3 flex items-center text-neutral-500 hover:text-neutral-500 transition-colors'
+              className='absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-500 transition-colors'
             >
               {showConfirmPassword ? (
                 <EyeOff className='h-5 w-5' />

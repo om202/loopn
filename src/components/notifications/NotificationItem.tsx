@@ -51,7 +51,7 @@ const getNotificationIcon = (type: string | null) => {
     case 'message':
       return (
         <svg
-          className='w-4 h-4 text-neutral-500'
+          className='w-4 h-4 text-gray-500'
           fill='currentColor'
           viewBox='0 0 20 20'
         >
@@ -77,7 +77,7 @@ const getNotificationIcon = (type: string | null) => {
     case 'system':
       return (
         <svg
-          className='w-4 h-4 text-neutral-500'
+          className='w-4 h-4 text-gray-500'
           fill='currentColor'
           viewBox='0 0 20 20'
         >
@@ -91,7 +91,7 @@ const getNotificationIcon = (type: string | null) => {
     default:
       return (
         <svg
-          className='w-4 h-4 text-neutral-500'
+          className='w-4 h-4 text-gray-500'
           fill='currentColor'
           viewBox='0 0 20 20'
         >
@@ -152,7 +152,7 @@ export default function NotificationItem({
   return (
     <div
       key={notification.id}
-      className='w-full bg-white border border-gray-200 rounded-2xl px-3 py-3 hover:bg-stone-100 transition-all duration-200'
+      className='w-full bg-white border border-gray-200 rounded-2xl px-3 py-3 hover:bg-gray-100 transition-all duration-200'
     >
       <div className='flex items-start gap-3'>
         {notification.type === 'chat_request' ? (
@@ -204,7 +204,7 @@ export default function NotificationItem({
             />
           </div>
         ) : (
-          <div className='flex-shrink-0 w-10 h-10 bg-stone-100 rounded-full flex items-center justify-center'>
+          <div className='flex-shrink-0 w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center'>
             {getNotificationIcon(notification.type || null)}
           </div>
         )}
@@ -222,10 +222,10 @@ export default function NotificationItem({
               <h4 className='text-base font-medium text-black truncate no-email-detection'>
                 {notification.title}
               </h4>
-              <span className='text-sm text-neutral-500 font-medium flex-shrink-0'>
+              <span className='text-sm text-gray-500 font-medium flex-shrink-0'>
                 •
               </span>
-              <span className='text-sm text-neutral-500 flex-shrink-0'>
+              <span className='text-sm text-gray-500 flex-shrink-0'>
                 {formatTimeAgo(notification.timestamp)}
               </span>
             </div>
@@ -240,9 +240,7 @@ export default function NotificationItem({
                   const [, baseContent, count] = moreMatch;
                   return (
                     <>
-                      <p className='text-base text-neutral-500'>
-                        {baseContent}
-                      </p>
+                      <p className='text-base text-gray-500'>{baseContent}</p>
                       <span className='inline-flex items-center px-2 py-1 text-sm font-medium bg-brand-50 text-brand-600 rounded-full'>
                         +{count} more
                       </span>
@@ -250,7 +248,7 @@ export default function NotificationItem({
                   );
                 }
 
-                return <p className='text-base text-neutral-500'>{content}</p>;
+                return <p className='text-base text-gray-500'>{content}</p>;
               })()}
             </div>
           </div>
@@ -289,7 +287,7 @@ export default function NotificationItem({
                       );
                     }}
                     disabled={decliningId === notification.id}
-                    className='px-3 py-2 text-sm font-medium text-black bg-white border border-gray-200 rounded-lg hover:bg-stone-100 disabled:opacity-50 transition-colors'
+                    className='px-3 py-2 text-sm font-medium text-black bg-white border border-gray-200 rounded-lg hover:bg-gray-100 disabled:opacity-50 transition-colors'
                   >
                     {decliningId === notification.id
                       ? 'Declining...'
@@ -334,7 +332,7 @@ export default function NotificationItem({
                     onError('Failed to mark notification as read');
                   }
                 }}
-                className='px-3 py-2 text-sm font-medium text-black bg-white border border-gray-200 rounded-lg hover:bg-stone-100 transition-colors'
+                className='px-3 py-2 text-sm font-medium text-black bg-white border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors'
               >
                 Mark as Read
               </button>
@@ -373,7 +371,7 @@ export default function NotificationItem({
                       );
                       // Note: onRemoveNotification is now handled inside onRespondToConnectionRequest
                     }}
-                    className='px-3 py-2 text-sm font-medium text-black bg-white border border-gray-200 rounded-lg hover:bg-stone-100 transition-colors'
+                    className='px-3 py-2 text-sm font-medium text-black bg-white border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors'
                   >
                     Decline
                   </button>
@@ -407,7 +405,7 @@ export default function NotificationItem({
                         onError('Failed to mark notification as read');
                       }
                     }}
-                    className='px-3 py-2 text-sm font-medium text-black bg-white border border-gray-200 rounded-lg hover:bg-stone-100 transition-colors'
+                    className='px-3 py-2 text-sm font-medium text-black bg-white border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors'
                   >
                     Mark as Read
                   </button>
@@ -430,7 +428,7 @@ export default function NotificationItem({
                   onError('Failed to mark notification as read');
                 }
               }}
-              className='px-3 py-2 text-sm font-medium text-black bg-white border border-gray-200 rounded-lg hover:bg-stone-100 transition-colors'
+              className='px-3 py-2 text-sm font-medium text-black bg-white border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors'
             >
               Mark as Read
             </button>

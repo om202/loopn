@@ -127,7 +127,7 @@ function ConnectedDialog({
           {/* OK Button */}
           <button
             onClick={handleOk}
-            className='flex-1 px-4 py-2 bg-white text-black text-sm font-medium rounded-2xl border border-gray-200 hover:bg-stone-100 transition-colors'
+            className='flex-1 px-4 py-2 bg-white text-black text-sm font-medium rounded-2xl border border-gray-200 hover:bg-gray-100 transition-colors'
           >
             Later
           </button>
@@ -205,7 +205,7 @@ function NewRequestDialog({
             <div className='text-center py-6'>
               <div className='mb-6'>
                 <div className='flex justify-center mb-3'>
-                  <div className='w-12 h-12 bg-stone-100 rounded-full flex items-center justify-center'>
+                  <div className='w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center'>
                     <svg
                       className='w-6 h-6 text-black'
                       fill='none'
@@ -233,7 +233,7 @@ function NewRequestDialog({
             {/* OK Button */}
             <button
               onClick={onClose}
-              className='w-full px-4 py-2 bg-white text-black text-sm font-medium rounded-2xl border border-gray-200 hover:bg-stone-100 transition-colors'
+              className='w-full px-4 py-2 bg-white text-black text-sm font-medium rounded-2xl border border-gray-200 hover:bg-gray-100 transition-colors'
             >
               OK
             </button>
@@ -274,7 +274,7 @@ function NewRequestDialog({
             {/* OK Button */}
             <button
               onClick={handleOk}
-              className='w-full px-4 py-2 bg-white text-black text-sm font-medium rounded-2xl border border-gray-200 hover:bg-stone-100 transition-colors'
+              className='w-full px-4 py-2 bg-white text-black text-sm font-medium rounded-2xl border border-gray-200 hover:bg-gray-100 transition-colors'
             >
               OK
             </button>
@@ -318,7 +318,7 @@ function NewRequestDialog({
               {/* Reject Button */}
               <button
                 onClick={() => handleResponse('REJECTED')}
-                className='flex-1 px-4 py-3 bg-stone-100 text-black text-base font-medium rounded-2xl hover:bg-stone-100 transition-colors'
+                className='flex-1 px-4 py-3 bg-gray-100 text-black text-base font-medium rounded-2xl hover:bg-gray-100 transition-colors'
               >
                 Reject
               </button>
@@ -327,7 +327,7 @@ function NewRequestDialog({
             {/* Maybe Later Button */}
             <button
               onClick={handleMaybeLater}
-              className='w-full px-4 py-3 text-sm text-neutral-500 hover:text-black transition-colors'
+              className='w-full px-4 py-3 text-sm text-gray-500 hover:text-black transition-colors'
             >
               Maybe Later
             </button>

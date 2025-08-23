@@ -219,7 +219,7 @@ export default function OnboardingPage() {
   // Removed suggestions; free-form skills entry only
 
   return (
-    <div className='min-h-screen bg-stone-100 py-8 px-3 sm:px-4'>
+    <div className='min-h-screen bg-gray-100 py-8 px-3 sm:px-4'>
       <div className='max-w-2xl mx-auto'>
         {/* Main content card */}
         <div className='bg-white rounded-2xl border border-gray-200 p-4 sm:p-6 lg:p-8'>
@@ -227,7 +227,7 @@ export default function OnboardingPage() {
           <div className='flex justify-end mb-6'>
             <button
               onClick={handleSignOut}
-              className='text-sm text-neutral-500 hover:text-b_red-600 transition-colors'
+              className='text-sm text-gray-500 hover:text-b_red-600 transition-colors'
             >
               Sign Out
             </button>
@@ -263,7 +263,7 @@ export default function OnboardingPage() {
                       className={`relative z-10 w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold border ${
                         step <= currentStep
                           ? 'bg-brand-500 text-white border-brand-500'
-                          : 'bg-white text-neutral-500 border-gray-200'
+                          : 'bg-white text-gray-500 border-gray-200'
                       }`}
                     >
                       {step}
@@ -281,7 +281,7 @@ export default function OnboardingPage() {
                     className={
                       i + 1 === currentStep
                         ? 'text-black font-medium'
-                        : 'text-neutral-500'
+                        : 'text-gray-500'
                     }
                   >
                     {label}
@@ -302,7 +302,7 @@ export default function OnboardingPage() {
               <h2 className='text-xl font-semibold text-black mb-4'>Profile</h2>
 
               <div>
-                <label className='block text-sm font-medium text-neutral-500 mb-3'>
+                <label className='block text-sm font-medium text-gray-500 mb-3'>
                   Full Name *
                 </label>
                 <input
@@ -315,7 +315,7 @@ export default function OnboardingPage() {
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-neutral-500 mb-3'>
+                <label className='block text-sm font-medium text-gray-500 mb-3'>
                   Title *
                 </label>
                 <input
@@ -328,7 +328,7 @@ export default function OnboardingPage() {
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-neutral-500 mb-3'>
+                <label className='block text-sm font-medium text-gray-500 mb-3'>
                   Company *
                 </label>
                 <input
@@ -341,7 +341,7 @@ export default function OnboardingPage() {
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-neutral-500 mb-3'>
+                <label className='block text-sm font-medium text-gray-500 mb-3'>
                   Industry *
                 </label>
                 <select
@@ -359,7 +359,7 @@ export default function OnboardingPage() {
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-neutral-500 mb-3'>
+                <label className='block text-sm font-medium text-gray-500 mb-3'>
                   Years of Experience
                 </label>
                 <select
@@ -381,7 +381,7 @@ export default function OnboardingPage() {
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-neutral-500 mb-3'>
+                <label className='block text-sm font-medium text-gray-500 mb-3'>
                   Education
                 </label>
                 <select
@@ -409,10 +409,10 @@ export default function OnboardingPage() {
 
               {/* Skills Section (moved above About) */}
               <div>
-                <label className='block text-sm font-medium text-neutral-500 mb-3'>
+                <label className='block text-sm font-medium text-gray-500 mb-3'>
                   Key skills
                 </label>
-                <p className='text-sm text-neutral-500 mb-3'>
+                <p className='text-sm text-gray-500 mb-3'>
                   Add what you&apos;re good at. Type a skill and press Enter (or
                   comma).
                 </p>
@@ -446,10 +446,10 @@ export default function OnboardingPage() {
 
               {/* About Section */}
               <div>
-                <label className='block text-sm font-medium text-neutral-500 mb-3'>
+                <label className='block text-sm font-medium text-gray-500 mb-3'>
                   How do you want to use Loopn? *
                 </label>
-                <div className='text-sm text-neutral-500 mb-3'>
+                <div className='text-sm text-gray-500 mb-3'>
                   <ul className='list-disc pl-5 space-y-1'>
                     <li>What you want (mentorship, collabs, clients)</li>
                     <li>
@@ -475,7 +475,7 @@ export default function OnboardingPage() {
                     {wordCount} words (minimum 24)
                   </span>
                   <span
-                    className={`${wordCount > 80 ? 'text-b_red-500' : 'text-neutral-500'}`}
+                    className={`${wordCount > 80 ? 'text-b_red-500' : 'text-gray-500'}`}
                   >
                     {wordCount}/80 words
                   </span>
@@ -490,7 +490,7 @@ export default function OnboardingPage() {
               <h2 className='text-xl font-semibold text-black mb-4'>
                 Your Interests
               </h2>
-              <p className='text-sm text-neutral-500 mb-4'>
+              <p className='text-sm text-gray-500 mb-4'>
                 Select topics you're interested in to help us connect you with
                 like-minded professionals.
               </p>
@@ -512,7 +512,7 @@ export default function OnboardingPage() {
                           className={`px-2.5 py-2 rounded-xl text-sm transition-colors border text-center ${
                             formData.interests?.includes(interest)
                               ? 'bg-brand-500 text-white border-brand-500'
-                              : 'bg-white text-neutral-500 border-gray-200 hover:bg-brand-50'
+                              : 'bg-white text-gray-500 border-gray-200 hover:bg-brand-50'
                           }`}
                         >
                           {interest}
@@ -525,7 +525,7 @@ export default function OnboardingPage() {
 
               {formData.interests && formData.interests.length > 0 && (
                 <div className='mt-6'>
-                  <p className='text-sm text-neutral-500 mb-2'>
+                  <p className='text-sm text-gray-500 mb-2'>
                     Selected interests ({formData.interests.length}):
                   </p>
                   <div className='flex flex-wrap gap-2'>
@@ -549,7 +549,7 @@ export default function OnboardingPage() {
               <h2 className='text-xl font-semibold text-black mb-4'>
                 Profile Picture
               </h2>
-              <p className='text-sm text-neutral-500 mb-6'>
+              <p className='text-sm text-gray-500 mb-6'>
                 Add a profile picture to help others recognize you. This is
                 optional but recommended for building trust in professional
                 connections.
@@ -570,7 +570,7 @@ export default function OnboardingPage() {
             <button
               onClick={prevStep}
               disabled={currentStep === 1}
-              className={`px-6 py-3 rounded-xl font-medium border bg-white text-black border-gray-200 hover:bg-stone-100 focus:outline-none focus:ring-2 focus:ring-brand-500 disabled:opacity-50 disabled:cursor-not-allowed`}
+              className={`px-6 py-3 rounded-xl font-medium border bg-white text-black border-gray-200 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-500 disabled:opacity-50 disabled:cursor-not-allowed`}
             >
               Previous
             </button>

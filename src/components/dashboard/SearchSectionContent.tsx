@@ -149,8 +149,8 @@ export default function SearchSectionContent({
       <div className='flex-1 overflow-y-auto w-full'>
         {!hasSearched ? (
           <div className='flex flex-col items-center justify-center h-full text-center p-8 transition-opacity duration-200 opacity-100'>
-            <div className='w-16 h-16 mx-auto mb-4 bg-stone-100 rounded-full flex items-center justify-center'>
-              <Search className='w-8 h-8 text-neutral-500' />
+            <div className='w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center'>
+              <Search className='w-8 h-8 text-gray-500' />
             </div>
             <h3 className='text-lg font-medium text-black mb-2'>
               Search Professionals
@@ -163,17 +163,17 @@ export default function SearchSectionContent({
         ) : error ? (
           <div className='flex flex-col items-center justify-center h-full text-center p-8 transition-opacity duration-200 opacity-100'>
             <div className='text-red-600 text-sm mb-2'>Search Error</div>
-            <p className='text-neutral-500 text-sm'>{error}</p>
+            <p className='text-gray-500 text-sm'>{error}</p>
           </div>
         ) : searchResults.length === 0 ? (
           <div className='flex flex-col items-center justify-center h-full text-center p-8 transition-opacity duration-200 opacity-100'>
-            <div className='w-16 h-16 mx-auto mb-4 bg-stone-100 rounded-full flex items-center justify-center'>
-              <Search className='w-8 h-8 text-neutral-500' />
+            <div className='w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center'>
+              <Search className='w-8 h-8 text-gray-500' />
             </div>
             <h3 className='text-lg font-medium text-black mb-2'>
               Hmm… nothing matched.
             </h3>
-            <p className='text-neutral-500 text-sm max-w-sm'>
+            <p className='text-gray-500 text-sm max-w-sm'>
               Try different words.
             </p>
           </div>

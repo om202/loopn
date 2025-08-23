@@ -74,7 +74,7 @@ export default function AccountContent() {
             <h3 className='font-medium text-black mb-1'>
               {getUserDisplayName()}
             </h3>
-            <p className='text-sm text-neutral-500 font-medium'>
+            <p className='text-sm text-gray-500 font-medium'>
               {getUserEmail()}
             </p>
           </div>
@@ -83,8 +83,8 @@ export default function AccountContent() {
         {/* Profile Details */}
         <div className='mt-5'>
           {loadingProfile ? (
-            <div className='flex items-center gap-2 text-sm text-neutral-500'>
-              <div className='w-3 h-3 bg-stone-200 rounded-full animate-pulse'></div>
+            <div className='flex items-center gap-2 text-sm text-gray-500'>
+              <div className='w-3 h-3 bg-gray-200 rounded-full animate-pulse'></div>
               <span>Loading...</span>
             </div>
           ) : userProfile ? (
@@ -100,13 +100,13 @@ export default function AccountContent() {
                 (userProfile.interests &&
                   userProfile.interests.length > 0)) && (
                 <div className='pb-6'>
-                  <h4 className='text-sm font-semibold text-neutral-500 mb-4'>
+                  <h4 className='text-sm font-semibold text-gray-500 mb-4'>
                     Profile Details
                   </h4>
                   <div className='divide-y divide-gray-100'>
                     {userProfile.jobRole && (
                       <div className='py-3'>
-                        <dt className='text-sm font-medium text-neutral-500 mb-1.5 flex items-center gap-1'>
+                        <dt className='text-sm font-medium text-gray-500 mb-1.5 flex items-center gap-1'>
                           <Briefcase className='w-3.5 h-3.5' />
                           Role
                         </dt>
@@ -117,7 +117,7 @@ export default function AccountContent() {
                     )}
                     {userProfile.companyName && (
                       <div className='py-3'>
-                        <dt className='text-sm font-medium text-neutral-500 mb-1.5 flex items-center gap-1'>
+                        <dt className='text-sm font-medium text-gray-500 mb-1.5 flex items-center gap-1'>
                           <Building2 className='w-3.5 h-3.5' />
                           Company
                         </dt>
@@ -128,7 +128,7 @@ export default function AccountContent() {
                     )}
                     {userProfile.industry && (
                       <div className='py-3'>
-                        <dt className='text-sm font-medium text-neutral-500 mb-1.5 flex items-center gap-1'>
+                        <dt className='text-sm font-medium text-gray-500 mb-1.5 flex items-center gap-1'>
                           <Factory className='w-3.5 h-3.5' />
                           Industry
                         </dt>
@@ -140,7 +140,7 @@ export default function AccountContent() {
                     {userProfile.yearsOfExperience !== null &&
                       userProfile.yearsOfExperience !== undefined && (
                         <div className='py-3'>
-                          <dt className='text-sm font-medium text-neutral-500 mb-1.5 flex items-center gap-1'>
+                          <dt className='text-sm font-medium text-gray-500 mb-1.5 flex items-center gap-1'>
                             <Clock className='w-3.5 h-3.5' />
                             Experience
                           </dt>
@@ -151,7 +151,7 @@ export default function AccountContent() {
                       )}
                     {userProfile.education && (
                       <div className='py-3'>
-                        <dt className='text-sm font-medium text-neutral-500 mb-1.5 flex items-center gap-1'>
+                        <dt className='text-sm font-medium text-gray-500 mb-1.5 flex items-center gap-1'>
                           <GraduationCap className='w-3.5 h-3.5' />
                           Education
                         </dt>
@@ -162,7 +162,7 @@ export default function AccountContent() {
                     )}
                     {userProfile.about && (
                       <div className='py-3'>
-                        <dt className='text-sm font-medium text-neutral-500 mb-1.5 flex items-center gap-1'>
+                        <dt className='text-sm font-medium text-gray-500 mb-1.5 flex items-center gap-1'>
                           <Info className='w-3.5 h-3.5' />
                           About
                         </dt>
@@ -173,7 +173,7 @@ export default function AccountContent() {
                     )}
                     {userProfile.skills && userProfile.skills.length > 0 && (
                       <div className='py-3'>
-                        <dt className='text-sm font-medium text-neutral-500 mb-1.5 flex items-center gap-1'>
+                        <dt className='text-sm font-medium text-gray-500 mb-1.5 flex items-center gap-1'>
                           <Target className='w-3.5 h-3.5' />
                           Skills
                         </dt>
@@ -192,7 +192,7 @@ export default function AccountContent() {
                     {userProfile.interests &&
                       userProfile.interests.length > 0 && (
                         <div className='py-3'>
-                          <dt className='text-sm font-medium text-neutral-500 mb-1.5 flex items-center gap-1'>
+                          <dt className='text-sm font-medium text-gray-500 mb-1.5 flex items-center gap-1'>
                             <Heart className='w-3.5 h-3.5' />
                             Interests
                           </dt>
@@ -213,7 +213,7 @@ export default function AccountContent() {
               )}
             </div>
           ) : (
-            <div className='text-sm text-neutral-500 text-center py-8'>
+            <div className='text-sm text-gray-500 text-center py-8'>
               No profile details available.
             </div>
           )}

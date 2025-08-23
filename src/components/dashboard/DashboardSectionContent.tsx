@@ -298,13 +298,13 @@ export default function DashboardSectionContent({
         usersToShow.map(renderUserCard)
       ) : (
         <div className='flex flex-col items-center justify-center h-full text-center'>
-          <div className='w-16 h-16 mx-auto mb-4 bg-stone-100 rounded-full flex items-center justify-center'>
-            <EmptyIcon className='w-8 h-8 text-neutral-500' />
+          <div className='w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center'>
+            <EmptyIcon className='w-8 h-8 text-gray-500' />
           </div>
           <h3 className='text-lg font-medium text-black mb-2'>
             {emptyMessage}
           </h3>
-          <p className='text-neutral-500'>
+          <p className='text-gray-500'>
             {activeSection === 'connections'
               ? 'Start chatting to build connections'
               : activeSection === 'suggested'

@@ -77,16 +77,16 @@ export default function BugReportDialog({
             <h2 className='text-lg font-semibold text-black'>
               {type === 'bug' ? 'Report a Bug' : 'Share a Suggestion'}
             </h2>
-            <p className='text-sm text-neutral-500'>Help us improve Loopn</p>
+            <p className='text-sm text-gray-500'>Help us improve Loopn</p>
           </div>
         </div>
         <button
           onClick={() => !isSubmitting && handleClose()}
-          className={`p-2 hover:bg-stone-100 rounded-lg transition-colors ${
+          className={`p-2 hover:bg-gray-100 rounded-lg transition-colors ${
             isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
           }`}
         >
-          <X className='w-5 h-5 text-neutral-500' />
+          <X className='w-5 h-5 text-gray-500' />
         </button>
       </div>
 
@@ -109,7 +109,7 @@ export default function BugReportDialog({
             >
               <div className='flex items-center gap-2 mb-1'>
                 <Bug
-                  className={`w-4 h-4 ${type === 'bug' ? 'text-brand-600' : 'text-neutral-500'}`}
+                  className={`w-4 h-4 ${type === 'bug' ? 'text-brand-600' : 'text-gray-500'}`}
                 />
                 <span
                   className={`font-medium text-sm ${type === 'bug' ? 'text-brand-600' : 'text-black'}`}
@@ -118,7 +118,7 @@ export default function BugReportDialog({
                 </span>
               </div>
               <p
-                className={`text-sm ${type === 'bug' ? 'text-brand-600' : 'text-neutral-500'}`}
+                className={`text-sm ${type === 'bug' ? 'text-brand-600' : 'text-gray-500'}`}
               >
                 Something isn't working
               </p>
@@ -135,7 +135,7 @@ export default function BugReportDialog({
             >
               <div className='flex items-center gap-2 mb-1'>
                 <Lightbulb
-                  className={`w-4 h-4 ${type === 'suggestion' ? 'text-brand-600' : 'text-neutral-500'}`}
+                  className={`w-4 h-4 ${type === 'suggestion' ? 'text-brand-600' : 'text-gray-500'}`}
                 />
                 <span
                   className={`font-medium text-sm ${type === 'suggestion' ? 'text-brand-600' : 'text-black'}`}
@@ -144,7 +144,7 @@ export default function BugReportDialog({
                 </span>
               </div>
               <p
-                className={`text-sm ${type === 'suggestion' ? 'text-brand-600' : 'text-neutral-500'}`}
+                className={`text-sm ${type === 'suggestion' ? 'text-brand-600' : 'text-gray-500'}`}
               >
                 Idea for improvement
               </p>
@@ -205,7 +205,7 @@ export default function BugReportDialog({
           <button
             type='button'
             onClick={() => !isSubmitting && handleClose()}
-            className={`flex-1 px-4 py-2 text-neutral-500 bg-white border border-gray-300 rounded-lg hover:bg-stone-100 transition-colors ${
+            className={`flex-1 px-4 py-2 text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors ${
               isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
             }`}
           >

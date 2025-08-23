@@ -158,7 +158,7 @@ export default function DashboardSidebar({
                   className={`relative w-full flex items-center gap-3 px-2 py-2 rounded-lg text-left group ${
                     activeSection === id
                       ? 'bg-brand-600 text-white hover:bg-brand-700'
-                      : 'text-black hover:bg-stone-100'
+                      : 'text-black hover:bg-gray-100'
                   }`}
                 >
                   <div className='w-6 h-6 flex-shrink-0 flex items-center justify-center'>
@@ -204,7 +204,7 @@ export default function DashboardSidebar({
                 className={`relative flex-1 flex items-center gap-3 px-2 py-2 rounded-lg text-left group ${
                   activeSection === helpItem.id
                     ? 'bg-brand-600 text-white hover:bg-brand-700'
-                    : 'text-black hover:bg-stone-100 hover:text-black'
+                    : 'text-black hover:bg-gray-100 hover:text-black'
                 }`}
               >
                 <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -215,7 +215,7 @@ export default function DashboardSidebar({
 
               <button
                 onClick={() => setIsBugReportOpen(true)}
-                className='p-2 text-neutral-500 hover:text-black hover:bg-stone-100 rounded-lg transition-colors border border-transparent hover:border-gray-200'
+                className='p-2 text-gray-500 hover:text-black hover:bg-gray-100 rounded-lg transition-colors border border-transparent hover:border-gray-200'
                 title='Report Bug / Share Suggestion'
               >
                 <Bug className='w-4 h-4' />
@@ -228,7 +228,7 @@ export default function DashboardSidebar({
               className={`relative w-full flex items-center gap-3 px-2 py-2 rounded-lg text-left group ${
                 activeSection === accountItem.id
                   ? 'bg-brand-600 text-white hover:bg-brand-700'
-                  : 'text-neutral-500 hover:bg-stone-100 hover:text-black'
+                  : 'text-gray-500 hover:bg-gray-100 hover:text-black'
               }`}
             >
               <div className='flex-shrink-0 flex items-center justify-center'>
@@ -252,7 +252,7 @@ export default function DashboardSidebar({
                 <div className='font-medium text-black text-base'>
                   {accountItem.label}
                 </div>
-                <div className='text-sm text-neutral-500'>Account</div>
+                <div className='text-sm text-gray-500'>Account</div>
               </div>
             </button>
           </div>
@@ -260,7 +260,7 @@ export default function DashboardSidebar({
       </div>
 
       {/* Mobile Bottom Bar */}
-      <div className='lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-stone-100 border-t border-gray-200'>
+      <div className='lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-gray-100 border-t border-gray-200'>
         <nav className='flex items-stretch px-2 py-1'>
           <div className='flex w-full'>
             {[

@@ -276,8 +276,8 @@ export default function MessageBubble({
               <div
                 className={`p-2.5 rounded-2xl border shadow-sm ${
                   isOwnMessage
-                    ? 'bg-stone-100 text-neutral-500 border-gray-200 rounded-br-md'
-                    : 'bg-stone-100 text-neutral-500 border-gray-200 rounded-bl-md'
+                    ? 'bg-gray-100 text-gray-500 border-gray-200 rounded-br-md'
+                    : 'bg-gray-100 text-gray-500 border-gray-200 rounded-bl-md'
                 }`}
               >
                 <p className='text-sm italic select-none'>Message deleted</p>
@@ -291,7 +291,7 @@ export default function MessageBubble({
                 className={`p-2.5 rounded-2xl shadow-sm ${
                   isOwnMessage
                     ? 'bg-brand-500 text-white border border-brand-500 rounded-br-md'
-                    : 'bg-stone-100 text-black border border-gray-200 rounded-bl-md'
+                    : 'bg-gray-100 text-black border border-gray-200 rounded-bl-md'
                 }`}
               >
                 {repliedToMessage && (
@@ -299,7 +299,7 @@ export default function MessageBubble({
                     className={`mb-2 pt-2 pb-2 border-l-2 pl-3 pr-3 ${
                       isOwnMessage
                         ? 'border-brand-300 bg-brand-500 bg-opacity-15'
-                        : 'border-gray-400 bg-stone-100'
+                        : 'border-gray-400 bg-gray-100'
                     } rounded-r-xl`}
                   >
                     <div
@@ -377,7 +377,7 @@ export default function MessageBubble({
                   title='Reply'
                 >
                   <svg
-                    className='w-4 h-4 text-neutral-500 group-hover:text-brand-600 group-hover:scale-110 transition-all duration-200'
+                    className='w-4 h-4 text-gray-500 group-hover:text-brand-600 group-hover:scale-110 transition-all duration-200'
                     fill='none'
                     stroke='currentColor'
                     viewBox='0 0 24 24'
@@ -398,7 +398,7 @@ export default function MessageBubble({
                     title='Delete message'
                   >
                     <svg
-                      className='w-4 h-4 text-neutral-500 group-hover:text-b_red-500 group-hover:scale-110 transition-all duration-200'
+                      className='w-4 h-4 text-gray-500 group-hover:text-b_red-500 group-hover:scale-110 transition-all duration-200'
                       fill='none'
                       stroke='currentColor'
                       viewBox='0 0 24 24'
@@ -428,7 +428,7 @@ export default function MessageBubble({
                       className={`w-4 h-4 group-hover:scale-110 transition-all duration-200 ${
                         showEmojiPicker
                           ? 'text-b_yellow-500'
-                          : 'text-neutral-500 group-hover:text-b_yellow-500'
+                          : 'text-gray-500 group-hover:text-b_yellow-500'
                       }`}
                       fill='none'
                       stroke='currentColor'

@@ -63,7 +63,7 @@ export default function ConfirmSignUpForm({
           </label>
           <div className='relative'>
             <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-              <Shield className='h-5 w-5 text-neutral-500' />
+              <Shield className='h-5 w-5 text-gray-500' />
             </div>
             <input
               id='confirmationCode'
@@ -76,7 +76,7 @@ export default function ConfirmSignUpForm({
               required
             />
           </div>
-          <p className='text-sm text-neutral-500 mt-2 text-center'>
+          <p className='text-sm text-gray-500 mt-2 text-center'>
             Enter the 6-digit code from your email
           </p>
         </div>

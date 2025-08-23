@@ -14,7 +14,7 @@ export function ZustandDemo() {
   const stats = getStats();
 
   return (
-    <div className='p-4 border rounded-lg bg-stone-50'>
+    <div className='p-4 border rounded-lg bg-gray-50'>
       <h3 className='text-lg font-semibold mb-2'>Zustand Demo</h3>
 
       <div className='space-y-2 text-base'>

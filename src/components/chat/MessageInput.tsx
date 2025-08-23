@@ -83,7 +83,7 @@ export default function MessageInput({
   return (
     <>
       {replyToMessage && (
-        <div className='bg-stone-100 border-t border-gray-200 px-4 sm:px-6 lg:px-8 xl:px-12 py-3'>
+        <div className='bg-gray-100 border-t border-gray-200 px-4 sm:px-6 lg:px-8 xl:px-12 py-3'>
           <div className='relative pr-8'>
             <div className='flex items-center text-sm text-black mb-3'>
               <svg
@@ -107,7 +107,7 @@ export default function MessageInput({
             {onCancelReply && (
               <button
                 onClick={onCancelReply}
-                className='absolute top-0 right-0 p-1 text-neutral-500 hover:text-black transition-colors rounded-full hover:bg-stone-100'
+                className='absolute top-0 right-0 p-1 text-gray-500 hover:text-black transition-colors rounded-full hover:bg-gray-100'
                 title='Cancel reply'
               >
                 <X className='w-4 h-4' />
@@ -197,13 +197,13 @@ export default function MessageInput({
                     WebkitAppearance: 'none',
                     MozAppearance: 'textfield',
                   }}
-                  className='w-full px-5 py-3 pr-14 border border-gray-200 rounded-full focus:outline-none focus:ring-1 focus:ring-brand-500 focus:border-transparent text-base font-medium bg-stone-100 hover:bg-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed placeholder-gray-1000'
+                  className='w-full px-5 py-3 pr-14 border border-gray-200 rounded-full focus:outline-none focus:ring-1 focus:ring-brand-500 focus:border-transparent text-base font-medium bg-gray-100 hover:bg-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed placeholder-gray-1000'
                 />
                 <button
                   type='button'
                   onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                   disabled={disabled}
-                  className={`absolute right-2 top-1/2 transform -translate-y-1/2 text-neutral-500 hover:text-black transition-all duration-200 p-2 rounded-full hover:bg-stone-100 focus:outline-none disabled:opacity-50 ${
+                  className={`absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-black transition-all duration-200 p-2 rounded-full hover:bg-gray-100 focus:outline-none disabled:opacity-50 ${
                     showEmojiPicker ? 'text-brand-600 bg-brand-50' : ''
                   }`}
                 >

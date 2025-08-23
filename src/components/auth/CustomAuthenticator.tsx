@@ -104,7 +104,7 @@ export default function CustomAuthenticator({
   };
 
   return (
-    <div className='min-h-screen bg-stone-100 flex items-center justify-center px-4 py-8'>
+    <div className='min-h-screen bg-gray-100 flex items-center justify-center px-4 py-8'>
       <div className='w-full max-w-md'>
         {/* Main Auth Card */}
         <div className='bg-white rounded-2xl border border-gray-200 p-6 lg:p-8 shadow-lg'>
