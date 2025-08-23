@@ -2,7 +2,14 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { X, Clock, User, Briefcase, MapPin, UserRoundSearch } from 'lucide-react';
+import {
+  X,
+  Clock,
+  User,
+  Briefcase,
+  MapPin,
+  UserRoundSearch,
+} from 'lucide-react';
 import {
   VespaService,
   type SearchResult,

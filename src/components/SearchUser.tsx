@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import {X, Clock, UserRoundSearch } from 'lucide-react';
+import { X, Clock, UserRoundSearch } from 'lucide-react';
 import {
   getSearchHistory,
   addToSearchHistory,
@@ -122,9 +122,7 @@ export default function SearchUser({
   };
 
   return (
-    <div
-      className='w-full sm:mx-auto relative transition-all duration-300 ease-out sm:max-w-xl'
-    >
+    <div className='w-full sm:mx-auto relative transition-all duration-300 ease-out sm:max-w-xl'>
       {/* Mobile Logo + Search Layout */}
       <div className='flex items-center gap-3 sm:block'>
         {/* Logo - only visible on mobile */}
@@ -196,7 +194,7 @@ export default function SearchUser({
               WebkitAppearance: 'none',
               MozAppearance: 'textfield',
             }}
-            className={`w-full pl-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-1 focus:ring-brand-200 text-neutral-900 hover:bg-white transition-colors placeholder-gray-500 ${isFocused ? 'bg-white' : 'bg-stone-100'} ${isFocused ? (query.trim() ? 'pr-32' : 'pr-28') : (query.trim() ? 'pr-20' : 'pr-12')}`}
+            className={`w-full pl-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-1 focus:ring-brand-200 text-neutral-900 hover:bg-white transition-colors placeholder-gray-500 ${isFocused ? 'bg-white' : 'bg-stone-100'} ${isFocused ? (query.trim() ? 'pr-32' : 'pr-28') : query.trim() ? 'pr-20' : 'pr-12'}`}
           />
 
           {/* Clear button - only show when there's text */}
