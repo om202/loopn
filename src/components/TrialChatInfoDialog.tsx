@@ -54,7 +54,7 @@ export default function TrialChatInfoDialog({
           )}
           <button
             onClick={onClose}
-            className='w-full px-4 py-2 text-sm font-medium text-brand-700 bg-white border border-brand-500 rounded-lg hover:bg-brand-50 focus:outline-none transition-colors'
+            className='w-full px-4 py-2 text-sm font-medium text-brand-700 bg-white border border-brand-500 rounded-lg hover:bg-brand-100 focus:outline-none transition-colors'
           >
             Got it
           </button>

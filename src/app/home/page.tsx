@@ -117,7 +117,7 @@ export default function HomePage() {
             </div>
             <div className='flex items-center'>
               <Link href={authLink}>
-                <button className='bg-white hover:bg-brand-50 text-brand-700 border border-gray-200 px-6 py-2.5 rounded-lg transition-colors flex items-center gap-2'>
+                <button className='bg-white hover:bg-brand-100 text-brand-700 border border-gray-200 px-6 py-2.5 rounded-lg transition-colors flex items-center gap-2'>
                   <LogIn className='w-4 h-4' />
                   {authText}
                 </button>
@@ -132,7 +132,7 @@ export default function HomePage() {
         {/* Background Elements */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-20 left-10 w-72 h-72 bg-brand-100/30 rounded-full blur-3xl animate-float' />
-          <div className='absolute bottom-20 right-10 w-80 h-80 bg-brand-50/50 rounded-full blur-3xl animate-float-delayed' />
+          <div className='absolute bottom-20 right-10 w-80 h-80 bg-brand-100/50 rounded-full blur-3xl animate-float-delayed' />
         </div>
 
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full'>
@@ -437,7 +437,7 @@ export default function HomePage() {
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-1/4 left-0 w-72 h-72 bg-stone-100/80 rounded-full blur-3xl' />
-          <div className='absolute bottom-1/4 right-1/4 w-80 h-80 bg-brand-50/60 rounded-full blur-3xl' />
+          <div className='absolute bottom-1/4 right-1/4 w-80 h-80 bg-brand-100/60 rounded-full blur-3xl' />
         </div>
 
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
@@ -566,7 +566,7 @@ export default function HomePage() {
       <section id='how-it-works' className='py-12 sm:py-16 bg-white relative'>
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
-          <div className='absolute top-1/3 right-0 w-96 h-96 bg-brand-50/60 rounded-full blur-3xl' />
+          <div className='absolute top-1/3 right-0 w-96 h-96 bg-brand-100/60 rounded-full blur-3xl' />
           <div className='absolute bottom-1/3 left-0 w-80 h-80 bg-stone-100/80 rounded-full blur-3xl' />
         </div>
 
@@ -650,7 +650,7 @@ export default function HomePage() {
       <section className='py-12 sm:py-16 bg-white relative'>
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
-          <div className='absolute top-1/4 right-0 w-96 h-96 bg-brand-50/40 rounded-full blur-3xl' />
+          <div className='absolute top-1/4 right-0 w-96 h-96 bg-brand-100/40 rounded-full blur-3xl' />
           <div className='absolute bottom-1/4 left-0 w-80 h-80 bg-stone-100/80 rounded-full blur-3xl' />
         </div>
 

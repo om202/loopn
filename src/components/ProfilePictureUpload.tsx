@@ -125,10 +125,10 @@ export default function ProfilePictureUpload({
         <div
           className={`relative w-48 h-48 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center cursor-pointer transition-all duration-200 ${
             dragActive
-              ? 'border-brand-500 bg-brand-50'
+              ? 'border-brand-500 bg-brand-100'
               : preview
                 ? 'border-transparent'
-                : 'border-gray-300 hover:border-brand-400 hover:bg-brand-50'
+                : 'border-gray-300 hover:border-brand-400 hover:bg-brand-100'
           }`}
           onDrop={handleDrop}
           onDragOver={handleDragOver}

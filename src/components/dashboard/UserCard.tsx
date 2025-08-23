@@ -156,7 +156,7 @@ export default function UserCard({
       onClick={handleCardClick}
       className={`px-2 py-2 group transition-all duration-200 cursor-pointer ${
         isSelected
-          ? 'bg-brand-50 rounded-2xl border border-brand-200'
+          ? 'bg-brand-100 rounded-2xl border border-brand-200'
           : 'bg-white hover:bg-stone-100 hover:rounded-2xl border border-transparent border-b-gray-100 last:border-b-0'
       }`}
     >
@@ -229,7 +229,7 @@ export default function UserCard({
               return (
                 <div
                   className={`flex items-center justify-center w-[40px] h-[40px] md:w-auto md:h-auto md:min-w-[70px] rounded-xl border border-brand-200 md:px-2.5 md:py-2 ${
-                    isSelected ? 'bg-white' : 'bg-brand-50'
+                    isSelected ? 'bg-white' : 'bg-brand-100'
                   }`}
                 >
                   <div
@@ -296,7 +296,7 @@ export default function UserCard({
                 className={`px-2 py-1.5 text-base font-medium rounded-xl border transition-colors flex items-center justify-center flex-shrink-0 gap-1.5 min-w-[44px] ${
                   isSelected
                     ? 'bg-white text-brand-700 border-brand-200 hover:bg-brand-100 hover:border-brand-200'
-                    : 'bg-brand-50 text-brand-700 border-brand-200 hover:bg-brand-100 hover:border-brand-200'
+                    : 'bg-brand-100 text-brand-700 border-brand-200 hover:bg-brand-100 hover:border-brand-200'
                 }`}
                 title={
                   incomingRequestSenderIds.has(userPresence.userId)
@@ -361,7 +361,7 @@ export default function UserCard({
           <button
             onClick={() => setShowProfileDialog(true)}
             className={`md:hidden px-2.5 py-2 text-base font-medium rounded-xl border transition-colors text-black border-brand-200 hover:bg-brand-100 hover:border-brand-200 flex items-center justify-center flex-shrink-0 w-[40px] h-[40px] ${
-              isSelected ? 'bg-white' : 'bg-brand-50'
+              isSelected ? 'bg-white' : 'bg-brand-100'
             }`}
             disabled={loadingProfile}
             title='View Profile'

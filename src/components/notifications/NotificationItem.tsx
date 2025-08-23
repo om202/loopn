@@ -243,7 +243,7 @@ export default function NotificationItem({
                       <p className='text-base text-neutral-500'>
                         {baseContent}
                       </p>
-                      <span className='inline-flex items-center px-2 py-1 text-sm font-medium bg-brand-50 text-brand-700 rounded-full'>
+                      <span className='inline-flex items-center px-2 py-1 text-sm font-medium bg-brand-100 text-brand-700 rounded-full'>
                         +{count} more
                       </span>
                     </>
@@ -275,7 +275,7 @@ export default function NotificationItem({
                       );
                     }}
                     disabled={decliningId === notification.id}
-                    className='px-3 py-2 bg-transparent text-brand-700 text-sm font-medium rounded-lg hover:bg-brand-50 disabled:opacity-50 transition-colors border border-brand-200'
+                    className='px-3 py-2 bg-transparent text-brand-700 text-sm font-medium rounded-lg hover:bg-brand-100 disabled:opacity-50 transition-colors border border-brand-200'
                   >
                     Accept
                   </button>
@@ -305,7 +305,7 @@ export default function NotificationItem({
                   e.stopPropagation();
                   onNotificationClick(notification);
                 }}
-                className='px-3 py-2 bg-transparent text-brand-700 text-sm font-medium rounded-lg hover:bg-brand-50 transition-colors border border-brand-200'
+                className='px-3 py-2 bg-transparent text-brand-700 text-sm font-medium rounded-lg hover:bg-brand-100 transition-colors border border-brand-200'
               >
                 Reply
               </button>
