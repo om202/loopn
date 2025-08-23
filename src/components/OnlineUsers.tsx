@@ -609,7 +609,7 @@ export default function OnlineUsers({
           {activeSection === 'notifications' && (
             <div className='flex items-start justify-between'>
               <div>
-                <h2 className='text-2xl sm:text-2xl font-bold text-neutral-950 mb-1'>
+                <h2 className='text-2xl sm:text-2xl font-bold text-black mb-1'>
                   Notifications
                 </h2>
                 <p className='text-base text-neutral-500'>
@@ -628,7 +628,7 @@ export default function OnlineUsers({
           )}
           {activeSection === 'help' && (
             <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-neutral-950 mb-1'>
+              <h2 className='text-xl sm:text-2xl font-bold text-black mb-1'>
                 Help & Support
               </h2>
               <p className='text-base text-neutral-500'>
@@ -639,7 +639,7 @@ export default function OnlineUsers({
           {activeSection === 'account' && (
             <div className='flex items-start justify-between'>
               <div>
-                <h2 className='text-2xl sm:text-2xl font-bold text-neutral-950 mb-1'>
+                <h2 className='text-2xl sm:text-2xl font-bold text-black mb-1'>
                   Account
                 </h2>
                 <p className='text-base text-neutral-500'>
@@ -656,7 +656,7 @@ export default function OnlineUsers({
           )}
           {activeSection === 'connections' && (
             <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-neutral-950 mb-1'>
+              <h2 className='text-xl sm:text-2xl font-bold text-black mb-1'>
                 Connections
               </h2>
               <p className='text-base text-neutral-500'>Your connections</p>
@@ -664,7 +664,7 @@ export default function OnlineUsers({
           )}
           {activeSection === 'suggested' && (
             <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-neutral-950 mb-1'>
+              <h2 className='text-xl sm:text-2xl font-bold text-black mb-1'>
                 Discover
               </h2>
               <p className='text-base text-neutral-500'>
@@ -674,7 +674,7 @@ export default function OnlineUsers({
           )}
           {activeSection === 'search' && (
             <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-neutral-950 mb-1'>
+              <h2 className='text-xl sm:text-2xl font-bold text-black mb-1'>
                 {searchQuery ? 'Search Results' : 'Search'}
               </h2>
               <p className='text-base text-neutral-500'>
@@ -684,7 +684,7 @@ export default function OnlineUsers({
           )}
           {activeSection === 'all' && (
             <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-neutral-950 mb-1'>
+              <h2 className='text-xl sm:text-2xl font-bold text-black mb-1'>
                 Chats
               </h2>
               <p className='text-base text-neutral-500'>Your conversations</p>

@@ -111,7 +111,7 @@ export default function HomePage() {
                   priority
                 />
                 <div className='flex items-center gap-2'>
-                  <span className='text-xl font-bold text-neutral-950'>
+                  <span className='text-xl font-bold text-black'>
                     Loopn
                   </span>
                 </div>
@@ -141,7 +141,7 @@ export default function HomePage() {
           <div className='grid lg:grid-cols-2 gap-12 lg:gap-16 items-center'>
             {/* Left column - Content */}
             <div className='text-center lg:text-left'>
-              <h1 className='text-4xl sm:text-5xl lg:text-5xl font-bold text-neutral-950 mb-8 leading-tight'>
+              <h1 className='text-4xl sm:text-5xl lg:text-5xl font-bold text-black mb-8 leading-tight'>
                 Simple and AI powered{' '}
                 <span className='text-brand-600 relative'>
                   Networking
@@ -168,7 +168,7 @@ export default function HomePage() {
                 </Link>
                 <button
                   onClick={scrollToHowItWorks}
-                  className='text-neutral-500 hover:text-neutral-950 text-xl font-semibold transition-colors flex items-center justify-center gap-2'
+                  className='text-neutral-500 hover:text-black text-xl font-semibold transition-colors flex items-center justify-center gap-2'
                 >
                   See how it works
                   <ArrowRight className='w-4 h-4' />
@@ -191,7 +191,7 @@ export default function HomePage() {
                         {/* Back Button */}
                         <button
                           disabled
-                          className='p-1.5 sm:p-2 -ml-1 sm:-ml-2 text-neutral-500 hover:text-neutral-950 hover:bg-stone-100 rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 cursor-not-allowed opacity-50'
+                          className='p-1.5 sm:p-2 -ml-1 sm:-ml-2 text-neutral-500 hover:text-black hover:bg-stone-100 rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 cursor-not-allowed opacity-50'
                         >
                           <svg
                             className='w-4 h-4 sm:w-5 sm:h-5'
@@ -221,7 +221,7 @@ export default function HomePage() {
                         </div>
 
                         <div className='flex-1 min-w-0'>
-                          <h1 className='text-sm sm:text-base font-medium text-neutral-950 truncate no-email-detection'>
+                          <h1 className='text-sm sm:text-base font-medium text-black truncate no-email-detection'>
                             Ethan Cole
                           </h1>
 
@@ -290,7 +290,7 @@ export default function HomePage() {
                         />
                       </div>
                       <div className='relative max-w-[85vw] sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl'>
-                        <div className='p-2.5 rounded-2xl bg-stone-100 text-neutral-950 border border-gray-200 rounded-bl-md shadow-sm'>
+                        <div className='p-2.5 rounded-2xl bg-stone-100 text-black border border-gray-200 rounded-bl-md shadow-sm'>
                           <p className='text-base leading-normal break-words select-none m-0 pr-2'>
                             Hey! I see you work in UX. Any tips for fintech
                             design?
@@ -335,7 +335,7 @@ export default function HomePage() {
                         />
                       </div>
                       <div className='relative max-w-[85vw] sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl'>
-                        <div className='p-2.5 rounded-2xl bg-stone-100 text-neutral-950 border border-gray-200 rounded-bl-md shadow-sm'>
+                        <div className='p-2.5 rounded-2xl bg-stone-100 text-black border border-gray-200 rounded-bl-md shadow-sm'>
                           <p className='text-base leading-normal break-words select-none m-0 pr-2'>
                             Perfect! Working on investment education app
                           </p>
@@ -379,7 +379,7 @@ export default function HomePage() {
                         />
                       </div>
                       <div className='relative max-w-[85vw] sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl'>
-                        <div className='p-2.5 rounded-2xl bg-stone-100 text-neutral-950 border border-gray-200 rounded-bl-md shadow-sm'>
+                        <div className='p-2.5 rounded-2xl bg-stone-100 text-black border border-gray-200 rounded-bl-md shadow-sm'>
                           <p className='text-base leading-normal break-words select-none m-0 pr-2'>
                             Thanks!
                           </p>
@@ -408,7 +408,7 @@ export default function HomePage() {
                         <button
                           type='button'
                           disabled
-                          className='absolute right-2 top-1/2 transform -translate-y-1/2 text-neutral-500 hover:text-neutral-950 transition-all duration-200 p-2 rounded-full hover:bg-stone-100 focus:outline-none disabled:opacity-50 cursor-not-allowed'
+                          className='absolute right-2 top-1/2 transform -translate-y-1/2 text-neutral-500 hover:text-black transition-all duration-200 p-2 rounded-full hover:bg-stone-100 focus:outline-none disabled:opacity-50 cursor-not-allowed'
                         >
                           <Smile className='w-6 h-6' />
                         </button>
@@ -458,7 +458,7 @@ export default function HomePage() {
           <div className='grid lg:grid-cols-3 gap-6 sm:gap-8 mb-16 mt-16'>
             {/* Feature 1 - Smart Matching */}
             <div className='group bg-white rounded-2xl p-6 sm:p-8 border border-gray-200 h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
-              <h3 className='text-2xl font-bold text-neutral-950 mb-4 flex items-center gap-3'>
+              <h3 className='text-2xl font-bold text-black mb-4 flex items-center gap-3'>
                 <Brain className='w-6 h-6 text-neutral-500' />
                 Smart AI Matching
               </h3>
@@ -490,7 +490,7 @@ export default function HomePage() {
 
             {/* Feature 2 - Real-time Chat */}
             <div className='group bg-white rounded-2xl p-6 sm:p-8 border border-gray-200 h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
-              <h3 className='text-2xl font-bold text-neutral-950 mb-4 flex items-center gap-3'>
+              <h3 className='text-2xl font-bold text-black mb-4 flex items-center gap-3'>
                 <Zap className='w-6 h-6 text-neutral-500' />
                 Instant Connections
               </h3>
@@ -522,7 +522,7 @@ export default function HomePage() {
 
             {/* Feature 3 - Quality Network */}
             <div className='group bg-white rounded-2xl p-6 sm:p-8 border border-gray-200 h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
-              <h3 className='text-2xl font-bold text-neutral-950 mb-4 flex items-center gap-3'>
+              <h3 className='text-2xl font-bold text-black mb-4 flex items-center gap-3'>
                 <Shield className='w-6 h-6 text-neutral-500' />
                 Quality & Privacy
               </h3>
@@ -591,7 +591,7 @@ export default function HomePage() {
                 </div>
                 {/* Content */}
                 <div className='text-center mt-4'>
-                  <h3 className='text-2xl font-bold text-neutral-950 mb-4 flex items-center justify-center gap-3'>
+                  <h3 className='text-2xl font-bold text-black mb-4 flex items-center justify-center gap-3'>
                     <User className='w-6 h-6 text-neutral-500' />
                     Create Your Profile
                   </h3>
@@ -612,7 +612,7 @@ export default function HomePage() {
                 </div>
                 {/* Content */}
                 <div className='text-center mt-4'>
-                  <h3 className='text-2xl font-bold text-neutral-950 mb-4 flex items-center justify-center gap-3'>
+                  <h3 className='text-2xl font-bold text-black mb-4 flex items-center justify-center gap-3'>
                     <Brain className='w-6 h-6 text-neutral-500' />
                     Get Smart Matches
                   </h3>
@@ -633,7 +633,7 @@ export default function HomePage() {
                 </div>
                 {/* Content */}
                 <div className='text-center mt-4'>
-                  <h3 className='text-2xl font-bold text-neutral-950 mb-4 flex items-center justify-center gap-3'>
+                  <h3 className='text-2xl font-bold text-black mb-4 flex items-center justify-center gap-3'>
                     <MessageCircle className='w-6 h-6 text-neutral-500' />
                     Start Connecting
                   </h3>
@@ -675,7 +675,7 @@ export default function HomePage() {
                   />
                 ))}
               </div>
-              <blockquote className='text-neutral-950 mb-6 text-sm sm:text-base leading-relaxed font-medium flex-grow'>
+              <blockquote className='text-black mb-6 text-sm sm:text-base leading-relaxed font-medium flex-grow'>
                 &quot;Loopn made networking feel natural again. I&apos;ve built
                 genuine relationships through honest conversations about shared
                 interests.&quot;
@@ -689,7 +689,7 @@ export default function HomePage() {
                   className='w-12 h-12 rounded-full object-cover'
                 />
                 <div>
-                  <p className='font-bold text-neutral-950 text-sm'>
+                  <p className='font-bold text-black text-sm'>
                     Sarah Johnson
                   </p>
                   <p className='text-neutral-500 text-sm'>
@@ -709,7 +709,7 @@ export default function HomePage() {
                   />
                 ))}
               </div>
-              <blockquote className='text-neutral-950 mb-6 text-sm sm:text-base leading-relaxed font-medium flex-grow'>
+              <blockquote className='text-black mb-6 text-sm sm:text-base leading-relaxed font-medium flex-grow'>
                 &quot;The smart matching is brilliant. I found a mentor through
                 meaningful conversations who&apos;s now a key connection in my
                 career.&quot;
@@ -723,7 +723,7 @@ export default function HomePage() {
                   className='w-12 h-12 rounded-full object-cover'
                 />
                 <div>
-                  <p className='font-bold text-neutral-950 text-sm'>
+                  <p className='font-bold text-black text-sm'>
                     Michael Chen
                   </p>
                   <p className='text-neutral-500 text-sm'>
@@ -743,7 +743,7 @@ export default function HomePage() {
                   />
                 ))}
               </div>
-              <blockquote className='text-neutral-950 mb-6 text-sm sm:text-base leading-relaxed font-medium flex-grow'>
+              <blockquote className='text-black mb-6 text-sm sm:text-base leading-relaxed font-medium flex-grow'>
                 &quot;Finally, a platform where expertise matters more than
                 titles. Every conversation feels purposeful and
                 growth-oriented.&quot;
@@ -757,7 +757,7 @@ export default function HomePage() {
                   className='w-12 h-12 rounded-full object-cover'
                 />
                 <div>
-                  <p className='font-bold text-neutral-950 text-sm'>
+                  <p className='font-bold text-black text-sm'>
                     Emily Rodriguez
                   </p>
                   <p className='text-neutral-500 text-sm'>
@@ -770,7 +770,7 @@ export default function HomePage() {
 
           {/* Trust Indicators */}
           <div className='mt-16 text-center'>
-            <h3 className='text-2xl sm:text-2xl font-semibold text-neutral-950 mb-4'>
+            <h3 className='text-2xl sm:text-2xl font-semibold text-black mb-4'>
               Built for Professionals in Every Field
             </h3>
             <p className='text-neutral-500 mb-8 text-2xl'>
@@ -802,7 +802,7 @@ export default function HomePage() {
       </section>
 
       {/* Final CTA Section */}
-      <section className='py-12 sm:py-16 bg-white text-neutral-950 relative overflow-hidden'>
+      <section className='py-12 sm:py-16 bg-white text-black relative overflow-hidden'>
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl' />
@@ -810,7 +810,7 @@ export default function HomePage() {
         </div>
 
         <div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center'>
-          <h2 className='text-2xl sm:text-3xl lg:text-4xl font-semibold text-neutral-950 mb-6 leading-tight'>
+          <h2 className='text-2xl sm:text-3xl lg:text-4xl font-semibold text-black mb-6 leading-tight'>
             Ready to Transform Your Network?
           </h2>
           <p className='text-xl text-neutral-500 mb-8 max-w-2xl mx-auto'>
@@ -842,7 +842,7 @@ export default function HomePage() {
             <div className='flex items-center justify-center space-x-3 mb-6'>
               <Image src='/loopn.svg' alt='Loopn' width={40} height={40} />
               <div className='flex items-center gap-2'>
-                <span className='text-2xl font-bold text-neutral-950'>
+                <span className='text-2xl font-bold text-black'>
                   Loopn
                 </span>
               </div>
@@ -855,25 +855,25 @@ export default function HomePage() {
             <div className='flex flex-col sm:flex-row justify-center items-center gap-8 mb-8'>
               <a
                 href='#'
-                className='text-neutral-500 hover:text-neutral-950 transition-colors'
+                className='text-neutral-500 hover:text-black transition-colors'
               >
                 Privacy Policy
               </a>
               <a
                 href='#'
-                className='text-neutral-500 hover:text-neutral-950 transition-colors'
+                className='text-neutral-500 hover:text-black transition-colors'
               >
                 Terms of Service
               </a>
               <a
                 href='#'
-                className='text-neutral-500 hover:text-neutral-950 transition-colors'
+                className='text-neutral-500 hover:text-black transition-colors'
               >
                 Contact Us
               </a>
               <a
                 href='#'
-                className='text-neutral-500 hover:text-neutral-950 transition-colors'
+                className='text-neutral-500 hover:text-black transition-colors'
               >
                 Help Center
               </a>
