@@ -377,9 +377,7 @@ export default function ProfileSidebar({
                 <div className='text-center text-sm text-neutral-500 mb-3'>
                   <span className='font-medium'>
                     Connection Expires in{' '}
-                    <span className='font-bold text-black'>
-                      {timeLeft}
-                    </span>
+                    <span className='font-bold text-black'>{timeLeft}</span>
                   </span>
                 </div>
 

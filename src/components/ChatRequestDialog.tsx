@@ -266,10 +266,7 @@ function NewRequestDialog({
                 onChange={e => setDontShowAgain(e.target.checked)}
                 className='w-4 h-4 text-brand-600 border-gray-200 rounded focus:ring-brand-500'
               />
-              <label
-                htmlFor='dontShowAgain'
-                className='text-sm text-black'
-              >
+              <label htmlFor='dontShowAgain' className='text-sm text-black'>
                 Don&apos;t show this confirmation again
               </label>
             </div>

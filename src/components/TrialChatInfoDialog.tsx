@@ -18,9 +18,7 @@ export default function TrialChatInfoDialog({
       {/* Dialog content */}
       <div className='p-6'>
         {/* Title */}
-        <h3 className='text-lg font-medium text-black mb-6'>
-          Trial Chat
-        </h3>
+        <h3 className='text-lg font-medium text-black mb-6'>Trial Chat</h3>
 
         {/* Content */}
         <div className='text-sm text-black space-y-4 leading-relaxed'>
