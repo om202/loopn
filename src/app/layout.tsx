@@ -1,14 +1,12 @@
 import type { Metadata } from 'next';
-import { Figtree } from 'next/font/google';
+import localFont from 'next/font/local';
 
 import './globals.css';
 
-const figtree = Figtree({
-  weight: ['300', '400', '500', '600', '700'],
-  style: ['normal', 'italic'],
-  subsets: ['latin'],
+const schibstedGrotesk = localFont({
+  src: '../../public/fonts/SchibstedGrotesk-VariableFont_wght.ttf',
   display: 'swap',
-  variable: '--font-figtree',
+  variable: '--font-schibsted-grotesk',
 });
 import AmplifyProvider from './amplify-provider';
 import { RealtimeProvider } from '@/contexts/RealtimeContext';
@@ -74,7 +72,7 @@ export default function RootLayout({
         />
         <meta name='format-detection' content='telephone=no,email=no' />
       </head>
-      <body className={`${figtree.variable} antialiased`}>
+      <body className={`${schibstedGrotesk.variable} antialiased`}>
         <AmplifyProvider>
           <AuthProvider>
             <RealtimeProvider>

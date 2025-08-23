@@ -9,7 +9,7 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: [
-          'var(--font-figtree)',
+          'var(--font-schibsted-grotesk)',
           'system-ui',
           '-apple-system',
           'sans-serif',
