@@ -155,10 +155,10 @@ export default function DashboardSidebar({
                 <button
                   key={id}
                   onClick={() => onSectionChange(id)}
-                  className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
+                  className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group transition-colors duration-150 ${
                     activeSection === id
-                      ? 'bg-brand-100 text-brand-700 border-brand-200'
-                      : 'text-black hover:bg-stone-100 hover:text-black border-transparent'
+                      ? 'text-brand-700'
+                      : 'text-black hover:bg-stone-100 hover:text-black'
                   }`}
                 >
                   <div className='w-6 h-6 flex-shrink-0 flex items-center justify-center'>
@@ -201,10 +201,10 @@ export default function DashboardSidebar({
             <div className='flex items-center gap-2'>
               <button
                 onClick={() => onSectionChange(helpItem.id)}
-                className={`relative flex-1 flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
+                className={`relative flex-1 flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group transition-colors duration-150 ${
                   activeSection === helpItem.id
-                    ? 'bg-brand-100 text-brand-700 border-brand-200'
-                    : 'text-black hover:bg-stone-100 hover:text-black border-transparent'
+                    ? 'text-brand-700'
+                    : 'text-black hover:bg-stone-100 hover:text-black'
                 }`}
               >
                 <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -227,10 +227,10 @@ export default function DashboardSidebar({
             {/* Account Button */}
             <button
               onClick={() => onSectionChange(accountItem.id)}
-              className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
+              className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group transition-colors duration-150 ${
                 activeSection === accountItem.id
-                  ? 'bg-brand-100 text-brand-700 border-brand-200'
-                  : 'text-neutral-500 hover:bg-stone-100 hover:text-black border-transparent'
+                  ? 'text-brand-700'
+                  : 'text-neutral-500 hover:bg-stone-100 hover:text-black'
               }`}
             >
               <div className='flex-shrink-0 flex items-center justify-center'>

@@ -37,6 +37,7 @@ export default function IntelligentSearch({
   const [showResults, setShowResults] = useState(false);
   const [filters, setFilters] = useState<SearchFilters>({});
   const [showFiltersPanel, setShowFiltersPanel] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -177,7 +178,7 @@ export default function IntelligentSearch({
   };
 
   return (
-    <div className='relative w-full max-w-2xl mx-auto'>
+    <div className={`relative w-full mx-auto transition-all duration-300 ease-out ${isFocused ? 'max-w-2xl' : 'max-w-lg'}`}>
       {/* Search Input */}
       <div className='relative'>
         <div className='relative'>
@@ -189,9 +190,11 @@ export default function IntelligentSearch({
             type='text'
             value={query}
             onChange={e => handleQueryChange(e.target.value)}
-            onFocus={() =>
-              !query.trim() ? setShowHistory(true) : setShowResults(true)
-            }
+            onFocus={() => {
+              setIsFocused(true);
+              !query.trim() ? setShowHistory(true) : setShowResults(true);
+            }}
+            onBlur={() => setIsFocused(false)}
             onKeyDown={e => {
               if (e.key === 'Enter') {
                 e.preventDefault();
