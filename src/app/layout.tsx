@@ -1,83 +1,14 @@
 import type { Metadata } from 'next';
-import localFont from 'next/font/local';
+import { Inter } from 'next/font/google';
 
 import './globals.css';
 
-const atkinson = localFont({
-  src: [
-    {
-      path: '../../public/fonts/Atkinson/atkinson-hyperlegible-next-latin-200-normal.woff2',
-      weight: '200',
-      style: 'normal',
-    },
-    {
-      path: '../../public/fonts/Atkinson/atkinson-hyperlegible-next-latin-200-italic.woff2',
-      weight: '200',
-      style: 'italic',
-    },
-    {
-      path: '../../public/fonts/Atkinson/atkinson-hyperlegible-next-latin-300-normal.woff2',
-      weight: '300',
-      style: 'normal',
-    },
-    {
-      path: '../../public/fonts/Atkinson/atkinson-hyperlegible-next-latin-300-italic.woff2',
-      weight: '300',
-      style: 'italic',
-    },
-    {
-      path: '../../public/fonts/Atkinson/atkinson-hyperlegible-next-latin-400-normal.woff2',
-      weight: '400',
-      style: 'normal',
-    },
-    {
-      path: '../../public/fonts/Atkinson/atkinson-hyperlegible-next-latin-400-italic.woff2',
-      weight: '400',
-      style: 'italic',
-    },
-    {
-      path: '../../public/fonts/Atkinson/atkinson-hyperlegible-next-latin-500-normal.woff2',
-      weight: '500',
-      style: 'normal',
-    },
-    {
-      path: '../../public/fonts/Atkinson/atkinson-hyperlegible-next-latin-500-italic.woff2',
-      weight: '500',
-      style: 'italic',
-    },
-    {
-      path: '../../public/fonts/Atkinson/atkinson-hyperlegible-next-latin-600-normal.woff2',
-      weight: '600',
-      style: 'normal',
-    },
-    {
-      path: '../../public/fonts/Atkinson/atkinson-hyperlegible-next-latin-600-italic.woff2',
-      weight: '600',
-      style: 'italic',
-    },
-    {
-      path: '../../public/fonts/Atkinson/atkinson-hyperlegible-next-latin-700-normal.woff2',
-      weight: '700',
-      style: 'normal',
-    },
-    {
-      path: '../../public/fonts/Atkinson/atkinson-hyperlegible-next-latin-700-italic.woff2',
-      weight: '700',
-      style: 'italic',
-    },
-    {
-      path: '../../public/fonts/Atkinson/atkinson-hyperlegible-next-latin-800-normal.woff2',
-      weight: '800',
-      style: 'normal',
-    },
-    {
-      path: '../../public/fonts/Atkinson/atkinson-hyperlegible-next-latin-800-italic.woff2',
-      weight: '800',
-      style: 'italic',
-    },
-  ],
+const inter = Inter({
+  weight: ['300', '400', '500', '600', '700'],
+  style: ['normal'],
+  subsets: ['latin'],
   display: 'swap',
-  variable: '--font-atkinson',
+  variable: '--font-inter',
 });
 import AmplifyProvider from './amplify-provider';
 import { RealtimeProvider } from '@/contexts/RealtimeContext';
@@ -143,7 +74,7 @@ export default function RootLayout({
         />
         <meta name='format-detection' content='telephone=no,email=no' />
       </head>
-      <body className={`${atkinson.variable} antialiased`}>
+      <body className={`${inter.variable} antialiased`}>
         <AmplifyProvider>
           <AuthProvider>
             <RealtimeProvider>
