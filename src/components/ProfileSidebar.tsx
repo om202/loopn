@@ -3,11 +3,8 @@
 import { useState, useEffect } from 'react';
 import {
   Clock,
-  MessageCircle,
   ArrowLeft,
   Info,
-  Plus,
-  UserPlus,
   UserX,
 } from 'lucide-react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
@@ -225,7 +222,7 @@ export default function ProfileSidebar({
     if (isEndedWithTimer) {
       const timeRemaining = getReconnectTimeRemaining!(userId);
       return (
-        <div className='text-sm text-center p-3 bg-stone-100 rounded-xl border border-gray-200'>
+        <div className='text-base text-center p-3 bg-stone-100 rounded-lg'>
           <div className='text-neutral-500 mb-1'>Reconnect in</div>
           <div className='text-neutral-500 flex items-center justify-center gap-1'>
             <Clock className='w-3 h-3' />
@@ -249,45 +246,28 @@ export default function ProfileSidebar({
               onChatAction?.(userId);
             }
           }}
-          className='px-2 py-1.5 text-base font-medium rounded-xl border transition-colors bg-brand-100 text-brand-700 border-brand-200 hover:bg-brand-100 hover:border-brand-200 flex items-center justify-center gap-2'
+          className='px-3 py-1.5 text-base font-medium rounded-lg transition-colors bg-brand-100 text-brand-700 hover:bg-brand-100 flex items-center justify-center'
         >
           {pendingRequests.has(userId) ? (
-            <>
-              <span className='text-neutral-500 text-base font-medium'>
-                Cancel Request
-              </span>
-            </>
+            <span className='text-neutral-500 text-base font-medium'>
+              Cancel Request
+            </span>
           ) : existingConversations.has(userId) ? (
-            <>
-              {existingConversations.get(userId)?.chatStatus === 'ENDED' ? (
-                canUserReconnect && canUserReconnect(userId) ? (
-                  <>
-                    <Plus className='w-4 h-4' />
-                    <span className='text-base font-medium'>Connect</span>
-                  </>
-                ) : (
-                  <>
-                    <MessageCircle className='w-4 h-4' />
-                    <span className='text-base font-medium'>View Chat</span>
-                  </>
-                )
+            existingConversations.get(userId)?.chatStatus === 'ENDED' ? (
+              canUserReconnect && canUserReconnect(userId) ? (
+                <span className='text-base font-medium'>Connect</span>
               ) : (
-                <>
-                  <MessageCircle className='w-4 h-4' />
-                  <span className='text-base font-medium'>Message</span>
-                </>
-              )}
-            </>
+                <span className='text-base font-medium'>View Chat</span>
+              )
+            ) : (
+              <span className='text-base font-medium'>Message</span>
+            )
           ) : (
-            <>
-              <Plus className='w-4 h-4' />
-              <span className='text-base font-medium'>Connect</span>
-            </>
+            <span className='text-base font-medium'>Connect</span>
           )}
         </button>
         {isTrialConversation && (
-          <span className='px-2 py-1.5 text-base font-medium text-neutral-500 rounded-xl flex-shrink-0 flex items-center gap-1'>
-            <Clock className='w-4 h-4' />
+          <span className='px-3 py-1.5 text-base font-medium text-neutral-500 rounded-lg flex-shrink-0'>
             Trial
           </span>
         )}
@@ -305,14 +285,14 @@ export default function ProfileSidebar({
             className='flex items-center gap-2 text-neutral-500 hover:text-black transition-colors'
           >
             <ArrowLeft className='w-4 h-4' />
-            <span className='text-sm font-medium'>Back</span>
+            <span className='text-base font-medium'>Back</span>
           </button>
 
           {/* Remove Connection Button - Top Right */}
           {onEndChat && (
             <button
               onClick={() => setShowEndChatDialog(true)}
-              className='text-sm text-neutral-500 hover:text-black transition-colors font-medium flex items-center gap-2'
+              className='text-base text-neutral-500 hover:text-black transition-colors font-medium flex items-center gap-2'
             >
               <UserX className='w-4 h-4' />
               Remove
@@ -348,7 +328,7 @@ export default function ProfileSidebar({
         <div className='px-6 pb-4 border-b border-gray-200'>
           {/* Connection Status */}
           {conversation.isConnected && (
-            <div className='flex items-center justify-center text-sm text-neutral-500 mb-3'>
+            <div className='flex items-center justify-center text-base text-neutral-500 mb-3'>
               <button
                 onClick={() => setShowRemoveConnectionDialog(true)}
                 className='flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-stone-100 transition-colors'
@@ -374,7 +354,7 @@ export default function ProfileSidebar({
             timeLeft !== 'Expired' && (
               <div className='mb-1 mt-1'>
                 {/* Trial Chat Info with End Chat Icon - Centered */}
-                <div className='text-center text-sm text-neutral-500 mb-3'>
+                <div className='text-center text-base text-neutral-500 mb-3'>
                   <span className='font-medium'>
                     Connection Expires in{' '}
                     <span className='font-bold text-black'>{timeLeft}</span>
@@ -384,7 +364,7 @@ export default function ProfileSidebar({
                 {/* Connect Button */}
                 <div className='flex justify-center mb-3'>
                   {hasAcceptedConnection ? (
-                    <div className='px-6 py-2 text-sm font-medium rounded-lg border border-gray-200 flex items-center justify-center gap-2 text-neutral-500'>
+                    <div className='px-6 py-2 text-base font-medium rounded-lg flex items-center justify-center gap-2 text-neutral-500'>
                       <svg
                         className='w-4 h-4'
                         viewBox='30 30 160 160'
@@ -400,9 +380,8 @@ export default function ProfileSidebar({
                     <button
                       onClick={() => setShowCancelRequestDialog(true)}
                       disabled={optimisticRequestSent} // Disable if optimistic (no real request to cancel yet)
-                      className='px-6 py-2 text-sm font-medium rounded-lg border border-gray-200 flex items-center justify-center gap-2 text-neutral-500 hover:bg-stone-100 transition-colors disabled:cursor-not-allowed disabled:hover:bg-transparent'
+                      className='px-6 py-2 text-base font-medium rounded-lg flex items-center justify-center gap-2 text-neutral-500 hover:bg-stone-100 transition-colors disabled:cursor-not-allowed disabled:hover:bg-transparent'
                     >
-                      <Clock className='w-4 h-4' />
                       <span>Request Sent</span>
                     </button>
                   ) : (
@@ -415,9 +394,8 @@ export default function ProfileSidebar({
                         disabled={
                           sendingConnectionRequest || connectionRequestsLoading
                         }
-                        className='px-6 py-2 text-sm font-medium rounded-lg border transition-colors flex items-center justify-center gap-2 bg-brand-100 text-brand-700 border-brand-200 hover:bg-brand-100 hover:border-brand-400 disabled:bg-brand-100 disabled:cursor-not-allowed'
+                        className='px-6 py-2 text-base font-medium rounded-lg transition-colors flex items-center justify-center gap-2 bg-brand-100 text-brand-700 hover:bg-brand-100 disabled:bg-brand-100 disabled:cursor-not-allowed'
                       >
-                        <UserPlus className='w-4 h-4' />
                         <span>Add to Network</span>
                       </button>
                     </Tooltip>
@@ -429,7 +407,7 @@ export default function ProfileSidebar({
           {/* Chat Ended Status */}
           {conversation.chatStatus === 'ENDED' && (
             <div className='mb-2'>
-              <div className='flex items-center gap-2 text-sm text-neutral-500 mb-2'>
+              <div className='flex items-center gap-2 text-base text-neutral-500 mb-2'>
                 <Info className='w-4 h-4' />
                 <span className='font-medium text-black'>Chat Ended</span>
               </div>
@@ -438,7 +416,7 @@ export default function ProfileSidebar({
               {onReconnect && (
                 <button
                   onClick={onReconnect}
-                  className='w-full px-4 py-2 text-sm font-medium rounded-lg bg-stone-1000 hover:bg-stone-600 text-white transition-colors flex items-center justify-center gap-2'
+                  className='w-full px-4 py-2 text-base font-medium rounded-lg bg-stone-1000 hover:bg-stone-600 text-white transition-colors flex items-center justify-center gap-2'
                 >
                   <Image
                     src='/connect-icon.svg'
@@ -478,13 +456,13 @@ export default function ProfileSidebar({
                 userProfile.industry ||
                 userProfile.yearsOfExperience !== null) && (
                 <div className='pb-4'>
-                  <h4 className='text-sm font-semibold text-neutral-500 mb-4 border-b border-gray-200 pb-2'>
+                  <h4 className='text-base font-semibold text-neutral-500 mb-4 border-b border-gray-200 pb-2'>
                     Profile Details
                   </h4>
                   <div className='divide-y divide-gray-100'>
                     {userProfile.jobRole && (
                       <div className='pb-3'>
-                        <dt className='text-sm font-medium text-neutral-500 mb-1.5'>
+                        <dt className='text-base font-medium text-neutral-500 mb-1.5'>
                           Role
                         </dt>
                         <dd className='text-base text-black'>
@@ -494,7 +472,7 @@ export default function ProfileSidebar({
                     )}
                     {userProfile.companyName && (
                       <div className='py-3'>
-                        <dt className='text-sm font-medium text-neutral-500 mb-1.5'>
+                        <dt className='text-base font-medium text-neutral-500 mb-1.5'>
                           Company
                         </dt>
                         <dd className='text-base text-black'>
@@ -504,7 +482,7 @@ export default function ProfileSidebar({
                     )}
                     {userProfile.industry && (
                       <div className='py-3'>
-                        <dt className='text-sm font-medium text-neutral-500 mb-1.5'>
+                        <dt className='text-base font-medium text-neutral-500 mb-1.5'>
                           Industry
                         </dt>
                         <dd className='text-base text-black'>
@@ -515,7 +493,7 @@ export default function ProfileSidebar({
                     {userProfile.yearsOfExperience !== null &&
                       userProfile.yearsOfExperience !== undefined && (
                         <div className='pt-3'>
-                          <dt className='text-sm font-medium text-neutral-500 mb-1.5'>
+                          <dt className='text-base font-medium text-neutral-500 mb-1.5'>
                             Experience
                           </dt>
                           <dd className='text-base text-black'>
@@ -530,7 +508,7 @@ export default function ProfileSidebar({
               {/* Education Section */}
               {userProfile.education && (
                 <div className='py-4'>
-                  <h4 className='text-sm font-semibold text-neutral-500 mb-4'>
+                  <h4 className='text-base font-semibold text-neutral-500 mb-4'>
                     Education
                   </h4>
                   <div className='text-base text-black leading-relaxed'>
@@ -542,7 +520,7 @@ export default function ProfileSidebar({
               {/* About Section */}
               {userProfile.about && (
                 <div className='py-4'>
-                  <h4 className='text-sm font-medium text-neutral-500 mb-4'>
+                  <h4 className='text-base font-medium text-neutral-500 mb-4'>
                     About
                   </h4>
                   <div className='text-base text-black leading-relaxed'>
@@ -559,7 +537,7 @@ export default function ProfileSidebar({
                   <div className='divide-y divide-gray-100'>
                     {userProfile.skills && userProfile.skills.length > 0 && (
                       <div className='pb-3'>
-                        <dt className='text-sm font-medium text-neutral-500 mb-3'>
+                        <dt className='text-base font-medium text-neutral-500 mb-3'>
                           Skills
                         </dt>
                         <dd className='flex flex-wrap gap-2'>
@@ -577,7 +555,7 @@ export default function ProfileSidebar({
                     {userProfile.interests &&
                       userProfile.interests.length > 0 && (
                         <div className='pt-3'>
-                          <dt className='text-sm font-medium text-neutral-500 mb-3'>
+                          <dt className='text-base font-medium text-neutral-500 mb-3'>
                             Interests
                           </dt>
                           <dd className='flex flex-wrap gap-2'>
@@ -597,7 +575,7 @@ export default function ProfileSidebar({
               )}
             </div>
           ) : (
-            <div className='text-sm text-neutral-500 text-center py-8'>
+            <div className='text-base text-neutral-500 text-center py-8'>
               No profile details available.
             </div>
           )}
@@ -614,7 +592,7 @@ export default function ProfileSidebar({
           <h3 className='text-lg font-medium text-black text-center mb-3'>
             Remove {getUserDisplayName()} from your connection?
           </h3>
-          <p className='text-sm text-neutral-500 text-center mb-4'>
+          <p className='text-base text-neutral-500 text-center mb-4'>
             This will end your trial chat immediately. Chat history will remain
             accessible until the trial expires.
           </p>

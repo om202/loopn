@@ -224,7 +224,7 @@ export default function UserCard({
               );
               return (
                 <div
-                  className={`flex items-center justify-center w-[40px] h-[40px] md:w-auto md:h-auto md:min-w-[70px] rounded-xl border border-brand-200 md:px-2.5 md:py-2 ${
+                  className={`flex items-center justify-center w-[40px] h-[40px] md:w-auto md:h-auto md:min-w-[70px] rounded-lg md:px-2.5 md:py-2 ${
                     isSelected ? 'bg-white' : 'bg-brand-100'
                   }`}
                 >
@@ -288,10 +288,10 @@ export default function UserCard({
                     onChatAction(userPresence.userId);
                   }
                 }}
-                className={`px-3 py-1.5 text-base font-medium rounded-xl border transition-colors flex items-center justify-center flex-shrink-0 ${
+                className={`px-3 py-1.5 text-base font-medium rounded-lg transition-colors flex items-center justify-center flex-shrink-0 ${
                   isSelected
-                    ? 'bg-white text-brand-700 border-brand-200 hover:bg-brand-100 hover:border-brand-200'
-                    : 'bg-brand-100 text-brand-700 border-brand-200 hover:bg-brand-100 hover:border-brand-200'
+                    ? 'bg-white text-brand-700 hover:bg-brand-100'
+                    : 'bg-brand-100 text-brand-700 hover:bg-brand-100'
                 }`}
                 title={
                   incomingRequestSenderIds.has(userPresence.userId)
@@ -340,7 +340,7 @@ export default function UserCard({
           {/* Mobile: Profile dialog button */}
           <button
             onClick={() => setShowProfileDialog(true)}
-            className={`md:hidden px-3 py-1.5 text-base font-medium rounded-xl border transition-colors text-black border-brand-200 hover:bg-brand-100 hover:border-brand-200 flex items-center justify-center flex-shrink-0 ${
+            className={`md:hidden px-3 py-1.5 text-base font-medium rounded-lg transition-colors text-black hover:bg-brand-100 flex items-center justify-center flex-shrink-0 ${
               isSelected ? 'bg-white' : 'bg-brand-100'
             }`}
             disabled={loadingProfile}
@@ -352,12 +352,12 @@ export default function UserCard({
           {/* Desktop: profile icon opens sidebar via parent */}
           <button
             onClick={() => onOpenProfileSidebar?.(userPresence)}
-            className={`hidden md:flex p-1.5 text-base font-medium rounded-full border transition-colors items-center justify-center w-[32px] h-[32px] ${
+            className={`hidden md:flex p-1.5 text-base font-medium rounded-full transition-colors items-center justify-center w-[32px] h-[32px] ${
               isProfileSidebarOpen
-                ? 'bg-stone-100 border-gray-200'
+                ? 'bg-stone-100'
                 : isSelected
-                  ? 'bg-stone-100 border-gray-200 hover:bg-stone-100'
-                  : 'border-transparent hover:bg-stone-100 hover:border-gray-200 group-hover:bg-white group-hover:border-gray-200'
+                  ? 'bg-stone-100 hover:bg-stone-100'
+                  : 'hover:bg-stone-100 group-hover:bg-white'
             }`}
             disabled={loadingProfile}
             aria-label='Open profile sidebar'
