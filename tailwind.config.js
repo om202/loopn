@@ -15,5 +15,8 @@ module.exports = {
       },
     },
   },
+  corePlugins: {
+    fontSmoothing: true,
+  },
   plugins: [],
 };
