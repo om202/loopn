@@ -164,7 +164,7 @@ export default function DashboardSidebar({
                   <div className='w-6 h-6 flex-shrink-0 flex items-center justify-center'>
                     {icon === 'NotificationBell' ? (
                       <svg
-                        className='w-6 h-6'
+                        className='w-5 h-5'
                         fill='none'
                         stroke='currentColor'
                         viewBox='0 0 24 24'
@@ -178,7 +178,7 @@ export default function DashboardSidebar({
                       </svg>
                     ) : (
                       React.createElement(icon, {
-                        className: 'w-6 h-6',
+                        className: 'w-5 h-5',
                       })
                     )}
                   </div>
@@ -284,7 +284,7 @@ export default function DashboardSidebar({
                   {icon === 'NotificationBell' ? (
                     <>
                       <svg
-                        className='w-6 h-6'
+                        className='w-5 h-5'
                         fill='none'
                         stroke='currentColor'
                         viewBox='0 0 24 24'
@@ -324,7 +324,7 @@ export default function DashboardSidebar({
                     </div>
                   ) : (
                     React.createElement(icon, {
-                      className: 'w-6 h-6',
+                      className: 'w-5 h-5',
                     })
                   )}
                 </div>
