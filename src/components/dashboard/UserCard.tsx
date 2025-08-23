@@ -3,11 +3,7 @@
 import { useState } from 'react';
 import {
   Clock,
-  MessageCircle,
   MoreHorizontal,
-  User,
-  Plus,
-  Check,
 } from 'lucide-react';
 
 import type { Schema } from '../../../amplify/data/resource';
@@ -242,13 +238,13 @@ export default function UserCard({
                         {timeRemaining}
                       </span>
                     </div>
-                    <div className='hidden md:block text-sm'>
-                      <div className='text-neutral-500 text-sm'>
+                    <div className='hidden md:block text-base'>
+                      <div className='text-neutral-500 text-base'>
                         Reconnect in
                       </div>
                       <div className='text-neutral-500 flex items-center justify-end gap-1'>
                         <Clock className='w-3 h-3 text-neutral-500' />
-                        <span className='text-sm'>{timeRemaining}</span>
+                        <span className='text-base'>{timeRemaining}</span>
                       </div>
                     </div>
                   </div>
@@ -271,7 +267,7 @@ export default function UserCard({
                 <button
                   onClick={() => setShowCancelDialog(true)}
                   disabled={isOptimisticRequest}
-                  className='flex items-center justify-center px-3 py-1.5 text-sm text-neutral-500 hover:bg-stone-100 rounded transition-colors disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:opacity-60'
+                  className='flex items-center justify-center px-3 py-1.5 text-base text-neutral-500 hover:bg-stone-100 rounded transition-colors disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:opacity-60'
                   title={
                     isOptimisticRequest
                       ? 'Request being sent...'
@@ -407,7 +403,7 @@ export default function UserCard({
           <h3 className='text-lg font-medium text-black text-center mb-3'>
             Cancel Chat Request?
           </h3>
-          <p className='text-sm text-black text-center mb-4'>
+          <p className='text-base text-black text-center mb-4'>
             This will cancel your pending chat request to{' '}
             {getDisplayName(userPresence, userProfile)}.
           </p>
