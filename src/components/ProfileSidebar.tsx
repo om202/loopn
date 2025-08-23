@@ -208,6 +208,15 @@ export default function ProfileSidebar({
     return 'OFFLINE';
   };
 
+  const isTrialConversation = () => {
+    return (
+      existingConversations &&
+      existingConversations.has(userId) &&
+      !existingConversations.get(userId)?.isConnected &&
+      existingConversations.get(userId)?.chatStatus === 'ACTIVE'
+    );
+  };
+
   const renderActionButtons = () => {
     if (!showActionButtons || !existingConversations || !pendingRequests) {
       return null;
@@ -234,9 +243,7 @@ export default function ProfileSidebar({
       );
     }
 
-    const isTrialConversation =
-      existingConversations.has(userId) &&
-      !existingConversations.get(userId)?.isConnected;
+
 
     return (
       <div className='flex items-center gap-3'>
@@ -287,11 +294,7 @@ export default function ProfileSidebar({
             </>
           )}
         </button>
-        {isTrialConversation && (
-          <span className='px-3 py-1.5 text-base font-medium text-neutral-500 rounded-lg flex-shrink-0'>
-            Trial
-          </span>
-        )}
+
       </div>
     );
   };
@@ -336,8 +339,13 @@ export default function ProfileSidebar({
           />
           <div className='mt-2'>
             <div className='mb-1'>
-              <div className='font-semibold text-black text-base'>
+              <div className='font-semibold text-black text-base flex items-center justify-center gap-2'>
                 {getUserDisplayName()}
+                {isTrialConversation() && (
+                  <Tooltip content='Trial Chat' position='bottom'>
+                    <Clock className='w-4 h-4 text-neutral-500' />
+                  </Tooltip>
+                )}
               </div>
             </div>
           </div>
