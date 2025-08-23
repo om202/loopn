@@ -123,7 +123,9 @@ export default function SearchUser({
   };
 
   return (
-    <div className={`w-full sm:mx-auto relative transition-all duration-300 ease-out ${isFocused ? 'sm:max-w-lg' : 'sm:max-w-md'}`}>
+    <div
+      className={`w-full sm:mx-auto relative transition-all duration-300 ease-out ${isFocused ? 'sm:max-w-lg' : 'sm:max-w-md'}`}
+    >
       {/* Mobile Logo + Search Layout */}
       <div className='flex items-center gap-3 sm:block'>
         {/* Logo - only visible on mobile */}

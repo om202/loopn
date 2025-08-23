@@ -1,12 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import {
-  Clock,
-  ArrowLeft,
-  Info,
-  UserX,
-} from 'lucide-react';
+import { Clock, ArrowLeft, Info, UserX } from 'lucide-react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import Image from 'next/image';
 import UserAvatar from './UserAvatar';

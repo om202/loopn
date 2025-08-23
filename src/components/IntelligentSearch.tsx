@@ -178,7 +178,9 @@ export default function IntelligentSearch({
   };
 
   return (
-    <div className={`relative w-full mx-auto transition-all duration-300 ease-out ${isFocused ? 'max-w-2xl' : 'max-w-lg'}`}>
+    <div
+      className={`relative w-full mx-auto transition-all duration-300 ease-out ${isFocused ? 'max-w-2xl' : 'max-w-lg'}`}
+    >
       {/* Search Input */}
       <div className='relative'>
         <div className='relative'>
@@ -192,7 +194,11 @@ export default function IntelligentSearch({
             onChange={e => handleQueryChange(e.target.value)}
             onFocus={() => {
               setIsFocused(true);
-              !query.trim() ? setShowHistory(true) : setShowResults(true);
+              if (!query.trim()) {
+                setShowHistory(true);
+              } else {
+                setShowResults(true);
+              }
             }}
             onBlur={() => setIsFocused(false)}
             onKeyDown={e => {
