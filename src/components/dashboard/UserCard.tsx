@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Clock, MoreHorizontal, Plus, MessageCircle } from 'lucide-react';
+import { Clock, MoreHorizontal, Plus, MessageCircle, UserCheck } from 'lucide-react';
 
 import type { Schema } from '../../../amplify/data/resource';
 import { formatPresenceTime } from '../../lib/presence-utils';
@@ -264,15 +264,15 @@ export default function UserCard({
                 <button
                   onClick={() => setShowCancelDialog(true)}
                   disabled={isOptimisticRequest}
-                  className='flex items-center justify-center gap-1.5 px-3 py-1.5 text-base text-neutral-500 hover:bg-stone-100 rounded transition-colors disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:opacity-60'
+                  className='flex items-center justify-center gap-1.5 px-3 py-1.5 text-base text-neutral-600 bg-stone-100 hover:bg-stone-200 rounded-lg transition-colors disabled:cursor-not-allowed disabled:hover:bg-stone-100 border border-stone-200'
                   title={
                     isOptimisticRequest
                       ? 'Request being sent...'
                       : 'Cancel Request'
                   }
                 >
-                  <Clock className='w-4 h-4 text-neutral-500' />
-                  <span className='text-base text-neutral-500'>Pending</span>
+                  <UserCheck className='w-4 h-4 text-neutral-600' />
+                  <span className='text-base text-neutral-600'>Pending</span>
                 </button>
               );
             }
@@ -286,10 +286,10 @@ export default function UserCard({
                     onChatAction(userPresence.userId);
                   }
                 }}
-                className={`px-3 py-1.5 text-base font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 flex-shrink-0 ${
+                className={`px-3 py-1.5 text-base font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 flex-shrink-0 border ${
                   isSelected
-                    ? 'bg-white text-brand-600 hover:bg-brand-50'
-                    : 'bg-brand-50 text-brand-600 hover:bg-brand-50'
+                    ? 'bg-white text-brand-600 hover:bg-brand-100 border-brand-200'
+                    : 'bg-brand-50 text-brand-600 hover:bg-brand-100 border-brand-200'
                 }`}
                 title={
                   incomingRequestSenderIds.has(userPresence.userId)

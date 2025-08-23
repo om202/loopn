@@ -193,7 +193,6 @@ export default function SearchUser({
             role='textbox'
             aria-label='Search for professionals'
             style={{
-              fontSize: '16px',
               WebkitAppearance: 'none',
               MozAppearance: 'textfield',
             }}
