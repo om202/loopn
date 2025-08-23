@@ -569,7 +569,7 @@ export default function OnlineUsers({
 
       <div className='flex-1 bg-white sm:rounded-2xl shadow-md p-3 sm:p-4 lg:p-6 ultra-compact overflow-hidden flex flex-col min-h-0'>
         {/* Search User - Always visible at top */}
-        <div className='flex-shrink-0 mb-4 sm:mb-6 mx-auto max-w-[950px] w-full'>
+        <div className='flex-shrink-0 mb-4 sm:mb-6 mx-auto max-w-[860px] w-full'>
           <SearchUser
             onProfessionalRequest={handleProfessionalRequest}
             userProfile={currentUserProfile || undefined}
@@ -577,7 +577,7 @@ export default function OnlineUsers({
         </div>
 
         {/* Section Header - Fixed at top */}
-        <div className='flex-shrink-0 mb-4 sm:mb-5 lg:mb-6 mx-auto max-w-[950px] w-full'>
+        <div className='flex-shrink-0 mb-4 sm:mb-5 lg:mb-6 mx-auto max-w-[860px] w-full'>
           {activeSection === 'notifications' && (
             <div className='flex items-start justify-between'>
               <div>

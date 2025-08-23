@@ -230,7 +230,7 @@ export default function DashboardDemo() {
             className='px-3 py-2 group transition-all duration-200 cursor-pointer bg-white hover:bg-stone-100 hover:rounded-2xl border border-transparent border-b-gray-100 opacity-0 animate-[slideUpFade_0.6s_ease-out_forwards]'
             style={{ animationDelay: `${0.5 + index * 0.5}s` }}
           >
-            <div className='flex items-center gap-3'>
+            <div className='flex items-center gap-1'>
               <div className='flex-shrink-0'>
                 <div className='relative'>
                   <Image
@@ -284,7 +284,7 @@ export default function DashboardDemo() {
             key={connection.id}
             className='px-3 py-3 bg-white hover:bg-stone-100 rounded-xl border border-gray-200 transition-all duration-200 cursor-pointer'
           >
-            <div className='flex items-center gap-3'>
+            <div className='flex items-center gap-2'>
               <div className='flex-shrink-0'>
                 <div className='relative'>
                   <Image
@@ -334,7 +334,7 @@ export default function DashboardDemo() {
               key={user.id}
               className='px-3 py-3 hover:bg-stone-100 rounded-xl transition-all duration-200 cursor-pointer'
             >
-              <div className='flex items-center gap-3'>
+              <div className='flex items-center gap-2'>
                 <div className='flex-shrink-0'>
                   <div className='relative'>
                     <Image
@@ -378,7 +378,7 @@ export default function DashboardDemo() {
             key={notification.id}
             className={`px-4 py-3 rounded-xl border transition-all duration-200 cursor-pointer ${notification.isRead ? 'bg-white border-gray-200' : 'bg-brand-50 border-brand-200'}`}
           >
-            <div className='flex items-center gap-3'>
+            <div className='flex items-center gap-2'>
               <div className='flex-shrink-0'>
                 <Image
                   src={notification.avatar}
@@ -431,7 +431,7 @@ export default function DashboardDemo() {
 
         <div className='space-y-3'>
           <div className='p-4 bg-white border border-gray-200 rounded-xl hover:bg-stone-100 transition-colors cursor-pointer'>
-            <div className='flex items-center gap-3'>
+            <div className='flex items-center gap-2'>
               <div className='w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center'>
                 <Globe className='w-5 h-5 text-blue-600' />
               </div>
@@ -447,7 +447,7 @@ export default function DashboardDemo() {
           </div>
 
           <div className='p-4 bg-white border border-gray-200 rounded-xl hover:bg-stone-100 transition-colors cursor-pointer'>
-            <div className='flex items-center gap-3'>
+            <div className='flex items-center gap-2'>
               <div className='w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center'>
                 <MessageCircle className='w-5 h-5 text-green-600' />
               </div>
@@ -463,7 +463,7 @@ export default function DashboardDemo() {
           </div>
 
           <div className='p-4 bg-white border border-gray-200 rounded-xl hover:bg-stone-100 transition-colors cursor-pointer'>
-            <div className='flex items-center gap-3'>
+            <div className='flex items-center gap-2'>
               <div className='w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center'>
                 <Shield className='w-5 h-5 text-purple-600' />
               </div>
@@ -486,7 +486,7 @@ export default function DashboardDemo() {
     <div className='flex-1 overflow-y-auto'>
       <div className='space-y-6'>
         {/* Profile Header */}
-        <div className='flex items-center gap-4'>
+        <div className='flex items-center gap-3'>
           <div className='relative'>
             <Image
               src={currentUser.image}
@@ -601,7 +601,7 @@ export default function DashboardDemo() {
               key={user.id}
               className='px-3 py-3 bg-white hover:bg-stone-100 rounded-xl border border-gray-200 transition-all duration-200 cursor-pointer'
             >
-              <div className='flex items-center gap-3'>
+              <div className='flex items-center gap-2'>
                 <div className='flex-shrink-0'>
                   <div className='relative'>
                     <Image
@@ -666,7 +666,7 @@ export default function DashboardDemo() {
           {/* Logo at top */}
           <div className='px-4 py-6 border-b border-gray-200'>
             <div className='flex items-center justify-between'>
-              <div className='flex items-center gap-3'>
+              <div className='flex items-center gap-2'>
                 <Image
                   src='/loopn.svg'
                   alt='Loopn'
@@ -687,7 +687,7 @@ export default function DashboardDemo() {
               {/* Discover */}
               <button
                 onClick={() => setActiveSection('discover')}
-                className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
+                className={`relative w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                   activeSection === 'discover'
                     ? 'bg-brand-50 text-brand-600 border-brand-200'
                     : 'text-black hover:bg-stone-100 hover:text-black border-transparent'
@@ -696,7 +696,7 @@ export default function DashboardDemo() {
                 <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
                   <Compass className='w-5 h-5' />
                 </div>
-                <span className='font-medium text-base flex-1 flex items-center gap-3'>
+                <span className='font-medium text-base flex-1 flex items-center gap-2'>
                   Discover
                 </span>
               </button>
@@ -704,7 +704,7 @@ export default function DashboardDemo() {
               {/* Connections */}
               <button
                 onClick={() => setActiveSection('connections')}
-                className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
+                className={`relative w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                   activeSection === 'connections'
                     ? 'bg-brand-50 text-brand-600 border-brand-200'
                     : 'text-black hover:bg-stone-100 hover:text-black border-transparent'
@@ -713,7 +713,7 @@ export default function DashboardDemo() {
                 <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
                   <Users className='w-5 h-5' />
                 </div>
-                <span className='font-medium text-base flex-1 flex items-center gap-3'>
+                <span className='font-medium text-base flex-1 flex items-center gap-2'>
                   Connections
                   <span className='text-sm font-bold flex items-center justify-center h-5 w-5 rounded-full text-center bg-stone-100 text-neutral-500'>
                     {dummyConnections.length}
@@ -724,7 +724,7 @@ export default function DashboardDemo() {
               {/* Chats */}
               <button
                 onClick={() => setActiveSection('chats')}
-                className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
+                className={`relative w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                   activeSection === 'chats'
                     ? 'bg-brand-50 text-brand-600 border-brand-200'
                     : 'text-black hover:bg-stone-100 hover:text-black border-transparent'
@@ -733,7 +733,7 @@ export default function DashboardDemo() {
                 <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
                   <MessageCircle className='w-5 h-5' />
                 </div>
-                <span className='font-medium text-base flex-1 flex items-center gap-3'>
+                <span className='font-medium text-base flex-1 flex items-center gap-2'>
                   Chats
                   <span className='text-sm font-bold flex items-center justify-center h-5 w-5 rounded-full text-center bg-brand-50 text-brand-600'>
                     {dummyUsers
@@ -746,7 +746,7 @@ export default function DashboardDemo() {
               {/* Notifications */}
               <button
                 onClick={() => setActiveSection('notifications')}
-                className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
+                className={`relative w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                   activeSection === 'notifications'
                     ? 'bg-brand-50 text-brand-600 border-brand-200'
                     : 'text-black hover:bg-stone-100 hover:text-black border-transparent'
@@ -755,7 +755,7 @@ export default function DashboardDemo() {
                 <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
                   <Bell className='w-5 h-5' />
                 </div>
-                <span className='font-medium text-base flex-1 flex items-center gap-3'>
+                <span className='font-medium text-base flex-1 flex items-center gap-2'>
                   Notifications
                   <span className='text-sm font-bold flex items-center justify-center h-6 w-6 rounded-full text-center bg-brand-50 text-brand-600 border border-brand-200'>
                     {dummyNotifications.filter(n => !n.isRead).length}
@@ -771,7 +771,7 @@ export default function DashboardDemo() {
             <div className='flex items-center gap-2'>
               <button
                 onClick={() => setActiveSection('help')}
-                className={`relative flex-1 flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
+                className={`relative flex-1 flex items-center gap-2 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                   activeSection === 'help'
                     ? 'bg-brand-50 text-brand-600 border-brand-200'
                     : 'text-black hover:bg-stone-100 hover:text-black border-transparent'
@@ -793,7 +793,7 @@ export default function DashboardDemo() {
             {/* Account Button */}
             <button
               onClick={() => setActiveSection('account')}
-              className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
+              className={`relative w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                 activeSection === 'account'
                   ? 'bg-brand-50 text-brand-600 border-brand-200'
                   : 'text-black hover:bg-stone-100 hover:text-black border-transparent'
@@ -956,7 +956,7 @@ export default function DashboardDemo() {
         {/* Mobile Header */}
         <div className='p-4 border-b border-gray-200 bg-white'>
           <div className='flex items-center justify-between'>
-            <div className='flex items-center gap-3'>
+            <div className='flex items-center gap-2'>
               <div className='relative'>
                 <Image
                   src='/dummy-users/dummy-user5.jpg'
@@ -976,7 +976,7 @@ export default function DashboardDemo() {
                 </p>
               </div>
             </div>
-            <div className='flex items-center gap-3'>
+            <div className='flex items-center gap-2'>
               <button
                 onClick={() => setActiveSection('notifications')}
                 className='relative'
@@ -1134,7 +1134,7 @@ export default function DashboardDemo() {
                   className='rounded-xl border px-3 py-3 group transition-all duration-200 cursor-pointer bg-white border-gray-200 hover:bg-stone-100 opacity-0 animate-[slideUpFade_0.6s_ease-out_forwards]'
                   style={{ animationDelay: `${0.5 + index * 0.5}s` }}
                 >
-                  <div className='flex items-center gap-3'>
+                  <div className='flex items-center gap-2'>
                     <div className='flex-shrink-0'>
                       <div className='relative'>
                         <Image
@@ -1183,7 +1183,7 @@ export default function DashboardDemo() {
                   key={connection.id}
                   className='rounded-xl border px-3 py-3 bg-white border-gray-200 hover:bg-stone-100 transition-all duration-200 cursor-pointer'
                 >
-                  <div className='flex items-center gap-3'>
+                  <div className='flex items-center gap-2'>
                     <div className='flex-shrink-0'>
                       <div className='relative'>
                         <Image
@@ -1228,7 +1228,7 @@ export default function DashboardDemo() {
                     key={user.id}
                     className='px-3 py-3 bg-white hover:bg-stone-100 rounded-xl transition-all duration-200 cursor-pointer'
                   >
-                    <div className='flex items-center gap-3'>
+                    <div className='flex items-center gap-2'>
                       <div className='flex-shrink-0'>
                         <div className='relative'>
                           <Image
@@ -1270,7 +1270,7 @@ export default function DashboardDemo() {
                   key={notification.id}
                   className={`px-3 py-3 rounded-xl border transition-all duration-200 cursor-pointer ${notification.isRead ? 'bg-white border-gray-200' : 'bg-brand-50 border-brand-200'}`}
                 >
-                  <div className='flex items-center gap-3'>
+                  <div className='flex items-center gap-2'>
                     <div className='flex-shrink-0'>
                       <Image
                         src={notification.avatar}
@@ -1333,7 +1333,7 @@ export default function DashboardDemo() {
                     key={user.id}
                     className='rounded-xl border px-3 py-3 bg-white border-gray-200 hover:bg-stone-100 transition-all duration-200 cursor-pointer'
                   >
-                    <div className='flex items-center gap-3'>
+                    <div className='flex items-center gap-2'>
                       <div className='flex-shrink-0'>
                         <div className='relative'>
                           <Image

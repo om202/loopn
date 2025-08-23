@@ -21,7 +21,7 @@ export default function HelpContent({
   onOpenBugReport,
 }: HelpContentProps = {}) {
   return (
-    <div className='h-full mx-auto max-w-[950px] w-full'>
+    <div className='h-full mx-auto max-w-[860px] w-full'>
       {/* Getting Started */}
       <div className='mb-6'>
         <h3 className='text-lg font-semibold text-black mb-4'>

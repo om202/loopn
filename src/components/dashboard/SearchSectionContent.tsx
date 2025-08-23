@@ -146,7 +146,7 @@ export default function SearchSectionContent({
   return (
     <div className='h-full flex flex-col'>
       {/* Search Results */}
-      <div className='flex-1 overflow-y-auto mx-auto max-w-[950px] w-full'>
+      <div className='flex-1 overflow-y-auto mx-auto max-w-[860px] w-full'>
         {!hasSearched ? (
           <div className='flex flex-col items-center justify-center h-full text-center p-8 transition-opacity duration-200 opacity-100'>
             <div className='w-16 h-16 mx-auto mb-4 bg-stone-100 rounded-full flex items-center justify-center'>

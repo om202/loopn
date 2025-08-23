@@ -286,14 +286,14 @@ export default function DashboardSectionContent({
   // Show loading state for suggested users
   if (activeSection === 'suggested' && suggestedUsersLoading) {
     return (
-      <div className='flex items-center justify-center h-full mx-auto max-w-[950px] w-full'>
+      <div className='flex items-center justify-center h-full mx-auto max-w-[860px] w-full'>
         <LoadingContainer />
       </div>
     );
   }
 
   return (
-    <div className='space-y-2.5 sm:space-y-3 mx-auto max-w-[950px] w-full'>
+    <div className='space-y-2.5 sm:space-y-3 mx-auto max-w-[860px] w-full'>
       {usersToShow.length > 0 ? (
         usersToShow.map(renderUserCard)
       ) : (

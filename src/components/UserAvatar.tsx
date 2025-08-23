@@ -216,8 +216,8 @@ export default function UserAvatar({
         <div
           className={`rounded-full overflow-hidden flex-shrink-0 relative ${
             !hasProfilePicture || imageError
-              ? 'border border-gray-400'
-              : 'border border-transparent'
+              ? 'border border-neutral-400'
+              : 'border border-neutral-400'
           }`}
           style={{
             width: `${getAvatarSize()}px`,
