@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="160" height="160" viewBox="30 30 160 160" xmlns="http://www.w3.org/2000/svg">
   <!-- slate background circle -->
-  <circle cx="110" cy="110" r="80" fill="#e5e7eb" />
+  <circle cx="110" cy="110" r="80" fill="#e5e5e5" />
 
   <!-- Left brand blue circle (brand-500) -->
-  <circle cx="75" cy="110" r="35" fill="#00adfb" />
+  <circle cx="75" cy="110" r="35" fill="#0079f4" />
 
   <!-- Right brand blue circle (brand-500) -->
-  <circle cx="145" cy="110" r="35" fill="#00adfb" />
+  <circle cx="145" cy="110" r="35" fill="#0079f4" />
 </svg> 

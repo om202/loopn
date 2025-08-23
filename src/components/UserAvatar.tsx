@@ -216,8 +216,8 @@ export default function UserAvatar({
         <div
           className={`rounded-full overflow-hidden flex-shrink-0 relative ${
             !hasProfilePicture || imageError
-              ? 'border border-neutral-400'
-              : 'border border-neutral-400'
+              ? 'border border-neutral-200'
+              : 'border border-neutral-200'
           }`}
           style={{
             width: `${getAvatarSize()}px`,
@@ -231,7 +231,7 @@ export default function UserAvatar({
               alt={`${email || userId || 'User'} profile picture`}
               width={getAvatarSize()}
               height={getAvatarSize()}
-              className={`object-cover absolute inset-0 transition-opacity duration-300 ease-in-out ${
+              className={`object-cover absolute inset-0 transition-opacity duration-150 ease-in-out ${
                 imageLoaded ? 'opacity-100' : 'opacity-0'
               }`}
               style={{
@@ -256,7 +256,7 @@ export default function UserAvatar({
           {/* Loading state - show shimmer while loading */}
           {shouldShowLoadingState && (
             <div
-              className={`absolute inset-0 transition-opacity duration-300 ease-in-out ${
+              className={`absolute inset-0 transition-opacity duration-150 ease-in-out ${
                 imageLoaded ? 'opacity-0' : 'opacity-100'
               }`}
             >
@@ -276,10 +276,10 @@ export default function UserAvatar({
 
           {/* Fallback state - show when no profile picture or error */}
           {(!hasProfilePicture || imageError) && (
-            <div className='bg-gradient-to-br from-gray-400 to-brand-400 w-full h-full flex items-center justify-center absolute inset-0'>
+            <div className='bg-neutral-50 w-full h-full flex items-center justify-center absolute inset-0'>
               <User
-                className='w-3/5 h-3/5 text-white drop-shadow-sm'
-                style={{ filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.3))' }}
+                className='w-3/5 h-3/5 text-neutral-500'
+                strokeWidth={1.5}
               />
             </div>
           )}
