@@ -104,7 +104,9 @@ export default function HelpContent({
           <div className='bg-white rounded-lg p-4 border border-gray-200'>
             <div className='flex items-center gap-3 mb-2'>
               <Sparkles className='w-4 h-4 text-brand-600' />
-              <h4 className='font-medium text-neutral-950 text-base'>Discover</h4>
+              <h4 className='font-medium text-neutral-950 text-base'>
+                Discover
+              </h4>
             </div>
             <p className='text-base text-neutral-950'>
               People the AI thinks you might want to connect with based on your
@@ -136,7 +138,9 @@ export default function HelpContent({
           <div className='bg-white rounded-lg p-4 border border-gray-200'>
             <div className='flex items-center gap-3 mb-2'>
               <Users className='w-4 h-4 text-brand-600' />
-              <h4 className='font-medium text-neutral-950 text-base'>Connections</h4>
+              <h4 className='font-medium text-neutral-950 text-base'>
+                Connections
+              </h4>
             </div>
             <p className='text-base text-neutral-950'>
               People you've successfully connected with (no time limit on chats)
@@ -159,7 +163,9 @@ export default function HelpContent({
 
       {/* Troubleshooting */}
       <div className='mb-6'>
-        <h3 className='text-lg font-semibold text-neutral-950 mb-4'>Common Issues</h3>
+        <h3 className='text-lg font-semibold text-neutral-950 mb-4'>
+          Common Issues
+        </h3>
         <div className='space-y-3'>
           <div className='bg-white rounded-lg p-4 border border-gray-200'>
             <div className='flex items-start gap-3'>
@@ -223,7 +229,9 @@ export default function HelpContent({
                 <h4 className='font-medium text-neutral-950 text-base mb-1'>
                   How do I end a chat?
                 </h4>
-                <p className='text-base text-neutral-950 mb-2'>In any chat window:</p>
+                <p className='text-base text-neutral-950 mb-2'>
+                  In any chat window:
+                </p>
                 <ul className='text-base text-neutral-950 space-y-1'>
                   <li>• Click the menu button (three dots)</li>
                   <li>• Select "End Chat"</li>

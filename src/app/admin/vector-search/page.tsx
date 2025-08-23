@@ -321,7 +321,9 @@ export default function VectorSearchAdminPage() {
                       <div className='text-2xl font-bold text-neutral-900'>
                         {status.totalUsers}
                       </div>
-                      <div className='text-sm text-neutral-600'>Total Users</div>
+                      <div className='text-sm text-neutral-600'>
+                        Total Users
+                      </div>
                     </div>
                     <div className='text-center'>
                       <div className='text-2xl font-bold text-green-600'>

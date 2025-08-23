@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { Search, X, Clock } from 'lucide-react';
-import GradientSparkles from './GradientSparkles';
 import {
   getSearchHistory,
   addToSearchHistory,

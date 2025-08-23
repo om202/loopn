@@ -97,7 +97,8 @@ export default function AccountContent() {
                 userProfile.education ||
                 userProfile.about ||
                 (userProfile.skills && userProfile.skills.length > 0) ||
-                (userProfile.interests && userProfile.interests.length > 0)) && (
+                (userProfile.interests &&
+                  userProfile.interests.length > 0)) && (
                 <div className='pb-6'>
                   <h4 className='text-sm font-semibold text-neutral-500 mb-4'>
                     Profile Details
@@ -188,24 +189,25 @@ export default function AccountContent() {
                         </dd>
                       </div>
                     )}
-                    {userProfile.interests && userProfile.interests.length > 0 && (
-                      <div className='py-3'>
-                        <dt className='text-sm font-medium text-neutral-500 mb-1.5 flex items-center gap-1'>
-                          <Heart className='w-3.5 h-3.5' />
-                          Interests
-                        </dt>
-                        <dd className='flex flex-wrap gap-2'>
-                          {userProfile.interests.map((interest, index) => (
-                            <span
-                              key={index}
-                              className='px-3 py-1.5 text-base bg-transparent text-neutral-950 border border-gray-200 rounded-lg font-medium'
-                            >
-                              {interest}
-                            </span>
-                          ))}
-                        </dd>
-                      </div>
-                    )}
+                    {userProfile.interests &&
+                      userProfile.interests.length > 0 && (
+                        <div className='py-3'>
+                          <dt className='text-sm font-medium text-neutral-500 mb-1.5 flex items-center gap-1'>
+                            <Heart className='w-3.5 h-3.5' />
+                            Interests
+                          </dt>
+                          <dd className='flex flex-wrap gap-2'>
+                            {userProfile.interests.map((interest, index) => (
+                              <span
+                                key={index}
+                                className='px-3 py-1.5 text-base bg-transparent text-neutral-950 border border-gray-200 rounded-lg font-medium'
+                              >
+                                {interest}
+                              </span>
+                            ))}
+                          </dd>
+                        </div>
+                      )}
                   </div>
                 </div>
               )}

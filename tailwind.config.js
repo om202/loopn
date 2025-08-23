@@ -8,7 +8,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Ronzino', 'system-ui', '-apple-system', 'sans-serif'],
+        sans: ['var(--font-atkinson)', 'system-ui', '-apple-system', 'sans-serif'],
       },
       scrollBehavior: {
         smooth: 'smooth',

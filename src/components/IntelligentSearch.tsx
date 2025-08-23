@@ -427,7 +427,9 @@ export default function IntelligentSearch({
               ) : query.trim() ? (
                 <div className='text-center py-8'>
                   <User className='w-12 h-12 text-neutral-300 mx-auto mb-3' />
-                  <p className='text-neutral-500'>No users found for "{query}"</p>
+                  <p className='text-neutral-500'>
+                    No users found for "{query}"
+                  </p>
                   <p className='text-sm text-neutral-400 mt-1'>
                     Try a different search term or check your filters
                   </p>

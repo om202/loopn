@@ -436,7 +436,9 @@ export default function DashboardDemo() {
                 <Globe className='w-5 h-5 text-blue-600' />
               </div>
               <div>
-                <div className='font-medium text-neutral-950'>Getting Started</div>
+                <div className='font-medium text-neutral-950'>
+                  Getting Started
+                </div>
                 <div className='text-sm text-neutral-500'>
                   Learn the basics of Loopn
                 </div>
@@ -450,7 +452,9 @@ export default function DashboardDemo() {
                 <MessageCircle className='w-5 h-5 text-green-600' />
               </div>
               <div>
-                <div className='font-medium text-neutral-950'>Chat Features</div>
+                <div className='font-medium text-neutral-950'>
+                  Chat Features
+                </div>
                 <div className='text-sm text-neutral-500'>
                   How to use messaging and connections
                 </div>
@@ -464,7 +468,9 @@ export default function DashboardDemo() {
                 <Shield className='w-5 h-5 text-purple-600' />
               </div>
               <div>
-                <div className='font-medium text-neutral-950'>Privacy & Safety</div>
+                <div className='font-medium text-neutral-950'>
+                  Privacy & Safety
+                </div>
                 <div className='text-sm text-neutral-500'>
                   Keep your account secure
                 </div>
@@ -567,7 +573,9 @@ export default function DashboardDemo() {
                 About
               </span>
             </div>
-            <p className='text-neutral-950 leading-relaxed'>{currentUser.about}</p>
+            <p className='text-neutral-950 leading-relaxed'>
+              {currentUser.about}
+            </p>
           </div>
         </div>
       </div>
@@ -610,7 +618,9 @@ export default function DashboardDemo() {
                 </div>
 
                 <div className='flex-1 min-w-0'>
-                  <div className='text-neutral-950 font-medium mb-1'>{user.name}</div>
+                  <div className='text-neutral-950 font-medium mb-1'>
+                    {user.name}
+                  </div>
                   <div className='text-sm text-neutral-500 mb-2'>
                     {user.role}
                   </div>
@@ -866,7 +876,9 @@ export default function DashboardDemo() {
           <div className='flex-shrink-0 mb-4 sm:mb-5 lg:mb-6'>
             {activeSection === 'discover' && (
               <>
-                <h2 className='text-2xl font-bold text-neutral-950 mb-1'>Discover</h2>
+                <h2 className='text-2xl font-bold text-neutral-950 mb-1'>
+                  Discover
+                </h2>
                 <p className='text-base text-neutral-500'>
                   AI-curated professionals based on your interests
                 </p>
@@ -884,7 +896,9 @@ export default function DashboardDemo() {
             )}
             {activeSection === 'chats' && (
               <>
-                <h2 className='text-2xl font-bold text-neutral-950 mb-1'>Chats</h2>
+                <h2 className='text-2xl font-bold text-neutral-950 mb-1'>
+                  Chats
+                </h2>
                 <p className='text-base text-neutral-500'>
                   Your ongoing conversations
                 </p>

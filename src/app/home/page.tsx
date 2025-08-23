@@ -111,7 +111,9 @@ export default function HomePage() {
                   priority
                 />
                 <div className='flex items-center gap-2'>
-                  <span className='text-xl font-bold text-neutral-950'>Loopn</span>
+                  <span className='text-xl font-bold text-neutral-950'>
+                    Loopn
+                  </span>
                 </div>
               </div>
             </div>
@@ -687,7 +689,9 @@ export default function HomePage() {
                   className='w-12 h-12 rounded-full object-cover'
                 />
                 <div>
-                  <p className='font-bold text-neutral-950 text-sm'>Sarah Johnson</p>
+                  <p className='font-bold text-neutral-950 text-sm'>
+                    Sarah Johnson
+                  </p>
                   <p className='text-neutral-500 text-sm'>
                     Software Engineer, Tech Startup
                   </p>
@@ -719,7 +723,9 @@ export default function HomePage() {
                   className='w-12 h-12 rounded-full object-cover'
                 />
                 <div>
-                  <p className='font-bold text-neutral-950 text-sm'>Michael Chen</p>
+                  <p className='font-bold text-neutral-950 text-sm'>
+                    Michael Chen
+                  </p>
                   <p className='text-neutral-500 text-sm'>
                     Product Manager, E-commerce
                   </p>
@@ -836,7 +842,9 @@ export default function HomePage() {
             <div className='flex items-center justify-center space-x-3 mb-6'>
               <Image src='/loopn.svg' alt='Loopn' width={40} height={40} />
               <div className='flex items-center gap-2'>
-                <span className='text-2xl font-bold text-neutral-950'>Loopn</span>
+                <span className='text-2xl font-bold text-neutral-950'>
+                  Loopn
+                </span>
               </div>
             </div>
             <p className='text-neutral-500 text-2xl text-center max-w-2xl mx-auto mb-8 leading-relaxed'>
