@@ -112,7 +112,7 @@ export default function BugReportDialog({
                   className={`w-4 h-4 ${type === 'bug' ? 'text-brand-700' : 'text-neutral-500'}`}
                 />
                 <span
-                  className={`font-medium text-sm ${type === 'bug' ? 'text-brand-900' : 'text-black'}`}
+                  className={`font-medium text-sm ${type === 'bug' ? 'text-brand-700' : 'text-black'}`}
                 >
                   Bug Report
                 </span>
@@ -138,7 +138,7 @@ export default function BugReportDialog({
                   className={`w-4 h-4 ${type === 'suggestion' ? 'text-brand-700' : 'text-neutral-500'}`}
                 />
                 <span
-                  className={`font-medium text-sm ${type === 'suggestion' ? 'text-brand-900' : 'text-black'}`}
+                  className={`font-medium text-sm ${type === 'suggestion' ? 'text-brand-700' : 'text-black'}`}
                 >
                   Suggestion
                 </span>

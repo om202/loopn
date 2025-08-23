@@ -426,7 +426,7 @@ export default function OnboardingPage() {
                       <button
                         type='button'
                         onClick={() => removeSkill(skill)}
-                        className='ml-1 text-brand-700 hover:text-brand-900'
+                        className='ml-1 text-brand-700 hover:text-brand-700'
                         aria-label={`Remove ${skill}`}
                       >
                         ×
