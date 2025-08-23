@@ -157,7 +157,7 @@ export default function DashboardSidebar({
                   onClick={() => onSectionChange(id)}
                   className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group transition-colors duration-150 ${
                     activeSection === id
-                      ? 'text-brand-700'
+                      ? 'text-brand-600'
                       : 'text-black hover:bg-stone-100 hover:text-black'
                   }`}
                 >
@@ -203,7 +203,7 @@ export default function DashboardSidebar({
                 onClick={() => onSectionChange(helpItem.id)}
                 className={`relative flex-1 flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group transition-colors duration-150 ${
                   activeSection === helpItem.id
-                    ? 'text-brand-700'
+                    ? 'text-brand-600'
                     : 'text-black hover:bg-stone-100 hover:text-black'
                 }`}
               >
@@ -229,7 +229,7 @@ export default function DashboardSidebar({
               onClick={() => onSectionChange(accountItem.id)}
               className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group transition-colors duration-150 ${
                 activeSection === accountItem.id
-                  ? 'text-brand-700'
+                  ? 'text-brand-600'
                   : 'text-neutral-500 hover:bg-stone-100 hover:text-black'
               }`}
             >
@@ -275,7 +275,7 @@ export default function DashboardSidebar({
                 onClick={() => onSectionChange(id)}
                 className={`relative flex-1 flex flex-col items-center justify-center gap-1 px-1 py-2 transition-colors duration-150 ${
                   activeSection === id
-                    ? 'text-brand-700'
+                    ? 'text-brand-600'
                     : 'text-black hover:text-black'
                 }`}
                 title={label}

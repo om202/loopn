@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Clock, ArrowLeft, Info, UserX } from 'lucide-react';
+import { Clock, ArrowLeft, Info, UserX, Plus, MessageCircle } from 'lucide-react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import Image from 'next/image';
 import UserAvatar from './UserAvatar';
@@ -241,24 +241,43 @@ export default function ProfileSidebar({
               onChatAction?.(userId);
             }
           }}
-          className='px-3 py-1.5 text-base font-medium rounded-lg transition-colors bg-brand-100 text-brand-700 hover:bg-brand-100 flex items-center justify-center'
+          className={`px-3 py-1.5 text-base font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 ${
+            pendingRequests.has(userId)
+              ? 'text-neutral-500 hover:bg-stone-100'
+              : 'bg-brand-100 text-brand-600 hover:bg-brand-100'
+          }`}
         >
           {pendingRequests.has(userId) ? (
-            <span className='text-neutral-500 text-base font-medium'>
-              Cancel Request
-            </span>
+            <>
+              <Clock className='w-4 h-4 text-neutral-500' />
+              <span className='text-neutral-500 text-base font-medium'>
+                Cancel Request
+              </span>
+            </>
           ) : existingConversations.has(userId) ? (
             existingConversations.get(userId)?.chatStatus === 'ENDED' ? (
               canUserReconnect && canUserReconnect(userId) ? (
-                <span className='text-base font-medium'>Connect</span>
+                <>
+                  <Plus className='w-4 h-4 stroke-[2]' />
+                  <span className='text-base font-medium'>Connect</span>
+                </>
               ) : (
-                <span className='text-base font-medium'>View Chat</span>
+                <>
+                  <MessageCircle className='w-4 h-4 stroke-[2]' />
+                  <span className='text-base font-medium'>View Chat</span>
+                </>
               )
             ) : (
-              <span className='text-base font-medium'>Message</span>
+              <>
+                <MessageCircle className='w-4 h-4 stroke-[2]' />
+                <span className='text-base font-medium'>Message</span>
+              </>
             )
           ) : (
-            <span className='text-base font-medium'>Connect</span>
+            <>
+              <Plus className='w-4 h-4 stroke-[2]' />
+              <span className='text-base font-medium'>Connect</span>
+            </>
           )}
         </button>
         {isTrialConversation && (
@@ -389,7 +408,7 @@ export default function ProfileSidebar({
                         disabled={
                           sendingConnectionRequest || connectionRequestsLoading
                         }
-                        className='px-6 py-2 text-base font-medium rounded-lg transition-colors flex items-center justify-center gap-2 bg-brand-100 text-brand-700 hover:bg-brand-100 disabled:bg-brand-100 disabled:cursor-not-allowed'
+                        className='px-6 py-2 text-base font-medium rounded-lg transition-colors flex items-center justify-center gap-2 bg-brand-100 text-brand-600 hover:bg-brand-100 disabled:bg-brand-100 disabled:cursor-not-allowed'
                       >
                         <span>Add to Network</span>
                       </button>

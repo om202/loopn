@@ -68,9 +68,9 @@ export default function BugReportDialog({
         <div className='flex items-center gap-3'>
           <div className='p-2 rounded-lg bg-brand-100'>
             {type === 'bug' ? (
-              <Bug className='w-5 h-5 text-brand-700' />
+              <Bug className='w-5 h-5 text-brand-600' />
             ) : (
-              <Lightbulb className='w-5 h-5 text-brand-700' />
+              <Lightbulb className='w-5 h-5 text-brand-600' />
             )}
           </div>
           <div>
@@ -109,16 +109,16 @@ export default function BugReportDialog({
             >
               <div className='flex items-center gap-2 mb-1'>
                 <Bug
-                  className={`w-4 h-4 ${type === 'bug' ? 'text-brand-700' : 'text-neutral-500'}`}
+                  className={`w-4 h-4 ${type === 'bug' ? 'text-brand-600' : 'text-neutral-500'}`}
                 />
                 <span
-                  className={`font-medium text-sm ${type === 'bug' ? 'text-brand-700' : 'text-black'}`}
+                  className={`font-medium text-sm ${type === 'bug' ? 'text-brand-600' : 'text-black'}`}
                 >
                   Bug Report
                 </span>
               </div>
               <p
-                className={`text-sm ${type === 'bug' ? 'text-brand-700' : 'text-neutral-500'}`}
+                className={`text-sm ${type === 'bug' ? 'text-brand-600' : 'text-neutral-500'}`}
               >
                 Something isn't working
               </p>
@@ -135,16 +135,16 @@ export default function BugReportDialog({
             >
               <div className='flex items-center gap-2 mb-1'>
                 <Lightbulb
-                  className={`w-4 h-4 ${type === 'suggestion' ? 'text-brand-700' : 'text-neutral-500'}`}
+                  className={`w-4 h-4 ${type === 'suggestion' ? 'text-brand-600' : 'text-neutral-500'}`}
                 />
                 <span
-                  className={`font-medium text-sm ${type === 'suggestion' ? 'text-brand-700' : 'text-black'}`}
+                  className={`font-medium text-sm ${type === 'suggestion' ? 'text-brand-600' : 'text-black'}`}
                 >
                   Suggestion
                 </span>
               </div>
               <p
-                className={`text-sm ${type === 'suggestion' ? 'text-brand-700' : 'text-neutral-500'}`}
+                className={`text-sm ${type === 'suggestion' ? 'text-brand-600' : 'text-neutral-500'}`}
               >
                 Idea for improvement
               </p>

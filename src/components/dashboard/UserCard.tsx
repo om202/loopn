@@ -4,6 +4,8 @@ import { useState } from 'react';
 import {
   Clock,
   MoreHorizontal,
+  Plus,
+  MessageCircle,
 } from 'lucide-react';
 
 import type { Schema } from '../../../amplify/data/resource';
@@ -152,7 +154,7 @@ export default function UserCard({
       onClick={handleCardClick}
       className={`px-2 py-2 group transition-all duration-200 cursor-pointer ${
         isSelected
-          ? 'bg-brand-100 rounded-2xl border border-brand-200'
+          ? 'bg-stone-50 rounded-2xl border border-transparent'
           : 'bg-white hover:bg-stone-100 hover:rounded-2xl border border-transparent border-b-gray-100 last:border-b-0'
       }`}
     >
@@ -195,7 +197,7 @@ export default function UserCard({
                 !conversation.isConnected;
 
               return isTemporaryConnection ? (
-                <Clock className='w-4 h-4 text-neutral-500 flex-shrink-0' />
+                <Clock className='w-3.5 h-3.5 text-neutral-500 flex-shrink-0' />
               ) : null;
             })()}
           </div>
@@ -267,13 +269,14 @@ export default function UserCard({
                 <button
                   onClick={() => setShowCancelDialog(true)}
                   disabled={isOptimisticRequest}
-                  className='flex items-center justify-center px-3 py-1.5 text-base text-neutral-500 hover:bg-stone-100 rounded transition-colors disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:opacity-60'
+                  className='flex items-center justify-center gap-1.5 px-3 py-1.5 text-base text-neutral-500 hover:bg-stone-100 rounded transition-colors disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:opacity-60'
                   title={
                     isOptimisticRequest
                       ? 'Request being sent...'
                       : 'Cancel Request'
                   }
                 >
+                  <Clock className='w-4 h-4 text-neutral-500' />
                   <span className='text-base text-neutral-500'>Pending</span>
                 </button>
               );
@@ -288,10 +291,10 @@ export default function UserCard({
                     onChatAction(userPresence.userId);
                   }
                 }}
-                className={`px-3 py-1.5 text-base font-medium rounded-lg transition-colors flex items-center justify-center flex-shrink-0 ${
+                className={`px-3 py-1.5 text-base font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 flex-shrink-0 ${
                   isSelected
-                    ? 'bg-white text-brand-700 hover:bg-brand-100'
-                    : 'bg-brand-100 text-brand-700 hover:bg-brand-100'
+                    ? 'bg-white text-brand-600 hover:bg-brand-100'
+                    : 'bg-brand-100 text-brand-600 hover:bg-brand-100'
                 }`}
                 title={
                   incomingRequestSenderIds.has(userPresence.userId)
@@ -308,12 +311,18 @@ export default function UserCard({
               >
                 {incomingRequestSenderIds.has(userPresence.userId) ? (
                   // Prioritize incoming requests over existing conversations
-                  <span className='text-base font-semibold'>Accept</span>
+                  <>
+                    <Plus className='w-4 h-4 stroke-[2.5]' />
+                    <span className='text-base font-semibold'>Accept</span>
+                  </>
                 ) : existingConversations.has(userPresence.userId) ? (
                   existingConversations.get(userPresence.userId)?.chatStatus ===
                   'ENDED' ? (
                     canUserReconnect(userPresence.userId) ? (
-                      <span className='text-base font-medium'>Connect</span>
+                      <>
+                        <Plus className='w-4 h-4 stroke-[2]' />
+                        <span className='text-base font-medium'>Connect</span>
+                      </>
                     ) : (
                       (() => {
                         const timeRemaining = getReconnectTimeRemaining(
@@ -322,15 +331,24 @@ export default function UserCard({
                         return timeRemaining ? (
                           <Clock className='w-4 h-4 text-neutral-500 flex-shrink-0' />
                         ) : (
-                          <span className='text-base font-medium'>View</span>
+                          <>
+                            <MessageCircle className='w-4 h-4 stroke-[2]' />
+                            <span className='text-base font-medium'>View</span>
+                          </>
                         );
                       })()
                     )
                   ) : (
-                    <span className='text-base font-medium'>Message</span>
+                    <>
+                      <MessageCircle className='w-4 h-4 stroke-[2]' />
+                      <span className='text-base font-medium'>Message</span>
+                    </>
                   )
                 ) : (
-                  <span className='text-base font-medium'>Connect</span>
+                  <>
+                    <Plus className='w-4 h-4 stroke-[2]' />
+                    <span className='text-base font-medium'>Connect</span>
+                  </>
                 )}
               </button>
             );
@@ -363,7 +381,7 @@ export default function UserCard({
             aria-label='Open profile sidebar'
             aria-pressed={isProfileSidebarOpen}
           >
-            <MoreHorizontal className='w-5.5 h-5.5 text-brand-700 stroke-[2.5]' />
+            <MoreHorizontal className='w-5.5 h-5.5 text-brand-600 stroke-[2.5]' />
           </button>
         </div>
       </div>

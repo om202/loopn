@@ -185,7 +185,7 @@ export default function IntelligentSearch({
       <div className='relative'>
         <div className='relative'>
           <div className='absolute left-4 top-1/2 transform -translate-y-1/2 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-sm'>
-            <Search className='text-brand-700 w-4 h-4' />
+            <Search className='text-brand-600 w-4 h-4' />
           </div>
           <input
             ref={inputRef}

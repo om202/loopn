@@ -206,7 +206,7 @@ export default function SearchUser({
             <button
               type='button'
               onClick={handleClearInput}
-              className={`absolute top-1/2 -translate-y-1/2 w-6 h-6 text-brand-500 hover:text-brand-700 flex items-center justify-center transition-all duration-300 ${
+              className={`absolute top-1/2 -translate-y-1/2 w-6 h-6 text-brand-500 hover:text-brand-600 flex items-center justify-center transition-all duration-300 ${
                 isFocused ? 'right-28' : 'right-11'
               }`}
               aria-label='Clear search'
