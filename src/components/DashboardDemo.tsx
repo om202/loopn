@@ -815,7 +815,7 @@ export default function DashboardDemo() {
             <div className='max-w-md mx-auto relative'>
               <div className='relative'>
                 <svg
-                  className='absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 z-10'
+                  className='absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 z-10'
                   fill='none'
                   stroke='currentColor'
                   viewBox='0 0 24 24'
@@ -1043,7 +1043,7 @@ export default function DashboardDemo() {
           {activeSection === 'search' && (
             <div className='mb-4'>
               <div className='relative'>
-                <Search className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400' />
+                <Search className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400' />
                 <input
                   type='text'
                   placeholder='Search professionals...'
