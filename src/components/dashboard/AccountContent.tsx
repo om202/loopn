@@ -54,7 +54,7 @@ export default function AccountContent() {
   return (
     <div className='h-full flex flex-col'>
       {/* Profile Section */}
-      <div className='mx-auto  w-full'>
+      <div className='mx-auto w-full pl-0 sm:pl-2'>
         <div className='flex flex-col items-start mb-8'>
           <UserAvatar
             email={getUserEmail()}

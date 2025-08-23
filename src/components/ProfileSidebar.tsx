@@ -260,40 +260,40 @@ export default function ProfileSidebar({
               onChatAction?.(userId);
             }
           }}
-          className={`px-3 py-1.5 text-base font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 border ${
+          className={`px-4 py-2 text-base font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 ${
             pendingRequests.has(userId)
-              ? 'bg-gray-100 text-gray-600 hover:bg-gray-200 border-stone-200'
-              : 'bg-brand-50 text-brand-600 hover:bg-brand-100 border-brand-200'
+              ? 'bg-gray-200 text-gray-700 hover:bg-gray-300 border border-gray-300'
+              : 'bg-brand-500 text-white hover:bg-brand-600'
           }`}
         >
           {pendingRequests.has(userId) ? (
             <>
-              <UserCheck className='w-4 h-4 text-gray-600' />
-              <span className='text-base text-gray-600'>Pending</span>
+              <UserCheck className='w-4 h-4 text-gray-700' />
+              <span className='text-base text-gray-700'>Pending</span>
             </>
           ) : existingConversations.has(userId) ? (
             existingConversations.get(userId)?.chatStatus === 'ENDED' ? (
               canUserReconnect && canUserReconnect(userId) ? (
                 <>
-                  <Plus className='w-4 h-4 stroke-[2]' />
-                  <span className='text-base font-medium'>Connect</span>
+                  <Plus className='w-4 h-4 stroke-[2] text-white' />
+                  <span className='text-base font-medium text-white'>Connect</span>
                 </>
               ) : (
                 <>
-                  <MessageCircle className='w-4 h-4 stroke-[2]' />
-                  <span className='text-base font-medium'>View</span>
+                  <MessageCircle className='w-4 h-4 stroke-[2] text-white' />
+                  <span className='text-base font-medium text-white'>View</span>
                 </>
               )
             ) : (
               <>
-                <MessageCircle className='w-4 h-4 stroke-[2]' />
-                <span className='text-base font-medium'>Message</span>
+                <MessageCircle className='w-4 h-4 stroke-[2] text-white' />
+                <span className='text-base font-medium text-white'>Message</span>
               </>
             )
           ) : (
             <>
-              <Plus className='w-4 h-4 stroke-[2]' />
-              <span className='text-base font-medium'>Connect</span>
+              <Plus className='w-4 h-4 stroke-[2] text-white' />
+              <span className='text-base font-medium text-white'>Connect</span>
             </>
           )}
         </button>
@@ -413,9 +413,9 @@ export default function ProfileSidebar({
                     <button
                       onClick={() => setShowCancelRequestDialog(true)}
                       disabled={optimisticRequestSent} // Disable if optimistic (no real request to cancel yet)
-                      className='px-6 py-2 text-base font-medium rounded-lg flex items-center justify-center gap-2 bg-gray-100 text-gray-600 hover:bg-gray-200 border border-stone-200 transition-colors disabled:cursor-not-allowed disabled:hover:bg-gray-100'
+                      className='px-4 py-2 text-base font-medium rounded-lg flex items-center justify-center gap-2 bg-gray-200 text-gray-700 hover:bg-gray-300 border border-gray-300 transition-colors disabled:cursor-not-allowed disabled:hover:bg-gray-200'
                     >
-                      <UserCheck className='w-4 h-4 text-gray-600' />
+                      <UserCheck className='w-4 h-4 text-gray-700' />
                       <span>Pending</span>
                     </button>
                   ) : (
@@ -428,9 +428,9 @@ export default function ProfileSidebar({
                         disabled={
                           sendingConnectionRequest || connectionRequestsLoading
                         }
-                        className='px-6 py-2 text-base font-medium rounded-lg transition-colors flex items-center justify-center gap-2 bg-brand-50 text-brand-600 hover:bg-brand-100 border border-brand-200 disabled:bg-brand-50 disabled:cursor-not-allowed'
+                        className='px-4 py-2 text-base font-medium rounded-lg transition-colors flex items-center justify-center gap-2 bg-brand-500 text-white hover:bg-brand-600 disabled:bg-brand-500 disabled:cursor-not-allowed'
                       >
-                        <Plus className='w-4 h-4 stroke-[2]' />
+                        <Plus className='w-4 h-4 stroke-[2] text-white' />
                         <span>Connect</span>
                       </button>
                     </Tooltip>

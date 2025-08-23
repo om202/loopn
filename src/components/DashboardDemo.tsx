@@ -825,7 +825,7 @@ export default function DashboardDemo() {
                 <button
                   type='button'
                   onClick={() => handleSearch(searchQuery)}
-                  className='absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full hover:bg-gray-50 flex items-center justify-center transition-colors duration-150 shadow-sm border border-gray-200'
+                  className='absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full hover:bg-gray-50 flex items-center justify-center transition-colors duration-150 shadow-sm'
                 >
                   <svg
                     className='w-5 h-5 text-brand-600'

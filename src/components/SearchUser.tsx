@@ -214,7 +214,7 @@ export default function SearchUser({
           <button
             type='submit'
             onMouseDown={e => e.preventDefault()}
-            className={`absolute right-2 top-1/2 -translate-y-1/2 bg-brand-100 rounded-lg hover:bg-brand-200 flex items-center justify-center transition-all duration-300 ease-out border border-brand-300 overflow-hidden ${
+            className={`absolute right-2 top-1/2 -translate-y-1/2 bg-brand-100 rounded-lg hover:bg-brand-200 flex items-center justify-center transition-all duration-300 ease-out overflow-hidden ${
               isFocused ? 'w-24 h-8 px-4' : 'w-8 h-8'
             }`}
           >

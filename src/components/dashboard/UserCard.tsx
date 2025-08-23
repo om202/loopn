@@ -270,7 +270,7 @@ export default function UserCard({
                 <button
                   onClick={() => setShowCancelDialog(true)}
                   disabled={isOptimisticRequest}
-                  className='flex items-center justify-center gap-1.5 px-3 py-1.5 text-base text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-lg transition-colors disabled:cursor-not-allowed disabled:hover:bg-gray-200 border border-gray-300'
+                  className='flex items-center justify-center gap-1.5 px-4 py-2 text-base font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-lg transition-colors disabled:cursor-not-allowed disabled:hover:bg-gray-200 border border-gray-300'
                   title={
                     isOptimisticRequest
                       ? 'Request being sent...'
@@ -292,11 +292,7 @@ export default function UserCard({
                     onChatAction(userPresence.userId);
                   }
                 }}
-                className={`px-3 py-1.5 text-base font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 flex-shrink-0 border ${
-                  isSelected
-                    ? 'bg-white text-brand-600 hover:bg-brand-50 border-brand-300'
-                    : 'bg-brand-100 text-brand-600 hover:bg-brand-200 border-brand-300'
-                }`}
+                className='px-4 py-2 bg-brand-500 text-white rounded-lg text-base font-medium hover:bg-brand-600 transition-colors flex items-center justify-center gap-1.5 flex-shrink-0'
                 title={
                   incomingRequestSenderIds.has(userPresence.userId)
                     ? 'Accept'
@@ -313,16 +309,16 @@ export default function UserCard({
                 {incomingRequestSenderIds.has(userPresence.userId) ? (
                   // Prioritize incoming requests over existing conversations
                   <>
-                    <Plus className='w-4 h-4 stroke-[2.5]' />
-                    <span className='text-base font-semibold'>Accept</span>
+                    <Plus className='w-4 h-4 stroke-[2.5] text-white' />
+                    <span className='text-base font-medium text-white'>Accept</span>
                   </>
                 ) : existingConversations.has(userPresence.userId) ? (
                   existingConversations.get(userPresence.userId)?.chatStatus ===
                   'ENDED' ? (
                     canUserReconnect(userPresence.userId) ? (
                       <>
-                        <Plus className='w-4 h-4 stroke-[2]' />
-                        <span className='text-base font-medium'>Connect</span>
+                        <Plus className='w-4 h-4 stroke-[2] text-white' />
+                        <span className='text-base font-medium text-white'>Connect</span>
                       </>
                     ) : (
                       (() => {
@@ -330,25 +326,25 @@ export default function UserCard({
                           userPresence.userId
                         );
                         return timeRemaining ? (
-                          <Clock className='w-4 h-4 text-gray-500 flex-shrink-0' />
+                          <Clock className='w-4 h-4 text-white flex-shrink-0' />
                         ) : (
                           <>
-                            <MessageCircle className='w-4 h-4 stroke-[2]' />
-                            <span className='text-base font-medium'>View</span>
+                            <MessageCircle className='w-4 h-4 stroke-[2] text-white' />
+                            <span className='text-base font-medium text-white'>View</span>
                           </>
                         );
                       })()
                     )
                   ) : (
                     <>
-                      <MessageCircle className='w-4 h-4 stroke-[2]' />
-                      <span className='text-base font-medium'>Message</span>
+                      <MessageCircle className='w-4 h-4 stroke-[2] text-white' />
+                      <span className='text-base font-medium text-white'>Message</span>
                     </>
                   )
                 ) : (
                   <>
-                    <Plus className='w-4 h-4 stroke-[2]' />
-                    <span className='text-base font-medium'>Connect</span>
+                    <Plus className='w-4 h-4 stroke-[2] text-white' />
+                    <span className='text-base font-medium text-white'>Connect</span>
                   </>
                 )}
               </button>
