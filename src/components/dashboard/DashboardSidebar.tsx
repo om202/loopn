@@ -126,9 +126,9 @@ export default function DashboardSidebar({
     <>
       {/* Desktop Sidebar */}
       <div className='hidden lg:block w-64 flex-shrink-0'>
-        <div className='bg-white rounded-2xl h-full flex flex-col shadow-md'>
+        <div className='bg-white rounded-2xl h-full flex flex-col shadow-sm border border-gray-100'>
           {/* Logo at top */}
-          <div className='px-4 py-4 border-b border-gray-200'>
+          <div className='px-4 py-4 border-b border-gray-100'>
             <div className='flex items-center justify-between'>
               <Link
                 href='/?stay=true'
@@ -142,7 +142,7 @@ export default function DashboardSidebar({
                   priority
                 />
                 <div className='flex items-center gap-2'>
-                  <h1 className='text-2xl font-bold text-black'>Loopn</h1>
+                  <h1 className='text-2xl font-bold text-gray-900'>Loopn</h1>
                 </div>
               </Link>
             </div>
@@ -155,13 +155,13 @@ export default function DashboardSidebar({
                 <button
                   key={id}
                   onClick={() => onSectionChange(id)}
-                  className={`relative w-full flex items-center gap-3 px-2 py-2 rounded-lg text-left group ${
+                  className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group transition-colors ${
                     activeSection === id
-                      ? 'text-brand-600 font-medium hover:bg-gray-100'
-                      : 'text-black hover:bg-gray-100'
+                      ? 'text-brand-600 bg-brand-50 font-medium'
+                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
                   }`}
                 >
-                  <div className='w-6 h-6 flex-shrink-0 flex items-center justify-center'>
+                  <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
                     {icon === 'NotificationBell' ? (
                       <svg
                         className='w-5 h-5'
@@ -182,12 +182,12 @@ export default function DashboardSidebar({
                       })
                     )}
                   </div>
-                  <span
-                    className={`text-base flex-1 flex items-center gap-3 ${activeSection === id ? 'font-medium' : ''}`}
-                  >
-                    {label}
+                  <span className='flex-1 flex items-center justify-between'>
+                    <span className={`${activeSection === id ? 'font-medium' : ''}`}>
+                      {label}
+                    </span>
                     {count > 0 && id === 'notifications' && (
-                      <span className='text-sm font-bold flex items-center justify-center h-5 w-5 rounded-full text-center bg-b_red-500 text-white'>
+                      <span className='text-xs font-bold flex items-center justify-center h-5 w-5 rounded-full bg-red-500 text-white'>
                         {count > 99 ? '99+' : count}
                       </span>
                     )}
@@ -198,30 +198,28 @@ export default function DashboardSidebar({
           </nav>
 
           {/* Help and Account buttons at bottom */}
-          <div className='border-t border-gray-200 p-4 space-y-2'>
+          <div className='border-t border-gray-100 p-4 space-y-2'>
             {/* Help Button with Bug Report Button */}
             <div className='flex items-center gap-2'>
               <button
                 onClick={() => onSectionChange(helpItem.id)}
-                className={`relative flex-1 flex items-center gap-3 px-2 py-2 rounded-lg text-left group ${
+                className={`relative flex-1 flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group transition-colors ${
                   activeSection === helpItem.id
-                    ? 'text-brand-600 font-medium hover:bg-gray-100'
-                    : 'text-black hover:bg-gray-100 hover:text-black'
+                    ? 'text-brand-600 bg-brand-50 font-medium'
+                    : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
                 }`}
               >
                 <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
                   <HelpCircle className='w-5 h-5' />
                 </div>
-                <span
-                  className={`text-base flex-1 ${activeSection === helpItem.id ? 'font-medium' : ''}`}
-                >
+                <span className={`${activeSection === helpItem.id ? 'font-medium' : ''}`}>
                   {helpItem.label}
                 </span>
               </button>
 
               <button
                 onClick={() => setIsBugReportOpen(true)}
-                className='p-2 text-gray-500 hover:text-black hover:bg-gray-100 rounded-lg transition-colors border border-transparent hover:border-gray-200'
+                className='p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition-colors'
                 title='Report Bug / Share Suggestion'
               >
                 <Bug className='w-4 h-4' />
@@ -231,10 +229,10 @@ export default function DashboardSidebar({
             {/* Account Button */}
             <button
               onClick={() => onSectionChange(accountItem.id)}
-              className={`relative w-full flex items-center gap-3 px-2 py-2 rounded-lg text-left group ${
+              className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group transition-colors ${
                 activeSection === accountItem.id
-                  ? 'text-brand-600 font-medium hover:bg-gray-100'
-                  : 'text-gray-500 hover:bg-gray-100 hover:text-black'
+                  ? 'text-brand-600 bg-brand-50 font-medium'
+                  : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
               }`}
             >
               <div className='flex-shrink-0 flex items-center justify-center'>
@@ -255,9 +253,7 @@ export default function DashboardSidebar({
                 />
               </div>
               <div className='flex-1'>
-                <div
-                  className={`text-black text-base ${activeSection === accountItem.id ? 'font-medium' : 'font-medium'}`}
-                >
+                <div className={`text-gray-900 ${activeSection === accountItem.id ? 'font-medium' : 'font-medium'}`}>
                   {accountItem.label}
                 </div>
                 <div className='text-sm text-gray-500'>Account</div>

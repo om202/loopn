@@ -153,14 +153,14 @@ export default function UserCard({
     <div
       key={userPresence.userId}
       onClick={handleCardClick}
-      className={`px-2 py-1.5 group transition-all duration-200 cursor-pointer ${
+      className={`px-3 py-3 group transition-all duration-200 cursor-pointer ${
         isSelected
-          ? 'bg-gray-100 rounded-2xl border border-transparent'
-          : 'bg-white hover:bg-gray-50 hover:rounded-2xl border border-transparent border-b-gray-100 last:border-b-0'
+          ? 'bg-brand-50 rounded-xl border border-brand-100'
+          : 'bg-white hover:bg-gray-50 rounded-lg border border-gray-100 hover:border-gray-200'
       }`}
     >
-      <div className='flex items-center gap-2.5'>
-        <div className='flex-shrink-0'>
+      <div className='flex items-center gap-3'>
+        <div className='flex-shrink-0 flex items-center justify-center'>
           <UserAvatar
             email={userProfile?.email}
             userId={userPresence.userId}
@@ -183,8 +183,8 @@ export default function UserCard({
         </div>
 
         <div className='flex-1 min-w-0'>
-          <div className='flex items-center gap-2 mb-0.5'>
-            <div className='text-black truncate no-email-detection font-medium'>
+          <div className='flex items-center gap-2 mb-1'>
+            <div className='text-gray-900 truncate no-email-detection font-semibold'>
               {getDisplayName(userPresence, userProfile)}
             </div>
             {/* Show clock icon for temporary connections (active chat trials) */}
@@ -198,14 +198,14 @@ export default function UserCard({
                 !conversation.isConnected;
 
               return isTemporaryConnection ? (
-                <Clock className='w-3.5 h-3.5 text-gray-500 flex-shrink-0' />
+                <Clock className='w-4 h-4 text-gray-400 flex-shrink-0' />
               ) : null;
             })()}
           </div>
 
           {/* Profession */}
           {(finalFullProfile?.jobRole || finalFullProfile?.companyName) && (
-            <div className='text-base text-gray-500 mb-1 truncate'>
+            <div className='text-gray-600 truncate'>
               {finalFullProfile?.jobRole && finalFullProfile?.companyName
                 ? `${finalFullProfile.jobRole} at ${finalFullProfile.companyName}`
                 : finalFullProfile?.jobRole || finalFullProfile?.companyName}
@@ -270,15 +270,15 @@ export default function UserCard({
                 <button
                   onClick={() => setShowCancelDialog(true)}
                   disabled={isOptimisticRequest}
-                  className='flex items-center justify-center gap-1.5 px-3 py-1.5 text-base text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors disabled:cursor-not-allowed disabled:hover:bg-gray-100 border border-stone-200'
+                  className='flex items-center justify-center gap-1.5 px-3 py-1.5 text-base text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-lg transition-colors disabled:cursor-not-allowed disabled:hover:bg-gray-200 border border-gray-300'
                   title={
                     isOptimisticRequest
                       ? 'Request being sent...'
                       : 'Cancel Request'
                   }
                 >
-                  <UserCheck className='w-4 h-4 text-gray-600' />
-                  <span className='text-base text-gray-600'>Pending</span>
+                  <UserCheck className='w-4 h-4 text-gray-700' />
+                  <span className='text-base text-gray-700'>Pending</span>
                 </button>
               );
             }
@@ -294,8 +294,8 @@ export default function UserCard({
                 }}
                 className={`px-3 py-1.5 text-base font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 flex-shrink-0 border ${
                   isSelected
-                    ? 'bg-white text-brand-600 hover:bg-brand-100 border-brand-200'
-                    : 'bg-brand-50 text-brand-600 hover:bg-brand-100 border-brand-200'
+                    ? 'bg-white text-brand-600 hover:bg-brand-50 border-brand-300'
+                    : 'bg-brand-100 text-brand-600 hover:bg-brand-200 border-brand-300'
                 }`}
                 title={
                   incomingRequestSenderIds.has(userPresence.userId)

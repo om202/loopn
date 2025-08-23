@@ -293,23 +293,23 @@ export default function DashboardSectionContent({
   }
 
   return (
-    <div className='space-y-2.5 sm:space-y-3 w-full pt-2'>
+    <div className='space-y-3 w-full'>
       {usersToShow.length > 0 ? (
         usersToShow.map(renderUserCard)
       ) : (
-        <div className='flex flex-col items-center justify-center h-full text-center'>
-          <div className='w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center'>
-            <EmptyIcon className='w-8 h-8 text-gray-500' />
+        <div className='flex flex-col items-center justify-center py-12 text-center'>
+          <div className='w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-2xl flex items-center justify-center'>
+            <EmptyIcon className='w-8 h-8 text-gray-400' />
           </div>
-          <h3 className='text-lg font-medium text-black mb-2'>
+          <h3 className='text-lg font-semibold text-gray-900 mb-2'>
             {emptyMessage}
           </h3>
-          <p className='text-gray-500'>
+          <p className='text-gray-600 max-w-sm'>
             {activeSection === 'connections'
-              ? 'Start chatting to build connections'
+              ? 'Start chatting to build connections with professionals'
               : activeSection === 'suggested'
-                ? 'Check back later for new suggestions'
-                : 'No conversations yet'}
+                ? 'Check back later for new suggestions based on your interests'
+                : 'No conversations yet. Connect with professionals to start chatting'}
           </p>
         </div>
       )}

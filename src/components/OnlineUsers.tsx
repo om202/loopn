@@ -595,7 +595,7 @@ export default function OnlineUsers({
         suggestedUsersCount={suggestedUsers.length}
       />
 
-      <div className='flex-1 bg-white sm:rounded-2xl shadow-md py-4 px-3 sm:py-4 sm:px-6 lg:py-4 lg:px-6 ultra-compact overflow-hidden flex flex-col min-h-0'>
+      <div className='flex-1 bg-white sm:rounded-2xl shadow-sm border border-gray-100 py-4 px-3 sm:py-4 sm:px-6 lg:py-4 lg:px-6 ultra-compact overflow-hidden flex flex-col min-h-0'>
         {/* Search User - Always visible at top */}
         <div className='flex-shrink-0 mb-4 sm:mb-6 w-full'>
           <SearchUser
@@ -609,17 +609,17 @@ export default function OnlineUsers({
           {activeSection === 'notifications' && (
             <div className='flex items-start justify-between'>
               <div>
-                <h2 className='text-2xl sm:text-2xl font-bold text-black mb-1'>
+                <h2 className='text-2xl sm:text-2xl font-bold text-gray-900 mb-1'>
                   Notifications
                 </h2>
-                <p className='text-base text-gray-500'>
+                <p className='text-base text-gray-600'>
                   Keep up with your latest activity
                 </p>
               </div>
               {centralizedNotifications.length > 0 && (
                 <button
                   onClick={handleMarkAllAsRead}
-                  className='text-sm text-brand-600 hover:text-brand-600 font-medium py-2 px-3 rounded-lg hover:bg-brand-50 transition-colors ml-4 flex-shrink-0'
+                  className='text-sm text-brand-600 hover:text-brand-700 font-medium py-2 px-3 rounded-lg hover:bg-brand-50 transition-colors ml-4 flex-shrink-0'
                 >
                   Mark all as read
                 </button>
@@ -628,10 +628,10 @@ export default function OnlineUsers({
           )}
           {activeSection === 'help' && (
             <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-black mb-1'>
+              <h2 className='text-xl sm:text-2xl font-bold text-gray-900 mb-1'>
                 Help & Support
               </h2>
-              <p className='text-base text-gray-500'>
+              <p className='text-base text-gray-600'>
                 Common questions and troubleshooting
               </p>
             </div>
@@ -639,10 +639,10 @@ export default function OnlineUsers({
           {activeSection === 'account' && (
             <div className='flex items-start justify-between'>
               <div>
-                <h2 className='text-2xl sm:text-2xl font-bold text-black mb-1'>
+                <h2 className='text-2xl sm:text-2xl font-bold text-gray-900 mb-1'>
                   Account
                 </h2>
-                <p className='text-base text-gray-500'>
+                <p className='text-base text-gray-600'>
                   Manage your profile and settings
                 </p>
               </div>
@@ -656,38 +656,38 @@ export default function OnlineUsers({
           )}
           {activeSection === 'connections' && (
             <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-black mb-1'>
+              <h2 className='text-xl sm:text-2xl font-bold text-gray-900 mb-1'>
                 Connections
               </h2>
-              <p className='text-base text-gray-500'>Your connections</p>
+              <p className='text-base text-gray-600'>Your connections</p>
             </div>
           )}
           {activeSection === 'suggested' && (
             <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-black mb-1'>
+              <h2 className='text-xl sm:text-2xl font-bold text-gray-900 mb-1'>
                 Discover
               </h2>
-              <p className='text-base text-gray-500'>
+              <p className='text-base text-gray-600'>
                 Find and connect with new people
               </p>
             </div>
           )}
           {activeSection === 'search' && (
             <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-black mb-1'>
+              <h2 className='text-xl sm:text-2xl font-bold text-gray-900 mb-1'>
                 {searchQuery ? 'Search Results' : 'Search'}
               </h2>
-              <p className='text-base text-gray-500'>
+              <p className='text-base text-gray-600'>
                 {searchQuery ? `"${searchQuery}"` : 'Search for professionals'}
               </p>
             </div>
           )}
           {activeSection === 'all' && (
             <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-black mb-1'>
+              <h2 className='text-xl sm:text-2xl font-bold text-gray-900 mb-1'>
                 Chats
               </h2>
-              <p className='text-base text-gray-500'>Your conversations</p>
+              <p className='text-base text-gray-600'>Your conversations</p>
             </div>
           )}
         </div>

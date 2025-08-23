@@ -36,15 +36,15 @@ export default function UserAvatar({
   const getAvatarSize = () => {
     switch (size) {
       case 'xs':
-        return 23; // w-5 h-5
+        return 26; // slightly larger than w-5 h-5
       case 'sm':
-        return 32; // w-8 h-8
+        return 36; // slightly larger than w-8 h-8
       case 'lg':
-        return 56; // w-15 h-15
+        return 64; // slightly larger than w-15 h-15
       case 'xl':
-        return 75; // w-20 h-20
+        return 84; // slightly larger than w-20 h-20
       default:
-        return 46; // w-10 h-10
+        return 52; // slightly larger than w-10 h-10
     }
   };
 

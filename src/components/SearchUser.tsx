@@ -194,7 +194,7 @@ export default function SearchUser({
               WebkitAppearance: 'none',
               MozAppearance: 'textfield',
             }}
-            className={`w-full pl-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-1 focus:ring-brand-200 text-gray-900 hover:bg-white transition-colors placeholder-gray-500 ${isFocused ? 'bg-white' : 'bg-gray-100'} ${isFocused ? (query.trim() ? 'pr-32' : 'pr-28') : query.trim() ? 'pr-20' : 'pr-12'}`}
+            className={`w-full pl-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-200 focus:border-brand-300 text-gray-900 hover:bg-white transition-all duration-200 placeholder-gray-500 ${isFocused ? 'bg-white shadow-sm' : 'bg-gray-50'} ${isFocused ? (query.trim() ? 'pr-32' : 'pr-28') : query.trim() ? 'pr-20' : 'pr-12'}`}
           />
 
           {/* Clear button - only show when there's text */}
@@ -214,17 +214,17 @@ export default function SearchUser({
           <button
             type='submit'
             onMouseDown={e => e.preventDefault()}
-            className={`absolute right-2 top-1/2 -translate-y-1/2 bg-white rounded-lg hover:bg-brand-50 flex items-center justify-center transition-all duration-300 ease-out border border-brand-200 overflow-hidden ${
+            className={`absolute right-2 top-1/2 -translate-y-1/2 bg-brand-100 rounded-lg hover:bg-brand-200 flex items-center justify-center transition-all duration-300 ease-out border border-brand-300 overflow-hidden ${
               isFocused ? 'w-24 h-8 px-4' : 'w-8 h-8'
             }`}
           >
             {isProcessing ? (
-              <div className='w-4 h-4 border-2 border-brand-500 border-t-transparent rounded-full animate-spin flex-shrink-0' />
+              <div className='w-4 h-4 border-2 border-brand-600 border-t-transparent rounded-full animate-spin flex-shrink-0' />
             ) : (
               <>
-                <UserRoundSearch className='w-5 h-5 text-brand-500 flex-shrink-0' />
+                <UserRoundSearch className='w-5 h-5 text-brand-600 flex-shrink-0' />
                 {isFocused && (
-                  <span className='text-base font-medium text-brand-500 whitespace-nowrap transition-all duration-300 ease-out ml-1.5'>
+                  <span className='text-base font-medium text-brand-600 whitespace-nowrap transition-all duration-300 ease-out ml-1.5'>
                     Search
                   </span>
                 )}
