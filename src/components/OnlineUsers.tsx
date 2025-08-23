@@ -100,7 +100,9 @@ export default function OnlineUsers({
   });
 
   // Check if conversations are still loading
-  const conversationsLoading = useSubscriptionStore(state => state.loading.conversations);
+  const conversationsLoading = useSubscriptionStore(
+    state => state.loading.conversations
+  );
 
   // Use centralized chat requests hook (handles subscriptions internally)
   const { incomingRequests: incomingChatRequests, pendingReceiverIds } =

@@ -243,8 +243,6 @@ export default function ProfileSidebar({
       );
     }
 
-
-
     return (
       <div className='flex items-center gap-3'>
         <button
@@ -294,7 +292,6 @@ export default function ProfileSidebar({
             </>
           )}
         </button>
-
       </div>
     );
   };
