@@ -271,14 +271,14 @@ export default function UserCard({
                 <button
                   onClick={() => setShowCancelDialog(true)}
                   disabled={isOptimisticRequest}
-                  className='flex items-center gap-1 px-2 py-1.5 text-sm text-neutral-500 hover:bg-stone-100 rounded transition-colors disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:opacity-60'
+                  className='flex items-center gap-1 px-1.5 py-1.5 text-sm text-neutral-500 hover:bg-stone-100 rounded transition-colors disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:opacity-60'
                   title={
                     isOptimisticRequest
                       ? 'Request being sent...'
                       : 'Cancel Request'
                   }
                 >
-                  <Clock className='w-4 h-4 text-neutral-500 flex-shrink-0' />
+                  <Clock className='w-4.5 h-4.5 text-neutral-500 flex-shrink-0 stroke-[2.5]' />
                   <span className='text-base text-neutral-500'>Pending</span>
                 </button>
               );
@@ -293,7 +293,7 @@ export default function UserCard({
                     onChatAction(userPresence.userId);
                   }
                 }}
-                className={`px-2 py-1.5 text-base font-medium rounded-xl border transition-colors flex items-center justify-center flex-shrink-0 gap-1.5 min-w-[44px] ${
+                className={`px-1.5 py-1.5 text-base font-medium rounded-xl border transition-colors flex items-center justify-center flex-shrink-0 gap-1.5 min-w-[44px] ${
                   isSelected
                     ? 'bg-white text-brand-700 border-brand-200 hover:bg-brand-100 hover:border-brand-200'
                     : 'bg-brand-100 text-brand-700 border-brand-200 hover:bg-brand-100 hover:border-brand-200'
@@ -314,7 +314,7 @@ export default function UserCard({
                 {incomingRequestSenderIds.has(userPresence.userId) ? (
                   // Prioritize incoming requests over existing conversations
                   <>
-                    <Check className='w-4 h-4 text-brand-700 flex-shrink-0 font-bold stroke-[2.5]' />
+                    <Check className='w-4.5 h-4.5 text-brand-700 flex-shrink-0 font-bold stroke-[3]' />
                     <span className='text-base font-semibold'>Accept</span>
                   </>
                 ) : existingConversations.has(userPresence.userId) ? (
@@ -322,7 +322,7 @@ export default function UserCard({
                   'ENDED' ? (
                     canUserReconnect(userPresence.userId) ? (
                       <>
-                        <Plus className='w-4 h-4 text-brand-700 flex-shrink-0' />
+                        <Plus className='w-4.5 h-4.5 text-brand-700 flex-shrink-0 stroke-[2.5]' />
                         <span className='text-base font-medium'>Connect</span>
                       </>
                     ) : (
@@ -334,7 +334,7 @@ export default function UserCard({
                           <Clock className='w-4 h-4 text-neutral-500 flex-shrink-0' />
                         ) : (
                           <>
-                            <MessageCircle className='w-4 h-4 text-brand-700 flex-shrink-0' />
+                            <MessageCircle className='w-4.5 h-4.5 text-brand-700 flex-shrink-0 stroke-[2.5]' />
                             <span className='text-base font-medium'>View</span>
                           </>
                         );
@@ -342,13 +342,13 @@ export default function UserCard({
                     )
                   ) : (
                     <>
-                      <MessageCircle className='w-4 h-4 text-brand-700 flex-shrink-0' />
+                      <MessageCircle className='w-4.5 h-4.5 text-brand-700 flex-shrink-0 stroke-[2.5]' />
                       <span className='text-base font-medium'>Message</span>
                     </>
                   )
                 ) : (
                   <>
-                    <Plus className='w-4 h-4 text-brand-700 flex-shrink-0' />
+                    <Plus className='w-4.5 h-4.5 text-brand-700 flex-shrink-0 stroke-[2.5]' />
                     <span className='text-base font-medium'>Connect</span>
                   </>
                 )}
@@ -360,13 +360,13 @@ export default function UserCard({
           {/* Mobile: Profile dialog button */}
           <button
             onClick={() => setShowProfileDialog(true)}
-            className={`md:hidden px-2.5 py-2 text-base font-medium rounded-xl border transition-colors text-black border-brand-200 hover:bg-brand-100 hover:border-brand-200 flex items-center justify-center flex-shrink-0 w-[40px] h-[40px] ${
+            className={`md:hidden px-2 py-2 text-base font-medium rounded-xl border transition-colors text-black border-brand-200 hover:bg-brand-100 hover:border-brand-200 flex items-center justify-center flex-shrink-0 w-[40px] h-[40px] ${
               isSelected ? 'bg-white' : 'bg-brand-100'
             }`}
             disabled={loadingProfile}
             title='View Profile'
           >
-            <User className='w-4 h-4 text-black flex-shrink-0' />
+            <User className='w-4.5 h-4.5 text-black flex-shrink-0 stroke-[2.5]' />
           </button>
 
           {/* Desktop: profile icon opens sidebar via parent */}
@@ -383,7 +383,7 @@ export default function UserCard({
             aria-label='Open profile sidebar'
             aria-pressed={isProfileSidebarOpen}
           >
-            <MoreHorizontal className='w-5 h-5 text-brand-700' />
+            <MoreHorizontal className='w-5.5 h-5.5 text-brand-700 stroke-[2.5]' />
           </button>
         </div>
       </div>
