@@ -269,7 +269,7 @@ export default function MessageBubble({
 
         {/* Message content wrapper with relative positioning for actions */}
         <div
-          className={`relative flex gap-2 min-w-0 ${isTouchDevice && showActionsOnMobile ? 'bg-brand-100 rounded-lg px-2 py-1' : ''}`}
+          className={`relative flex gap-2 min-w-0 ${isTouchDevice && showActionsOnMobile ? 'bg-brand-50 rounded-lg px-2 py-1' : ''}`}
         >
           <div className='relative max-w-[85vw] sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl'>
             {message.isDeleted ? (
@@ -373,7 +373,7 @@ export default function MessageBubble({
               >
                 <button
                   onClick={handleReplyClick}
-                  className='p-1 hover:bg-brand-100 hover:rounded-full rounded transition-all duration-200 flex items-center justify-center group'
+                  className='p-1 hover:bg-brand-50 hover:rounded-full rounded transition-all duration-200 flex items-center justify-center group'
                   title='Reply'
                 >
                   <svg

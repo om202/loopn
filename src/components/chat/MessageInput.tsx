@@ -204,7 +204,7 @@ export default function MessageInput({
                   onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                   disabled={disabled}
                   className={`absolute right-2 top-1/2 transform -translate-y-1/2 text-neutral-500 hover:text-neutral-950 transition-all duration-200 p-2 rounded-full hover:bg-stone-100 focus:outline-none disabled:opacity-50 ${
-                    showEmojiPicker ? 'text-brand-600 bg-brand-100' : ''
+                    showEmojiPicker ? 'text-brand-600 bg-brand-50' : ''
                   }`}
                 >
                   <Smile className='w-6 h-6' />

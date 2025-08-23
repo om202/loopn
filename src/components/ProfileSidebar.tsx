@@ -263,7 +263,7 @@ export default function ProfileSidebar({
           className={`px-3 py-1.5 text-base font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 ${
             pendingRequests.has(userId)
               ? 'text-neutral-500 hover:bg-stone-100'
-              : 'bg-brand-100 text-brand-600 hover:bg-brand-100'
+              : 'bg-brand-50 text-brand-600 hover:bg-brand-50'
           }`}
         >
           {pendingRequests.has(userId) ? (
@@ -341,9 +341,9 @@ export default function ProfileSidebar({
             showStatus
             status={getUserStatus()}
           />
-          <div className='mt-2'>
-            <div className='mb-1'>
-              <div className='font-semibold text-neutral-950 text-base flex items-center justify-center gap-2'>
+          <div className='mt-1'>
+            <div className='mb-0'>
+              <div className='font-bold text-neutral-950 text-lg flex items-center justify-center gap-2'>
                 {getUserDisplayName()}
                 {isTrialConversation() && (
                   <Tooltip content='Trial Chat' position='bottom'>
@@ -387,15 +387,15 @@ export default function ProfileSidebar({
             timeLeft !== 'Expired' && (
               <div className='mb-1 mt-1'>
                 {/* Trial Chat Info with End Chat Icon - Centered */}
-                <div className='text-center text-base text-neutral-500 mb-3'>
+                <div className='text-center text-sm text-neutral-500 mb-3'>
                   <span className='font-medium'>
                     Connection Expires in{' '}
-                    <span className='font-bold text-neutral-950'>{timeLeft}</span>
+                    <span className='font-bold text-neutral-950 text-sm'>{timeLeft}</span>
                   </span>
                 </div>
 
                 {/* Connect Button */}
-                <div className='flex justify-center mb-3'>
+                <div className='flex justify-center mb-0'>
                   {hasAcceptedConnection ? (
                     <div className='px-6 py-2 text-base font-medium rounded-lg flex items-center justify-center gap-2 text-neutral-500'>
                       <svg
@@ -427,7 +427,7 @@ export default function ProfileSidebar({
                         disabled={
                           sendingConnectionRequest || connectionRequestsLoading
                         }
-                        className='px-6 py-2 text-base font-medium rounded-lg transition-colors flex items-center justify-center gap-2 bg-brand-100 text-brand-600 hover:bg-brand-100 disabled:bg-brand-100 disabled:cursor-not-allowed'
+                        className='px-6 py-2 text-base font-medium rounded-lg transition-colors flex items-center justify-center gap-2 bg-brand-50 text-brand-600 hover:bg-brand-50 disabled:bg-brand-50 disabled:cursor-not-allowed'
                       >
                         <span>Add to Network</span>
                       </button>

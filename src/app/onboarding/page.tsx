@@ -420,7 +420,7 @@ export default function OnboardingPage() {
                   {(formData.skills || []).map(skill => (
                     <span
                       key={skill}
-                      className='inline-flex items-center gap-1 px-2 py-1 rounded-full text-sm bg-brand-100 text-brand-600 border border-brand-200'
+                      className='inline-flex items-center gap-1 px-2 py-1 rounded-full text-sm bg-brand-50 text-brand-600 border border-brand-200'
                     >
                       {skill}
                       <button
@@ -512,7 +512,7 @@ export default function OnboardingPage() {
                           className={`px-2.5 py-2 rounded-xl text-sm transition-colors border text-center ${
                             formData.interests?.includes(interest)
                               ? 'bg-brand-500 text-white border-brand-500'
-                              : 'bg-white text-neutral-500 border-gray-200 hover:bg-brand-100'
+                              : 'bg-white text-neutral-500 border-gray-200 hover:bg-brand-50'
                           }`}
                         >
                           {interest}
@@ -532,7 +532,7 @@ export default function OnboardingPage() {
                     {formData.interests.map(interest => (
                       <span
                         key={interest}
-                        className='px-2 py-1 bg-brand-100 text-brand-600 border border-brand-200 text-sm rounded-full'
+                        className='px-2 py-1 bg-brand-50 text-brand-600 border border-brand-200 text-sm rounded-full'
                       >
                         {interest}
                       </span>

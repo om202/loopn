@@ -222,7 +222,7 @@ export default function UserCard({
               return (
                 <div
                   className={`flex items-center justify-center w-[40px] h-[40px] md:w-auto md:h-auto md:min-w-[70px] rounded-lg md:px-2.5 md:py-2 ${
-                    isSelected ? 'bg-white' : 'bg-brand-100'
+                    isSelected ? 'bg-white' : 'bg-brand-50'
                   }`}
                 >
                   <div
@@ -288,8 +288,8 @@ export default function UserCard({
                 }}
                 className={`px-3 py-1.5 text-base font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 flex-shrink-0 ${
                   isSelected
-                    ? 'bg-white text-brand-600 hover:bg-brand-100'
-                    : 'bg-brand-100 text-brand-600 hover:bg-brand-100'
+                    ? 'bg-white text-brand-600 hover:bg-brand-50'
+                    : 'bg-brand-50 text-brand-600 hover:bg-brand-50'
                 }`}
                 title={
                   incomingRequestSenderIds.has(userPresence.userId)
@@ -353,8 +353,8 @@ export default function UserCard({
           {/* Mobile: Profile dialog button */}
           <button
             onClick={() => setShowProfileDialog(true)}
-            className={`md:hidden p-1.5 text-base font-medium rounded-lg transition-colors text-neutral-950 hover:bg-brand-100 flex items-center justify-center flex-shrink-0 w-[32px] h-[32px] ${
-              isSelected ? 'bg-white' : 'bg-brand-100'
+            className={`md:hidden p-1.5 text-base font-medium rounded-lg transition-colors text-neutral-950 hover:bg-brand-50 flex items-center justify-center flex-shrink-0 w-[32px] h-[32px] ${
+              isSelected ? 'bg-white' : 'bg-brand-50'
             }`}
             disabled={loadingProfile}
             title='View Profile'

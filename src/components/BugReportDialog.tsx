@@ -66,7 +66,7 @@ export default function BugReportDialog({
       {/* Header */}
       <div className='flex items-center justify-between p-6 border-b border-gray-200'>
         <div className='flex items-center gap-3'>
-          <div className='p-2 rounded-lg bg-brand-100'>
+          <div className='p-2 rounded-lg bg-brand-50'>
             {type === 'bug' ? (
               <Bug className='w-5 h-5 text-brand-600' />
             ) : (
@@ -103,7 +103,7 @@ export default function BugReportDialog({
               onClick={() => !isSubmitting && setType('bug')}
               className={`p-3 rounded-lg border transition-all text-left ${
                 type === 'bug'
-                  ? 'border-brand-200 bg-brand-100'
+                  ? 'border-brand-200 bg-brand-50'
                   : 'border-gray-200 hover:border-gray-300'
               } ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
             >
@@ -129,7 +129,7 @@ export default function BugReportDialog({
               onClick={() => !isSubmitting && setType('suggestion')}
               className={`p-3 rounded-lg border transition-all text-left ${
                 type === 'suggestion'
-                  ? 'border-brand-200 bg-brand-100'
+                  ? 'border-brand-200 bg-brand-50'
                   : 'border-gray-200 hover:border-gray-300'
               } ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
             >

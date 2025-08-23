@@ -436,7 +436,7 @@ export default function MessageList({
             ) : (
               <button
                 onClick={onLoadMoreMessages}
-                className='px-4 py-2 text-sm text-brand-600 hover:text-brand-600 hover:bg-brand-100 rounded-lg transition-colors duration-200'
+                className='px-4 py-2 text-sm text-brand-600 hover:text-brand-600 hover:bg-brand-50 rounded-lg transition-colors duration-200'
               >
                 Load older messages
               </button>

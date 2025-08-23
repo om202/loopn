@@ -166,7 +166,7 @@ export default function SearchUser({
             tabIndex={-1}
             aria-hidden='true'
           />
-          <GradientSparkles className='absolute left-3 top-1/2 -translate-y-1/2 w-6 h-6 text-brand-500' />
+          {/* <GradientSparkles className='absolute left-3 top-1/2 -translate-y-1/2 w-6 h-6 text-brand-500' /> */}
           <input
             ref={inputRef}
             type='text'
@@ -198,7 +198,7 @@ export default function SearchUser({
               WebkitAppearance: 'none',
               MozAppearance: 'textfield',
             }}
-            className='w-full pl-10 pr-16 py-3 rounded-full border border-gray-200 focus:outline-none focus:ring-1 active:bg-white focus:ring-brand-200 bg-stone-100 text-neutral-900 hover:bg-white transition-colors placeholder-gray-500'
+            className='w-full pl-4 py-3 rounded-full border border-gray-200 focus:outline-none focus:ring-1 active:bg-white focus:ring-brand-200 bg-stone-100 text-neutral-900 hover:bg-white transition-colors placeholder-gray-500'
           />
 
           {/* Clear button - only show when there's text */}
@@ -218,7 +218,7 @@ export default function SearchUser({
           <button
             type='submit'
             onMouseDown={e => e.preventDefault()}
-            className={`absolute right-2 top-1/2 -translate-y-1/2 bg-white rounded-full hover:bg-brand-100 flex items-center justify-center transition-all duration-300 ease-out border border-brand-200 overflow-hidden ${
+            className={`absolute right-2 top-1/2 -translate-y-1/2 bg-white rounded-full hover:bg-brand-50 flex items-center justify-center transition-all duration-300 ease-out border border-brand-200 overflow-hidden ${
               isFocused ? 'w-24 h-8 px-4' : 'w-8 h-8'
             }`}
           >
