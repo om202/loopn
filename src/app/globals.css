@@ -83,7 +83,7 @@ html {
 
 body {
   font-family:
-    var(--font-inter),
+    var(--font-figtree),
     system-ui,
     -apple-system,
     sans-serif;
@@ -248,16 +248,16 @@ a:hover,
   display: none;
 }
 
-/* Force Inter to override Amplify UI React default fonts */
+/* Force Figtree to override Amplify UI React default fonts */
 * {
   font-family:
-    var(--font-inter),
+    var(--font-figtree),
     system-ui,
     -apple-system,
     sans-serif !important;
 }
 
-/* Ensure all Amplify UI components use Inter */
+/* Ensure all Amplify UI components use Figtree */
 [data-amplify-authenticator] *,
 [data-amplify-theme] *,
 .amplify-authenticator *,
@@ -267,7 +267,7 @@ a:hover,
 .amplify-label *,
 .amplify-text * {
   font-family:
-    var(--font-inter),
+    var(--font-figtree),
     system-ui,
     -apple-system,
     sans-serif !important;

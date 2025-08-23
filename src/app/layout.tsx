@@ -1,14 +1,14 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Figtree } from 'next/font/google';
 
 import './globals.css';
 
-const inter = Inter({
+const figtree = Figtree({
   weight: ['300', '400', '500', '600', '700'],
-  style: ['normal'],
+  style: ['normal', 'italic'],
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-inter',
+  variable: '--font-figtree',
 });
 import AmplifyProvider from './amplify-provider';
 import { RealtimeProvider } from '@/contexts/RealtimeContext';
@@ -74,7 +74,7 @@ export default function RootLayout({
         />
         <meta name='format-detection' content='telephone=no,email=no' />
       </head>
-      <body className={`${inter.variable} antialiased`}>
+      <body className={`${figtree.variable} antialiased`}>
         <AmplifyProvider>
           <AuthProvider>
             <RealtimeProvider>
