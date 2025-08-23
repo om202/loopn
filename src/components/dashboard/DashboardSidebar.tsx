@@ -150,14 +150,14 @@ export default function DashboardSidebar({
 
           {/* Navigation items */}
           <nav className='flex-1 overflow-y-auto py-4'>
-            <div className='px-2 space-y-0.5'>
+            <div className='px-4 space-y-1'>
               {sidebarItems.map(({ id, icon, label, count }) => (
                 <button
                   key={id}
                   onClick={() => onSectionChange(id)}
-                  className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group transition-colors duration-150 ${
+                  className={`relative w-full flex items-center gap-3 px-2 py-2 rounded-lg text-left group ${
                     activeSection === id
-                      ? 'text-brand-600 hover:bg-stone-100'
+                      ? 'bg-brand-600 text-white hover:bg-brand-700'
                       : 'text-black hover:bg-stone-100'
                   }`}
                 >
@@ -196,14 +196,14 @@ export default function DashboardSidebar({
           </nav>
 
           {/* Help and Account buttons at bottom */}
-          <div className='border-t border-gray-200 p-2 space-y-1'>
+          <div className='border-t border-gray-200 p-4 space-y-2'>
             {/* Help Button with Bug Report Button */}
             <div className='flex items-center gap-2'>
               <button
                 onClick={() => onSectionChange(helpItem.id)}
-                className={`relative flex-1 flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group transition-colors duration-150 ${
+                className={`relative flex-1 flex items-center gap-3 px-2 py-2 rounded-lg text-left group ${
                   activeSection === helpItem.id
-                    ? 'text-brand-600 '
+                    ? 'bg-brand-600 text-white hover:bg-brand-700'
                     : 'text-black hover:bg-stone-100 hover:text-black'
                 }`}
               >
@@ -225,9 +225,9 @@ export default function DashboardSidebar({
             {/* Account Button */}
             <button
               onClick={() => onSectionChange(accountItem.id)}
-              className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group transition-colors duration-150 ${
+              className={`relative w-full flex items-center gap-3 px-2 py-2 rounded-lg text-left group ${
                 activeSection === accountItem.id
-                  ? 'text-brand-600'
+                  ? 'bg-brand-600 text-white hover:bg-brand-700'
                   : 'text-neutral-500 hover:bg-stone-100 hover:text-black'
               }`}
             >

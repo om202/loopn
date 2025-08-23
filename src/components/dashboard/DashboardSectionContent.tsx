@@ -293,7 +293,7 @@ export default function DashboardSectionContent({
   }
 
   return (
-    <div className='space-y-2.5 sm:space-y-3 mx-auto  w-full'>
+    <div className='space-y-2.5 sm:space-y-3 mx-auto w-full pt-2'>
       {usersToShow.length > 0 ? (
         usersToShow.map(renderUserCard)
       ) : (

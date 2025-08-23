@@ -19,7 +19,7 @@ export default function OnlineUsers_Shimmer({
       <DashboardSidebar_Shimmer />
 
       {/* Main content shimmer */}
-      <div className='flex-1 bg-white sm:rounded-2xl sm:border sm:border-gray-200 p-2 sm:p-4 lg:p-6 ultra-compact overflow-hidden flex flex-col min-h-0'>
+      <div className='flex-1 bg-white sm:rounded-2xl sm:border sm:border-gray-200 py-4 px-6 sm:py-4 sm:px-6 lg:py-4 lg:px-6 ultra-compact overflow-hidden flex flex-col min-h-0'>
         {/* Search User shimmer - Always visible at top */}
         <div className='flex-shrink-0 mb-4 sm:mb-6'>
           <SearchUser_Shimmer />

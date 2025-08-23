@@ -147,13 +147,13 @@ export default function UserCard({
     <div
       key={userPresence.userId}
       onClick={handleCardClick}
-      className={`px-2 py-2 group transition-all duration-200 cursor-pointer ${
+      className={`px-2 py-1.5 group transition-all duration-200 cursor-pointer ${
         isSelected
           ? 'bg-stone-100 rounded-2xl border border-transparent'
           : 'bg-white hover:bg-stone-50 hover:rounded-2xl border border-transparent border-b-gray-100 last:border-b-0'
       }`}
     >
-      <div className='flex items-center gap-3'>
+      <div className='flex items-center gap-2.5'>
         <div className='flex-shrink-0'>
           <UserAvatar
             email={userProfile?.email}
@@ -177,7 +177,7 @@ export default function UserCard({
         </div>
 
         <div className='flex-1 min-w-0'>
-          <div className='flex items-center gap-2 mb-1'>
+          <div className='flex items-center gap-2 mb-0.5'>
             <div className='text-black truncate no-email-detection font-medium'>
               {getDisplayName(userPresence, userProfile)}
             </div>
@@ -199,7 +199,7 @@ export default function UserCard({
 
           {/* Profession */}
           {(finalFullProfile?.jobRole || finalFullProfile?.companyName) && (
-            <div className='text-base text-neutral-500 mb-1.5 truncate'>
+            <div className='text-base text-neutral-500 mb-1 truncate'>
               {finalFullProfile?.jobRole && finalFullProfile?.companyName
                 ? `${finalFullProfile.jobRole} at ${finalFullProfile.companyName}`
                 : finalFullProfile?.jobRole || finalFullProfile?.companyName}
@@ -207,7 +207,7 @@ export default function UserCard({
           )}
         </div>
 
-        <div className='flex-shrink-0 flex items-center gap-1.5'>
+        <div className='flex-shrink-0 flex items-center gap-1'>
           {(() => {
             const conversation = existingConversations.get(userPresence.userId);
             const isEndedWithTimer =
