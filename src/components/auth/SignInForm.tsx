@@ -44,7 +44,7 @@ export default function SignInForm({
             clearError();
             onSwitchToSignUp();
           }}
-          className='text-sm text-brand-600 hover:text-brand-600 transition-colors'
+          className='text-sm text-brand-700 hover:text-brand-700 transition-colors'
         >
           Create an account
         </button>
@@ -126,7 +126,7 @@ export default function SignInForm({
           <button
             type='button'
             onClick={onSwitchToForgotPassword}
-            className='text-sm text-brand-600 hover:text-brand-600 transition-colors'
+            className='text-sm text-brand-700 hover:text-brand-700 transition-colors'
           >
             Forgot your password?
           </button>

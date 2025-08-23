@@ -76,7 +76,7 @@ export default function ForgotPasswordForm({
           <button
             type='button'
             onClick={onSwitchToSignIn}
-            className='text-sm text-brand-600 hover:text-brand-600 font-medium transition-colors flex items-center justify-center gap-2 mx-auto'
+            className='text-sm text-brand-700 hover:text-brand-700 font-medium transition-colors flex items-center justify-center gap-2 mx-auto'
           >
             <ArrowLeft className='w-4 h-4' />
             Back to sign in

@@ -249,7 +249,7 @@ export default function ProfileSidebar({
               onChatAction?.(userId);
             }
           }}
-          className='px-2 py-1.5 text-base font-medium rounded-xl border transition-colors bg-brand-50 text-brand-600 border-brand-200 hover:bg-brand-100 hover:border-brand-200 flex items-center justify-center gap-2'
+          className='px-2 py-1.5 text-base font-medium rounded-xl border transition-colors bg-brand-50 text-brand-700 border-brand-200 hover:bg-brand-100 hover:border-brand-200 flex items-center justify-center gap-2'
         >
           {pendingRequests.has(userId) ? (
             <>
@@ -415,7 +415,7 @@ export default function ProfileSidebar({
                         disabled={
                           sendingConnectionRequest || connectionRequestsLoading
                         }
-                        className='px-6 py-2 text-sm font-medium rounded-lg border transition-colors flex items-center justify-center gap-2 bg-brand-50 text-brand-600 border-brand-200 hover:bg-brand-100 hover:border-brand-400 disabled:bg-brand-100 disabled:cursor-not-allowed'
+                        className='px-6 py-2 text-sm font-medium rounded-lg border transition-colors flex items-center justify-center gap-2 bg-brand-50 text-brand-700 border-brand-200 hover:bg-brand-100 hover:border-brand-400 disabled:bg-brand-100 disabled:cursor-not-allowed'
                       >
                         <UserPlus className='w-4 h-4' />
                         <span>Add to Network</span>

@@ -591,7 +591,7 @@ export default function OnlineUsers({
               {centralizedNotifications.length > 0 && (
                 <button
                   onClick={handleMarkAllAsRead}
-                  className='text-sm text-brand-600 hover:text-brand-600 font-medium py-2 px-3 rounded-lg hover:bg-brand-50 transition-colors ml-4 flex-shrink-0'
+                  className='text-sm text-brand-700 hover:text-brand-700 font-medium py-2 px-3 rounded-lg hover:bg-brand-50 transition-colors ml-4 flex-shrink-0'
                 >
                   Mark all as read
                 </button>

@@ -420,13 +420,13 @@ export default function OnboardingPage() {
                   {(formData.skills || []).map(skill => (
                     <span
                       key={skill}
-                      className='inline-flex items-center gap-1 px-2 py-1 rounded-full text-sm bg-brand-50 text-brand-600 border border-brand-200'
+                      className='inline-flex items-center gap-1 px-2 py-1 rounded-full text-sm bg-brand-50 text-brand-700 border border-brand-200'
                     >
                       {skill}
                       <button
                         type='button'
                         onClick={() => removeSkill(skill)}
-                        className='ml-1 text-brand-600 hover:text-brand-900'
+                        className='ml-1 text-brand-700 hover:text-brand-900'
                         aria-label={`Remove ${skill}`}
                       >
                         ×
@@ -532,7 +532,7 @@ export default function OnboardingPage() {
                     {formData.interests.map(interest => (
                       <span
                         key={interest}
-                        className='px-2 py-1 bg-brand-50 text-brand-600 border border-brand-200 text-sm rounded-full'
+                        className='px-2 py-1 bg-brand-50 text-brand-700 border border-brand-200 text-sm rounded-full'
                       >
                         {interest}
                       </span>

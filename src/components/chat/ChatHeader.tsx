@@ -265,7 +265,7 @@ export default function ChatHeader({
                           title='Learn about trial chat period'
                         >
                           <Clock className='w-4 h-4 text-neutral-500 sm:hidden flex-shrink-0' />
-                          <Clock className='w-3 sm:w-4 h-3 sm:h-4 text-brand-600 hidden sm:block' />
+                          <Clock className='w-3 sm:w-4 h-3 sm:h-4 text-brand-700 hidden sm:block' />
                           <span className='font-medium hidden sm:inline'>
                             Trial Chat
                           </span>
@@ -282,7 +282,7 @@ export default function ChatHeader({
                       <button
                         onClick={onSendConnectionRequest}
                         disabled={sendingConnectionRequest}
-                        className='px-3 py-2 text-sm font-medium rounded-xl border transition-colors flex items-center justify-center gap-1 bg-brand-100 text-brand-600 border-brand-200 hover:bg-brand-200 hover:border-brand-400 disabled:bg-brand-100 disabled:cursor-not-allowed'
+                        className='px-3 py-2 text-sm font-medium rounded-xl border transition-colors flex items-center justify-center gap-1 bg-brand-100 text-brand-700 border-brand-200 hover:bg-brand-200 hover:border-brand-400 disabled:bg-brand-100 disabled:cursor-not-allowed'
                       >
                         <svg
                           width='16'

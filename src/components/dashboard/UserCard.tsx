@@ -295,8 +295,8 @@ export default function UserCard({
                 }}
                 className={`px-2 py-1.5 text-base font-medium rounded-xl border transition-colors flex items-center justify-center flex-shrink-0 gap-1.5 min-w-[44px] ${
                   isSelected
-                    ? 'bg-white text-brand-600 border-brand-200 hover:bg-brand-100 hover:border-brand-200'
-                    : 'bg-brand-50 text-brand-600 border-brand-200 hover:bg-brand-100 hover:border-brand-200'
+                    ? 'bg-white text-brand-700 border-brand-200 hover:bg-brand-100 hover:border-brand-200'
+                    : 'bg-brand-50 text-brand-700 border-brand-200 hover:bg-brand-100 hover:border-brand-200'
                 }`}
                 title={
                   incomingRequestSenderIds.has(userPresence.userId)
@@ -314,7 +314,7 @@ export default function UserCard({
                 {incomingRequestSenderIds.has(userPresence.userId) ? (
                   // Prioritize incoming requests over existing conversations
                   <>
-                    <Check className='w-4 h-4 text-brand-600 flex-shrink-0 font-bold stroke-[2.5]' />
+                    <Check className='w-4 h-4 text-brand-700 flex-shrink-0 font-bold stroke-[2.5]' />
                     <span className='text-base font-semibold'>Accept</span>
                   </>
                 ) : existingConversations.has(userPresence.userId) ? (
@@ -322,7 +322,7 @@ export default function UserCard({
                   'ENDED' ? (
                     canUserReconnect(userPresence.userId) ? (
                       <>
-                        <Plus className='w-4 h-4 text-brand-600 flex-shrink-0' />
+                        <Plus className='w-4 h-4 text-brand-700 flex-shrink-0' />
                         <span className='text-base font-medium'>Connect</span>
                       </>
                     ) : (
@@ -334,7 +334,7 @@ export default function UserCard({
                           <Clock className='w-4 h-4 text-neutral-500 flex-shrink-0' />
                         ) : (
                           <>
-                            <MessageCircle className='w-4 h-4 text-brand-600 flex-shrink-0' />
+                            <MessageCircle className='w-4 h-4 text-brand-700 flex-shrink-0' />
                             <span className='text-base font-medium'>View</span>
                           </>
                         );
@@ -342,13 +342,13 @@ export default function UserCard({
                     )
                   ) : (
                     <>
-                      <MessageCircle className='w-4 h-4 text-brand-600 flex-shrink-0' />
+                      <MessageCircle className='w-4 h-4 text-brand-700 flex-shrink-0' />
                       <span className='text-base font-medium'>Message</span>
                     </>
                   )
                 ) : (
                   <>
-                    <Plus className='w-4 h-4 text-brand-600 flex-shrink-0' />
+                    <Plus className='w-4 h-4 text-brand-700 flex-shrink-0' />
                     <span className='text-base font-medium'>Connect</span>
                   </>
                 )}
@@ -383,7 +383,7 @@ export default function UserCard({
             aria-label='Open profile sidebar'
             aria-pressed={isProfileSidebarOpen}
           >
-            <MoreHorizontal className='w-5 h-5 text-brand-600' />
+            <MoreHorizontal className='w-5 h-5 text-brand-700' />
           </button>
         </div>
       </div>

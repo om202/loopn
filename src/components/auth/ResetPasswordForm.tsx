@@ -90,7 +90,7 @@ export default function ResetPasswordForm({
               type='button'
               onClick={handleResendCode}
               disabled={isLoading}
-              className='text-sm text-brand-600 hover:text-brand-600 font-medium transition-colors disabled:opacity-50'
+              className='text-sm text-brand-700 hover:text-brand-700 font-medium transition-colors disabled:opacity-50'
             >
               Resend code
             </button>
@@ -174,7 +174,7 @@ export default function ResetPasswordForm({
           <button
             type='button'
             onClick={onSwitchToSignIn}
-            className='text-sm text-brand-600 hover:text-brand-600 font-medium transition-colors'
+            className='text-sm text-brand-700 hover:text-brand-700 font-medium transition-colors'
           >
             Back to sign in
           </button>

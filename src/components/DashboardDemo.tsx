@@ -258,8 +258,8 @@ export default function DashboardDemo() {
               </div>
 
               <div className='flex-shrink-0 flex items-center gap-1.5'>
-                <button className='px-2 py-1.5 text-base font-medium rounded-xl border transition-colors flex items-center justify-center flex-shrink-0 w-[40px] h-[40px] md:w-auto md:h-auto md:gap-1.5 md:min-w-[44px] bg-brand-50 text-brand-600 border-brand-200 hover:bg-brand-100 hover:border-brand-200'>
-                  <CheckCircle2 className='w-4 h-4 text-brand-600 flex-shrink-0' />
+                <button className='px-2 py-1.5 text-base font-medium rounded-xl border transition-colors flex items-center justify-center flex-shrink-0 w-[40px] h-[40px] md:w-auto md:h-auto md:gap-1.5 md:min-w-[44px] bg-brand-50 text-brand-700 border-brand-200 hover:bg-brand-100 hover:border-brand-200'>
+                  <CheckCircle2 className='w-4 h-4 text-brand-700 flex-shrink-0' />
                   <span className='hidden md:inline text-base font-medium'>
                     Connect
                   </span>
@@ -310,7 +310,7 @@ export default function DashboardDemo() {
               </div>
 
               <div className='flex-shrink-0 flex items-center gap-2'>
-                <button className='p-2 text-brand-600 hover:bg-brand-50 rounded-lg transition-colors'>
+                <button className='p-2 text-brand-700 hover:bg-brand-50 rounded-lg transition-colors'>
                   <MessageCircle className='w-5 h-5' />
                 </button>
                 <button className='p-2 text-neutral-500 hover:bg-stone-100 rounded-lg transition-colors'>
@@ -421,7 +421,7 @@ export default function DashboardDemo() {
       <div className='space-y-6'>
         <div className='text-center py-8'>
           <div className='w-16 h-16 mx-auto mb-4 bg-brand-100 rounded-full flex items-center justify-center'>
-            <HelpCircle className='w-8 h-8 text-brand-600' />
+            <HelpCircle className='w-8 h-8 text-brand-700' />
           </div>
           <h3 className='text-lg font-medium text-black mb-2'>
             Help & Support
@@ -533,7 +533,7 @@ export default function DashboardDemo() {
               {currentUser.skills.map((skill, index) => (
                 <span
                   key={index}
-                  className='px-3 py-1 bg-brand-50 text-brand-600 text-sm rounded-full font-medium'
+                  className='px-3 py-1 bg-brand-50 text-brand-700 text-sm rounded-full font-medium'
                 >
                   {skill}
                 </span>
@@ -618,7 +618,7 @@ export default function DashboardDemo() {
                     {user.skills.slice(0, 3).map((skill, idx) => (
                       <span
                         key={idx}
-                        className='bg-brand-50 text-brand-600 text-sm px-2 py-0.5 rounded-full font-medium'
+                        className='bg-brand-50 text-brand-700 text-sm px-2 py-0.5 rounded-full font-medium'
                       >
                         {skill}
                       </span>
@@ -643,8 +643,8 @@ export default function DashboardDemo() {
     <div className='bg-white md:rounded-2xl shadow-xl border border-gray-200 md:max-w-7xl md:mx-auto overflow-hidden w-full p-4'>
       {/* Interactive Demo Header */}
       <div className='text-center mb-4 flex items-center justify-center gap-2'>
-        <Target className='w-4 h-4 text-brand-600' />
-        <span className='text-brand-600 font-semibold text-sm'>
+        <Target className='w-4 h-4 text-brand-700' />
+        <span className='text-brand-700 font-semibold text-sm'>
           Interactive Demo
         </span>
       </div>
@@ -679,7 +679,7 @@ export default function DashboardDemo() {
                 onClick={() => setActiveSection('discover')}
                 className={`relative w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                   activeSection === 'discover'
-                    ? 'bg-brand-50 text-brand-600 border-brand-200'
+                    ? 'bg-brand-50 text-brand-700 border-brand-200'
                     : 'text-black hover:bg-stone-100 hover:text-black border-transparent'
                 }`}
               >
@@ -696,7 +696,7 @@ export default function DashboardDemo() {
                 onClick={() => setActiveSection('connections')}
                 className={`relative w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                   activeSection === 'connections'
-                    ? 'bg-brand-50 text-brand-600 border-brand-200'
+                    ? 'bg-brand-50 text-brand-700 border-brand-200'
                     : 'text-black hover:bg-stone-100 hover:text-black border-transparent'
                 }`}
               >
@@ -716,7 +716,7 @@ export default function DashboardDemo() {
                 onClick={() => setActiveSection('chats')}
                 className={`relative w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                   activeSection === 'chats'
-                    ? 'bg-brand-50 text-brand-600 border-brand-200'
+                    ? 'bg-brand-50 text-brand-700 border-brand-200'
                     : 'text-black hover:bg-stone-100 hover:text-black border-transparent'
                 }`}
               >
@@ -725,7 +725,7 @@ export default function DashboardDemo() {
                 </div>
                 <span className='font-medium text-base flex-1 flex items-center gap-2'>
                   Chats
-                  <span className='text-sm font-bold flex items-center justify-center h-5 w-5 rounded-full text-center bg-brand-50 text-brand-600'>
+                  <span className='text-sm font-bold flex items-center justify-center h-5 w-5 rounded-full text-center bg-brand-50 text-brand-700'>
                     {dummyUsers
                       .filter(u => u.unreadCount > 0)
                       .reduce((sum, u) => sum + u.unreadCount, 0)}
@@ -738,7 +738,7 @@ export default function DashboardDemo() {
                 onClick={() => setActiveSection('notifications')}
                 className={`relative w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                   activeSection === 'notifications'
-                    ? 'bg-brand-50 text-brand-600 border-brand-200'
+                    ? 'bg-brand-50 text-brand-700 border-brand-200'
                     : 'text-black hover:bg-stone-100 hover:text-black border-transparent'
                 }`}
               >
@@ -747,7 +747,7 @@ export default function DashboardDemo() {
                 </div>
                 <span className='font-medium text-base flex-1 flex items-center gap-2'>
                   Notifications
-                  <span className='text-sm font-bold flex items-center justify-center h-6 w-6 rounded-full text-center bg-brand-50 text-brand-600 border border-brand-200'>
+                  <span className='text-sm font-bold flex items-center justify-center h-6 w-6 rounded-full text-center bg-brand-50 text-brand-700 border border-brand-200'>
                     {dummyNotifications.filter(n => !n.isRead).length}
                   </span>
                 </span>
@@ -763,7 +763,7 @@ export default function DashboardDemo() {
                 onClick={() => setActiveSection('help')}
                 className={`relative flex-1 flex items-center gap-2 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                   activeSection === 'help'
-                    ? 'bg-brand-50 text-brand-600 border-brand-200'
+                    ? 'bg-brand-50 text-brand-700 border-brand-200'
                     : 'text-black hover:bg-stone-100 hover:text-black border-transparent'
                 }`}
               >
@@ -785,7 +785,7 @@ export default function DashboardDemo() {
               onClick={() => setActiveSection('account')}
               className={`relative w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                 activeSection === 'account'
-                  ? 'bg-brand-50 text-brand-600 border-brand-200'
+                  ? 'bg-brand-50 text-brand-700 border-brand-200'
                   : 'text-black hover:bg-stone-100 hover:text-black border-transparent'
               }`}
             >
@@ -845,7 +845,7 @@ export default function DashboardDemo() {
                   className='absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full hover:bg-stone-50 flex items-center justify-center transition-colors duration-150 shadow-sm border border-gray-200'
                 >
                   <svg
-                    className='w-4 h-4 text-brand-600'
+                    className='w-4 h-4 text-brand-700'
                     fill='none'
                     stroke='currentColor'
                     viewBox='0 0 24 24'
@@ -992,7 +992,7 @@ export default function DashboardDemo() {
             onClick={() => setActiveSection('discover')}
             className={`flex-1 px-3 py-3 text-center text-sm font-medium ${
               activeSection === 'discover'
-                ? 'text-brand-600 bg-white border-b-2 border-brand-500'
+                ? 'text-brand-700 bg-white border-b-2 border-brand-500'
                 : 'text-neutral-500'
             }`}
           >
@@ -1002,7 +1002,7 @@ export default function DashboardDemo() {
             onClick={() => setActiveSection('connections')}
             className={`flex-1 px-3 py-3 text-center text-sm font-medium ${
               activeSection === 'connections'
-                ? 'text-brand-600 bg-white border-b-2 border-brand-500'
+                ? 'text-brand-700 bg-white border-b-2 border-brand-500'
                 : 'text-neutral-500'
             }`}
           >
@@ -1012,7 +1012,7 @@ export default function DashboardDemo() {
             onClick={() => setActiveSection('notifications')}
             className={`flex-1 px-3 py-3 text-center text-sm font-medium relative ${
               activeSection === 'notifications'
-                ? 'text-brand-600 bg-white border-b-2 border-brand-500'
+                ? 'text-brand-700 bg-white border-b-2 border-brand-500'
                 : 'text-neutral-500'
             }`}
           >
@@ -1029,7 +1029,7 @@ export default function DashboardDemo() {
             onClick={() => setActiveSection('chats')}
             className={`flex-1 px-3 py-3 text-center text-sm font-medium ${
               activeSection === 'chats'
-                ? 'text-brand-600 bg-white border-b-2 border-brand-500'
+                ? 'text-brand-700 bg-white border-b-2 border-brand-500'
                 : 'text-neutral-500'
             }`}
           >
@@ -1151,8 +1151,8 @@ export default function DashboardDemo() {
                     </div>
 
                     <div className='flex-shrink-0'>
-                      <button className='px-3 py-2 text-sm font-medium rounded-lg border transition-colors bg-white text-brand-600 border-gray-200 hover:bg-brand-100 hover:border-gray-200 flex items-center gap-1.5'>
-                        <CheckCircle2 className='w-3 h-3 text-brand-600 flex-shrink-0' />
+                      <button className='px-3 py-2 text-sm font-medium rounded-lg border transition-colors bg-white text-brand-700 border-gray-200 hover:bg-brand-100 hover:border-gray-200 flex items-center gap-1.5'>
+                        <CheckCircle2 className='w-3 h-3 text-brand-700 flex-shrink-0' />
                         Connect
                       </button>
                     </div>
@@ -1195,7 +1195,7 @@ export default function DashboardDemo() {
                     </div>
 
                     <div className='flex-shrink-0'>
-                      <button className='p-2 text-brand-600 hover:bg-brand-50 rounded-lg transition-colors'>
+                      <button className='p-2 text-brand-700 hover:bg-brand-50 rounded-lg transition-colors'>
                         <MessageCircle className='w-4 h-4' />
                       </button>
                     </div>
