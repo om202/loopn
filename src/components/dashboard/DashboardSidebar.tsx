@@ -150,7 +150,7 @@ export default function DashboardSidebar({
 
           {/* Navigation items */}
           <nav className='flex-1 overflow-y-auto py-4'>
-            <div className='px-2 space-y-1'>
+            <div className='px-2 space-y-0.5'>
               {sidebarItems.map(({ id, icon, label, count }) => (
                 <button
                   key={id}
