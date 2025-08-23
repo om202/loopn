@@ -124,7 +124,7 @@ export default function ChatHeader({
             {/* Back Button */}
             <button
               onClick={onBack}
-              className='p-1.5 sm:p-2 -ml-1 sm:-ml-2 text-neutral-500 hover:text-black hover:bg-stone-100 rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2'
+              className='p-1.5 sm:p-2 -ml-1 sm:-ml-2 text-neutral-500 hover:text-neutral-950 hover:bg-stone-100 rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2'
             >
               <svg
                 className='w-4 h-4 sm:w-5 sm:h-5'
@@ -162,7 +162,7 @@ export default function ChatHeader({
             />
 
             <div className='flex-1 min-w-0'>
-              <h1 className='text-sm sm:text-base font-medium text-black truncate no-email-detection'>
+              <h1 className='text-sm sm:text-base font-medium text-neutral-950 truncate no-email-detection'>
                 {getUserDisplayName()}
               </h1>
 
@@ -201,15 +201,15 @@ export default function ChatHeader({
                 {/* Chat Ended State */}
                 {conversation.chatStatus === 'ENDED' && (
                   <div className='flex items-center gap-2 sm:gap-3 md:gap-4'>
-                    <div className='flex items-center gap-1 sm:gap-2 text-sm sm:text-sm text-black'>
+                    <div className='flex items-center gap-1 sm:gap-2 text-sm sm:text-sm text-neutral-950'>
                       <button
                         onClick={() => setShowChatEndedInfoDialog(true)}
-                        className='flex items-center gap-1 text-neutral-500 hover:text-black transition-colors p-1 rounded-full hover:bg-stone-100 flex-shrink-0'
+                        className='flex items-center gap-1 text-neutral-500 hover:text-neutral-950 transition-colors p-1 rounded-full hover:bg-stone-100 flex-shrink-0'
                         title='Learn about ended chats'
                       >
                         <Info className='w-3 sm:w-4 h-3 sm:h-4' />
                       </button>
-                      <span className='font-medium text-black whitespace-nowrap'>
+                      <span className='font-medium text-neutral-950 whitespace-nowrap'>
                         <span className='hidden sm:inline'>Chat Ended</span>
                         <span className='sm:hidden'>Ended</span>
                       </span>
@@ -270,7 +270,7 @@ export default function ChatHeader({
                             Trial Chat
                           </span>
                         </button>
-                        <span className='text-black text-sm font-bold whitespace-nowrap'>
+                        <span className='text-neutral-950 text-sm font-bold whitespace-nowrap'>
                           {timeLeft}
                         </span>
                       </div>
@@ -327,10 +327,10 @@ export default function ChatHeader({
         maxWidth='xs'
       >
         <div className='p-4'>
-          <h3 className='text-lg font-medium text-black text-center mb-3'>
+          <h3 className='text-lg font-medium text-neutral-950 text-center mb-3'>
             End trial chat?
           </h3>
-          <p className='text-sm text-black text-center mb-4'>
+          <p className='text-sm text-neutral-950 text-center mb-4'>
             This will immediately end the chat. You won&apos;t be able to send
             more messages, but chat history will remain accessible until the
             trial period expires.
@@ -338,7 +338,7 @@ export default function ChatHeader({
           <div className='flex gap-2'>
             <button
               onClick={() => setShowEndChatDialog(false)}
-              className='flex-1 px-3 py-2 text-base font-medium text-black bg-stone-100 rounded-lg hover:bg-stone-100 focus:outline-none transition-colors'
+              className='flex-1 px-3 py-2 text-base font-medium text-neutral-950 bg-stone-100 rounded-lg hover:bg-stone-100 focus:outline-none transition-colors'
             >
               Cancel
             </button>
@@ -362,9 +362,9 @@ export default function ChatHeader({
         maxWidth='md'
       >
         <div className='p-6'>
-          <h3 className='text-lg font-semibold text-black mb-4'>Chat Ended</h3>
+          <h3 className='text-lg font-semibold text-neutral-950 mb-4'>Chat Ended</h3>
 
-          <div className='text-base text-black space-y-3'>
+          <div className='text-base text-neutral-950 space-y-3'>
             <p>
               <strong>What happened?</strong>
               <br />
@@ -392,7 +392,7 @@ export default function ChatHeader({
               period (testing mode)
             </p>
 
-            <p className='text-black'>
+            <p className='text-neutral-950'>
               💡 <strong>Note:</strong> Ending a chat early helps both parties
               move on respectfully when the conversation isn&apos;t working out.
             </p>

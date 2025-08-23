@@ -178,7 +178,7 @@ export default function UserCard({
 
         <div className='flex-1 min-w-0'>
           <div className='flex items-center gap-2 mb-1'>
-            <div className='text-black truncate no-email-detection font-semibold'>
+            <div className='text-neutral-950 truncate no-email-detection font-semibold'>
               {getDisplayName(userPresence, userProfile)}
             </div>
             {/* Show clock icon for temporary connections (active chat trials) */}
@@ -353,7 +353,7 @@ export default function UserCard({
           {/* Mobile: Profile dialog button */}
           <button
             onClick={() => setShowProfileDialog(true)}
-            className={`md:hidden p-1.5 text-base font-medium rounded-lg transition-colors text-black hover:bg-brand-100 flex items-center justify-center flex-shrink-0 w-[32px] h-[32px] ${
+            className={`md:hidden p-1.5 text-base font-medium rounded-lg transition-colors text-neutral-950 hover:bg-brand-100 flex items-center justify-center flex-shrink-0 w-[32px] h-[32px] ${
               isSelected ? 'bg-white' : 'bg-brand-100'
             }`}
             disabled={loadingProfile}
@@ -413,17 +413,17 @@ export default function UserCard({
         maxWidth='sm'
       >
         <div className='p-4'>
-          <h3 className='text-lg font-medium text-black text-center mb-3'>
+          <h3 className='text-lg font-medium text-neutral-950 text-center mb-3'>
             Cancel Chat Request?
           </h3>
-          <p className='text-base text-black text-center mb-4'>
+          <p className='text-base text-neutral-950 text-center mb-4'>
             This will cancel your pending chat request to{' '}
             {getDisplayName(userPresence, userProfile)}.
           </p>
           <div className='flex gap-2'>
             <button
               onClick={() => setShowCancelDialog(false)}
-              className='flex-1 px-3 py-2 text-base font-medium text-black bg-stone-100 rounded-lg hover:bg-stone-100 focus:outline-none transition-colors'
+              className='flex-1 px-3 py-2 text-base font-medium text-neutral-950 bg-stone-100 rounded-lg hover:bg-stone-100 focus:outline-none transition-colors'
             >
               Done
             </button>

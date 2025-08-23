@@ -128,7 +128,7 @@ export default function UserAvatar({
             className={`${recentlyActiveSize} bg-stone-300 rounded-full border-2 border-white box-content flex items-center justify-center`}
           >
             <Clock
-              className={`${recentlyActiveIconSize} text-black`}
+              className={`${recentlyActiveIconSize} text-neutral-950`}
               strokeWidth={2.5}
             />
           </div>

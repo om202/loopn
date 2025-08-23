@@ -291,7 +291,7 @@ export default function MessageBubble({
                 className={`p-2.5 rounded-2xl shadow-sm ${
                   isOwnMessage
                     ? 'bg-brand-500 text-white border border-brand-500 rounded-br-md'
-                    : 'bg-stone-100 text-black border border-gray-200 rounded-bl-md'
+                    : 'bg-stone-100 text-neutral-950 border border-gray-200 rounded-bl-md'
                 }`}
               >
                 {repliedToMessage && (
@@ -304,7 +304,7 @@ export default function MessageBubble({
                   >
                     <div
                       className={`text-sm ${
-                        isOwnMessage ? 'text-brand-100' : 'text-black'
+                        isOwnMessage ? 'text-brand-100' : 'text-neutral-950'
                       } mb-1`}
                     >
                       Replying to{' '}
@@ -316,7 +316,7 @@ export default function MessageBubble({
                     </div>
                     <div
                       className={`text-base ${
-                        isOwnMessage ? 'text-brand-100' : 'text-black'
+                        isOwnMessage ? 'text-brand-100' : 'text-neutral-950'
                       }`}
                     >
                       {getRepliedToContent(repliedToMessage.content)}

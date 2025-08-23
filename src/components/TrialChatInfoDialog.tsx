@@ -18,10 +18,10 @@ export default function TrialChatInfoDialog({
       {/* Dialog content */}
       <div className='p-6'>
         {/* Title */}
-        <h3 className='text-lg font-medium text-black mb-6'>Trial Chat</h3>
+        <h3 className='text-lg font-medium text-neutral-950 mb-6'>Trial Chat</h3>
 
         {/* Content */}
-        <div className='text-sm text-black space-y-4 leading-relaxed'>
+        <div className='text-sm text-neutral-950 space-y-4 leading-relaxed'>
           <p>
             You have 7 days to chat and get to know each other. Either person
             can send a connection request to continue chatting after the trial

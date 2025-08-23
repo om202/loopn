@@ -71,7 +71,7 @@ export default function AccountContent() {
             className='mb-4'
           />
           <div>
-            <h3 className='font-semibold text-black mb-1'>
+            <h3 className='font-semibold text-neutral-950 mb-1'>
               {getUserDisplayName()}
             </h3>
             <p className='text-sm text-neutral-500 font-medium'>
@@ -109,7 +109,7 @@ export default function AccountContent() {
                           <Briefcase className='w-3.5 h-3.5' />
                           Role
                         </dt>
-                        <dd className='text-base text-black'>
+                        <dd className='text-base text-neutral-950'>
                           {userProfile.jobRole}
                         </dd>
                       </div>
@@ -120,7 +120,7 @@ export default function AccountContent() {
                           <Building2 className='w-3.5 h-3.5' />
                           Company
                         </dt>
-                        <dd className='text-base text-black'>
+                        <dd className='text-base text-neutral-950'>
                           {userProfile.companyName}
                         </dd>
                       </div>
@@ -131,7 +131,7 @@ export default function AccountContent() {
                           <Factory className='w-3.5 h-3.5' />
                           Industry
                         </dt>
-                        <dd className='text-base text-black'>
+                        <dd className='text-base text-neutral-950'>
                           {userProfile.industry}
                         </dd>
                       </div>
@@ -143,7 +143,7 @@ export default function AccountContent() {
                             <Clock className='w-3.5 h-3.5' />
                             Experience
                           </dt>
-                          <dd className='text-base text-black'>
+                          <dd className='text-base text-neutral-950'>
                             {userProfile.yearsOfExperience} years
                           </dd>
                         </div>
@@ -154,7 +154,7 @@ export default function AccountContent() {
                           <GraduationCap className='w-3.5 h-3.5' />
                           Education
                         </dt>
-                        <dd className='text-base text-black'>
+                        <dd className='text-base text-neutral-950'>
                           {userProfile.education}
                         </dd>
                       </div>
@@ -165,7 +165,7 @@ export default function AccountContent() {
                           <Info className='w-3.5 h-3.5' />
                           About
                         </dt>
-                        <dd className='text-base text-black'>
+                        <dd className='text-base text-neutral-950'>
                           {userProfile.about}
                         </dd>
                       </div>
@@ -180,7 +180,7 @@ export default function AccountContent() {
                           {userProfile.skills.map((skill, index) => (
                             <span
                               key={index}
-                              className='px-3 py-1.5 text-base bg-transparent text-black border border-gray-200 rounded-lg font-medium'
+                              className='px-3 py-1.5 text-base bg-transparent text-neutral-950 border border-gray-200 rounded-lg font-medium'
                             >
                               {skill}
                             </span>
@@ -198,7 +198,7 @@ export default function AccountContent() {
                           {userProfile.interests.map((interest, index) => (
                             <span
                               key={index}
-                              className='px-3 py-1.5 text-base bg-transparent text-black border border-gray-200 rounded-lg font-medium'
+                              className='px-3 py-1.5 text-base bg-transparent text-neutral-950 border border-gray-200 rounded-lg font-medium'
                             >
                               {interest}
                             </span>
