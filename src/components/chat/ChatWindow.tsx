@@ -6,6 +6,7 @@ import { useState, useEffect, useCallback } from 'react';
 import type { Schema } from '../../../amplify/data/resource';
 import { messageService } from '../../services/message.service';
 import { chatPresenceService } from '../../services/chat-presence.service';
+import { soundService } from '../../services/sound.service';
 import { useRealtimeMessages } from '../../hooks/realtime';
 import LoadingContainer from '../LoadingContainer';
 
@@ -111,6 +112,9 @@ export default function ChatWindow({
     setReplyToMessage(null); // Clear reply state
     setLastLoadWasOlderMessages(false); // Ensure scroll logic treats this as new message
     setShouldAutoScroll(true); // Trigger auto-scroll for sent message
+
+    // Play sent sound
+    soundService.playSentSound();
 
     // Send to server - let real-time subscription handle UI updates
     try {
