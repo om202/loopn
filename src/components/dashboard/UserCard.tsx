@@ -149,8 +149,8 @@ export default function UserCard({
       onClick={handleCardClick}
       className={`px-2 py-2 group transition-all duration-200 cursor-pointer ${
         isSelected
-          ? 'bg-stone-50 rounded-2xl border border-transparent'
-          : 'bg-white hover:bg-stone-100 hover:rounded-2xl border border-transparent border-b-gray-100 last:border-b-0'
+          ? 'bg-stone-100 rounded-2xl border border-transparent'
+          : 'bg-white hover:bg-stone-50 hover:rounded-2xl border border-transparent border-b-gray-100 last:border-b-0'
       }`}
     >
       <div className='flex items-center gap-3'>
@@ -367,10 +367,10 @@ export default function UserCard({
             onClick={() => onOpenProfileSidebar?.(userPresence)}
             className={`hidden md:flex p-1.5 text-base font-medium rounded-full transition-colors items-center justify-center w-[32px] h-[32px] ${
               isProfileSidebarOpen
-                ? 'bg-stone-100'
+                ? 'bg-stone-200'
                 : isSelected
-                  ? 'bg-stone-100 hover:bg-stone-100'
-                  : 'hover:bg-stone-100 group-hover:bg-white'
+                  ? 'bg-stone-200 hover:bg-stone-200'
+                  : 'hover:bg-stone-200 group-hover:bg-white'
             }`}
             disabled={loadingProfile}
             aria-label='Open profile sidebar'
