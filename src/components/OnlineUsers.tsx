@@ -99,6 +99,9 @@ export default function OnlineUsers({
     enabled: !!user?.userId,
   });
 
+  // Check if conversations are still loading
+  const conversationsLoading = useSubscriptionStore(state => state.loading.conversations);
+
   // Use centralized chat requests hook (handles subscriptions internally)
   const { incomingRequests: incomingChatRequests, pendingReceiverIds } =
     useChatRequests({
@@ -357,6 +360,12 @@ export default function OnlineUsers({
         return;
       }
 
+      // Wait for conversations to load before filtering suggested users
+      if (conversationsLoading) {
+        setSuggestedUsersLoading(false);
+        return;
+      }
+
       setSuggestedUsersLoading(true);
       try {
         const result = await userPresenceService.getAllUsers();
@@ -386,10 +395,26 @@ export default function OnlineUsers({
             userCategories.canUserReconnect(u.userId);
 
           // Exclude users with active conversations or permanent connections
-          // Include users who can be reconnected
+          // Only include users who can be reconnected or have no prior conversation
           return isEndedAndReconnectable;
         });
-        setSuggestedUsers(filteredUsers);
+
+        // Additional filtering to ensure we don't show users with active conversations
+        const finalFilteredUsers = filteredUsers.filter((u: UserPresence) => {
+          const conversation = existingConversations.get(u.userId);
+          if (!conversation) {
+            return true; // No conversation, include
+          }
+
+          // Exclude users with active or connected conversations
+          const isActiveOrConnected =
+            conversation.chatStatus === 'ACTIVE' ||
+            conversation.isConnected === true;
+
+          return !isActiveOrConnected;
+        });
+
+        setSuggestedUsers(finalFilteredUsers);
         setLastSuggestedUsersLoad(now);
         setSuggestedUsersLoading(false);
       } catch (error) {
@@ -405,6 +430,7 @@ export default function OnlineUsers({
     suggestedUsers.length,
     existingConversations,
     userCategories,
+    conversationsLoading,
   ]);
 
   useEffect(() => {
