@@ -178,7 +178,7 @@ export default function UserCard({
 
         <div className='flex-1 min-w-0'>
           <div className='flex items-center gap-2 mb-1'>
-            <div className='text-black truncate no-email-detection font-medium'>
+            <div className='text-black truncate no-email-detection font-semibold'>
               {getDisplayName(userPresence, userProfile)}
             </div>
             {/* Show clock icon for temporary connections (active chat trials) */}
@@ -199,7 +199,7 @@ export default function UserCard({
 
           {/* Profession */}
           {(finalFullProfile?.jobRole || finalFullProfile?.companyName) && (
-            <div className='text-base text-neutral-500 mb-1.5 truncate'>
+            <div className='text-sm text-neutral-500 mb-1.5 truncate'>
               {finalFullProfile?.jobRole && finalFullProfile?.companyName
                 ? `${finalFullProfile.jobRole} at ${finalFullProfile.companyName}`
                 : finalFullProfile?.jobRole || finalFullProfile?.companyName}
@@ -353,13 +353,13 @@ export default function UserCard({
           {/* Mobile: Profile dialog button */}
           <button
             onClick={() => setShowProfileDialog(true)}
-            className={`md:hidden px-3 py-1.5 text-base font-medium rounded-lg transition-colors text-black hover:bg-brand-100 flex items-center justify-center flex-shrink-0 ${
+            className={`md:hidden p-1.5 text-base font-medium rounded-lg transition-colors text-black hover:bg-brand-100 flex items-center justify-center flex-shrink-0 w-[32px] h-[32px] ${
               isSelected ? 'bg-white' : 'bg-brand-100'
             }`}
             disabled={loadingProfile}
             title='View Profile'
           >
-            <span className='text-base font-medium'>Profile</span>
+            <MoreHorizontal className='w-5.5 h-5.5 text-brand-600 stroke-[2.5]' />
           </button>
 
           {/* Desktop: profile icon opens sidebar via parent */}
