@@ -14,6 +14,7 @@ import {
   User,
   Target,
   Heart,
+  UserCheck,
 } from 'lucide-react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import Image from 'next/image';
@@ -259,18 +260,16 @@ export default function ProfileSidebar({
               onChatAction?.(userId);
             }
           }}
-          className={`px-3 py-1.5 text-base font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 ${
+          className={`px-3 py-1.5 text-base font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 border ${
             pendingRequests.has(userId)
-              ? 'text-neutral-500 hover:bg-stone-100'
-              : 'bg-brand-50 text-brand-600 hover:bg-brand-50'
+              ? 'bg-stone-100 text-neutral-600 hover:bg-stone-200 border-stone-200'
+              : 'bg-brand-50 text-brand-600 hover:bg-brand-100 border-brand-200'
           }`}
         >
           {pendingRequests.has(userId) ? (
             <>
-              <Clock className='w-4 h-4 text-neutral-500' />
-              <span className='text-neutral-500 text-base font-medium'>
-                Cancel Request
-              </span>
+              <UserCheck className='w-4 h-4 text-neutral-600' />
+              <span className='text-base text-neutral-600'>Pending</span>
             </>
           ) : existingConversations.has(userId) ? (
             existingConversations.get(userId)?.chatStatus === 'ENDED' ? (
@@ -282,7 +281,7 @@ export default function ProfileSidebar({
               ) : (
                 <>
                   <MessageCircle className='w-4 h-4 stroke-[2]' />
-                  <span className='text-base font-medium'>View Chat</span>
+                  <span className='text-base font-medium'>View</span>
                 </>
               )
             ) : (
@@ -414,9 +413,10 @@ export default function ProfileSidebar({
                     <button
                       onClick={() => setShowCancelRequestDialog(true)}
                       disabled={optimisticRequestSent} // Disable if optimistic (no real request to cancel yet)
-                      className='px-6 py-2 text-base font-medium rounded-lg flex items-center justify-center gap-2 text-neutral-500 hover:bg-stone-100 transition-colors disabled:cursor-not-allowed disabled:hover:bg-transparent'
+                      className='px-6 py-2 text-base font-medium rounded-lg flex items-center justify-center gap-2 bg-stone-100 text-neutral-600 hover:bg-stone-200 border border-stone-200 transition-colors disabled:cursor-not-allowed disabled:hover:bg-stone-100'
                     >
-                      <span>Request Sent</span>
+                      <UserCheck className='w-4 h-4 text-neutral-600' />
+                      <span>Pending</span>
                     </button>
                   ) : (
                     <Tooltip
@@ -428,9 +428,10 @@ export default function ProfileSidebar({
                         disabled={
                           sendingConnectionRequest || connectionRequestsLoading
                         }
-                        className='px-6 py-2 text-base font-medium rounded-lg transition-colors flex items-center justify-center gap-2 bg-brand-50 text-brand-600 hover:bg-brand-50 disabled:bg-brand-50 disabled:cursor-not-allowed'
+                        className='px-6 py-2 text-base font-medium rounded-lg transition-colors flex items-center justify-center gap-2 bg-brand-50 text-brand-600 hover:bg-brand-100 border border-brand-200 disabled:bg-brand-50 disabled:cursor-not-allowed'
                       >
-                        <span>Add to Network</span>
+                        <Plus className='w-4 h-4 stroke-[2]' />
+                        <span>Connect</span>
                       </button>
                     </Tooltip>
                   )}

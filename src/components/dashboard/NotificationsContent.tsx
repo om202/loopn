@@ -411,7 +411,7 @@ export default function NotificationsContent() {
   return (
     <div className='h-full flex flex-col'>
       {/* Content */}
-      <div className='flex-1 mx-auto  w-full'>
+      <div className='flex-1 w-full'>
         {error && (
           <div className='p-4 text-b_red-700 bg-b_red-100 mb-4 rounded-2xl'>
             {error}
