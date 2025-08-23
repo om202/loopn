@@ -17,6 +17,7 @@ import {
   Shield,
   Globe,
   Bug,
+  UserRoundSearch,
 } from 'lucide-react';
 import Image from 'next/image';
 import React, { useState } from 'react';
@@ -812,21 +813,9 @@ export default function DashboardDemo() {
         <div className='flex-1 bg-white rounded-2xl border border-gray-200 p-6 overflow-hidden flex flex-col min-h-0 ml-4'>
           {/* Search User - Always visible at top */}
           <div className='flex-shrink-0 mb-2 sm:mb-2'>
-            <div className='max-w-md mx-auto relative'>
+            <div className='max-w-xl mx-auto relative'>
               <div className='relative'>
-                <svg
-                  className='absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 z-10'
-                  fill='none'
-                  stroke='currentColor'
-                  viewBox='0 0 24 24'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M13 10V3L4 14h7v7l9-11h-7z'
-                  />
-                </svg>
+                <UserRoundSearch className='absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400 z-10' />
                 <input
                   type='text'
                   placeholder='Ask Anything or Search'
@@ -837,7 +826,7 @@ export default function DashboardDemo() {
                     WebkitAppearance: 'none',
                     MozAppearance: 'textfield',
                   }}
-                  className='w-full pl-10 pr-16 py-3 rounded-full border border-gray-200 focus:outline-none focus:ring-1 focus:ring-brand-200 focus:bg-white bg-stone-100 hover:bg-brand-50 transition-colors placeholder-gray-1000'
+                  className='w-full pl-9 pr-16 py-3 rounded-full border border-gray-200 focus:outline-none focus:ring-1 focus:ring-brand-200 focus:bg-white bg-stone-100 hover:bg-white transition-colors placeholder-gray-1000'
                 />
                 <button
                   type='button'
@@ -845,7 +834,7 @@ export default function DashboardDemo() {
                   className='absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full hover:bg-stone-50 flex items-center justify-center transition-colors duration-150 shadow-sm border border-gray-200'
                 >
                   <svg
-                    className='w-4 h-4 text-brand-600'
+                    className='w-5 h-5 text-brand-600'
                     fill='none'
                     stroke='currentColor'
                     viewBox='0 0 24 24'
@@ -1043,13 +1032,13 @@ export default function DashboardDemo() {
           {activeSection === 'search' && (
             <div className='mb-4'>
               <div className='relative'>
-                <Search className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400' />
+                <UserRoundSearch className='absolute left-2 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400' />
                 <input
                   type='text'
                   placeholder='Search professionals...'
                   value={searchQuery}
                   onChange={e => handleSearch(e.target.value)}
-                  className='w-full pl-10 pr-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-1 focus:ring-brand-200 bg-white'
+                  className='w-full pl-9 pr-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-1 focus:ring-brand-200 bg-white'
                 />
               </div>
             </div>

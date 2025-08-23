@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { Search, X, Clock, User, Briefcase, MapPin } from 'lucide-react';
+import { X, Clock, User, Briefcase, MapPin, UserRoundSearch } from 'lucide-react';
 import {
   VespaService,
   type SearchResult,
@@ -179,13 +179,13 @@ export default function IntelligentSearch({
 
   return (
     <div
-      className={`relative w-full mx-auto transition-all duration-300 ease-out ${isFocused ? 'max-w-2xl' : 'max-w-lg'}`}
+      className={`relative w-full mx-auto transition-all duration-300 ease-out ${isFocused ? 'max-w-4xl' : 'max-w-xl'}`}
     >
       {/* Search Input */}
       <div className='relative'>
         <div className='relative'>
-          <div className='absolute left-4 top-1/2 transform -translate-y-1/2 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-sm'>
-            <Search className='text-brand-600 w-4 h-4' />
+          <div className='absolute left-2 top-1/2 transform -translate-y-1/2 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-sm'>
+            <UserRoundSearch className='text-brand-600 w-5 h-5' />
           </div>
           <input
             ref={inputRef}
@@ -208,7 +208,7 @@ export default function IntelligentSearch({
               }
             }}
             placeholder={placeholder}
-            className='w-full pl-12 pr-12 py-4 text-lg border border-gray-200 rounded-xl focus:border-brand-300 focus:outline-none bg-white shadow-sm'
+            className={`w-full pl-10 py-4 text-lg border border-gray-200 rounded-xl focus:border-brand-300 focus:outline-none shadow-sm transition-colors ${isFocused ? 'bg-white' : 'bg-gray-50'} ${query ? 'pr-16' : 'pr-4'}`}
           />
           {query && (
             <button

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { Search, X, Clock } from 'lucide-react';
+import {X, Clock, UserRoundSearch } from 'lucide-react';
 import {
   getSearchHistory,
   addToSearchHistory,
@@ -123,7 +123,7 @@ export default function SearchUser({
 
   return (
     <div
-      className='w-full sm:mx-auto relative transition-all duration-300 ease-out sm:max-w-lg'
+      className='w-full sm:mx-auto relative transition-all duration-300 ease-out sm:max-w-xl'
     >
       {/* Mobile Logo + Search Layout */}
       <div className='flex items-center gap-3 sm:block'>
@@ -197,7 +197,7 @@ export default function SearchUser({
               WebkitAppearance: 'none',
               MozAppearance: 'textfield',
             }}
-            className='w-full pl-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-1 active:bg-white focus:ring-brand-200 bg-stone-100 text-neutral-900 hover:bg-white transition-colors placeholder-gray-500'
+            className={`w-full pl-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-1 focus:ring-brand-200 text-neutral-900 hover:bg-white transition-colors placeholder-gray-500 ${isFocused ? 'bg-white' : 'bg-stone-100'} ${isFocused ? (query.trim() ? 'pr-32' : 'pr-28') : (query.trim() ? 'pr-20' : 'pr-12')}`}
           />
 
           {/* Clear button - only show when there's text */}
@@ -225,9 +225,9 @@ export default function SearchUser({
               <div className='w-4 h-4 border-2 border-brand-500 border-t-transparent rounded-full animate-spin flex-shrink-0' />
             ) : (
               <>
-                <Search className='w-4 h-4 text-brand-500 flex-shrink-0' />
+                <UserRoundSearch className='w-5 h-5 text-brand-500 flex-shrink-0' />
                 {isFocused && (
-                  <span className='text-sm font-medium text-brand-500 whitespace-nowrap transition-all duration-300 ease-out ml-2'>
+                  <span className='text-base font-medium text-brand-500 whitespace-nowrap transition-all duration-300 ease-out ml-1.5'>
                     Search
                   </span>
                 )}
