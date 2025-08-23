@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 
-/* Import Atkinson Hyperlegible Font Family */
-@import url('/fonts/atkinson-optimized.css');
+/* Import Ronzino Font Family */
+@import url('/fonts/ronzino-optimized.css');
 
 @theme {
   /* Custom brand colors - Slightly toned down Blue */
@@ -239,16 +239,16 @@ a:hover,
   display: none;
 }
 
-/* Force Atkinson to override Amplify UI React default fonts */
+/* Force Ronzino to override Amplify UI React default fonts */
 * {
   font-family:
-    'Atkinson',
+    'Ronzino',
     system-ui,
     -apple-system,
     sans-serif !important;
 }
 
-/* Ensure all Amplify UI components use Atkinson */
+/* Ensure all Amplify UI components use Ronzino */
 [data-amplify-authenticator] *,
 [data-amplify-theme] *,
 .amplify-authenticator *,
@@ -258,7 +258,7 @@ a:hover,
 .amplify-label *,
 .amplify-text * {
   font-family:
-    'Atkinson',
+    'Ronzino',
     system-ui,
     -apple-system,
     sans-serif !important;

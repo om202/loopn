@@ -8,7 +8,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Atkinson', 'system-ui', '-apple-system', 'sans-serif'],
+        sans: ['Ronzino', 'system-ui', '-apple-system', 'sans-serif'],
       },
     },
   },

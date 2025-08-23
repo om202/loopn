@@ -131,9 +131,9 @@ export default function SearchUser({
           <Image
             src='/loopn.svg'
             alt='Loopn'
-            width={38}
-            height={38}
-            className='w-12 h-12'
+            width={28}
+            height={28}
+            className='w-8 h-8'
           />
         </div>
 
