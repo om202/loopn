@@ -199,7 +199,7 @@ export default function UserCard({
 
           {/* Profession */}
           {(finalFullProfile?.jobRole || finalFullProfile?.companyName) && (
-            <div className='text-sm text-neutral-500 mb-1.5 truncate'>
+            <div className='text-base text-neutral-500 mb-1.5 truncate'>
               {finalFullProfile?.jobRole && finalFullProfile?.companyName
                 ? `${finalFullProfile.jobRole} at ${finalFullProfile.companyName}`
                 : finalFullProfile?.jobRole || finalFullProfile?.companyName}

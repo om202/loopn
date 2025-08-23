@@ -8,6 +8,13 @@ import {
   UserX,
   Plus,
   MessageCircle,
+  Briefcase,
+  Building2,
+  Factory,
+  GraduationCap,
+  User,
+  Target,
+  Heart,
 } from 'lucide-react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import Image from 'next/image';
@@ -480,15 +487,20 @@ export default function ProfileSidebar({
               {(userProfile.jobRole ||
                 userProfile.companyName ||
                 userProfile.industry ||
-                userProfile.yearsOfExperience !== null) && (
-                <div className='pb-4'>
-                  <h4 className='text-base font-semibold text-neutral-500 mb-4 border-b border-gray-200 pb-2'>
+                userProfile.yearsOfExperience !== null ||
+                userProfile.education ||
+                userProfile.about ||
+                (userProfile.skills && userProfile.skills.length > 0) ||
+                (userProfile.interests && userProfile.interests.length > 0)) && (
+                <div className='pb-6'>
+                  <h4 className='text-sm font-semibold text-neutral-500 mb-4'>
                     Profile Details
                   </h4>
                   <div className='divide-y divide-gray-100'>
                     {userProfile.jobRole && (
-                      <div className='pb-3'>
-                        <dt className='text-base font-medium text-neutral-500 mb-1.5'>
+                      <div className='py-3'>
+                        <dt className='text-sm font-medium text-neutral-500 mb-1.5 flex items-center gap-1'>
+                          <User className='w-3.5 h-3.5' />
                           Role
                         </dt>
                         <dd className='text-base text-black'>
@@ -498,7 +510,8 @@ export default function ProfileSidebar({
                     )}
                     {userProfile.companyName && (
                       <div className='py-3'>
-                        <dt className='text-base font-medium text-neutral-500 mb-1.5'>
+                        <dt className='text-sm font-medium text-neutral-500 mb-1.5 flex items-center gap-1'>
+                          <Building2 className='w-3.5 h-3.5' />
                           Company
                         </dt>
                         <dd className='text-base text-black'>
@@ -508,7 +521,8 @@ export default function ProfileSidebar({
                     )}
                     {userProfile.industry && (
                       <div className='py-3'>
-                        <dt className='text-base font-medium text-neutral-500 mb-1.5'>
+                        <dt className='text-sm font-medium text-neutral-500 mb-1.5 flex items-center gap-1'>
+                          <Factory className='w-3.5 h-3.5' />
                           Industry
                         </dt>
                         <dd className='text-base text-black'>
@@ -518,8 +532,9 @@ export default function ProfileSidebar({
                     )}
                     {userProfile.yearsOfExperience !== null &&
                       userProfile.yearsOfExperience !== undefined && (
-                        <div className='pt-3'>
-                          <dt className='text-base font-medium text-neutral-500 mb-1.5'>
+                        <div className='py-3'>
+                          <dt className='text-sm font-medium text-neutral-500 mb-1.5 flex items-center gap-1'>
+                            <Clock className='w-3.5 h-3.5' />
                             Experience
                           </dt>
                           <dd className='text-base text-black'>
@@ -527,43 +542,32 @@ export default function ProfileSidebar({
                           </dd>
                         </div>
                       )}
-                  </div>
-                </div>
-              )}
-
-              {/* Education Section */}
-              {userProfile.education && (
-                <div className='py-4'>
-                  <h4 className='text-base font-semibold text-neutral-500 mb-4'>
-                    Education
-                  </h4>
-                  <div className='text-base text-black leading-relaxed'>
-                    {userProfile.education}
-                  </div>
-                </div>
-              )}
-
-              {/* About Section */}
-              {userProfile.about && (
-                <div className='py-4'>
-                  <h4 className='text-base font-medium text-neutral-500 mb-4'>
-                    About
-                  </h4>
-                  <div className='text-base text-black leading-relaxed'>
-                    {userProfile.about}
-                  </div>
-                </div>
-              )}
-
-              {/* Skills & Interests Section */}
-              {((userProfile.skills && userProfile.skills.length > 0) ||
-                (userProfile.interests &&
-                  userProfile.interests.length > 0)) && (
-                <div className='pt-4'>
-                  <div className='divide-y divide-gray-100'>
+                    {userProfile.education && (
+                      <div className='py-3'>
+                        <dt className='text-sm font-medium text-neutral-500 mb-1.5 flex items-center gap-1'>
+                          <GraduationCap className='w-3.5 h-3.5' />
+                          Education
+                        </dt>
+                        <dd className='text-base text-black'>
+                          {userProfile.education}
+                        </dd>
+                      </div>
+                    )}
+                    {userProfile.about && (
+                      <div className='py-3'>
+                        <dt className='text-sm font-medium text-neutral-500 mb-1.5 flex items-center gap-1'>
+                          <Info className='w-3.5 h-3.5' />
+                          About
+                        </dt>
+                        <dd className='text-base text-black'>
+                          {userProfile.about}
+                        </dd>
+                      </div>
+                    )}
                     {userProfile.skills && userProfile.skills.length > 0 && (
-                      <div className='pb-3'>
-                        <dt className='text-base font-medium text-neutral-500 mb-3'>
+                      <div className='py-3'>
+                        <dt className='text-sm font-medium text-neutral-500 mb-1.5 flex items-center gap-1'>
+                          <Target className='w-3.5 h-3.5' />
                           Skills
                         </dt>
                         <dd className='flex flex-wrap gap-2'>
@@ -578,24 +582,24 @@ export default function ProfileSidebar({
                         </dd>
                       </div>
                     )}
-                    {userProfile.interests &&
-                      userProfile.interests.length > 0 && (
-                        <div className='pt-3'>
-                          <dt className='text-base font-medium text-neutral-500 mb-3'>
-                            Interests
-                          </dt>
-                          <dd className='flex flex-wrap gap-2'>
-                            {userProfile.interests.map((interest, index) => (
-                              <span
-                                key={index}
-                                className='px-3 py-1.5 text-base bg-transparent text-black border border-gray-200 rounded-lg font-medium'
-                              >
-                                {interest}
-                              </span>
-                            ))}
-                          </dd>
-                        </div>
-                      )}
+                    {userProfile.interests && userProfile.interests.length > 0 && (
+                      <div className='py-3'>
+                        <dt className='text-sm font-medium text-neutral-500 mb-1.5 flex items-center gap-1'>
+                          <Heart className='w-3.5 h-3.5' />
+                          Interests
+                        </dt>
+                        <dd className='flex flex-wrap gap-2'>
+                          {userProfile.interests.map((interest, index) => (
+                            <span
+                              key={index}
+                              className='px-3 py-1.5 text-base bg-transparent text-black border border-gray-200 rounded-lg font-medium'
+                            >
+                              {interest}
+                            </span>
+                          ))}
+                        </dd>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
