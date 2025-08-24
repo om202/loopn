@@ -385,7 +385,9 @@ export default function VectorSearchAdminPage() {
                 >
                   <h3
                     className={`font-medium ${
-                      indexingResult.success ? 'text-b_green-800' : 'text-b_red-800'
+                      indexingResult.success
+                        ? 'text-b_green-800'
+                        : 'text-b_red-800'
                     }`}
                   >
                     {indexingResult.success
