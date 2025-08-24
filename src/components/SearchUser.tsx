@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { X, Clock, UserRoundSearch } from 'lucide-react';
+import { X, Clock, Search } from 'lucide-react';
 import {
   getSearchHistory,
   addToSearchHistory,
@@ -138,7 +138,7 @@ export default function SearchUser({
 
         <form
           onSubmit={handleSubmit}
-          className='relative flex-1 sm:flex-none'
+          className='flex flex-1 sm:flex-none'
           autoComplete='off'
           data-form-type='other'
           data-lpignore='true'
@@ -163,81 +163,77 @@ export default function SearchUser({
             tabIndex={-1}
             aria-hidden='true'
           />
-          {/* <GradientSparkles className='absolute left-3 top-1/2 -translate-y-1/2 w-6 h-6 text-brand-500' /> */}
-          <input
-            ref={inputRef}
-            type='text'
-            placeholder='Ask Anything or Search'
-            value={query}
-            onChange={handleInputChange}
-            onFocus={handleInputFocus}
-            onBlur={handleInputBlur}
-            disabled={isProcessing}
-            autoComplete='off'
-            autoCorrect='off'
-            autoCapitalize='off'
-            spellCheck='false'
-            data-lpignore='true'
-            data-1p-ignore
-            data-bwignore
-            data-form-type='other'
-            data-ms-editor='false'
-            data-ms-spell-check='false'
-            data-gramm='false'
-            data-gramm_editor='false'
-            data-enable-grammarly='false'
-            name='professional-lookup-field'
-            id='professional-lookup-input'
-            role='textbox'
-            aria-label='Search for professionals'
-            style={{
-              WebkitAppearance: 'none',
-              MozAppearance: 'textfield',
-            }}
-            className={`w-full pl-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-200 focus:border-brand-300 text-slate-950 hover:bg-white transition-all duration-200 placeholder-slate-500 ${isFocused ? 'bg-white shadow-sm' : 'bg-slate-50'} ${isFocused ? (query.trim() ? 'pr-32' : 'pr-28') : query.trim() ? 'pr-20' : 'pr-12'}`}
-          />
 
-          {/* Clear button - only show when there's text */}
-          {query.trim() && (
-            <button
-              type='button'
-              onClick={handleClearInput}
-              className={`absolute top-1/2 -translate-y-1/2 w-6 h-6 text-brand-500 hover:text-brand-600 flex items-center justify-center transition-all duration-300 ${
-                isFocused ? 'right-28' : 'right-11'
-              }`}
-              aria-label='Clear search'
-            >
-              <X className='w-4 h-4' />
-            </button>
-          )}
-
-          <button
-            type='submit'
-            onMouseDown={e => e.preventDefault()}
-            className={`absolute right-2 top-1/2 -translate-y-1/2 bg-brand-100 rounded-lg hover:bg-brand-200 flex items-center justify-center transition-all duration-300 ease-out overflow-hidden ${
-              isFocused ? 'w-24 h-8 px-4' : 'w-8 h-8'
-            }`}
+          <div
+            className={`flex flex-1 rounded-xl transition-all duration-200 ${isFocused ? 'ring-1 ring-brand-200' : ''}`}
           >
-            {isProcessing ? (
-              <div className='w-4 h-4 border-2 border-brand-600 border-t-transparent rounded-full animate-spin flex-shrink-0' />
-            ) : (
-              <>
-                <UserRoundSearch className='w-5 h-5 text-brand-600 flex-shrink-0' />
-                {isFocused && (
-                  <span className='text-base font-medium text-brand-600 whitespace-nowrap transition-all duration-300 ease-out ml-1.5'>
-                    Search
-                  </span>
-                )}
-              </>
-            )}
-          </button>
+            <div className='relative flex-1'>
+              {/* <GradientSparkles className='absolute left-3 top-1/2 -translate-y-1/2 w-6 h-6 text-brand-500' /> */}
+              <input
+                ref={inputRef}
+                type='text'
+                placeholder='Ask Anything or Search'
+                value={query}
+                onChange={handleInputChange}
+                onFocus={handleInputFocus}
+                onBlur={handleInputBlur}
+                disabled={isProcessing}
+                autoComplete='off'
+                autoCorrect='off'
+                autoCapitalize='off'
+                spellCheck='false'
+                data-lpignore='true'
+                data-1p-ignore
+                data-bwignore
+                data-form-type='other'
+                data-ms-editor='false'
+                data-ms-spell-check='false'
+                data-gramm='false'
+                data-gramm_editor='false'
+                data-enable-grammarly='false'
+                name='professional-lookup-field'
+                id='professional-lookup-input'
+                role='textbox'
+                aria-label='Search for professionals'
+                style={{
+                  WebkitAppearance: 'none',
+                  MozAppearance: 'textfield',
+                }}
+                className={`w-full pl-4 py-3 rounded-l-xl border border-r-0 border-slate-200 focus:outline-none focus:border-brand-300 text-slate-950 hover:bg-white transition-all duration-200 placeholder-slate-500 ${isFocused ? 'bg-white shadow-sm' : 'bg-slate-50'} ${query.trim() ? 'pr-10' : 'pr-4'}`}
+              />
+
+              {/* Clear button - only show when there's text */}
+              {query.trim() && (
+                <button
+                  type='button'
+                  onClick={handleClearInput}
+                  className='absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 text-brand-500 hover:text-brand-600 flex items-center justify-center transition-all duration-300'
+                  aria-label='Clear search'
+                >
+                  <X className='w-4 h-4' />
+                </button>
+              )}
+            </div>
+
+            <button
+              type='submit'
+              onMouseDown={e => e.preventDefault()}
+              className='bg-brand-500 rounded-r-xl hover:bg-brand-600 flex items-center justify-center transition-all duration-300 ease-out px-4 py-3 flex-shrink-0 border border-l-0 border-brand-500'
+            >
+              {isProcessing ? (
+                <div className='w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin flex-shrink-0' />
+              ) : (
+                <Search className='w-5 h-5 text-white flex-shrink-0' />
+              )}
+            </button>
+          </div>
         </form>
 
         {/* Search History Dropdown */}
         {showHistory && searchHistory.length > 0 && (
           <div
             ref={dropdownRef}
-            className='absolute top-full left-0 right-0 bg-white border border-slate-200 rounded-2xl shadow-lg z-50 max-h-64 overflow-y-auto mt-2'
+            className='absolute top-full left-0 right-0 bg-slate-50 border border-slate-200 rounded-2xl shadow-sm z-50 max-h-64 overflow-y-auto mt-2'
           >
             <div className='py-2'>
               <div className='px-4 py-2 text-sm font-medium text-slate-500 border-b border-slate-200'>

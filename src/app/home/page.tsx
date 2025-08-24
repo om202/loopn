@@ -111,7 +111,9 @@ export default function HomePage() {
                   priority
                 />
                 <div className='flex items-center gap-2'>
-                  <span className='text-xl font-bold text-slate-950'>Loopn</span>
+                  <span className='text-xl font-bold text-slate-950'>
+                    Loopn
+                  </span>
                 </div>
               </div>
             </div>
@@ -687,7 +689,9 @@ export default function HomePage() {
                   className='w-12 h-12 rounded-full object-cover'
                 />
                 <div>
-                  <p className='font-bold text-slate-950 text-sm'>Sarah Johnson</p>
+                  <p className='font-bold text-slate-950 text-sm'>
+                    Sarah Johnson
+                  </p>
                   <p className='text-slate-500 text-sm'>
                     Software Engineer, Tech Startup
                   </p>
@@ -719,7 +723,9 @@ export default function HomePage() {
                   className='w-12 h-12 rounded-full object-cover'
                 />
                 <div>
-                  <p className='font-bold text-slate-950 text-sm'>Michael Chen</p>
+                  <p className='font-bold text-slate-950 text-sm'>
+                    Michael Chen
+                  </p>
                   <p className='text-slate-500 text-sm'>
                     Product Manager, E-commerce
                   </p>

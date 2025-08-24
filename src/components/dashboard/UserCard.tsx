@@ -397,7 +397,7 @@ export default function UserCard({
       <DialogContainer
         isOpen={showProfileDialog}
         onClose={() => setShowProfileDialog(false)}
-        maxWidth='md'
+        maxWidth='lg'
       >
         <div className='h-[80vh] max-h-[600px]'>
           <ProfileSidebar

@@ -500,70 +500,70 @@ export default function ProfileSidebar({
                 (userProfile.interests &&
                   userProfile.interests.length > 0)) && (
                 <div className='pb-6'>
-                  <h4 className='text-sm font-medium text-slate-500 mb-4'>
+                  <h4 className='text-base font-medium text-slate-500 mb-4'>
                     Profile Details
                   </h4>
                   <div className='divide-y divide-slate-100'>
                     {userProfile.jobRole && (
-                      <div className='py-3'>
-                        <dt className='text-sm font-medium text-slate-500 mb-1.5 flex items-center gap-1'>
-                          <User className='w-3.5 h-3.5' />
+                      <div className='py-3 flex items-center justify-between'>
+                        <dt className='text-base font-medium text-slate-500 flex items-center gap-2 flex-shrink-0'>
+                          <User className='w-4 h-4' />
                           Role
                         </dt>
-                        <dd className='text-base text-slate-950'>
+                        <dd className='text-base text-slate-950 text-right ml-4'>
                           {userProfile.jobRole}
                         </dd>
                       </div>
                     )}
                     {userProfile.companyName && (
-                      <div className='py-3'>
-                        <dt className='text-sm font-medium text-slate-500 mb-1.5 flex items-center gap-1'>
-                          <Building2 className='w-3.5 h-3.5' />
+                      <div className='py-3 flex items-center justify-between'>
+                        <dt className='text-base font-medium text-slate-500 flex items-center gap-2 flex-shrink-0'>
+                          <Building2 className='w-4 h-4' />
                           Company
                         </dt>
-                        <dd className='text-base text-slate-950'>
+                        <dd className='text-base text-slate-950 text-right ml-4'>
                           {userProfile.companyName}
                         </dd>
                       </div>
                     )}
                     {userProfile.industry && (
-                      <div className='py-3'>
-                        <dt className='text-sm font-medium text-slate-500 mb-1.5 flex items-center gap-1'>
-                          <Factory className='w-3.5 h-3.5' />
+                      <div className='py-3 flex items-center justify-between'>
+                        <dt className='text-base font-medium text-slate-500 flex items-center gap-2 flex-shrink-0'>
+                          <Factory className='w-4 h-4' />
                           Industry
                         </dt>
-                        <dd className='text-base text-slate-950'>
+                        <dd className='text-base text-slate-950 text-right ml-4'>
                           {userProfile.industry}
                         </dd>
                       </div>
                     )}
                     {userProfile.yearsOfExperience !== null &&
                       userProfile.yearsOfExperience !== undefined && (
-                        <div className='py-3'>
-                          <dt className='text-sm font-medium text-slate-500 mb-1.5 flex items-center gap-1'>
-                            <Clock className='w-3.5 h-3.5' />
+                        <div className='py-3 flex items-center justify-between'>
+                          <dt className='text-base font-medium text-slate-500 flex items-center gap-2 flex-shrink-0'>
+                            <Clock className='w-4 h-4' />
                             Experience
                           </dt>
-                          <dd className='text-base text-slate-950'>
+                          <dd className='text-base text-slate-950 text-right ml-4'>
                             {userProfile.yearsOfExperience} years
                           </dd>
                         </div>
                       )}
                     {userProfile.education && (
-                      <div className='py-3'>
-                        <dt className='text-sm font-medium text-slate-500 mb-1.5 flex items-center gap-1'>
-                          <GraduationCap className='w-3.5 h-3.5' />
+                      <div className='py-3 flex items-center justify-between'>
+                        <dt className='text-base font-medium text-slate-500 flex items-center gap-2 flex-shrink-0'>
+                          <GraduationCap className='w-4 h-4' />
                           Education
                         </dt>
-                        <dd className='text-base text-slate-950'>
+                        <dd className='text-base text-slate-950 text-right ml-4'>
                           {userProfile.education}
                         </dd>
                       </div>
                     )}
                     {userProfile.about && (
                       <div className='py-3'>
-                        <dt className='text-sm font-medium text-slate-500 mb-1.5 flex items-center gap-1'>
-                          <Info className='w-3.5 h-3.5' />
+                        <dt className='text-base font-medium text-slate-500 mb-1.5 flex items-center gap-2'>
+                          <Info className='w-4 h-4' />
                           About
                         </dt>
                         <dd className='text-base text-slate-950'>
@@ -573,8 +573,8 @@ export default function ProfileSidebar({
                     )}
                     {userProfile.skills && userProfile.skills.length > 0 && (
                       <div className='py-3'>
-                        <dt className='text-sm font-medium text-slate-500 mb-1.5 flex items-center gap-1'>
-                          <Target className='w-3.5 h-3.5' />
+                        <dt className='text-base font-medium text-slate-500 mb-1.5 flex items-center gap-2'>
+                          <Target className='w-4 h-4' />
                           Skills
                         </dt>
                         <dd className='flex flex-wrap gap-2'>
@@ -592,8 +592,8 @@ export default function ProfileSidebar({
                     {userProfile.interests &&
                       userProfile.interests.length > 0 && (
                         <div className='py-3'>
-                          <dt className='text-sm font-medium text-slate-500 mb-1.5 flex items-center gap-1'>
-                            <Heart className='w-3.5 h-3.5' />
+                          <dt className='text-base font-medium text-slate-500 mb-1.5 flex items-center gap-2'>
+                            <Heart className='w-4 h-4' />
                             Interests
                           </dt>
                           <dd className='flex flex-wrap gap-2'>

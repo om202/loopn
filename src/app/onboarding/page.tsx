@@ -299,7 +299,9 @@ export default function OnboardingPage() {
           {/* Step 1: Professional Information */}
           {currentStep === 1 && (
             <div className='space-y-6'>
-              <h2 className='text-xl font-semibold text-slate-950 mb-4'>Profile</h2>
+              <h2 className='text-xl font-semibold text-slate-950 mb-4'>
+                Profile
+              </h2>
 
               <div>
                 <label className='block text-sm font-medium text-slate-500 mb-3'>

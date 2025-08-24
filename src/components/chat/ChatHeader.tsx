@@ -362,7 +362,9 @@ export default function ChatHeader({
         maxWidth='md'
       >
         <div className='p-6'>
-          <h3 className='text-lg font-semibold text-slate-950 mb-4'>Chat Ended</h3>
+          <h3 className='text-lg font-semibold text-slate-950 mb-4'>
+            Chat Ended
+          </h3>
 
           <div className='text-base text-slate-950 space-y-3'>
             <p>

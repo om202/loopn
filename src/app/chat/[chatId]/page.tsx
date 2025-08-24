@@ -347,7 +347,7 @@ export default function ChatPage({ params }: ChatPageProps) {
         <div className='h-full flex justify-center'>
           <div className='w-full  h-full flex'>
             {/* Left Sidebar - Desktop Only */}
-            <div className='hidden lg:flex lg:w-80 xl:w-96 flex-shrink-0 h-full'>
+            <div className='hidden lg:flex lg:w-[340px] xl:w-[360px] flex-shrink-0 h-full'>
               <div className='w-full p-3 lg:p-4 h-full'>
                 <ProfileSidebar
                   userId={otherParticipantId}

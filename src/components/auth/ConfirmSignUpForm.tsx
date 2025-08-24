@@ -90,7 +90,9 @@ export default function ConfirmSignUpForm({
         </button>
 
         <div className='text-center'>
-          <span className='text-sm text-slate-950'>Didn't receive the code? </span>
+          <span className='text-sm text-slate-950'>
+            Didn't receive the code?{' '}
+          </span>
           <button
             type='button'
             onClick={handleResendCode}
