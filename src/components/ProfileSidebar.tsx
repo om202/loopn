@@ -276,7 +276,9 @@ export default function ProfileSidebar({
               canUserReconnect && canUserReconnect(userId) ? (
                 <>
                   <Plus className='w-4 h-4 stroke-[2] text-white' />
-                  <span className='text-base font-medium text-white'>Connect</span>
+                  <span className='text-base font-medium text-white'>
+                    Connect
+                  </span>
                 </>
               ) : (
                 <>
@@ -287,7 +289,9 @@ export default function ProfileSidebar({
             ) : (
               <>
                 <MessageCircle className='w-4 h-4 stroke-[2] text-white' />
-                <span className='text-base font-medium text-white'>Message</span>
+                <span className='text-base font-medium text-white'>
+                  Message
+                </span>
               </>
             )
           ) : (

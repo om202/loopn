@@ -183,7 +183,9 @@ export default function DashboardSidebar({
                     )}
                   </div>
                   <span className='flex-1 flex items-center justify-between'>
-                    <span className={`${activeSection === id ? 'font-medium' : ''}`}>
+                    <span
+                      className={`${activeSection === id ? 'font-medium' : ''}`}
+                    >
                       {label}
                     </span>
                     {count > 0 && id === 'notifications' && (
@@ -212,7 +214,9 @@ export default function DashboardSidebar({
                 <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
                   <HelpCircle className='w-5 h-5' />
                 </div>
-                <span className={`${activeSection === helpItem.id ? 'font-medium' : ''}`}>
+                <span
+                  className={`${activeSection === helpItem.id ? 'font-medium' : ''}`}
+                >
                   {helpItem.label}
                 </span>
               </button>
@@ -253,7 +257,9 @@ export default function DashboardSidebar({
                 />
               </div>
               <div className='flex-1'>
-                <div className={`text-gray-900 ${activeSection === accountItem.id ? 'font-medium' : 'font-medium'}`}>
+                <div
+                  className={`text-gray-900 ${activeSection === accountItem.id ? 'font-medium' : 'font-medium'}`}
+                >
                   {accountItem.label}
                 </div>
                 <div className='text-sm text-gray-500'>Account</div>

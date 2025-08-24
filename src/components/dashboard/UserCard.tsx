@@ -310,7 +310,9 @@ export default function UserCard({
                   // Prioritize incoming requests over existing conversations
                   <>
                     <Plus className='w-4 h-4 stroke-[2.5] text-white' />
-                    <span className='text-base font-medium text-white'>Accept</span>
+                    <span className='text-base font-medium text-white'>
+                      Accept
+                    </span>
                   </>
                 ) : existingConversations.has(userPresence.userId) ? (
                   existingConversations.get(userPresence.userId)?.chatStatus ===
@@ -318,7 +320,9 @@ export default function UserCard({
                     canUserReconnect(userPresence.userId) ? (
                       <>
                         <Plus className='w-4 h-4 stroke-[2] text-white' />
-                        <span className='text-base font-medium text-white'>Connect</span>
+                        <span className='text-base font-medium text-white'>
+                          Connect
+                        </span>
                       </>
                     ) : (
                       (() => {
@@ -330,7 +334,9 @@ export default function UserCard({
                         ) : (
                           <>
                             <MessageCircle className='w-4 h-4 stroke-[2] text-white' />
-                            <span className='text-base font-medium text-white'>View</span>
+                            <span className='text-base font-medium text-white'>
+                              View
+                            </span>
                           </>
                         );
                       })()
@@ -338,13 +344,17 @@ export default function UserCard({
                   ) : (
                     <>
                       <MessageCircle className='w-4 h-4 stroke-[2] text-white' />
-                      <span className='text-base font-medium text-white'>Message</span>
+                      <span className='text-base font-medium text-white'>
+                        Message
+                      </span>
                     </>
                   )
                 ) : (
                   <>
                     <Plus className='w-4 h-4 stroke-[2] text-white' />
-                    <span className='text-base font-medium text-white'>Connect</span>
+                    <span className='text-base font-medium text-white'>
+                      Connect
+                    </span>
                   </>
                 )}
               </button>
