@@ -152,7 +152,7 @@ export default function SearchSectionContent({
             <div className='w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-full flex items-center justify-center'>
               <Search className='w-8 h-8 text-slate-500' />
             </div>
-            <h3 className='text-lg font-medium text-slate-950 mb-2'>
+            <h3 className='text-lg font-medium text-slate-950 mb-1'>
               Search Professionals
             </h3>
           </div>
@@ -170,12 +170,9 @@ export default function SearchSectionContent({
             <div className='w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-full flex items-center justify-center'>
               <Search className='w-8 h-8 text-slate-500' />
             </div>
-            <h3 className='text-lg font-medium text-slate-950 mb-2'>
+            <h3 className='text-lg font-medium text-slate-950 mb-1'>
               Hmm… nothing matched.
             </h3>
-            <p className='text-slate-500 text-sm max-w-sm'>
-              Try different words.
-            </p>
           </div>
         ) : (
           <div className='space-y-2.5 sm:space-y-3 transition-opacity duration-200 opacity-100 pt-2'>

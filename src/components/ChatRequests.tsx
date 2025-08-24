@@ -116,10 +116,9 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
               />
             </svg>
           </div>
-          <h3 className='text-lg font-medium text-slate-950 mb-2'>
+          <h3 className='text-lg font-medium text-slate-950 mb-1'>
             No chat requests
           </h3>
-          <p className='text-slate-500'>Incoming requests will appear here</p>
         </div>
       ) : (
         <div className='p-4 space-y-3'>

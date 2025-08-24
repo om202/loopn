@@ -425,10 +425,9 @@ export default function NotificationsContent() {
             <div className='w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-full flex items-center justify-center'>
               <Bell className='w-8 h-8 text-slate-500' />
             </div>
-            <h3 className='text-lg font-medium text-slate-950 mb-2'>
+            <h3 className='text-lg font-medium text-slate-950 mb-1'>
               You&apos;re all caught up
             </h3>
-            <p className='text-slate-500'>No new notifications</p>
           </div>
         ) : (
           <div className='space-y-4'>

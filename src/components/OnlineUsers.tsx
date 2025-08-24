@@ -605,7 +605,7 @@ export default function OnlineUsers({
         </div>
 
         {/* Section Header - Fixed at top */}
-        <div className='flex-shrink-0 mb-2 sm:mb-3 lg:mb-3 w-full max-w-4xl mx-auto'>
+        <div className='flex-shrink-0 mb-5 sm:mb-6 lg:mb-8 w-full max-w-4xl mx-auto'>
           {activeSection === 'notifications' && (
             <div className='flex items-start justify-between'>
               <div>
@@ -694,10 +694,10 @@ export default function OnlineUsers({
 
         <div className='relative flex-1 overflow-hidden'>
           {/* Top border - shows when scrolled down */}
-          <div className='absolute top-0 left-0 right-0 h-px bg-slate-200 opacity-0 transition-opacity duration-200 z-10 scroll-top-border'></div>
+          <div className='absolute top-0 left-1/2 transform -translate-x-1/2 w-full max-w-4xl h-px bg-slate-200 opacity-0 transition-opacity duration-200 z-10 scroll-top-border'></div>
 
           {/* Bottom border - shows when not at bottom */}
-          <div className='absolute bottom-0 left-0 right-0 h-px bg-slate-200 opacity-0 transition-opacity duration-200 z-10 scroll-bottom-border'></div>
+          <div className='absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-4xl h-px bg-slate-200 opacity-0 transition-opacity duration-200 z-10 scroll-bottom-border'></div>
 
           <div
             className='overflow-y-auto flex-1 h-full max-w-4xl mx-auto w-full'
