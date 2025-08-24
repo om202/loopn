@@ -5,7 +5,6 @@ import {
   ClockFading,
   ArrowLeft,
   Info,
-  UserX,
   Plus,
   MessageSquare,
   MessageSquareOff,
@@ -246,7 +245,9 @@ export default function ProfileSidebar({
         }
 
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const hours = Math.floor(
+          (diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        );
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
 
         if (days > 0) {
@@ -690,8 +691,8 @@ export default function ProfileSidebar({
                 End chat with {getUserDisplayName()}?
               </h3>
               <p className='text-base text-slate-500 text-center mb-4'>
-                This will end your trial chat immediately. Chat history will remain
-                accessible until the trial expires.
+                This will end your trial chat immediately. Chat history will
+                remain accessible until the trial expires.
               </p>
               <div className='flex gap-2'>
                 <button
@@ -718,7 +719,8 @@ export default function ProfileSidebar({
                 Remove {getUserDisplayName()} from your connections?
               </h3>
               <p className='text-base text-slate-500 text-center mb-4'>
-                This will permanently remove them from your professional network. You can reconnect later if needed.
+                This will permanently remove them from your professional
+                network. You can reconnect later if needed.
               </p>
               <div className='flex gap-2'>
                 <button

@@ -142,7 +142,9 @@ export default function DashboardSidebar({
                   priority
                 />
                 <div className='flex items-center gap-2'>
-                  <h1 className='text-[26px] font-bold text-brand-600'>Loopn</h1>
+                  <h1 className='text-[26px] font-bold text-brand-600'>
+                    Loopn
+                  </h1>
                 </div>
               </Link>
             </div>

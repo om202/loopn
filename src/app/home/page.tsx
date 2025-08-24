@@ -119,7 +119,10 @@ export default function HomePage() {
             </div>
             <div className='flex items-center'>
               <Link href={authLink}>
-                <button className='bg-white hover:bg-brand-50 text-brand-600 border border-slate-200 px-6 py-2.5 rounded-lg transition-colors flex items-center gap-2' style={{fontWeight: 500}}>
+                <button
+                  className='bg-white hover:bg-brand-50 text-brand-600 border border-slate-200 px-6 py-2.5 rounded-lg transition-colors flex items-center gap-2'
+                  style={{ fontWeight: 500 }}
+                >
                   <LogIn className='w-4 h-4' strokeWidth={2.5} />
                   {authText}
                 </button>
