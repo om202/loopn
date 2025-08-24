@@ -772,8 +772,10 @@ export default function OnlineUsers({
             showActionButtons={true}
             existingConversations={existingConversations}
             pendingRequests={combinedPendingRequests}
+            incomingRequestSenderIds={incomingRequestSenderIds}
             onChatAction={handleChatAction}
             onCancelChatRequest={handleCancelChatRequest}
+            onAcceptChatRequest={handleAcceptChatRequest}
             canUserReconnect={userCategories.canUserReconnect}
             getReconnectTimeRemaining={userCategories.getReconnectTimeRemaining}
           />
