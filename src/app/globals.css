@@ -1,18 +1,18 @@
 @import 'tailwindcss';
 
 @theme {
-  /* Custom brand colors - Slightly toned down Blue */
-  --color-brand-50: oklch(0.98 0.022 235);
-  --color-brand-100: oklch(0.95 0.045 235);
-  --color-brand-200: oklch(0.9 0.08 235);
-  --color-brand-300: oklch(0.83 0.135 235);
-  --color-brand-400: oklch(0.74 0.2 235);
-  --color-brand-500: oklch(0.64 0.25 235);
-  --color-brand-600: oklch(0.55 0.27 235);
-  --color-brand-700: oklch(0.46 0.24 235);
-  --color-brand-800: oklch(0.38 0.21 235);
-  --color-brand-900: oklch(0.32 0.18 235);
-  --color-brand-950: oklch(0.25 0.14 235);
+  /* Custom brand colors - Blue-Purple Professional */
+  --color-brand-50: oklch(0.97 0.02 249.39);
+  --color-brand-100: oklch(0.94 0.04 249.39);
+  --color-brand-200: oklch(0.88 0.07 249.39);
+  --color-brand-300: oklch(0.8 0.1 249.39);
+  --color-brand-400: oklch(0.7 0.125 249.39);
+  --color-brand-500: oklch(0.6132 0.149 249.39);
+  --color-brand-600: oklch(0.55 0.155 249.39);
+  --color-brand-700: oklch(0.46 0.14 249.39);
+  --color-brand-800: oklch(0.38 0.12 249.39);
+  --color-brand-900: oklch(0.32 0.1 249.39);
+  --color-brand-950: oklch(0.25 0.08 249.39);
 
   /* Custom red colors - slightly toned down */
   --color-b_red-50: oklch(0.98 0.022 50);
