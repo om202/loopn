@@ -20,6 +20,7 @@ interface UserAvatarProps {
   status?: string | null;
   className?: string;
   statusTooltip?: string;
+  shape?: 'square' | 'circular';
 }
 
 export default function UserAvatar({
@@ -32,6 +33,7 @@ export default function UserAvatar({
   status,
   className = '',
   statusTooltip,
+  shape = 'square',
 }: UserAvatarProps) {
   const getAvatarSize = () => {
     switch (size) {
@@ -214,7 +216,7 @@ export default function UserAvatar({
     >
       <div className={`relative ${className} cursor-pointer`}>
         <div
-          className={`rounded-full overflow-hidden flex-shrink-0 relative ${
+          className={`${shape === 'circular' ? 'rounded-full' : 'rounded-lg'} overflow-hidden flex-shrink-0 relative ${
             !hasProfilePicture || imageError
               ? 'border border-neutral-200'
               : 'border border-neutral-200'
@@ -262,12 +264,13 @@ export default function UserAvatar({
             >
               <ShimmerProvider>
                 <Skeleton
-                  circle
+                  circle={shape === 'circular'}
                   width={getAvatarSize()}
                   height={getAvatarSize()}
                   style={{
                     width: '100%',
                     height: '100%',
+                    borderRadius: shape === 'circular' ? '50%' : '0.5rem',
                   }}
                 />
               </ShimmerProvider>

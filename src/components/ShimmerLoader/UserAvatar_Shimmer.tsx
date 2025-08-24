@@ -6,12 +6,14 @@ interface UserAvatar_ShimmerProps {
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   showStatus?: boolean;
   className?: string;
+  shape?: 'square' | 'circular';
 }
 
 export default function UserAvatar_Shimmer({
   size = 'md',
   showStatus = false,
   className = '',
+  shape = 'square',
 }: UserAvatar_ShimmerProps) {
   const getAvatarSize = () => {
     switch (size) {
@@ -63,19 +65,20 @@ export default function UserAvatar_Shimmer({
   return (
     <div className={`relative ${className}`}>
       <div
-        className='rounded-full overflow-hidden flex-shrink-0'
+        className={`${shape === 'circular' ? 'rounded-full' : 'rounded-lg'} overflow-hidden flex-shrink-0`}
         style={{
           width: `${avatarSize}px`,
           height: `${avatarSize}px`,
         }}
       >
         <Skeleton
-          circle
+          circle={shape === 'circular'}
           width={avatarSize}
           height={avatarSize}
           style={{
             width: '100%',
             height: '100%',
+            borderRadius: shape === 'circular' ? '50%' : '0.5rem',
           }}
         />
       </div>
