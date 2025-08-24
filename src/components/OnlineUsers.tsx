@@ -597,7 +597,7 @@ export default function OnlineUsers({
 
       <div className='flex-1 bg-white sm:rounded-2xl border border-slate-200 py-4 px-3 sm:py-4 sm:px-6 lg:py-4 lg:px-6 ultra-compact overflow-hidden flex flex-col min-h-0'>
         {/* Search User - Always visible at top */}
-        <div className='flex-shrink-0 mb-4 sm:mb-6 w-full'>
+        <div className='flex-shrink-0 mb-4 sm:mb-6 w-full max-w-4xl mx-auto'>
           <SearchUser
             onProfessionalRequest={handleProfessionalRequest}
             userProfile={currentUserProfile || undefined}
@@ -605,7 +605,7 @@ export default function OnlineUsers({
         </div>
 
         {/* Section Header - Fixed at top */}
-        <div className='flex-shrink-0 mb-2 sm:mb-3 lg:mb-3 ml-0 sm:ml-2 w-full'>
+        <div className='flex-shrink-0 mb-2 sm:mb-3 lg:mb-3 w-full max-w-4xl mx-auto'>
           {activeSection === 'notifications' && (
             <div className='flex items-start justify-between'>
               <div>
@@ -700,7 +700,7 @@ export default function OnlineUsers({
           <div className='absolute bottom-0 left-0 right-0 h-px bg-slate-200 opacity-0 transition-opacity duration-200 z-10 scroll-bottom-border'></div>
 
           <div
-            className='overflow-y-auto flex-1 h-full'
+            className='overflow-y-auto flex-1 h-full max-w-4xl mx-auto w-full'
             onScroll={e => {
               const target = e.target as HTMLDivElement;
               const { scrollTop, scrollHeight, clientHeight } = target;
