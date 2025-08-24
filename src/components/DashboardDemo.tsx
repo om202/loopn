@@ -1,7 +1,7 @@
 'use client';
 
 import {
-  MessageCircle,
+  MessageSquare,
   CheckCircle2,
   Users,
   Compass,
@@ -312,7 +312,7 @@ export default function DashboardDemo() {
 
               <div className='flex-shrink-0 flex items-center gap-2'>
                 <button className='p-2 text-brand-600 hover:bg-brand-50 rounded-lg transition-colors'>
-                  <MessageCircle className='w-5 h-5' />
+                  <MessageSquare className='w-5 h-5' />
                 </button>
                 <button className='p-2 text-slate-500 hover:bg-slate-100 rounded-lg transition-colors'>
                   <MoreHorizontal className='w-5 h-5' />
@@ -450,7 +450,7 @@ export default function DashboardDemo() {
           <div className='p-4 bg-white border border-slate-200 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer'>
             <div className='flex items-center gap-2'>
               <div className='w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center'>
-                <MessageCircle className='w-5 h-5 text-green-600' />
+                <MessageSquare className='w-5 h-5 text-green-600' />
               </div>
               <div>
                 <div className='font-medium text-slate-950'>Chat Features</div>
@@ -724,7 +724,7 @@ export default function DashboardDemo() {
                 }`}
               >
                 <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
-                  <MessageCircle className='w-5 h-5' />
+                  <MessageSquare className='w-5 h-5' />
                 </div>
                 <span className='font-medium text-base flex-1 flex items-center gap-2'>
                   Chats
@@ -975,7 +975,7 @@ export default function DashboardDemo() {
                 <Search className='w-5 h-5 text-slate-500' />
               </button>
               <button onClick={() => setActiveSection('chats')}>
-                <MessageCircle className='w-5 h-5 text-slate-500' />
+                <MessageSquare className='w-5 h-5 text-slate-500' />
               </button>
             </div>
           </div>
@@ -1191,7 +1191,7 @@ export default function DashboardDemo() {
 
                     <div className='flex-shrink-0'>
                       <button className='p-2 text-brand-600 hover:bg-brand-50 rounded-lg transition-colors'>
-                        <MessageCircle className='w-4 h-4' />
+                        <MessageSquare className='w-4 h-4' />
                       </button>
                     </div>
                   </div>

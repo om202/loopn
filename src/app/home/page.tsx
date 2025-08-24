@@ -2,7 +2,7 @@
 
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import {
-  MessageCircle,
+  MessageSquare,
   ArrowRight,
   CheckCircle,
   Star,
@@ -634,7 +634,7 @@ export default function HomePage() {
                 {/* Content */}
                 <div className='text-center mt-4'>
                   <h3 className='text-2xl font-bold text-slate-950 mb-4 flex items-center justify-center gap-3'>
-                    <MessageCircle className='w-6 h-6 text-slate-500' />
+                    <MessageSquare className='w-6 h-6 text-slate-500' />
                     Start Connecting
                   </h3>
                   <p className='text-slate-500 leading-relaxed text-base'>
@@ -828,7 +828,7 @@ export default function HomePage() {
               </button>
             </Link>
             <button className='w-full sm:w-auto bg-white hover:bg-slate-100 text-slate-500 px-10 py-4 rounded-xl text-lg font-bold border border-slate-200 transition-all duration-300 flex items-center justify-center gap-3'>
-              <MessageCircle className='w-5 h-5' />
+              <MessageSquare className='w-5 h-5' />
               Learn More
             </button>
           </div>

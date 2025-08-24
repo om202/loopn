@@ -1,6 +1,6 @@
 'use client';
 
-import { MessageCircle, Sparkles, Users, Search } from 'lucide-react';
+import { MessageSquare, Sparkles, Users, Search } from 'lucide-react';
 
 import type { Schema } from '../../../amplify/data/resource';
 import { formatPresenceTime } from '../../lib/presence-utils';
@@ -245,7 +245,7 @@ export default function DashboardSectionContent({
         return {
           title: 'Chats',
           description: 'Your conversations',
-          emptyIcon: MessageCircle,
+          emptyIcon: MessageSquare,
           emptyMessage: 'No chats available',
         };
     }

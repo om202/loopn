@@ -1,6 +1,6 @@
 'use client';
 
-import { MessageCircle } from 'lucide-react';
+import { MessageSquare } from 'lucide-react';
 import type { UINotification } from './types';
 
 interface NotificationBadgeProps {
@@ -33,7 +33,7 @@ export default function NotificationBadge({
         key='message'
         className='flex items-center gap-2 bg-brand-500 text-white rounded-2xl rounded-br-sm px-4 py-1.5 min-h-[28px]'
       >
-        <MessageCircle className='w-5 h-5 flex-shrink-0' />
+        <MessageSquare className='w-5 h-5 flex-shrink-0' />
         <span className='text-base font-bold leading-none'>
           {messageCount > 99 ? '99+' : messageCount}
         </span>

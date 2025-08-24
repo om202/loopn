@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { MessageCircle, Compass, Users, HelpCircle, Bug } from 'lucide-react';
+import { MessageSquare, Compass, Users, HelpCircle, Bug } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAuthenticator } from '@aws-amplify/ui-react';
@@ -96,7 +96,7 @@ export default function DashboardSidebar({
     },
     {
       id: 'all' as const,
-      icon: MessageCircle,
+      icon: MessageSquare,
       label: 'Chats',
       count: onlineUsersCount + connectionsCount + chatTrialsCount,
     },
