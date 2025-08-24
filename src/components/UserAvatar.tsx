@@ -279,8 +279,10 @@ export default function UserAvatar({
 
           {/* Fallback state - show when no profile picture or error */}
           {(!hasProfilePicture || imageError) && (
-            <div className='bg-neutral-50 w-full h-full flex items-center justify-center absolute inset-0'>
-              <User className='w-3/5 h-3/5 text-slate-500' strokeWidth={1.5} />
+            <div className='bg-gradient-to-br from-neutral-50 to-neutral-150 w-full h-full flex items-center justify-center absolute inset-0 shadow-inner'>
+              <User className='w-3/5 h-3/5 text-slate-500 drop-shadow-sm' strokeWidth={1.5} style={{
+                filter: 'drop-shadow(0 1px 0 rgba(255, 255, 255, 0.5)) drop-shadow(0 -1px 0 rgba(0, 0, 0, 0.1))'
+              }} />
             </div>
           )}
         </div>
