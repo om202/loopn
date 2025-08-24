@@ -142,7 +142,7 @@ export default function DashboardSidebar({
                   priority
                 />
                 <div className='flex items-center gap-2'>
-                  <h1 className='text-2xl font-bold text-gray-900'>Loopn</h1>
+                  <h1 className='text-2xl font-bold text-black'>Loopn</h1>
                 </div>
               </Link>
             </div>
@@ -158,7 +158,7 @@ export default function DashboardSidebar({
                   className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group transition-colors ${
                     activeSection === id
                       ? 'text-brand-600 bg-brand-50 font-medium'
-                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                      : 'text-gray-500 hover:bg-gray-50 hover:text-black'
                   }`}
                 >
                   <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -208,7 +208,7 @@ export default function DashboardSidebar({
                 className={`relative flex-1 flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group transition-colors ${
                   activeSection === helpItem.id
                     ? 'text-brand-600 bg-brand-50 font-medium'
-                    : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                    : 'text-gray-500 hover:bg-gray-50 hover:text-black'
                 }`}
               >
                 <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -223,7 +223,7 @@ export default function DashboardSidebar({
 
               <button
                 onClick={() => setIsBugReportOpen(true)}
-                className='p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition-colors'
+                className='p-2 text-gray-500 hover:text-gray-500 hover:bg-gray-50 rounded-lg transition-colors'
                 title='Report Bug / Share Suggestion'
               >
                 <Bug className='w-4 h-4' />
@@ -236,7 +236,7 @@ export default function DashboardSidebar({
               className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group transition-colors ${
                 activeSection === accountItem.id
                   ? 'text-brand-600 bg-brand-50 font-medium'
-                  : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                  : 'text-gray-500 hover:bg-gray-50 hover:text-black'
               }`}
             >
               <div className='flex-shrink-0 flex items-center justify-center'>
@@ -258,7 +258,7 @@ export default function DashboardSidebar({
               </div>
               <div className='flex-1'>
                 <div
-                  className={`text-gray-900 ${activeSection === accountItem.id ? 'font-medium' : 'font-medium'}`}
+                  className={`text-black ${activeSection === accountItem.id ? 'font-medium' : 'font-medium'}`}
                 >
                   {accountItem.label}
                 </div>

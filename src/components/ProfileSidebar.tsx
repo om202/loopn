@@ -262,14 +262,14 @@ export default function ProfileSidebar({
           }}
           className={`px-4 py-2 text-base font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 ${
             pendingRequests.has(userId)
-              ? 'bg-gray-200 text-gray-700 hover:bg-gray-300 border border-gray-300'
+              ? 'bg-gray-200 text-gray-500 hover:bg-gray-300 border border-gray-300'
               : 'bg-brand-500 text-white hover:bg-brand-600'
           }`}
         >
           {pendingRequests.has(userId) ? (
             <>
-              <UserCheck className='w-4 h-4 text-gray-700' />
-              <span className='text-base text-gray-700'>Pending</span>
+              <UserCheck className='w-4 h-4 text-gray-500' />
+              <span className='text-base text-gray-500'>Pending</span>
             </>
           ) : existingConversations.has(userId) ? (
             existingConversations.get(userId)?.chatStatus === 'ENDED' ? (
@@ -417,9 +417,9 @@ export default function ProfileSidebar({
                     <button
                       onClick={() => setShowCancelRequestDialog(true)}
                       disabled={optimisticRequestSent} // Disable if optimistic (no real request to cancel yet)
-                      className='px-4 py-2 text-base font-medium rounded-lg flex items-center justify-center gap-2 bg-gray-200 text-gray-700 hover:bg-gray-300 border border-gray-300 transition-colors disabled:cursor-not-allowed disabled:hover:bg-gray-200'
+                      className='px-4 py-2 text-base font-medium rounded-lg flex items-center justify-center gap-2 bg-gray-200 text-gray-500 hover:bg-gray-300 border border-gray-300 transition-colors disabled:cursor-not-allowed disabled:hover:bg-gray-200'
                     >
-                      <UserCheck className='w-4 h-4 text-gray-700' />
+                      <UserCheck className='w-4 h-4 text-gray-500' />
                       <span>Pending</span>
                     </button>
                   ) : (

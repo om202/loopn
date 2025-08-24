@@ -184,7 +184,7 @@ export default function UserCard({
 
         <div className='flex-1 min-w-0'>
           <div className='flex items-center gap-2 mb-1'>
-            <div className='text-gray-900 truncate no-email-detection font-semibold'>
+            <div className='text-black truncate no-email-detection font-medium'>
               {getDisplayName(userPresence, userProfile)}
             </div>
             {/* Show clock icon for temporary connections (active chat trials) */}
@@ -198,14 +198,14 @@ export default function UserCard({
                 !conversation.isConnected;
 
               return isTemporaryConnection ? (
-                <Clock className='w-4 h-4 text-gray-400 flex-shrink-0' />
+                <Clock className='w-4 h-4 text-gray-500 flex-shrink-0' />
               ) : null;
             })()}
           </div>
 
           {/* Profession */}
           {(finalFullProfile?.jobRole || finalFullProfile?.companyName) && (
-            <div className='text-gray-600 truncate'>
+            <div className='text-gray-500 truncate'>
               {finalFullProfile?.jobRole && finalFullProfile?.companyName
                 ? `${finalFullProfile.jobRole} at ${finalFullProfile.companyName}`
                 : finalFullProfile?.jobRole || finalFullProfile?.companyName}
@@ -270,15 +270,15 @@ export default function UserCard({
                 <button
                   onClick={() => setShowCancelDialog(true)}
                   disabled={isOptimisticRequest}
-                  className='flex items-center justify-center gap-1.5 px-4 py-2 text-base font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-lg transition-colors disabled:cursor-not-allowed disabled:hover:bg-gray-200 border border-gray-300'
+                  className='flex items-center justify-center gap-1.5 px-4 py-2 text-base font-medium text-gray-500 bg-gray-200 hover:bg-gray-300 rounded-lg transition-colors disabled:cursor-not-allowed disabled:hover:bg-gray-200 border border-gray-300'
                   title={
                     isOptimisticRequest
                       ? 'Request being sent...'
                       : 'Cancel Request'
                   }
                 >
-                  <UserCheck className='w-4 h-4 text-gray-700' />
-                  <span className='text-base text-gray-700'>Pending</span>
+                  <UserCheck className='w-4 h-4 text-gray-500' />
+                  <span className='text-base text-gray-500'>Pending</span>
                 </button>
               );
             }

@@ -220,7 +220,7 @@ export default function IntelligentSearch({
           {query && (
             <button
               onClick={handleClear}
-              className='absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600'
+              className='absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-500'
             >
               <X className='w-5 h-5' />
             </button>
@@ -243,7 +243,7 @@ export default function IntelligentSearch({
         <div className='mt-4 p-4 bg-gray-50 rounded-lg border'>
           <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
             <div>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>
+              <label className='block text-sm font-medium text-gray-500 mb-1'>
                 Industry
               </label>
               <select
@@ -267,7 +267,7 @@ export default function IntelligentSearch({
             </div>
 
             <div>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>
+              <label className='block text-sm font-medium text-gray-500 mb-1'>
                 Min Experience
               </label>
               <select
@@ -291,7 +291,7 @@ export default function IntelligentSearch({
             </div>
 
             <div>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>
+              <label className='block text-sm font-medium text-gray-500 mb-1'>
                 Max Experience
               </label>
               <select
@@ -326,7 +326,7 @@ export default function IntelligentSearch({
           {/* Search History */}
           {showHistory && searchHistory.length > 0 && (
             <div className='p-4'>
-              <h3 className='text-sm font-medium text-gray-700 mb-3 flex items-center'>
+              <h3 className='text-sm font-medium text-gray-500 mb-3 flex items-center'>
                 <Clock className='w-4 h-4 mr-2' />
                 Recent Searches
               </h3>
@@ -337,10 +337,10 @@ export default function IntelligentSearch({
                     className='flex items-center justify-between p-2 hover:bg-gray-50 rounded cursor-pointer group'
                     onClick={() => handleHistoryClick(item)}
                   >
-                    <span className='text-gray-700'>{item.query}</span>
+                    <span className='text-gray-500'>{item.query}</span>
                     <button
                       onClick={e => handleRemoveHistory(item.id, e)}
-                      className='opacity-0 group-hover:opacity-100 text-gray-400 hover:text-gray-600'
+                      className='opacity-0 group-hover:opacity-100 text-gray-500 hover:text-gray-500'
                     >
                       <X className='w-4 h-4' />
                     </button>
@@ -360,7 +360,7 @@ export default function IntelligentSearch({
                 </div>
               ) : results.length > 0 ? (
                 <div className='space-y-3'>
-                  <h3 className='text-sm font-medium text-gray-700 mb-3'>
+                  <h3 className='text-sm font-medium text-gray-500 mb-3'>
                     Found {results.length} people
                   </h3>
                   {results.map(user => (
@@ -386,7 +386,7 @@ export default function IntelligentSearch({
                           )}
                         </div>
                         <div className='flex-1 min-w-0'>
-                          <h4 className='text-sm font-medium text-gray-900 truncate'>
+                          <h4 className='text-sm font-medium text-black truncate'>
                             {user.profile.fullName || 'Unknown User'}
                           </h4>
                           <div className='flex items-center text-sm text-gray-500 mt-1'>
@@ -423,7 +423,7 @@ export default function IntelligentSearch({
                                 )}
                               </div>
                             )}
-                          <div className='text-sm text-gray-400 mt-1'>
+                          <div className='text-sm text-gray-500 mt-1'>
                             Match: {Math.round(user.score * 100)}%
                           </div>
                         </div>
@@ -433,9 +433,9 @@ export default function IntelligentSearch({
                 </div>
               ) : query.trim() ? (
                 <div className='text-center py-8'>
-                  <User className='w-12 h-12 text-gray-300 mx-auto mb-3' />
+                  <User className='w-12 h-12 text-gray-500 mx-auto mb-3' />
                   <p className='text-gray-500'>No users found for "{query}"</p>
-                  <p className='text-sm text-gray-400 mt-1'>
+                  <p className='text-sm text-gray-500 mt-1'>
                     Try a different search term or check your filters
                   </p>
                 </div>

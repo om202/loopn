@@ -497,7 +497,7 @@ export default function DashboardDemo() {
               {currentUser.name}
             </h3>
             <p className='text-gray-500'>{currentUser.role}</p>
-            <p className='text-sm text-gray-400'>{currentUser.email}</p>
+            <p className='text-sm text-gray-500'>{currentUser.email}</p>
           </div>
         </div>
 
@@ -809,7 +809,7 @@ export default function DashboardDemo() {
           <div className='flex-shrink-0 mb-2 sm:mb-2'>
             <div className='max-w-xl mx-auto relative'>
               <div className='relative'>
-                <UserRoundSearch className='absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10' />
+                <UserRoundSearch className='absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 z-10' />
                 <input
                   type='text'
                   placeholder='Ask Anything or Search'
@@ -1026,7 +1026,7 @@ export default function DashboardDemo() {
           {activeSection === 'search' && (
             <div className='mb-4'>
               <div className='relative'>
-                <UserRoundSearch className='absolute left-2 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400' />
+                <UserRoundSearch className='absolute left-2 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500' />
                 <input
                   type='text'
                   placeholder='Search professionals...'

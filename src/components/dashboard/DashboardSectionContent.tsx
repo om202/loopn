@@ -299,12 +299,12 @@ export default function DashboardSectionContent({
       ) : (
         <div className='flex flex-col items-center justify-center py-12 text-center'>
           <div className='w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-2xl flex items-center justify-center'>
-            <EmptyIcon className='w-8 h-8 text-gray-400' />
+            <EmptyIcon className='w-8 h-8 text-gray-500' />
           </div>
-          <h3 className='text-lg font-semibold text-gray-900 mb-2'>
+          <h3 className='text-lg font-semibold text-black mb-2'>
             {emptyMessage}
           </h3>
-          <p className='text-gray-600 max-w-sm'>
+          <p className='text-gray-500 max-w-sm'>
             {activeSection === 'connections'
               ? 'Start chatting to build connections with professionals'
               : activeSection === 'suggested'
