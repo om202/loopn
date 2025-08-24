@@ -219,7 +219,7 @@ export default function NotificationItem({
           >
             {/* Name and Timestamp */}
             <div className='flex items-center gap-2 mb-0.5'>
-              <h4 className='text-base font-medium text-black truncate no-email-detection'>
+              <h4 className='text-base font-medium text-gray-900 truncate no-email-detection'>
                 {notification.title}
               </h4>
               <span className='text-sm text-gray-500 font-medium flex-shrink-0'>
@@ -287,7 +287,7 @@ export default function NotificationItem({
                       );
                     }}
                     disabled={decliningId === notification.id}
-                    className='px-3 py-2 text-sm font-medium text-black bg-white border border-gray-200 rounded-lg hover:bg-gray-100 disabled:opacity-50 transition-colors'
+                    className='px-3 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 disabled:opacity-50 transition-colors'
                   >
                     {decliningId === notification.id
                       ? 'Declining...'
@@ -332,7 +332,7 @@ export default function NotificationItem({
                     onError('Failed to mark notification as read');
                   }
                 }}
-                className='px-3 py-2 text-sm font-medium text-black bg-white border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors'
+                className='px-3 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors'
               >
                 Mark as Read
               </button>
@@ -371,7 +371,7 @@ export default function NotificationItem({
                       );
                       // Note: onRemoveNotification is now handled inside onRespondToConnectionRequest
                     }}
-                    className='px-3 py-2 text-sm font-medium text-black bg-white border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors'
+                    className='px-3 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors'
                   >
                     Decline
                   </button>
@@ -405,7 +405,7 @@ export default function NotificationItem({
                         onError('Failed to mark notification as read');
                       }
                     }}
-                    className='px-3 py-2 text-sm font-medium text-black bg-white border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors'
+                    className='px-3 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors'
                   >
                     Mark as Read
                   </button>
@@ -428,7 +428,7 @@ export default function NotificationItem({
                   onError('Failed to mark notification as read');
                 }
               }}
-              className='px-3 py-2 text-sm font-medium text-black bg-white border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors'
+              className='px-3 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors'
             >
               Mark as Read
             </button>

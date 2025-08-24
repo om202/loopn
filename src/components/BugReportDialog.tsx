@@ -74,7 +74,7 @@ export default function BugReportDialog({
             )}
           </div>
           <div>
-            <h2 className='text-lg font-semibold text-black'>
+            <h2 className='text-lg font-semibold text-gray-900'>
               {type === 'bug' ? 'Report a Bug' : 'Share a Suggestion'}
             </h2>
             <p className='text-sm text-gray-500'>Help us improve Loopn</p>
@@ -94,7 +94,7 @@ export default function BugReportDialog({
       <form onSubmit={handleSubmit} className='p-6 space-y-4'>
         {/* Type Selector */}
         <div>
-          <label className='block text-sm font-medium text-black mb-3'>
+          <label className='block text-sm font-medium text-gray-900 mb-3'>
             What would you like to share?
           </label>
           <div className='grid grid-cols-2 gap-3'>
@@ -112,7 +112,7 @@ export default function BugReportDialog({
                   className={`w-4 h-4 ${type === 'bug' ? 'text-brand-600' : 'text-gray-500'}`}
                 />
                 <span
-                  className={`font-medium text-sm ${type === 'bug' ? 'text-brand-600' : 'text-black'}`}
+                  className={`font-medium text-sm ${type === 'bug' ? 'text-brand-600' : 'text-gray-900'}`}
                 >
                   Bug Report
                 </span>
@@ -138,7 +138,7 @@ export default function BugReportDialog({
                   className={`w-4 h-4 ${type === 'suggestion' ? 'text-brand-600' : 'text-gray-500'}`}
                 />
                 <span
-                  className={`font-medium text-sm ${type === 'suggestion' ? 'text-brand-600' : 'text-black'}`}
+                  className={`font-medium text-sm ${type === 'suggestion' ? 'text-brand-600' : 'text-gray-900'}`}
                 >
                   Suggestion
                 </span>
@@ -155,7 +155,7 @@ export default function BugReportDialog({
         <div>
           <label
             htmlFor='submission-title'
-            className='block text-sm font-medium text-black mb-2'
+            className='block text-sm font-medium text-gray-900 mb-2'
           >
             {type === 'bug' ? "What's the issue?" : "What's your idea?"}
           </label>
@@ -179,7 +179,7 @@ export default function BugReportDialog({
         <div>
           <label
             htmlFor='submission-description'
-            className='block text-sm font-medium text-black mb-2'
+            className='block text-sm font-medium text-gray-900 mb-2'
           >
             Tell us more
           </label>

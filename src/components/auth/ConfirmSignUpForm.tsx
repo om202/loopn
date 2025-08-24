@@ -57,7 +57,7 @@ export default function ConfirmSignUpForm({
         <div>
           <label
             htmlFor='confirmationCode'
-            className='block text-sm font-medium text-black mb-3'
+            className='block text-sm font-medium text-gray-900 mb-3'
           >
             Verification code
           </label>
@@ -90,7 +90,7 @@ export default function ConfirmSignUpForm({
         </button>
 
         <div className='text-center'>
-          <span className='text-sm text-black'>Didn't receive the code? </span>
+          <span className='text-sm text-gray-900'>Didn't receive the code? </span>
           <button
             type='button'
             onClick={handleResendCode}

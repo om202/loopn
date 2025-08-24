@@ -88,12 +88,12 @@ function ConnectedDialog({
               Connected!
             </h3>
 
-            <div className='text-lg font-medium text-black mb-3 no-email-detection'>
+            <div className='text-lg font-medium text-gray-900 mb-3 no-email-detection'>
               {chatRequest.requesterEmail ||
                 `User ${chatRequest.requesterId.slice(-4)}`}
             </div>
 
-            <p className='text-base text-black'>
+            <p className='text-base text-gray-900'>
               You are now connected to chat for 7 days.
             </p>
           </div>
@@ -108,7 +108,7 @@ function ConnectedDialog({
             onChange={e => setDontShowAgain(e.target.checked)}
             className='w-4 h-4 text-brand-600 border-gray-200 rounded focus:ring-brand-500'
           />
-          <label htmlFor='dontShowAgain' className='text-sm text-black'>
+          <label htmlFor='dontShowAgain' className='text-sm text-gray-900'>
             Don&apos;t show this confirmation again
           </label>
         </div>
@@ -127,7 +127,7 @@ function ConnectedDialog({
           {/* OK Button */}
           <button
             onClick={handleOk}
-            className='flex-1 px-4 py-2 bg-white text-black text-sm font-medium rounded-2xl border border-gray-200 hover:bg-gray-100 transition-colors'
+            className='flex-1 px-4 py-2 bg-white text-gray-900 text-sm font-medium rounded-2xl border border-gray-200 hover:bg-gray-100 transition-colors'
           >
             Later
           </button>
@@ -207,7 +207,7 @@ function NewRequestDialog({
                 <div className='flex justify-center mb-3'>
                   <div className='w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center'>
                     <svg
-                      className='w-6 h-6 text-black'
+                      className='w-6 h-6 text-gray-900'
                       fill='none'
                       stroke='currentColor'
                       viewBox='0 0 24 24'
@@ -221,10 +221,10 @@ function NewRequestDialog({
                     </svg>
                   </div>
                 </div>
-                <h3 className='text-xl font-medium text-black mb-2'>
+                <h3 className='text-xl font-medium text-gray-900 mb-2'>
                   Request Removed
                 </h3>
-                <p className='text-base text-black'>
+                <p className='text-base text-gray-900'>
                   The chat request was removed by the other user
                 </p>
               </div>
@@ -233,7 +233,7 @@ function NewRequestDialog({
             {/* OK Button */}
             <button
               onClick={onClose}
-              className='w-full px-4 py-2 bg-white text-black text-sm font-medium rounded-2xl border border-gray-200 hover:bg-gray-100 transition-colors'
+              className='w-full px-4 py-2 bg-white text-gray-900 text-sm font-medium rounded-2xl border border-gray-200 hover:bg-gray-100 transition-colors'
             >
               OK
             </button>
@@ -251,7 +251,7 @@ function NewRequestDialog({
                 <h3 className='text-xl font-medium text-b_green-500 mb-2'>
                   Connected!
                 </h3>
-                <p className='text-base text-black'>
+                <p className='text-base text-gray-900'>
                   You are connected to chat for 7 days
                 </p>
               </div>
@@ -266,7 +266,7 @@ function NewRequestDialog({
                 onChange={e => setDontShowAgain(e.target.checked)}
                 className='w-4 h-4 text-brand-600 border-gray-200 rounded focus:ring-brand-500'
               />
-              <label htmlFor='dontShowAgain' className='text-sm text-black'>
+              <label htmlFor='dontShowAgain' className='text-sm text-gray-900'>
                 Don&apos;t show this confirmation again
               </label>
             </div>
@@ -274,7 +274,7 @@ function NewRequestDialog({
             {/* OK Button */}
             <button
               onClick={handleOk}
-              className='w-full px-4 py-2 bg-white text-black text-sm font-medium rounded-2xl border border-gray-200 hover:bg-gray-100 transition-colors'
+              className='w-full px-4 py-2 bg-white text-gray-900 text-sm font-medium rounded-2xl border border-gray-200 hover:bg-gray-100 transition-colors'
             >
               OK
             </button>
@@ -283,7 +283,7 @@ function NewRequestDialog({
           /* Normal Chat Request */
           <>
             <div className='text-center mb-6'>
-              <h3 className='text-lg font-medium text-black mb-2'>
+              <h3 className='text-lg font-medium text-gray-900 mb-2'>
                 New Chat Request
               </h3>
             </div>
@@ -295,11 +295,11 @@ function NewRequestDialog({
                 size='md'
               />
               <div className='flex-1 min-w-0'>
-                <div className='text-base font-medium text-black truncate no-email-detection'>
+                <div className='text-base font-medium text-gray-900 truncate no-email-detection'>
                   {chatRequest.requesterEmail ||
                     `User ${chatRequest.requesterId.slice(-4)}`}
                 </div>
-                <div className='text-sm text-black mt-1'>
+                <div className='text-sm text-gray-900 mt-1'>
                   wants to chat with you
                 </div>
               </div>
@@ -318,7 +318,7 @@ function NewRequestDialog({
               {/* Reject Button */}
               <button
                 onClick={() => handleResponse('REJECTED')}
-                className='flex-1 px-4 py-3 bg-gray-100 text-black text-base font-medium rounded-2xl hover:bg-gray-100 transition-colors'
+                className='flex-1 px-4 py-3 bg-gray-100 text-gray-900 text-base font-medium rounded-2xl hover:bg-gray-100 transition-colors'
               >
                 Reject
               </button>
@@ -327,7 +327,7 @@ function NewRequestDialog({
             {/* Maybe Later Button */}
             <button
               onClick={handleMaybeLater}
-              className='w-full px-4 py-3 text-sm text-gray-500 hover:text-black transition-colors'
+              className='w-full px-4 py-3 text-sm text-gray-500 hover:text-gray-900 transition-colors'
             >
               Maybe Later
             </button>

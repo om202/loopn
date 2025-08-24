@@ -194,7 +194,7 @@ export default function SearchUser({
               WebkitAppearance: 'none',
               MozAppearance: 'textfield',
             }}
-            className={`w-full pl-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-200 focus:border-brand-300 text-black hover:bg-white transition-all duration-200 placeholder-gray-500 ${isFocused ? 'bg-white shadow-sm' : 'bg-gray-50'} ${isFocused ? (query.trim() ? 'pr-32' : 'pr-28') : query.trim() ? 'pr-20' : 'pr-12'}`}
+            className={`w-full pl-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-200 focus:border-brand-300 text-gray-900 hover:bg-white transition-all duration-200 placeholder-gray-500 ${isFocused ? 'bg-white shadow-sm' : 'bg-gray-50'} ${isFocused ? (query.trim() ? 'pr-32' : 'pr-28') : query.trim() ? 'pr-20' : 'pr-12'}`}
           />
 
           {/* Clear button - only show when there's text */}
