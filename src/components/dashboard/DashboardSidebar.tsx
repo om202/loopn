@@ -126,7 +126,7 @@ export default function DashboardSidebar({
     <>
       {/* Desktop Sidebar */}
       <div className='hidden lg:block w-64 flex-shrink-0'>
-        <div className='bg-white rounded-2xl h-full flex flex-col shadow-sm border border-gray-100'>
+        <div className='bg-white rounded-2xl h-full flex flex-col border border-slate-200'>
           {/* Logo at top */}
           <div className='px-4 py-4 border-b border-gray-100'>
             <div className='flex items-center justify-between'>

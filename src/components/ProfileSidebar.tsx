@@ -306,7 +306,7 @@ export default function ProfileSidebar({
   };
 
   return (
-    <div className='bg-white rounded-2xl shadow-md w-full h-full flex flex-col relative'>
+    <div className='bg-white rounded-2xl w-full h-full flex flex-col relative border border-slate-200'>
       {/* Back Button - Top of sidebar */}
       {onBack && (
         <div className='p-4 pb-2 border-b border-gray-200 flex items-center justify-between'>
