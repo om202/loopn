@@ -309,8 +309,8 @@ export default function VectorSearchAdminPage() {
               </div>
 
               {statusError && (
-                <div className='bg-red-50 border border-red-200 rounded-lg p-4 mb-4'>
-                  <p className='text-red-800 text-sm'>{statusError}</p>
+                <div className='bg-b_red-50 border border-b_red-200 rounded-lg p-4 mb-4'>
+                  <p className='text-b_red-800 text-sm'>{statusError}</p>
                 </div>
               )}
 
@@ -324,7 +324,7 @@ export default function VectorSearchAdminPage() {
                       <div className='text-sm text-slate-500'>Total Users</div>
                     </div>
                     <div className='text-center'>
-                      <div className='text-2xl font-bold text-green-600'>
+                      <div className='text-2xl font-bold text-b_green-600'>
                         {status.migratedUsers}
                       </div>
                       <div className='text-sm text-slate-500'>In Vespa</div>
@@ -366,7 +366,7 @@ export default function VectorSearchAdminPage() {
               <button
                 onClick={handleIndexUsers}
                 disabled={isIndexing || !client}
-                className='px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50'
+                className='px-6 py-3 bg-b_green-600 text-white rounded-md hover:bg-b_green-700 disabled:opacity-50'
               >
                 {isIndexing
                   ? 'Migrating Users...'
@@ -379,13 +379,13 @@ export default function VectorSearchAdminPage() {
                 <div
                   className={`mt-4 p-4 rounded-lg ${
                     indexingResult.success
-                      ? 'bg-green-50 border border-green-200'
-                      : 'bg-red-50 border border-red-200'
+                      ? 'bg-b_green-50 border border-b_green-200'
+                      : 'bg-b_red-50 border border-b_red-200'
                   }`}
                 >
                   <h3
                     className={`font-medium ${
-                      indexingResult.success ? 'text-green-800' : 'text-red-800'
+                      indexingResult.success ? 'text-b_green-800' : 'text-b_red-800'
                     }`}
                   >
                     {indexingResult.success
@@ -401,7 +401,7 @@ export default function VectorSearchAdminPage() {
                         <ul className='list-disc list-inside'>
                           {indexingResult.errors.map(
                             (error: string, index: number) => (
-                              <li key={index} className='text-red-700'>
+                              <li key={index} className='text-b_red-700'>
                                 {error}
                               </li>
                             )
@@ -470,7 +470,7 @@ export default function VectorSearchAdminPage() {
                 <button
                   onClick={handleTestWildcardSearch}
                   disabled={isTestingSearch || !client}
-                  className='px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50'
+                  className='px-6 py-2 bg-b_green-600 text-white rounded-md hover:bg-b_green-700 disabled:opacity-50'
                 >
                   {isTestingSearch
                     ? 'Searching...'
@@ -504,7 +504,7 @@ export default function VectorSearchAdminPage() {
                                       {result.profile.fullName ||
                                         'Unknown Name'}
                                     </p>
-                                    <span className='px-2 py-1 bg-green-100 text-green-800 text-sm rounded'>
+                                    <span className='px-2 py-1 bg-b_green-100 text-b_green-800 text-sm rounded'>
                                       {Math.round(result.score * 100)}% match
                                     </span>
                                   </div>
@@ -574,7 +574,7 @@ export default function VectorSearchAdminPage() {
                       </div>
                     </div>
                   ) : (
-                    <p className='text-red-600'>Error: {testResults.error}</p>
+                    <p className='text-b_red-600'>Error: {testResults.error}</p>
                   )}
                 </div>
               )}

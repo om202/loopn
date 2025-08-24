@@ -24,7 +24,7 @@ export function ZustandDemo() {
         </div>
 
         {error && (
-          <div className='text-red-600'>
+          <div className='text-b_red-600'>
             <strong>Error:</strong> {error}
           </div>
         )}

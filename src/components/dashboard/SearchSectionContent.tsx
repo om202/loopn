@@ -162,7 +162,7 @@ export default function SearchSectionContent({
           </div>
         ) : error ? (
           <div className='flex flex-col items-center justify-center h-full text-center p-8 transition-opacity duration-200 opacity-100'>
-            <div className='text-red-600 text-sm mb-2'>Search Error</div>
+            <div className='text-b_red-600 text-sm mb-2'>Search Error</div>
             <p className='text-slate-500 text-sm'>{error}</p>
           </div>
         ) : searchResults.length === 0 ? (

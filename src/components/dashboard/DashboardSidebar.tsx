@@ -191,7 +191,7 @@ export default function DashboardSidebar({
                       {label}
                     </span>
                     {count > 0 && id === 'notifications' && (
-                      <span className='text-xs font-bold flex items-center justify-center h-5 w-5 rounded-full bg-red-500 text-white'>
+                      <span className='text-xs font-bold flex items-center justify-center h-5 w-5 rounded-full bg-b_red-600 text-white'>
                         {count > 99 ? '99+' : count}
                       </span>
                     )}
@@ -307,7 +307,7 @@ export default function DashboardSidebar({
                         />
                       </svg>
                       {count > 0 && id === 'notifications' && (
-                        <div className='absolute -top-1 -right-1 w-4 h-4 bg-b_red-500 rounded-full flex items-center justify-center'>
+                        <div className='absolute -top-1 -right-1 w-4 h-4 bg-b_red-600 rounded-full flex items-center justify-center'>
                           <span className='text-white text-[8px] font-bold leading-none'>
                             {count > 99 ? '99+' : count}
                           </span>

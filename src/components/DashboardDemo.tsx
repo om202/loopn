@@ -242,7 +242,7 @@ export default function DashboardDemo() {
                     className='w-12 h-12 rounded-full object-cover'
                   />
                   <div
-                    className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 ${user.isOnline ? 'bg-green-400' : 'bg-slate-400'} border-2 border-white rounded-full`}
+                    className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 ${user.isOnline ? 'bg-b_green-400' : 'bg-slate-400'} border-2 border-white rounded-full`}
                   ></div>
                 </div>
               </div>
@@ -296,7 +296,7 @@ export default function DashboardDemo() {
                     className='w-12 h-12 rounded-full object-cover'
                   />
                   <div
-                    className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 ${connection.isOnline ? 'bg-green-400' : 'bg-slate-400'} border-2 border-white rounded-full`}
+                    className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 ${connection.isOnline ? 'bg-b_green-400' : 'bg-slate-400'} border-2 border-white rounded-full`}
                   ></div>
                 </div>
               </div>
@@ -346,7 +346,7 @@ export default function DashboardDemo() {
                       className='w-12 h-12 rounded-full object-cover'
                     />
                     <div
-                      className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 ${user.isOnline ? 'bg-green-400' : 'bg-slate-400'} border-2 border-white rounded-full`}
+                      className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 ${user.isOnline ? 'bg-b_green-400' : 'bg-slate-400'} border-2 border-white rounded-full`}
                     ></div>
                   </div>
                 </div>
@@ -449,8 +449,8 @@ export default function DashboardDemo() {
 
           <div className='p-4 bg-white border border-slate-200 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer'>
             <div className='flex items-center gap-2'>
-              <div className='w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center'>
-                <MessageSquare className='w-5 h-5 text-green-600' />
+              <div className='w-10 h-10 bg-b_green-100 rounded-lg flex items-center justify-center'>
+                <MessageSquare className='w-5 h-5 text-b_green-600' />
               </div>
               <div>
                 <div className='font-medium text-slate-950'>Chat Features</div>
@@ -494,7 +494,7 @@ export default function DashboardDemo() {
               height={80}
               className='w-20 h-20 rounded-full object-cover'
             />
-            <div className='absolute -bottom-1 -right-1 w-6 h-6 bg-green-400 border-3 border-white rounded-full'></div>
+            <div className='absolute -bottom-1 -right-1 w-6 h-6 bg-b_green-400 border-3 border-white rounded-full'></div>
           </div>
           <div>
             <h3 className='text-xl font-semibold text-slate-950'>
@@ -607,7 +607,7 @@ export default function DashboardDemo() {
                       className='w-12 h-12 rounded-full object-cover'
                     />
                     <div
-                      className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 ${user.isOnline ? 'bg-green-400' : 'bg-slate-400'} border-2 border-white rounded-full`}
+                      className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 ${user.isOnline ? 'bg-b_green-400' : 'bg-slate-400'} border-2 border-white rounded-full`}
                     ></div>
                   </div>
                 </div>
@@ -801,7 +801,7 @@ export default function DashboardDemo() {
                     height={20}
                     className='w-5 h-5 rounded-full object-cover'
                   />
-                  <div className='absolute -bottom-0.5 -right-0.5 w-2 h-2 bg-green-400 border border-white rounded-full'></div>
+                  <div className='absolute -bottom-0.5 -right-0.5 w-2 h-2 bg-b_green-400 border border-white rounded-full'></div>
                 </div>
               </div>
               <span className='font-medium text-base flex-1 truncate'>
@@ -946,7 +946,7 @@ export default function DashboardDemo() {
                   height={40}
                   className='w-10 h-10 rounded-full object-cover'
                 />
-                <div className='absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-400 border-2 border-white rounded-full'></div>
+                <div className='absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-b_green-400 border-2 border-white rounded-full'></div>
               </div>
               <div className='flex-1 min-w-0'>
                 <h3 className='text-sm font-semibold text-slate-950 truncate'>
@@ -1126,7 +1126,7 @@ export default function DashboardDemo() {
                           className='w-12 h-12 rounded-full object-cover border border-brand-500'
                         />
                         <div
-                          className={`absolute -bottom-0 -right-0 w-3 h-3 ${user.isOnline ? 'bg-green-500' : 'bg-slate-400'} rounded-full border-2 border-white box-content`}
+                          className={`absolute -bottom-0 -right-0 w-3 h-3 ${user.isOnline ? 'bg-b_green-500' : 'bg-slate-400'} rounded-full border-2 border-white box-content`}
                         ></div>
                       </div>
                     </div>
@@ -1175,7 +1175,7 @@ export default function DashboardDemo() {
                           className='w-12 h-12 rounded-full object-cover'
                         />
                         <div
-                          className={`absolute -bottom-0 -right-0 w-3 h-3 ${connection.isOnline ? 'bg-green-500' : 'bg-slate-400'} rounded-full border-2 border-white box-content`}
+                          className={`absolute -bottom-0 -right-0 w-3 h-3 ${connection.isOnline ? 'bg-b_green-500' : 'bg-slate-400'} rounded-full border-2 border-white box-content`}
                         ></div>
                       </div>
                     </div>
@@ -1220,7 +1220,7 @@ export default function DashboardDemo() {
                             className='w-10 h-10 rounded-full object-cover'
                           />
                           <div
-                            className={`absolute -bottom-0 -right-0 w-3 h-3 ${user.isOnline ? 'bg-green-400' : 'bg-slate-400'} rounded-full border-2 border-white`}
+                            className={`absolute -bottom-0 -right-0 w-3 h-3 ${user.isOnline ? 'bg-b_green-400' : 'bg-slate-400'} rounded-full border-2 border-white`}
                           ></div>
                         </div>
                       </div>
@@ -1325,7 +1325,7 @@ export default function DashboardDemo() {
                             className='w-12 h-12 rounded-full object-cover'
                           />
                           <div
-                            className={`absolute -bottom-0 -right-0 w-3 h-3 ${user.isOnline ? 'bg-green-500' : 'bg-slate-400'} rounded-full border-2 border-white box-content`}
+                            className={`absolute -bottom-0 -right-0 w-3 h-3 ${user.isOnline ? 'bg-b_green-500' : 'bg-slate-400'} rounded-full border-2 border-white box-content`}
                           ></div>
                         </div>
                       </div>
