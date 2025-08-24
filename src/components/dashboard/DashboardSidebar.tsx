@@ -137,12 +137,12 @@ export default function DashboardSidebar({
                 <Image
                   src='/loopn.svg'
                   alt='Loopn'
-                  width={32}
-                  height={32}
+                  width={36}
+                  height={36}
                   priority
                 />
                 <div className='flex items-center gap-2'>
-                  <h1 className='text-2xl font-bold text-slate-950'>Loopn</h1>
+                  <h1 className='text-[26px] font-bold text-brand-600'>Loopn</h1>
                 </div>
               </Link>
             </div>
@@ -155,16 +155,16 @@ export default function DashboardSidebar({
                 <button
                   key={id}
                   onClick={() => onSectionChange(id)}
-                  className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left group transition-colors ${
+                  className={`relative w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left group transition-colors ${
                     activeSection === id
                       ? 'text-brand-600 bg-brand-50 font-medium'
                       : 'text-slate-950 hover:bg-slate-50'
                   }`}
                 >
-                  <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
+                  <div className='w-6 h-6 flex-shrink-0 flex items-center justify-center'>
                     {icon === 'NotificationBell' ? (
                       <svg
-                        className='w-5 h-5'
+                        className='w-6 h-6'
                         fill='none'
                         stroke='currentColor'
                         viewBox='0 0 24 24'
@@ -178,13 +178,13 @@ export default function DashboardSidebar({
                       </svg>
                     ) : (
                       React.createElement(icon, {
-                        className: 'w-5 h-5',
+                        className: 'w-6 h-6',
                       })
                     )}
                   </div>
                   <span className='flex-1 flex items-center justify-between'>
                     <span
-                      className={`${activeSection === id ? 'font-medium' : ''}`}
+                      className={`text-lg ${activeSection === id ? 'font-medium' : ''}`}
                     >
                       {label}
                     </span>
@@ -292,7 +292,7 @@ export default function DashboardSidebar({
                   {icon === 'NotificationBell' ? (
                     <>
                       <svg
-                        className='w-5 h-5'
+                        className='w-6 h-6'
                         fill='none'
                         stroke='currentColor'
                         viewBox='0 0 24 24'
@@ -332,7 +332,7 @@ export default function DashboardSidebar({
                     </div>
                   ) : (
                     React.createElement(icon, {
-                      className: 'w-5 h-5',
+                      className: 'w-6 h-6',
                     })
                   )}
                 </div>

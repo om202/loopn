@@ -106,12 +106,12 @@ export default function HomePage() {
                 <Image
                   src='/loopn.svg'
                   alt='Loopn'
-                  width={32}
-                  height={32}
+                  width={36}
+                  height={36}
                   priority
                 />
                 <div className='flex items-center gap-2'>
-                  <span className='text-xl font-bold text-slate-950'>
+                  <span className='text-[26px] font-bold text-brand-600'>
                     Loopn
                   </span>
                 </div>
@@ -119,8 +119,8 @@ export default function HomePage() {
             </div>
             <div className='flex items-center'>
               <Link href={authLink}>
-                <button className='bg-white hover:bg-brand-50 text-brand-600 border border-slate-200 px-6 py-2.5 rounded-lg transition-colors flex items-center gap-2'>
-                  <LogIn className='w-4 h-4' />
+                <button className='bg-white hover:bg-brand-50 text-brand-600 border border-slate-200 px-6 py-2.5 rounded-lg transition-colors flex items-center gap-2' style={{fontWeight: 500}}>
+                  <LogIn className='w-4 h-4' strokeWidth={2.5} />
                   {authText}
                 </button>
               </Link>
