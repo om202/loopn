@@ -90,9 +90,9 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
   }
 
   return (
-    <div className='bg-white rounded-xl shadow-lg border border-gray-200'>
-      <div className='p-4 border-b border-gray-200'>
-        <div className='flex items-center gap-2 text-gray-900'>
+    <div className='bg-white rounded-xl shadow-lg border border-slate-200'>
+      <div className='p-4 border-b border-slate-200'>
+        <div className='flex items-center gap-2 text-slate-950'>
           <span className='font-medium'>
             Chat Requests ({chatRequests.length})
           </span>
@@ -101,9 +101,9 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
 
       {chatRequests.length === 0 ? (
         <div className='flex flex-col items-center justify-center text-center p-8'>
-          <div className='w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center'>
+          <div className='w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-full flex items-center justify-center'>
             <svg
-              className='w-8 h-8 text-gray-500'
+              className='w-8 h-8 text-slate-500'
               fill='none'
               stroke='currentColor'
               viewBox='0 0 24 24'
@@ -116,25 +116,25 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
               />
             </svg>
           </div>
-          <h3 className='text-lg font-medium text-gray-900 mb-2'>
+          <h3 className='text-lg font-medium text-slate-950 mb-2'>
             No chat requests
           </h3>
-          <p className='text-gray-500'>Incoming requests will appear here</p>
+          <p className='text-slate-500'>Incoming requests will appear here</p>
         </div>
       ) : (
         <div className='p-4 space-y-3'>
           {chatRequests.map(request => (
             <div
               key={request.id}
-              className='flex items-center justify-between p-3 rounded-lg border border-gray-200 hover:border-brand-200 hover:bg-brand-50/30 transition-all'
+              className='flex items-center justify-between p-3 rounded-lg border border-slate-200 hover:border-brand-200 hover:bg-brand-50/30 transition-all'
             >
               <div className='flex items-center gap-3'>
                 <UserAvatar userId={request.requesterId} size='md' />
                 <div>
-                  <div className='font-medium text-gray-900 text-sm no-email-detection'>
+                  <div className='font-medium text-slate-950 text-sm no-email-detection'>
                     {`User ${request.requesterId.slice(-4)}`}
                   </div>
-                  <div className='text-sm text-gray-500'>
+                  <div className='text-sm text-slate-500'>
                     Wants to chat • {formatTimeAgo(request.createdAt)}
                   </div>
                 </div>
@@ -148,7 +148,7 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
                   disabled={
                     decliningId === request.id || acceptingId === request.id
                   }
-                  className='px-3 py-2 bg-gray-100 text-gray-900 text-sm font-medium rounded-lg hover:bg-gray-100 disabled:opacity-50 transition-colors'
+                  className='px-3 py-2 bg-slate-100 text-slate-950 text-sm font-medium rounded-lg hover:bg-slate-100 disabled:opacity-50 transition-colors'
                 >
                   {decliningId === request.id ? 'Declining...' : 'Decline'}
                 </button>

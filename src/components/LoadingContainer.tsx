@@ -52,7 +52,7 @@ export default function LoadingContainer({
       default:
         return (
           <div
-            className={`${getSizeClasses()} border-gray-200 border-t-brand-400 rounded-full animate-spin`}
+            className={`${getSizeClasses()} border-slate-200 border-t-brand-400 rounded-full animate-spin`}
           />
         );
     }

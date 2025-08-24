@@ -276,8 +276,8 @@ export default function MessageBubble({
               <div
                 className={`p-2.5 rounded-2xl border shadow-sm ${
                   isOwnMessage
-                    ? 'bg-gray-100 text-gray-500 border-gray-200 rounded-br-md'
-                    : 'bg-gray-100 text-gray-500 border-gray-200 rounded-bl-md'
+                    ? 'bg-slate-100 text-slate-500 border-slate-200 rounded-br-md'
+                    : 'bg-slate-100 text-slate-500 border-slate-200 rounded-bl-md'
                 }`}
               >
                 <p className='text-sm italic select-none'>Message deleted</p>
@@ -291,7 +291,7 @@ export default function MessageBubble({
                 className={`p-2.5 rounded-2xl shadow-sm ${
                   isOwnMessage
                     ? 'bg-brand-500 text-white border border-brand-500 rounded-br-md'
-                    : 'bg-gray-100 text-gray-900 border border-gray-200 rounded-bl-md'
+                    : 'bg-slate-100 text-slate-950 border border-slate-200 rounded-bl-md'
                 }`}
               >
                 {repliedToMessage && (
@@ -299,12 +299,12 @@ export default function MessageBubble({
                     className={`mb-2 pt-2 pb-2 border-l-2 pl-3 pr-3 ${
                       isOwnMessage
                         ? 'border-brand-300 bg-brand-500 bg-opacity-15'
-                        : 'border-gray-400 bg-gray-100'
+                        : 'border-slate-400 bg-slate-100'
                     } rounded-r-xl`}
                   >
                     <div
                       className={`text-sm ${
-                        isOwnMessage ? 'text-brand-100' : 'text-gray-900'
+                        isOwnMessage ? 'text-brand-100' : 'text-slate-950'
                       } mb-1`}
                     >
                       Replying to{' '}
@@ -316,7 +316,7 @@ export default function MessageBubble({
                     </div>
                     <div
                       className={`text-base ${
-                        isOwnMessage ? 'text-brand-100' : 'text-gray-900'
+                        isOwnMessage ? 'text-brand-100' : 'text-slate-950'
                       }`}
                     >
                       {getRepliedToContent(repliedToMessage.content)}
@@ -367,7 +367,7 @@ export default function MessageBubble({
               } z-10`}
             >
               <div
-                className={`bg-white/95 backdrop-blur-md border border-gray-200 rounded-full px-2 py-1.5 gap-3 flex items-center ${
+                className={`bg-white/95 backdrop-blur-md border border-slate-200 rounded-full px-2 py-1.5 gap-3 flex items-center ${
                   isOwnMessage ? 'flex-row-reverse' : 'flex-row'
                 }`}
               >
@@ -377,7 +377,7 @@ export default function MessageBubble({
                   title='Reply'
                 >
                   <svg
-                    className='w-4 h-4 text-gray-500 group-hover:text-brand-600 group-hover:scale-110 transition-all duration-200'
+                    className='w-4 h-4 text-slate-500 group-hover:text-brand-600 group-hover:scale-110 transition-all duration-200'
                     fill='none'
                     stroke='currentColor'
                     viewBox='0 0 24 24'
@@ -398,7 +398,7 @@ export default function MessageBubble({
                     title='Delete message'
                   >
                     <svg
-                      className='w-4 h-4 text-gray-500 group-hover:text-b_red-500 group-hover:scale-110 transition-all duration-200'
+                      className='w-4 h-4 text-slate-500 group-hover:text-b_red-500 group-hover:scale-110 transition-all duration-200'
                       fill='none'
                       stroke='currentColor'
                       viewBox='0 0 24 24'
@@ -428,7 +428,7 @@ export default function MessageBubble({
                       className={`w-4 h-4 group-hover:scale-110 transition-all duration-200 ${
                         showEmojiPicker
                           ? 'text-b_yellow-500'
-                          : 'text-gray-500 group-hover:text-b_yellow-500'
+                          : 'text-slate-500 group-hover:text-b_yellow-500'
                       }`}
                       fill='none'
                       stroke='currentColor'

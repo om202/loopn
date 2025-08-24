@@ -609,10 +609,10 @@ export default function OnlineUsers({
           {activeSection === 'notifications' && (
             <div className='flex items-start justify-between'>
               <div>
-                <h2 className='text-2xl sm:text-2xl font-bold text-gray-900 mb-1'>
+                <h2 className='text-2xl sm:text-2xl font-bold text-slate-950 mb-1'>
                   Notifications
                 </h2>
-                <p className='text-base text-gray-500'>
+                <p className='text-base text-slate-500'>
                   Keep up with your latest activity
                 </p>
               </div>
@@ -628,10 +628,10 @@ export default function OnlineUsers({
           )}
           {activeSection === 'help' && (
             <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-gray-900 mb-1'>
+              <h2 className='text-xl sm:text-2xl font-bold text-slate-950 mb-1'>
                 Help & Support
               </h2>
-              <p className='text-base text-gray-500'>
+              <p className='text-base text-slate-500'>
                 Common questions and troubleshooting
               </p>
             </div>
@@ -639,10 +639,10 @@ export default function OnlineUsers({
           {activeSection === 'account' && (
             <div className='flex items-start justify-between'>
               <div>
-                <h2 className='text-2xl sm:text-2xl font-bold text-gray-900 mb-1'>
+                <h2 className='text-2xl sm:text-2xl font-bold text-slate-950 mb-1'>
                   Account
                 </h2>
-                <p className='text-base text-gray-500'>
+                <p className='text-base text-slate-500'>
                   Manage your profile and settings
                 </p>
               </div>
@@ -656,48 +656,48 @@ export default function OnlineUsers({
           )}
           {activeSection === 'connections' && (
             <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-gray-900 mb-1'>
+              <h2 className='text-xl sm:text-2xl font-bold text-slate-950 mb-1'>
                 Connections
               </h2>
-              <p className='text-base text-gray-500'>Your connections</p>
+              <p className='text-base text-slate-500'>Your connections</p>
             </div>
           )}
           {activeSection === 'suggested' && (
             <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-gray-900 mb-1'>
+              <h2 className='text-xl sm:text-2xl font-bold text-slate-950 mb-1'>
                 Discover
               </h2>
-              <p className='text-base text-gray-500'>
+              <p className='text-base text-slate-500'>
                 Find and connect with new people
               </p>
             </div>
           )}
           {activeSection === 'search' && (
             <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-gray-900 mb-1'>
+              <h2 className='text-xl sm:text-2xl font-bold text-slate-950 mb-1'>
                 {searchQuery ? 'Search Results' : 'Search'}
               </h2>
-              <p className='text-base text-gray-500'>
+              <p className='text-base text-slate-500'>
                 {searchQuery ? `"${searchQuery}"` : 'Search for professionals'}
               </p>
             </div>
           )}
           {activeSection === 'all' && (
             <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-gray-900 mb-1'>
+              <h2 className='text-xl sm:text-2xl font-bold text-slate-950 mb-1'>
                 Chats
               </h2>
-              <p className='text-base text-gray-500'>Your conversations</p>
+              <p className='text-base text-slate-500'>Your conversations</p>
             </div>
           )}
         </div>
 
         <div className='relative flex-1 overflow-hidden'>
           {/* Top border - shows when scrolled down */}
-          <div className='absolute top-0 left-0 right-0 h-px bg-gray-200 opacity-0 transition-opacity duration-200 z-10 scroll-top-border'></div>
+          <div className='absolute top-0 left-0 right-0 h-px bg-slate-200 opacity-0 transition-opacity duration-200 z-10 scroll-top-border'></div>
 
           {/* Bottom border - shows when not at bottom */}
-          <div className='absolute bottom-0 left-0 right-0 h-px bg-gray-200 opacity-0 transition-opacity duration-200 z-10 scroll-bottom-border'></div>
+          <div className='absolute bottom-0 left-0 right-0 h-px bg-slate-200 opacity-0 transition-opacity duration-200 z-10 scroll-bottom-border'></div>
 
           <div
             className='overflow-y-auto flex-1 h-full'

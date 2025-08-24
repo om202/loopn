@@ -71,10 +71,10 @@ export default function AccountContent() {
             className='mb-4'
           />
           <div>
-            <h3 className='font-medium text-gray-900 mb-1'>
+            <h3 className='font-medium text-slate-950 mb-1'>
               {getUserDisplayName()}
             </h3>
-            <p className='text-sm text-gray-500 font-medium'>
+            <p className='text-sm text-slate-500 font-medium'>
               {getUserEmail()}
             </p>
           </div>
@@ -83,12 +83,12 @@ export default function AccountContent() {
         {/* Profile Details */}
         <div className='mt-5'>
           {loadingProfile ? (
-            <div className='flex items-center gap-2 text-sm text-gray-500'>
-              <div className='w-3 h-3 bg-gray-200 rounded-full animate-pulse'></div>
+            <div className='flex items-center gap-2 text-sm text-slate-500'>
+              <div className='w-3 h-3 bg-slate-200 rounded-full animate-pulse'></div>
               <span>Loading...</span>
             </div>
           ) : userProfile ? (
-            <div className='divide-y divide-gray-100'>
+            <div className='divide-y divide-slate-100'>
               {/* Professional Info Section */}
               {(userProfile.jobRole ||
                 userProfile.companyName ||
@@ -100,39 +100,39 @@ export default function AccountContent() {
                 (userProfile.interests &&
                   userProfile.interests.length > 0)) && (
                 <div className='pb-6'>
-                  <h4 className='text-sm font-semibold text-gray-500 mb-4'>
+                  <h4 className='text-sm font-semibold text-slate-500 mb-4'>
                     Profile Details
                   </h4>
-                  <div className='divide-y divide-gray-100'>
+                  <div className='divide-y divide-slate-100'>
                     {userProfile.jobRole && (
                       <div className='py-3'>
-                        <dt className='text-sm font-medium text-gray-500 mb-1.5 flex items-center gap-1'>
+                        <dt className='text-sm font-medium text-slate-500 mb-1.5 flex items-center gap-1'>
                           <Briefcase className='w-3.5 h-3.5' />
                           Role
                         </dt>
-                        <dd className='text-base text-gray-900'>
+                        <dd className='text-base text-slate-950'>
                           {userProfile.jobRole}
                         </dd>
                       </div>
                     )}
                     {userProfile.companyName && (
                       <div className='py-3'>
-                        <dt className='text-sm font-medium text-gray-500 mb-1.5 flex items-center gap-1'>
+                        <dt className='text-sm font-medium text-slate-500 mb-1.5 flex items-center gap-1'>
                           <Building2 className='w-3.5 h-3.5' />
                           Company
                         </dt>
-                        <dd className='text-base text-gray-900'>
+                        <dd className='text-base text-slate-950'>
                           {userProfile.companyName}
                         </dd>
                       </div>
                     )}
                     {userProfile.industry && (
                       <div className='py-3'>
-                        <dt className='text-sm font-medium text-gray-500 mb-1.5 flex items-center gap-1'>
+                        <dt className='text-sm font-medium text-slate-500 mb-1.5 flex items-center gap-1'>
                           <Factory className='w-3.5 h-3.5' />
                           Industry
                         </dt>
-                        <dd className='text-base text-gray-900'>
+                        <dd className='text-base text-slate-950'>
                           {userProfile.industry}
                         </dd>
                       </div>
@@ -140,40 +140,40 @@ export default function AccountContent() {
                     {userProfile.yearsOfExperience !== null &&
                       userProfile.yearsOfExperience !== undefined && (
                         <div className='py-3'>
-                          <dt className='text-sm font-medium text-gray-500 mb-1.5 flex items-center gap-1'>
+                          <dt className='text-sm font-medium text-slate-500 mb-1.5 flex items-center gap-1'>
                             <Clock className='w-3.5 h-3.5' />
                             Experience
                           </dt>
-                          <dd className='text-base text-gray-900'>
+                          <dd className='text-base text-slate-950'>
                             {userProfile.yearsOfExperience} years
                           </dd>
                         </div>
                       )}
                     {userProfile.education && (
                       <div className='py-3'>
-                        <dt className='text-sm font-medium text-gray-500 mb-1.5 flex items-center gap-1'>
+                        <dt className='text-sm font-medium text-slate-500 mb-1.5 flex items-center gap-1'>
                           <GraduationCap className='w-3.5 h-3.5' />
                           Education
                         </dt>
-                        <dd className='text-base text-gray-900'>
+                        <dd className='text-base text-slate-950'>
                           {userProfile.education}
                         </dd>
                       </div>
                     )}
                     {userProfile.about && (
                       <div className='py-3'>
-                        <dt className='text-sm font-medium text-gray-500 mb-1.5 flex items-center gap-1'>
+                        <dt className='text-sm font-medium text-slate-500 mb-1.5 flex items-center gap-1'>
                           <Info className='w-3.5 h-3.5' />
                           About
                         </dt>
-                        <dd className='text-base text-gray-900'>
+                        <dd className='text-base text-slate-950'>
                           {userProfile.about}
                         </dd>
                       </div>
                     )}
                     {userProfile.skills && userProfile.skills.length > 0 && (
                       <div className='py-3'>
-                        <dt className='text-sm font-medium text-gray-500 mb-1.5 flex items-center gap-1'>
+                        <dt className='text-sm font-medium text-slate-500 mb-1.5 flex items-center gap-1'>
                           <Target className='w-3.5 h-3.5' />
                           Skills
                         </dt>
@@ -181,7 +181,7 @@ export default function AccountContent() {
                           {userProfile.skills.map((skill, index) => (
                             <span
                               key={index}
-                              className='px-3 py-1.5 text-base bg-transparent text-gray-900 border border-gray-200 rounded-lg font-medium'
+                              className='px-3 py-1.5 text-base bg-transparent text-slate-950 border border-slate-200 rounded-lg font-medium'
                             >
                               {skill}
                             </span>
@@ -192,7 +192,7 @@ export default function AccountContent() {
                     {userProfile.interests &&
                       userProfile.interests.length > 0 && (
                         <div className='py-3'>
-                          <dt className='text-sm font-medium text-gray-500 mb-1.5 flex items-center gap-1'>
+                          <dt className='text-sm font-medium text-slate-500 mb-1.5 flex items-center gap-1'>
                             <Heart className='w-3.5 h-3.5' />
                             Interests
                           </dt>
@@ -200,7 +200,7 @@ export default function AccountContent() {
                             {userProfile.interests.map((interest, index) => (
                               <span
                                 key={index}
-                                className='px-3 py-1.5 text-base bg-transparent text-gray-900 border border-gray-200 rounded-lg font-medium'
+                                className='px-3 py-1.5 text-base bg-transparent text-slate-950 border border-slate-200 rounded-lg font-medium'
                               >
                                 {interest}
                               </span>
@@ -213,7 +213,7 @@ export default function AccountContent() {
               )}
             </div>
           ) : (
-            <div className='text-sm text-gray-500 text-center py-8'>
+            <div className='text-sm text-slate-500 text-center py-8'>
               No profile details available.
             </div>
           )}

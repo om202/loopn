@@ -125,10 +125,10 @@ export default function UserAvatar({
       case 'RECENTLY_ACTIVE':
         return (
           <div
-            className={`${recentlyActiveSize} bg-gray-300 rounded-full border-2 border-white box-content flex items-center justify-center`}
+            className={`${recentlyActiveSize} bg-slate-300 rounded-full border-2 border-white box-content flex items-center justify-center`}
           >
             <Clock
-              className={`${recentlyActiveIconSize} text-gray-900`}
+              className={`${recentlyActiveIconSize} text-slate-950`}
               strokeWidth={2.5}
             />
           </div>
@@ -277,7 +277,7 @@ export default function UserAvatar({
           {/* Fallback state - show when no profile picture or error */}
           {(!hasProfilePicture || imageError) && (
             <div className='bg-neutral-50 w-full h-full flex items-center justify-center absolute inset-0'>
-              <User className='w-3/5 h-3/5 text-gray-500' strokeWidth={1.5} />
+              <User className='w-3/5 h-3/5 text-slate-500' strokeWidth={1.5} />
             </div>
           )}
         </div>

@@ -24,45 +24,45 @@ export default function HelpContent({
     <div className='h-full mx-auto w-full pl-0 sm:pl-2'>
       {/* Getting Started */}
       <div className='mb-6'>
-        <h3 className='text-lg font-semibold text-gray-900 mb-4'>
+        <h3 className='text-lg font-semibold text-slate-950 mb-4'>
           Getting Started
         </h3>
         <div className='space-y-3'>
-          <div className='bg-white rounded-lg p-4 border border-gray-200'>
-            <h4 className='font-medium text-gray-900 text-base mb-2'>
+          <div className='bg-white rounded-lg p-4 border border-slate-200'>
+            <h4 className='font-medium text-slate-950 text-base mb-2'>
               I'm not getting any matches
             </h4>
-            <p className='text-base text-gray-900 mb-3'>
+            <p className='text-base text-slate-950 mb-3'>
               This usually happens when your profile is incomplete.
             </p>
             <div className='space-y-2'>
               <div className='flex items-start gap-2'>
                 <CheckCircle className='w-4 h-4 text-brand-600 mt-0.5 flex-shrink-0' />
-                <span className='text-base text-gray-900'>
+                <span className='text-base text-slate-950'>
                   Go to Account → Complete your profile with skills and
                   interests
                 </span>
               </div>
               <div className='flex items-start gap-2'>
                 <CheckCircle className='w-4 h-4 text-brand-600 mt-0.5 flex-shrink-0' />
-                <span className='text-base text-gray-900'>
+                <span className='text-base text-slate-950'>
                   Add a clear profile picture
                 </span>
               </div>
               <div className='flex items-start gap-2'>
                 <CheckCircle className='w-4 h-4 text-brand-600 mt-0.5 flex-shrink-0' />
-                <span className='text-base text-gray-900'>
+                <span className='text-base text-slate-950'>
                   Write a brief "About" section
                 </span>
               </div>
             </div>
           </div>
 
-          <div className='bg-white rounded-lg p-4 border border-gray-200'>
-            <h4 className='font-medium text-gray-900 text-base mb-2'>
+          <div className='bg-white rounded-lg p-4 border border-slate-200'>
+            <h4 className='font-medium text-slate-950 text-base mb-2'>
               How do I start a conversation?
             </h4>
-            <p className='text-base text-gray-900 mb-3'>
+            <p className='text-base text-slate-950 mb-3'>
               You can start trial chats without connecting first.
             </p>
             <div className='space-y-2'>
@@ -70,7 +70,7 @@ export default function HelpContent({
                 <span className='text-brand-600 font-medium text-base mt-0.5 flex-shrink-0'>
                   1.
                 </span>
-                <span className='text-base text-gray-900'>
+                <span className='text-base text-slate-950'>
                   Find someone in Suggested or Search
                 </span>
               </div>
@@ -78,7 +78,7 @@ export default function HelpContent({
                 <span className='text-brand-600 font-medium text-base mt-0.5 flex-shrink-0'>
                   2.
                 </span>
-                <span className='text-base text-gray-900'>
+                <span className='text-base text-slate-950'>
                   Click "Start Trial" button
                 </span>
               </div>
@@ -86,7 +86,7 @@ export default function HelpContent({
                 <span className='text-brand-600 font-medium text-base mt-0.5 flex-shrink-0'>
                   3.
                 </span>
-                <span className='text-base text-gray-900'>
+                <span className='text-base text-slate-950'>
                   You have 7 days to chat and decide if you want to connect
                 </span>
               </div>
@@ -97,60 +97,60 @@ export default function HelpContent({
 
       {/* Navigation Help */}
       <div className='mb-6'>
-        <h3 className='text-lg font-semibold text-gray-900 mb-4'>
+        <h3 className='text-lg font-semibold text-slate-950 mb-4'>
           Understanding the Dashboard
         </h3>
         <div className='space-y-3'>
-          <div className='bg-white rounded-lg p-4 border border-gray-200'>
+          <div className='bg-white rounded-lg p-4 border border-slate-200'>
             <div className='flex items-center gap-3 mb-2'>
               <Sparkles className='w-4 h-4 text-brand-600' />
-              <h4 className='font-medium text-gray-900 text-base'>Discover</h4>
+              <h4 className='font-medium text-slate-950 text-base'>Discover</h4>
             </div>
-            <p className='text-base text-gray-900'>
+            <p className='text-base text-slate-950'>
               People the AI thinks you might want to connect with based on your
               profile
             </p>
           </div>
 
-          <div className='bg-white rounded-lg p-4 border border-gray-200'>
+          <div className='bg-white rounded-lg p-4 border border-slate-200'>
             <div className='flex items-center gap-3 mb-2'>
               <Search className='w-4 h-4 text-brand-600' />
-              <h4 className='font-medium text-gray-900 text-base'>Search</h4>
+              <h4 className='font-medium text-slate-950 text-base'>Search</h4>
             </div>
-            <p className='text-base text-gray-900'>
+            <p className='text-base text-slate-950'>
               Find specific people by name, company, or skills
             </p>
           </div>
 
-          <div className='bg-white rounded-lg p-4 border border-gray-200'>
+          <div className='bg-white rounded-lg p-4 border border-slate-200'>
             <div className='flex items-center gap-3 mb-2'>
               <MessageCircle className='w-4 h-4 text-brand-600' />
-              <h4 className='font-medium text-gray-900 text-base'>Chats</h4>
+              <h4 className='font-medium text-slate-950 text-base'>Chats</h4>
             </div>
-            <p className='text-base text-gray-900'>
+            <p className='text-base text-slate-950'>
               All your ongoing conversations - both trial chats and established
               connections
             </p>
           </div>
 
-          <div className='bg-white rounded-lg p-4 border border-gray-200'>
+          <div className='bg-white rounded-lg p-4 border border-slate-200'>
             <div className='flex items-center gap-3 mb-2'>
               <Users className='w-4 h-4 text-brand-600' />
-              <h4 className='font-medium text-gray-900 text-base'>Connections</h4>
+              <h4 className='font-medium text-slate-950 text-base'>Connections</h4>
             </div>
-            <p className='text-base text-gray-900'>
+            <p className='text-base text-slate-950'>
               People you've successfully connected with (no time limit on chats)
             </p>
           </div>
 
-          <div className='bg-white rounded-lg p-4 border border-gray-200'>
+          <div className='bg-white rounded-lg p-4 border border-slate-200'>
             <div className='flex items-center gap-3 mb-2'>
               <Bell className='w-4 h-4 text-brand-600' />
-              <h4 className='font-medium text-gray-900 text-base'>
+              <h4 className='font-medium text-slate-950 text-base'>
                 Notifications
               </h4>
             </div>
-            <p className='text-base text-gray-900'>
+            <p className='text-base text-slate-950'>
               Chat requests from others and system updates
             </p>
           </div>
@@ -159,19 +159,19 @@ export default function HelpContent({
 
       {/* Troubleshooting */}
       <div className='mb-6'>
-        <h3 className='text-lg font-semibold text-gray-900 mb-4'>Common Issues</h3>
+        <h3 className='text-lg font-semibold text-slate-950 mb-4'>Common Issues</h3>
         <div className='space-y-3'>
-          <div className='bg-white rounded-lg p-4 border border-gray-200'>
+          <div className='bg-white rounded-lg p-4 border border-slate-200'>
             <div className='flex items-start gap-3'>
               <AlertCircle className='w-4 h-4 text-brand-600 mt-0.5 flex-shrink-0' />
               <div>
-                <h4 className='font-medium text-gray-900 text-base mb-1'>
+                <h4 className='font-medium text-slate-950 text-base mb-1'>
                   My trial chat expired
                 </h4>
-                <p className='text-base text-gray-900 mb-2'>
+                <p className='text-base text-slate-950 mb-2'>
                   Trial chats last 7 days. If it expires:
                 </p>
-                <ul className='text-base text-gray-900 space-y-1'>
+                <ul className='text-base text-slate-950 space-y-1'>
                   <li>• You can no longer send messages</li>
                   <li>• You can still read previous messages</li>
                   <li>
@@ -182,17 +182,17 @@ export default function HelpContent({
             </div>
           </div>
 
-          <div className='bg-white rounded-lg p-4 border border-gray-200'>
+          <div className='bg-white rounded-lg p-4 border border-slate-200'>
             <div className='flex items-start gap-3'>
               <AlertCircle className='w-4 h-4 text-brand-600 mt-0.5 flex-shrink-0' />
               <div>
-                <h4 className='font-medium text-gray-900 text-base mb-1'>
+                <h4 className='font-medium text-slate-950 text-base mb-1'>
                   Someone isn't responding
                 </h4>
-                <p className='text-base text-gray-900'>
+                <p className='text-base text-slate-950'>
                   This is normal in professional networking:
                 </p>
-                <ul className='text-base text-gray-900 space-y-1 mt-2'>
+                <ul className='text-base text-slate-950 space-y-1 mt-2'>
                   <li>• People might be busy or not check frequently</li>
                   <li>• Try other matches instead of waiting</li>
                   <li>• Focus on building multiple connections</li>
@@ -201,14 +201,14 @@ export default function HelpContent({
             </div>
           </div>
 
-          <div className='bg-white rounded-lg p-4 border border-gray-200'>
+          <div className='bg-white rounded-lg p-4 border border-slate-200'>
             <div className='flex items-start gap-3'>
               <Clock className='w-4 h-4 text-brand-600 mt-0.5 flex-shrink-0' />
               <div>
-                <h4 className='font-medium text-gray-900 text-base mb-1'>
+                <h4 className='font-medium text-slate-950 text-base mb-1'>
                   What does the timer mean?
                 </h4>
-                <p className='text-base text-gray-900'>
+                <p className='text-base text-slate-950'>
                   Shows time remaining in your trial chat period. After it
                   expires, you'll need to connect to continue messaging.
                 </p>
@@ -216,15 +216,15 @@ export default function HelpContent({
             </div>
           </div>
 
-          <div className='bg-white rounded-lg p-4 border border-gray-200'>
+          <div className='bg-white rounded-lg p-4 border border-slate-200'>
             <div className='flex items-start gap-3'>
               <X className='w-4 h-4 text-brand-600 mt-0.5 flex-shrink-0' />
               <div>
-                <h4 className='font-medium text-gray-900 text-base mb-1'>
+                <h4 className='font-medium text-slate-950 text-base mb-1'>
                   How do I end a chat?
                 </h4>
-                <p className='text-base text-gray-900 mb-2'>In any chat window:</p>
-                <ul className='text-base text-gray-900 space-y-1'>
+                <p className='text-base text-slate-950 mb-2'>In any chat window:</p>
+                <ul className='text-base text-slate-950 space-y-1'>
                   <li>• Click the menu button (three dots)</li>
                   <li>• Select "End Chat"</li>
                   <li>• The conversation will be archived</li>
@@ -236,11 +236,11 @@ export default function HelpContent({
       </div>
 
       {/* Contact Support */}
-      <div className='bg-white rounded-lg p-4 border border-gray-200'>
-        <h3 className='text-lg font-semibold text-gray-900 mb-2'>
+      <div className='bg-white rounded-lg p-4 border border-slate-200'>
+        <h3 className='text-lg font-semibold text-slate-950 mb-2'>
           Still Need Help?
         </h3>
-        <p className='text-base text-gray-900 mb-4'>
+        <p className='text-base text-slate-950 mb-4'>
           If you can't find the answer here, reach out to our support team.
         </p>
         <div className='flex flex-col sm:flex-row gap-3'>
@@ -257,7 +257,7 @@ export default function HelpContent({
           </button>
           <button
             onClick={onOpenBugReport}
-            className='px-4 py-2 bg-white text-gray-900 border border-gray-300 rounded-lg text-base font-medium hover:bg-gray-100 transition-colors'
+            className='px-4 py-2 bg-white text-slate-950 border border-slate-300 rounded-lg text-base font-medium hover:bg-slate-100 transition-colors'
           >
             Report Bug / Suggest
           </button>

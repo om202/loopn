@@ -219,15 +219,15 @@ export default function OnboardingPage() {
   // Removed suggestions; free-form skills entry only
 
   return (
-    <div className='min-h-screen bg-gray-100 py-8 px-3 sm:px-4'>
+    <div className='min-h-screen bg-slate-100 py-8 px-3 sm:px-4'>
       <div className='max-w-2xl mx-auto'>
         {/* Main content card */}
-        <div className='bg-white rounded-2xl border border-gray-200 p-4 sm:p-6 lg:p-8'>
+        <div className='bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 lg:p-8'>
           {/* Sign Out Button - Top Right of Card */}
           <div className='flex justify-end mb-6'>
             <button
               onClick={handleSignOut}
-              className='text-sm text-gray-500 hover:text-b_red-600 transition-colors'
+              className='text-sm text-slate-500 hover:text-b_red-600 transition-colors'
             >
               Sign Out
             </button>
@@ -244,10 +244,10 @@ export default function OnboardingPage() {
                   height={48}
                   priority
                 />
-                <h1 className='text-3xl font-bold text-gray-900'>Loopn</h1>
+                <h1 className='text-3xl font-bold text-slate-950'>Loopn</h1>
               </div>
             </Link>
-            <p className='text-gray-900 text-base mb-6'>
+            <p className='text-slate-950 text-base mb-6'>
               Let's set up your profile
             </p>
           </div>
@@ -255,7 +255,7 @@ export default function OnboardingPage() {
           <div className='mb-8 sm:mb-10'>
             <div className='relative'>
               {/* Solid connector line between steps (center-aligned) */}
-              <div className='absolute left-5 right-5 top-1/2 -translate-y-1/2 border-t border-gray-200 z-0' />
+              <div className='absolute left-5 right-5 top-1/2 -translate-y-1/2 border-t border-slate-200 z-0' />
               <div className='grid grid-cols-4 items-center'>
                 {[1, 2, 3, 4].map(step => (
                   <div key={step} className='flex justify-center'>
@@ -263,7 +263,7 @@ export default function OnboardingPage() {
                       className={`relative z-10 w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold border ${
                         step <= currentStep
                           ? 'bg-brand-500 text-white border-brand-500'
-                          : 'bg-white text-gray-500 border-gray-200'
+                          : 'bg-white text-slate-500 border-slate-200'
                       }`}
                     >
                       {step}
@@ -280,8 +280,8 @@ export default function OnboardingPage() {
                     key={label}
                     className={
                       i + 1 === currentStep
-                        ? 'text-gray-900 font-medium'
-                        : 'text-gray-500'
+                        ? 'text-slate-950 font-medium'
+                        : 'text-slate-500'
                     }
                   >
                     {label}
@@ -299,10 +299,10 @@ export default function OnboardingPage() {
           {/* Step 1: Professional Information */}
           {currentStep === 1 && (
             <div className='space-y-6'>
-              <h2 className='text-xl font-semibold text-gray-900 mb-4'>Profile</h2>
+              <h2 className='text-xl font-semibold text-slate-950 mb-4'>Profile</h2>
 
               <div>
-                <label className='block text-sm font-medium text-gray-500 mb-3'>
+                <label className='block text-sm font-medium text-slate-500 mb-3'>
                   Full Name *
                 </label>
                 <input
@@ -310,12 +310,12 @@ export default function OnboardingPage() {
                   value={formData.fullName}
                   onChange={e => updateFormData('fullName', e.target.value)}
                   placeholder='e.g., John Smith'
-                  className='w-full px-3 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+                  className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                 />
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-gray-500 mb-3'>
+                <label className='block text-sm font-medium text-slate-500 mb-3'>
                   Title *
                 </label>
                 <input
@@ -323,12 +323,12 @@ export default function OnboardingPage() {
                   value={formData.jobRole}
                   onChange={e => updateFormData('jobRole', e.target.value)}
                   placeholder='e.g., Software Engineer, Product Manager'
-                  className='w-full px-3 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+                  className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                 />
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-gray-500 mb-3'>
+                <label className='block text-sm font-medium text-slate-500 mb-3'>
                   Company *
                 </label>
                 <input
@@ -336,18 +336,18 @@ export default function OnboardingPage() {
                   value={formData.companyName}
                   onChange={e => updateFormData('companyName', e.target.value)}
                   placeholder='e.g., Google, Microsoft, Startup Inc'
-                  className='w-full px-3 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+                  className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                 />
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-gray-500 mb-3'>
+                <label className='block text-sm font-medium text-slate-500 mb-3'>
                   Industry *
                 </label>
                 <select
                   value={formData.industry}
                   onChange={e => updateFormData('industry', e.target.value)}
-                  className='w-full px-3 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+                  className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                 >
                   <option value=''>Select an industry</option>
                   {INDUSTRY_OPTIONS.map(industry => (
@@ -359,7 +359,7 @@ export default function OnboardingPage() {
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-gray-500 mb-3'>
+                <label className='block text-sm font-medium text-slate-500 mb-3'>
                   Years of Experience
                 </label>
                 <select
@@ -370,7 +370,7 @@ export default function OnboardingPage() {
                       parseInt(e.target.value)
                     )
                   }
-                  className='w-full px-3 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+                  className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                 >
                   {YEARS_OF_EXPERIENCE_OPTIONS.map(option => (
                     <option key={option.value} value={option.value}>
@@ -381,13 +381,13 @@ export default function OnboardingPage() {
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-gray-500 mb-3'>
+                <label className='block text-sm font-medium text-slate-500 mb-3'>
                   Education
                 </label>
                 <select
                   value={formData.education}
                   onChange={e => updateFormData('education', e.target.value)}
-                  className='w-full px-3 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+                  className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                 >
                   <option value=''>Select education level</option>
                   {EDUCATION_OPTIONS.map(education => (
@@ -403,16 +403,16 @@ export default function OnboardingPage() {
           {/* Step 2: About Section */}
           {currentStep === 2 && (
             <div className='space-y-6'>
-              <h2 className='text-xl font-semibold text-gray-900 mb-4'>
+              <h2 className='text-xl font-semibold text-slate-950 mb-4'>
                 About You
               </h2>
 
               {/* Skills Section (moved above About) */}
               <div>
-                <label className='block text-sm font-medium text-gray-500 mb-3'>
+                <label className='block text-sm font-medium text-slate-500 mb-3'>
                   Key skills
                 </label>
-                <p className='text-sm text-gray-500 mb-3'>
+                <p className='text-sm text-slate-500 mb-3'>
                   Add what you&apos;re good at. Type a skill and press Enter (or
                   comma).
                 </p>
@@ -440,16 +440,16 @@ export default function OnboardingPage() {
                   onChange={e => setSkillInput(e.target.value)}
                   onKeyDown={handleSkillKeyDown}
                   placeholder='ReactJS, AI Expert, Marriage Law, Public Speaking'
-                  className='w-full px-3 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+                  className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                 />
               </div>
 
               {/* About Section */}
               <div>
-                <label className='block text-sm font-medium text-gray-500 mb-3'>
+                <label className='block text-sm font-medium text-slate-500 mb-3'>
                   How do you want to use Loopn? *
                 </label>
-                <div className='text-sm text-gray-500 mb-3'>
+                <div className='text-sm text-slate-500 mb-3'>
                   <ul className='list-disc pl-5 space-y-1'>
                     <li>What you want (mentorship, collabs, clients)</li>
                     <li>
@@ -466,7 +466,7 @@ export default function OnboardingPage() {
                   onChange={e => updateFormData('about', e.target.value)}
                   placeholder="I'm here to find collaborators for side projects and swap ideas on product strategy. Looking to meet founders and PMs for partnerships and knowledge sharing. Open to quick intros and follow-up chats."
                   rows={4}
-                  className='w-full px-3 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+                  className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                 />
                 <div className='flex justify-between text-sm mt-2'>
                   <span
@@ -475,7 +475,7 @@ export default function OnboardingPage() {
                     {wordCount} words (minimum 24)
                   </span>
                   <span
-                    className={`${wordCount > 80 ? 'text-b_red-500' : 'text-gray-500'}`}
+                    className={`${wordCount > 80 ? 'text-b_red-500' : 'text-slate-500'}`}
                   >
                     {wordCount}/80 words
                   </span>
@@ -487,10 +487,10 @@ export default function OnboardingPage() {
           {/* Step 3: Interests */}
           {currentStep === 3 && (
             <div className='space-y-6'>
-              <h2 className='text-xl font-semibold text-gray-900 mb-4'>
+              <h2 className='text-xl font-semibold text-slate-950 mb-4'>
                 Your Interests
               </h2>
-              <p className='text-sm text-gray-500 mb-4'>
+              <p className='text-sm text-slate-500 mb-4'>
                 Select topics you're interested in to help us connect you with
                 like-minded professionals.
               </p>
@@ -499,9 +499,9 @@ export default function OnboardingPage() {
                 {INTERESTS_GROUPS.map((group, idx) => (
                   <div
                     key={group.title}
-                    className={`${idx !== 0 ? 'pt-6 mt-6 border-t border-gray-200' : ''}`}
+                    className={`${idx !== 0 ? 'pt-6 mt-6 border-t border-slate-200' : ''}`}
                   >
-                    <div className='text-sm font-medium text-gray-900 mb-4'>
+                    <div className='text-sm font-medium text-slate-950 mb-4'>
                       {group.title}
                     </div>
                     <div className='grid grid-cols-2 md:grid-cols-3 gap-3'>
@@ -512,7 +512,7 @@ export default function OnboardingPage() {
                           className={`px-2.5 py-2 rounded-xl text-sm transition-colors border text-center ${
                             formData.interests?.includes(interest)
                               ? 'bg-brand-500 text-white border-brand-500'
-                              : 'bg-white text-gray-500 border-gray-200 hover:bg-brand-50'
+                              : 'bg-white text-slate-500 border-slate-200 hover:bg-brand-50'
                           }`}
                         >
                           {interest}
@@ -525,7 +525,7 @@ export default function OnboardingPage() {
 
               {formData.interests && formData.interests.length > 0 && (
                 <div className='mt-6'>
-                  <p className='text-sm text-gray-500 mb-2'>
+                  <p className='text-sm text-slate-500 mb-2'>
                     Selected interests ({formData.interests.length}):
                   </p>
                   <div className='flex flex-wrap gap-2'>
@@ -546,10 +546,10 @@ export default function OnboardingPage() {
           {/* Step 4: Profile Picture */}
           {currentStep === 4 && (
             <div className='space-y-6'>
-              <h2 className='text-xl font-semibold text-gray-900 mb-4'>
+              <h2 className='text-xl font-semibold text-slate-950 mb-4'>
                 Profile Picture
               </h2>
-              <p className='text-sm text-gray-500 mb-6'>
+              <p className='text-sm text-slate-500 mb-6'>
                 Add a profile picture to help others recognize you. This is
                 optional but recommended for building trust in professional
                 connections.
@@ -570,7 +570,7 @@ export default function OnboardingPage() {
             <button
               onClick={prevStep}
               disabled={currentStep === 1}
-              className={`px-6 py-3 rounded-xl font-medium border bg-white text-gray-900 border-gray-200 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-500 disabled:opacity-50 disabled:cursor-not-allowed`}
+              className={`px-6 py-3 rounded-xl font-medium border bg-white text-slate-950 border-slate-200 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-500 disabled:opacity-50 disabled:cursor-not-allowed`}
             >
               Previous
             </button>
