@@ -377,7 +377,7 @@ export default function MessageBubble({
                   title='Reply'
                 >
                   <svg
-                    className='w-4 h-4 text-slate-500 group-hover:text-brand-600 group-hover:scale-110 transition-all duration-200'
+                    className='w-4 h-4 text-slate-500 group-hover:text-brand-500 group-hover:scale-110 transition-all duration-200'
                     fill='none'
                     stroke='currentColor'
                     viewBox='0 0 24 24'

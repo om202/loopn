@@ -37,7 +37,7 @@ const getNotificationIcon = (type: string | null) => {
     case 'chat_request':
       return (
         <svg
-          className='w-4 h-4 text-brand-600'
+          className='w-4 h-4 text-brand-500'
           fill='currentColor'
           viewBox='0 0 20 20'
         >
@@ -241,7 +241,7 @@ export default function NotificationItem({
                   return (
                     <>
                       <p className='text-base text-slate-500'>{baseContent}</p>
-                      <span className='inline-flex items-center px-2 py-1 text-sm font-medium bg-brand-50 text-brand-600 rounded-full'>
+                      <span className='inline-flex items-center px-2 py-1 text-sm font-medium bg-brand-50 text-brand-500 rounded-full'>
                         +{count} more
                       </span>
                     </>
@@ -273,7 +273,7 @@ export default function NotificationItem({
                       );
                     }}
                     disabled={decliningId === notification.id}
-                    className='px-3 py-2 bg-transparent text-brand-600 text-sm font-medium rounded-lg hover:bg-brand-50 disabled:opacity-50 transition-colors border border-brand-200'
+                    className='px-3 py-2 bg-transparent text-brand-500 text-sm font-medium rounded-lg hover:bg-brand-50 disabled:opacity-50 transition-colors border border-brand-200'
                   >
                     Accept
                   </button>
@@ -303,7 +303,7 @@ export default function NotificationItem({
                   e.stopPropagation();
                   onNotificationClick(notification);
                 }}
-                className='px-3 py-2 bg-transparent text-brand-600 text-sm font-medium rounded-lg hover:bg-brand-50 transition-colors border border-brand-200'
+                className='px-3 py-2 bg-transparent text-brand-500 text-sm font-medium rounded-lg hover:bg-brand-50 transition-colors border border-brand-200'
               >
                 Reply
               </button>

@@ -111,7 +111,7 @@ export default function HomePage() {
                   priority
                 />
                 <div className='flex items-center gap-2'>
-                  <span className='text-[26px] font-bold text-brand-600'>
+                  <span className='text-[26px] font-bold text-brand-500'>
                     Loopn
                   </span>
                 </div>
@@ -120,7 +120,7 @@ export default function HomePage() {
             <div className='flex items-center'>
               <Link href={authLink}>
                 <button
-                  className='bg-white hover:bg-brand-50 text-brand-600 border border-slate-200 px-6 py-2.5 rounded-lg transition-colors flex items-center gap-2'
+                  className='bg-white hover:bg-brand-50 text-brand-500 border border-slate-200 px-6 py-2.5 rounded-lg transition-colors flex items-center gap-2'
                   style={{ fontWeight: 500 }}
                 >
                   <LogIn className='w-4 h-4' strokeWidth={2.5} />
@@ -146,7 +146,7 @@ export default function HomePage() {
             <div className='text-center lg:text-left'>
               <h1 className='text-4xl sm:text-5xl lg:text-5xl font-bold text-slate-950 mb-8 leading-tight'>
                 Simple and AI powered{' '}
-                <span className='text-brand-600 relative'>
+                <span className='text-brand-500 relative'>
                   Networking
                   <div className='absolute -bottom-2 left-0 w-full h-1 bg-brand-200 rounded-full opacity-60'></div>
                 </span>{' '}
@@ -239,7 +239,7 @@ export default function HomePage() {
                           {/* Connect Button */}
                           <button
                             disabled
-                            className='px-4 py-2 text-base font-medium rounded-xl border transition-colors flex items-center justify-center md:w-auto md:h-auto md:gap-1.5 bg-brand-50 text-brand-600 border-brand-200 hover:bg-brand-200 hover:border-brand-400 disabled:bg-brand-50 disabled:cursor-not-allowed opacity-80'
+                            className='px-4 py-2 text-base font-medium rounded-xl border transition-colors flex items-center justify-center md:w-auto md:h-auto md:gap-1.5 bg-brand-50 text-brand-500 border-brand-200 hover:bg-brand-200 hover:border-brand-400 disabled:bg-brand-50 disabled:cursor-not-allowed opacity-80'
                           >
                             <svg
                               width='16'
@@ -589,7 +589,7 @@ export default function HomePage() {
             <div className='relative group'>
               <div className='bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 relative h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
                 {/* Step number */}
-                <div className='absolute -top-4 left-1/2 -translate-x-1/2 w-12 h-12 border-1 border-brand-200 bg-white rounded-2xl flex items-center justify-center text-brand-600 font-bold text-lg z-20'>
+                <div className='absolute -top-4 left-1/2 -translate-x-1/2 w-12 h-12 border-1 border-brand-200 bg-white rounded-2xl flex items-center justify-center text-brand-500 font-bold text-lg z-20'>
                   1
                 </div>
                 {/* Content */}
@@ -610,7 +610,7 @@ export default function HomePage() {
             <div className='relative group'>
               <div className='bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 relative h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
                 {/* Step number */}
-                <div className='absolute -top-4 left-1/2 -translate-x-1/2 w-12 h-12 border-1 border-brand-200 bg-white rounded-2xl flex items-center justify-center text-brand-600 font-bold text-lg z-20'>
+                <div className='absolute -top-4 left-1/2 -translate-x-1/2 w-12 h-12 border-1 border-brand-200 bg-white rounded-2xl flex items-center justify-center text-brand-500 font-bold text-lg z-20'>
                   2
                 </div>
                 {/* Content */}
@@ -631,7 +631,7 @@ export default function HomePage() {
             <div className='relative group'>
               <div className='bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 relative h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
                 {/* Step number */}
-                <div className='absolute -top-4 left-1/2 -translate-x-1/2 w-12 h-12 border-1 border-brand-200 bg-white rounded-2xl flex items-center justify-center text-brand-600 font-bold text-lg z-20'>
+                <div className='absolute -top-4 left-1/2 -translate-x-1/2 w-12 h-12 border-1 border-brand-200 bg-white rounded-2xl flex items-center justify-center text-brand-500 font-bold text-lg z-20'>
                   3
                 </div>
                 {/* Content */}
@@ -825,7 +825,7 @@ export default function HomePage() {
               href={isAuthenticated ? authLink : signUpLink}
               className='w-full sm:w-auto'
             >
-              <button className='group w-full bg-white hover:bg-slate-100 text-brand-600 px-10 py-4 rounded-xl text-lg font-black transition-all duration-300 flex items-center justify-center gap-3 border border-brand-600'>
+              <button className='group w-full bg-white hover:bg-slate-100 text-brand-500 px-10 py-4 rounded-xl text-lg font-black transition-all duration-300 flex items-center justify-center gap-3 border border-brand-600'>
                 {ctaText}
                 <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' />
               </button>

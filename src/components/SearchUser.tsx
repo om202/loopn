@@ -207,7 +207,7 @@ export default function SearchUser({
                 <button
                   type='button'
                   onClick={handleClearInput}
-                  className='absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 text-brand-500 hover:text-brand-600 flex items-center justify-center transition-all duration-300'
+                  className='absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 text-brand-500 hover:text-brand-500 flex items-center justify-center transition-all duration-300'
                   aria-label='Clear search'
                 >
                   <X className='w-4 h-4' />
