@@ -659,7 +659,9 @@ export default function OnlineUsers({
               <h2 className='text-xl sm:text-2xl font-bold text-slate-950 mb-1'>
                 Connections
               </h2>
-              <p className='text-sm text-slate-500 font-semibold'>Your connections</p>
+              <p className='text-sm text-slate-500 font-semibold'>
+                Your connections
+              </p>
             </div>
           )}
           {activeSection === 'suggested' && (
@@ -687,7 +689,9 @@ export default function OnlineUsers({
               <h2 className='text-xl sm:text-2xl font-bold text-slate-950 mb-1'>
                 Chats
               </h2>
-              <p className='text-sm text-slate-500 font-semibold'>Your conversations</p>
+              <p className='text-sm text-slate-500 font-semibold'>
+                Your conversations
+              </p>
             </div>
           )}
         </div>
