@@ -612,7 +612,7 @@ export default function OnlineUsers({
                 <h2 className='text-2xl sm:text-2xl font-bold text-slate-950 mb-1'>
                   Notifications
                 </h2>
-                <p className='text-base text-slate-500'>
+                <p className='text-sm text-slate-500 font-semibold'>
                   Keep up with your latest activity
                 </p>
               </div>
@@ -631,7 +631,7 @@ export default function OnlineUsers({
               <h2 className='text-xl sm:text-2xl font-bold text-slate-950 mb-1'>
                 Help & Support
               </h2>
-              <p className='text-base text-slate-500'>
+              <p className='text-sm text-slate-500 font-semibold'>
                 Common questions and troubleshooting
               </p>
             </div>
@@ -642,7 +642,7 @@ export default function OnlineUsers({
                 <h2 className='text-2xl sm:text-2xl font-bold text-slate-950 mb-1'>
                   Account
                 </h2>
-                <p className='text-base text-slate-500'>
+                <p className='text-sm text-slate-500 font-semibold'>
                   Manage your profile and settings
                 </p>
               </div>
@@ -659,7 +659,7 @@ export default function OnlineUsers({
               <h2 className='text-xl sm:text-2xl font-bold text-slate-950 mb-1'>
                 Connections
               </h2>
-              <p className='text-base text-slate-500'>Your connections</p>
+              <p className='text-sm text-slate-500 font-semibold'>Your connections</p>
             </div>
           )}
           {activeSection === 'suggested' && (
@@ -667,7 +667,7 @@ export default function OnlineUsers({
               <h2 className='text-xl sm:text-2xl font-bold text-slate-950 mb-1'>
                 Discover
               </h2>
-              <p className='text-base text-slate-500'>
+              <p className='text-sm text-slate-500 font-semibold'>
                 Find and connect with new people
               </p>
             </div>
@@ -677,7 +677,7 @@ export default function OnlineUsers({
               <h2 className='text-xl sm:text-2xl font-bold text-slate-950 mb-1'>
                 {searchQuery ? 'Search Results' : 'Search'}
               </h2>
-              <p className='text-base text-slate-500'>
+              <p className='text-sm text-slate-500 font-semibold'>
                 {searchQuery ? `"${searchQuery}"` : 'Search for professionals'}
               </p>
             </div>
@@ -687,7 +687,7 @@ export default function OnlineUsers({
               <h2 className='text-xl sm:text-2xl font-bold text-slate-950 mb-1'>
                 Chats
               </h2>
-              <p className='text-base text-slate-500'>Your conversations</p>
+              <p className='text-sm text-slate-500 font-semibold'>Your conversations</p>
             </div>
           )}
         </div>

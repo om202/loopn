@@ -152,12 +152,12 @@ export default function DashboardSidebar({
 
           {/* Navigation items */}
           <nav className='flex-1 overflow-y-auto py-4'>
-            <div className='px-4 space-y-1'>
+            <div className='px-4'>
               {sidebarItems.map(({ id, icon, label, count }) => (
                 <button
                   key={id}
                   onClick={() => onSectionChange(id)}
-                  className={`relative w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left group transition-colors ${
+                  className={`relative w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-left group transition-colors ${
                     activeSection === id
                       ? 'text-brand-500 bg-brand-50 font-medium'
                       : 'text-slate-950 hover:bg-slate-50'
@@ -186,7 +186,7 @@ export default function DashboardSidebar({
                   </div>
                   <span className='flex-1 flex items-center justify-between'>
                     <span
-                      className={`text-lg ${activeSection === id ? 'font-medium' : ''}`}
+                      className={`text-base ${activeSection === id ? 'font-medium' : ''}`}
                     >
                       {label}
                     </span>
@@ -264,7 +264,7 @@ export default function DashboardSidebar({
                 >
                   {accountItem.label}
                 </div>
-                <div className='text-sm text-slate-500'>Account</div>
+                <div className='text-base text-slate-500'>Account</div>
               </div>
             </button>
           </div>

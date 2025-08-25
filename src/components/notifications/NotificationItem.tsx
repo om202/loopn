@@ -218,7 +218,7 @@ export default function NotificationItem({
             })}
           >
             {/* Name and Timestamp */}
-            <div className='flex items-center gap-2 mb-0.5'>
+            <div className='flex items-center gap-2'>
               <h4 className='text-base font-medium text-slate-950 truncate no-email-detection'>
                 {notification.title}
               </h4>
@@ -241,7 +241,7 @@ export default function NotificationItem({
                   return (
                     <>
                       <p className='text-base text-slate-500'>{baseContent}</p>
-                      <span className='inline-flex items-center px-2 py-1 text-sm font-medium bg-brand-50 text-brand-500 rounded-full'>
+                      <span className='inline-flex items-center text-sm font-medium text-brand-500'>
                         +{count} more
                       </span>
                     </>
