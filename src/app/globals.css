@@ -68,9 +68,9 @@
 }
 
 /* Set root font size to 15px instead of default 16px */
-html {
+/* html {
   font-size: 15.5px;
-}
+} */
 
 /* Enable smooth scrolling for the entire app */
 html {

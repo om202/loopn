@@ -335,7 +335,7 @@ export default function UserCard({
                 }}
                 className={`px-2 py-2 rounded-lg text-base font-medium transition-colors flex items-center justify-center gap-2 flex-shrink-0 ${
                   incomingRequestSenderIds.has(userPresence.userId)
-                    ? 'bg-white text-brand-500 border border-brand-500 hover:bg-brand-50'
+                    ? 'bg-white text-brand-600 border border-brand-500 hover:bg-brand-50'
                     : 'bg-brand-500 hover:bg-brand-600 text-white'
                 }`}
                 title={
@@ -354,8 +354,8 @@ export default function UserCard({
                 {incomingRequestSenderIds.has(userPresence.userId) ? (
                   // Prioritize incoming requests over existing conversations
                   <>
-                    <Check className='w-5 h-5 text-brand-500' />
-                    <span className='text-base font-medium text-brand-500'>
+                    <Check className='w-5 h-5 text-brand-600' />
+                    <span className='text-base font-medium text-brand-600'>
                       Accept Chat
                     </span>
                   </>
@@ -416,7 +416,7 @@ export default function UserCard({
             disabled={loadingProfile}
             title='View Profile'
           >
-            <MoreHorizontal className='w-6 h-6 text-brand-500' />
+            <MoreHorizontal className='w-6 h-6 text-brand-600' />
           </button>
 
           {/* Desktop: profile icon opens sidebar via parent */}
@@ -433,7 +433,7 @@ export default function UserCard({
             aria-label='Open profile sidebar'
             aria-pressed={isProfileSidebarOpen}
           >
-            <MoreHorizontal className='w-6 h-6 text-brand-500' />
+            <MoreHorizontal className='w-6 h-6 text-brand-600' />
           </button>
         </div>
       </div>

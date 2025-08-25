@@ -308,7 +308,7 @@ export default function ProfileSidebar({
           }}
           className={`px-2 py-2 text-base font-medium rounded-lg transition-colors flex items-center justify-center gap-2 ${
             incomingRequestSenderIds?.has(userId)
-              ? 'bg-white text-brand-500 border border-brand-500 hover:bg-brand-50'
+              ? 'bg-white text-brand-600 border border-brand-500 hover:bg-brand-50'
               : pendingRequests.has(userId)
                 ? 'bg-slate-100 text-slate-500 hover:bg-slate-200 border border-slate-200'
                 : 'bg-brand-500 text-white hover:bg-brand-600'
@@ -316,8 +316,8 @@ export default function ProfileSidebar({
         >
           {incomingRequestSenderIds?.has(userId) ? (
             <>
-              <Check className='w-5 h-5 text-brand-500' />
-              <span className='text-base font-medium text-brand-500'>
+              <Check className='w-5 h-5 text-brand-600' />
+              <span className='text-base font-medium text-brand-600'>
                 Accept Chat
               </span>
             </>
