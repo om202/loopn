@@ -433,8 +433,8 @@ export default function DashboardDemo() {
         <div className='space-y-3'>
           <div className='p-4 bg-white border border-slate-200 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer'>
             <div className='flex items-center gap-2'>
-              <div className='w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center'>
-                <Globe className='w-5 h-5 text-blue-600' />
+              <div className='w-10 h-10 bg-brand-100 rounded-lg flex items-center justify-center'>
+                <Globe className='w-5 h-5 text-brand-600' />
               </div>
               <div>
                 <div className='font-medium text-slate-950'>
@@ -463,8 +463,8 @@ export default function DashboardDemo() {
 
           <div className='p-4 bg-white border border-slate-200 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer'>
             <div className='flex items-center gap-2'>
-              <div className='w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center'>
-                <Shield className='w-5 h-5 text-purple-600' />
+              <div className='w-10 h-10 bg-brand-100 rounded-lg flex items-center justify-center'>
+                <Shield className='w-5 h-5 text-brand-600' />
               </div>
               <div>
                 <div className='font-medium text-slate-950'>

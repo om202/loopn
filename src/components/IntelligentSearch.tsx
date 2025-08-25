@@ -231,7 +231,7 @@ export default function IntelligentSearch({
         {showFilters && (
           <button
             onClick={() => setShowFiltersPanel(!showFiltersPanel)}
-            className='mt-2 text-sm text-blue-600 hover:text-blue-700'
+            className='mt-2 text-sm text-brand-600 hover:text-brand-700'
           >
             {showFiltersPanel ? 'Hide Filters' : 'Show Filters'}
           </button>
@@ -355,7 +355,7 @@ export default function IntelligentSearch({
             <div className='p-4'>
               {isSearching ? (
                 <div className='text-center py-8'>
-                  <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto'></div>
+                  <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-brand-500 mx-auto'></div>
                   <p className='text-slate-500 mt-2'>Searching...</p>
                 </div>
               ) : results.length > 0 ? (
@@ -380,8 +380,8 @@ export default function IntelligentSearch({
                               className='w-12 h-12 rounded-full object-cover'
                             />
                           ) : (
-                            <div className='w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center'>
-                              <User className='w-6 h-6 text-blue-600' />
+                            <div className='w-12 h-12 bg-brand-100 rounded-full flex items-center justify-center'>
+                              <User className='w-6 h-6 text-brand-600' />
                             </div>
                           )}
                         </div>
@@ -411,7 +411,7 @@ export default function IntelligentSearch({
                                   .map((skill, index) => (
                                     <span
                                       key={index}
-                                      className='inline-block px-2 py-1 text-sm bg-blue-100 text-blue-700 rounded'
+                                      className='inline-block px-2 py-1 text-sm bg-brand-100 text-brand-700 rounded'
                                     >
                                       {skill}
                                     </span>

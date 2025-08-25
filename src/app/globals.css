@@ -1,18 +1,18 @@
 @import 'tailwindcss';
 
 @theme {
-  /* Custom brand colors - Blue-Purple Professional */
-  --color-brand-50: oklch(0.97 0.03 264.38);
-  --color-brand-100: oklch(0.94 0.06 264.38);
-  --color-brand-200: oklch(0.88 0.1 264.38);
-  --color-brand-300: oklch(0.8 0.13 264.38);
-  --color-brand-400: oklch(0.7 0.16 264.38);
-  --color-brand-500: oklch(0.6 0.19 264.38);
-  --color-brand-600: oklch(0.52 0.2 264.38);
-  --color-brand-700: oklch(0.4882 0.2172 264.38);
-  --color-brand-800: oklch(0.38 0.18 264.38);
-  --color-brand-900: oklch(0.32 0.15 264.38);
-  --color-brand-950: oklch(0.25 0.12 264.38);
+  /* Custom brand colors - Vibrant Purple */
+  --color-brand-50: oklch(0.97 0.03 260.16);
+  --color-brand-100: oklch(0.94 0.06 260.16);
+  --color-brand-200: oklch(0.88 0.10 260.16);
+  --color-brand-300: oklch(0.80 0.13 260.16);
+  --color-brand-400: oklch(0.72 0.15 260.16);
+  --color-brand-500: oklch(0.6474 0.1715 260.16);
+  --color-brand-600: oklch(0.56 0.17 260.16);
+  --color-brand-700: oklch(0.48 0.16 260.16);
+  --color-brand-800: oklch(0.40 0.14 260.16);
+  --color-brand-900: oklch(0.32 0.12 260.16);
+  --color-brand-950: oklch(0.25 0.10 260.16);
 
   /* Custom red colors - matching brand shade approach */
   --color-b_red-50: oklch(0.97 0.02 35);
@@ -68,9 +68,9 @@
 }
 
 /* Set root font size to 15px instead of default 16px */
-/* html {
-  font-size: 16px;
-} */
+html {
+  font-size: 15.5px;
+}
 
 /* Enable smooth scrolling for the entire app */
 html {

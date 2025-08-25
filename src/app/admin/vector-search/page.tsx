@@ -298,7 +298,7 @@ export default function VectorSearchAdminPage() {
                 <button
                   onClick={handleCheckStatus}
                   disabled={isLoadingStatus || !client}
-                  className='px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50'
+                  className='px-4 py-2 bg-brand-600 text-white rounded-md hover:bg-brand-700 disabled:opacity-50'
                 >
                   {isLoadingStatus
                     ? 'Loading...'
@@ -345,13 +345,13 @@ export default function VectorSearchAdminPage() {
               <h2 className='text-lg font-semibold text-slate-950 mb-4'>
                 Migrate Users to Vespa AI
               </h2>
-              <div className='bg-blue-50 border border-blue-200 rounded-md p-4 mb-4'>
+              <div className='bg-brand-50 border border-brand-200 rounded-md p-4 mb-4'>
                 <div className='flex'>
                   <div className='ml-3'>
-                    <h3 className='text-sm font-medium text-blue-800'>
+                    <h3 className='text-sm font-medium text-brand-800'>
                       Information
                     </h3>
-                    <div className='mt-2 text-sm text-blue-700'>
+                    <div className='mt-2 text-sm text-brand-700'>
                       <p>
                         This will migrate all user profiles from DynamoDB to
                         Vespa AI for advanced search with vector similarity,
@@ -432,7 +432,7 @@ export default function VectorSearchAdminPage() {
                   onChange={e =>
                     setSelectedRankingProfile(e.target.value as RankingProfile)
                   }
-                  className='px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
+                  className='px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500'
                 >
                   <option value='hybrid'>
                     🚀 Hybrid AI - Text + Vector (Recommended)
@@ -456,12 +456,12 @@ export default function VectorSearchAdminPage() {
                   value={testQuery}
                   onChange={e => setTestQuery(e.target.value)}
                   placeholder="Enter search query (e.g., 'software engineer', 'co-founder')"
-                  className='flex-1 px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
+                  className='flex-1 px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500'
                 />
                 <button
                   onClick={handleTestSearch}
                   disabled={isTestingSearch || !testQuery.trim() || !client}
-                  className='px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50'
+                  className='px-6 py-2 bg-brand-600 text-white rounded-md hover:bg-brand-700 disabled:opacity-50'
                 >
                   {isTestingSearch
                     ? 'Searching...'
@@ -541,7 +541,7 @@ export default function VectorSearchAdminPage() {
                                               ) => (
                                                 <span
                                                   key={skillIndex}
-                                                  className='px-2 py-1 bg-blue-100 text-blue-700 text-sm rounded'
+                                                  className='px-2 py-1 bg-brand-100 text-brand-700 text-sm rounded'
                                                 >
                                                   {skill}
                                                 </span>

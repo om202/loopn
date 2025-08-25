@@ -42,7 +42,7 @@ export function ZustandDemo() {
           <strong>Total Callbacks:</strong> {stats.totalCallbacks}
         </div>
 
-        <div className='mt-3 p-2 bg-blue-50 rounded text-base'>
+        <div className='mt-3 p-2 bg-brand-50 rounded text-base'>
           <strong>Benefits:</strong>
           <ul className='list-disc list-inside mt-1'>
             <li>Single subscription shared across components</li>

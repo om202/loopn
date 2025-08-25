@@ -16,39 +16,39 @@ export const amplifyTheme: Theme = {
       },
       button: {
         primary: {
-          backgroundColor: 'rgb(79, 70, 229)', // blue-600
+          backgroundColor: 'rgb(120, 77, 186)', // brand-600
           _hover: {
-            backgroundColor: 'rgb(67, 56, 202)', // blue-700
+            backgroundColor: 'rgb(102, 58, 164)', // brand-700
           },
           _focus: {
-            backgroundColor: 'rgb(67, 56, 202)',
+            backgroundColor: 'rgb(102, 58, 164)',
           },
           _active: {
-            backgroundColor: 'rgb(55, 48, 163)', // blue-800
+            backgroundColor: 'rgb(84, 40, 142)', // brand-800
           },
         },
         link: {
-          color: 'rgb(79, 70, 229)',
+          color: 'rgb(120, 77, 186)',
           _hover: {
-            color: 'rgb(67, 56, 202)',
+            color: 'rgb(102, 58, 164)',
           },
         },
       },
       fieldcontrol: {
         _focus: {
-          borderColor: 'rgb(79, 70, 229)',
-          boxShadow: '0 0 0 3px rgba(79, 70, 229, 0.1)',
+          borderColor: 'rgb(120, 77, 186)',
+          boxShadow: '0 0 0 3px rgba(120, 77, 186, 0.1)',
         },
       },
       tabs: {
         item: {
           color: 'rgb(107, 114, 128)', // slate-1000
           _active: {
-            borderColor: 'rgb(79, 70, 229)',
-            color: 'rgb(79, 70, 229)',
+            borderColor: 'rgb(120, 77, 186)',
+            color: 'rgb(120, 77, 186)',
           },
           _hover: {
-            color: 'rgb(79, 70, 229)',
+            color: 'rgb(120, 77, 186)',
           },
         },
       },
@@ -56,13 +56,13 @@ export const amplifyTheme: Theme = {
     colors: {
       brand: {
         primary: {
-          10: 'rgb(238, 242, 255)', // blue-50
-          20: 'rgb(224, 231, 255)', // blue-100
-          40: 'rgb(165, 180, 252)', // blue-300
-          60: 'rgb(129, 140, 248)', // blue-400
-          80: 'rgb(99, 102, 241)', // blue-600
-          90: 'rgb(79, 70, 229)', // blue-600
-          100: 'rgb(67, 56, 202)', // blue-700
+          10: 'rgb(249, 246, 255)', // brand-50
+          20: 'rgb(240, 232, 255)', // brand-100
+          40: 'rgb(186, 158, 228)', // brand-300
+          60: 'rgb(165, 128, 215)', // brand-400
+          80: 'rgb(120, 77, 186)', // brand-600
+          90: 'rgb(142, 102, 201)', // brand-500
+          100: 'rgb(102, 58, 164)', // brand-700
         },
       },
     },
