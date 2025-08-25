@@ -83,7 +83,7 @@ html {
 
 body {
   font-family:
-    var(--font-schibsted-grotesk),
+    var(--font-switzer),
     system-ui,
     -apple-system,
     sans-serif;
@@ -248,16 +248,16 @@ a:hover,
   display: none;
 }
 
-/* Force Schibsted Grotesk to override Amplify UI React default fonts */
+/* Force Switzer to override Amplify UI React default fonts */
 * {
   font-family:
-    var(--font-schibsted-grotesk),
+    var(--font-switzer),
     system-ui,
     -apple-system,
     sans-serif !important;
 }
 
-/* Ensure all Amplify UI components use Schibsted Grotesk */
+/* Ensure all Amplify UI components use Switzer */
 [data-amplify-authenticator] *,
 [data-amplify-theme] *,
 .amplify-authenticator *,
@@ -267,7 +267,7 @@ a:hover,
 .amplify-label *,
 .amplify-text * {
   font-family:
-    var(--font-schibsted-grotesk),
+    var(--font-switzer),
     system-ui,
     -apple-system,
     sans-serif !important;

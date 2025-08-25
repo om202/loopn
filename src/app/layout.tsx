@@ -3,10 +3,10 @@ import localFont from 'next/font/local';
 
 import './globals.css';
 
-const schibstedGrotesk = localFont({
-  src: '../../public/fonts/SchibstedGrotesk-VariableFont_wght.ttf',
+const switzer = localFont({
+  src: '../../public/fonts/Switzer/Switzer-Variable.woff2',
   display: 'swap',
-  variable: '--font-schibsted-grotesk',
+  variable: '--font-switzer',
 });
 import AmplifyProvider from './amplify-provider';
 import { RealtimeProvider } from '@/contexts/RealtimeContext';
@@ -72,7 +72,7 @@ export default function RootLayout({
         />
         <meta name='format-detection' content='telephone=no,email=no' />
       </head>
-      <body className={`${schibstedGrotesk.variable} antialiased`}>
+      <body className={`${switzer.variable} antialiased`}>
         <AmplifyProvider>
           <AuthProvider>
             <RealtimeProvider>
