@@ -14,7 +14,7 @@ export default function DialogContainer({
   isOpen,
   onClose,
   children,
-  maxWidth = 'xs',
+  maxWidth = 'sm',
 }: DialogContainerProps): ReactElement | null {
   const [isVisible, setIsVisible] = useState(false);
   const [shouldRender, setShouldRender] = useState(false);
