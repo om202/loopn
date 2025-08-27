@@ -18,6 +18,7 @@ import {
   Heart,
   UserCheck,
   Check,
+  ChevronsRight,
 } from 'lucide-react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import Image from 'next/image';
@@ -60,6 +61,7 @@ interface ProfileSidebarProps {
   timeLeft?: string;
   sendingConnectionRequest?: boolean;
   onBack?: () => void;
+  onClose?: () => void;
   onEndChat?: () => void;
   onSendConnectionRequest?: () => void;
   onCancelConnectionRequest?: (connectionId: string) => void;
@@ -84,6 +86,7 @@ export default function ProfileSidebar({
   timeLeft,
   sendingConnectionRequest,
   onBack,
+  onClose,
   onEndChat,
   onSendConnectionRequest,
   onCancelConnectionRequest,
@@ -364,38 +367,52 @@ export default function ProfileSidebar({
 
   return (
     <div className='bg-white rounded-2xl w-full h-full flex flex-col relative border border-slate-200'>
-      {/* Back Button - Top of sidebar */}
-      {onBack && (
-        <div className='p-4 pb-2 border-b border-slate-200 flex items-center justify-between'>
-          <button
-            onClick={onBack}
-            className='flex items-center gap-2 text-slate-500 hover:text-slate-950 transition-colors'
-          >
-            <ArrowLeft className='w-5 h-5' />
-            <span className='text-base font-medium'>Back</span>
-          </button>
-
-          {/* Remove Connection Button - Top Right */}
-          {onEndChat && (
+      {/* Header with collapse button */}
+      <div className='p-4 pb-2 flex items-center justify-between'>
+        <div className='flex items-center gap-2'>
+          {/* Collapse Button - Always visible when onClose is provided */}
+          {onClose && (
             <button
-              onClick={() => setShowEndChatDialog(true)}
-              className='text-sm text-slate-500 hover:text-slate-950 transition-colors font-medium flex items-center gap-2'
+              onClick={onClose}
+              className='p-1.5 text-slate-500 hover:text-slate-950 transition-colors rounded-lg hover:bg-slate-100'
+              title='Collapse sidebar'
             >
-              {conversation && !conversation.isConnected ? (
-                <>
-                  <MessageSquareOff className='w-4 h-4' />
-                  End Chat
-                </>
-              ) : (
-                <>
-                  <UserRoundMinus className='w-4 h-4' />
-                  Remove Connection
-                </>
-              )}
+              <ChevronsRight className='w-5 h-5' />
+            </button>
+          )}
+
+          {/* Back Button - Only shows when onBack is provided */}
+          {onBack && (
+            <button
+              onClick={onBack}
+              className='flex items-center gap-2 text-slate-500 hover:text-slate-950 transition-colors'
+            >
+              <ArrowLeft className='w-5 h-5' />
+              <span className='text-base font-medium'>Back</span>
             </button>
           )}
         </div>
-      )}
+
+        {/* Remove Connection Button - Only shows when onEndChat is provided */}
+        {onEndChat && (
+          <button
+            onClick={() => setShowEndChatDialog(true)}
+            className='text-sm text-slate-500 hover:text-slate-950 transition-colors font-medium flex items-center gap-2'
+          >
+            {conversation && !conversation.isConnected ? (
+              <>
+                <MessageSquareOff className='w-4 h-4' />
+                End Chat
+              </>
+            ) : (
+              <>
+                <UserRoundMinus className='w-4 h-4' />
+                Remove Connection
+              </>
+            )}
+          </button>
+        )}
+      </div>
 
       {/* User Profile Header */}
       <div className='p-6 pb-2 flex justify-center'>

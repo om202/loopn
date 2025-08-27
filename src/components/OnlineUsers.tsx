@@ -768,7 +768,7 @@ export default function OnlineUsers({
 
       {/* Right push sidebar: desktop only */}
       {profileSidebarOpen && profileSidebarUser && (
-        <div className='hidden md:flex w-[340px] xl:w-[360px] flex-shrink-0'>
+        <div className='hidden md:flex w-[400px] xl:w-[420px] flex-shrink-0'>
           <ProfileSidebar
             userId={profileSidebarUser.userId}
             userPresence={profileSidebarUser}
@@ -780,6 +780,10 @@ export default function OnlineUsers({
             onChatAction={handleChatAction}
             onCancelChatRequest={handleCancelChatRequest}
             onAcceptChatRequest={handleAcceptChatRequest}
+            onClose={() => {
+              setProfileSidebarOpen(false);
+              setProfileSidebarUser(null);
+            }}
             canUserReconnect={userCategories.canUserReconnect}
             getReconnectTimeRemaining={userCategories.getReconnectTimeRemaining}
           />

@@ -32,7 +32,7 @@ export default function OnlineUsers_Shimmer({
       </div>
 
       {/* Right push sidebar shimmer - desktop only */}
-      <div className='hidden md:flex w-[340px] xl:w-[350px] flex-shrink-0'>
+      <div className='hidden md:flex w-[400px] xl:w-[420px] flex-shrink-0'>
         <div className='bg-white rounded-2xl border border-slate-200 w-full h-full flex flex-col'>
           {/* Profile header shimmer */}
           <div className='p-6 pb-4 flex justify-center'>

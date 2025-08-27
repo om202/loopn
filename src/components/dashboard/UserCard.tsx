@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import {
   ClockFading,
-  MoreHorizontal,
   Plus,
   MessageSquare,
   UserCheck,
@@ -92,7 +91,6 @@ export default function UserCard({
   useRealtimeStatus = true,
 }: UserCardProps) {
   const [showCancelDialog, setShowCancelDialog] = useState(false);
-  const [showProfileDialog, setShowProfileDialog] = useState(false);
 
   // Use our centralized user profile hook instead of local state and API calls
   const { profile: fullProfile, isLoading: loadingProfile } = useUserProfile(
@@ -406,62 +404,9 @@ export default function UserCard({
             );
           })()}
 
-          {/* Profile Summary Trigger - Mobile shows dialog, Desktop shows sidebar */}
-          {/* Mobile: Profile dialog button */}
-          <button
-            onClick={() => setShowProfileDialog(true)}
-            className={`md:hidden p-1.5 text-base font-medium rounded-lg transition-colors text-slate-950 hover:bg-brand-50 flex items-center justify-center flex-shrink-0 w-[32px] h-[32px] ${
-              isSelected ? 'bg-white' : 'bg-brand-50'
-            }`}
-            disabled={loadingProfile}
-            title='View Profile'
-          >
-            <MoreHorizontal className='w-6 h-6 text-brand-600' />
-          </button>
 
-          {/* Desktop: profile icon opens sidebar via parent */}
-          <button
-            onClick={() => onOpenProfileSidebar?.(userPresence)}
-            className={`hidden md:flex p-1.5 text-base font-medium rounded-full transition-colors items-center justify-center w-[32px] h-[32px] ${
-              isProfileSidebarOpen
-                ? 'bg-slate-200'
-                : isSelected
-                  ? 'bg-slate-200 hover:bg-slate-200'
-                  : 'hover:bg-slate-200 group-hover:bg-white'
-            }`}
-            disabled={loadingProfile}
-            aria-label='Open profile sidebar'
-            aria-pressed={isProfileSidebarOpen}
-          >
-            <MoreHorizontal className='w-6 h-6 text-brand-600' />
-          </button>
         </div>
       </div>
-
-      {/* Mobile Profile Dialog - Using ProfileSidebar */}
-      <DialogContainer
-        isOpen={showProfileDialog}
-        onClose={() => setShowProfileDialog(false)}
-        maxWidth='lg'
-      >
-        <div className='h-[80vh] max-h-[600px]'>
-          <ProfileSidebar
-            userId={userPresence.userId}
-            userPresence={userPresence}
-            onlineUsers={onlineUsers}
-            showActionButtons={true}
-            existingConversations={existingConversations}
-            pendingRequests={pendingRequests}
-            incomingRequestSenderIds={incomingRequestSenderIds}
-            onChatAction={onChatAction}
-            onCancelChatRequest={onCancelChatRequest}
-            onAcceptChatRequest={onAcceptChatRequest}
-            canUserReconnect={canUserReconnect}
-            getReconnectTimeRemaining={getReconnectTimeRemaining}
-            onBack={() => setShowProfileDialog(false)}
-          />
-        </div>
-      </DialogContainer>
 
       {/* Sidebar rendering moved to parent to allow push layout */}
 
