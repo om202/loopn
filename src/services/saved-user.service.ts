@@ -28,8 +28,7 @@ export class SavedUserService {
     } catch (error) {
       return {
         data: null,
-        error:
-          error instanceof Error ? error.message : 'Failed to save user',
+        error: error instanceof Error ? error.message : 'Failed to save user',
       };
     }
   }
@@ -54,8 +53,7 @@ export class SavedUserService {
     } catch (error) {
       return {
         success: false,
-        error:
-          error instanceof Error ? error.message : 'Failed to unsave user',
+        error: error instanceof Error ? error.message : 'Failed to unsave user',
       };
     }
   }
@@ -151,8 +149,7 @@ export class SavedUserService {
     } catch (error) {
       return {
         saved: false,
-        error:
-          error instanceof Error ? error.message : 'Failed to toggle save',
+        error: error instanceof Error ? error.message : 'Failed to toggle save',
       };
     }
   }
