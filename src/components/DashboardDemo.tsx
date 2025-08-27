@@ -410,8 +410,6 @@ export default function DashboardDemo() {
     </div>
   );
 
-
-
   const renderAccountSection = () => (
     <div className='flex-1 overflow-y-auto'>
       <div className='space-y-6'>
@@ -687,7 +685,6 @@ export default function DashboardDemo() {
 
           {/* Account buttons at bottom */}
           <div className='border-t border-slate-200 p-2 space-y-1'>
-
             {/* Account Button */}
             <button
               onClick={() => setActiveSection('account')}

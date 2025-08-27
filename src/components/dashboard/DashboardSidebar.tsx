@@ -105,8 +105,6 @@ export default function DashboardSidebar({
     },
   ];
 
-
-
   const accountItem = {
     id: 'account' as const,
     icon: 'UserAvatar',
