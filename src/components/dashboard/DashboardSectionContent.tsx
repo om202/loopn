@@ -17,8 +17,6 @@ interface DashboardSectionContentProps {
   activeSection: SidebarSection;
   onlineUsers: UserPresence[];
   connectionUsers: UserPresence[];
-  activeChatTrialUsers: UserPresence[];
-  endedChatTrialUsers: UserPresence[];
   suggestedUsers: UserPresence[];
   suggestedUsersLoading?: boolean;
   existingConversations: Map<string, Conversation>;
@@ -28,8 +26,6 @@ interface DashboardSectionContentProps {
   onChatAction: (userId: string) => void;
   onCancelChatRequest: (userId: string) => void;
   onAcceptChatRequest: (userId: string) => void;
-  canUserReconnect: (userId: string) => boolean;
-  getReconnectTimeRemaining: (userId: string) => string | null;
   onOpenProfileSidebar?: (user: UserPresence) => void;
   onUserCardClick?: (user: UserPresence) => void;
   isProfileSidebarOpen?: boolean;
@@ -46,8 +42,6 @@ export default function DashboardSectionContent({
   activeSection,
   onlineUsers,
   connectionUsers,
-  activeChatTrialUsers,
-  endedChatTrialUsers,
   suggestedUsers,
   suggestedUsersLoading = false,
   existingConversations,
@@ -57,8 +51,6 @@ export default function DashboardSectionContent({
   onChatAction,
   onCancelChatRequest,
   onAcceptChatRequest,
-  canUserReconnect,
-  getReconnectTimeRemaining,
   onOpenProfileSidebar,
   onUserCardClick,
   isProfileSidebarOpen,
@@ -67,31 +59,15 @@ export default function DashboardSectionContent({
   shouldTriggerSearch,
   setOptimisticPendingRequests,
 }: DashboardSectionContentProps) {
-  // Combine all users for "All Chats" section
-  const allChatUsers = [
-    ...onlineUsers,
-    ...connectionUsers,
-    ...activeChatTrialUsers,
-    ...endedChatTrialUsers,
-  ];
+  // Combine all users for "All Chats" section - now just online users and connections
+  const allChatUsers = [...onlineUsers, ...connectionUsers];
 
-  // Remove duplicates based on userId and filter out reconnectable users
+  // Remove duplicates based on userId
   const uniqueAllChatUsers = allChatUsers.filter((user, index, array) => {
     // Remove duplicates
     const isFirstOccurrence =
       array.findIndex(u => u.userId === user.userId) === index;
-    if (!isFirstOccurrence) {
-      return false;
-    }
-
-    // Filter out users who can be reconnected (they should appear in Discover instead)
-    const conversation = existingConversations.get(user.userId);
-    const isReconnectable =
-      conversation &&
-      conversation.chatStatus === 'ENDED' &&
-      canUserReconnect(user.userId);
-
-    return !isReconnectable;
+    return isFirstOccurrence;
   });
   // Helper function to render user cards
   const renderUserCard = (userPresence: UserPresence) => (
@@ -106,8 +82,6 @@ export default function DashboardSectionContent({
       onChatAction={onChatAction}
       onCancelChatRequest={onCancelChatRequest}
       onAcceptChatRequest={onAcceptChatRequest}
-      canUserReconnect={canUserReconnect}
-      getReconnectTimeRemaining={getReconnectTimeRemaining}
       onOpenProfileSidebar={onOpenProfileSidebar}
       onUserCardClick={onUserCardClick}
       isProfileSidebarOpen={isProfileSidebarOpen}
@@ -125,13 +99,9 @@ export default function DashboardSectionContent({
       const aConversation = existingConversations.get(a.userId);
       const bConversation = existingConversations.get(b.userId);
 
-      // Check if users are available to chat (have active/connected conversations)
-      const aAvailableToChat =
-        aConversation &&
-        (aConversation.chatStatus === 'ACTIVE' || aConversation.isConnected);
-      const bAvailableToChat =
-        bConversation &&
-        (bConversation.chatStatus === 'ACTIVE' || bConversation.isConnected);
+      // Check if users are available to chat (have connected conversations)
+      const aAvailableToChat = aConversation && aConversation.isConnected;
+      const bAvailableToChat = bConversation && bConversation.isConnected;
 
       // Check if users are recently active (offline but within 15 minutes)
       const aRecentlyActive =
@@ -274,8 +244,6 @@ export default function DashboardSectionContent({
         optimisticPendingRequests={optimisticPendingRequests}
         incomingRequestSenderIds={incomingRequestSenderIds}
         onlineUsers={onlineUsers}
-        canUserReconnect={canUserReconnect}
-        getReconnectTimeRemaining={getReconnectTimeRemaining}
         onCancelChatRequest={onCancelChatRequest}
         onAcceptChatRequest={onAcceptChatRequest}
         setOptimisticPendingRequests={setOptimisticPendingRequests}

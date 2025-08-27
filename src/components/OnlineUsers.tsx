@@ -280,7 +280,6 @@ export default function OnlineUsers({
   const chatActions = useChatActions({
     user,
     existingConversations,
-    canUserReconnect: userCategories.canUserReconnect,
     onChatRequestSent,
   });
 
@@ -391,14 +390,8 @@ export default function OnlineUsers({
             return true;
           }
 
-          // If conversation exists, only include if it's ended and user can reconnect
-          const isEndedAndReconnectable =
-            conversation.chatStatus === 'ENDED' &&
-            userCategories.canUserReconnect(u.userId);
-
-          // Exclude users with active conversations or permanent connections
-          // Only include users who can be reconnected or have no prior conversation
-          return isEndedAndReconnectable;
+          // All conversations are permanent - no need to check for reconnectable users
+          return false; // Don't include users with existing conversations in suggestions
         });
 
         // Additional filtering to ensure we don't show users with active conversations
@@ -408,12 +401,8 @@ export default function OnlineUsers({
             return true; // No conversation, include
           }
 
-          // Exclude users with active or connected conversations
-          const isActiveOrConnected =
-            conversation.chatStatus === 'ACTIVE' ||
-            conversation.isConnected === true;
-
-          return !isActiveOrConnected;
+          // All conversations are permanent now - exclude users with any existing conversation
+          return false;
         });
 
         setSuggestedUsers(finalFilteredUsers);
@@ -588,10 +577,7 @@ export default function OnlineUsers({
         onSectionChange={setActiveSection}
         onlineUsersCount={userCategories.onlineUsers.length}
         connectionsCount={userCategories.connectionUsers.length}
-        chatTrialsCount={
-          userCategories.activeChatTrialUsers.length +
-          userCategories.endedChatTrialUsers.length
-        }
+        chatTrialsCount={0}
         suggestedUsersCount={suggestedUsers.length}
       />
 
@@ -717,8 +703,6 @@ export default function OnlineUsers({
                 activeSection={activeSection}
                 onlineUsers={userCategories.onlineUsers}
                 connectionUsers={userCategories.connectionUsers}
-                activeChatTrialUsers={userCategories.activeChatTrialUsers}
-                endedChatTrialUsers={userCategories.endedChatTrialUsers}
                 suggestedUsers={suggestedUsers}
                 suggestedUsersLoading={suggestedUsersLoading}
                 existingConversations={existingConversations}
@@ -728,10 +712,6 @@ export default function OnlineUsers({
                 onChatAction={handleChatAction}
                 onCancelChatRequest={handleCancelChatRequest}
                 onAcceptChatRequest={handleAcceptChatRequest}
-                canUserReconnect={userCategories.canUserReconnect}
-                getReconnectTimeRemaining={
-                  userCategories.getReconnectTimeRemaining
-                }
                 onOpenProfileSidebar={handleOpenProfileSidebar}
                 onUserCardClick={handleUserCardClick}
                 isProfileSidebarOpen={profileSidebarOpen}
@@ -763,8 +743,6 @@ export default function OnlineUsers({
               setProfileSidebarOpen(false);
               setProfileSidebarUser(null);
             }}
-            canUserReconnect={userCategories.canUserReconnect}
-            getReconnectTimeRemaining={userCategories.getReconnectTimeRemaining}
           />
         </div>
       )}

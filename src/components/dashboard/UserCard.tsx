@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ClockFading, MessageSquare, UserCheck, Check } from 'lucide-react';
+import { MessageSquare, UserCheck, Check } from 'lucide-react';
 
 // Custom Connect Icon using circles from logo
 const ConnectIcon = ({ className }: { className?: string }) => (
@@ -37,8 +37,6 @@ interface UserCardProps {
   onChatAction: (userId: string) => void;
   onCancelChatRequest: (userId: string) => void;
   onAcceptChatRequest: (userId: string) => void;
-  canUserReconnect: (userId: string) => boolean;
-  getReconnectTimeRemaining: (userId: string) => string | null;
   onOpenProfileSidebar?: (user: UserPresence) => void;
   onUserCardClick?: (user: UserPresence) => void;
   isProfileSidebarOpen?: boolean;
@@ -87,8 +85,6 @@ export default function UserCard({
   onChatAction,
   onCancelChatRequest,
   onAcceptChatRequest,
-  canUserReconnect,
-  getReconnectTimeRemaining,
   onUserCardClick,
   selectedUserId,
   searchProfile,
@@ -190,58 +186,7 @@ export default function UserCard({
             <div className='text-black truncate no-email-detection font-medium'>
               {getDisplayName(userPresence, userProfile)}
             </div>
-            {/* Show clock icon for temporary connections (active chat trials) */}
-            {(() => {
-              const conversation = existingConversations.get(
-                userPresence.userId
-              );
-              const isTemporaryConnection =
-                conversation &&
-                conversation.chatStatus === 'ACTIVE' &&
-                !conversation.isConnected;
-
-              if (!isTemporaryConnection || !conversation.probationEndsAt) {
-                return null;
-              }
-
-              // Calculate time remaining
-              const now = new Date();
-              const endTime = new Date(conversation.probationEndsAt);
-              const diff = endTime.getTime() - now.getTime();
-
-              if (diff <= 0) {
-                return null; // Expired
-              }
-
-              const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-              const hours = Math.floor(
-                (diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-              );
-              const minutes = Math.floor(
-                (diff % (1000 * 60 * 60)) / (1000 * 60)
-              );
-
-              let timeLeft = '';
-              if (days > 0) {
-                timeLeft = `${days}d ${hours}h`;
-              } else if (hours > 0) {
-                timeLeft = `${hours}h ${minutes}m`;
-              } else {
-                timeLeft = `${minutes}m`;
-              }
-
-              return (
-                <div className='flex items-center gap-1 text-gray-400'>
-                  <ClockFading className='w-3.5 h-3.5 flex-shrink-0' />
-                  <span className='text-sm font-medium hidden sm:inline'>
-                    Chat Expires in {timeLeft}
-                  </span>
-                  <span className='text-sm font-medium sm:hidden'>
-                    {timeLeft}
-                  </span>
-                </div>
-              );
-            })()}
+            {/* All connections are now permanent - no trial indicators needed */}
           </div>
 
           {/* Profession */}
@@ -256,45 +201,7 @@ export default function UserCard({
 
         <div className='flex-shrink-0 flex items-center gap-1'>
           {(() => {
-            const conversation = existingConversations.get(userPresence.userId);
-            const isEndedWithTimer =
-              conversation?.chatStatus === 'ENDED' &&
-              !canUserReconnect(userPresence.userId) &&
-              getReconnectTimeRemaining(userPresence.userId);
-
-            if (isEndedWithTimer) {
-              const timeRemaining = getReconnectTimeRemaining(
-                userPresence.userId
-              );
-              return (
-                <div
-                  className={`flex items-center justify-center w-[40px] h-[40px] md:w-auto md:h-auto md:min-w-[70px] rounded-lg md:px-2.5 md:py-2 ${
-                    isSelected ? 'bg-white' : 'bg-brand-50'
-                  }`}
-                >
-                  <div
-                    className='text-slate-500 flex flex-col items-center gap-0.5 md:text-right'
-                    title={`Reconnect in ${timeRemaining}`}
-                  >
-                    <div className='md:hidden flex flex-col items-center gap-0.5'>
-                      <ClockFading className='w-5 h-5 text-slate-500' />
-                      <span className='text-[10px] leading-none'>
-                        {timeRemaining}
-                      </span>
-                    </div>
-                    <div className='hidden md:block text-base'>
-                      <div className='text-slate-500 text-base'>
-                        Reconnect in
-                      </div>
-                      <div className='text-slate-500 flex items-center justify-end gap-1'>
-                        <ClockFading className='w-3 h-3 text-slate-500' />
-                        <span className='text-base'>{timeRemaining}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
-            }
+            // All conversations are now permanent - no ended state or timers to check
 
             // Handle pending request state - show as clickable button for consistency
             // BUT: If user has incoming request, prioritize "Accept Request" over "Request Sent"
@@ -344,12 +251,7 @@ export default function UserCard({
                   incomingRequestSenderIds.has(userPresence.userId)
                     ? 'Accept Chat'
                     : existingConversations.has(userPresence.userId)
-                      ? existingConversations.get(userPresence.userId)
-                          ?.chatStatus === 'ENDED'
-                        ? canUserReconnect(userPresence.userId)
-                          ? 'Connect'
-                          : 'View Chat'
-                        : 'Message'
+                      ? 'Message'
                       : 'Connect'
                 }
               >
@@ -362,40 +264,12 @@ export default function UserCard({
                     </span>
                   </>
                 ) : existingConversations.has(userPresence.userId) ? (
-                  existingConversations.get(userPresence.userId)?.chatStatus ===
-                  'ENDED' ? (
-                    canUserReconnect(userPresence.userId) ? (
-                      <>
-                        <ConnectIcon className='w-5 h-5 text-white' />
-                        <span className='text-base font-medium text-white'>
-                          Connect
-                        </span>
-                      </>
-                    ) : (
-                      (() => {
-                        const timeRemaining = getReconnectTimeRemaining(
-                          userPresence.userId
-                        );
-                        return timeRemaining ? (
-                          <ClockFading className='w-5 h-5 text-white flex-shrink-0' />
-                        ) : (
-                          <>
-                            <MessageSquare className='w-5 h-5 text-white' />
-                            <span className='text-base font-medium text-white'>
-                              View
-                            </span>
-                          </>
-                        );
-                      })()
-                    )
-                  ) : (
-                    <>
-                      <MessageSquare className='w-5 h-5 text-white' />
-                      <span className='text-base font-medium text-white'>
-                        Message
-                      </span>
-                    </>
-                  )
+                  <>
+                    <MessageSquare className='w-5 h-5 text-white' />
+                    <span className='text-base font-medium text-white'>
+                      Message
+                    </span>
+                  </>
                 ) : (
                   <>
                     <ConnectIcon className='w-5 h-5 text-white' />

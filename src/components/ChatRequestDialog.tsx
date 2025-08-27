@@ -94,7 +94,7 @@ function ConnectedDialog({
             </div>
 
             <p className='text-base text-black'>
-              You are now connected to chat for 7 days.
+              You are now permanently connected to chat!
             </p>
           </div>
         </div>
@@ -252,7 +252,7 @@ function NewRequestDialog({
                   Connected!
                 </h3>
                 <p className='text-base text-black'>
-                  You are connected to chat for 7 days
+                  You are permanently connected to chat
                 </p>
               </div>
             </div>

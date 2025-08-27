@@ -13,14 +13,12 @@ type Conversation = Schema['Conversation']['type'];
 interface UseChatActionsProps {
   user: { userId: string };
   existingConversations: Map<string, Conversation>;
-  canUserReconnect: (userId: string) => boolean;
   onChatRequestSent: () => void;
 }
 
 export function useChatActions({
   user,
   existingConversations,
-  canUserReconnect,
   onChatRequestSent,
 }: UseChatActionsProps) {
   const router = useRouter();
@@ -40,12 +38,7 @@ export function useChatActions({
     const conversation = existingConversations.get(receiverId);
 
     if (conversation) {
-      // If this is a reconnectable ended chat, send a new chat request
-      if (conversation.chatStatus === 'ENDED' && canUserReconnect(receiverId)) {
-        return 'send-request';
-      }
-
-      // Open existing chat with short URL
+      // All conversations are permanent - just open the chat
       router.push(createShortChatUrl(conversation.id));
       return 'open-chat';
     }

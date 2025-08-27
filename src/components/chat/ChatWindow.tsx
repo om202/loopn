@@ -99,7 +99,7 @@ export default function ChatWindow({
 
   const handleSendMessage = async () => {
     // Programmatically check conditions instead of disabling button
-    if (!newMessage.trim() || !user || conversation.chatStatus === 'ENDED') {
+    if (!newMessage.trim() || !user) {
       return;
     }
 
@@ -271,12 +271,8 @@ export default function ChatWindow({
         newMessage={newMessage}
         setNewMessage={setNewMessage}
         onSendMessage={handleSendMessage}
-        disabled={conversation.chatStatus === 'ENDED'}
-        autoFocus={
-          !isInitializing &&
-          !externalLoading &&
-          conversation.chatStatus !== 'ENDED'
-        }
+        disabled={false}
+        autoFocus={!isInitializing && !externalLoading}
         replyToMessage={replyToMessage}
         onCancelReply={handleCancelReply}
       />

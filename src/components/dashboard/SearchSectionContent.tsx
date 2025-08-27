@@ -26,8 +26,7 @@ interface SearchSectionContentProps {
   optimisticPendingRequests: Set<string>;
   incomingRequestSenderIds: Set<string>;
   onlineUsers: UserPresence[];
-  canUserReconnect: (userId: string) => boolean;
-  getReconnectTimeRemaining: (userId: string) => string | null;
+
   onCancelChatRequest: (userId: string) => void;
   onAcceptChatRequest: (userId: string) => void;
   // State setters for optimistic updates
@@ -49,8 +48,7 @@ export default function SearchSectionContent({
   optimisticPendingRequests,
   incomingRequestSenderIds,
   onlineUsers,
-  canUserReconnect,
-  getReconnectTimeRemaining,
+
   onCancelChatRequest: _onCancelChatRequest,
   onAcceptChatRequest,
   setOptimisticPendingRequests,
@@ -65,7 +63,6 @@ export default function SearchSectionContent({
   const chatActions = useChatActions({
     user: user ? { userId: user.userId } : { userId: '' },
     existingConversations,
-    canUserReconnect,
     onChatRequestSent: onChatRequestSent || (() => {}),
   });
 
@@ -198,8 +195,6 @@ export default function SearchSectionContent({
                   onChatAction={handleChatAction} // Use proper chat action handler
                   onCancelChatRequest={handleCancelChatRequest} // Use proper cancel handler
                   onAcceptChatRequest={onAcceptChatRequest} // Use proper accept handler
-                  canUserReconnect={canUserReconnect} // Use real reconnect logic
-                  getReconnectTimeRemaining={getReconnectTimeRemaining} // Use real timer logic
                   onOpenProfileSidebar={onOpenProfileSidebar}
                   onUserCardClick={onUserCardClick}
                   isProfileSidebarOpen={isProfileSidebarOpen}
