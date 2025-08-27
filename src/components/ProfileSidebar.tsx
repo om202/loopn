@@ -19,7 +19,6 @@ import {
   ClockFading,
   ArrowLeft,
   Info,
-  Plus,
   MessageSquare,
   UserRoundMinus,
   UserPlus,
@@ -29,7 +28,6 @@ import {
   Target,
   Heart,
   UserCheck,
-  Check,
   ChevronsRight,
 } from 'lucide-react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
@@ -273,12 +271,14 @@ export default function ProfileSidebar({
               ? 'bg-white text-brand-600 border border-brand-500 hover:bg-brand-50'
               : pendingRequests.has(userId)
                 ? 'bg-slate-100 text-slate-500 hover:bg-slate-200 border border-slate-200'
-                : 'bg-brand-500 text-white hover:bg-brand-600'
+                : existingConversations.has(userId)
+                  ? 'bg-white text-brand-600 border border-brand-500 hover:bg-brand-50'
+                  : 'bg-brand-500 text-white hover:bg-brand-600'
           }`}
         >
           {incomingRequestSenderIds?.has(userId) ? (
             <>
-              <Check className='w-5 h-5 text-brand-600' />
+              <ConnectIcon className='w-5 h-5 text-brand-600' />
               <span className='text-base font-medium text-brand-600'>
                 Accept
               </span>
@@ -292,12 +292,12 @@ export default function ProfileSidebar({
             </>
           ) : existingConversations.has(userId) ? (
             <>
-              <MessageSquare className='w-5 h-5 text-white' />
-              <span className='text-base font-medium text-white'>Message</span>
+              <MessageSquare className='w-5 h-5 text-brand-600' />
+              <span className='text-base font-medium text-brand-600'>Message</span>
             </>
           ) : (
             <>
-              <Plus className='w-5 h-5 text-white' />
+              <ConnectIcon className='w-5 h-5 text-white' />
               <span className='text-base font-medium text-white'>Connect</span>
             </>
           )}

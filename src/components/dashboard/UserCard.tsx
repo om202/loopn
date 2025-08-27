@@ -245,7 +245,9 @@ export default function UserCard({
                 className={`px-2 py-2 rounded-lg text-base font-medium transition-colors flex items-center justify-center gap-2 flex-shrink-0 ${
                   incomingRequestSenderIds.has(userPresence.userId)
                     ? 'bg-white text-brand-600 border border-brand-500 hover:bg-brand-50'
-                    : 'bg-brand-500 hover:bg-brand-600 text-white'
+                    : existingConversations.has(userPresence.userId)
+                      ? 'bg-white text-brand-600 border border-brand-500 hover:bg-brand-50'
+                      : 'bg-brand-500 hover:bg-brand-600 text-white'
                 }`}
                 title={
                   incomingRequestSenderIds.has(userPresence.userId)
@@ -265,8 +267,8 @@ export default function UserCard({
                   </>
                 ) : existingConversations.has(userPresence.userId) ? (
                   <>
-                    <MessageSquare className='w-5 h-5 text-white' />
-                    <span className='text-base font-medium text-white'>
+                    <MessageSquare className='w-5 h-5 text-brand-600' />
+                    <span className='text-base font-medium text-brand-600'>
                       Message
                     </span>
                   </>
