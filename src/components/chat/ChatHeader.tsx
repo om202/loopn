@@ -136,7 +136,7 @@ export default function ChatHeader({
               <button
                 onClick={onSendConnectionRequest}
                 disabled={sendingConnectionRequest}
-                className='px-3 py-2 text-sm font-medium rounded-xl border transition-colors flex items-center justify-center gap-1 bg-brand-50 text-brand-500 border-brand-200 hover:bg-brand-200 hover:border-brand-400 disabled:bg-brand-50 disabled:cursor-not-allowed'
+                className='px-3 py-2 text-sm font-medium rounded-xl border transition-colors flex items-center justify-center gap-1 bg-brand-50 text-brand-600 border-brand-200 hover:bg-brand-200 hover:border-brand-400 disabled:bg-brand-50 disabled:cursor-not-allowed'
               >
                 <svg
                   width='16'

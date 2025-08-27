@@ -106,7 +106,7 @@ function ConnectedDialog({
             id='dontShowAgain'
             checked={dontShowAgain}
             onChange={e => setDontShowAgain(e.target.checked)}
-            className='w-4 h-4 text-brand-500 border-slate-200 rounded focus:ring-brand-500'
+            className='w-4 h-4 text-brand-600 border-slate-200 rounded focus:ring-brand-500'
           />
           <label htmlFor='dontShowAgain' className='text-sm text-black'>
             Don&apos;t show this confirmation again
@@ -264,7 +264,7 @@ function NewRequestDialog({
                 id='dontShowAgain'
                 checked={dontShowAgain}
                 onChange={e => setDontShowAgain(e.target.checked)}
-                className='w-4 h-4 text-brand-500 border-slate-200 rounded focus:ring-brand-500'
+                className='w-4 h-4 text-brand-600 border-slate-200 rounded focus:ring-brand-500'
               />
               <label htmlFor='dontShowAgain' className='text-sm text-black'>
                 Don&apos;t show this confirmation again

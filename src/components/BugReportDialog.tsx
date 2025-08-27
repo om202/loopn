@@ -68,9 +68,9 @@ export default function BugReportDialog({
         <div className='flex items-center gap-3'>
           <div>
             {type === 'bug' ? (
-              <Bug className='w-7 h-7 text-brand-500' />
+              <Bug className='w-7 h-7 text-brand-600' />
             ) : (
-              <Lightbulb className='w-7 h-7 text-brand-500' />
+              <Lightbulb className='w-7 h-7 text-brand-600' />
             )}
           </div>
           <div>
@@ -103,22 +103,22 @@ export default function BugReportDialog({
               onClick={() => !isSubmitting && setType('bug')}
               className={`p-3 rounded-lg border transition-colors text-left ${
                 type === 'bug'
-                  ? 'border-brand-200 bg-brand-50 text-brand-500'
+                  ? 'border-brand-200 bg-brand-50 text-brand-600'
                   : 'border-slate-200 hover:bg-slate-50 text-black'
               } ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
             >
               <div className='flex items-center gap-2 mb-1'>
                 <Bug
-                  className={`w-4 h-4 ${type === 'bug' ? 'text-brand-500' : 'text-slate-500'}`}
+                  className={`w-4 h-4 ${type === 'bug' ? 'text-brand-600' : 'text-slate-500'}`}
                 />
                 <span
-                  className={`font-medium text-sm ${type === 'bug' ? 'text-brand-500' : 'text-black'}`}
+                  className={`font-medium text-sm ${type === 'bug' ? 'text-brand-600' : 'text-black'}`}
                 >
                   Bug Report
                 </span>
               </div>
               <p
-                className={`text-sm ${type === 'bug' ? 'text-brand-500' : 'text-slate-500'}`}
+                className={`text-sm ${type === 'bug' ? 'text-brand-600' : 'text-slate-500'}`}
               >
                 Something isn't working
               </p>
@@ -129,22 +129,22 @@ export default function BugReportDialog({
               onClick={() => !isSubmitting && setType('suggestion')}
               className={`p-3 rounded-lg border transition-colors text-left ${
                 type === 'suggestion'
-                  ? 'border-brand-200 bg-brand-50 text-brand-500'
+                  ? 'border-brand-200 bg-brand-50 text-brand-600'
                   : 'border-slate-200 hover:bg-slate-50 text-black'
               } ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
             >
               <div className='flex items-center gap-2 mb-1'>
                 <Lightbulb
-                  className={`w-4 h-4 ${type === 'suggestion' ? 'text-brand-500' : 'text-slate-500'}`}
+                  className={`w-4 h-4 ${type === 'suggestion' ? 'text-brand-600' : 'text-slate-500'}`}
                 />
                 <span
-                  className={`font-medium text-sm ${type === 'suggestion' ? 'text-brand-500' : 'text-black'}`}
+                  className={`font-medium text-sm ${type === 'suggestion' ? 'text-brand-600' : 'text-black'}`}
                 >
                   Suggestion
                 </span>
               </div>
               <p
-                className={`text-sm ${type === 'suggestion' ? 'text-brand-500' : 'text-slate-500'}`}
+                className={`text-sm ${type === 'suggestion' ? 'text-brand-600' : 'text-slate-500'}`}
               >
                 Idea for improvement
               </p>

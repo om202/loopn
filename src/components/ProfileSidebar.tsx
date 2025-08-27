@@ -268,18 +268,18 @@ export default function ProfileSidebar({
           }}
           className={`px-2 py-2 text-base font-medium rounded-lg transition-colors flex items-center justify-center gap-2 ${
             incomingRequestSenderIds?.has(userId)
-              ? 'bg-white text-brand-500 border border-brand-500 hover:bg-brand-50'
+              ? 'bg-white text-brand-600 border border-brand-500 hover:bg-brand-50'
               : pendingRequests.has(userId)
                 ? 'bg-slate-100 text-slate-500 hover:bg-slate-200 border border-slate-200'
                 : existingConversations.has(userId)
-                  ? 'bg-white text-brand-500 border border-brand-500 hover:bg-brand-50'
+                  ? 'bg-white text-brand-600 border border-brand-500 hover:bg-brand-50'
                   : 'bg-brand-500 text-white hover:bg-brand-600'
           }`}
         >
           {incomingRequestSenderIds?.has(userId) ? (
             <>
-              <ConnectIcon className='w-5 h-5 text-brand-500' />
-              <span className='text-base font-medium text-brand-500'>
+              <ConnectIcon className='w-5 h-5 text-brand-600' />
+              <span className='text-base font-medium text-brand-600'>
                 Accept
               </span>
             </>
@@ -292,8 +292,8 @@ export default function ProfileSidebar({
             </>
           ) : existingConversations.has(userId) ? (
             <>
-              <MessageSquare className='w-5 h-5 text-brand-500' />
-              <span className='text-base font-medium text-brand-500'>
+              <MessageSquare className='w-5 h-5 text-brand-600' />
+              <span className='text-base font-medium text-brand-600'>
                 Message
               </span>
             </>
@@ -388,7 +388,7 @@ export default function ProfileSidebar({
               onClick={() => setShowRemoveConnectionDialog(true)}
               className='flex items-center gap-2 px-2 py-2 rounded-lg hover:bg-slate-100 transition-colors'
             >
-              <ConnectIcon className='w-5 h-5 text-brand-500' />
+              <ConnectIcon className='w-5 h-5 text-brand-600' />
               <span className='font-medium'>Connected</span>
             </button>
           </div>

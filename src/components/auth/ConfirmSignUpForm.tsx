@@ -95,7 +95,7 @@ export default function ConfirmSignUpForm({
             type='button'
             onClick={handleResendCode}
             disabled={isLoading}
-            className='text-sm text-brand-500 hover:text-brand-500 font-medium transition-colors disabled:opacity-50'
+            className='text-sm text-brand-600 hover:text-brand-600 font-medium transition-colors disabled:opacity-50'
           >
             Resend
           </button>
@@ -105,7 +105,7 @@ export default function ConfirmSignUpForm({
           <button
             type='button'
             onClick={onSwitchToSignIn}
-            className='text-sm text-brand-500 hover:text-brand-500 font-medium transition-colors'
+            className='text-sm text-brand-600 hover:text-brand-600 font-medium transition-colors'
           >
             Back to sign in
           </button>
