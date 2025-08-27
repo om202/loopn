@@ -62,8 +62,6 @@ const schema = a
         index('receiverId').sortKeys(['requestedAt']),
       ]),
 
-
-
     // User connections (optional - can be used for friendship/networking features)
     UserConnection: a
       .model({
