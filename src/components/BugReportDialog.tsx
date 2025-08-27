@@ -64,13 +64,13 @@ export default function BugReportDialog({
   return (
     <DialogContainer isOpen={isOpen} onClose={handleClose} maxWidth='md'>
       {/* Header */}
-      <div className='flex items-center justify-between p-6 border-b border-slate-200'>
+      <div className='flex items-center justify-between px-6 py-4 border-b border-slate-100'>
         <div className='flex items-center gap-3'>
-          <div className='p-2 rounded-lg bg-brand-50'>
+          <div>
             {type === 'bug' ? (
-              <Bug className='w-5 h-5 text-brand-500' />
+              <Bug className='w-7 h-7 text-brand-500' />
             ) : (
-              <Lightbulb className='w-5 h-5 text-brand-500' />
+              <Lightbulb className='w-7 h-7 text-brand-500' />
             )}
           </div>
           <div>
@@ -82,7 +82,7 @@ export default function BugReportDialog({
         </div>
         <button
           onClick={() => !isSubmitting && handleClose()}
-          className={`p-2 hover:bg-slate-100 rounded-lg transition-colors ${
+          className={`p-2 hover:bg-slate-50 rounded-lg transition-colors ${
             isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
           }`}
         >
@@ -91,7 +91,7 @@ export default function BugReportDialog({
       </div>
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className='p-6 space-y-4'>
+      <form onSubmit={handleSubmit} className='px-6 py-5 space-y-5'>
         {/* Type Selector */}
         <div>
           <label className='block text-sm font-medium text-black mb-3'>
@@ -101,10 +101,10 @@ export default function BugReportDialog({
             <button
               type='button'
               onClick={() => !isSubmitting && setType('bug')}
-              className={`p-3 rounded-lg border transition-all text-left ${
+              className={`p-3 rounded-lg border transition-colors text-left ${
                 type === 'bug'
-                  ? 'border-brand-200 bg-brand-50'
-                  : 'border-slate-200 hover:border-slate-300'
+                  ? 'border-brand-200 bg-brand-50 text-brand-500'
+                  : 'border-slate-200 hover:bg-slate-50 text-black'
               } ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
             >
               <div className='flex items-center gap-2 mb-1'>
@@ -127,10 +127,10 @@ export default function BugReportDialog({
             <button
               type='button'
               onClick={() => !isSubmitting && setType('suggestion')}
-              className={`p-3 rounded-lg border transition-all text-left ${
+              className={`p-3 rounded-lg border transition-colors text-left ${
                 type === 'suggestion'
-                  ? 'border-brand-200 bg-brand-50'
-                  : 'border-slate-200 hover:border-slate-300'
+                  ? 'border-brand-200 bg-brand-50 text-brand-500'
+                  : 'border-slate-200 hover:bg-slate-50 text-black'
               } ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
             >
               <div className='flex items-center gap-2 mb-1'>
@@ -169,7 +169,7 @@ export default function BugReportDialog({
                 ? 'Brief description of the bug'
                 : 'Brief description of your suggestion'
             }
-            className={`w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors ${
+            className={`w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-1 focus:ring-brand-200 focus:border-brand-300 outline-none transition-colors bg-white hover:border-slate-300 ${
               isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
             }`}
             required
@@ -193,7 +193,7 @@ export default function BugReportDialog({
                 : 'Describe your suggestion in detail. How would this improve the user experience?'
             }
             rows={4}
-            className={`w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors resize-none ${
+            className={`w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-1 focus:ring-brand-200 focus:border-brand-300 outline-none transition-colors resize-none bg-white hover:border-slate-300 ${
               isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
             }`}
             required
@@ -201,11 +201,11 @@ export default function BugReportDialog({
         </div>
 
         {/* Actions */}
-        <div className='flex gap-3 pt-2'>
+        <div className='flex gap-3 pt-3'>
           <button
             type='button'
             onClick={() => !isSubmitting && handleClose()}
-            className={`flex-1 px-4 py-2 text-slate-500 bg-white border border-slate-300 rounded-lg hover:bg-slate-100 transition-colors ${
+            className={`flex-1 px-4 py-2.5 text-black bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors font-medium ${
               isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
             }`}
           >
@@ -213,7 +213,7 @@ export default function BugReportDialog({
           </button>
           <button
             type='submit'
-            className='flex-1 px-4 py-2 bg-brand-500 text-white rounded-lg hover:bg-brand-600 transition-colors flex items-center justify-center gap-2'
+            className='flex-1 px-4 py-2.5 bg-brand-500 text-white rounded-lg hover:bg-brand-600 transition-colors flex items-center justify-center gap-2 font-medium'
           >
             {isSubmitting ? (
               <>
