@@ -267,7 +267,7 @@ export default function ProfileSidebar({
             <>
               <Check className='w-5 h-5 text-brand-600' />
               <span className='text-base font-medium text-brand-600'>
-                Accept Chat
+                Accept
               </span>
             </>
           ) : pendingRequests.has(userId) ? (

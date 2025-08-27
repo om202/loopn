@@ -94,7 +94,7 @@ export function useChatActions({
         newSet.delete(receiverId);
         return newSet;
       });
-      setError('Failed to send chat request');
+      setError('Failed to send connection request');
     }
   };
 
@@ -128,7 +128,7 @@ export function useChatActions({
     } catch {
       // Revert optimistic update on any error
       setPendingRequests(prev => new Set([...prev, receiverId]));
-      setError('Failed to cancel chat request');
+      setError('Failed to cancel connection request');
     }
   };
 

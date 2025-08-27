@@ -57,7 +57,7 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
       }
       // On success, the real-time subscription will automatically update the UI
     } catch {
-      setLocalError('Failed to respond to chat request');
+      setLocalError('Failed to respond to connection request');
     }
 
     setAcceptingId(null);
@@ -94,7 +94,7 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
       <div className='p-4 border-b border-slate-200'>
         <div className='flex items-center gap-2 text-black'>
           <span className='font-medium'>
-            Chat Requests ({chatRequests.length})
+            Connection Requests ({chatRequests.length})
           </span>
         </div>
       </div>
@@ -117,7 +117,7 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
             </svg>
           </div>
           <h3 className='text-lg font-medium text-black mb-1'>
-            No chat requests
+            No connection requests
           </h3>
         </div>
       ) : (
@@ -134,7 +134,7 @@ export default function ChatRequests({ onRequestAccepted }: ChatRequestsProps) {
                     {`User ${request.requesterId.slice(-4)}`}
                   </div>
                   <div className='text-sm text-slate-500'>
-                    Wants to chat • {formatTimeAgo(request.createdAt)}
+                    Wants to connect • {formatTimeAgo(request.createdAt)}
                   </div>
                 </div>
               </div>

@@ -151,7 +151,7 @@ export default function HelpContent({
               </h4>
             </div>
             <p className='text-base text-black'>
-              Chat requests from others and system updates
+              Connection requests from others and system updates
             </p>
           </div>
         </div>
@@ -175,7 +175,7 @@ export default function HelpContent({
                   <li>• You can no longer send messages</li>
                   <li>• You can still read previous messages</li>
                   <li>
-                    • You can send a connection request to continue chatting
+                    • You can send a connection request to continue messaging
                   </li>
                 </ul>
               </div>

@@ -43,7 +43,7 @@ export interface Notification extends Omit<AmplifyNotification, 'data'> {
     | ConnectionRequestNotificationData;
 }
 
-// Chat request notification - a virtual notification for displaying chat requests
+// Connection request notification - a virtual notification for displaying connection requests
 export interface ChatRequestNotification {
   id: string;
   type: 'chat_request';

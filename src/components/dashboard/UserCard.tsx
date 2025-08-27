@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { MessageSquare, UserCheck, Check } from 'lucide-react';
+import { MessageSquare, UserCheck } from 'lucide-react';
 
 // Custom Connect Icon using circles from logo
 const ConnectIcon = ({ className }: { className?: string }) => (
@@ -249,7 +249,7 @@ export default function UserCard({
                 }`}
                 title={
                   incomingRequestSenderIds.has(userPresence.userId)
-                    ? 'Accept Chat'
+                    ? 'Accept'
                     : existingConversations.has(userPresence.userId)
                       ? 'Message'
                       : 'Connect'
@@ -258,9 +258,9 @@ export default function UserCard({
                 {incomingRequestSenderIds.has(userPresence.userId) ? (
                   // Prioritize incoming requests over existing conversations
                   <>
-                    <Check className='w-5 h-5 text-brand-600' />
+                    <ConnectIcon className='w-5 h-5 text-brand-600' />
                     <span className='text-base font-medium text-brand-600'>
-                      Accept Chat
+                      Accept
                     </span>
                   </>
                 ) : existingConversations.has(userPresence.userId) ? (
@@ -294,10 +294,10 @@ export default function UserCard({
       >
         <div className='p-4'>
           <h3 className='text-lg font-medium text-black text-center mb-3'>
-            Cancel Chat Request?
+            Cancel Connection Request?
           </h3>
           <p className='text-base text-black text-center mb-4'>
-            This will cancel your pending chat request to{' '}
+            This will cancel your pending connection request to{' '}
             {getDisplayName(userPresence, userProfile)}.
           </p>
           <div className='flex gap-2'>

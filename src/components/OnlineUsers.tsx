@@ -463,7 +463,7 @@ export default function OnlineUsers({
   const handleAcceptChatRequest = async (requesterId: string) => {
     const chatRequest = incomingRequestsByUserId.get(requesterId);
     if (!chatRequest) {
-      console.error('Chat request not found for user:', requesterId);
+      console.error('Connection request not found for user:', requesterId);
       return;
     }
 
@@ -480,8 +480,8 @@ export default function OnlineUsers({
         onChatRequestSent();
       }
     } catch (error) {
-      console.error('Error accepting chat request:', error);
-      setError('Failed to accept chat request');
+      console.error('Error accepting connection request:', error);
+      setError('Failed to accept connection request');
     }
   };
 

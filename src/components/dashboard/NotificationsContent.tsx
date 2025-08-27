@@ -118,10 +118,10 @@ export default function NotificationsContent() {
       const uiNotifications: UINotification[] = [];
 
       // Process store notifications (from subscription)
-      // Exclude chat_request notifications since we handle those via real-time chat requests
+      // Exclude chat_request notifications since we handle those via real-time connection requests
       for (const storeNotif of storeNotifications) {
         if (storeNotif.type === 'chat_request') {
-          continue; // Skip chat_request notifications to avoid duplicates
+          continue; // Skip chat_request notifications to avoid duplicates (handled as connection requests)
         }
 
         // Create a proper Notification object
@@ -143,7 +143,7 @@ export default function NotificationsContent() {
         uiNotifications.push(notification);
       }
 
-      // Process chat requests into notifications
+      // Process connection requests into notifications
       if (realtimeChatRequests && !chatRequestsLoading) {
         for (const request of realtimeChatRequests) {
           // Fetch user profile from centralized cache
@@ -158,7 +158,7 @@ export default function NotificationsContent() {
             : undefined;
 
           const title = getDisplayName(requesterProfile, request.requesterId);
-          const content = 'wants to chat with you';
+          const content = 'wants to connect with you';
 
           uiNotifications.push({
             id: request.id,
@@ -344,13 +344,13 @@ export default function NotificationsContent() {
           chatRequest.requesterProfile,
           chatRequest.requesterId
         ),
-        content: 'wants to chat with you',
+        content: 'wants to connect with you',
         timestamp: chatRequest.createdAt,
         isRead: false,
         data: chatRequest,
       };
       setNotifications(prev => [...prev, chatNotification]);
-      setError('Failed to respond to chat request');
+      setError('Failed to respond to connection request');
     }
 
     setDecliningId(null);

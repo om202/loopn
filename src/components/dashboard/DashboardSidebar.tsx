@@ -77,9 +77,7 @@ export default function DashboardSidebar({
     return 'Your Account';
   };
 
-  // Notification count is now handled by useNotifications hook
-
-  // Notification count is now handled by useNotifications hook (includes chat requests)
+  // Notification count is now handled by useNotifications hook (includes connection requests)
 
   const sidebarItems = [
     {

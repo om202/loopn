@@ -96,7 +96,7 @@ const dummyNotifications = [
     id: '1',
     type: 'chat_request',
     title: 'Sarah Johnson',
-    content: 'wants to chat with you',
+    content: 'wants to connect with you',
     timestamp: '5 minutes ago',
     isRead: false,
     avatar: '/dummy-users/dummy-user2.jpg',

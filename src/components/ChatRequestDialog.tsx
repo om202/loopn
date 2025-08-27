@@ -115,13 +115,13 @@ function ConnectedDialog({
 
         {/* Action Buttons */}
         <div className='flex gap-3'>
-          {/* Chat Now Button */}
+          {/* Message Now Button */}
           <button
             onClick={handleChatNow}
             disabled={!conversationId}
             className='flex-1 px-4 py-2 bg-brand-500 text-white text-sm font-medium rounded-2xl hover:bg-brand-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors'
           >
-            Chat Now
+            Message Now
           </button>
 
           {/* OK Button */}
@@ -171,12 +171,12 @@ function NewRequestDialog({
       );
 
       if (result.error) {
-        console.error('Failed to respond to chat request:', result.error);
+        console.error('Failed to respond to connection request:', result.error);
         // Could show a toast notification here if needed
       }
       // No auto-redirect for NewRequestDialog - it transitions to connected state internally
     } catch (error) {
-      console.error('Error responding to chat request:', error);
+      console.error('Error responding to connection request:', error);
       // Could show a toast notification here if needed
     }
   };
@@ -225,7 +225,7 @@ function NewRequestDialog({
                   Request Removed
                 </h3>
                 <p className='text-base text-black'>
-                  The chat request was removed by the other user
+                  The connection request was removed by the other user
                 </p>
               </div>
             </div>
@@ -284,7 +284,7 @@ function NewRequestDialog({
           <>
             <div className='text-center mb-6'>
               <h3 className='text-lg font-medium text-black mb-2'>
-                New Chat Request
+                New Connection Request
               </h3>
             </div>
 
@@ -300,7 +300,7 @@ function NewRequestDialog({
                     `User ${chatRequest.requesterId.slice(-4)}`}
                 </div>
                 <div className='text-sm text-black mt-1'>
-                  wants to chat with you
+                  wants to connect with you
                 </div>
               </div>
             </div>
