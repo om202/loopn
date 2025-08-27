@@ -127,13 +127,15 @@ export default function SearchUser({
       <div className='flex items-center gap-3 sm:block'>
         {/* Logo - only visible on mobile */}
         <div className='flex-shrink-0 sm:hidden'>
-          <Image
-            src='/loopn.svg'
-            alt='Loopn'
-            width={28}
-            height={28}
-            className='w-8 h-8'
-          />
+          <div className='w-12 h-12 bg-white rounded-lg border border-slate-200 flex items-center justify-center'>
+            <Image
+              src='/loopn.svg'
+              alt='Loopn'
+              width={28}
+              height={28}
+              className='w-7 h-7'
+            />
+          </div>
         </div>
 
         <form
@@ -172,7 +174,7 @@ export default function SearchUser({
               <input
                 ref={inputRef}
                 type='text'
-                placeholder='Ask Anything or Search'
+                placeholder='Search'
                 value={query}
                 onChange={handleInputChange}
                 onFocus={handleInputFocus}
@@ -218,12 +220,12 @@ export default function SearchUser({
             <button
               type='submit'
               onMouseDown={e => e.preventDefault()}
-              className='bg-brand-500 rounded-r-xl hover:bg-brand-600 flex items-center justify-center transition-all duration-300 ease-out px-4 py-3 flex-shrink-0 border border-l-0 border-brand-500'
+              className='text-brand-600 bg-brand-50 hover:bg-brand-100 rounded-r-xl flex items-center justify-center transition-all duration-300 ease-out px-4 py-3 flex-shrink-0 font-medium'
             >
               {isProcessing ? (
-                <div className='w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin flex-shrink-0' />
+                <div className='w-5 h-5 border-2 border-brand-600 border-t-transparent rounded-full animate-spin flex-shrink-0' />
               ) : (
-                <Search className='w-5 h-5 text-white flex-shrink-0' />
+                <Search className='w-5 h-5 text-brand-600 flex-shrink-0' />
               )}
             </button>
           </div>

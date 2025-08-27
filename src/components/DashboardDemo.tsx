@@ -725,7 +725,7 @@ export default function DashboardDemo() {
                 <UserRoundSearch className='absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 z-10' />
                 <input
                   type='text'
-                  placeholder='Ask Anything or Search'
+                  placeholder='Search'
                   value={searchQuery}
                   onChange={e => handleSearch(e.target.value)}
                   style={{

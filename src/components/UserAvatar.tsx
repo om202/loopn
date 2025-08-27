@@ -7,7 +7,6 @@ import { imageUrlCache } from '@/lib/image-cache';
 import { ShimmerProvider, Skeleton } from './ShimmerLoader/exports';
 import Tooltip from './Tooltip';
 
-// Global set to track which images have been loaded before
 const loadedImages = new Set<string>();
 
 interface UserAvatarProps {
@@ -36,110 +35,43 @@ export default function UserAvatar({
   shape = 'square',
 }: UserAvatarProps) {
   const getAvatarSize = () => {
-    switch (size) {
-      case 'xs':
-        return 26; // slightly larger than w-5 h-5
-      case 'sm':
-        return 36; // slightly larger than w-8 h-8
-      case 'lg':
-        return 64; // slightly larger than w-15 h-15
-      case 'xl':
-        return 84; // slightly larger than w-20 h-20
-      default:
-        return 52; // slightly larger than w-10 h-10
-    }
+    const sizes = { xs: 26, sm: 36, md: 52, lg: 64, xl: 84 };
+    return sizes[size] || sizes.md;
   };
 
-  const getIndicatorSizeAndPosition = () => {
-    switch (size) {
-      case 'xs':
-        return {
-          size: 'w-1.5 h-1.5',
-          iconSize: 'w-1 h-1',
-          smallDotSize: 'w-1.5 h-1.5',
-          recentlyActiveSize: 'w-2 h-2',
-          recentlyActiveIconSize: 'w-1.5 h-1.5',
-          position: '-bottom-0 -right-0',
-        };
-      case 'sm':
-        return {
-          size: 'w-2.5 h-2.5',
-          iconSize: 'w-1.5 h-1.5',
-          smallDotSize: 'w-2.5 h-2.5',
-          recentlyActiveSize: 'w-3 h-3',
-          recentlyActiveIconSize: 'w-2 h-2',
-          position: '-bottom-0 -right-0',
-        };
-      case 'lg':
-        return {
-          size: 'w-4.5 h-4.5',
-          iconSize: 'w-3 h-3',
-          smallDotSize: 'w-4.5 h-4.5',
-          recentlyActiveSize: 'w-5 h-5',
-          recentlyActiveIconSize: 'w-3.5 h-3.5',
-          position: '-bottom-0 -right-0',
-        };
-      case 'xl':
-        return {
-          size: 'w-4.5 h-4.5',
-          iconSize: 'w-3 h-3',
-          smallDotSize: 'w-4.5 h-4.5',
-          recentlyActiveSize: 'w-5 h-5',
-          recentlyActiveIconSize: 'w-3.5 h-3.5',
-          position: '-bottom-0 -right-0',
-        };
-      default: // md
-        return {
-          size: 'w-3.5 h-3.5',
-          iconSize: 'w-2 h-2',
-          smallDotSize: 'w-3.5 h-3.5',
-          recentlyActiveSize: 'w-4 h-4',
-          recentlyActiveIconSize: 'w-2.5 h-2.5',
-          position: '-bottom-0 -right-0',
-        };
-    }
+  const getIndicatorSizes = () => {
+    const sizeConfig = {
+      xs: { base: 'w-1.5 h-1.5', active: 'w-2 h-2', activeIcon: 'w-1.5 h-1.5' },
+      sm: { base: 'w-2.5 h-2.5', active: 'w-3 h-3', activeIcon: 'w-2 h-2' },
+      lg: { base: 'w-4.5 h-4.5', active: 'w-5 h-5', activeIcon: 'w-3.5 h-3.5' },
+      xl: { base: 'w-4.5 h-4.5', active: 'w-5 h-5', activeIcon: 'w-3.5 h-3.5' },
+      md: { base: 'w-3.5 h-3.5', active: 'w-4 h-4', activeIcon: 'w-2.5 h-2.5' },
+    };
+    return sizeConfig[size] || sizeConfig.md;
   };
 
   const getStatusIndicator = () => {
-    if (!showStatus) {
-      return null;
-    }
+    if (!showStatus || !status) return null;
 
-    const {
-      size: indicatorSize,
-      recentlyActiveSize,
-      recentlyActiveIconSize,
-    } = getIndicatorSizeAndPosition();
+    const sizes = getIndicatorSizes();
+    const baseClass = 'rounded-full border-2 border-white box-content';
 
-    switch (status) {
-      case 'ONLINE':
-        return (
-          <div
-            className={`${indicatorSize} bg-b_green-500 rounded-full border-2 border-white box-content`}
+    if (status === 'ONLINE')
+      return <div className={`${sizes.base} bg-b_green-500 ${baseClass}`} />;
+    if (status === 'BUSY')
+      return <div className={`${sizes.base} bg-b_red-600 ${baseClass}`} />;
+    if (status === 'RECENTLY_ACTIVE')
+      return (
+        <div
+          className={`${sizes.active} bg-slate-300 ${baseClass} flex items-center justify-center`}
+        >
+          <Clock
+            className={`${sizes.activeIcon} text-black`}
+            strokeWidth={2.5}
           />
-        );
-      case 'BUSY':
-        return (
-          <div
-            className={`${indicatorSize} bg-b_red-600 rounded-full border-2 border-white box-content`}
-          />
-        );
-      case 'RECENTLY_ACTIVE':
-        return (
-          <div
-            className={`${recentlyActiveSize} bg-slate-300 rounded-full border-2 border-white box-content flex items-center justify-center`}
-          >
-            <Clock
-              className={`${recentlyActiveIconSize} text-black`}
-              strokeWidth={2.5}
-            />
-          </div>
-        );
-      case 'OFFLINE':
-        return null;
-      default:
-        return null;
-    }
+        </div>
+      );
+    return null;
   };
 
   const [imageError, setImageError] = useState(false);
@@ -148,28 +80,21 @@ export default function UserAvatar({
   const previousUrlRef = useRef<string | null>(null);
   const previousResolvedUrlRef = useRef<string | null>(null);
 
-  // Convert S3 key to displayable URL using cache
   useEffect(() => {
     const resolveImageUrl = async () => {
       if (profilePictureUrl && hasProfilePicture) {
         try {
           const url = await imageUrlCache.getResolvedUrl(profilePictureUrl);
-
-          // Check if this image has been loaded before globally
           const wasLoadedBefore = url ? loadedImages.has(url) : false;
-
-          // Only reset imageLoaded if either the profile picture URL or resolved URL has actually changed
           const hasUrlChanged = previousUrlRef.current !== profilePictureUrl;
           const hasResolvedUrlChanged = previousResolvedUrlRef.current !== url;
 
           if (hasUrlChanged || hasResolvedUrlChanged) {
             setImageError(false);
-            // If the image was loaded before, don't reset imageLoaded to false
             setImageLoaded(wasLoadedBefore);
             previousUrlRef.current = profilePictureUrl;
             previousResolvedUrlRef.current = url;
           }
-
           setResolvedImageUrl(url);
         } catch (error) {
           console.error('Error resolving profile picture URL:', error);
@@ -185,7 +110,6 @@ export default function UserAvatar({
         previousResolvedUrlRef.current = null;
       }
     };
-
     resolveImageUrl();
   }, [profilePictureUrl, hasProfilePicture]);
 
@@ -216,51 +140,36 @@ export default function UserAvatar({
     >
       <div className={`relative ${className} cursor-pointer`}>
         <div
-          className={`${shape === 'circular' ? 'rounded-full' : 'rounded-lg'} overflow-hidden flex-shrink-0 relative ${
-            !hasProfilePicture || imageError
-              ? 'border border-neutral-200'
-              : 'border border-neutral-200'
-          }`}
+          className={`${shape === 'circular' ? 'rounded-full' : 'rounded-lg'} overflow-hidden flex-shrink-0 relative border border-neutral-200`}
           style={{
             width: `${getAvatarSize()}px`,
             height: `${getAvatarSize()}px`,
           }}
         >
-          {/* Always render the image if we have a URL, but control visibility with opacity */}
           {resolvedImageUrl && !imageError && (
             <Image
               src={resolvedImageUrl}
               alt={`${email || userId || 'User'} profile picture`}
               width={getAvatarSize()}
               height={getAvatarSize()}
-              className={`object-cover absolute inset-0 transition-opacity duration-150 ease-in-out ${
+              className={`object-cover absolute inset-0 w-full h-full transition-opacity duration-150 ${
                 imageLoaded ? 'opacity-100' : 'opacity-0'
               }`}
-              style={{
-                width: '100%',
-                height: '100%',
-              }}
               onLoad={() => {
                 setImageLoaded(true);
-                // Add this URL to the global set of loaded images
-                if (resolvedImageUrl) {
-                  loadedImages.add(resolvedImageUrl);
-                }
+                if (resolvedImageUrl) loadedImages.add(resolvedImageUrl);
               }}
               onError={() => {
                 setImageError(true);
                 setImageLoaded(false);
               }}
-              priority={size === 'lg' || size === 'xl'} // Prioritize larger avatars
+              priority={size === 'lg' || size === 'xl'}
             />
           )}
 
-          {/* Loading state - show shimmer while loading */}
           {shouldShowLoadingState && (
             <div
-              className={`absolute inset-0 transition-opacity duration-150 ease-in-out ${
-                imageLoaded ? 'opacity-0' : 'opacity-100'
-              }`}
+              className={`absolute inset-0 transition-opacity duration-150 ${imageLoaded ? 'opacity-0' : 'opacity-100'}`}
             >
               <ShimmerProvider>
                 <Skeleton
@@ -277,22 +186,17 @@ export default function UserAvatar({
             </div>
           )}
 
-          {/* Fallback state - show when no profile picture or error */}
           {(!hasProfilePicture || imageError) && (
             <div className='bg-gradient-to-br from-neutral-50 to-neutral-150 w-full h-full flex items-center justify-center absolute inset-0 shadow-inner'>
               <User
                 className='w-3/5 h-3/5 text-slate-500 drop-shadow-sm'
                 strokeWidth={1.5}
-                style={{
-                  filter:
-                    'drop-shadow(0 1px 0 rgba(255, 255, 255, 0.5)) drop-shadow(0 -1px 0 rgba(0, 0, 0, 0.1))',
-                }}
               />
             </div>
           )}
         </div>
-        {showStatus === true && (
-          <div className={`absolute ${getIndicatorSizeAndPosition().position}`}>
+        {showStatus && (
+          <div className='absolute -bottom-0 -right-0'>
             {getStatusIndicator()}
           </div>
         )}
