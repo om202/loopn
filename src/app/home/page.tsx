@@ -692,9 +692,7 @@ export default function HomePage() {
                   className='w-12 h-12 rounded-full object-cover'
                 />
                 <div>
-                  <p className='font-bold text-black text-sm'>
-                    Sarah Johnson
-                  </p>
+                  <p className='font-bold text-black text-sm'>Sarah Johnson</p>
                   <p className='text-slate-500 text-sm'>
                     Software Engineer, Tech Startup
                   </p>
@@ -726,9 +724,7 @@ export default function HomePage() {
                   className='w-12 h-12 rounded-full object-cover'
                 />
                 <div>
-                  <p className='font-bold text-black text-sm'>
-                    Michael Chen
-                  </p>
+                  <p className='font-bold text-black text-sm'>Michael Chen</p>
                   <p className='text-slate-500 text-sm'>
                     Product Manager, E-commerce
                   </p>

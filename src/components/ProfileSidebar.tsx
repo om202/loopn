@@ -11,7 +11,6 @@ import {
   UserRoundMinus,
   UserPlus,
   Building2,
-  Factory,
   GraduationCap,
   User,
   Target,
