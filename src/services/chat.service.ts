@@ -44,27 +44,6 @@ export class ChatService {
     requesterId: string
   ): Promise<DataResult<ChatRequest>> {
     try {
-      // Check for active chat restrictions (2-week cooldown)
-      const restrictionCheck = await this.hasActiveChatRestriction(
-        requesterId,
-        receiverId
-      );
-
-      if (restrictionCheck.error) {
-        return {
-          data: null,
-          error: restrictionCheck.error,
-        };
-      }
-
-      if (restrictionCheck.data) {
-        return {
-          data: null,
-          error:
-            'Cannot send chat request. Please wait for the cooldown period to end.',
-        };
-      }
-
       const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
 
       const result = await getClient().models.ChatRequest.create({
@@ -435,14 +414,11 @@ export class ChatService {
   ): Promise<DataResult<Conversation>> {
     try {
       const now = new Date();
-      const probationEndsAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000); // 7 days
 
       const result = await getClient().models.Conversation.create({
         participant1Id,
         participant2Id,
-        isConnected: false,
-        chatStatus: 'ACTIVE',
-        probationEndsAt: probationEndsAt.toISOString(),
+        isConnected: true, // Always connected from the start
         createdAt: now.toISOString(),
         // Set participants for multi-user authorization
         participants: [participant1Id, participant2Id],
@@ -491,12 +467,12 @@ export class ChatService {
     }
   }
 
-  async endChat(
+  // Note: Conversations are now permanent, but users can still "archive" them
+  async archiveConversation(
     conversationId: string,
-    userId: string
+    _userId: string
   ): Promise<DataResult<Conversation>> {
     try {
-      // First get the conversation to know the participants
       const conversationResult = await getClient().models.Conversation.get({
         id: conversationId,
       });
@@ -508,55 +484,10 @@ export class ChatService {
         };
       }
 
-      const conversation = conversationResult.data;
-
-      // Update conversation to ended status
-      const result = await getClient().models.Conversation.update({
-        id: conversationId,
-        chatStatus: 'ENDED',
-        endedAt: new Date().toISOString(),
-        endedByUserId: userId,
-      });
-
-      // Create ChatRestriction to prevent reconnection
-      const now = new Date();
-      // TODO: when deploying change to 2 weeks (14 * 24 * 60 * 60 * 1000)
-      const restrictionEnds = new Date(now.getTime() + 3 * 60 * 1000); // 3 minutes for testing
-
-      await getClient().models.ChatRestriction.create({
-        user1Id: conversation.participant1Id,
-        user2Id: conversation.participant2Id,
-        endedConversationId: conversationId,
-        restrictionEndsAt: restrictionEnds.toISOString(),
-        createdAt: now.toISOString(),
-        expiresAt: restrictionEnds.toISOString(), // TTL cleanup
-      });
-
+      // In the future, we could add an "archived" field or user-specific flags
+      // For now, conversations remain fully active and accessible
       return {
-        data: result.data,
-        error: null,
-      };
-    } catch (error) {
-      return {
-        data: null,
-        error: error instanceof Error ? error.message : 'Failed to end chat',
-      };
-    }
-  }
-
-  async continueProbation(
-    conversationId: string
-  ): Promise<DataResult<Conversation>> {
-    try {
-      const newProbationEnd = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-
-      const result = await getClient().models.Conversation.update({
-        id: conversationId,
-        probationEndsAt: newProbationEnd.toISOString(),
-      });
-
-      return {
-        data: result.data,
+        data: conversationResult.data,
         error: null,
       };
     } catch (error) {
@@ -565,7 +496,7 @@ export class ChatService {
         error:
           error instanceof Error
             ? error.message
-            : 'Failed to continue probation',
+            : 'Failed to archive conversation',
       };
     }
   }
@@ -601,7 +532,6 @@ export class ChatService {
         filter: {
           participant1Id: { eq: user1Id },
           participant2Id: { eq: user2Id },
-          chatStatus: { eq: 'ACTIVE' },
         },
       });
 
@@ -611,7 +541,6 @@ export class ChatService {
           filter: {
             participant1Id: { eq: user2Id },
             participant2Id: { eq: user1Id },
-            chatStatus: { eq: 'ACTIVE' },
           },
         });
       }
@@ -736,15 +665,9 @@ export class ChatService {
         respondedAt: new Date().toISOString(),
       });
 
-      // If accepted, update the conversation to be permanently connected
-      if (status === 'ACCEPTED' && connectionResult.data.conversationId) {
-        await getClient().models.Conversation.update({
-          id: connectionResult.data.conversationId,
-          isConnected: true,
-          chatStatus: 'ACTIVE',
-        });
-
-        // Create notification for the requester about acceptance
+      // Note: Conversations are already permanent, connection status is just for social features
+      // Send notification if connection was accepted
+      if (status === 'ACCEPTED') {
         try {
           const userProfileService = new UserProfileService();
           const receiverProfile = await userProfileService.getUserProfile(
@@ -872,25 +795,21 @@ export class ChatService {
         id: connection.id,
       });
 
-      // Update the conversation to remove the permanent connection status
-      const conversationResult = await getClient().models.Conversation.update({
-        id: conversationId,
-        isConnected: false,
-        chatStatus: 'ENDED', // End the chat when connection is removed
-        endedAt: new Date().toISOString(),
-      });
+      // Note: Conversations remain permanent even when connections are removed
+      // Users can still access their chat history
+      const conversation = await this.getConversation(conversationId);
 
-      if (!conversationResult.data) {
+      if (conversation.error || !conversation.data) {
         return {
           data: null,
-          error: 'Failed to update conversation after removing connection',
+          error: conversation.error || 'Conversation not found',
         };
       }
 
       return {
         data: {
           connection,
-          conversation: conversationResult.data,
+          conversation: conversation.data,
         },
         error: null,
       };
@@ -995,52 +914,6 @@ export class ChatService {
           error instanceof Error
             ? error.message
             : 'Failed to cancel connection request',
-      };
-    }
-  }
-
-  // ===== CHAT RESTRICTIONS =====
-
-  async hasActiveChatRestriction(
-    user1Id: string,
-    user2Id: string
-  ): Promise<DataResult<boolean>> {
-    try {
-      const now = new Date();
-
-      // Check if there's an active restriction between these users
-      // We need to check both directions since restrictions can be created with either user as user1
-      const restriction1 = await getClient().models.ChatRestriction.list({
-        filter: {
-          user1Id: { eq: user1Id },
-          user2Id: { eq: user2Id },
-          restrictionEndsAt: { gt: now.toISOString() },
-        },
-      });
-
-      const restriction2 = await getClient().models.ChatRestriction.list({
-        filter: {
-          user1Id: { eq: user2Id },
-          user2Id: { eq: user1Id },
-          restrictionEndsAt: { gt: now.toISOString() },
-        },
-      });
-
-      const hasRestriction =
-        (restriction1.data && restriction1.data.length > 0) ||
-        (restriction2.data && restriction2.data.length > 0);
-
-      return {
-        data: hasRestriction,
-        error: null,
-      };
-    } catch (error) {
-      return {
-        data: false,
-        error:
-          error instanceof Error
-            ? error.message
-            : 'Failed to check chat restrictions',
       };
     }
   }
