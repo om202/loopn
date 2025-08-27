@@ -99,9 +99,9 @@ export default function DashboardSectionContent({
       const aConversation = existingConversations.get(a.userId);
       const bConversation = existingConversations.get(b.userId);
 
-      // Check if users are available to chat (have connected conversations)
-      const aAvailableToChat = aConversation && aConversation.isConnected;
-      const bAvailableToChat = bConversation && bConversation.isConnected;
+      // Check if users are available to chat (all conversations are now permanent)
+      const aAvailableToChat = !!aConversation;
+      const bAvailableToChat = !!bConversation;
 
       // Check if users are recently active (offline but within 15 minutes)
       const aRecentlyActive =

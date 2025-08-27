@@ -7,7 +7,6 @@ import {
   Info,
   Plus,
   MessageSquare,
-  MessageSquareOff,
   UserRoundMinus,
   UserPlus,
   Building2,
@@ -327,17 +326,10 @@ export default function ProfileSidebar({
             onClick={() => setShowEndChatDialog(true)}
             className='text-sm text-slate-500 hover:text-black transition-colors font-medium flex items-center gap-1.5'
           >
-            {conversation && !conversation.isConnected ? (
-              <>
-                <MessageSquareOff className='w-3.5 h-3.5' />
-                End Chat
-              </>
-            ) : (
-              <>
-                <UserRoundMinus className='w-3.5 h-3.5' />
-                Remove Connection
-              </>
-            )}
+            <>
+              <UserRoundMinus className='w-3.5 h-3.5' />
+              Remove Connection
+            </>
           </button>
         )}
       </div>
@@ -374,26 +366,24 @@ export default function ProfileSidebar({
       {/* Chat Header Section - when in chat context */}
       {conversation && (
         <div className='px-4 pb-3 border-b border-slate-200'>
-          {/* Connection Status */}
-          {conversation.isConnected && (
-            <div className='flex items-center justify-center text-base text-slate-500 mb-2'>
-              <button
-                onClick={() => setShowRemoveConnectionDialog(true)}
-                className='flex items-center gap-2 px-2 py-2 rounded-lg hover:bg-slate-100 transition-colors'
+          {/* Connection Status - All conversations are now permanent connections */}
+          <div className='flex items-center justify-center text-base text-slate-500 mb-2'>
+            <button
+              onClick={() => setShowRemoveConnectionDialog(true)}
+              className='flex items-center gap-2 px-2 py-2 rounded-lg hover:bg-slate-100 transition-colors'
+            >
+              <svg
+                className='w-5 h-5'
+                viewBox='30 30 160 160'
+                xmlns='http://www.w3.org/2000/svg'
               >
-                <svg
-                  className='w-5 h-5'
-                  viewBox='30 30 160 160'
-                  xmlns='http://www.w3.org/2000/svg'
-                >
-                  <circle cx='110' cy='110' r='80' fill='#D9D9D9' />
-                  <circle cx='75' cy='110' r='35' fill='#0099fc' />
-                  <circle cx='145' cy='110' r='35' fill='#0099fc' />
-                </svg>
-                <span className='font-medium'>Connected</span>
-              </button>
-            </div>
-          )}
+                <circle cx='110' cy='110' r='80' fill='#D9D9D9' />
+                <circle cx='75' cy='110' r='35' fill='#0099fc' />
+                <circle cx='145' cy='110' r='35' fill='#0099fc' />
+              </svg>
+              <span className='font-medium'>Connected</span>
+            </button>
+          </div>
 
           {/* All conversations are permanent - no trial chat status needed */}
           {false && (
@@ -620,63 +610,33 @@ export default function ProfileSidebar({
         maxWidth='sm'
       >
         <div className='p-4'>
-          {conversation && !conversation.isConnected ? (
-            // Temporary chat dialog
-            <>
-              <h3 className='text-sm font-medium text-black text-center mb-3'>
-                End chat with {getUserDisplayName()}?
-              </h3>
-              <p className='text-base text-slate-500 text-center mb-4'>
-                This will end your trial chat immediately. Chat history will
-                remain accessible until the trial expires.
-              </p>
-              <div className='flex gap-2'>
-                <button
-                  onClick={() => setShowEndChatDialog(false)}
-                  className='flex-1 px-3 py-2 text-base font-medium text-black bg-slate-100 rounded-lg hover:bg-slate-200 focus:outline-none transition-colors'
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={() => {
-                    onEndChat?.();
-                    setShowEndChatDialog(false);
-                  }}
-                  className='flex-1 px-3 py-2 text-base font-medium text-b_red-600 bg-slate-100 rounded-lg hover:bg-slate-200 focus:outline-none transition-colors'
-                >
-                  End Chat
-                </button>
-              </div>
-            </>
-          ) : (
-            // Permanent connection dialog
-            <>
-              <h3 className='text-sm font-medium text-black text-center mb-3'>
-                Remove {getUserDisplayName()} from your connections?
-              </h3>
-              <p className='text-base text-slate-500 text-center mb-4'>
-                This will permanently remove them from your professional
-                network. You can reconnect later if needed.
-              </p>
-              <div className='flex gap-2'>
-                <button
-                  onClick={() => setShowEndChatDialog(false)}
-                  className='flex-1 px-3 py-2 text-base font-medium text-black bg-slate-100 rounded-lg hover:bg-slate-200 focus:outline-none transition-colors'
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={() => {
-                    onEndChat?.();
-                    setShowEndChatDialog(false);
-                  }}
-                  className='flex-1 px-3 py-2 text-base font-medium text-b_red-600 bg-slate-100 rounded-lg hover:bg-slate-200 focus:outline-none transition-colors'
-                >
-                  Remove Connection
-                </button>
-              </div>
-            </>
-          )}
+          {/* All conversations are now permanent connections */}
+          <>
+            <h3 className='text-sm font-medium text-black text-center mb-3'>
+              Remove {getUserDisplayName()} from your connections?
+            </h3>
+            <p className='text-base text-slate-500 text-center mb-4'>
+              This will permanently remove them from your professional
+              network. You can reconnect later if needed.
+            </p>
+            <div className='flex gap-2'>
+              <button
+                onClick={() => setShowEndChatDialog(false)}
+                className='flex-1 px-3 py-2 text-base font-medium text-black bg-slate-100 rounded-lg hover:bg-slate-200 focus:outline-none transition-colors'
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  onRemoveConnection?.();
+                  setShowEndChatDialog(false);
+                }}
+                className='flex-1 px-3 py-2 text-base font-medium text-b_red-600 bg-slate-100 rounded-lg hover:bg-slate-200 focus:outline-none transition-colors'
+              >
+                Remove Connection
+              </button>
+            </div>
+          </>
         </div>
       </DialogContainer>
 

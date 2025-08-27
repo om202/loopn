@@ -22,10 +22,10 @@ export function useUserCategorization({
 }: UseUserCategorizationProps) {
   // Helper functions to categorize users - simplified for permanent connections
   const connectionUsers = useMemo(() => {
-    // All users with existing conversations (all are now permanent by default)
+    // All users with existing conversations (all conversations are now permanent)
     return allUsers.filter(user => {
       const conversation = existingConversations.get(user.userId);
-      return conversation && conversation.isConnected === true;
+      return conversation; // No need to check isConnected - all conversations are permanent
     });
   }, [allUsers, existingConversations]);
 
