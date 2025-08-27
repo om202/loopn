@@ -267,6 +267,21 @@ const schema = a
         reportedAt: a.datetime().required(),
       })
       .authorization(allow => [allow.authenticated()]),
+
+    // Saved Users
+    SavedUser: a
+      .model({
+        id: a.id().required(),
+        saverId: a.string().required(),
+        savedUserId: a.string().required(),
+        savedAt: a.datetime().required(),
+      })
+      .identifier(['saverId', 'savedUserId'])
+      .authorization(allow => [allow.authenticated()])
+      .secondaryIndexes(index => [
+        index('saverId').sortKeys(['savedAt']),
+        index('savedUserId').sortKeys(['savedAt']),
+      ]),
   })
   .authorization(allow => [allow.resource(presenceCleanup)]);
 
