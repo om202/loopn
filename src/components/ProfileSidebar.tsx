@@ -397,16 +397,16 @@ export default function ProfileSidebar({
         {onEndChat && (
           <button
             onClick={() => setShowEndChatDialog(true)}
-            className='text-sm text-slate-500 hover:text-slate-950 transition-colors font-medium flex items-center gap-2'
+            className='text-sm text-slate-500 hover:text-slate-950 transition-colors font-medium flex items-center gap-1.5'
           >
             {conversation && !conversation.isConnected ? (
               <>
-                <MessageSquareOff className='w-4 h-4' />
+                <MessageSquareOff className='w-3.5 h-3.5' />
                 End Chat
               </>
             ) : (
               <>
-                <UserRoundMinus className='w-4 h-4' />
+                <UserRoundMinus className='w-3.5 h-3.5' />
                 Remove Connection
               </>
             )}
@@ -428,7 +428,7 @@ export default function ProfileSidebar({
           />
           <div className='mt-1'>
             <div className='mb-0'>
-              <div className='font-medium text-slate-950 text-lg flex items-center justify-center gap-2'>
+              <div className='font-medium text-slate-950 text-base flex items-center justify-center gap-2'>
                 {getUserDisplayName()}
               </div>
               {/* Show trial chat expiration info when in sidebar context (not in chat) */}
@@ -481,7 +481,7 @@ export default function ProfileSidebar({
                     <ClockFading className='w-3.5 h-3.5 text-gray-400' />
                     <span className='font-medium'>
                       Connection Expires in{' '}
-                      <span className='font-bold text-slate-950 text-sm'>
+                      <span className='font-bold text-slate-950 text-base'>
                         {timeLeft}
                       </span>
                     </span>
@@ -536,8 +536,8 @@ export default function ProfileSidebar({
           {/* Chat Ended Status */}
           {conversation.chatStatus === 'ENDED' && (
             <div className='mb-2'>
-              <div className='flex items-center gap-2 text-base text-slate-500 mb-2'>
-                <Info className='w-5 h-5' />
+              <div className='flex items-center gap-1.5 text-sm text-slate-500 mb-2'>
+                <Info className='w-4 h-4' />
                 <span className='font-medium text-slate-950'>Chat Ended</span>
               </div>
 
@@ -590,14 +590,14 @@ export default function ProfileSidebar({
                 (userProfile.interests &&
                   userProfile.interests.length > 0)) && (
                 <div className='pb-6'>
-                  <h4 className='text-base font-medium text-slate-500 mb-4'>
+                  <h4 className='text-sm font-medium text-slate-500 mb-4'>
                     Profile Details
                   </h4>
                   <div className='divide-y divide-slate-100'>
                     {userProfile.jobRole && (
                       <div className='py-3 flex items-center justify-between'>
-                        <dt className='text-base font-medium text-slate-500 flex items-center gap-2 flex-shrink-0'>
-                          <User className='w-4 h-4' />
+                        <dt className='text-sm font-medium text-slate-500 flex items-center gap-1.5 flex-shrink-0'>
+                          <User className='w-3.5 h-3.5' />
                           Role
                         </dt>
                         <dd className='text-base text-slate-950 text-right ml-4'>
@@ -607,8 +607,8 @@ export default function ProfileSidebar({
                     )}
                     {userProfile.companyName && (
                       <div className='py-3 flex items-center justify-between'>
-                        <dt className='text-base font-medium text-slate-500 flex items-center gap-2 flex-shrink-0'>
-                          <Building2 className='w-4 h-4' />
+                        <dt className='text-sm font-medium text-slate-500 flex items-center gap-1.5 flex-shrink-0'>
+                          <Building2 className='w-3.5 h-3.5' />
                           Company
                         </dt>
                         <dd className='text-base text-slate-950 text-right ml-4'>
@@ -618,8 +618,8 @@ export default function ProfileSidebar({
                     )}
                     {userProfile.industry && (
                       <div className='py-3 flex items-center justify-between'>
-                        <dt className='text-base font-medium text-slate-500 flex items-center gap-2 flex-shrink-0'>
-                          <Factory className='w-4 h-4' />
+                        <dt className='text-sm font-medium text-slate-500 flex items-center gap-1.5 flex-shrink-0'>
+                          <Factory className='w-3.5 h-3.5' />
                           Industry
                         </dt>
                         <dd className='text-base text-slate-950 text-right ml-4'>
@@ -630,8 +630,8 @@ export default function ProfileSidebar({
                     {userProfile.yearsOfExperience !== null &&
                       userProfile.yearsOfExperience !== undefined && (
                         <div className='py-3 flex items-center justify-between'>
-                          <dt className='text-base font-medium text-slate-500 flex items-center gap-2 flex-shrink-0'>
-                            <ClockFading className='w-4 h-4' />
+                          <dt className='text-sm font-medium text-slate-500 flex items-center gap-1.5 flex-shrink-0'>
+                            <ClockFading className='w-3.5 h-3.5' />
                             Experience
                           </dt>
                           <dd className='text-base text-slate-950 text-right ml-4'>
@@ -641,8 +641,8 @@ export default function ProfileSidebar({
                       )}
                     {userProfile.education && (
                       <div className='py-3 flex items-center justify-between'>
-                        <dt className='text-base font-medium text-slate-500 flex items-center gap-2 flex-shrink-0'>
-                          <GraduationCap className='w-4 h-4' />
+                        <dt className='text-sm font-medium text-slate-500 flex items-center gap-1.5 flex-shrink-0'>
+                          <GraduationCap className='w-3.5 h-3.5' />
                           Education
                         </dt>
                         <dd className='text-base text-slate-950 text-right ml-4'>
@@ -652,8 +652,8 @@ export default function ProfileSidebar({
                     )}
                     {userProfile.about && (
                       <div className='py-3'>
-                        <dt className='text-base font-medium text-slate-500 mb-1.5 flex items-center gap-2'>
-                          <Info className='w-4 h-4' />
+                        <dt className='text-sm font-medium text-slate-500 mb-1.5 flex items-center gap-1.5'>
+                          <Info className='w-3.5 h-3.5' />
                           About
                         </dt>
                         <dd className='text-base text-slate-950'>
@@ -663,8 +663,8 @@ export default function ProfileSidebar({
                     )}
                     {userProfile.skills && userProfile.skills.length > 0 && (
                       <div className='py-3'>
-                        <dt className='text-base font-medium text-slate-500 mb-1.5 flex items-center gap-2'>
-                          <Target className='w-4 h-4' />
+                        <dt className='text-sm font-medium text-slate-500 mb-1.5 flex items-center gap-1.5'>
+                          <Target className='w-3.5 h-3.5' />
                           Skills
                         </dt>
                         <dd className='flex flex-wrap gap-2'>
@@ -682,8 +682,8 @@ export default function ProfileSidebar({
                     {userProfile.interests &&
                       userProfile.interests.length > 0 && (
                         <div className='py-3'>
-                          <dt className='text-base font-medium text-slate-500 mb-1.5 flex items-center gap-2'>
-                            <Heart className='w-4 h-4' />
+                          <dt className='text-sm font-medium text-slate-500 mb-1.5 flex items-center gap-1.5'>
+                            <Heart className='w-3.5 h-3.5' />
                             Interests
                           </dt>
                           <dd className='flex flex-wrap gap-2'>
@@ -720,7 +720,7 @@ export default function ProfileSidebar({
           {conversation && !conversation.isConnected ? (
             // Temporary chat dialog
             <>
-              <h3 className='text-lg font-medium text-slate-950 text-center mb-3'>
+              <h3 className='text-sm font-medium text-slate-950 text-center mb-3'>
                 End chat with {getUserDisplayName()}?
               </h3>
               <p className='text-base text-slate-500 text-center mb-4'>
@@ -748,7 +748,7 @@ export default function ProfileSidebar({
           ) : (
             // Permanent connection dialog
             <>
-              <h3 className='text-lg font-medium text-slate-950 text-center mb-3'>
+              <h3 className='text-sm font-medium text-slate-950 text-center mb-3'>
                 Remove {getUserDisplayName()} from your connections?
               </h3>
               <p className='text-base text-slate-500 text-center mb-4'>
