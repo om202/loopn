@@ -293,7 +293,9 @@ export default function ProfileSidebar({
           ) : existingConversations.has(userId) ? (
             <>
               <MessageSquare className='w-5 h-5 text-brand-600' />
-              <span className='text-base font-medium text-brand-600'>Message</span>
+              <span className='text-base font-medium text-brand-600'>
+                Message
+              </span>
             </>
           ) : (
             <>
@@ -622,8 +624,8 @@ export default function ProfileSidebar({
               Remove {getUserDisplayName()} from your connections?
             </h3>
             <p className='text-base text-slate-500 text-center mb-4'>
-              This will permanently remove them from your professional
-              network. You can reconnect later if needed.
+              This will permanently remove them from your professional network.
+              You can reconnect later if needed.
             </p>
             <div className='flex gap-2'>
               <button

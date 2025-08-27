@@ -25,8 +25,10 @@ export default function RemoveConnectionDialog({
         </h3>
         <p className='text-sm text-black text-center mb-4'>
           This will permanently remove your connection with{' '}
-          <span className="font-semibold">{userName ? userName : 'this user'}</span>. You won&apos;t be able to message
-          each other anymore.
+          <span className='font-semibold'>
+            {userName ? userName : 'this user'}
+          </span>
+          . You won&apos;t be able to message each other anymore.
         </p>
         <div className='flex gap-2'>
           <button
