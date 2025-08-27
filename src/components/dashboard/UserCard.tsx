@@ -1,13 +1,21 @@
 'use client';
 
 import { useState } from 'react';
-import {
-  ClockFading,
-  Plus,
-  MessageSquare,
-  UserCheck,
-  Check,
-} from 'lucide-react';
+import { ClockFading, MessageSquare, UserCheck, Check } from 'lucide-react';
+
+// Custom Connect Icon using circles from logo
+const ConnectIcon = ({ className }: { className?: string }) => (
+  <svg
+    width='20'
+    height='20'
+    viewBox='0 0 20 20'
+    className={className}
+    fill='currentColor'
+  >
+    <circle cx='6' cy='10' r='4' />
+    <circle cx='14' cy='10' r='4' />
+  </svg>
+);
 
 import type { Schema } from '../../../amplify/data/resource';
 import { formatPresenceTime } from '../../lib/presence-utils';
@@ -15,8 +23,6 @@ import { useUserProfile } from '../../hooks/useUserProfile';
 
 import DialogContainer from '../DialogContainer';
 import UserAvatar from '../UserAvatar';
-
-import ProfileSidebar from '../ProfileSidebar';
 
 type UserPresence = Schema['UserPresence']['type'];
 type Conversation = Schema['Conversation']['type'];
@@ -83,9 +89,7 @@ export default function UserCard({
   onAcceptChatRequest,
   canUserReconnect,
   getReconnectTimeRemaining,
-  onOpenProfileSidebar,
   onUserCardClick,
-  isProfileSidebarOpen,
   selectedUserId,
   searchProfile,
   useRealtimeStatus = true,
@@ -93,7 +97,7 @@ export default function UserCard({
   const [showCancelDialog, setShowCancelDialog] = useState(false);
 
   // Use our centralized user profile hook instead of local state and API calls
-  const { profile: fullProfile, isLoading: loadingProfile } = useUserProfile(
+  const { profile: fullProfile, isLoading: _loadingProfile } = useUserProfile(
     searchProfile ? '' : userPresence.userId // Skip fetching if searchProfile is provided
   );
 
@@ -155,7 +159,7 @@ export default function UserCard({
       className={`px-3 py-3 group transition-all duration-200 cursor-pointer ${
         isSelected
           ? 'bg-brand-50 rounded-xl border border-brand-100'
-          : 'bg-white hover:bg-slate-50 rounded-lg border border-slate-100 hover:border-slate-200'
+          : 'bg-white hover:bg-slate-50 rounded-lg border border-slate-100 hover:border-brand-200'
       }`}
     >
       <div className='flex items-center gap-3'>
@@ -182,7 +186,7 @@ export default function UserCard({
         </div>
 
         <div className='flex-1 min-w-0'>
-          <div className='flex items-center gap-2 mb-1'>
+          <div className='flex items-center gap-2 mb-0.5'>
             <div className='text-slate-950 truncate no-email-detection font-medium'>
               {getDisplayName(userPresence, userProfile)}
             </div>
@@ -242,7 +246,7 @@ export default function UserCard({
 
           {/* Profession */}
           {(finalFullProfile?.jobRole || finalFullProfile?.companyName) && (
-            <div className='text-slate-500 truncate'>
+            <div className='text-sm text-slate-500 truncate'>
               {finalFullProfile?.jobRole && finalFullProfile?.companyName
                 ? `${finalFullProfile.jobRole} at ${finalFullProfile.companyName}`
                 : finalFullProfile?.jobRole || finalFullProfile?.companyName}
@@ -362,7 +366,7 @@ export default function UserCard({
                   'ENDED' ? (
                     canUserReconnect(userPresence.userId) ? (
                       <>
-                        <Plus className='w-5 h-5 text-white' />
+                        <ConnectIcon className='w-5 h-5 text-white' />
                         <span className='text-base font-medium text-white'>
                           Connect
                         </span>
@@ -394,7 +398,7 @@ export default function UserCard({
                   )
                 ) : (
                   <>
-                    <Plus className='w-5 h-5 text-white' />
+                    <ConnectIcon className='w-5 h-5 text-white' />
                     <span className='text-base font-medium text-white'>
                       Connect
                     </span>
@@ -403,8 +407,6 @@ export default function UserCard({
               </button>
             );
           })()}
-
-
         </div>
       </div>
 

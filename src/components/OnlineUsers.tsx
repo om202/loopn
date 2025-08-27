@@ -597,7 +597,7 @@ export default function OnlineUsers({
 
       <div className='flex-1 bg-white sm:rounded-2xl border border-slate-200 py-4 px-3 sm:py-4 sm:px-6 lg:py-4 lg:px-6 ultra-compact overflow-hidden flex flex-col min-h-0'>
         {/* Search User - Always visible at top */}
-        <div className='flex-shrink-0 mb-4 sm:mb-6 w-full max-w-4xl mx-auto'>
+        <div className='flex-shrink-0 mb-4 sm:mb-6 w-full max-w-6xl mx-auto'>
           <SearchUser
             onProfessionalRequest={handleProfessionalRequest}
             userProfile={currentUserProfile || undefined}
@@ -605,16 +605,13 @@ export default function OnlineUsers({
         </div>
 
         {/* Section Header - Fixed at top */}
-        <div className='flex-shrink-0 mb-5 sm:mb-6 lg:mb-8 w-full max-w-4xl mx-auto'>
+        <div className='flex-shrink-0 mb-4 sm:mb-5 lg:mb-6 w-full max-w-6xl mx-auto'>
           {activeSection === 'notifications' && (
             <div className='flex items-start justify-between'>
               <div>
-                <h2 className='text-2xl sm:text-2xl font-bold text-slate-950 mb-1'>
-                  Notifications
+                <h2 className='text-2xl sm:text-2xl font-bold text-slate-950'>
+                  Recent Activity
                 </h2>
-                <p className='text-sm text-slate-500 font-semibold'>
-                  Keep up with your latest activity
-                </p>
               </div>
               {centralizedNotifications.length > 0 && (
                 <button
@@ -628,23 +625,17 @@ export default function OnlineUsers({
           )}
           {activeSection === 'help' && (
             <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-slate-950 mb-1'>
-                Help & Support
+              <h2 className='text-xl sm:text-2xl font-bold text-slate-950'>
+                Help Center
               </h2>
-              <p className='text-sm text-slate-500 font-semibold'>
-                Common questions and troubleshooting
-              </p>
             </div>
           )}
           {activeSection === 'account' && (
             <div className='flex items-start justify-between'>
               <div>
-                <h2 className='text-2xl sm:text-2xl font-bold text-slate-950 mb-1'>
-                  Account
+                <h2 className='text-2xl sm:text-2xl font-bold text-slate-950'>
+                  Account Settings
                 </h2>
-                <p className='text-sm text-slate-500 font-semibold'>
-                  Manage your profile and settings
-                </p>
               </div>
               <button
                 onClick={handleSignOutClick}
@@ -656,42 +647,30 @@ export default function OnlineUsers({
           )}
           {activeSection === 'connections' && (
             <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-slate-950 mb-1'>
-                Connections
+              <h2 className='text-xl sm:text-2xl font-bold text-slate-950'>
+                My Connections
               </h2>
-              <p className='text-sm text-slate-500 font-semibold'>
-                Your connections
-              </p>
             </div>
           )}
           {activeSection === 'suggested' && (
             <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-slate-950 mb-1'>
-                Discover
+              <h2 className='text-xl sm:text-2xl font-bold text-slate-950'>
+                Discover Professionals
               </h2>
-              <p className='text-sm text-slate-500 font-semibold'>
-                Find and connect with new people
-              </p>
             </div>
           )}
           {activeSection === 'search' && (
             <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-slate-950 mb-1'>
-                {searchQuery ? 'Search Results' : 'Search'}
+              <h2 className='text-xl sm:text-2xl font-bold text-slate-950'>
+                Search Professionals
               </h2>
-              <p className='text-sm text-slate-500 font-semibold'>
-                {searchQuery ? `"${searchQuery}"` : 'Search for professionals'}
-              </p>
             </div>
           )}
           {activeSection === 'all' && (
             <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-slate-950 mb-1'>
-                Chats
+              <h2 className='text-xl sm:text-2xl font-bold text-slate-950'>
+                My Conversations
               </h2>
-              <p className='text-sm text-slate-500 font-semibold'>
-                Your conversations
-              </p>
             </div>
           )}
         </div>
@@ -704,7 +683,7 @@ export default function OnlineUsers({
           <div className='absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-4xl h-px bg-slate-200 opacity-0 transition-opacity duration-200 z-10 scroll-bottom-border'></div>
 
           <div
-            className='overflow-y-auto flex-1 h-full max-w-4xl mx-auto w-full'
+            className='overflow-y-auto flex-1 h-full max-w-6xl mx-auto w-full'
             onScroll={e => {
               const target = e.target as HTMLDivElement;
               const { scrollTop, scrollHeight, clientHeight } = target;

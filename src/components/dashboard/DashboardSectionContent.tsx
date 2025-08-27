@@ -219,21 +219,21 @@ export default function DashboardSectionContent({
     switch (activeSection) {
       case 'connections':
         return {
-          title: 'Connections',
+          title: 'My Connections',
           description: 'Your connections',
           emptyIcon: Users,
           emptyMessage: 'No connections yet',
         };
       case 'suggested':
         return {
-          title: 'Discover',
+          title: 'Discover Professionals',
           description: 'Find and connect with new people',
           emptyIcon: Sparkles,
           emptyMessage: 'No suggestions available',
         };
       case 'search':
         return {
-          title: searchQuery ? 'Search Results' : 'Search',
+          title: 'Search Professionals',
           description: searchQuery
             ? `"${searchQuery}"`
             : 'Search for professionals',
@@ -243,7 +243,7 @@ export default function DashboardSectionContent({
       case 'all':
       default:
         return {
-          title: 'Chats',
+          title: 'My Conversations',
           description: 'Your conversations',
           emptyIcon: MessageSquare,
           emptyMessage: 'No chats available',
