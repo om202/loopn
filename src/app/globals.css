@@ -82,11 +82,7 @@ html {
 }
 
 body {
-  font-family:
-    var(--font-switzer),
-    system-ui,
-    -apple-system,
-    sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
   /* Additional font smoothing for body */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -248,16 +244,12 @@ a:hover,
   display: none;
 }
 
-/* Force Switzer to override Amplify UI React default fonts */
+/* Force system font stack to override Amplify UI React default fonts */
 * {
-  font-family:
-    var(--font-switzer),
-    system-ui,
-    -apple-system,
-    sans-serif !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif !important;
 }
 
-/* Ensure all Amplify UI components use Switzer */
+/* Ensure all Amplify UI components use system font stack */
 [data-amplify-authenticator] *,
 [data-amplify-theme] *,
 .amplify-authenticator *,
@@ -266,9 +258,5 @@ a:hover,
 .amplify-input *,
 .amplify-label *,
 .amplify-text * {
-  font-family:
-    var(--font-switzer),
-    system-ui,
-    -apple-system,
-    sans-serif !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif !important;
 }
