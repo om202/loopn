@@ -115,117 +115,7 @@ export const schema: Schema = {
         },
       ],
     },
-    ChatRestriction: {
-      name: 'ChatRestriction',
-      fields: {
-        id: {
-          name: 'id',
-          isArray: false,
-          type: 'ID',
-          isRequired: true,
-          attributes: [],
-        },
-        user1Id: {
-          name: 'user1Id',
-          isArray: false,
-          type: 'String',
-          isRequired: true,
-          attributes: [],
-        },
-        user2Id: {
-          name: 'user2Id',
-          isArray: false,
-          type: 'String',
-          isRequired: true,
-          attributes: [],
-        },
-        endedConversationId: {
-          name: 'endedConversationId',
-          isArray: false,
-          type: 'ID',
-          isRequired: true,
-          attributes: [],
-        },
-        restrictionEndsAt: {
-          name: 'restrictionEndsAt',
-          isArray: false,
-          type: 'AWSDateTime',
-          isRequired: true,
-          attributes: [],
-        },
-        createdAt: {
-          name: 'createdAt',
-          isArray: false,
-          type: 'AWSDateTime',
-          isRequired: true,
-          attributes: [],
-        },
-        expiresAt: {
-          name: 'expiresAt',
-          isArray: false,
-          type: 'AWSDateTime',
-          isRequired: false,
-          attributes: [],
-        },
-        updatedAt: {
-          name: 'updatedAt',
-          isArray: false,
-          type: 'AWSDateTime',
-          isRequired: false,
-          attributes: [],
-          isReadOnly: true,
-        },
-      },
-      syncable: true,
-      pluralName: 'ChatRestrictions',
-      attributes: [
-        {
-          type: 'model',
-          properties: {},
-        },
-        {
-          type: 'key',
-          properties: {
-            fields: ['id'],
-          },
-        },
-        {
-          type: 'key',
-          properties: {
-            name: 'chatRestrictionsByUser1IdAndUser2Id',
-            queryField: 'listChatRestrictionByUser1IdAndUser2Id',
-            fields: ['user1Id', 'user2Id'],
-          },
-        },
-        {
-          type: 'key',
-          properties: {
-            name: 'chatRestrictionsByUser2IdAndUser1Id',
-            queryField: 'listChatRestrictionByUser2IdAndUser1Id',
-            fields: ['user2Id', 'user1Id'],
-          },
-        },
-        {
-          type: 'key',
-          properties: {
-            name: 'chatRestrictionsByRestrictionEndsAt',
-            queryField: 'listChatRestrictionByRestrictionEndsAt',
-            fields: ['restrictionEndsAt'],
-          },
-        },
-        {
-          type: 'auth',
-          properties: {
-            rules: [
-              {
-                allow: 'private',
-                operations: ['create', 'update', 'delete', 'read'],
-              },
-            ],
-          },
-        },
-      ],
-    },
+
     UserConnection: {
       name: 'UserConnection',
       fields: {
@@ -275,13 +165,6 @@ export const schema: Schema = {
         },
         respondedAt: {
           name: 'respondedAt',
-          isArray: false,
-          type: 'AWSDateTime',
-          isRequired: false,
-          attributes: [],
-        },
-        expiresAt: {
-          name: 'expiresAt',
           isArray: false,
           type: 'AWSDateTime',
           isRequired: false,
@@ -420,36 +303,7 @@ export const schema: Schema = {
           isRequired: false,
           attributes: [],
         },
-        probationEndsAt: {
-          name: 'probationEndsAt',
-          isArray: false,
-          type: 'AWSDateTime',
-          isRequired: false,
-          attributes: [],
-        },
-        chatStatus: {
-          name: 'chatStatus',
-          isArray: false,
-          type: {
-            enum: 'ConversationChatStatus',
-          },
-          isRequired: false,
-          attributes: [],
-        },
-        endedByUserId: {
-          name: 'endedByUserId',
-          isArray: false,
-          type: 'String',
-          isRequired: false,
-          attributes: [],
-        },
-        endedAt: {
-          name: 'endedAt',
-          isArray: false,
-          type: 'AWSDateTime',
-          isRequired: false,
-          attributes: [],
-        },
+
         participants: {
           name: 'participants',
           isArray: true,
@@ -1069,10 +923,7 @@ export const schema: Schema = {
       name: 'UserConnectionStatus',
       values: ['PENDING', 'ACCEPTED', 'REJECTED'],
     },
-    ConversationChatStatus: {
-      name: 'ConversationChatStatus',
-      values: ['ACTIVE', 'PROBATION', 'ENDED'],
-    },
+
     MessageMessageType: {
       name: 'MessageMessageType',
       values: ['TEXT', 'SYSTEM'],

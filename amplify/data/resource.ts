@@ -7,15 +7,13 @@ This schema implements the Loopn user story:
 
 1. User sees AI-chosen professionals online (anonymous profiles)
 2. Sends "Chat Request" to start chatting
-3. If accepted, they can chat for 7 days (probation period)
-4. During chat, either can send "Connection Request" to connect permanently
-5. If connected: chat forever
-6. If not connected after 7 days: chat data expires, need new chat request
+3. If accepted, they can chat permanently (immediate connection)
+4. All conversations are permanent with full chat history
 
 Models:
 - ChatRequest: Request to start chatting with someone
-- UserConnection: Request to connect permanently (friendship)
-- Conversation: Chat between two users
+- UserConnection: Connection status between users (optional enhancement)
+- Conversation: Chat between two users (always permanent)
 - Message: Individual messages within conversations
 - UserPresence: Online/offline status tracking
 
@@ -64,28 +62,9 @@ const schema = a
         index('receiverId').sortKeys(['requestedAt']),
       ]),
 
-    // Track when users can reconnect after ending chats (2-week restriction)
-    ChatRestriction: a
-      .model({
-        id: a.id().required(),
-        user1Id: a.string().required(), // First user involved in ended chat
-        user2Id: a.string().required(), // Second user involved in ended chat
-        endedConversationId: a.id().required(), // Reference to the ended conversation
-        restrictionEndsAt: a.datetime().required(), // When users can send new chat requests (2 weeks from end)
-        createdAt: a.datetime().required(),
-        // TTL field - remove restriction after it expires
-        expiresAt: a.datetime(), // Same as restrictionEndsAt for cleanup
-      })
-      .authorization(allow => [allow.authenticated()])
-      .secondaryIndexes(index => [
-        // Find restrictions for a user pair
-        index('user1Id').sortKeys(['user2Id']),
-        index('user2Id').sortKeys(['user1Id']),
-        // Find all restrictions ending soon for cleanup
-        index('restrictionEndsAt'),
-      ]),
 
-    // Request to connect permanently (Step 2 - during chat)
+
+    // User connections (optional - can be used for friendship/networking features)
     UserConnection: a
       .model({
         id: a.id().required(),
@@ -95,8 +74,7 @@ const schema = a
         status: a.enum(['PENDING', 'ACCEPTED', 'REJECTED']),
         requestedAt: a.datetime(),
         respondedAt: a.datetime(),
-        // Connection requests are tied to the conversation's 7-day period
-        expiresAt: a.datetime(), // TTL field - expires with the conversation
+        // Connection requests are permanent (no expiry)
       })
       .authorization(allow => [allow.authenticated()])
       .secondaryIndexes(index => [
@@ -105,28 +83,22 @@ const schema = a
         index('conversationId'), // Find connection request for a specific conversation
       ]),
 
-    // Conversation between two users
+    // Conversation between two users (always permanent)
     Conversation: a
       .model({
         id: a.id().required(),
         // The two participants in the conversation
         participant1Id: a.string().required(),
         participant2Id: a.string().required(),
-        // Connection status affects data retention
-        isConnected: a.boolean().default(false), // Based on UserConnection acceptance
+        // All conversations are permanent by default
+        isConnected: a.boolean().default(true), // Always connected from the start
         // Conversation metadata
         lastMessageAt: a.datetime(),
         lastMessageContent: a.string(), // Preview of last message
         lastMessageSenderId: a.string(), // Who sent the last message
         createdAt: a.datetime(),
         updatedAt: a.datetime(),
-        // Note: Conversations are now permanent and never auto-deleted
-        // Enhanced probation period management
-        probationEndsAt: a.datetime(), // When the 7-day probation period ends (for UI countdown)
-        chatStatus: a.enum(['ACTIVE', 'PROBATION', 'ENDED']),
-        // Track who ended the chat (for different UI behavior)
-        endedByUserId: a.string(), // Optional: who clicked "End chat now"
-        endedAt: a.datetime(), // When chat was manually ended
+        // Note: All conversations are permanent and never auto-deleted
         // Multi-user authorization: both participants can access
         participants: a.string().array(),
       })
@@ -162,7 +134,7 @@ const schema = a
         deletedAt: a.datetime(),
         // Reply functionality
         replyToMessageId: a.id(),
-        // Note: Messages are now permanent and never auto-deleted
+        // All messages are permanent and never auto-deleted
         // Multi-user authorization: both sender and receiver can access
         participants: a.string().array(),
       })
@@ -185,7 +157,7 @@ const schema = a
         userId: a.string().required(),
         emoji: a.string().required(), // The emoji character
         timestamp: a.datetime().required(),
-        // Note: Reactions are now permanent and never auto-deleted
+        // All reactions are permanent and never auto-deleted
         // Multi-user authorization: all participants can see reactions
         participants: a.string().array(),
       })
@@ -314,7 +286,7 @@ export const data = defineData({
 
 /*== LOOPN USER FLOW IMPLEMENTATION ====================================
 
-STEP 1: Starting a Chat
+STEP 1: Starting a Chat (Simplified)
 ```typescript
 // User finds a designer and sends chat request
 const sendChatRequest = async (designerId: string) => {
@@ -328,7 +300,7 @@ const sendChatRequest = async (designerId: string) => {
   });
 };
 
-// Designer accepts chat request
+// Designer accepts chat request - creates permanent conversation immediately
 const acceptChatRequest = async (chatRequestId: string, requesterId: string, receiverId: string) => {
   // Update chat request
   await client.models.ChatRequest.update({
@@ -337,110 +309,47 @@ const acceptChatRequest = async (chatRequestId: string, requesterId: string, rec
     respondedAt: new Date().toISOString()
   });
   
-  // Create conversation with 7-day probation
-  const probationEndsAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
-  
+  // Create permanent conversation immediately
   await client.models.Conversation.create({
     participant1Id: requesterId,
     participant2Id: receiverId,
-    isConnected: false,
-    chatStatus: 'ACTIVE',
-    probationEndsAt: probationEndsAt.toISOString()
+    isConnected: true, // Always connected from the start
+    participants: [requesterId, receiverId],
+    createdAt: new Date().toISOString()
   });
 };
 ```
 
-STEP 2: Probation Period UI Management
+STEP 2: Permanent Chat Management (Simplified)
 ```typescript
-// Get probation time remaining for UI countdown
-const getProbationTimeRemaining = (conversation: Conversation) => {
-  if (conversation.isConnected || conversation.chatStatus === 'ENDED') {
-    return null; // No probation period
-  }
-  
-  const now = new Date();
-  const probationEnd = new Date(conversation.probationEndsAt);
-  const timeRemaining = probationEnd.getTime() - now.getTime();
-  
-  if (timeRemaining <= 0) {
-    return 'Expired';
-  }
-  
-  const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-  
-  return { days, hours, minutes };
-};
+// All conversations are permanent - no probation period needed!
+// Users can chat immediately and indefinitely
 
-// Continue probation period (reset 7 days)
-const continueProbation = async (conversationId: string) => {
-  const newProbationEnd = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // Reset to 7 days
-  
-  await client.models.Conversation.update({
-    id: conversationId,
-    probationEndsAt: newProbationEnd.toISOString(),
-    chatStatus: 'ACTIVE' // Reset to active if it was in probation
-  });
-};
-
-// End chat immediately (user choice)
-const endChatNow = async (conversationId: string) => {
-  await client.models.Conversation.update({
-    id: conversationId,
-    chatStatus: 'ENDED',
-    endedByUserId: currentUser.userId,
-    endedAt: new Date().toISOString()
-    // Note: Chat data is now permanent and never auto-deleted
-  });
-};
-
-// UI Component Example for Probation Buttons
-const ProbationControls = ({ conversation }) => {
-  const timeRemaining = getProbationTimeRemaining(conversation);
-  
-  if (conversation.isConnected) {
-    return <div>✅ Connected - Chat forever!</div>;
-  }
-  
-  if (conversation.chatStatus === 'ENDED') {
-    return <div>💔 Chat ended. Data will be deleted soon.</div>;
-  }
-  
+// Simple UI Component for Connected Status
+const ConnectionStatus = ({ conversation }) => {
   return (
-    <div className="probation-controls">
-      <div className="countdown">
-        ⏰ Probation ends in: {timeRemaining.days}d {timeRemaining.hours}h {timeRemaining.minutes}m
-      </div>
-      <div className="buttons">
-        <button onClick={() => continueProbation(conversation.id)}>
-          🔄 Continue 7 days probation
-        </button>
-        <button onClick={() => endChatNow(conversation.id)}>
-          ❌ End chat now
-        </button>
-      </div>
+    <div className="connection-status">
+      <div>✅ Connected - Chat anytime!</div>
     </div>
   );
 };
 ```
 
-STEP 3: During Chat - Connection Request
+STEP 3: Optional Connection Enhancement (Future Feature)
 ```typescript
-// Either user can send connection request during chat
+// Optional: Users can send connection requests for networking/friendship
+// Note: All chats are already permanent, this is just for social features
+
 const sendConnectionRequest = async (conversationId: string, receiverId: string) => {
-  // Get conversation expiry to set same expiry for connection request
-  const conversation = await client.models.Conversation.get({ id: conversationId });
-  
   await client.models.UserConnection.create({
     requesterId: currentUser.userId,
     receiverId,
     conversationId,
-    status: 'PENDING'
-    // Note: UserConnections are now permanent (no TTL)
+    status: 'PENDING',
+    requestedAt: new Date().toISOString()
   });
   
-  // Send system message to chat
+  // Optional: Send system message to chat
   await client.models.Message.create({
     conversationId,
     senderId: 'SYSTEM',
@@ -451,75 +360,48 @@ const sendConnectionRequest = async (conversationId: string, receiverId: string)
   });
 };
 
-// Accept connection request - make chat permanent
-const acceptConnectionRequest = async (connectionRequestId: string, conversationId: string) => {
-  // Update connection request
+// Accept connection request - enhances relationship status
+const acceptConnectionRequest = async (connectionRequestId: string) => {
   await client.models.UserConnection.update({
     id: connectionRequestId,
     status: 'ACCEPTED',
     respondedAt: new Date().toISOString()
   });
   
-  // Make conversation permanent
-  await client.models.Conversation.update({
-    id: conversationId,
-    isConnected: true,
-    probationEndsAt: null, // No more probation period
-    chatStatus: 'ACTIVE'
-  });
-  
-  // Note: Messages are now permanent by default (no TTL removal needed)
+  // Note: Conversation is already permanent, this just updates connection status
 };
 ```
 
-STEP 4: Enhanced Message Sending Logic
+STEP 4: Simplified Message Sending Logic
 ```typescript
-// Check if users can send messages with enhanced logic
+// Simple check - users can always send messages in permanent conversations
 const canSendMessage = async (conversationId: string, receiverId: string) => {
   const conversation = await client.models.Conversation.get({ id: conversationId });
   
-  // Connected users can always chat
-  if (conversation.isConnected) {
-    return { allowed: true, reason: 'Connected' };
+  // All conversations are permanent and active
+  if (conversation && conversation.isConnected) {
+    return { allowed: true, reason: 'Permanent connection' };
   }
   
-  // Chat was manually ended
-  if (conversation.chatStatus === 'ENDED') {
-    return { allowed: false, reason: 'Chat was ended' };
-  }
-  
-  // Check if probation period expired
-  const now = new Date();
-  const probationEnd = new Date(conversation.probationEndsAt);
-  if (now > probationEnd) {
-    return { allowed: false, reason: 'Probation period expired' };
-  }
-  
-  // During active probation period
-  if (conversation.chatStatus === 'ACTIVE') {
-    return { allowed: true, reason: 'Active probation period' };
-  }
-  
-  // Default fallback
-  return { allowed: false, reason: 'Unknown status' };
+  // Default fallback (should rarely happen)
+  return { allowed: false, reason: 'Conversation not found' };
 };
 ```
 
-DATA RETENTION POLICY:
+DATA RETENTION POLICY (SIMPLIFIED):
 - Chat requests: 24 hours if no response (TTL)
-- ChatRestrictions: 2 weeks after chat ends (TTL)
 - Conversations: Permanent (never deleted)
 - Messages: Permanent (never deleted)
 - Reactions: Permanent (never deleted)
 - UserConnections: Permanent (never deleted)
 - Notifications: 30 days (TTL)
 
-ENHANCED PROBATION FEATURES:
-- ⏰ Real-time countdown timer showing time left
-- 🔄 "Continue 7 days probation" button (resets timer)
-- ❌ "End chat now" button (immediate termination)
-- 📊 Track who ended the chat and when
-- 🎯 Better user control over chat lifecycle
+PERMANENT CONNECTION FEATURES:
+- ✅ Immediate permanent connections upon chat request acceptance
+- 💬 No time limits or restrictions on conversations
+- 📱 Simple, user-friendly chat experience
+- 🔄 All chat history preserved indefinitely
+- 🎯 Focus on meaningful long-term conversations
 =========================================================================*/
 
 /*== TODO: FUTURE FEATURES ==============================================
