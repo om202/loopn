@@ -4,8 +4,8 @@
   <circle cx="110" cy="110" r="80" fill="#e5e5e5" />
 
   <!-- Left brand blue circle (brand-500) -->
-  <circle cx="75" cy="110" r="35" fill="oklch(0.56 0.17 260.16)" />
+  <circle cx="75" cy="110" r="35" fill="oklch(0.6474 0.26 258)" />
 
   <!-- Right brand blue circle (brand-500) -->
-  <circle cx="145" cy="110" r="35" fill="oklch(0.56 0.17 260.16)" />
+  <circle cx="145" cy="110" r="35" fill="oklch(0.6474 0.26 258)" />
 </svg> 
