@@ -192,7 +192,7 @@ export default function IntelligentSearch({
       <div className='relative'>
         <div className='relative'>
           <div className='absolute left-2 top-1/2 transform -translate-y-1/2 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-sm'>
-            <UserRoundSearch className='text-brand-600 w-5 h-5' />
+            <UserRoundSearch className='text-brand-500 w-5 h-5' />
           </div>
           <input
             ref={inputRef}
@@ -231,7 +231,7 @@ export default function IntelligentSearch({
         {showFilters && (
           <button
             onClick={() => setShowFiltersPanel(!showFiltersPanel)}
-            className='mt-2 text-sm text-brand-600 hover:text-brand-700'
+            className='mt-2 text-sm text-brand-500 hover:text-brand-700'
           >
             {showFiltersPanel ? 'Hide Filters' : 'Show Filters'}
           </button>
@@ -381,7 +381,7 @@ export default function IntelligentSearch({
                             />
                           ) : (
                             <div className='w-12 h-12 bg-brand-100 rounded-full flex items-center justify-center'>
-                              <User className='w-6 h-6 text-brand-600' />
+                              <User className='w-6 h-6 text-brand-500' />
                             </div>
                           )}
                         </div>

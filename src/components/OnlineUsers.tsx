@@ -16,7 +16,6 @@ import {
   DashboardSectionContent,
   NotificationsContent,
   AccountContent,
-  HelpContent,
 } from './dashboard';
 import SearchUser from './SearchUser';
 import BugReportDialog from './BugReportDialog';
@@ -44,7 +43,6 @@ type SidebarSection =
   | 'suggested'
   | 'search'
   | 'notifications'
-  | 'help'
   | 'account';
 
 export default function OnlineUsers({
@@ -602,20 +600,14 @@ export default function OnlineUsers({
               {centralizedNotifications.length > 0 && (
                 <button
                   onClick={handleMarkAllAsRead}
-                  className='text-sm text-brand-600 hover:text-brand-700 font-medium py-2 px-3 rounded-lg hover:bg-brand-50 transition-colors ml-4 flex-shrink-0'
+                  className='text-sm text-brand-500 hover:text-brand-700 font-medium py-2 px-3 rounded-lg hover:bg-brand-50 transition-colors ml-4 flex-shrink-0'
                 >
                   Mark all as read
                 </button>
               )}
             </div>
           )}
-          {activeSection === 'help' && (
-            <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-black'>
-                Help Center
-              </h2>
-            </div>
-          )}
+
           {activeSection === 'account' && (
             <div className='flex items-start justify-between'>
               <div>
@@ -694,8 +686,6 @@ export default function OnlineUsers({
           >
             {activeSection === 'notifications' ? (
               <NotificationsContent />
-            ) : activeSection === 'help' ? (
-              <HelpContent onOpenBugReport={() => setIsBugReportOpen(true)} />
             ) : activeSection === 'account' ? (
               <AccountContent />
             ) : (

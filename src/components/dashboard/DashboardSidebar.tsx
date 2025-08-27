@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { MessageSquare, Compass, Users, HelpCircle, Bug } from 'lucide-react';
+import { MessageSquare, Compass, Users, Bug } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAuthenticator } from '@aws-amplify/ui-react';
@@ -19,7 +19,6 @@ type SidebarSection =
   | 'suggested'
   | 'search'
   | 'notifications'
-  | 'help'
   | 'account';
 
 interface DashboardSidebarProps {
@@ -106,12 +105,7 @@ export default function DashboardSidebar({
     },
   ];
 
-  const helpItem = {
-    id: 'help' as const,
-    icon: HelpCircle,
-    label: 'Help & Support',
-    count: 0,
-  };
+
 
   const accountItem = {
     id: 'account' as const,
@@ -140,7 +134,7 @@ export default function DashboardSidebar({
                   priority
                 />
                 <div className='flex items-center gap-2'>
-                  <h1 className='text-[26px] font-bold text-brand-600'>
+                  <h1 className='text-[26px] font-bold text-brand-500'>
                     Loopn
                   </h1>
                 </div>
@@ -157,7 +151,7 @@ export default function DashboardSidebar({
                   onClick={() => onSectionChange(id)}
                   className={`relative w-full flex items-center gap-3 px-2 py-2 rounded-lg text-left group transition-colors ${
                     activeSection === id
-                      ? 'text-brand-600 bg-brand-50 font-medium'
+                      ? 'text-brand-500 bg-brand-50 font-medium'
                       : 'text-black hover:bg-slate-50'
                   }`}
                 >
@@ -182,9 +176,9 @@ export default function DashboardSidebar({
                       })
                     )}
                   </div>
-                  <span className='flex-1 flex items-center justify-between'>
+                  <span className='flex-1 flex items-center justify-between min-w-0'>
                     <span
-                      className={`text-base ${activeSection === id ? 'font-medium' : ''}`}
+                      className={`text-base truncate ${activeSection === id ? 'font-medium' : ''}`}
                     >
                       {label}
                     </span>
@@ -199,34 +193,15 @@ export default function DashboardSidebar({
             </div>
           </nav>
 
-          {/* Help and Account buttons at bottom */}
+          {/* Account and utility buttons at bottom */}
           <div className='border-t border-slate-100 px-3 py-2 space-y-2'>
-            {/* Help Button */}
-            <button
-              onClick={() => onSectionChange(helpItem.id)}
-              className={`relative w-full flex items-center gap-3 px-2 py-2 rounded-lg text-left group transition-colors ${
-                activeSection === helpItem.id
-                  ? 'text-brand-600 bg-brand-50 font-medium'
-                  : 'text-black hover:bg-slate-50'
-              }`}
-            >
-              <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
-                <HelpCircle className='w-5 h-5' />
-              </div>
-              <span
-                className={`text-sm ${activeSection === helpItem.id ? 'font-medium' : ''}`}
-              >
-                {helpItem.label}
-              </span>
-            </button>
-
             {/* Bug Report Button */}
             <button
               onClick={() => setIsBugReportOpen(true)}
               className='relative w-full flex items-center gap-3 px-2 py-2 rounded-lg text-left group transition-colors text-black hover:bg-slate-50'
             >
               <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
-                <Bug className='w-5 h-5' />
+                <Bug className='w-4 h-4' />
               </div>
               <span className='text-sm'>Report Bug</span>
             </button>
@@ -236,7 +211,7 @@ export default function DashboardSidebar({
               onClick={() => onSectionChange(accountItem.id)}
               className={`relative w-full flex items-center gap-3 px-2 py-2 rounded-lg text-left group transition-colors ${
                 activeSection === accountItem.id
-                  ? 'text-brand-600 bg-brand-50 font-medium'
+                  ? 'text-brand-500 bg-brand-50 font-medium'
                   : 'text-black hover:bg-slate-50'
               }`}
             >
@@ -253,12 +228,11 @@ export default function DashboardSidebar({
                     !!onboardingStatus?.onboardingData?.profilePictureUrl
                   }
                   size='sm'
-                  showStatus={true}
-                  status='ONLINE'
+                  showStatus={false}
                 />
               </div>
-              <div className='flex-1'>
-                <div className={`text-black text-sm font-bold`}>
+              <div className='flex-1 min-w-0'>
+                <div className={`text-black text-sm font-medium truncate`}>
                   {accountItem.label}
                 </div>
                 <div className='text-sm text-slate-500'>Account</div>
@@ -282,7 +256,7 @@ export default function DashboardSidebar({
                 onClick={() => onSectionChange(id)}
                 className={`relative flex-1 flex flex-col items-center justify-center gap-1 px-1 py-2 transition-colors duration-150 ${
                   activeSection === id
-                    ? 'text-brand-600'
+                    ? 'text-brand-500'
                     : 'text-black hover:text-black'
                 }`}
                 title={label}
@@ -325,8 +299,7 @@ export default function DashboardSidebar({
                           !!onboardingStatus?.onboardingData?.profilePictureUrl
                         }
                         size='sm'
-                        showStatus={true}
-                        status='ONLINE'
+                        showStatus={false}
                       />
                     </div>
                   ) : (

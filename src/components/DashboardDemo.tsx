@@ -5,7 +5,6 @@ import {
   CheckCircle2,
   Users,
   Compass,
-  HelpCircle,
   Bell,
   Search,
   User,
@@ -14,9 +13,6 @@ import {
   GraduationCap,
   Award,
   Target,
-  Shield,
-  Globe,
-  Bug,
   UserRoundSearch,
 } from 'lucide-react';
 import Image from 'next/image';
@@ -173,7 +169,6 @@ type SectionType =
   | 'connections'
   | 'chats'
   | 'notifications'
-  | 'help'
   | 'account'
   | 'search';
 
@@ -211,8 +206,6 @@ export default function DashboardDemo() {
         return renderChatsSection();
       case 'notifications':
         return renderNotificationsSection();
-      case 'help':
-        return renderHelpSection();
       case 'account':
         return renderAccountSection();
       case 'search':
@@ -259,8 +252,8 @@ export default function DashboardDemo() {
               </div>
 
               <div className='flex-shrink-0 flex items-center gap-1.5'>
-                <button className='px-2 py-1.5 text-base font-medium rounded-xl border transition-colors flex items-center justify-center flex-shrink-0 w-[40px] h-[40px] md:w-auto md:h-auto md:gap-1.5 md:min-w-[44px] bg-brand-50 text-brand-600 border-brand-200 hover:bg-brand-50 hover:border-brand-200'>
-                  <CheckCircle2 className='w-4 h-4 text-brand-600 flex-shrink-0' />
+                <button className='px-2 py-1.5 text-base font-medium rounded-xl border transition-colors flex items-center justify-center flex-shrink-0 w-[40px] h-[40px] md:w-auto md:h-auto md:gap-1.5 md:min-w-[44px] bg-brand-50 text-brand-500 border-brand-200 hover:bg-brand-50 hover:border-brand-200'>
+                  <CheckCircle2 className='w-4 h-4 text-brand-500 flex-shrink-0' />
                   <span className='hidden md:inline text-base font-medium'>
                     Connect
                   </span>
@@ -311,7 +304,7 @@ export default function DashboardDemo() {
               </div>
 
               <div className='flex-shrink-0 flex items-center gap-2'>
-                <button className='p-2 text-brand-600 hover:bg-brand-50 rounded-lg transition-colors'>
+                <button className='p-2 text-brand-500 hover:bg-brand-50 rounded-lg transition-colors'>
                   <MessageSquare className='w-5 h-5' />
                 </button>
                 <button className='p-2 text-slate-500 hover:bg-slate-100 rounded-lg transition-colors'>
@@ -417,65 +410,7 @@ export default function DashboardDemo() {
     </div>
   );
 
-  const renderHelpSection = () => (
-    <div className='flex-1 overflow-y-auto'>
-      <div className='space-y-6'>
-        <div className='text-center py-8'>
-          <div className='w-16 h-16 mx-auto mb-4 bg-brand-50 rounded-full flex items-center justify-center'>
-            <HelpCircle className='w-8 h-8 text-brand-600' />
-          </div>
-          <h3 className='text-lg font-medium text-black mb-2'>
-            Help & Support
-          </h3>
-          <p className='text-slate-500'>Get help with using Loopn</p>
-        </div>
 
-        <div className='space-y-3'>
-          <div className='p-4 bg-white border border-slate-200 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer'>
-            <div className='flex items-center gap-2'>
-              <div className='w-10 h-10 bg-brand-100 rounded-lg flex items-center justify-center'>
-                <Globe className='w-5 h-5 text-brand-600' />
-              </div>
-              <div>
-                <div className='font-medium text-black'>Getting Started</div>
-                <div className='text-sm text-slate-500'>
-                  Learn the basics of Loopn
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className='p-4 bg-white border border-slate-200 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer'>
-            <div className='flex items-center gap-2'>
-              <div className='w-10 h-10 bg-b_green-100 rounded-lg flex items-center justify-center'>
-                <MessageSquare className='w-5 h-5 text-b_green-600' />
-              </div>
-              <div>
-                <div className='font-medium text-black'>Chat Features</div>
-                <div className='text-sm text-slate-500'>
-                  How to use messaging and connections
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className='p-4 bg-white border border-slate-200 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer'>
-            <div className='flex items-center gap-2'>
-              <div className='w-10 h-10 bg-brand-100 rounded-lg flex items-center justify-center'>
-                <Shield className='w-5 h-5 text-brand-600' />
-              </div>
-              <div>
-                <div className='font-medium text-black'>Privacy & Safety</div>
-                <div className='text-sm text-slate-500'>
-                  Keep your account secure
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
 
   const renderAccountSection = () => (
     <div className='flex-1 overflow-y-auto'>
@@ -532,7 +467,7 @@ export default function DashboardDemo() {
               {currentUser.skills.map((skill, index) => (
                 <span
                   key={index}
-                  className='px-3 py-1 bg-brand-50 text-brand-600 text-sm rounded-full font-medium'
+                  className='px-3 py-1 bg-brand-50 text-brand-500 text-sm rounded-full font-medium'
                 >
                   {skill}
                 </span>
@@ -613,7 +548,7 @@ export default function DashboardDemo() {
                     {user.skills.slice(0, 3).map((skill, idx) => (
                       <span
                         key={idx}
-                        className='bg-brand-50 text-brand-600 text-sm px-2 py-0.5 rounded-full font-medium'
+                        className='bg-brand-50 text-brand-500 text-sm px-2 py-0.5 rounded-full font-medium'
                       >
                         {skill}
                       </span>
@@ -638,8 +573,8 @@ export default function DashboardDemo() {
     <div className='bg-white md:rounded-2xl shadow-xl border border-slate-200 md:max-w-7xl md:mx-auto overflow-hidden w-full p-4'>
       {/* Interactive Demo Header */}
       <div className='text-center mb-4 flex items-center justify-center gap-2'>
-        <Target className='w-4 h-4 text-brand-600' />
-        <span className='text-brand-600 font-semibold text-sm'>
+        <Target className='w-4 h-4 text-brand-500' />
+        <span className='text-brand-500 font-semibold text-sm'>
           Interactive Demo
         </span>
       </div>
@@ -674,7 +609,7 @@ export default function DashboardDemo() {
                 onClick={() => setActiveSection('discover')}
                 className={`relative w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                   activeSection === 'discover'
-                    ? 'bg-brand-50 text-brand-600 border-brand-200'
+                    ? 'bg-brand-50 text-brand-500 border-brand-200'
                     : 'text-black hover:bg-slate-100 hover:text-black border-transparent'
                 }`}
               >
@@ -691,7 +626,7 @@ export default function DashboardDemo() {
                 onClick={() => setActiveSection('connections')}
                 className={`relative w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                   activeSection === 'connections'
-                    ? 'bg-brand-50 text-brand-600 border-brand-200'
+                    ? 'bg-brand-50 text-brand-500 border-brand-200'
                     : 'text-black hover:bg-slate-100 hover:text-black border-transparent'
                 }`}
               >
@@ -711,7 +646,7 @@ export default function DashboardDemo() {
                 onClick={() => setActiveSection('chats')}
                 className={`relative w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                   activeSection === 'chats'
-                    ? 'bg-brand-50 text-brand-600 border-brand-200'
+                    ? 'bg-brand-50 text-brand-500 border-brand-200'
                     : 'text-black hover:bg-slate-100 hover:text-black border-transparent'
                 }`}
               >
@@ -720,7 +655,7 @@ export default function DashboardDemo() {
                 </div>
                 <span className='font-medium text-base flex-1 flex items-center gap-2'>
                   Chats
-                  <span className='text-sm font-bold flex items-center justify-center h-5 w-5 rounded-full text-center bg-brand-50 text-brand-600'>
+                  <span className='text-sm font-bold flex items-center justify-center h-5 w-5 rounded-full text-center bg-brand-50 text-brand-500'>
                     {dummyUsers
                       .filter(u => u.unreadCount > 0)
                       .reduce((sum, u) => sum + u.unreadCount, 0)}
@@ -733,7 +668,7 @@ export default function DashboardDemo() {
                 onClick={() => setActiveSection('notifications')}
                 className={`relative w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                   activeSection === 'notifications'
-                    ? 'bg-brand-50 text-brand-600 border-brand-200'
+                    ? 'bg-brand-50 text-brand-500 border-brand-200'
                     : 'text-black hover:bg-slate-100 hover:text-black border-transparent'
                 }`}
               >
@@ -742,7 +677,7 @@ export default function DashboardDemo() {
                 </div>
                 <span className='font-medium text-base flex-1 flex items-center gap-2'>
                   Notifications
-                  <span className='text-sm font-bold flex items-center justify-center h-6 w-6 rounded-full text-center bg-brand-50 text-brand-600 border border-brand-200'>
+                  <span className='text-sm font-bold flex items-center justify-center h-6 w-6 rounded-full text-center bg-brand-50 text-brand-500 border border-brand-200'>
                     {dummyNotifications.filter(n => !n.isRead).length}
                   </span>
                 </span>
@@ -750,37 +685,15 @@ export default function DashboardDemo() {
             </div>
           </nav>
 
-          {/* Help and Account buttons at bottom */}
+          {/* Account buttons at bottom */}
           <div className='border-t border-slate-200 p-2 space-y-1'>
-            {/* Help Button */}
-            <div className='flex items-center gap-2'>
-              <button
-                onClick={() => setActiveSection('help')}
-                className={`relative flex-1 flex items-center gap-2 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
-                  activeSection === 'help'
-                    ? 'bg-brand-50 text-brand-600 border-brand-200'
-                    : 'text-black hover:bg-slate-100 hover:text-black border-transparent'
-                }`}
-              >
-                <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
-                  <HelpCircle className='w-5 h-5' />
-                </div>
-                <span className='font-medium text-base flex-1'>
-                  Help & Support
-                </span>
-              </button>
-
-              <button className='p-2 text-slate-500 hover:text-black hover:bg-slate-100 rounded-lg transition-colors border border-transparent hover:border-slate-200'>
-                <Bug className='w-4 h-4' />
-              </button>
-            </div>
 
             {/* Account Button */}
             <button
               onClick={() => setActiveSection('account')}
               className={`relative w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                 activeSection === 'account'
-                  ? 'bg-brand-50 text-brand-600 border-brand-200'
+                  ? 'bg-brand-50 text-brand-500 border-brand-200'
                   : 'text-black hover:bg-slate-100 hover:text-black border-transparent'
               }`}
             >
@@ -828,7 +741,7 @@ export default function DashboardDemo() {
                   className='absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full hover:bg-slate-50 flex items-center justify-center transition-colors duration-150 shadow-sm'
                 >
                   <svg
-                    className='w-5 h-5 text-brand-600'
+                    className='w-5 h-5 text-brand-500'
                     fill='none'
                     stroke='currentColor'
                     viewBox='0 0 24 24'
@@ -883,16 +796,7 @@ export default function DashboardDemo() {
                 </p>
               </>
             )}
-            {activeSection === 'help' && (
-              <>
-                <h2 className='text-xl font-bold text-black mb-1'>
-                  Help & Support
-                </h2>
-                <p className='text-sm text-slate-500'>
-                  Get help with using Loopn
-                </p>
-              </>
-            )}
+
             {activeSection === 'account' && (
               <>
                 <h2 className='text-xl font-bold text-black mb-1'>
@@ -975,7 +879,7 @@ export default function DashboardDemo() {
             onClick={() => setActiveSection('discover')}
             className={`flex-1 px-3 py-3 text-center text-sm font-medium ${
               activeSection === 'discover'
-                ? 'text-brand-600 bg-white border-b-2 border-brand-500'
+                ? 'text-brand-500 bg-white border-b-2 border-brand-500'
                 : 'text-slate-500'
             }`}
           >
@@ -985,7 +889,7 @@ export default function DashboardDemo() {
             onClick={() => setActiveSection('connections')}
             className={`flex-1 px-3 py-3 text-center text-sm font-medium ${
               activeSection === 'connections'
-                ? 'text-brand-600 bg-white border-b-2 border-brand-500'
+                ? 'text-brand-500 bg-white border-b-2 border-brand-500'
                 : 'text-slate-500'
             }`}
           >
@@ -995,7 +899,7 @@ export default function DashboardDemo() {
             onClick={() => setActiveSection('notifications')}
             className={`flex-1 px-3 py-3 text-center text-sm font-medium relative ${
               activeSection === 'notifications'
-                ? 'text-brand-600 bg-white border-b-2 border-brand-500'
+                ? 'text-brand-500 bg-white border-b-2 border-brand-500'
                 : 'text-slate-500'
             }`}
           >
@@ -1012,7 +916,7 @@ export default function DashboardDemo() {
             onClick={() => setActiveSection('chats')}
             className={`flex-1 px-3 py-3 text-center text-sm font-medium ${
               activeSection === 'chats'
-                ? 'text-brand-600 bg-white border-b-2 border-brand-500'
+                ? 'text-brand-500 bg-white border-b-2 border-brand-500'
                 : 'text-slate-500'
             }`}
           >
@@ -1134,8 +1038,8 @@ export default function DashboardDemo() {
                     </div>
 
                     <div className='flex-shrink-0'>
-                      <button className='px-3 py-2 text-sm font-medium rounded-lg border transition-colors bg-white text-brand-600 border-slate-200 hover:bg-brand-50 hover:border-slate-200 flex items-center gap-1.5'>
-                        <CheckCircle2 className='w-3 h-3 text-brand-600 flex-shrink-0' />
+                      <button className='px-3 py-2 text-sm font-medium rounded-lg border transition-colors bg-white text-brand-500 border-slate-200 hover:bg-brand-50 hover:border-slate-200 flex items-center gap-1.5'>
+                        <CheckCircle2 className='w-3 h-3 text-brand-500 flex-shrink-0' />
                         Connect
                       </button>
                     </div>
@@ -1178,7 +1082,7 @@ export default function DashboardDemo() {
                     </div>
 
                     <div className='flex-shrink-0'>
-                      <button className='p-2 text-brand-600 hover:bg-brand-50 rounded-lg transition-colors'>
+                      <button className='p-2 text-brand-500 hover:bg-brand-50 rounded-lg transition-colors'>
                         <MessageSquare className='w-4 h-4' />
                       </button>
                     </div>
