@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { MessageSquare, Compass, Users, Bug } from 'lucide-react';
+import { MessageSquare, Compass, Users, Bug, Bookmark } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAuthenticator } from '@aws-amplify/ui-react';
@@ -12,11 +12,13 @@ import BugReportDialog from '../BugReportDialog';
 import { useUserProfile } from '../../hooks/useUserProfile';
 import { useChatRequests } from '../../hooks/useChatRequests';
 import { useNotifications } from '../../hooks/useNotifications';
+import { useSavedUsers } from '../../hooks/useSavedUsers';
 
 type SidebarSection =
   | 'all'
   | 'connections'
   | 'suggested'
+  | 'saved'
   | 'search'
   | 'notifications'
   | 'account';
@@ -59,6 +61,12 @@ export default function DashboardSidebar({
     enabled: !!user?.userId,
   });
 
+  // Use our centralized saved users hook for count
+  const { savedCount } = useSavedUsers({
+    userId: user?.userId || '',
+    enabled: !!user?.userId,
+  });
+
   const getUserEmail = () => {
     return user?.signInDetails?.loginId || 'user@example.com';
   };
@@ -84,6 +92,12 @@ export default function DashboardSidebar({
       icon: Compass,
       label: 'Discover',
       count: suggestedUsersCount,
+    },
+    {
+      id: 'saved' as const,
+      icon: Bookmark,
+      label: 'Saved',
+      count: savedCount,
     },
     {
       id: 'connections' as const,
@@ -314,11 +328,13 @@ export default function DashboardSidebar({
                     ? 'You'
                     : id === 'suggested'
                       ? 'Discover'
-                      : id === 'connections'
-                        ? 'Connect'
-                        : id === 'notifications'
-                          ? 'Notify'
-                          : label}
+                      : id === 'saved'
+                        ? 'Saved'
+                        : id === 'connections'
+                          ? 'Connect'
+                          : id === 'notifications'
+                            ? 'Notify'
+                            : label}
                 </div>
               </button>
             ))}

@@ -68,7 +68,10 @@ export function useSavedUsers({
       if (!userId || !enabled) return false;
 
       try {
-        const result = await savedUserService.toggleSaveUser(userId, targetUserId);
+        const result = await savedUserService.toggleSaveUser(
+          userId,
+          targetUserId
+        );
         if (result.error) {
           console.error('Error toggling save status:', result.error);
           return false;
@@ -90,7 +93,7 @@ export function useSavedUsers({
           }
         } else {
           // Remove from saved users
-          setSavedUsers(prev => 
+          setSavedUsers(prev =>
             prev.filter(user => user.savedUserId !== targetUserId)
           );
         }
