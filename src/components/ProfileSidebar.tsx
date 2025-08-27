@@ -1,6 +1,20 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+
+// Custom Connect Icon using circles from logo
+const ConnectIcon = ({ className }: { className?: string }) => (
+  <svg
+    width='20'
+    height='20'
+    viewBox='0 0 20 20'
+    className={className}
+    fill='currentColor'
+  >
+    <circle cx='6' cy='10' r='4' />
+    <circle cx='14' cy='10' r='4' />
+  </svg>
+);
 import {
   ClockFading,
   ArrowLeft,
@@ -372,15 +386,7 @@ export default function ProfileSidebar({
               onClick={() => setShowRemoveConnectionDialog(true)}
               className='flex items-center gap-2 px-2 py-2 rounded-lg hover:bg-slate-100 transition-colors'
             >
-              <svg
-                className='w-5 h-5'
-                viewBox='30 30 160 160'
-                xmlns='http://www.w3.org/2000/svg'
-              >
-                <circle cx='110' cy='110' r='80' fill='#D9D9D9' />
-                <circle cx='75' cy='110' r='35' fill='#0099fc' />
-                <circle cx='145' cy='110' r='35' fill='#0099fc' />
-              </svg>
+              <ConnectIcon className='w-5 h-5 text-brand-600' />
               <span className='font-medium'>Connected</span>
             </button>
           </div>
