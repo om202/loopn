@@ -25,6 +25,7 @@ import { useOnlineUsers } from '../hooks/useOnlineUsers';
 import { useConversations } from '../hooks/useConversations';
 import { useChatRequests } from '../hooks/useChatRequests';
 import { useNotifications } from '../hooks/useNotifications';
+import { useSavedUsers } from '../hooks/useSavedUsers';
 import { notificationService } from '../services/notification.service';
 import { useSubscriptionStore } from '../stores/subscription-store';
 import { OnlineUsers_Shimmer, ShimmerProvider } from './ShimmerLoader/exports';
@@ -41,6 +42,7 @@ type SidebarSection =
   | 'all'
   | 'connections'
   | 'suggested'
+  | 'saved'
   | 'search'
   | 'notifications'
   | 'account';
@@ -115,6 +117,15 @@ export default function OnlineUsers({
     enabled: !!user?.userId,
   });
 
+  // Use saved users hook
+  const { 
+    savedUsers: savedUserEntries, 
+    isLoading: savedUsersLoading,
+  } = useSavedUsers({
+    userId: user?.userId || '',
+    enabled: !!user?.userId,
+  });
+
   // Combine real-time pending requests with optimistic updates
   const combinedPendingRequests = useMemo(() => {
     const combined = new Set([
@@ -147,6 +158,31 @@ export default function OnlineUsers({
   const onlineUsers = useMemo(() => {
     return allOnlineUsers.filter(u => u?.userId && u.userId !== user?.userId);
   }, [allOnlineUsers, user?.userId]);
+
+  // Convert saved user entries to UserPresence objects
+  const savedUsers = useMemo(() => {
+    return savedUserEntries
+      .map(entry => {
+        // Try to find the user in allUsers (includes online and conversation users)
+        const userPresence = allUsers.find(u => u.userId === entry.savedUserId);
+        if (userPresence) {
+          return userPresence;
+        }
+        // If not found in allUsers, create a basic UserPresence object
+        return {
+          userId: entry.savedUserId,
+          isOnline: false,
+          status: 'OFFLINE' as const,
+          lastSeen: null,
+          lastHeartbeat: null,
+          activeChatId: null,
+          lastChatActivity: null,
+          createdAt: entry.createdAt,
+          updatedAt: entry.updatedAt,
+        } as UserPresence;
+      })
+      .filter(savedUser => savedUser.userId !== user?.userId); // Exclude current user
+  }, [savedUserEntries, allUsers, user?.userId]);
 
   const initialLoading = onlineUsersLoading;
 
@@ -694,11 +730,14 @@ export default function OnlineUsers({
                 onlineUsers={userCategories.onlineUsers}
                 connectionUsers={userCategories.connectionUsers}
                 suggestedUsers={suggestedUsers}
+                savedUsers={savedUsers}
+                savedUsersLoading={savedUsersLoading}
                 suggestedUsersLoading={suggestedUsersLoading}
                 existingConversations={existingConversations}
                 pendingRequests={combinedPendingRequests}
                 optimisticPendingRequests={optimisticPendingRequests}
                 incomingRequestSenderIds={incomingRequestSenderIds}
+                currentUserId={user?.userId}
                 onChatAction={handleChatAction}
                 onCancelChatRequest={handleCancelChatRequest}
                 onAcceptChatRequest={handleAcceptChatRequest}

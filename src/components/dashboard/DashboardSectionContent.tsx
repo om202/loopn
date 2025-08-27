@@ -1,6 +1,6 @@
 'use client';
 
-import { MessageSquare, Sparkles, Users, Search } from 'lucide-react';
+import { MessageSquare, Sparkles, Users, Search, Bookmark } from 'lucide-react';
 
 import type { Schema } from '../../../amplify/data/resource';
 import { formatPresenceTime } from '../../lib/presence-utils';
@@ -11,18 +11,21 @@ import LoadingContainer from '../LoadingContainer';
 
 type UserPresence = Schema['UserPresence']['type'];
 type Conversation = Schema['Conversation']['type'];
-type SidebarSection = 'all' | 'connections' | 'suggested' | 'search';
+type SidebarSection = 'all' | 'connections' | 'suggested' | 'saved' | 'search';
 
 interface DashboardSectionContentProps {
   activeSection: SidebarSection;
   onlineUsers: UserPresence[];
   connectionUsers: UserPresence[];
   suggestedUsers: UserPresence[];
+  savedUsers?: UserPresence[];
+  savedUsersLoading?: boolean;
   suggestedUsersLoading?: boolean;
   existingConversations: Map<string, Conversation>;
   pendingRequests: Set<string>;
   optimisticPendingRequests: Set<string>;
   incomingRequestSenderIds: Set<string>;
+  currentUserId?: string;
   onChatAction: (userId: string) => void;
   onCancelChatRequest: (userId: string) => void;
   onAcceptChatRequest: (userId: string) => void;
@@ -43,11 +46,14 @@ export default function DashboardSectionContent({
   onlineUsers,
   connectionUsers,
   suggestedUsers,
+  savedUsers = [],
+  savedUsersLoading = false,
   suggestedUsersLoading = false,
   existingConversations,
   pendingRequests,
   optimisticPendingRequests,
   incomingRequestSenderIds,
+  currentUserId,
   onChatAction,
   onCancelChatRequest,
   onAcceptChatRequest,
@@ -86,6 +92,7 @@ export default function DashboardSectionContent({
       onUserCardClick={onUserCardClick}
       isProfileSidebarOpen={isProfileSidebarOpen}
       selectedUserId={selectedUserId}
+      currentUserId={currentUserId || ''}
     />
   );
 
@@ -172,6 +179,9 @@ export default function DashboardSectionContent({
       case 'suggested':
         users = suggestedUsers;
         break;
+      case 'saved':
+        users = savedUsers;
+        break;
       case 'search':
         return []; // Search section uses its own component
       case 'all':
@@ -200,6 +210,13 @@ export default function DashboardSectionContent({
           description: 'Find and connect with new people',
           emptyIcon: Sparkles,
           emptyMessage: 'No suggestions available',
+        };
+      case 'saved':
+        return {
+          title: 'Saved Users',
+          description: 'Users you have saved for quick access',
+          emptyIcon: Bookmark,
+          emptyMessage: 'No saved users yet',
         };
       case 'search':
         return {
@@ -253,6 +270,15 @@ export default function DashboardSectionContent({
 
   // Show loading state for suggested users
   if (activeSection === 'suggested' && suggestedUsersLoading) {
+    return (
+      <div className='flex items-center justify-center h-full w-full'>
+        <LoadingContainer />
+      </div>
+    );
+  }
+
+  // Show loading state for saved users
+  if (activeSection === 'saved' && savedUsersLoading) {
     return (
       <div className='flex items-center justify-center h-full w-full'>
         <LoadingContainer />
