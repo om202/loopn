@@ -156,7 +156,7 @@ export default function UserCard({
     <div
       key={userPresence.userId}
       onClick={handleCardClick}
-      className={`px-3 py-3 group transition-all duration-200 cursor-pointer ${
+      className={`px-3 py-3 group transition-all duration-200 cursor-pointer shadow-xs ${
         isSelected
           ? 'bg-brand-50 rounded-xl border border-brand-100'
           : 'bg-white hover:bg-slate-50 rounded-lg border border-slate-100 hover:border-brand-200'
@@ -187,7 +187,7 @@ export default function UserCard({
 
         <div className='flex-1 min-w-0'>
           <div className='flex items-center gap-2 mb-0.5'>
-            <div className='text-slate-950 truncate no-email-detection font-medium'>
+            <div className='text-black truncate no-email-detection font-medium'>
               {getDisplayName(userPresence, userProfile)}
             </div>
             {/* Show clock icon for temporary connections (active chat trials) */}
@@ -419,17 +419,17 @@ export default function UserCard({
         maxWidth='sm'
       >
         <div className='p-4'>
-          <h3 className='text-lg font-medium text-slate-950 text-center mb-3'>
+          <h3 className='text-lg font-medium text-black text-center mb-3'>
             Cancel Chat Request?
           </h3>
-          <p className='text-base text-slate-950 text-center mb-4'>
+          <p className='text-base text-black text-center mb-4'>
             This will cancel your pending chat request to{' '}
             {getDisplayName(userPresence, userProfile)}.
           </p>
           <div className='flex gap-2'>
             <button
               onClick={() => setShowCancelDialog(false)}
-              className='flex-1 px-3 py-2 text-base font-medium text-slate-950 bg-slate-100 rounded-lg hover:bg-slate-100 focus:outline-none transition-colors'
+              className='flex-1 px-3 py-2 text-base font-medium text-black bg-slate-100 rounded-lg hover:bg-slate-100 focus:outline-none transition-colors'
             >
               Done
             </button>

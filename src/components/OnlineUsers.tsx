@@ -609,7 +609,7 @@ export default function OnlineUsers({
           {activeSection === 'notifications' && (
             <div className='flex items-start justify-between'>
               <div>
-                <h2 className='text-2xl sm:text-2xl font-bold text-slate-950'>
+                <h2 className='text-2xl sm:text-2xl font-bold text-black'>
                   Recent Activity
                 </h2>
               </div>
@@ -625,7 +625,7 @@ export default function OnlineUsers({
           )}
           {activeSection === 'help' && (
             <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-slate-950'>
+              <h2 className='text-xl sm:text-2xl font-bold text-black'>
                 Help Center
               </h2>
             </div>
@@ -633,7 +633,7 @@ export default function OnlineUsers({
           {activeSection === 'account' && (
             <div className='flex items-start justify-between'>
               <div>
-                <h2 className='text-2xl sm:text-2xl font-bold text-slate-950'>
+                <h2 className='text-2xl sm:text-2xl font-bold text-black'>
                   Account Settings
                 </h2>
               </div>
@@ -647,28 +647,28 @@ export default function OnlineUsers({
           )}
           {activeSection === 'connections' && (
             <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-slate-950'>
+              <h2 className='text-xl sm:text-2xl font-bold text-black'>
                 My Connections
               </h2>
             </div>
           )}
           {activeSection === 'suggested' && (
             <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-slate-950'>
+              <h2 className='text-xl sm:text-2xl font-bold text-black'>
                 Discover Professionals
               </h2>
             </div>
           )}
           {activeSection === 'search' && (
             <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-slate-950'>
+              <h2 className='text-xl sm:text-2xl font-bold text-black'>
                 Search Professionals
               </h2>
             </div>
           )}
           {activeSection === 'all' && (
             <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-slate-950'>
+              <h2 className='text-xl sm:text-2xl font-bold text-black'>
                 My Conversations
               </h2>
             </div>
@@ -747,7 +747,7 @@ export default function OnlineUsers({
 
       {/* Right push sidebar: desktop only */}
       {profileSidebarOpen && profileSidebarUser && (
-        <div className='hidden md:flex w-[400px] xl:w-[420px] flex-shrink-0'>
+        <div className='hidden md:flex w-[500px] xl:w-[500px] flex-shrink-0'>
           <ProfileSidebar
             userId={profileSidebarUser.userId}
             userPresence={profileSidebarUser}

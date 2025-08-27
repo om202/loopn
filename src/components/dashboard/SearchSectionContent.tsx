@@ -152,7 +152,7 @@ export default function SearchSectionContent({
             <div className='w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-full flex items-center justify-center'>
               <Search className='w-8 h-8 text-slate-500' />
             </div>
-            <h3 className='text-lg font-medium text-slate-950 mb-1'>
+            <h3 className='text-lg font-medium text-black mb-1'>
               Search Professionals
             </h3>
           </div>
@@ -170,7 +170,7 @@ export default function SearchSectionContent({
             <div className='w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-full flex items-center justify-center'>
               <Search className='w-8 h-8 text-slate-500' />
             </div>
-            <h3 className='text-lg font-medium text-slate-950 mb-1'>
+            <h3 className='text-lg font-medium text-black mb-1'>
               Hmm… nothing matched.
             </h3>
           </div>

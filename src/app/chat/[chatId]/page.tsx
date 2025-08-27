@@ -322,10 +322,10 @@ export default function ChatPage({ params }: ChatPageProps) {
           style={{ minHeight: '100dvh' }}
         >
           <div className='text-center'>
-            <h1 className='text-2xl font-bold text-slate-950 mb-4'>
+            <h1 className='text-2xl font-bold text-black mb-4'>
               Chat Not Found
             </h1>
-            <p className='text-slate-950 mb-4'>{error}</p>
+            <p className='text-black mb-4'>{error}</p>
             <button
               onClick={() => router.push('/dashboard')}
               className='px-4 py-2 bg-brand-500 text-white rounded-lg hover:bg-brand-500'
@@ -347,7 +347,7 @@ export default function ChatPage({ params }: ChatPageProps) {
         <div className='h-full flex justify-center'>
           <div className='w-full  h-full flex'>
             {/* Left Sidebar - Desktop Only */}
-            <div className='hidden lg:flex lg:w-[400px] xl:w-[420px] flex-shrink-0 h-full'>
+            <div className='hidden lg:flex lg:w-[500px] xl:w-[500px] flex-shrink-0 h-full'>
               <div className='w-full p-3 lg:p-4 h-full'>
                 <ProfileSidebar
                   userId={otherParticipantId}

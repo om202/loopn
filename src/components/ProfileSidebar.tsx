@@ -368,13 +368,13 @@ export default function ProfileSidebar({
   return (
     <div className='bg-white rounded-2xl w-full h-full flex flex-col relative border border-slate-200'>
       {/* Header with collapse button */}
-      <div className='p-4 pb-2 flex items-center justify-between'>
+      <div className='p-3 pb-1 flex items-center justify-between'>
         <div className='flex items-center gap-2'>
           {/* Collapse Button - Always visible when onClose is provided */}
           {onClose && (
             <button
               onClick={onClose}
-              className='p-1.5 text-slate-500 hover:text-slate-950 transition-colors rounded-lg hover:bg-slate-100'
+              className='p-1.5 text-slate-500 hover:text-black transition-colors rounded-lg hover:bg-slate-100'
               title='Collapse sidebar'
             >
               <ChevronsRight className='w-5 h-5' />
@@ -385,7 +385,7 @@ export default function ProfileSidebar({
           {onBack && (
             <button
               onClick={onBack}
-              className='flex items-center gap-2 text-slate-500 hover:text-slate-950 transition-colors'
+              className='flex items-center gap-2 text-slate-500 hover:text-black transition-colors'
             >
               <ArrowLeft className='w-5 h-5' />
               <span className='text-base font-medium'>Back</span>
@@ -397,7 +397,7 @@ export default function ProfileSidebar({
         {onEndChat && (
           <button
             onClick={() => setShowEndChatDialog(true)}
-            className='text-sm text-slate-500 hover:text-slate-950 transition-colors font-medium flex items-center gap-1.5'
+            className='text-sm text-slate-500 hover:text-black transition-colors font-medium flex items-center gap-1.5'
           >
             {conversation && !conversation.isConnected ? (
               <>
@@ -415,7 +415,7 @@ export default function ProfileSidebar({
       </div>
 
       {/* User Profile Header */}
-      <div className='p-6 pb-2 flex justify-center'>
+      <div className='p-3 pb-1 flex justify-center'>
         <div className='flex flex-col items-center text-center'>
           <UserAvatar
             email={userProfile?.email}
@@ -427,30 +427,28 @@ export default function ProfileSidebar({
             status={getUserStatus()}
           />
           <div className='mt-1'>
-            <div className='mb-0'>
-              <div className='font-medium text-slate-950 text-base flex items-center justify-center gap-2'>
-                {getUserDisplayName()}
-              </div>
-              {/* Show trial chat expiration info when in sidebar context (not in chat) */}
-              {!conversation && isTrialConversation() && getTrialTimeLeft() && (
-                <div className='flex items-center justify-center gap-1 text-gray-400 mt-1'>
-                  <ClockFading className='w-3.5 h-3.5 flex-shrink-0' />
-                  <span className='text-sm font-medium'>
-                    Chat Expires in {getTrialTimeLeft()}
-                  </span>
-                </div>
-              )}
+            <div className='font-medium text-black text-base flex items-center justify-center gap-2'>
+              {getUserDisplayName()}
             </div>
+            {/* Show trial chat expiration info when in sidebar context (not in chat) */}
+            {!conversation && isTrialConversation() && getTrialTimeLeft() && (
+              <div className='flex items-center justify-center gap-1 text-gray-400 mt-0.5'>
+                <ClockFading className='w-3.5 h-3.5 flex-shrink-0' />
+                <span className='text-sm font-medium'>
+                  Chat Expires in {getTrialTimeLeft()}
+                </span>
+              </div>
+            )}
           </div>
         </div>
       </div>
 
       {/* Chat Header Section - when in chat context */}
       {conversation && (
-        <div className='px-6 pb-4 border-b border-slate-200'>
+        <div className='px-4 pb-3 border-b border-slate-200'>
           {/* Connection Status */}
           {conversation.isConnected && (
-            <div className='flex items-center justify-center text-base text-slate-500 mb-3'>
+            <div className='flex items-center justify-center text-base text-slate-500 mb-2'>
               <button
                 onClick={() => setShowRemoveConnectionDialog(true)}
                 className='flex items-center gap-2 px-2 py-2 rounded-lg hover:bg-slate-100 transition-colors'
@@ -476,12 +474,12 @@ export default function ProfileSidebar({
             timeLeft !== 'Expired' && (
               <div className='mb-1 mt-1'>
                 {/* Trial Chat Info with End Chat Icon - Centered */}
-                <div className='text-center text-sm text-slate-500 mb-3'>
+                <div className='text-center text-sm text-slate-500 mb-2'>
                   <div className='flex items-center justify-center gap-1 mb-1'>
                     <ClockFading className='w-3.5 h-3.5 text-gray-400' />
                     <span className='font-medium'>
                       Connection Expires in{' '}
-                      <span className='font-bold text-slate-950 text-base'>
+                      <span className='font-bold text-black text-base'>
                         {timeLeft}
                       </span>
                     </span>
@@ -489,7 +487,7 @@ export default function ProfileSidebar({
                 </div>
 
                 {/* Connect Button */}
-                <div className='flex justify-center mb-0'>
+                <div className='flex justify-center'>
                   {hasAcceptedConnection ? (
                     <div className='px-2 py-2 text-base font-medium rounded-lg flex items-center justify-center gap-2 text-slate-500'>
                       <svg
@@ -535,10 +533,10 @@ export default function ProfileSidebar({
 
           {/* Chat Ended Status */}
           {conversation.chatStatus === 'ENDED' && (
-            <div className='mb-2'>
-              <div className='flex items-center gap-1.5 text-sm text-slate-500 mb-2'>
+            <div className='mb-1'>
+              <div className='flex items-center gap-1.5 text-sm text-slate-500 mb-1'>
                 <Info className='w-4 h-4' />
-                <span className='font-medium text-slate-950'>Chat Ended</span>
+                <span className='font-medium text-black'>Chat Ended</span>
               </div>
 
               {/* Reconnect Button - if available */}
@@ -563,7 +561,7 @@ export default function ProfileSidebar({
 
       {/* Action buttons section */}
       {showActionButtons && (
-        <div className='px-6 pb-6 pt-2'>
+        <div className='px-4 pb-4 pt-1'>
           <div className='w-full flex justify-center'>
             {renderActionButtons()}
           </div>
@@ -572,139 +570,143 @@ export default function ProfileSidebar({
 
       {/* Professional Details */}
       <div className='flex-1 overflow-y-auto'>
-        <div className='px-6 pb-8 pt-3'>
+        <div className='px-3 pb-4 pt-1 space-y-3'>
           {profileLoading ? (
             <ShimmerProvider>
               <ProfileDetails_Shimmer />
             </ShimmerProvider>
           ) : userProfile ? (
-            <div>
-              {/* Professional Info Section */}
+            <>
+              {/* Work Information Card */}
               {(userProfile.jobRole ||
                 userProfile.companyName ||
                 userProfile.industry ||
-                userProfile.yearsOfExperience !== null ||
-                userProfile.education ||
-                userProfile.about ||
-                (userProfile.skills && userProfile.skills.length > 0) ||
-                (userProfile.interests &&
-                  userProfile.interests.length > 0)) && (
-                <div className='pb-6'>
-                  <h4 className='text-sm font-medium text-slate-500 mb-4'>
-                    Profile Details
+                userProfile.yearsOfExperience !== null) && (
+                <div className='border border-slate-200 rounded-lg p-3'>
+                  <h4 className='text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2'>
+                    <Building2 className='w-4 h-4' />
+                    Work
                   </h4>
-                  <div className='divide-y divide-slate-100'>
+                  <div className='space-y-2'>
                     {userProfile.jobRole && (
-                      <div className='py-3 flex items-center justify-between'>
-                        <dt className='text-sm font-medium text-slate-500 flex items-center gap-1.5 flex-shrink-0'>
-                          <User className='w-3.5 h-3.5' />
+                      <div>
+                        <dt className='text-sm font-medium text-slate-500 mb-1'>
                           Role
                         </dt>
-                        <dd className='text-base text-slate-950 text-right ml-4'>
+                        <dd className='text-sm font-medium text-slate-900'>
                           {userProfile.jobRole}
                         </dd>
                       </div>
                     )}
                     {userProfile.companyName && (
-                      <div className='py-3 flex items-center justify-between'>
-                        <dt className='text-sm font-medium text-slate-500 flex items-center gap-1.5 flex-shrink-0'>
-                          <Building2 className='w-3.5 h-3.5' />
+                      <div>
+                        <dt className='text-sm font-medium text-slate-500 mb-1'>
                           Company
                         </dt>
-                        <dd className='text-base text-slate-950 text-right ml-4'>
+                        <dd className='text-sm font-medium text-slate-900'>
                           {userProfile.companyName}
                         </dd>
                       </div>
                     )}
                     {userProfile.industry && (
-                      <div className='py-3 flex items-center justify-between'>
-                        <dt className='text-sm font-medium text-slate-500 flex items-center gap-1.5 flex-shrink-0'>
-                          <Factory className='w-3.5 h-3.5' />
+                      <div>
+                        <dt className='text-sm font-medium text-slate-500 mb-1'>
                           Industry
                         </dt>
-                        <dd className='text-base text-slate-950 text-right ml-4'>
+                        <dd className='text-sm font-medium text-slate-900'>
                           {userProfile.industry}
                         </dd>
                       </div>
                     )}
                     {userProfile.yearsOfExperience !== null &&
                       userProfile.yearsOfExperience !== undefined && (
-                        <div className='py-3 flex items-center justify-between'>
-                          <dt className='text-sm font-medium text-slate-500 flex items-center gap-1.5 flex-shrink-0'>
-                            <ClockFading className='w-3.5 h-3.5' />
+                        <div>
+                          <dt className='text-sm font-medium text-slate-500 mb-1'>
                             Experience
                           </dt>
-                          <dd className='text-base text-slate-950 text-right ml-4'>
+                          <dd className='text-sm font-medium text-slate-900'>
                             {userProfile.yearsOfExperience} years
-                          </dd>
-                        </div>
-                      )}
-                    {userProfile.education && (
-                      <div className='py-3 flex items-center justify-between'>
-                        <dt className='text-sm font-medium text-slate-500 flex items-center gap-1.5 flex-shrink-0'>
-                          <GraduationCap className='w-3.5 h-3.5' />
-                          Education
-                        </dt>
-                        <dd className='text-base text-slate-950 text-right ml-4'>
-                          {userProfile.education}
-                        </dd>
-                      </div>
-                    )}
-                    {userProfile.about && (
-                      <div className='py-3'>
-                        <dt className='text-sm font-medium text-slate-500 mb-1.5 flex items-center gap-1.5'>
-                          <Info className='w-3.5 h-3.5' />
-                          About
-                        </dt>
-                        <dd className='text-base text-slate-950'>
-                          {userProfile.about}
-                        </dd>
-                      </div>
-                    )}
-                    {userProfile.skills && userProfile.skills.length > 0 && (
-                      <div className='py-3'>
-                        <dt className='text-sm font-medium text-slate-500 mb-1.5 flex items-center gap-1.5'>
-                          <Target className='w-3.5 h-3.5' />
-                          Skills
-                        </dt>
-                        <dd className='flex flex-wrap gap-2'>
-                          {userProfile.skills.map((skill, index) => (
-                            <span
-                              key={index}
-                              className='px-3 py-1.5 text-base bg-transparent text-slate-950 border border-slate-200 rounded-lg'
-                            >
-                              {skill}
-                            </span>
-                          ))}
-                        </dd>
-                      </div>
-                    )}
-                    {userProfile.interests &&
-                      userProfile.interests.length > 0 && (
-                        <div className='py-3'>
-                          <dt className='text-sm font-medium text-slate-500 mb-1.5 flex items-center gap-1.5'>
-                            <Heart className='w-3.5 h-3.5' />
-                            Interests
-                          </dt>
-                          <dd className='flex flex-wrap gap-2'>
-                            {userProfile.interests.map((interest, index) => (
-                              <span
-                                key={index}
-                                className='px-3 py-1.5 text-base bg-transparent text-slate-950 border border-slate-200 rounded-lg'
-                              >
-                                {interest}
-                              </span>
-                            ))}
                           </dd>
                         </div>
                       )}
                   </div>
                 </div>
               )}
-            </div>
+
+              {/* Education Card */}
+              {userProfile.education && (
+                <div className='border border-slate-200 rounded-lg p-3'>
+                  <h4 className='text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2'>
+                    <GraduationCap className='w-4 h-4' />
+                    Education
+                  </h4>
+                  <p className='text-sm font-medium text-slate-900'>
+                    {userProfile.education}
+                  </p>
+                </div>
+              )}
+
+              {/* About Section */}
+              {userProfile.about && (
+                <div className='border border-slate-200 rounded-lg p-3'>
+                  <h4 className='text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2'>
+                    <Info className='w-4 h-4' />
+                    About
+                  </h4>
+                  <p className='text-sm font-medium text-slate-900 leading-relaxed'>
+                    {userProfile.about}
+                  </p>
+                </div>
+              )}
+
+              {/* Skills Section */}
+              {userProfile.skills && userProfile.skills.length > 0 && (
+                <div className='border border-slate-200 rounded-lg p-3'>
+                  <h4 className='text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2'>
+                    <Target className='w-4 h-4' />
+                    Skills
+                  </h4>
+                  <div className='flex flex-wrap gap-2'>
+                    {userProfile.skills.map((skill, index) => (
+                      <span
+                        key={index}
+                        className='px-3 py-1.5 text-sm font-medium bg-gray-50 text-gray-700 border border-gray-200 rounded-full'
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Interests Section */}
+              {userProfile.interests && userProfile.interests.length > 0 && (
+                <div className='border border-slate-200 rounded-lg p-3'>
+                  <h4 className='text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2'>
+                    <Heart className='w-4 h-4' />
+                    Interests
+                  </h4>
+                  <div className='flex flex-wrap gap-2'>
+                    {userProfile.interests.map((interest, index) => (
+                      <span
+                        key={index}
+                        className='px-3 py-1.5 text-sm font-medium bg-gray-50 text-gray-700 border border-gray-200 rounded-full'
+                      >
+                        {interest}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </>
           ) : (
-            <div className='text-base text-slate-500 text-center py-8'>
-              No profile details available.
+            <div className='text-center py-8'>
+              <div className='w-12 h-12 mx-auto mb-3 bg-slate-100 rounded-full flex items-center justify-center'>
+                <User className='w-6 h-6 text-slate-400' />
+              </div>
+              <p className='text-sm text-slate-500'>
+                No profile details available
+              </p>
             </div>
           )}
         </div>
@@ -720,7 +722,7 @@ export default function ProfileSidebar({
           {conversation && !conversation.isConnected ? (
             // Temporary chat dialog
             <>
-              <h3 className='text-sm font-medium text-slate-950 text-center mb-3'>
+              <h3 className='text-sm font-medium text-black text-center mb-3'>
                 End chat with {getUserDisplayName()}?
               </h3>
               <p className='text-base text-slate-500 text-center mb-4'>
@@ -730,7 +732,7 @@ export default function ProfileSidebar({
               <div className='flex gap-2'>
                 <button
                   onClick={() => setShowEndChatDialog(false)}
-                  className='flex-1 px-3 py-2 text-base font-medium text-slate-950 bg-slate-100 rounded-lg hover:bg-slate-200 focus:outline-none transition-colors'
+                  className='flex-1 px-3 py-2 text-base font-medium text-black bg-slate-100 rounded-lg hover:bg-slate-200 focus:outline-none transition-colors'
                 >
                   Cancel
                 </button>
@@ -748,7 +750,7 @@ export default function ProfileSidebar({
           ) : (
             // Permanent connection dialog
             <>
-              <h3 className='text-sm font-medium text-slate-950 text-center mb-3'>
+              <h3 className='text-sm font-medium text-black text-center mb-3'>
                 Remove {getUserDisplayName()} from your connections?
               </h3>
               <p className='text-base text-slate-500 text-center mb-4'>
@@ -758,7 +760,7 @@ export default function ProfileSidebar({
               <div className='flex gap-2'>
                 <button
                   onClick={() => setShowEndChatDialog(false)}
-                  className='flex-1 px-3 py-2 text-base font-medium text-slate-950 bg-slate-100 rounded-lg hover:bg-slate-200 focus:outline-none transition-colors'
+                  className='flex-1 px-3 py-2 text-base font-medium text-black bg-slate-100 rounded-lg hover:bg-slate-200 focus:outline-none transition-colors'
                 >
                   Cancel
                 </button>

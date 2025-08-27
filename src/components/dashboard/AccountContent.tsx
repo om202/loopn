@@ -71,7 +71,7 @@ export default function AccountContent() {
             className='mb-4'
           />
           <div>
-            <h3 className='font-medium text-slate-950 text-lg mb-1'>
+            <h3 className='font-medium text-black text-lg mb-1'>
               {getUserDisplayName()}
             </h3>
             <p className='text-base text-slate-500 font-medium'>
@@ -110,7 +110,7 @@ export default function AccountContent() {
                           <User className='w-4 h-4' />
                           Role
                         </dt>
-                        <dd className='text-base text-slate-950 text-right ml-4'>
+                        <dd className='text-base text-black text-right ml-4'>
                           {userProfile.jobRole}
                         </dd>
                       </div>
@@ -121,7 +121,7 @@ export default function AccountContent() {
                           <Building2 className='w-4 h-4' />
                           Company
                         </dt>
-                        <dd className='text-base text-slate-950 text-right ml-4'>
+                        <dd className='text-base text-black text-right ml-4'>
                           {userProfile.companyName}
                         </dd>
                       </div>
@@ -132,7 +132,7 @@ export default function AccountContent() {
                           <Factory className='w-4 h-4' />
                           Industry
                         </dt>
-                        <dd className='text-base text-slate-950 text-right ml-4'>
+                        <dd className='text-base text-black text-right ml-4'>
                           {userProfile.industry}
                         </dd>
                       </div>
@@ -144,7 +144,7 @@ export default function AccountContent() {
                             <ClockFading className='w-4 h-4' />
                             Experience
                           </dt>
-                          <dd className='text-base text-slate-950 text-right ml-4'>
+                          <dd className='text-base text-black text-right ml-4'>
                             {userProfile.yearsOfExperience} years
                           </dd>
                         </div>
@@ -155,7 +155,7 @@ export default function AccountContent() {
                           <GraduationCap className='w-4 h-4' />
                           Education
                         </dt>
-                        <dd className='text-base text-slate-950 text-right ml-4'>
+                        <dd className='text-base text-black text-right ml-4'>
                           {userProfile.education}
                         </dd>
                       </div>
@@ -166,7 +166,7 @@ export default function AccountContent() {
                           <Info className='w-4 h-4' />
                           About
                         </dt>
-                        <dd className='text-base text-slate-950'>
+                        <dd className='text-base text-black'>
                           {userProfile.about}
                         </dd>
                       </div>
@@ -181,7 +181,7 @@ export default function AccountContent() {
                           {userProfile.skills.map((skill, index) => (
                             <span
                               key={index}
-                              className='px-3 py-1.5 text-base bg-transparent text-slate-950 border border-slate-200 rounded-lg font-medium'
+                              className='px-3 py-1.5 text-base bg-transparent text-black border border-slate-200 rounded-lg font-medium'
                             >
                               {skill}
                             </span>
@@ -200,7 +200,7 @@ export default function AccountContent() {
                             {userProfile.interests.map((interest, index) => (
                               <span
                                 key={index}
-                                className='px-3 py-1.5 text-base bg-transparent text-slate-950 border border-slate-200 rounded-lg font-medium'
+                                className='px-3 py-1.5 text-base bg-transparent text-black border border-slate-200 rounded-lg font-medium'
                               >
                                 {interest}
                               </span>

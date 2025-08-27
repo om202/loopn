@@ -301,7 +301,7 @@ export default function DashboardSectionContent({
           <div className='w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-full flex items-center justify-center'>
             <EmptyIcon className='w-8 h-8 text-slate-500' />
           </div>
-          <h3 className='text-lg font-medium text-slate-950 mb-1'>
+          <h3 className='text-lg font-medium text-black mb-1'>
             {emptyMessage}
           </h3>
         </div>

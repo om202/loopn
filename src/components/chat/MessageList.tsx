@@ -408,7 +408,7 @@ export default function MessageList({
             <div className='w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4'>
               <MessageSquare className='w-8 h-8 text-slate-500' />
             </div>
-            <h3 className='text-lg font-medium text-slate-950 mb-1'>
+            <h3 className='text-lg font-medium text-black mb-1'>
               No messages yet
             </h3>
           </div>

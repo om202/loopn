@@ -386,7 +386,7 @@ export default function IntelligentSearch({
                           )}
                         </div>
                         <div className='flex-1 min-w-0'>
-                          <h4 className='text-sm font-medium text-slate-950 truncate'>
+                          <h4 className='text-sm font-medium text-black truncate'>
                             {user.profile.fullName || 'Unknown User'}
                           </h4>
                           <div className='flex items-center text-sm text-slate-500 mt-1'>

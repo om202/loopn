@@ -130,7 +130,7 @@ export default function UserAvatar({
             className={`${recentlyActiveSize} bg-slate-300 rounded-full border-2 border-white box-content flex items-center justify-center`}
           >
             <Clock
-              className={`${recentlyActiveIconSize} text-slate-950`}
+              className={`${recentlyActiveIconSize} text-black`}
               strokeWidth={2.5}
             />
           </div>

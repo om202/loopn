@@ -60,7 +60,7 @@ export default function SignInForm({
         <div>
           <label
             htmlFor='email'
-            className='block text-sm font-medium text-slate-950 mb-3'
+            className='block text-sm font-medium text-black mb-3'
           >
             Email address
           </label>
@@ -83,7 +83,7 @@ export default function SignInForm({
         <div>
           <label
             htmlFor='password'
-            className='block text-sm font-medium text-slate-950 mb-3'
+            className='block text-sm font-medium text-black mb-3'
           >
             Password
           </label>
