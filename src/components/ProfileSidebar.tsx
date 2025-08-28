@@ -373,7 +373,7 @@ export default function ProfileSidebar({
             showStatus
             status={getUserStatus()}
           />
-          <div className='mt-1'>
+          <div className='mt-2'>
             <div className='font-semibold text-black text-lg flex items-center justify-center gap-2'>
               {getUserDisplayName()}
             </div>
@@ -559,8 +559,8 @@ export default function ProfileSidebar({
           />
 
           {/* Dialog container */}
-          <div className='flex min-h-full items-center justify-center p-4'>
-            <div className='relative w-[90vw] max-w-[1200px] min-w-[800px] bg-white rounded-2xl max-h-[90vh] flex flex-col overflow-hidden shadow-lg border border-slate-200'>
+          <div className='flex min-h-full items-center justify-center p-2'>
+            <div className='relative w-[90vw] max-w-[900px] min-w-[600px] bg-white rounded-2xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl'>
               {/* Header */}
               <div className='px-6 py-4 border-b border-slate-200 flex items-center justify-between'>
                 <h2 className='text-lg font-semibold text-slate-900'>
