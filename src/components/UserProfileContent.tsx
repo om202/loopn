@@ -55,39 +55,39 @@ export default function UserProfileContent({
         userProfile.githubUrl ||
         userProfile.portfolioUrl) && (
         <div className='flex flex-wrap gap-2'>
-            {userProfile.linkedinUrl && (
-              <a
-                href={ensureHttps(userProfile.linkedinUrl)}
-                target='_blank'
-                rel='noopener noreferrer'
-                className='flex items-center gap-2 px-3 py-1.5 bg-slate-50 text-slate-700 hover:bg-blue-50 hover:text-blue-600 rounded-full text-sm font-medium transition-colors'
-              >
-                <Linkedin className='w-3.5 h-3.5' />
-                <span>LinkedIn</span>
-              </a>
-            )}
-            {userProfile.githubUrl && (
-              <a
-                href={ensureHttps(userProfile.githubUrl)}
-                target='_blank'
-                rel='noopener noreferrer'
-                className='flex items-center gap-2 px-3 py-1.5 bg-slate-50 text-slate-700 hover:bg-slate-100 hover:text-slate-900 rounded-full text-sm font-medium transition-colors'
-              >
-                <Github className='w-3.5 h-3.5' />
-                <span>GitHub</span>
-              </a>
-            )}
-            {userProfile.portfolioUrl && (
-              <a
-                href={ensureHttps(userProfile.portfolioUrl)}
-                target='_blank'
-                rel='noopener noreferrer'
-                className='flex items-center gap-2 px-3 py-1.5 bg-slate-50 text-slate-700 hover:bg-blue-50 hover:text-brand-600 rounded-full text-sm font-medium transition-colors'
-              >
-                <Globe className='w-3.5 h-3.5' />
-                <span>Portfolio</span>
-              </a>
-            )}
+          {userProfile.linkedinUrl && (
+            <a
+              href={ensureHttps(userProfile.linkedinUrl)}
+              target='_blank'
+              rel='noopener noreferrer'
+              className='flex items-center gap-2 px-3 py-1.5 bg-slate-50 text-slate-700 hover:bg-blue-50 hover:text-blue-600 rounded-full text-sm font-medium transition-colors'
+            >
+              <Linkedin className='w-3.5 h-3.5' />
+              <span>LinkedIn</span>
+            </a>
+          )}
+          {userProfile.githubUrl && (
+            <a
+              href={ensureHttps(userProfile.githubUrl)}
+              target='_blank'
+              rel='noopener noreferrer'
+              className='flex items-center gap-2 px-3 py-1.5 bg-slate-50 text-slate-700 hover:bg-slate-100 hover:text-slate-900 rounded-full text-sm font-medium transition-colors'
+            >
+              <Github className='w-3.5 h-3.5' />
+              <span>GitHub</span>
+            </a>
+          )}
+          {userProfile.portfolioUrl && (
+            <a
+              href={ensureHttps(userProfile.portfolioUrl)}
+              target='_blank'
+              rel='noopener noreferrer'
+              className='flex items-center gap-2 px-3 py-1.5 bg-slate-50 text-slate-700 hover:bg-blue-50 hover:text-brand-600 rounded-full text-sm font-medium transition-colors'
+            >
+              <Globe className='w-3.5 h-3.5' />
+              <span>Portfolio</span>
+            </a>
+          )}
         </div>
       )}
 
