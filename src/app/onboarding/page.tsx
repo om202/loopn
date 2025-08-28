@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -42,6 +42,8 @@ export default function OnboardingPage() {
   const [resumeError, setResumeError] = useState('');
   const [showResumeUpload, setShowResumeUpload] = useState(true);
   const [resumeProcessed, setResumeProcessed] = useState(false);
+
+
 
   // Form data
   const [formData, setFormData] = useState<Partial<OnboardingData>>({
@@ -92,6 +94,56 @@ export default function OnboardingPage() {
     // Auto-fill tracking
     autoFilledFields: [],
   });
+
+  // Dynamic step configuration based on available data
+  const availableSteps = useMemo(() => {
+    const steps = [
+      { id: 1, title: 'Personal', key: 'personal', required: true },
+    ];
+
+    // Add work experience step if data exists
+    if (formData.workExperience && formData.workExperience.length > 0) {
+      steps.push({ id: steps.length + 1, title: 'Experience', key: 'workExperience', required: false });
+    }
+
+    // Add education & projects step if data exists
+    if ((formData.educationHistory && formData.educationHistory.length > 0) || 
+        (formData.projects && formData.projects.length > 0)) {
+      steps.push({ id: steps.length + 1, title: 'Education', key: 'educationProjects', required: false });
+    }
+
+    // Add qualifications step if data exists
+    if ((formData.certifications && formData.certifications.length > 0) ||
+        (formData.awards && formData.awards.length > 0) ||
+        (formData.languages && formData.languages.length > 0) ||
+        (formData.publications && formData.publications.length > 0)) {
+      steps.push({ id: steps.length + 1, title: 'Qualifications', key: 'qualifications', required: false });
+    }
+
+    // Always add core steps
+    steps.push(
+      { id: steps.length + 1, title: 'About', key: 'about', required: true },
+      { id: steps.length + 1, title: 'Interests', key: 'interests', required: true },
+      { id: steps.length + 1, title: 'Picture', key: 'picture', required: false }
+    );
+
+    return steps;
+  }, [
+    formData.workExperience, 
+    formData.educationHistory, 
+    formData.projects,
+    formData.certifications, 
+    formData.awards, 
+    formData.languages, 
+    formData.publications
+  ]);
+
+  const totalSteps = availableSteps.length;
+  
+  // Get current step info
+  const getCurrentStepInfo = () => {
+    return availableSteps.find(step => step.id === currentStep) || availableSteps[0];
+  };
 
   // Handle authentication and onboarding status
   useEffect(() => {
@@ -154,15 +206,24 @@ export default function OnboardingPage() {
   };
 
   const validateStep = (step: number): boolean => {
-    switch (step) {
-      case 1:
+    const stepInfo = availableSteps.find(s => s.id === step);
+    if (!stepInfo) return false;
+
+    switch (stepInfo.key) {
+      case 'personal':
         return !!(
           formData.fullName &&
           formData.jobRole &&
           formData.companyName &&
           formData.industry
         );
-      case 2: {
+      case 'workExperience':
+        return true; // Work experience is auto-filled or optional
+      case 'educationProjects':
+        return true; // Education and projects are auto-filled or optional
+      case 'qualifications':
+        return true; // Qualifications are auto-filled or optional
+      case 'about': {
         const words = (formData.about || '')
           .trim()
           .split(/\s+/)
@@ -170,9 +231,9 @@ export default function OnboardingPage() {
         const wordCount = words.length;
         return wordCount >= 24 && wordCount <= 80;
       }
-      case 3:
+      case 'interests':
         return (formData.interests?.length || 0) > 0;
-      case 4:
+      case 'picture':
         return true; // Profile picture is optional
       default:
         return false;
@@ -180,7 +241,7 @@ export default function OnboardingPage() {
   };
 
   const nextStep = () => {
-    if (validateStep(currentStep) && currentStep < 4) {
+    if (validateStep(currentStep) && currentStep < totalSteps) {
       setCurrentStep(currentStep + 1);
     }
   };
@@ -192,7 +253,7 @@ export default function OnboardingPage() {
   };
 
   const handleComplete = async () => {
-    if (!validateStep(4)) return;
+    if (!validateStep(totalSteps)) return;
 
     setIsLoading(true);
     setError('');
@@ -472,43 +533,41 @@ export default function OnboardingPage() {
             </div>
           )}
           
-          {/* Stepper */}
+          {/* Dynamic Stepper */}
           <div className='mb-8 sm:mb-10'>
             <div className='relative'>
               {/* Solid connector line between steps (center-aligned) */}
               <div className='absolute left-5 right-5 top-1/2 -translate-y-1/2 border-t border-slate-200 z-0' />
-              <div className='grid grid-cols-4 items-center'>
-                {[1, 2, 3, 4].map(step => (
-                  <div key={step} className='flex justify-center'>
+              <div className='flex items-center justify-between px-5'>
+                {availableSteps.map(step => (
+                  <div key={step.id} className='flex justify-center'>
                     <div
                       className={`relative z-10 w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold border ${
-                        step <= currentStep
+                        step.id <= currentStep
                           ? 'bg-brand-500 text-white border-brand-500'
                           : 'bg-white text-slate-500 border-slate-200'
                       }`}
                     >
-                      {step}
+                      {step.id}
                     </div>
                   </div>
                 ))}
               </div>
             </div>
             {/* Labels */}
-            <div className='mt-3 grid grid-cols-4 text-center text-sm sm:text-sm'>
-              {['Profile', 'Use Loopn', 'Interests', 'Picture'].map(
-                (label, i) => (
-                  <div
-                    key={label}
-                    className={
-                      i + 1 === currentStep
-                        ? 'text-black font-medium'
-                        : 'text-slate-500'
-                    }
-                  >
-                    {label}
-                  </div>
-                )
-              )}
+            <div className='mt-3 flex justify-between text-center text-xs sm:text-sm px-5'>
+              {availableSteps.map((step) => (
+                <div
+                  key={step.id}
+                  className={`max-w-[80px] ${
+                    step.id === currentStep
+                      ? 'text-black font-medium'
+                      : 'text-slate-500'
+                  }`}
+                >
+                  {step.title}
+                </div>
+              ))}
             </div>
           </div>
           {error && (
@@ -517,8 +576,8 @@ export default function OnboardingPage() {
             </div>
           )}
 
-          {/* Step 1: Personal & Professional Information */}
-          {currentStep === 1 && (
+          {/* Step: Personal & Professional Information */}
+          {getCurrentStepInfo().key === 'personal' && (
             <div className='space-y-6'>
               <h2 className='text-xl font-semibold text-black mb-4'>Personal & Professional Info</h2>
 
@@ -769,8 +828,478 @@ export default function OnboardingPage() {
             </div>
           )}
 
-          {/* Step 2: About Section */}
-          {currentStep === 2 && (
+          {/* Step: Work Experience */}
+          {getCurrentStepInfo().key === 'workExperience' && (
+            <div className='space-y-6'>
+              <h2 className='text-xl font-semibold text-black mb-4'>Work Experience</h2>
+              <p className='text-sm text-slate-500 mb-4'>
+                Review and edit your work experience. This information was automatically extracted from your resume.
+              </p>
+
+              <div className='space-y-4'>
+                {(formData.workExperience || []).map((job, index) => (
+                  <div key={index} className='bg-slate-50 rounded-xl p-4 space-y-3'>
+                    <div className='flex items-center justify-between'>
+                      <h3 className='font-medium text-slate-800'>Experience {index + 1}</h3>
+                      <span className='text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>Auto-filled</span>
+                    </div>
+                    
+                    <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
+                      <input
+                        type='text'
+                        value={job.company}
+                        onChange={e => {
+                          const updated = [...(formData.workExperience || [])];
+                          updated[index] = { ...updated[index], company: e.target.value };
+                          updateFormData('workExperience', updated);
+                        }}
+                        placeholder='Company Name'
+                        className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                      />
+                      <input
+                        type='text'
+                        value={job.position}
+                        onChange={e => {
+                          const updated = [...(formData.workExperience || [])];
+                          updated[index] = { ...updated[index], position: e.target.value };
+                          updateFormData('workExperience', updated);
+                        }}
+                        placeholder='Job Title'
+                        className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                      />
+                    </div>
+                    
+                    <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
+                      <input
+                        type='text'
+                        value={job.startDate}
+                        onChange={e => {
+                          const updated = [...(formData.workExperience || [])];
+                          updated[index] = { ...updated[index], startDate: e.target.value };
+                          updateFormData('workExperience', updated);
+                        }}
+                        placeholder='Start Date (e.g., Jan 2020)'
+                        className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                      />
+                      <input
+                        type='text'
+                        value={job.endDate}
+                        onChange={e => {
+                          const updated = [...(formData.workExperience || [])];
+                          updated[index] = { ...updated[index], endDate: e.target.value };
+                          updateFormData('workExperience', updated);
+                        }}
+                        placeholder='End Date (e.g., Present)'
+                        className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                      />
+                    </div>
+                    
+                    <textarea
+                      value={job.description}
+                      onChange={e => {
+                        const updated = [...(formData.workExperience || [])];
+                        updated[index] = { ...updated[index], description: e.target.value };
+                        updateFormData('workExperience', updated);
+                      }}
+                      placeholder='Job description and key achievements...'
+                      rows={3}
+                      className='w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Step: Education & Projects */}
+          {getCurrentStepInfo().key === 'educationProjects' && (
+            <div className='space-y-6'>
+              <h2 className='text-xl font-semibold text-black mb-4'>Education & Projects</h2>
+              <p className='text-sm text-slate-500 mb-4'>
+                Review your educational background and key projects.
+              </p>
+
+              {/* Education History */}
+              {formData.educationHistory && formData.educationHistory.length > 0 && (
+                <div className='space-y-4'>
+                  <h3 className='text-lg font-medium text-slate-800'>Education</h3>
+                  {formData.educationHistory.map((edu, index) => (
+                    <div key={index} className='bg-slate-50 rounded-xl p-4 space-y-3'>
+                      <div className='flex items-center justify-between'>
+                        <h4 className='font-medium text-slate-800'>Education {index + 1}</h4>
+                        <span className='text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>Auto-filled</span>
+                      </div>
+                      
+                      <input
+                        type='text'
+                        value={edu.institution}
+                        onChange={e => {
+                          const updated = [...(formData.educationHistory || [])];
+                          updated[index] = { ...updated[index], institution: e.target.value };
+                          updateFormData('educationHistory', updated);
+                        }}
+                        placeholder='Institution Name'
+                        className='w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                      />
+                      
+                      <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
+                        <input
+                          type='text'
+                          value={edu.degree}
+                          onChange={e => {
+                            const updated = [...(formData.educationHistory || [])];
+                            updated[index] = { ...updated[index], degree: e.target.value };
+                            updateFormData('educationHistory', updated);
+                          }}
+                          placeholder='Degree (e.g., Bachelor of Science)'
+                          className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                        />
+                        <input
+                          type='text'
+                          value={edu.field}
+                          onChange={e => {
+                            const updated = [...(formData.educationHistory || [])];
+                            updated[index] = { ...updated[index], field: e.target.value };
+                            updateFormData('educationHistory', updated);
+                          }}
+                          placeholder='Field of Study'
+                          className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                        />
+                      </div>
+                      
+                      <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
+                        <input
+                          type='text'
+                          value={edu.startYear}
+                          onChange={e => {
+                            const updated = [...(formData.educationHistory || [])];
+                            updated[index] = { ...updated[index], startYear: e.target.value };
+                            updateFormData('educationHistory', updated);
+                          }}
+                          placeholder='Start Year (e.g., 2018)'
+                          className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                        />
+                        <input
+                          type='text'
+                          value={edu.endYear}
+                          onChange={e => {
+                            const updated = [...(formData.educationHistory || [])];
+                            updated[index] = { ...updated[index], endYear: e.target.value };
+                            updateFormData('educationHistory', updated);
+                          }}
+                          placeholder='End Year (e.g., 2022)'
+                          className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Projects */}
+              {formData.projects && formData.projects.length > 0 && (
+                <div className='space-y-4'>
+                  <h3 className='text-lg font-medium text-slate-800'>Projects</h3>
+                  {formData.projects.map((project, index) => (
+                    <div key={index} className='bg-slate-50 rounded-xl p-4 space-y-3'>
+                      <div className='flex items-center justify-between'>
+                        <h4 className='font-medium text-slate-800'>Project {index + 1}</h4>
+                        <span className='text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>Auto-filled</span>
+                      </div>
+                      
+                      <input
+                        type='text'
+                        value={project.title}
+                        onChange={e => {
+                          const updated = [...(formData.projects || [])];
+                          updated[index] = { ...updated[index], title: e.target.value };
+                          updateFormData('projects', updated);
+                        }}
+                        placeholder='Project Title'
+                        className='w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                      />
+                      
+                      <textarea
+                        value={project.description}
+                        onChange={e => {
+                          const updated = [...(formData.projects || [])];
+                          updated[index] = { ...updated[index], description: e.target.value };
+                          updateFormData('projects', updated);
+                        }}
+                        placeholder='Project description and achievements...'
+                        rows={3}
+                        className='w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                      />
+                      
+                      <input
+                        type='text'
+                        value={project.technologies}
+                        onChange={e => {
+                          const updated = [...(formData.projects || [])];
+                          updated[index] = { ...updated[index], technologies: e.target.value };
+                          updateFormData('projects', updated);
+                        }}
+                        placeholder='Technologies used (e.g., React, Node.js, Python)'
+                        className='w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Step: Additional Qualifications */}
+          {getCurrentStepInfo().key === 'qualifications' && (
+            <div className='space-y-6'>
+              <h2 className='text-xl font-semibold text-black mb-4'>Additional Qualifications</h2>
+              <p className='text-sm text-slate-500 mb-4'>
+                Review your certifications, awards, languages, and publications.
+              </p>
+
+              {/* Certifications */}
+              {formData.certifications && formData.certifications.length > 0 && (
+                <div className='space-y-4'>
+                  <h3 className='text-lg font-medium text-slate-800'>Certifications</h3>
+                  {formData.certifications.map((cert, index) => (
+                    <div key={index} className='bg-slate-50 rounded-xl p-4 space-y-3'>
+                      <div className='flex items-center justify-between'>
+                        <h4 className='font-medium text-slate-800'>Certification {index + 1}</h4>
+                        <span className='text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>Auto-filled</span>
+                      </div>
+                      
+                      <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
+                        <input
+                          type='text'
+                          value={cert.name}
+                          onChange={e => {
+                            const updated = [...(formData.certifications || [])];
+                            updated[index] = { ...updated[index], name: e.target.value };
+                            updateFormData('certifications', updated);
+                          }}
+                          placeholder='Certification Name'
+                          className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                        />
+                        <input
+                          type='text'
+                          value={cert.issuer}
+                          onChange={e => {
+                            const updated = [...(formData.certifications || [])];
+                            updated[index] = { ...updated[index], issuer: e.target.value };
+                            updateFormData('certifications', updated);
+                          }}
+                          placeholder='Issuing Organization'
+                          className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                        />
+                      </div>
+                      
+                      <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
+                        <input
+                          type='text'
+                          value={cert.date}
+                          onChange={e => {
+                            const updated = [...(formData.certifications || [])];
+                            updated[index] = { ...updated[index], date: e.target.value };
+                            updateFormData('certifications', updated);
+                          }}
+                          placeholder='Issue Date'
+                          className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                        />
+                        <input
+                          type='text'
+                          value={cert.expiryDate}
+                          onChange={e => {
+                            const updated = [...(formData.certifications || [])];
+                            updated[index] = { ...updated[index], expiryDate: e.target.value };
+                            updateFormData('certifications', updated);
+                          }}
+                          placeholder='Expiry Date (if applicable)'
+                          className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Languages */}
+              {formData.languages && formData.languages.length > 0 && (
+                <div className='space-y-4'>
+                  <h3 className='text-lg font-medium text-slate-800'>Languages</h3>
+                  <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                    {formData.languages.map((lang, index) => (
+                      <div key={index} className='bg-slate-50 rounded-xl p-4 space-y-3'>
+                        <div className='flex items-center justify-between'>
+                          <h4 className='font-medium text-slate-800'>Language {index + 1}</h4>
+                          <span className='text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>Auto-filled</span>
+                        </div>
+                        
+                        <input
+                          type='text'
+                          value={lang.language}
+                          onChange={e => {
+                            const updated = [...(formData.languages || [])];
+                            updated[index] = { ...updated[index], language: e.target.value };
+                            updateFormData('languages', updated);
+                          }}
+                          placeholder='Language'
+                          className='w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                        />
+                        
+                        <select
+                          value={lang.proficiency}
+                          onChange={e => {
+                            const updated = [...(formData.languages || [])];
+                            updated[index] = { ...updated[index], proficiency: e.target.value };
+                            updateFormData('languages', updated);
+                          }}
+                          className='w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                        >
+                          <option value=''>Select Proficiency</option>
+                          <option value='Native'>Native</option>
+                          <option value='Fluent'>Fluent</option>
+                          <option value='Advanced'>Advanced</option>
+                          <option value='Intermediate'>Intermediate</option>
+                          <option value='Basic'>Basic</option>
+                        </select>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Awards */}
+              {formData.awards && formData.awards.length > 0 && (
+                <div className='space-y-4'>
+                  <h3 className='text-lg font-medium text-slate-800'>Awards & Achievements</h3>
+                  {formData.awards.map((award, index) => (
+                    <div key={index} className='bg-slate-50 rounded-xl p-4 space-y-3'>
+                      <div className='flex items-center justify-between'>
+                        <h4 className='font-medium text-slate-800'>Award {index + 1}</h4>
+                        <span className='text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>Auto-filled</span>
+                      </div>
+                      
+                      <input
+                        type='text'
+                        value={award.title}
+                        onChange={e => {
+                          const updated = [...(formData.awards || [])];
+                          updated[index] = { ...updated[index], title: e.target.value };
+                          updateFormData('awards', updated);
+                        }}
+                        placeholder='Award Title'
+                        className='w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                      />
+                      
+                      <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
+                        <input
+                          type='text'
+                          value={award.issuer}
+                          onChange={e => {
+                            const updated = [...(formData.awards || [])];
+                            updated[index] = { ...updated[index], issuer: e.target.value };
+                            updateFormData('awards', updated);
+                          }}
+                          placeholder='Issuing Organization'
+                          className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                        />
+                        <input
+                          type='text'
+                          value={award.date}
+                          onChange={e => {
+                            const updated = [...(formData.awards || [])];
+                            updated[index] = { ...updated[index], date: e.target.value };
+                            updateFormData('awards', updated);
+                          }}
+                          placeholder='Date Received'
+                          className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                        />
+                      </div>
+                      
+                      <textarea
+                        value={award.description}
+                        onChange={e => {
+                          const updated = [...(formData.awards || [])];
+                          updated[index] = { ...updated[index], description: e.target.value };
+                          updateFormData('awards', updated);
+                        }}
+                        placeholder='Award description...'
+                        rows={2}
+                        className='w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Publications */}
+              {formData.publications && formData.publications.length > 0 && (
+                <div className='space-y-4'>
+                  <h3 className='text-lg font-medium text-slate-800'>Publications</h3>
+                  {formData.publications.map((pub, index) => (
+                    <div key={index} className='bg-slate-50 rounded-xl p-4 space-y-3'>
+                      <div className='flex items-center justify-between'>
+                        <h4 className='font-medium text-slate-800'>Publication {index + 1}</h4>
+                        <span className='text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>Auto-filled</span>
+                      </div>
+                      
+                      <input
+                        type='text'
+                        value={pub.title}
+                        onChange={e => {
+                          const updated = [...(formData.publications || [])];
+                          updated[index] = { ...updated[index], title: e.target.value };
+                          updateFormData('publications', updated);
+                        }}
+                        placeholder='Publication Title'
+                        className='w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                      />
+                      
+                      <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
+                        <input
+                          type='text'
+                          value={pub.venue}
+                          onChange={e => {
+                            const updated = [...(formData.publications || [])];
+                            updated[index] = { ...updated[index], venue: e.target.value };
+                            updateFormData('publications', updated);
+                          }}
+                          placeholder='Venue/Journal'
+                          className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                        />
+                        <input
+                          type='text'
+                          value={pub.date}
+                          onChange={e => {
+                            const updated = [...(formData.publications || [])];
+                            updated[index] = { ...updated[index], date: e.target.value };
+                            updateFormData('publications', updated);
+                          }}
+                          placeholder='Publication Date'
+                          className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                        />
+                      </div>
+                      
+                      <textarea
+                        value={pub.description}
+                        onChange={e => {
+                          const updated = [...(formData.publications || [])];
+                          updated[index] = { ...updated[index], description: e.target.value };
+                          updateFormData('publications', updated);
+                        }}
+                        placeholder='Publication description or abstract...'
+                        rows={3}
+                        className='w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Step: About Section */}
+          {getCurrentStepInfo().key === 'about' && (
             <div className='space-y-6'>
               <h2 className='text-xl font-semibold text-black mb-4'>
                 About You
@@ -859,16 +1388,36 @@ export default function OnboardingPage() {
             </div>
           )}
 
-          {/* Step 3: Interests */}
-          {currentStep === 3 && (
+          {/* Step: Interests & Hobbies */}
+          {getCurrentStepInfo().key === 'interests' && (
             <div className='space-y-6'>
               <h2 className='text-xl font-semibold text-black mb-4'>
-                Your Interests
+                Interests & Hobbies
               </h2>
               <p className='text-sm text-slate-500 mb-4'>
                 Select topics you're interested in to help us connect you with
                 like-minded professionals.
               </p>
+
+              {/* Display hobbies from resume if available */}
+              {formData.hobbies && formData.hobbies.length > 0 && (
+                <div className='bg-slate-50 rounded-xl p-4 mb-6'>
+                  <div className='flex items-center justify-between mb-3'>
+                    <h3 className='text-base font-medium text-slate-700'>Personal Hobbies from Resume</h3>
+                    <span className='text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>Auto-filled</span>
+                  </div>
+                  <div className='flex flex-wrap gap-2'>
+                    {formData.hobbies.map((hobby, index) => (
+                      <span
+                        key={index}
+                        className='px-3 py-1.5 bg-purple-50 text-purple-700 border border-purple-200 text-sm rounded-full'
+                      >
+                        {hobby}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <div className='space-y-8'>
                 {INTERESTS_GROUPS.map((group, idx) => (
@@ -918,8 +1467,8 @@ export default function OnboardingPage() {
             </div>
           )}
 
-          {/* Step 4: Profile Picture */}
-          {currentStep === 4 && (
+          {/* Step: Profile Picture */}
+          {getCurrentStepInfo().key === 'picture' && (
             <div className='space-y-6'>
               <h2 className='text-xl font-semibold text-black mb-4'>
                 Profile Picture
@@ -950,18 +1499,18 @@ export default function OnboardingPage() {
               Previous
             </button>
 
-            {currentStep < 4 ? (
+            {currentStep < totalSteps ? (
               <button
                 onClick={nextStep}
                 disabled={!validateStep(currentStep)}
                 className='px-6 py-3 rounded-xl font-medium bg-brand-500 text-white hover:bg-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed'
               >
-                {currentStep === 3 ? 'Almost Done!' : 'Next'}
+                {currentStep === totalSteps - 1 ? 'Almost Done!' : 'Next'}
               </button>
             ) : (
               <button
                 onClick={handleComplete}
-                disabled={!validateStep(4) || isLoading}
+                disabled={!validateStep(totalSteps) || isLoading}
                 className='px-6 py-3 rounded-xl font-medium bg-brand-500 text-white hover:bg-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed'
               >
                 {isLoading ? 'Completing...' : 'Complete Setup'}
