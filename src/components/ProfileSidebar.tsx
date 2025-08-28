@@ -464,7 +464,7 @@ export default function ProfileSidebar({
 
       {/* Professional Details */}
       <div className='flex-1 overflow-y-auto'>
-        <div className='px-3 pb-4 pt-1'>
+        <div className='p-6 pb-8 pt-1'>
           {profileLoading ? (
             <ShimmerProvider>
               <ProfileDetails_Shimmer />
