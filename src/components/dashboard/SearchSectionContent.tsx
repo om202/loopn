@@ -199,6 +199,7 @@ export default function SearchSectionContent({
                   onUserCardClick={onUserCardClick}
                   isProfileSidebarOpen={isProfileSidebarOpen}
                   selectedUserId={selectedUserId}
+                  currentUserId={user?.userId || ''} // Add the missing currentUserId prop
                   searchProfile={result.profile} // OpenSearch profile data
                   useRealtimeStatus={false} // Disable real-time status for search results
                 />
