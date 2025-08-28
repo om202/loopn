@@ -7,17 +7,85 @@ type DataResult<T> = { data: T | null; error: string | null };
 type ListResult<T> = { data: T[]; error: string | null };
 
 export interface ProfileData {
+  // Personal Information
   fullName: string;
+  phone?: string;
+  city?: string;
+  country?: string;
+  
+  // Professional URLs
+  linkedinUrl?: string;
+  githubUrl?: string;
+  portfolioUrl?: string;
+  
+  // Current Professional Info (for compatibility)
   jobRole: string;
   companyName: string;
   industry: string;
   yearsOfExperience: number;
   education: string;
   about: string;
+  
+  // Professional Background & Skills
   interests: string[];
   skills: string[];
+  hobbies?: string[];
+  
+  // Detailed Professional Background
+  workExperience?: Array<{
+    company: string;
+    position: string;
+    startDate: string;
+    endDate: string;
+    description: string;
+  }>;
+  
+  educationHistory?: Array<{
+    institution: string;
+    degree: string;
+    field: string;
+    startYear: string;
+    endYear: string;
+  }>;
+  
+  projects?: Array<{
+    title: string;
+    description: string;
+    technologies: string;
+  }>;
+  
+  certifications?: Array<{
+    name: string;
+    issuer: string;
+    date: string;
+    expiryDate: string;
+  }>;
+  
+  awards?: Array<{
+    title: string;
+    issuer: string;
+    date: string;
+    description: string;
+  }>;
+  
+  languages?: Array<{
+    language: string;
+    proficiency: string;
+  }>;
+  
+  publications?: Array<{
+    title: string;
+    venue: string;
+    date: string;
+    description: string;
+  }>;
+  
+  // Profile picture fields
   profilePictureUrl?: string;
   hasProfilePicture?: boolean;
+  
+  // Auto-fill tracking
+  autoFilledFields?: string[];
 }
 
 export class UserProfileService {
@@ -127,21 +195,53 @@ export class UserProfileService {
             await UserProfileService.getProfileDetails(userId);
           if (fullProfile) {
             const profileData: ProfileData = {
+              // Personal Information
               fullName: fullProfile.fullName || '',
+              phone: fullProfile.phone || undefined,
+              city: fullProfile.city || undefined,
+              country: fullProfile.country || undefined,
+              
+              // Professional URLs
+              linkedinUrl: fullProfile.linkedinUrl || undefined,
+              githubUrl: fullProfile.githubUrl || undefined,
+              portfolioUrl: fullProfile.portfolioUrl || undefined,
+              
+              // Current Professional Info
               jobRole: fullProfile.jobRole || '',
               companyName: fullProfile.companyName || '',
               industry: fullProfile.industry || '',
               yearsOfExperience: fullProfile.yearsOfExperience || 0,
               education: fullProfile.education || '',
               about: fullProfile.about || '',
+              
+              // Professional Background & Skills
               interests: (fullProfile.interests || []).filter(
                 (item): item is string => item !== null
               ),
               skills: (fullProfile.skills || []).filter(
                 (item): item is string => item !== null
               ),
+              hobbies: (fullProfile.hobbies || []).filter(
+                (item): item is string => item !== null
+              ),
+              
+              // Detailed Professional Background
+              workExperience: fullProfile.workExperience as ProfileData['workExperience'] || undefined,
+              educationHistory: fullProfile.educationHistory as ProfileData['educationHistory'] || undefined,
+              projects: fullProfile.projects as ProfileData['projects'] || undefined,
+              certifications: fullProfile.certifications as ProfileData['certifications'] || undefined,
+              awards: fullProfile.awards as ProfileData['awards'] || undefined,
+              languages: fullProfile.languages as ProfileData['languages'] || undefined,
+              publications: fullProfile.publications as ProfileData['publications'] || undefined,
+              
+              // Profile picture fields
               profilePictureUrl: fullProfile.profilePictureUrl || undefined,
               hasProfilePicture: fullProfile.hasProfilePicture || false,
+              
+              // Auto-fill tracking
+              autoFilledFields: (fullProfile.autoFilledFields || []).filter(
+                (item): item is string => item !== null
+              ),
             };
             await VespaService.indexUser(userId, {
               ...profileData,

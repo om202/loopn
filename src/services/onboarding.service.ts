@@ -153,13 +153,27 @@ export class OnboardingService {
           isOnboardingComplete: isComplete,
           onboardingData: isComplete
             ? {
+                // Personal Information
                 fullName: userProfile.fullName || '',
+                email: userProfile.email || undefined,
+                phone: userProfile.phone || undefined,
+                city: userProfile.city || undefined,
+                country: userProfile.country || undefined,
+                
+                // Professional URLs
+                linkedinUrl: userProfile.linkedinUrl || undefined,
+                githubUrl: userProfile.githubUrl || undefined,
+                portfolioUrl: userProfile.portfolioUrl || undefined,
+                
+                // Current Professional Info
                 jobRole: userProfile.jobRole || '',
                 companyName: userProfile.companyName || '',
                 industry: userProfile.industry || '',
                 yearsOfExperience: userProfile.yearsOfExperience || 0,
                 education: userProfile.education || '',
                 about: userProfile.about || '',
+                
+                // Professional Background & Skills
                 interests: (userProfile.interests || []).filter(
                   (interest: string | null): interest is string =>
                     interest !== null
@@ -167,7 +181,26 @@ export class OnboardingService {
                 skills: (userProfile.skills || []).filter(
                   (skill: string | null): skill is string => skill !== null
                 ),
+                hobbies: (userProfile.hobbies || []).filter(
+                  (hobby: string | null): hobby is string => hobby !== null
+                ),
+                
+                // Detailed Professional Background
+                workExperience: userProfile.workExperience as OnboardingData['workExperience'] || [],
+                educationHistory: userProfile.educationHistory as OnboardingData['educationHistory'] || [],
+                projects: userProfile.projects as OnboardingData['projects'] || [],
+                certifications: userProfile.certifications as OnboardingData['certifications'] || [],
+                awards: userProfile.awards as OnboardingData['awards'] || [],
+                languages: userProfile.languages as OnboardingData['languages'] || [],
+                publications: userProfile.publications as OnboardingData['publications'] || [],
+                
+                // Profile picture fields
                 profilePictureUrl: userProfile.profilePictureUrl || undefined,
+                
+                // Auto-fill tracking
+                autoFilledFields: (userProfile.autoFilledFields || []).filter(
+                  (field: string | null): field is string => field !== null
+                ),
               }
             : undefined,
         };
@@ -244,22 +277,50 @@ export class OnboardingService {
         console.log('No profile picture file provided during onboarding');
       }
 
-      // Create user profile with onboarding data
+      // Create user profile with expanded onboarding data
       await userProfileService.createUserProfile(
         user.userId,
         user.signInDetails?.loginId || '',
         {
+          // Personal Information
           fullName: data.fullName,
+          phone: data.phone,
+          city: data.city,
+          country: data.country,
+          
+          // Professional URLs
+          linkedinUrl: data.linkedinUrl,
+          githubUrl: data.githubUrl,
+          portfolioUrl: data.portfolioUrl,
+          
+          // Current Professional Info
           jobRole: data.jobRole,
           companyName: data.companyName,
           industry: data.industry,
           yearsOfExperience: data.yearsOfExperience,
           education: data.education,
           about: data.about,
+          
+          // Professional Background & Skills
           interests: data.interests,
           skills: data.skills,
+          hobbies: data.hobbies,
+          
+          // Detailed Professional Background
+          workExperience: data.workExperience,
+          educationHistory: data.educationHistory,
+          projects: data.projects,
+          certifications: data.certifications,
+          awards: data.awards,
+          languages: data.languages,
+          publications: data.publications,
+          
+          // Profile picture fields
           profilePictureUrl: profilePictureUrl,
           hasProfilePicture: hasProfilePicture,
+          
+          // Auto-fill tracking
+          autoFilledFields: data.autoFilledFields,
         }
       );
 
