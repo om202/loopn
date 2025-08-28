@@ -1,6 +1,6 @@
 'use client';
 
-import { MessageSquare, Sparkles, Users, Search, Bookmark } from 'lucide-react';
+import { Sparkles, Users, Search, Bookmark } from 'lucide-react';
 
 import type { Schema } from '../../../amplify/data/resource';
 import { formatPresenceTime } from '../../lib/presence-utils';

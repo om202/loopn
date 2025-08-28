@@ -675,7 +675,6 @@ export default function OnlineUsers({
               </h2>
             </div>
           )}
-
         </div>
 
         <div className='relative flex-1 overflow-hidden'>

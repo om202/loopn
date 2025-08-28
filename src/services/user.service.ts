@@ -24,7 +24,7 @@ export class UserPresenceService {
         const currentStatus = existingResult.data.status;
         const currentIsOnline = existingResult.data.isOnline;
         const newIsOnline = status === 'ONLINE';
-        
+
         // Only update if status or isOnline state changed
         if (currentStatus !== status || currentIsOnline !== newIsOnline) {
           const result = await getClient().models.UserPresence.update({

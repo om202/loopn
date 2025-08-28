@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { MessageSquare, Compass, Users, Bug, Bookmark, Infinity } from 'lucide-react';
+import { Compass, Bug, Bookmark, Infinity } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAuthenticator } from '@aws-amplify/ui-react';

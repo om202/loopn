@@ -250,8 +250,6 @@ class SimplePresenceManager {
       clearTimeout(this.visibilityTimeout);
       this.visibilityTimeout = null;
     }
-
-
   }
 }
 
