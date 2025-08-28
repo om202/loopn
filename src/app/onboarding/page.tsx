@@ -30,7 +30,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLi
 const client = generateClient<Schema>();
 
 export default function OnboardingPage() {
-  const { authStatus, onboardingStatus, handleSignOut } = useAuth();
+  const { authStatus, onboardingStatus } = useAuth();
   const router = useRouter();
 
   const [currentStep, setCurrentStep] = useState(1);
@@ -515,15 +515,7 @@ export default function OnboardingPage() {
       <div className='max-w-4xl mx-auto'>
         {/* Main content card */}
         <div className='bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 lg:p-8'>
-          {/* Sign Out Button - Top Right of Card */}
-          <div className='flex justify-end mb-6'>
-            <button
-              onClick={handleSignOut}
-              className='text-sm text-slate-500 hover:text-b_red-600 transition-colors'
-            >
-              Sign Out
-            </button>
-          </div>
+
 
           {/* Header - Logo and Title */}
           <div className='text-center mb-8'>
@@ -536,51 +528,47 @@ export default function OnboardingPage() {
                   height={48}
                   priority
                 />
-                <h1 className='text-3xl font-bold text-black'>Loopn</h1>
+                <h1 className='text-3xl font-bold text-brand-600'>Loopn</h1>
               </div>
             </Link>
-            <p className='text-black text-base mb-6'>
+            <p className='text-black text-2xl font-bold mb-6'>
               Let's set up your profile
             </p>
           </div>
 
           {/* Resume Upload Section */}
           {showResumeUpload && currentStep === 1 && (
-            <div className='mb-8 bg-brand-50 border border-brand-200 rounded-2xl p-6'>
-              <div className='text-center'>
-                <p className='text-brand-700 mb-6 text-base font-semibold'>
-                  Upload your resume, and we'll autofill the form for you.
-                </p>
+            <div className='mb-8 text-center'>
+              <p className='text-slate-600 mb-4'>
+                Upload your resume, and we'll autofill the form for you.
+              </p>
 
-                <div className='flex justify-center'>
-                  <label className='cursor-pointer'>
-                    <input
-                      type='file'
-                      accept='.pdf'
-                      onChange={handleResumeUpload}
-                      disabled={isProcessingResume}
-                      className='hidden'
-                    />
-                    <div className='bg-brand-500 text-white px-6 py-3 rounded-xl font-medium hover:bg-brand-600 disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center gap-2 text-base'>
-                      {isProcessingResume ? (
-                        <>
-                          <div className='animate-spin rounded-full h-5 w-5 border-b-2 border-white'></div>
-                          Processing...
-                        </>
-                      ) : (
-                        <>
-                          <CloudUpload className='w-5 h-5' />
-                          Choose PDF Resume
-                        </>
-                      )}
-                    </div>
-                  </label>
+              <label className='cursor-pointer'>
+                <input
+                  type='file'
+                  accept='.pdf'
+                  onChange={handleResumeUpload}
+                  disabled={isProcessingResume}
+                  className='hidden'
+                />
+                <div className='bg-brand-500 text-white px-6 py-3 rounded-xl font-medium hover:bg-brand-600 disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center gap-2 text-base'>
+                  {isProcessingResume ? (
+                    <>
+                      <div className='animate-spin rounded-full h-5 w-5 border-b-2 border-white'></div>
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <CloudUpload className='w-5 h-5' />
+                      Choose PDF Resume
+                    </>
+                  )}
                 </div>
+              </label>
 
-                {resumeError && (
-                  <p className='text-b_red-600 mt-3 text-sm'>{resumeError}</p>
-                )}
-              </div>
+              {resumeError && (
+                <p className='text-red-600 mt-3 text-sm'>{resumeError}</p>
+              )}
             </div>
           )}
 
@@ -626,12 +614,9 @@ export default function OnboardingPage() {
           {/* Step: Personal & Professional Information */}
           {getCurrentStepInfo().key === 'personal' && (
             <div className='space-y-6'>
-              <h2 className='text-xl font-semibold text-black mb-2'>
+              <h2 className='text-xl font-semibold text-black mb-6'>
                 Personal & Professional Info
               </h2>
-              <p className='text-sm text-slate-500 mb-6'>
-                Only your <strong>full name</strong> is required. You can complete the rest anytime in your profile settings.
-              </p>
 
               {/* Personal Information Section */}
               <div className='bg-slate-50 rounded-xl p-4 space-y-4'>
