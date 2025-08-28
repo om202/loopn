@@ -50,11 +50,52 @@ export default function UserProfileContent({
 
   return (
     <div className={`space-y-8 ${className}`}>
+      {/* Professional Links */}
+      {(userProfile.linkedinUrl ||
+        userProfile.githubUrl ||
+        userProfile.portfolioUrl) && (
+        <div className='flex flex-wrap gap-2'>
+            {userProfile.linkedinUrl && (
+              <a
+                href={ensureHttps(userProfile.linkedinUrl)}
+                target='_blank'
+                rel='noopener noreferrer'
+                className='flex items-center gap-2 px-3 py-1.5 bg-slate-50 text-slate-700 hover:bg-blue-50 hover:text-blue-600 rounded-full text-sm font-medium transition-colors'
+              >
+                <Linkedin className='w-3.5 h-3.5' />
+                <span>LinkedIn</span>
+              </a>
+            )}
+            {userProfile.githubUrl && (
+              <a
+                href={ensureHttps(userProfile.githubUrl)}
+                target='_blank'
+                rel='noopener noreferrer'
+                className='flex items-center gap-2 px-3 py-1.5 bg-slate-50 text-slate-700 hover:bg-slate-100 hover:text-slate-900 rounded-full text-sm font-medium transition-colors'
+              >
+                <Github className='w-3.5 h-3.5' />
+                <span>GitHub</span>
+              </a>
+            )}
+            {userProfile.portfolioUrl && (
+              <a
+                href={ensureHttps(userProfile.portfolioUrl)}
+                target='_blank'
+                rel='noopener noreferrer'
+                className='flex items-center gap-2 px-3 py-1.5 bg-slate-50 text-slate-700 hover:bg-blue-50 hover:text-brand-600 rounded-full text-sm font-medium transition-colors'
+              >
+                <Globe className='w-3.5 h-3.5' />
+                <span>Portfolio</span>
+              </a>
+            )}
+        </div>
+      )}
+
       {/* Contact Information - Resume Header */}
       {showContactInfo &&
         (userProfile.phone || userProfile.city || userProfile.country) && (
           <div className='pb-6 border-b-2 border-slate-200'>
-            <div className='flex flex-wrap items-center gap-4 text-sm text-slate-600'>
+            <div className='flex flex-wrap items-center gap-4 text-sm text-slate-700'>
               {userProfile.phone && (
                 <div className='flex items-center gap-1'>
                   <Phone className='w-4 h-4' />
@@ -116,18 +157,6 @@ export default function UserProfileContent({
           </div>
         )}
 
-      {/* Professional Summary/About */}
-      {userProfile.about && (
-        <div>
-          <h4 className='text-base font-semibold text-slate-900 mb-4 pb-2 border-b border-slate-100'>
-            Professional Summary
-          </h4>
-          <p className='text-base text-slate-900 leading-relaxed'>
-            {userProfile.about}
-          </p>
-        </div>
-      )}
-
       {/* Work Experience */}
       {userProfile.workExperience &&
         Array.isArray(userProfile.workExperience) &&
@@ -156,7 +185,7 @@ export default function UserProfileContent({
                     </p>
                   </div>
                   {job.description && (
-                    <p className='text-base text-slate-900 leading-relaxed mt-2'>
+                    <p className='text-base text-slate-700 leading-relaxed mt-2'>
                       {job.description}
                     </p>
                   )}
@@ -178,7 +207,7 @@ export default function UserProfileContent({
             <div className='space-y-2'>
               {userProfile.jobRole && (
                 <div>
-                  <span className='text-base font-semibold text-slate-900'>
+                  <span className='text-base font-semibold text-slate-700'>
                     {userProfile.jobRole}
                   </span>
                   {userProfile.companyName && (
@@ -189,13 +218,13 @@ export default function UserProfileContent({
                 </div>
               )}
               {userProfile.industry && (
-                <p className='text-base text-slate-900'>
+                <p className='text-base text-slate-700'>
                   {userProfile.industry}
                 </p>
               )}
               {userProfile.yearsOfExperience &&
                 userProfile.yearsOfExperience > 0 && (
-                  <p className='text-base text-slate-900'>
+                  <p className='text-base text-slate-700'>
                     {userProfile.yearsOfExperience} years of experience
                   </p>
                 )}
@@ -237,7 +266,7 @@ export default function UserProfileContent({
               ))}
             </div>
           ) : (
-            <p className='text-base text-slate-900'>{userProfile.education}</p>
+            <p className='text-base text-slate-700'>{userProfile.education}</p>
           )}
         </div>
       ) : null}
@@ -260,7 +289,7 @@ export default function UserProfileContent({
                     {project.title}
                   </h5>
                   {project.description && (
-                    <p className='text-base text-slate-900 leading-relaxed mb-2'>
+                    <p className='text-base text-slate-700 leading-relaxed mb-2'>
                       {project.description}
                     </p>
                   )}
@@ -328,7 +357,7 @@ export default function UserProfileContent({
                     </p>
                   )}
                   {award.description && (
-                    <p className='text-base text-slate-900 mt-1 leading-relaxed'>
+                    <p className='text-base text-slate-700 mt-1 leading-relaxed'>
                       {award.description}
                     </p>
                   )}
@@ -349,10 +378,10 @@ export default function UserProfileContent({
             <div className='grid grid-cols-2 gap-2'>
               {userProfile.languages.map((lang: any, index: number) => (
                 <div key={index} className='flex justify-between items-center'>
-                  <span className='text-base font-medium text-slate-900'>
+                  <span className='text-base font-medium text-slate-700'>
                     {lang.language}
                   </span>
-                  <span className='text-sm text-slate-600 font-medium whitespace-nowrap'>
+                  <span className='text-sm text-slate-700 font-medium whitespace-nowrap'>
                     {lang.proficiency}
                   </span>
                 </div>
@@ -446,6 +475,18 @@ export default function UserProfileContent({
               </span>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* Professional Summary/About */}
+      {userProfile.about && (
+        <div>
+          <h4 className='text-base font-semibold text-slate-900 mb-4 pb-2 border-b border-slate-100'>
+            Professional Summary
+          </h4>
+          <p className='text-base text-slate-700 leading-relaxed'>
+            {userProfile.about}
+          </p>
         </div>
       )}
     </div>
