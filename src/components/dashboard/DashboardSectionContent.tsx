@@ -213,10 +213,10 @@ export default function DashboardSectionContent({
         };
       case 'saved':
         return {
-          title: 'Saved Users',
-          description: 'Users you have saved for quick access',
+          title: 'Saved',
+          description: 'Items you have saved for quick access',
           emptyIcon: Bookmark,
-          emptyMessage: 'No saved users yet',
+          emptyMessage: 'No saved items yet',
         };
       case 'search':
         return {

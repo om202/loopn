@@ -218,7 +218,7 @@ export default function UserCard({
           )}
         </div>
 
-        <div className='flex-shrink-0 flex items-center gap-1'>
+        <div className='flex-shrink-0 flex items-center gap-2'>
           {/* Save Button - only show for other users */}
           {currentUserId && userPresence.userId !== currentUserId && (
             <button
@@ -226,13 +226,13 @@ export default function UserCard({
               disabled={isSaveLoading}
               className={`p-2 rounded-lg transition-colors flex-shrink-0 ${
                 isSaved
-                  ? 'text-brand-600 bg-brand-50 hover:bg-brand-100'
+                  ? 'text-brand-600 hover:bg-slate-50'
                   : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50'
               } ${isSaveLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-              title={isSaved ? 'Remove from saved' : 'Save user'}
+              title={isSaved ? 'Remove from saved' : 'Save'}
             >
               <Bookmark
-                className={`w-4 h-4 ${isSaved ? 'fill-current' : ''}`}
+                className={`w-5 h-5 ${isSaved ? 'fill-current' : ''}`}
               />
             </button>
           )}
