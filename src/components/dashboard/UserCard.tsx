@@ -226,13 +226,13 @@ export default function UserCard({
               disabled={isSaveLoading}
               className={`p-2 rounded-lg transition-colors flex-shrink-0 ${
                 isSaved
-                  ? 'text-brand-600 hover:bg-slate-50'
+                  ? 'text-brand-500 hover:bg-slate-50'
                   : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50'
               } ${isSaveLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
               title={isSaved ? 'Remove from saved' : 'Save'}
             >
               <Bookmark
-                className={`w-5 h-5 ${isSaved ? 'fill-current' : ''}`}
+                className={`w-5 h-5 ${isSaved ? 'fill-brand-100 stroke-brand-500' : ''}`}
               />
             </button>
           )}

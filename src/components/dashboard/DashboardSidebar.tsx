@@ -89,16 +89,16 @@ export default function DashboardSidebar({
       count: suggestedUsersCount,
     },
     {
-      id: 'saved' as const,
-      icon: Bookmark,
-      label: 'Saved',
-      count: savedCount,
-    },
-    {
       id: 'connections' as const,
       icon: Users,
       label: 'Connections',
       count: connectionsCount,
+    },
+    {
+      id: 'saved' as const,
+      icon: Bookmark,
+      label: 'Saved',
+      count: savedCount,
     },
     {
       id: 'notifications' as const,
