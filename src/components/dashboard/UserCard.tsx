@@ -231,6 +231,7 @@ export default function UserCard({
             >
               <Bookmark
                 className={`w-5 h-5 stroke-slate-500 ${isSaved ? 'fill-slate-300' : ''}`}
+                strokeWidth={1.5}
               />
             </button>
           )}
