@@ -248,8 +248,6 @@ export class OnboardingService {
    * Complete user onboarding
    */
   static async completeOnboarding(data: OnboardingData): Promise<void> {
-
-
     try {
       // Ensure Amplify is ready before making API calls
       await amplifyInitialization.waitForReady();
