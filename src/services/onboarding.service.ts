@@ -16,16 +16,16 @@ export interface OnboardingData {
   githubUrl?: string;
   portfolioUrl?: string;
 
-  // Current Professional Info (for compatibility)
-  jobRole: string;
-  companyName: string;
-  industry: string;
-  yearsOfExperience: number;
-  education: string; // Keep as string for compatibility, but also have detailed education below
-  about: string;
+  // Current Professional Info (for compatibility) - made optional to match UI validation
+  jobRole?: string;
+  companyName?: string;
+  industry?: string;
+  yearsOfExperience?: number;
+  education?: string; // Keep as string for compatibility, but also have detailed education below
+  about?: string;
 
-  // Detailed Professional Background
-  workExperience: Array<{
+  // Detailed Professional Background - made optional since they're dynamic
+  workExperience?: Array<{
     company: string;
     position: string;
     startDate: string;
@@ -33,8 +33,8 @@ export interface OnboardingData {
     description: string;
   }>;
 
-  // Detailed Education
-  educationHistory: Array<{
+  // Detailed Education - made optional since they're dynamic
+  educationHistory?: Array<{
     institution: string;
     degree: string;
     field: string;
@@ -42,44 +42,44 @@ export interface OnboardingData {
     endYear: string;
   }>;
 
-  // Skills & Projects
-  skills: string[];
-  projects: Array<{
+  // Skills & Projects - made optional to match UI behavior
+  skills?: string[];
+  projects?: Array<{
     title: string;
     description: string;
     technologies: string;
   }>;
 
-  // Additional Qualifications
-  certifications: Array<{
+  // Additional Qualifications - made optional since they're dynamic
+  certifications?: Array<{
     name: string;
     issuer: string;
     date: string;
     expiryDate: string;
   }>;
 
-  awards: Array<{
+  awards?: Array<{
     title: string;
     issuer: string;
     date: string;
     description: string;
   }>;
 
-  languages: Array<{
+  languages?: Array<{
     language: string;
     proficiency: string;
   }>;
 
-  publications: Array<{
+  publications?: Array<{
     title: string;
     venue: string;
     date: string;
     description: string;
   }>;
 
-  // Personal Interests
-  interests: string[]; // Professional interests from our current system
-  hobbies: string[]; // Personal hobbies from resume
+  // Personal Interests - made optional to match UI validation
+  interests?: string[]; // Professional interests from our current system
+  hobbies?: string[]; // Personal hobbies from resume
 
   // Profile Picture
   profilePictureFile?: File; // For upload during onboarding
@@ -185,24 +185,35 @@ export class OnboardingService {
                   (hobby: string | null): hobby is string => hobby !== null
                 ),
 
-                // Detailed Professional Background
+                // Detailed Professional Background - parse JSON strings back to objects
                 workExperience:
-                  (userProfile.workExperience as OnboardingData['workExperience']) ||
-                  [],
+                  (this.safeParseJSON(
+                    userProfile.workExperience
+                  ) as OnboardingData['workExperience']) || [],
                 educationHistory:
-                  (userProfile.educationHistory as OnboardingData['educationHistory']) ||
-                  [],
+                  (this.safeParseJSON(
+                    userProfile.educationHistory
+                  ) as OnboardingData['educationHistory']) || [],
                 projects:
-                  (userProfile.projects as OnboardingData['projects']) || [],
+                  (this.safeParseJSON(
+                    userProfile.projects
+                  ) as OnboardingData['projects']) || [],
                 certifications:
-                  (userProfile.certifications as OnboardingData['certifications']) ||
-                  [],
-                awards: (userProfile.awards as OnboardingData['awards']) || [],
+                  (this.safeParseJSON(
+                    userProfile.certifications
+                  ) as OnboardingData['certifications']) || [],
+                awards:
+                  (this.safeParseJSON(
+                    userProfile.awards
+                  ) as OnboardingData['awards']) || [],
                 languages:
-                  (userProfile.languages as OnboardingData['languages']) || [],
+                  (this.safeParseJSON(
+                    userProfile.languages
+                  ) as OnboardingData['languages']) || [],
                 publications:
-                  (userProfile.publications as OnboardingData['publications']) ||
-                  [],
+                  (this.safeParseJSON(
+                    userProfile.publications
+                  ) as OnboardingData['publications']) || [],
 
                 // Profile picture fields
                 profilePictureUrl: userProfile.profilePictureUrl || undefined,
@@ -237,26 +248,49 @@ export class OnboardingService {
    * Complete user onboarding
    */
   static async completeOnboarding(data: OnboardingData): Promise<void> {
+    console.log('🔧 [ONBOARDING SERVICE] Starting completeOnboarding...');
+    console.log('📥 [ONBOARDING SERVICE] Received data:', {
+      fullName: data.fullName,
+      email: data.email,
+      hasWorkExp: data.workExperience?.length || 0,
+      hasEducation: data.educationHistory?.length || 0,
+      hasSkills: data.skills?.length || 0,
+      hasInterests: data.interests?.length || 0,
+      hasProfilePicture: !!data.profilePictureFile,
+      autoFilledCount: data.autoFilledFields?.length || 0,
+    });
+
     try {
       // Ensure Amplify is ready before making API calls
+      console.log(
+        '⏳ [ONBOARDING SERVICE] Waiting for Amplify initialization...'
+      );
       await amplifyInitialization.waitForReady();
 
+      console.log('👤 [ONBOARDING SERVICE] Getting current user...');
       const user = await getCurrentUser();
       if (!user) {
         throw new Error('User not authenticated');
       }
+      console.log('✅ [ONBOARDING SERVICE] User authenticated:', user.userId);
 
       // Handle profile picture upload if provided
       let profilePictureUrl: string | undefined;
       let hasProfilePicture = false;
 
       if (data.profilePictureFile) {
+        console.log(
+          '📷 [ONBOARDING SERVICE] Processing profile picture upload...'
+        );
         try {
           const fileExtension =
             data.profilePictureFile.name.split('.').pop() || 'jpg';
           const fileName = `${user.userId}/profile.${fileExtension}`;
 
-          console.log('Attempting to upload profile picture:', fileName);
+          console.log(
+            '📤 [ONBOARDING SERVICE] Uploading profile picture:',
+            fileName
+          );
 
           const uploadResult = await uploadData({
             key: `profile-pictures/${fileName}`,
@@ -268,14 +302,20 @@ export class OnboardingService {
 
           profilePictureUrl = uploadResult.key;
           hasProfilePicture = true;
-          console.log('Profile picture uploaded successfully:', {
-            key: profilePictureUrl,
-            size: data.profilePictureFile.size,
-            type: data.profilePictureFile.type,
-          });
+          console.log(
+            '✅ [ONBOARDING SERVICE] Profile picture uploaded successfully:',
+            {
+              key: profilePictureUrl,
+              size: data.profilePictureFile.size,
+              type: data.profilePictureFile.type,
+            }
+          );
         } catch (uploadError) {
-          console.error('Failed to upload profile picture:', uploadError);
-          console.error('Upload error details:', {
+          console.error(
+            '❌ [ONBOARDING SERVICE] Failed to upload profile picture:',
+            uploadError
+          );
+          console.error('🔍 [ONBOARDING SERVICE] Upload error details:', {
             userId: user.userId,
             fileName: `${user.userId}/profile.${data.profilePictureFile.name.split('.').pop() || 'jpg'}`,
             fileSize: data.profilePictureFile.size,
@@ -284,65 +324,116 @@ export class OnboardingService {
           // Continue with onboarding even if image upload fails
         }
       } else {
-        console.log('No profile picture file provided during onboarding');
+        console.log(
+          '🚫 [ONBOARDING SERVICE] No profile picture file provided during onboarding'
+        );
       }
 
       // Create user profile with expanded onboarding data
-      await userProfileService.createUserProfile(
-        user.userId,
-        user.signInDetails?.loginId || '',
+      const profileData = {
+        // Personal Information
+        fullName: data.fullName,
+        phone: data.phone,
+        city: data.city,
+        country: data.country,
+
+        // Professional URLs
+        linkedinUrl: data.linkedinUrl,
+        githubUrl: data.githubUrl,
+        portfolioUrl: data.portfolioUrl,
+
+        // Current Professional Info - provide defaults for optional fields (null for indexed fields)
+        jobRole: data.jobRole || '',
+        companyName: data.companyName || '',
+        industry: data.industry || null, // null instead of '' for DynamoDB secondary index
+        yearsOfExperience: data.yearsOfExperience || 0,
+        education: data.education || '',
+        about: data.about || '',
+
+        // Professional Background & Skills - provide defaults for arrays
+        interests: data.interests || [],
+        skills: data.skills || [],
+        hobbies: data.hobbies || [],
+
+        // Detailed Professional Background - provide defaults for arrays
+        workExperience: data.workExperience || [],
+        educationHistory: data.educationHistory || [],
+        projects: data.projects || [],
+        certifications: data.certifications || [],
+        awards: data.awards || [],
+        languages: data.languages || [],
+        publications: data.publications || [],
+
+        // Profile picture fields
+        profilePictureUrl: profilePictureUrl,
+        hasProfilePicture: hasProfilePicture,
+
+        // Auto-fill tracking
+        autoFilledFields: data.autoFilledFields || [],
+      };
+
+      console.log(
+        '📊 [ONBOARDING SERVICE] Profile data to be sent to server:',
         {
-          // Personal Information
-          fullName: data.fullName,
-          phone: data.phone,
-          city: data.city,
-          country: data.country,
-
-          // Professional URLs
-          linkedinUrl: data.linkedinUrl,
-          githubUrl: data.githubUrl,
-          portfolioUrl: data.portfolioUrl,
-
-          // Current Professional Info
-          jobRole: data.jobRole,
-          companyName: data.companyName,
-          industry: data.industry,
-          yearsOfExperience: data.yearsOfExperience,
-          education: data.education,
-          about: data.about,
-
-          // Professional Background & Skills
-          interests: data.interests,
-          skills: data.skills,
-          hobbies: data.hobbies,
-
-          // Detailed Professional Background
-          workExperience: data.workExperience,
-          educationHistory: data.educationHistory,
-          projects: data.projects,
-          certifications: data.certifications,
-          awards: data.awards,
-          languages: data.languages,
-          publications: data.publications,
-
-          // Profile picture fields
-          profilePictureUrl: profilePictureUrl,
-          hasProfilePicture: hasProfilePicture,
-
-          // Auto-fill tracking
-          autoFilledFields: data.autoFilledFields,
+          userId: user.userId,
+          email: user.signInDetails?.loginId || '',
+          fullName: profileData.fullName,
+          jobRole: profileData.jobRole,
+          companyName: profileData.companyName,
+          industry: profileData.industry, // 🔍 Should be null if empty to avoid DynamoDB secondary index error
+          industryType: typeof profileData.industry,
+          yearsOfExperience: profileData.yearsOfExperience,
+          skillsCount: profileData.skills.length,
+          interestsCount: profileData.interests.length,
+          workExpCount: profileData.workExperience.length,
+          educationCount: profileData.educationHistory.length,
+          projectsCount: profileData.projects.length,
+          certificationsCount: profileData.certifications.length,
+          awardsCount: profileData.awards.length,
+          languagesCount: profileData.languages.length,
+          publicationsCount: profileData.publications.length,
+          hobbiesCount: profileData.hobbies.length,
+          autoFilledCount: profileData.autoFilledFields.length,
+          hasProfilePicture: profileData.hasProfilePicture,
+          profilePictureUrl: profileData.profilePictureUrl,
         }
       );
 
+      console.log(
+        '📤 [ONBOARDING SERVICE] Calling userProfileService.createUserProfile...'
+      );
+      await userProfileService.createUserProfile(
+        user.userId,
+        user.signInDetails?.loginId || '',
+        profileData
+      );
+      console.log('✅ [ONBOARDING SERVICE] User profile created successfully!');
+
       // Update localStorage
+      console.log(
+        '💾 [ONBOARDING SERVICE] Updating localStorage with completion status...'
+      );
       const status: UserOnboardingStatus = {
         isOnboardingComplete: true,
         onboardingData: data,
       };
 
       await this.setOnboardingStatusInStorage(status);
+      console.log('✅ [ONBOARDING SERVICE] LocalStorage updated successfully!');
+      console.log(
+        '🎉 [ONBOARDING SERVICE] Onboarding completion process finished!'
+      );
     } catch (error) {
-      console.error('Error completing onboarding:', error);
+      console.error(
+        '❌ [ONBOARDING SERVICE] Error completing onboarding:',
+        error
+      );
+      console.error('🔍 [ONBOARDING SERVICE] Error details:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined,
+        type: typeof error,
+        name: error instanceof Error ? error.name : undefined,
+      });
       throw error;
     }
   }
@@ -473,6 +564,18 @@ export class OnboardingService {
   }
 
   // Private helper methods
+  private static safeParseJSON(jsonString: unknown): unknown {
+    if (!jsonString || typeof jsonString !== 'string') {
+      return null;
+    }
+    try {
+      return JSON.parse(jsonString);
+    } catch (error) {
+      console.error('Failed to parse JSON field:', error);
+      return null;
+    }
+  }
+
   private static async getOnboardingStatusFromStorage(): Promise<UserOnboardingStatus | null> {
     try {
       if (typeof window === 'undefined') return null;

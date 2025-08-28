@@ -384,7 +384,8 @@ export function mergeResumeWithOnboardingData(
           ...(existingData.skills || []),
         ].filter(
           (skill, index, array) =>
-            array.findIndex(s => s.toLowerCase() === skill.toLowerCase()) === index
+            array.findIndex(s => s.toLowerCase() === skill.toLowerCase()) ===
+            index
         );
       } else if (key === 'hobbies') {
         merged.hobbies = [
@@ -392,7 +393,8 @@ export function mergeResumeWithOnboardingData(
           ...(existingData.hobbies || []),
         ].filter(
           (hobby, index, array) =>
-            array.findIndex(h => h.toLowerCase() === hobby.toLowerCase()) === index
+            array.findIndex(h => h.toLowerCase() === hobby.toLowerCase()) ===
+            index
         );
       } else if (key === 'interests') {
         // Preserve existing interests (these are manually selected)

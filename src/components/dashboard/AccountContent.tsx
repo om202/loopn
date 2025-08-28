@@ -25,6 +25,55 @@ import {
   MapPin,
 } from 'lucide-react';
 
+// Type definitions for profile data arrays
+interface WorkExperience {
+  company: string;
+  position: string;
+  startDate: string;
+  endDate: string;
+  description: string;
+}
+
+interface EducationHistory {
+  institution: string;
+  degree: string;
+  field: string;
+  startYear: string;
+  endYear: string;
+}
+
+interface Project {
+  title: string;
+  description: string;
+  technologies: string;
+}
+
+interface Certification {
+  name: string;
+  issuer: string;
+  date: string;
+  expiryDate: string;
+}
+
+interface Award {
+  title: string;
+  issuer: string;
+  date: string;
+  description: string;
+}
+
+interface Language {
+  language: string;
+  proficiency: string;
+}
+
+interface Publication {
+  title: string;
+  venue: string;
+  date: string;
+  description: string;
+}
+
 export default function AccountContent() {
   const { user, onboardingStatus } = useAuth();
 
@@ -309,23 +358,22 @@ export default function AccountContent() {
 
                     {/* Hobbies */}
                     {userProfile.hobbies &&
-                      (userProfile.hobbies as any[]).length > 0 && (
+                      Array.isArray(userProfile.hobbies) &&
+                      userProfile.hobbies.length > 0 && (
                         <div className='py-3'>
                           <dt className='text-base font-medium text-slate-500 mb-1.5 flex items-center gap-2'>
                             <Gamepad2 className='w-4 h-4' />
                             Personal Hobbies
                           </dt>
                           <dd className='flex flex-wrap gap-2'>
-                            {((userProfile.hobbies as any[]) || []).map(
-                              (hobby, index) => (
-                                <span
-                                  key={index}
-                                  className='px-3 py-1.5 text-base bg-purple-50 text-purple-700 border border-purple-200 rounded-lg font-medium'
-                                >
-                                  {hobby}
-                                </span>
-                              )
-                            )}
+                            {userProfile.hobbies.map((hobby, index) => (
+                              <span
+                                key={index}
+                                className='px-3 py-1.5 text-base bg-purple-50 text-purple-700 border border-purple-200 rounded-lg font-medium'
+                              >
+                                {hobby}
+                              </span>
+                            ))}
                           </dd>
                         </div>
                       )}
@@ -335,14 +383,15 @@ export default function AccountContent() {
 
               {/* Work Experience Timeline */}
               {userProfile.workExperience &&
-                (userProfile.workExperience as any[]).length > 0 && (
+                Array.isArray(userProfile.workExperience) &&
+                userProfile.workExperience.length > 0 && (
                   <div className='pb-6'>
                     <h4 className='text-base font-medium text-slate-500 mb-4'>
                       Work Experience
                     </h4>
                     <div className='space-y-4'>
-                      {((userProfile.workExperience as any[]) || []).map(
-                        (job: any, index: number) => (
+                      {userProfile.workExperience.map(
+                        (job: WorkExperience, index: number) => (
                           <div
                             key={index}
                             className='border border-slate-200 rounded-lg p-4'
@@ -373,14 +422,15 @@ export default function AccountContent() {
 
               {/* Education History */}
               {userProfile.educationHistory &&
-                (userProfile.educationHistory as any[]).length > 0 && (
+                Array.isArray(userProfile.educationHistory) &&
+                userProfile.educationHistory.length > 0 && (
                   <div className='pb-6'>
                     <h4 className='text-base font-medium text-slate-500 mb-4'>
                       Education History
                     </h4>
                     <div className='space-y-4'>
-                      {((userProfile.educationHistory as any[]) || []).map(
-                        (edu: any, index: number) => (
+                      {userProfile.educationHistory.map(
+                        (edu: EducationHistory, index: number) => (
                           <div
                             key={index}
                             className='border border-slate-200 rounded-lg p-4'
@@ -409,14 +459,15 @@ export default function AccountContent() {
 
               {/* Projects */}
               {userProfile.projects &&
-                (userProfile.projects as any[]).length > 0 && (
+                Array.isArray(userProfile.projects) &&
+                userProfile.projects.length > 0 && (
                   <div className='pb-6'>
                     <h4 className='text-base font-medium text-slate-500 mb-4'>
                       Projects
                     </h4>
                     <div className='space-y-4'>
-                      {((userProfile.projects as any[]) || []).map(
-                        (project: any, index: number) => (
+                      {userProfile.projects.map(
+                        (project: Project, index: number) => (
                           <div
                             key={index}
                             className='border border-slate-200 rounded-lg p-4'
@@ -447,14 +498,15 @@ export default function AccountContent() {
 
               {/* Certifications */}
               {userProfile.certifications &&
-                (userProfile.certifications as any[]).length > 0 && (
+                Array.isArray(userProfile.certifications) &&
+                userProfile.certifications.length > 0 && (
                   <div className='pb-6'>
                     <h4 className='text-base font-medium text-slate-500 mb-4'>
                       Certifications
                     </h4>
                     <div className='space-y-4'>
-                      {((userProfile.certifications as any[]) || []).map(
-                        (cert: any, index: number) => (
+                      {userProfile.certifications.map(
+                        (cert: Certification, index: number) => (
                           <div
                             key={index}
                             className='border border-slate-200 rounded-lg p-4'
@@ -482,52 +534,52 @@ export default function AccountContent() {
 
               {/* Awards */}
               {userProfile.awards &&
-                (userProfile.awards as any[]).length > 0 && (
+                Array.isArray(userProfile.awards) &&
+                userProfile.awards.length > 0 && (
                   <div className='pb-6'>
                     <h4 className='text-base font-medium text-slate-500 mb-4'>
                       Awards & Achievements
                     </h4>
                     <div className='space-y-4'>
-                      {((userProfile.awards as any[]) || []).map(
-                        (award: any, index: number) => (
-                          <div
-                            key={index}
-                            className='border border-slate-200 rounded-lg p-4'
-                          >
-                            <div className='flex items-center gap-2 mb-2'>
-                              <Trophy className='w-4 h-4 text-slate-500' />
-                              <div className='text-base font-medium text-black'>
-                                {award.title}
-                              </div>
+                      {userProfile.awards.map((award: Award, index: number) => (
+                        <div
+                          key={index}
+                          className='border border-slate-200 rounded-lg p-4'
+                        >
+                          <div className='flex items-center gap-2 mb-2'>
+                            <Trophy className='w-4 h-4 text-slate-500' />
+                            <div className='text-base font-medium text-black'>
+                              {award.title}
                             </div>
-                            <div className='text-base text-slate-600 mb-1'>
-                              {award.issuer}
-                            </div>
-                            <div className='text-sm text-slate-500 mb-2'>
-                              {award.date}
-                            </div>
-                            {award.description && (
-                              <div className='text-sm text-slate-700'>
-                                {award.description}
-                              </div>
-                            )}
                           </div>
-                        )
-                      )}
+                          <div className='text-base text-slate-600 mb-1'>
+                            {award.issuer}
+                          </div>
+                          <div className='text-sm text-slate-500 mb-2'>
+                            {award.date}
+                          </div>
+                          {award.description && (
+                            <div className='text-sm text-slate-700'>
+                              {award.description}
+                            </div>
+                          )}
+                        </div>
+                      ))}
                     </div>
                   </div>
                 )}
 
               {/* Languages */}
               {userProfile.languages &&
-                (userProfile.languages as any[]).length > 0 && (
+                Array.isArray(userProfile.languages) &&
+                userProfile.languages.length > 0 && (
                   <div className='pb-6'>
                     <h4 className='text-base font-medium text-slate-500 mb-4'>
                       Languages
                     </h4>
                     <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-                      {((userProfile.languages as any[]) || []).map(
-                        (lang: any, index: number) => (
+                      {userProfile.languages.map(
+                        (lang: Language, index: number) => (
                           <div
                             key={index}
                             className='border border-slate-200 rounded-lg p-3'
@@ -552,14 +604,15 @@ export default function AccountContent() {
 
               {/* Publications */}
               {userProfile.publications &&
-                (userProfile.publications as any[]).length > 0 && (
+                Array.isArray(userProfile.publications) &&
+                userProfile.publications.length > 0 && (
                   <div className='pb-6'>
                     <h4 className='text-base font-medium text-slate-500 mb-4'>
                       Publications
                     </h4>
                     <div className='space-y-4'>
-                      {((userProfile.publications as any[]) || []).map(
-                        (pub: any, index: number) => (
+                      {userProfile.publications.map(
+                        (pub: Publication, index: number) => (
                           <div
                             key={index}
                             className='border border-slate-200 rounded-lg p-4'

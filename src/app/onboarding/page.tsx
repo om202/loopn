@@ -5,7 +5,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { CloudUpload } from 'lucide-react';
-import * as pdfjsLib from 'pdfjs-dist';
 import { generateClient } from 'aws-amplify/data';
 import type { Schema } from '../../../amplify/data/resource';
 import { useAuth } from '@/contexts/AuthContext';
@@ -23,12 +22,6 @@ import { ResumeData, mergeResumeWithOnboardingData } from '@/lib/resume-mapper';
 import LoadingContainer from '@/components/LoadingContainer';
 import ProfilePictureUpload from '@/components/ProfilePictureUpload';
 
-// Set up the worker for pdf.js
-pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
-
-// Initialize Amplify Data client
-const client = generateClient<Schema>();
-
 export default function OnboardingPage() {
   const { authStatus, onboardingStatus } = useAuth();
   const router = useRouter();
@@ -45,7 +38,7 @@ export default function OnboardingPage() {
   const [showResumeUpload, setShowResumeUpload] = useState(true);
   const [resumeProcessed, setResumeProcessed] = useState(false);
 
-  // Form data
+  // Form data - initialized with proper defaults
   const [formData, setFormData] = useState<Partial<OnboardingData>>({
     // Personal Information
     fullName: '',
@@ -67,23 +60,23 @@ export default function OnboardingPage() {
     education: '',
     about: '',
 
-    // Detailed Professional Background
+    // Detailed Professional Background - initialize as empty arrays
     workExperience: [],
 
-    // Detailed Education
+    // Detailed Education - initialize as empty arrays
     educationHistory: [],
 
-    // Skills & Projects
+    // Skills & Projects - initialize as empty arrays
     skills: [],
     projects: [],
 
-    // Additional Qualifications
+    // Additional Qualifications - initialize as empty arrays
     certifications: [],
     awards: [],
     languages: [],
     publications: [],
 
-    // Personal Interests
+    // Personal Interests - initialize as empty arrays
     interests: [],
     hobbies: [],
 
@@ -146,14 +139,14 @@ export default function OnboardingPage() {
       key: 'about',
       required: true,
     });
-    
+
     steps.push({
       id: steps.length + 1,
       title: 'Interests',
       key: 'interests',
       required: true,
     });
-    
+
     steps.push({
       id: steps.length + 1,
       title: 'Picture',
@@ -207,12 +200,31 @@ export default function OnboardingPage() {
   useEffect(() => {
     const loadPartialData = async () => {
       try {
+        console.log('💾 [LOCALSTORAGE] Loading partial onboarding data...');
         const partialData = await OnboardingService.getPartialOnboardingData();
         if (partialData) {
+          console.log('✅ [LOCALSTORAGE] Partial data found:', {
+            fullName: partialData.fullName,
+            skillsCount: partialData.skills?.length || 0,
+            interestsCount: partialData.interests?.length || 0,
+            workExpCount: partialData.workExperience?.length || 0,
+            autoFilledCount: partialData.autoFilledFields?.length || 0,
+            hasResumeData: !!(
+              partialData.autoFilledFields &&
+              partialData.autoFilledFields.length > 0
+            ),
+          });
           setFormData(prev => ({ ...prev, ...partialData }));
+        } else {
+          console.log(
+            'ℹ️ [LOCALSTORAGE] No partial data found, using defaults'
+          );
         }
       } catch (error) {
-        console.error('Error loading partial onboarding data:', error);
+        console.error(
+          '❌ [LOCALSTORAGE] Error loading partial onboarding data:',
+          error
+        );
       }
     };
 
@@ -223,9 +235,19 @@ export default function OnboardingPage() {
   useEffect(() => {
     const savePartialData = async () => {
       try {
+        console.log('💾 [LOCALSTORAGE] Saving partial onboarding data...', {
+          fullName: formData.fullName,
+          skillsCount: formData.skills?.length || 0,
+          interestsCount: formData.interests?.length || 0,
+          workExpCount: formData.workExperience?.length || 0,
+        });
         await OnboardingService.savePartialOnboardingData(formData);
+        console.log('✅ [LOCALSTORAGE] Partial data saved successfully');
       } catch (error) {
-        console.error('Error saving partial onboarding data:', error);
+        console.error(
+          '❌ [LOCALSTORAGE] Error saving partial onboarding data:',
+          error
+        );
       }
     };
 
@@ -245,7 +267,10 @@ export default function OnboardingPage() {
   };
 
   // Helper function to get input className with highlighting
-  const getInputClassName = (fieldName: string, baseClassName: string = 'w-full px-3 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white') => {
+  const getInputClassName = (
+    fieldName: string,
+    baseClassName: string = 'w-full px-3 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+  ) => {
     const isHighlighted = highlightedFields.includes(fieldName);
     if (isHighlighted) {
       return `${baseClassName.replace('border-slate-200', 'border-red-500')} ring-2 ring-red-200`;
@@ -270,7 +295,7 @@ export default function OnboardingPage() {
     if (!stepInfo) return [];
 
     const missingFields: string[] = [];
-    
+
     switch (stepInfo.key) {
       case 'personal':
         // Only require the most essential field - Full Name
@@ -299,36 +324,49 @@ export default function OnboardingPage() {
         // Profile picture is optional
         break;
     }
-    
+
     return missingFields;
   };
 
   const validateStep = (step: number): boolean => {
-    return getMissingFields(step).length === 0;
+    const missingFields = getMissingFields(step);
+    const isValid = missingFields.length === 0;
+
+    console.log(`🔍 [VALIDATION] Step ${step} validation:`, {
+      stepInfo: getCurrentStepInfo(),
+      missingFields,
+      isValid,
+      currentFormData: {
+        fullName: formData.fullName,
+        hasContent: !!formData.fullName?.trim(),
+      },
+    });
+
+    return isValid;
   };
 
   const nextStep = () => {
     const missingFields = getMissingFields(currentStep);
-    
+
     if (missingFields.length > 0) {
       // Highlight missing fields instead of blocking
       setHighlightedFields(missingFields);
-      
+
       // Show a brief error message
       if (missingFields.includes('fullName')) {
         setError('Please enter your full name to continue');
       } else {
         setError(`Please fill in: ${missingFields.join(', ')}`);
       }
-      
+
       // Clear error after 3 seconds
       setTimeout(() => {
         setError('');
       }, 3000);
-      
+
       return;
     }
-    
+
     if (currentStep < totalSteps) {
       setCurrentStep(currentStep + 1);
       setHighlightedFields([]); // Clear highlights when moving
@@ -343,16 +381,99 @@ export default function OnboardingPage() {
   };
 
   const handleComplete = async () => {
-    if (!validateStep(totalSteps)) return;
+    console.log(
+      '🎯 [ONBOARDING] Complete button clicked - starting validation...'
+    );
+    console.log('📊 [ONBOARDING] Final form state:', {
+      currentStep,
+      totalSteps,
+      stepInfo: getCurrentStepInfo(),
+      formDataSummary: {
+        fullName: formData.fullName,
+        fullNameValid: !!formData.fullName?.trim(),
+        skillsCount: formData.skills?.length || 0,
+        interestsCount: formData.interests?.length || 0,
+        workExpCount: formData.workExperience?.length || 0,
+        autoFilledCount: formData.autoFilledFields?.length || 0,
+      },
+    });
+
+    const isValid = validateStep(totalSteps);
+    if (!isValid) {
+      console.log(
+        '❌ [ONBOARDING] Validation failed - stopping completion process'
+      );
+      return;
+    }
+    console.log(
+      '✅ [ONBOARDING] Validation passed - proceeding with completion...'
+    );
 
     setIsLoading(true);
     setError('');
 
     try {
-      await OnboardingService.completeOnboarding(formData as OnboardingData);
+      // Ensure we have a valid OnboardingData object with at least fullName
+      const onboardingData: OnboardingData = {
+        fullName: formData.fullName || '', // This should be validated above
+        ...formData,
+      };
+
+      console.log('🚀 [ONBOARDING] Starting completion process...');
+      console.log('📋 [ONBOARDING] Form data being submitted:', {
+        fullName: onboardingData.fullName,
+        email: onboardingData.email,
+        phone: onboardingData.phone,
+        city: onboardingData.city,
+        country: onboardingData.country,
+        jobRole: onboardingData.jobRole,
+        companyName: onboardingData.companyName,
+        industry: onboardingData.industry,
+        yearsOfExperience: onboardingData.yearsOfExperience,
+        education: onboardingData.education,
+        about: onboardingData.about,
+        skills: onboardingData.skills,
+        interests: onboardingData.interests,
+        workExperience: onboardingData.workExperience?.length || 0,
+        educationHistory: onboardingData.educationHistory?.length || 0,
+        projects: onboardingData.projects?.length || 0,
+        certifications: onboardingData.certifications?.length || 0,
+        awards: onboardingData.awards?.length || 0,
+        languages: onboardingData.languages?.length || 0,
+        publications: onboardingData.publications?.length || 0,
+        hobbies: onboardingData.hobbies?.length || 0,
+        autoFilledFields: onboardingData.autoFilledFields?.length || 0,
+        hasProfilePicture: !!onboardingData.profilePictureFile,
+      });
+
+      console.log(
+        '📤 [ONBOARDING] Calling OnboardingService.completeOnboarding...'
+      );
+
+      // 🔍 BREAKPOINT 1: Before submitting to server
+      // eslint-disable-next-line no-debugger
+      debugger;
+
+      await OnboardingService.completeOnboarding(onboardingData);
+
+      console.log('✅ [ONBOARDING] Server responded successfully!');
+
+      // 🔍 BREAKPOINT 2: After server response
+      // eslint-disable-next-line no-debugger
+      debugger;
+      console.log('🏠 [ONBOARDING] Navigating to dashboard...');
+
       // Onboarding complete! Navigate to dashboard
       router.replace('/dashboard');
     } catch (err) {
+      console.error('❌ [ONBOARDING] Completion failed with error:', err);
+      console.error('🔍 [ONBOARDING] Error details:', {
+        message: err instanceof Error ? err.message : 'Unknown error',
+        stack: err instanceof Error ? err.stack : undefined,
+        type: typeof err,
+        stringified: JSON.stringify(err, null, 2),
+      });
+
       setError(
         err instanceof Error ? err.message : 'Failed to complete onboarding'
       );
@@ -421,6 +542,12 @@ export default function OnboardingPage() {
 
   // Resume processing functions
   const extractTextFromPDF = async (file: File): Promise<string> => {
+    // Dynamically import pdfjs-dist only on client side
+    const pdfjsLib = await import('pdfjs-dist');
+
+    // Set up the worker for pdf.js
+    pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
+
     const arrayBuffer = await file.arrayBuffer();
     const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
     let fullText = '';
@@ -441,6 +568,9 @@ export default function OnboardingPage() {
   };
 
   const parseResumeWithBedrock = async (text: string): Promise<ResumeData> => {
+    // Initialize Amplify Data client safely on client side
+    const client = generateClient<Schema>();
+
     const result = await client.queries.parseResume({
       text: text,
     });
@@ -464,8 +594,15 @@ export default function OnboardingPage() {
     const file = event.target.files?.[0];
     if (!file) return;
 
+    console.log('📄 [RESUME UPLOAD] Starting resume upload process...', {
+      fileName: file.name,
+      fileSize: file.size,
+      fileType: file.type,
+    });
+
     if (file.type !== 'application/pdf') {
       setResumeError('Please upload a PDF file');
+      console.error('❌ [RESUME UPLOAD] Invalid file type:', file.type);
       return;
     }
 
@@ -474,33 +611,70 @@ export default function OnboardingPage() {
 
     try {
       // Step 1: Extract text from PDF
+      console.log('📖 [RESUME UPLOAD] Step 1: Extracting text from PDF...');
       const text = await extractTextFromPDF(file);
+      console.log('✅ [RESUME UPLOAD] Text extracted successfully:', {
+        textLength: text.length,
+        preview: text.substring(0, 200) + '...',
+      });
 
       // Step 2: Parse with Bedrock Claude
+      console.log('🤖 [RESUME UPLOAD] Step 2: Parsing with Bedrock Claude...');
       const parsedData = await parseResumeWithBedrock(text);
+      console.log('✅ [RESUME UPLOAD] Resume parsed successfully:', {
+        firstName: parsedData.firstName,
+        lastName: parsedData.lastName,
+        email: parsedData.email,
+        workExpCount: parsedData.workExperience?.length || 0,
+        skillsCount: parsedData.skills?.length || 0,
+        educationCount: parsedData.education?.length || 0,
+        projectsCount: parsedData.projects?.length || 0,
+      });
 
       // Step 3: Merge with existing form data
+      console.log(
+        '🔀 [RESUME UPLOAD] Step 3: Merging with existing form data...'
+      );
+      console.log('📋 [RESUME UPLOAD] Current form data before merge:', {
+        fullName: formData.fullName,
+        skillsCount: formData.skills?.length || 0,
+        interestsCount: formData.interests?.length || 0,
+      });
+
       const mergedData = mergeResumeWithOnboardingData(parsedData, formData);
+      console.log('✅ [RESUME UPLOAD] Data merged successfully:', {
+        fullName: mergedData.fullName,
+        skillsCount: mergedData.skills?.length || 0,
+        workExpCount: mergedData.workExperience?.length || 0,
+        educationCount: mergedData.educationHistory?.length || 0,
+        autoFilledFields: mergedData.autoFilledFields?.length || 0,
+      });
 
       // Step 4: Update form data
+      console.log('📝 [RESUME UPLOAD] Step 4: Updating form state...');
       setFormData(mergedData);
       setResumeProcessed(true);
       setShowResumeUpload(false);
 
-      console.log('✅ Resume processed successfully:', {
+      console.log('🎉 [RESUME UPLOAD] Resume processed successfully!', {
         autoFilledFields: mergedData.autoFilledFields?.length || 0,
         totalFields: Object.keys(mergedData).length,
       });
     } catch (err) {
+      console.error('❌ [RESUME UPLOAD] Resume processing failed:', err);
+      console.error('🔍 [RESUME UPLOAD] Error details:', {
+        message: err instanceof Error ? err.message : 'Unknown error',
+        stack: err instanceof Error ? err.stack : undefined,
+        type: typeof err,
+      });
+
       setResumeError(
         err instanceof Error ? err.message : 'Failed to process resume'
       );
-      console.error('Resume processing error:', err);
     } finally {
       setIsProcessingResume(false);
     }
   };
-
 
   const showResumeUploadAgain = () => {
     setShowResumeUpload(true);
@@ -508,15 +682,11 @@ export default function OnboardingPage() {
     setResumeError('');
   };
 
-
-
   return (
     <div className='min-h-screen bg-slate-100 py-8 px-3 sm:px-4 pb-32'>
       <div className='max-w-4xl mx-auto'>
         {/* Main content card */}
         <div className='bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 lg:p-8'>
-
-
           {/* Header - Logo and Title */}
           <div className='text-center mb-8'>
             <Link href='/home' className='inline-block'>
@@ -864,7 +1034,6 @@ export default function OnboardingPage() {
                       <h3 className='font-medium text-slate-800'>
                         Experience {index + 1}
                       </h3>
-
                     </div>
 
                     <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
@@ -975,7 +1144,6 @@ export default function OnboardingPage() {
                           <h4 className='font-medium text-slate-800'>
                             Education {index + 1}
                           </h4>
-
                         </div>
 
                         <input
@@ -1084,7 +1252,6 @@ export default function OnboardingPage() {
                         <h4 className='font-medium text-slate-800'>
                           Project {index + 1}
                         </h4>
-
                       </div>
 
                       <input
@@ -1164,7 +1331,6 @@ export default function OnboardingPage() {
                           <h4 className='font-medium text-slate-800'>
                             Certification {index + 1}
                           </h4>
-
                         </div>
 
                         <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
@@ -1257,7 +1423,6 @@ export default function OnboardingPage() {
                           <h4 className='font-medium text-slate-800'>
                             Language {index + 1}
                           </h4>
-
                         </div>
 
                         <input
@@ -1315,7 +1480,6 @@ export default function OnboardingPage() {
                         <h4 className='font-medium text-slate-800'>
                           Award {index + 1}
                         </h4>
-
                       </div>
 
                       <input
@@ -1398,7 +1562,6 @@ export default function OnboardingPage() {
                         <h4 className='font-medium text-slate-800'>
                           Publication {index + 1}
                         </h4>
-
                       </div>
 
                       <input
@@ -1515,10 +1678,14 @@ export default function OnboardingPage() {
               {/* About Section */}
               <div>
                 <label className='block text-sm font-medium text-slate-500 mb-3'>
-                  How do you want to use Loopn? <span className='text-xs text-slate-400'>(Optional)</span>
+                  How do you want to use Loopn?{' '}
+                  <span className='text-xs text-slate-400'>(Optional)</span>
                 </label>
                 <div className='text-sm text-slate-500 mb-3'>
-                  <p className='mb-2'>Tell others about your goals and interests. This helps with matching and networking.</p>
+                  <p className='mb-2'>
+                    Tell others about your goals and interests. This helps with
+                    matching and networking.
+                  </p>
                   <ul className='list-disc pl-5 space-y-1 text-xs'>
                     <li>What you want (mentorship, collabs, clients)</li>
                     <li>
@@ -1539,7 +1706,9 @@ export default function OnboardingPage() {
                 />
                 <div className='flex justify-between text-xs mt-2'>
                   <span className='text-slate-400'>
-                    {wordCount === 0 ? 'You can fill this out later' : `${wordCount} words`}
+                    {wordCount === 0
+                      ? 'You can fill this out later'
+                      : `${wordCount} words`}
                   </span>
                   <span className='text-slate-400'>
                     {wordCount > 100 ? 'Consider keeping it concise' : ''}
@@ -1553,10 +1722,15 @@ export default function OnboardingPage() {
           {getCurrentStepInfo().key === 'interests' && (
             <div className='space-y-6'>
               <h2 className='text-xl font-semibold text-black mb-4'>
-                Interests & Hobbies <span className='text-sm text-slate-400 font-normal'>(Optional)</span>
+                Interests & Hobbies{' '}
+                <span className='text-sm text-slate-400 font-normal'>
+                  (Optional)
+                </span>
               </h2>
               <p className='text-sm text-slate-500 mb-4'>
-                Select topics you're interested in to help us connect you with like-minded professionals. You can always add more later in your profile.
+                Select topics you're interested in to help us connect you with
+                like-minded professionals. You can always add more later in your
+                profile.
               </p>
 
               {/* Display hobbies from resume if available */}
@@ -1566,7 +1740,6 @@ export default function OnboardingPage() {
                     <h3 className='text-base font-medium text-slate-700'>
                       Personal Hobbies from Resume
                     </h3>
-
                   </div>
                   <div className='flex flex-wrap gap-2'>
                     {formData.hobbies.map((hobby, index) => (
@@ -1650,7 +1823,6 @@ export default function OnboardingPage() {
               />
             </div>
           )}
-
         </div>
       </div>
 
@@ -1706,7 +1878,7 @@ export default function OnboardingPage() {
                   </span>
                 </div>
               </div>
-              
+
               {/* Step text - Hidden on very small screens */}
               <div className='text-center hidden sm:block'>
                 <div className='text-xs sm:text-sm text-slate-500'>

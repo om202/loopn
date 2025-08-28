@@ -21,7 +21,7 @@ export interface ProfileData {
   // Current Professional Info (for compatibility)
   jobRole: string;
   companyName: string;
-  industry: string;
+  industry: string | null | undefined; // Allow null/undefined for DynamoDB secondary index compatibility
   yearsOfExperience: number;
   education: string;
   about: string;
@@ -88,6 +88,50 @@ export interface ProfileData {
   autoFilledFields?: string[];
 }
 
+// Helper function to safely parse JSON fields from database
+function safeParseJsonField<T>(jsonField: any): T | null {
+  if (!jsonField) return null;
+
+  // If it's already an object/array, return as is
+  if (typeof jsonField === 'object' && jsonField !== null) {
+    return jsonField as T;
+  }
+
+  // If it's a string, try to parse it
+  if (typeof jsonField === 'string') {
+    try {
+      return JSON.parse(jsonField) as T;
+    } catch (error) {
+      console.warn('Failed to parse JSON field:', jsonField, error);
+      return null;
+    }
+  }
+
+  return null;
+}
+
+// Helper function to parse all JSON fields in a user profile
+function parseUserProfileJsonFields(profile: UserProfile): UserProfile {
+  return {
+    ...profile,
+    workExperience: safeParseJsonField<ProfileData['workExperience']>(
+      profile.workExperience
+    ),
+    educationHistory: safeParseJsonField<ProfileData['educationHistory']>(
+      profile.educationHistory
+    ),
+    projects: safeParseJsonField<ProfileData['projects']>(profile.projects),
+    certifications: safeParseJsonField<ProfileData['certifications']>(
+      profile.certifications
+    ),
+    awards: safeParseJsonField<ProfileData['awards']>(profile.awards),
+    languages: safeParseJsonField<ProfileData['languages']>(profile.languages),
+    publications: safeParseJsonField<ProfileData['publications']>(
+      profile.publications
+    ),
+  };
+}
+
 export class UserProfileService {
   /**
    * Get user profile details for display (replaces anonymous summary)
@@ -106,7 +150,8 @@ export class UserProfileService {
         dataKeys: result.data ? Object.keys(result.data) : 'null',
       });
 
-      return result.data || null;
+      // Parse JSON fields before returning
+      return result.data ? parseUserProfileJsonFields(result.data) : null;
     } catch (error) {
       const apiEndTime = performance.now();
       console.error(
@@ -129,10 +174,38 @@ export class UserProfileService {
     profileData: ProfileData
   ): Promise<DataResult<UserProfile>> {
     try {
+      // Convert JSON fields to strings as required by GraphQL schema
+      const jsonFields = {
+        workExperience: profileData.workExperience
+          ? JSON.stringify(profileData.workExperience)
+          : undefined,
+        educationHistory: profileData.educationHistory
+          ? JSON.stringify(profileData.educationHistory)
+          : undefined,
+        projects: profileData.projects
+          ? JSON.stringify(profileData.projects)
+          : undefined,
+        certifications: profileData.certifications
+          ? JSON.stringify(profileData.certifications)
+          : undefined,
+        awards: profileData.awards
+          ? JSON.stringify(profileData.awards)
+          : undefined,
+        languages: profileData.languages
+          ? JSON.stringify(profileData.languages)
+          : undefined,
+        publications: profileData.publications
+          ? JSON.stringify(profileData.publications)
+          : undefined,
+      };
+
       const result = await getClient().models.UserProfile.create({
         userId,
         email,
+        // Spread all other profile data
         ...profileData,
+        // Override JSON fields with stringified versions
+        ...jsonFields,
         isOnboardingComplete: true,
         onboardingCompletedAt: new Date().toISOString(),
       });
@@ -144,7 +217,8 @@ export class UserProfileService {
           const indexResult = await VespaService.indexUser(userId, {
             ...profileData,
             userId,
-          });
+            industry: profileData.industry || undefined,
+          } as any);
           console.log('User indexing result:', indexResult);
 
           if (!indexResult.success) {
@@ -182,9 +256,40 @@ export class UserProfileService {
     updates: Partial<ProfileData>
   ): Promise<DataResult<UserProfile>> {
     try {
+      // Convert JSON fields to strings as required by GraphQL schema
+      const jsonFields = {
+        workExperience: updates.workExperience
+          ? JSON.stringify(updates.workExperience)
+          : undefined,
+        educationHistory: updates.educationHistory
+          ? JSON.stringify(updates.educationHistory)
+          : undefined,
+        projects: updates.projects
+          ? JSON.stringify(updates.projects)
+          : undefined,
+        certifications: updates.certifications
+          ? JSON.stringify(updates.certifications)
+          : undefined,
+        awards: updates.awards ? JSON.stringify(updates.awards) : undefined,
+        languages: updates.languages
+          ? JSON.stringify(updates.languages)
+          : undefined,
+        publications: updates.publications
+          ? JSON.stringify(updates.publications)
+          : undefined,
+      };
+
+      // Filter out undefined values
+      const filteredJsonFields = Object.fromEntries(
+        Object.entries(jsonFields).filter(([, value]) => value !== undefined)
+      );
+
       const result = await getClient().models.UserProfile.update({
         userId,
+        // Spread all other updates
         ...updates,
+        // Override JSON fields with stringified versions if they exist in updates
+        ...filteredJsonFields,
       });
 
       // Re-index the user profile for vector search if update was successful
@@ -209,7 +314,7 @@ export class UserProfileService {
               // Current Professional Info
               jobRole: fullProfile.jobRole || '',
               companyName: fullProfile.companyName || '',
-              industry: fullProfile.industry || '',
+              industry: fullProfile.industry || null,
               yearsOfExperience: fullProfile.yearsOfExperience || 0,
               education: fullProfile.education || '',
               about: fullProfile.about || '',
@@ -258,7 +363,8 @@ export class UserProfileService {
             await VespaService.indexUser(userId, {
               ...profileData,
               userId,
-            });
+              industry: profileData.industry || undefined,
+            } as any);
           }
         } catch (indexError) {
           console.error(
@@ -291,7 +397,7 @@ export class UserProfileService {
     try {
       const result = await getClient().models.UserProfile.get({ userId });
       return {
-        data: result.data,
+        data: result.data ? parseUserProfileJsonFields(result.data) : null,
         error: null,
       };
     } catch (error) {
