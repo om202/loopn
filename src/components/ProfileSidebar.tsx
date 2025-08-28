@@ -470,7 +470,7 @@ export default function ProfileSidebar({
               <ProfileDetails_Shimmer />
             </ShimmerProvider>
           ) : (
-            <UserProfileContent 
+            <UserProfileContent
               userProfile={userProfile}
               loading={false}
               showContactInfo={false}

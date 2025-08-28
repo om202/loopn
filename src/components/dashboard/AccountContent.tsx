@@ -73,7 +73,7 @@ export default function AccountContent() {
 
         {/* Profile Details */}
         <div className='mt-5'>
-          <UserProfileContent 
+          <UserProfileContent
             userProfile={userProfile}
             loading={loadingProfile}
             showContactInfo={true}
