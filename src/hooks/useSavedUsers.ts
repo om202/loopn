@@ -33,7 +33,8 @@ export function useSavedUsers({
     if (enabled && userId) {
       store.fetchSavedUsers(userId);
     }
-  }, [userId, enabled, store]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId, enabled]); // Zustand stores are stable, don't need store in deps
 
   // Get current state from store
   const savedUsers = store.getSavedUsers(userId);
@@ -46,7 +47,8 @@ export function useSavedUsers({
   const refetch = useCallback(async () => {
     if (!enabled || !userId) return;
     await store.fetchSavedUsers(userId, true); // Force refresh
-  }, [userId, enabled, store]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId, enabled]); // Zustand stores are stable, don't need store in deps
 
   // Toggle save/unsave for a user
   const toggleSaveUser = useCallback(
@@ -54,7 +56,8 @@ export function useSavedUsers({
       if (!userId || !enabled) return false;
       return await store.toggleSaveUser(userId, targetUserId);
     },
-    [userId, enabled, store]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [userId, enabled] // Zustand stores are stable, don't need store in deps
   );
 
   // Check if a user is saved
@@ -62,7 +65,8 @@ export function useSavedUsers({
     (targetUserId: string): boolean => {
       return store.isUserSaved(userId, targetUserId);
     },
-    [userId, store]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [userId] // Zustand stores are stable, don't need store in deps
   );
 
   // Convert store entries to SavedUser format for backward compatibility

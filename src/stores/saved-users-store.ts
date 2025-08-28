@@ -47,11 +47,9 @@ interface SavedUsersState {
   toggleSaveUser: (userId: string, targetUserId: string) => Promise<boolean>;
 
   // Cache management
-  shouldRefresh: (userId: string) => boolean;
+  hasCachedData: (userId: string) => boolean;
   clearUserData: (userId: string) => void;
 }
-
-const CACHE_TTL = 5 * 60 * 1000; // 5 minutes cache
 
 export const useSavedUsersStore = create<SavedUsersState>()(
   devtools(
@@ -136,20 +134,20 @@ export const useSavedUsersStore = create<SavedUsersState>()(
           }));
         },
 
-        // Check if cache should be refreshed
-        shouldRefresh: (userId: string) => {
+        // Check if we have any cached data for user
+        hasCachedData: (userId: string) => {
           const state = get();
+          const savedUsers = state.savedUsersByUser[userId];
           const lastSyncTime = state.lastSync[userId];
-          if (!lastSyncTime) return true;
-          return Date.now() - lastSyncTime > CACHE_TTL;
+          return savedUsers !== undefined && lastSyncTime !== undefined;
         },
 
-        // Fetch saved users with caching
+        // Fetch saved users - only call API if no cached data exists
         fetchSavedUsers: async (userId: string, forceRefresh = false) => {
           const state = get();
 
-          // Return cached data if fresh and not forcing refresh
-          if (!forceRefresh && !state.shouldRefresh(userId)) {
+          // Return cached data if exists and not forcing refresh
+          if (!forceRefresh && state.hasCachedData(userId)) {
             return state.getSavedUsers(userId);
           }
 
