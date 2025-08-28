@@ -79,7 +79,9 @@ interface SubscriptionState {
 
   // High-level subscription methods
   subscribeToOnlineUsers: (userId: string) => UnsubscribeFn;
-  subscribeToConnectionsPresence: (connectionUserIds: string[]) => UnsubscribeFn;
+  subscribeToConnectionsPresence: (
+    connectionUserIds: string[]
+  ) => UnsubscribeFn;
   subscribeToIncomingChatRequests: (userId: string) => UnsubscribeFn;
   subscribeToSentChatRequests: (userId: string) => UnsubscribeFn;
   subscribeToNotifications: (userId: string) => UnsubscribeFn;
@@ -565,13 +567,14 @@ export const useSubscriptionStore = create<SubscriptionState>()(
         const config: SubscriptionConfig = {
           key,
           query: () => {
-            const userIdFilters = connectionUserIds.length === 1 
-              ? { userId: { eq: connectionUserIds[0] } }
-              : {
-                  or: connectionUserIds.map(userId => ({
-                    userId: { eq: userId }
-                  }))
-                };
+            const userIdFilters =
+              connectionUserIds.length === 1
+                ? { userId: { eq: connectionUserIds[0] } }
+                : {
+                    or: connectionUserIds.map(userId => ({
+                      userId: { eq: userId },
+                    })),
+                  };
 
             return getClient().models.UserPresence.observeQuery({
               filter: {
@@ -585,7 +588,7 @@ export const useSubscriptionStore = create<SubscriptionState>()(
         const callback = (data: unknown) => {
           const typedData = data as { items: UserPresence[] };
           const { items } = typedData;
-          
+
           get().setOnlineUsers(items);
           get().setOnlineUsersLoading(false);
           get().setOnlineUsersError(null);

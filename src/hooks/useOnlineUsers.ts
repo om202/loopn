@@ -58,12 +58,11 @@ export function useOnlineUsers({
       .filter((id, index, array) => array.indexOf(id) === index);
 
     const unsubscribe = subscribeToConnectionsPresence(connectionUserIds);
-    
+
     return () => {
       unsubscribe();
     };
   }, [enabled, conversations, subscribeToConnectionsPresence, currentUserId]);
-
 
   const onlineUsers = useMemo(() => {
     if (!rawOnlineUsers) return [];
