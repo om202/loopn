@@ -162,7 +162,7 @@ export default function UserProfileContent({
         Array.isArray(userProfile.workExperience) &&
         userProfile.workExperience.length > 0 && (
           <div>
-            <h4 className='text-base font-semibold text-slate-900 mb-4 pb-2 border-b border-slate-100'>
+            <h4 className='text-base font-semibold text-brand-600 mb-4 pb-2 border-b border-slate-100'>
               Work Experience
             </h4>
             <div className='space-y-4'>
@@ -180,7 +180,7 @@ export default function UserProfileContent({
                         {job.startDate} - {job.endDate}
                       </div>
                     </div>
-                    <p className='text-base font-medium text-brand-600'>
+                    <p className='text-base font-medium text-slate-700'>
                       {job.company}
                     </p>
                   </div>
@@ -201,7 +201,7 @@ export default function UserProfileContent({
           userProfile.companyName ||
           userProfile.industry) && (
           <div>
-            <h4 className='text-base font-semibold text-slate-900 mb-4 pb-2 border-b border-slate-100'>
+            <h4 className='text-base font-semibold text-brand-600 mb-4 pb-2 border-b border-slate-100'>
               Current Position
             </h4>
             <div className='space-y-2'>
@@ -211,7 +211,7 @@ export default function UserProfileContent({
                     {userProfile.jobRole}
                   </span>
                   {userProfile.companyName && (
-                    <span className='text-base font-medium text-brand-600 ml-2'>
+                    <span className='text-base font-medium text-slate-700 ml-2'>
                       at {userProfile.companyName}
                     </span>
                   )}
@@ -238,7 +238,7 @@ export default function UserProfileContent({
         userProfile.educationHistory.length > 0) ||
       userProfile.education ? (
         <div>
-          <h4 className='text-base font-semibold text-slate-900 mb-4 pb-2 border-b border-slate-100'>
+          <h4 className='text-base font-semibold text-brand-600 mb-4 pb-2 border-b border-slate-100'>
             Education
           </h4>
           {userProfile.educationHistory &&
@@ -261,7 +261,7 @@ export default function UserProfileContent({
                   <p className='text-base font-medium text-slate-700'>
                     {edu.field}
                   </p>
-                  <p className='text-base text-brand-600'>{edu.institution}</p>
+                  <p className='text-base text-slate-700'>{edu.institution}</p>
                 </div>
               ))}
             </div>
@@ -276,7 +276,7 @@ export default function UserProfileContent({
         Array.isArray(userProfile.projects) &&
         userProfile.projects.length > 0 && (
           <div>
-            <h4 className='text-base font-semibold text-slate-900 mb-4 pb-2 border-b border-slate-100'>
+            <h4 className='text-base font-semibold text-brand-600 mb-4 pb-2 border-b border-slate-100'>
               Projects
             </h4>
             <div className='space-y-4'>
@@ -309,7 +309,7 @@ export default function UserProfileContent({
         Array.isArray(userProfile.certifications) &&
         userProfile.certifications.length > 0 && (
           <div>
-            <h4 className='text-base font-semibold text-slate-900 mb-4 pb-2 border-b border-slate-100'>
+            <h4 className='text-base font-semibold text-brand-600 mb-4 pb-2 border-b border-slate-100'>
               Certifications
             </h4>
             <div className='space-y-3'>
@@ -321,7 +321,7 @@ export default function UserProfileContent({
                   <h5 className='text-base font-semibold text-slate-900'>
                     {cert.name}
                   </h5>
-                  <p className='text-base text-brand-600'>{cert.issuer}</p>
+                  <p className='text-base text-slate-700'>{cert.issuer}</p>
                   {cert.date && (
                     <p className='text-sm text-slate-500 mt-1 whitespace-nowrap'>
                       {cert.date}
@@ -338,7 +338,7 @@ export default function UserProfileContent({
         Array.isArray(userProfile.awards) &&
         userProfile.awards.length > 0 && (
           <div>
-            <h4 className='text-base font-semibold text-slate-900 mb-4 pb-2 border-b border-slate-100'>
+            <h4 className='text-base font-semibold text-brand-600 mb-4 pb-2 border-b border-slate-100'>
               Awards & Recognition
             </h4>
             <div className='space-y-3'>
@@ -350,7 +350,7 @@ export default function UserProfileContent({
                   <h5 className='text-base font-semibold text-slate-900'>
                     {award.title}
                   </h5>
-                  <p className='text-base text-brand-600'>{award.issuer}</p>
+                  <p className='text-base text-slate-700'>{award.issuer}</p>
                   {award.date && (
                     <p className='text-sm text-slate-500 mt-1 whitespace-nowrap'>
                       {award.date}
@@ -372,7 +372,7 @@ export default function UserProfileContent({
         Array.isArray(userProfile.languages) &&
         userProfile.languages.length > 0 && (
           <div>
-            <h4 className='text-base font-semibold text-slate-900 mb-4 pb-2 border-b border-slate-100'>
+            <h4 className='text-base font-semibold text-brand-600 mb-4 pb-2 border-b border-slate-100'>
               Languages
             </h4>
             <div className='grid grid-cols-2 gap-2'>
@@ -395,7 +395,7 @@ export default function UserProfileContent({
         Array.isArray(userProfile.publications) &&
         userProfile.publications.length > 0 && (
           <div>
-            <h4 className='text-base font-semibold text-slate-900 mb-4 pb-2 border-b border-slate-100'>
+            <h4 className='text-base font-semibold text-brand-600 mb-4 pb-2 border-b border-slate-100'>
               Publications
             </h4>
             <div className='space-y-3'>
@@ -407,7 +407,7 @@ export default function UserProfileContent({
                   <h5 className='text-base font-semibold text-slate-900'>
                     {pub.title}
                   </h5>
-                  <p className='text-base text-brand-600 italic'>{pub.venue}</p>
+                  <p className='text-base text-slate-700 italic'>{pub.venue}</p>
                   {pub.date && (
                     <p className='text-sm text-slate-500 mt-1 whitespace-nowrap'>
                       {pub.date}
@@ -422,7 +422,7 @@ export default function UserProfileContent({
       {/* Professional Interests */}
       {userProfile.interests && userProfile.interests.length > 0 && (
         <div>
-          <h4 className='text-base font-semibold text-slate-900 mb-4 pb-2 border-b border-slate-100'>
+          <h4 className='text-base font-semibold text-brand-600 mb-4 pb-2 border-b border-slate-100'>
             Professional Interests
           </h4>
           <div className='flex flex-wrap gap-2'>
@@ -443,7 +443,7 @@ export default function UserProfileContent({
         Array.isArray(userProfile.hobbies) &&
         userProfile.hobbies.length > 0 && (
           <div>
-            <h4 className='text-base font-semibold text-slate-900 mb-4 pb-2 border-b border-slate-100'>
+            <h4 className='text-base font-semibold text-brand-600 mb-4 pb-2 border-b border-slate-100'>
               Hobbies & Interests
             </h4>
             <div className='flex flex-wrap gap-2'>
@@ -462,7 +462,7 @@ export default function UserProfileContent({
       {/* Skills */}
       {userProfile.skills && userProfile.skills.length > 0 && (
         <div>
-          <h4 className='text-base font-semibold text-slate-900 mb-4 pb-2 border-b border-slate-100'>
+          <h4 className='text-base font-semibold text-brand-600 mb-4 pb-2 border-b border-slate-100'>
             Skills
           </h4>
           <div className='flex flex-wrap gap-2'>
@@ -481,7 +481,7 @@ export default function UserProfileContent({
       {/* Professional Summary/About */}
       {userProfile.about && (
         <div>
-          <h4 className='text-base font-semibold text-slate-900 mb-4 pb-2 border-b border-slate-100'>
+          <h4 className='text-base font-semibold text-brand-600 mb-4 pb-2 border-b border-slate-100'>
             Professional Summary
           </h4>
           <p className='text-base text-slate-700 leading-relaxed'>

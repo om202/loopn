@@ -22,7 +22,8 @@ import {
   UserRoundMinus,
   UserPlus,
   UserCheck,
-  ChevronsRight,
+  Expand,
+  X,
 } from 'lucide-react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import UserAvatar from './UserAvatar';
@@ -101,6 +102,7 @@ export default function ProfileSidebar({
   const [showCancelRequestDialog, setShowCancelRequestDialog] = useState(false);
   const [showRemoveConnectionDialog, setShowRemoveConnectionDialog] =
     useState(false);
+  const [showFullScreenDialog, setShowFullScreenDialog] = useState(false);
   const [optimisticRequestSent, setOptimisticRequestSent] = useState(false);
   const { fetchUserProfile } = useSubscriptionStore();
   const { user } = useAuthenticator();
@@ -305,20 +307,9 @@ export default function ProfileSidebar({
 
   return (
     <div className='bg-white rounded-2xl w-full h-full flex flex-col relative border border-slate-200'>
-      {/* Header with collapse button */}
-      <div className='p-3 pb-1 flex items-center justify-between'>
+      {/* Header with buttons */}
+      <div className='p-3 pb-2 flex items-center justify-between'>
         <div className='flex items-center gap-2'>
-          {/* Collapse Button - Always visible when onClose is provided */}
-          {onClose && (
-            <button
-              onClick={onClose}
-              className='p-2 text-slate-500 hover:text-black transition-colors rounded-lg hover:bg-slate-100'
-              title='Collapse sidebar'
-            >
-              <ChevronsRight className='w-6 h-6' />
-            </button>
-          )}
-
           {/* Back Button - Only shows when onBack is provided */}
           {onBack && (
             <button
@@ -331,22 +322,47 @@ export default function ProfileSidebar({
           )}
         </div>
 
-        {/* Remove Connection Button - Only shows when onEndChat is provided */}
-        {onEndChat && (
+        <div className='flex items-center gap-2'>
+          {/* Full Screen Button */}
           <button
-            onClick={() => setShowEndChatDialog(true)}
-            className='text-sm text-slate-500 hover:text-black transition-colors font-medium flex items-center gap-1.5'
+            onClick={() => setShowFullScreenDialog(true)}
+            className='p-1.5 text-slate-500 hover:text-black transition-colors rounded-lg hover:bg-slate-100'
+            title='Open in full view'
           >
-            <>
-              <UserRoundMinus className='w-3.5 h-3.5' />
-              Remove Connection
-            </>
+            <Expand className='w-[18px] h-[18px]' />
           </button>
-        )}
+
+          {/* Collapse Button - Always visible when onClose is provided */}
+          {onClose && (
+            <button
+              onClick={onClose}
+              className='p-1.5 text-slate-500 hover:text-black transition-colors rounded-lg hover:bg-slate-100'
+              title='Collapse sidebar'
+            >
+              <X className='w-[22px] h-[22px]' />
+            </button>
+          )}
+
+          {/* Remove Connection Button - Only shows when onEndChat is provided */}
+          {onEndChat && (
+            <button
+              onClick={() => setShowEndChatDialog(true)}
+              className='text-sm text-slate-500 hover:text-black transition-colors font-medium flex items-center gap-1.5'
+            >
+              <>
+                <UserRoundMinus className='w-3.5 h-3.5' />
+                Remove Connection
+              </>
+            </button>
+          )}
+        </div>
       </div>
 
+      {/* Line Separator */}
+      <div className='w-full h-px bg-slate-200'></div>
+
       {/* User Profile Header */}
-      <div className='p-3 pb-1 flex justify-center'>
+      <div className='p-3 pt-2 pb-1 flex justify-center'>
         <div className='flex flex-col items-center text-center'>
           <UserAvatar
             email={userProfile?.email}
@@ -532,6 +548,97 @@ export default function ProfileSidebar({
         isLoading={connectionActions?.isLoading || false}
         userName={getUserDisplayName()}
       />
+
+      {/* Full Screen Profile Dialog */}
+      {showFullScreenDialog && (
+        <div className='fixed inset-0 z-50 overflow-y-auto'>
+          {/* Background overlay */}
+          <div 
+            className='fixed inset-0 bg-slate-950/16'
+            onClick={() => setShowFullScreenDialog(false)}
+          />
+          
+          {/* Dialog container */}
+          <div className='flex min-h-full items-center justify-center p-4'>
+            <div className='relative w-[90vw] max-w-[1200px] min-w-[800px] bg-white rounded-2xl max-h-[90vh] flex flex-col overflow-hidden shadow-lg border border-slate-200'>
+          {/* Header */}
+          <div className='px-6 py-4 border-b border-slate-200 flex items-center justify-between'>
+            <h2 className='text-lg font-semibold text-slate-900'>
+              Profile Details
+            </h2>
+            <button
+              onClick={() => setShowFullScreenDialog(false)}
+              className='p-2 text-slate-500 hover:text-black transition-colors rounded-lg hover:bg-slate-100'
+              title='Close'
+            >
+              <X className='w-[22px] h-[22px]' />
+            </button>
+          </div>
+
+          {/* Content */}
+          <div className='flex-1 overflow-y-auto'>
+            <div className='px-6 py-4'>
+              {/* User Profile Header */}
+              <div className='flex items-start gap-8 mb-4'>
+                <div className='flex-shrink-0'>
+                  <UserAvatar
+                    email={userProfile?.email}
+                    userId={userId}
+                    profilePictureUrl={userProfile?.profilePictureUrl}
+                    hasProfilePicture={userProfile?.hasProfilePicture || false}
+                    size='xl'
+                    showStatus
+                    status={getUserStatus()}
+                  />
+                </div>
+                <div className='flex-1 min-w-0'>
+                  <div className='flex items-start justify-between mb-3'>
+                    <div>
+                      <h1 className='text-xl font-bold text-slate-900 mb-1'>
+                        {getUserDisplayName()}
+                      </h1>
+                      {userProfile?.jobRole && (
+                        <p className='text-base text-slate-600 mb-1'>
+                          {userProfile.jobRole}
+                          {userProfile.companyName && (
+                            <span className='text-slate-500'>
+                              {' '}
+                              at {userProfile.companyName}
+                            </span>
+                          )}
+                        </p>
+                      )}
+                      {userProfile?.city || userProfile?.country ? (
+                        <p className='text-base text-slate-500'>
+                          {[userProfile.city, userProfile.country]
+                            .filter(Boolean)
+                            .join(', ')}
+                        </p>
+                      ) : null}
+                    </div>
+                    {showActionButtons && renderActionButtons()}
+                  </div>
+                </div>
+              </div>
+
+              {/* Profile Content */}
+              {profileLoading ? (
+                <ShimmerProvider>
+                  <ProfileDetails_Shimmer />
+                </ShimmerProvider>
+              ) : (
+                <UserProfileContent
+                  userProfile={userProfile}
+                  loading={false}
+                  showContactInfo={false}
+                />
+              )}
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
