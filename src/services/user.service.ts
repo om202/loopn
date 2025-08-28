@@ -20,18 +20,32 @@ export class UserPresenceService {
       });
 
       if (existingResult.data) {
-        const result = await getClient().models.UserPresence.update({
-          userId,
-          status,
-          isOnline: status === 'ONLINE',
-          lastSeen: new Date().toISOString(),
-          lastHeartbeat: new Date().toISOString(),
-        });
+        // Check if status actually changed to avoid unnecessary updates
+        const currentStatus = existingResult.data.status;
+        const currentIsOnline = existingResult.data.isOnline;
+        const newIsOnline = status === 'ONLINE';
+        
+        // Only update if status or isOnline state changed
+        if (currentStatus !== status || currentIsOnline !== newIsOnline) {
+          const result = await getClient().models.UserPresence.update({
+            userId,
+            status,
+            isOnline: newIsOnline,
+            lastSeen: new Date().toISOString(),
+            lastHeartbeat: new Date().toISOString(),
+          });
 
-        return {
-          data: result.data,
-          error: null,
-        };
+          return {
+            data: result.data,
+            error: null,
+          };
+        } else {
+          // Status hasn't changed, return existing data without updating
+          return {
+            data: existingResult.data,
+            error: null,
+          };
+        }
       }
 
       const result = await getClient().models.UserPresence.create({

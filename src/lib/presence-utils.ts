@@ -36,11 +36,8 @@ class SimplePresenceManager {
   private hubUnsubscribe: (() => void) | null = null;
   private isSigningOut: boolean = false; // Track if user is in signout process
   private isInitialized: boolean = false; // Prevent multiple initializations
-  private heartbeatInterval: NodeJS.Timeout | null = null;
-
   // Configuration
   private readonly OFFLINE_AFTER_HIDDEN = 30000; // 30 seconds after tab hidden
-  private readonly HEARTBEAT_INTERVAL = 2 * 60 * 1000; // 2 minutes
 
   /**
    * Initialize simple presence management
@@ -117,8 +114,8 @@ class SimplePresenceManager {
     // Handle page unload (browser close/refresh)
     this.setupUnloadListener();
 
-    // Start heartbeat to send "I'm online" every 2 minutes
-    this.startHeartbeat();
+    // Note: No heartbeat needed - AppSync handles connection state automatically
+    // Backend cleanup will handle edge cases where connection state isn't detected
   }
 
   /**
@@ -230,23 +227,7 @@ class SimplePresenceManager {
     window.addEventListener('pagehide', handlePageHide);
   }
 
-  /**
-   * Start heartbeat - send "I'm online" every 2 minutes
-   */
-  private startHeartbeat() {
-    if (!this.currentUser || this.isSigningOut) return;
-
-    this.heartbeatInterval = setInterval(() => {
-      if (this.currentUser && !this.isSigningOut && !document.hidden) {
-        // Send heartbeat - updates lastSeen timestamp
-        userPresenceService
-          .setUserOnline(this.currentUser.userId)
-          .catch(error => {
-            console.error('Heartbeat failed:', error);
-          });
-      }
-    }, this.HEARTBEAT_INTERVAL);
-  }
+  // Heartbeat removed - AppSync handles connection state automatically
 
   /**
    * Remove all event listeners
@@ -270,10 +251,7 @@ class SimplePresenceManager {
       this.visibilityTimeout = null;
     }
 
-    if (this.heartbeatInterval) {
-      clearInterval(this.heartbeatInterval);
-      this.heartbeatInterval = null;
-    }
+
   }
 }
 
