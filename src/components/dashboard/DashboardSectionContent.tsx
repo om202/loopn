@@ -1,6 +1,6 @@
 'use client';
 
-import { Sparkles, Users, Search, Bookmark } from 'lucide-react';
+import { Compass, Users, Search, Bookmark } from 'lucide-react';
 
 import type { Schema } from '../../../amplify/data/resource';
 import { formatPresenceTime } from '../../lib/presence-utils';
@@ -209,7 +209,7 @@ export default function DashboardSectionContent({
         return {
           title: 'Discover Professionals',
           description: 'Find and connect with new people',
-          emptyIcon: Sparkles,
+          emptyIcon: Compass,
           emptyMessage: 'No suggestions available',
         };
       case 'saved':
