@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { MessageSquare, UserCheck, Bookmark } from 'lucide-react';
 
 // Custom Connect Icon using circles from logo
@@ -23,7 +23,7 @@ import { useUserProfile } from '../../hooks/useUserProfile';
 
 import DialogContainer from '../DialogContainer';
 import UserAvatar from '../UserAvatar';
-import { savedUserService } from '../../services/saved-user.service';
+import { useSavedUsersStore } from '../../stores/saved-users-store';
 
 type UserPresence = Schema['UserPresence']['type'];
 type Conversation = Schema['Conversation']['type'];
@@ -94,48 +94,22 @@ export default function UserCard({
   currentUserId,
 }: UserCardProps) {
   const [showCancelDialog, setShowCancelDialog] = useState(false);
-  const [isSaved, setIsSaved] = useState(false);
-  const [isSaveLoading, setIsSaveLoading] = useState(false);
 
-  // Use our centralized user profile hook instead of local state and API calls
+  // Use our centralized stores
   const { profile: fullProfile, isLoading: _loadingProfile } = useUserProfile(
     searchProfile ? '' : userPresence.userId // Skip fetching if searchProfile is provided
   );
+  
+  const savedUsersStore = useSavedUsersStore();
 
-  // Check if user is saved on component mount
-  useEffect(() => {
-    const checkSaveStatus = async () => {
-      if (currentUserId && userPresence.userId !== currentUserId) {
-        const result = await savedUserService.isUserSaved(
-          currentUserId,
-          userPresence.userId
-        );
-        if (!result.error) {
-          setIsSaved(result.saved);
-        }
-      }
-    };
-    checkSaveStatus();
-  }, [currentUserId, userPresence.userId]);
+  // Get save status from store
+  const isSaved = currentUserId ? savedUsersStore.isUserSaved(currentUserId, userPresence.userId) : false;
+  const isSaveLoading = currentUserId ? savedUsersStore.loading[currentUserId] || false : false;
 
-  // Handle save/unsave toggle
+  // Handle save/unsave toggle using store
   const handleToggleSave = async () => {
     if (!currentUserId || userPresence.userId === currentUserId) return;
-
-    setIsSaveLoading(true);
-    try {
-      const result = await savedUserService.toggleSaveUser(
-        currentUserId,
-        userPresence.userId
-      );
-      if (!result.error) {
-        setIsSaved(result.saved);
-      }
-    } catch (error) {
-      console.error('Error toggling save status:', error);
-    } finally {
-      setIsSaveLoading(false);
-    }
+    await savedUsersStore.toggleSaveUser(currentUserId, userPresence.userId);
   };
 
   // Derive user profile data from either searchProfile or fetched profile

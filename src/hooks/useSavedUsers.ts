@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState, useCallback, useMemo } from 'react';
-import { savedUserService } from '../services/saved-user.service';
+import { useEffect, useCallback } from 'react';
+import { useSavedUsersStore } from '../stores/saved-users-store';
 import type { Schema } from '../../amplify/data/resource';
 
 type SavedUser = Schema['SavedUser']['type'];
@@ -26,102 +26,62 @@ export function useSavedUsers({
   userId,
   enabled,
 }: UseSavedUsersProps): UseSavedUsersReturn {
-  const [savedUsers, setSavedUsers] = useState<SavedUser[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const store = useSavedUsersStore();
 
-  // Create a Set of saved user IDs for quick lookup
-  const savedUserIds = useMemo(
-    () => new Set(savedUsers.map(user => user.savedUserId)),
-    [savedUsers]
-  );
-
-  const fetchSavedUsers = useCallback(async () => {
-    if (!enabled || !userId) return;
-
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const result = await savedUserService.getSavedUsers(userId);
-      if (result.error) {
-        setError(result.error);
-      } else {
-        setSavedUsers(result.data);
-      }
-    } catch (err) {
-      console.error('Error fetching saved users:', err);
-      setError('Failed to load saved users');
-    } finally {
-      setIsLoading(false);
-    }
-  }, [userId, enabled]);
-
-  // Initial fetch
+  // Auto-fetch saved users when enabled
   useEffect(() => {
-    fetchSavedUsers();
-  }, [fetchSavedUsers]);
+    if (enabled && userId) {
+      store.fetchSavedUsers(userId);
+    }
+  }, [userId, enabled, store]);
+
+  // Get current state from store
+  const savedUsers = store.getSavedUsers(userId);
+  const savedUserIds = store.getSavedUserIds(userId);
+  const isLoading = store.loading[userId] || false;
+  const error = store.errors[userId] || null;
+  const savedCount = store.getSavedCount(userId);
+
+  // Refetch function
+  const refetch = useCallback(async () => {
+    if (!enabled || !userId) return;
+    await store.fetchSavedUsers(userId, true); // Force refresh
+  }, [userId, enabled, store]);
 
   // Toggle save/unsave for a user
   const toggleSaveUser = useCallback(
     async (targetUserId: string): Promise<boolean> => {
       if (!userId || !enabled) return false;
-
-      try {
-        const result = await savedUserService.toggleSaveUser(
-          userId,
-          targetUserId
-        );
-        if (result.error) {
-          console.error('Error toggling save status:', result.error);
-          return false;
-        }
-
-        // Update local state optimistically
-        if (result.saved) {
-          // Add to saved users if not already present
-          if (!savedUserIds.has(targetUserId)) {
-            const newSavedUser: SavedUser = {
-              id: crypto.randomUUID(),
-              saverId: userId,
-              savedUserId: targetUserId,
-              savedAt: new Date().toISOString(),
-              createdAt: new Date().toISOString(),
-              updatedAt: new Date().toISOString(),
-            };
-            setSavedUsers(prev => [...prev, newSavedUser]);
-          }
-        } else {
-          // Remove from saved users
-          setSavedUsers(prev =>
-            prev.filter(user => user.savedUserId !== targetUserId)
-          );
-        }
-
-        return result.saved;
-      } catch (err) {
-        console.error('Error toggling save status:', err);
-        return false;
-      }
+      return await store.toggleSaveUser(userId, targetUserId);
     },
-    [userId, enabled, savedUserIds]
+    [userId, enabled, store]
   );
 
   // Check if a user is saved
   const isUserSaved = useCallback(
     (targetUserId: string): boolean => {
-      return savedUserIds.has(targetUserId);
+      return store.isUserSaved(userId, targetUserId);
     },
-    [savedUserIds]
+    [userId, store]
   );
 
+  // Convert store entries to SavedUser format for backward compatibility
+  const savedUsersWithSchema: SavedUser[] = savedUsers.map(entry => ({
+    id: entry.id,
+    saverId: entry.saverId,
+    savedUserId: entry.savedUserId,
+    savedAt: entry.savedAt,
+    createdAt: entry.createdAt,
+    updatedAt: entry.updatedAt,
+  }));
+
   return {
-    savedUsers,
+    savedUsers: savedUsersWithSchema,
     savedUserIds,
     isLoading,
     error,
-    savedCount: savedUsers.length,
-    refetch: fetchSavedUsers,
+    savedCount,
+    refetch,
     toggleSaveUser,
     isUserSaved,
   };
