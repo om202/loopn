@@ -20,6 +20,8 @@ interface ResumeData {
   city: string;
   country: string;
   linkedinUrl: string;
+  githubUrl: string;
+  portfolioUrl: string;
   summary: string;
   education: Array<{
     institution: string;
@@ -41,6 +43,29 @@ interface ResumeData {
     description: string;
     technologies: string;
   }>;
+  certifications: Array<{
+    name: string;
+    issuer: string;
+    date: string;
+    expiryDate: string;
+  }>;
+  awards: Array<{
+    title: string;
+    issuer: string;
+    date: string;
+    description: string;
+  }>;
+  languages: Array<{
+    language: string;
+    proficiency: string;
+  }>;
+  publications: Array<{
+    title: string;
+    venue: string;
+    date: string;
+    description: string;
+  }>;
+  hobbies: string[];
 }
 
 interface ResumeParserResponse {
@@ -60,6 +85,8 @@ You are an expert resume parser. Please analyze the following resume text and ex
   "city": "string",
   "country": "string",
   "linkedinUrl": "string",
+  "githubUrl": "string",
+  "portfolioUrl": "string",
   "summary": "string",
   "education": [
     {
@@ -86,13 +113,49 @@ You are an expert resume parser. Please analyze the following resume text and ex
       "description": "string",
       "technologies": "string"
     }
-  ]
+  ],
+  "certifications": [
+    {
+      "name": "string",
+      "issuer": "string",
+      "date": "string",
+      "expiryDate": "string"
+    }
+  ],
+  "awards": [
+    {
+      "title": "string",
+      "issuer": "string",
+      "date": "string",
+      "description": "string"
+    }
+  ],
+  "languages": [
+    {
+      "language": "string",
+      "proficiency": "string"
+    }
+  ],
+  "publications": [
+    {
+      "title": "string",
+      "venue": "string",
+      "date": "string",
+      "description": "string"
+    }
+  ],
+  "hobbies": ["hobby1", "hobby2", "hobby3"]
 }
 
 Rules:
 - Extract information accurately from the resume text
+- Separate LinkedIn URLs from GitHub URLs - they are different fields
+- For GitHub, look for github.com links or "GitHub:" mentions
+- For portfolio, look for personal websites, portfolio links
+- For hobbies/interests, look for sections like "Interests", "Hobbies", "Personal Interests", "Activities"
 - If information is missing, use empty strings or empty arrays
 - For dates, use formats like "Jan 2020", "2020-2023", etc.
+- For languages, include proficiency levels like "Native", "Fluent", "Intermediate", "Basic"
 - Keep descriptions concise but informative
 - Return ONLY the JSON object, no additional text
 
@@ -156,6 +219,8 @@ async function parseResumeWithClaude(text: string): Promise<ResumeData> {
       city: parsedData.city || '',
       country: parsedData.country || '',
       linkedinUrl: parsedData.linkedinUrl || '',
+      githubUrl: parsedData.githubUrl || '',
+      portfolioUrl: parsedData.portfolioUrl || '',
       summary: parsedData.summary || '',
       education: Array.isArray(parsedData.education)
         ? parsedData.education
@@ -165,6 +230,17 @@ async function parseResumeWithClaude(text: string): Promise<ResumeData> {
         : [],
       skills: Array.isArray(parsedData.skills) ? parsedData.skills : [],
       projects: Array.isArray(parsedData.projects) ? parsedData.projects : [],
+      certifications: Array.isArray(parsedData.certifications)
+        ? parsedData.certifications
+        : [],
+      awards: Array.isArray(parsedData.awards) ? parsedData.awards : [],
+      languages: Array.isArray(parsedData.languages)
+        ? parsedData.languages
+        : [],
+      publications: Array.isArray(parsedData.publications)
+        ? parsedData.publications
+        : [],
+      hobbies: Array.isArray(parsedData.hobbies) ? parsedData.hobbies : [],
     };
 
     console.log('✅ Successfully parsed resume data');

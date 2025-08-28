@@ -19,6 +19,8 @@ interface ResumeData {
   city: string;
   country: string;
   linkedinUrl: string;
+  githubUrl: string;
+  portfolioUrl: string;
   summary: string;
   education: Array<{
     institution: string;
@@ -40,6 +42,29 @@ interface ResumeData {
     description: string;
     technologies: string;
   }>;
+  certifications: Array<{
+    name: string;
+    issuer: string;
+    date: string;
+    expiryDate: string;
+  }>;
+  awards: Array<{
+    title: string;
+    issuer: string;
+    date: string;
+    description: string;
+  }>;
+  languages: Array<{
+    language: string;
+    proficiency: string;
+  }>;
+  publications: Array<{
+    title: string;
+    venue: string;
+    date: string;
+    description: string;
+  }>;
+  hobbies: string[];
 }
 
 export default function ResumeParserMVP() {
@@ -198,13 +223,29 @@ export default function ResumeParserMVP() {
                   />
                 </div>
 
-                <input
-                  type='url'
-                  placeholder='LinkedIn URL'
-                  value={parsedData.linkedinUrl}
-                  className='w-full border rounded px-3 py-2'
-                  readOnly
-                />
+                <div className='grid grid-cols-1 gap-4'>
+                  <input
+                    type='url'
+                    placeholder='LinkedIn URL'
+                    value={parsedData.linkedinUrl}
+                    className='w-full border rounded px-3 py-2'
+                    readOnly
+                  />
+                  <input
+                    type='url'
+                    placeholder='GitHub URL'
+                    value={parsedData.githubUrl}
+                    className='w-full border rounded px-3 py-2'
+                    readOnly
+                  />
+                  <input
+                    type='url'
+                    placeholder='Portfolio URL'
+                    value={parsedData.portfolioUrl}
+                    className='w-full border rounded px-3 py-2'
+                    readOnly
+                  />
+                </div>
 
                 <textarea
                   placeholder='Summary'
@@ -308,6 +349,203 @@ export default function ResumeParserMVP() {
                         </div>
                       </div>
                     ))}
+                  </div>
+                )}
+
+                {/* Projects */}
+                {parsedData.projects.length > 0 && (
+                  <div>
+                    <label className='block text-sm font-medium mb-2'>
+                      Projects
+                    </label>
+                    {parsedData.projects.map((project, index) => (
+                      <div key={index} className='border rounded p-3 mb-2'>
+                        <input
+                          value={project.title}
+                          placeholder='Project Title'
+                          className='w-full text-sm border rounded px-2 py-1 mb-2'
+                          readOnly
+                        />
+                        <textarea
+                          value={project.description}
+                          placeholder='Project Description'
+                          className='w-full text-sm border rounded px-2 py-1 mb-2'
+                          rows={2}
+                          readOnly
+                        />
+                        <input
+                          value={project.technologies}
+                          placeholder='Technologies Used'
+                          className='w-full text-sm border rounded px-2 py-1'
+                          readOnly
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Certifications */}
+                {parsedData.certifications.length > 0 && (
+                  <div>
+                    <label className='block text-sm font-medium mb-2'>
+                      Certifications
+                    </label>
+                    {parsedData.certifications.map((cert, index) => (
+                      <div key={index} className='border rounded p-3 mb-2'>
+                        <input
+                          value={cert.name}
+                          placeholder='Certification Name'
+                          className='w-full text-sm border rounded px-2 py-1 mb-2'
+                          readOnly
+                        />
+                        <div className='grid grid-cols-2 gap-2 mb-2'>
+                          <input
+                            value={cert.issuer}
+                            placeholder='Issuer'
+                            className='text-sm border rounded px-2 py-1'
+                            readOnly
+                          />
+                          <input
+                            value={cert.date}
+                            placeholder='Issue Date'
+                            className='text-sm border rounded px-2 py-1'
+                            readOnly
+                          />
+                        </div>
+                        <input
+                          value={cert.expiryDate}
+                          placeholder='Expiry Date'
+                          className='w-full text-sm border rounded px-2 py-1'
+                          readOnly
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Awards */}
+                {parsedData.awards.length > 0 && (
+                  <div>
+                    <label className='block text-sm font-medium mb-2'>
+                      Awards & Achievements
+                    </label>
+                    {parsedData.awards.map((award, index) => (
+                      <div key={index} className='border rounded p-3 mb-2'>
+                        <input
+                          value={award.title}
+                          placeholder='Award Title'
+                          className='w-full text-sm border rounded px-2 py-1 mb-2'
+                          readOnly
+                        />
+                        <div className='grid grid-cols-2 gap-2 mb-2'>
+                          <input
+                            value={award.issuer}
+                            placeholder='Issuing Organization'
+                            className='text-sm border rounded px-2 py-1'
+                            readOnly
+                          />
+                          <input
+                            value={award.date}
+                            placeholder='Date'
+                            className='text-sm border rounded px-2 py-1'
+                            readOnly
+                          />
+                        </div>
+                        <textarea
+                          value={award.description}
+                          placeholder='Description'
+                          className='w-full text-sm border rounded px-2 py-1'
+                          rows={2}
+                          readOnly
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Languages */}
+                {parsedData.languages.length > 0 && (
+                  <div>
+                    <label className='block text-sm font-medium mb-2'>
+                      Languages
+                    </label>
+                    <div className='grid grid-cols-1 gap-2'>
+                      {parsedData.languages.map((lang, index) => (
+                        <div
+                          key={index}
+                          className='flex gap-2 items-center border rounded p-2'
+                        >
+                          <input
+                            value={lang.language}
+                            placeholder='Language'
+                            className='flex-1 text-sm border rounded px-2 py-1'
+                            readOnly
+                          />
+                          <span className='bg-green-100 text-green-800 px-2 py-1 rounded text-sm'>
+                            {lang.proficiency}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Publications */}
+                {parsedData.publications.length > 0 && (
+                  <div>
+                    <label className='block text-sm font-medium mb-2'>
+                      Publications
+                    </label>
+                    {parsedData.publications.map((pub, index) => (
+                      <div key={index} className='border rounded p-3 mb-2'>
+                        <input
+                          value={pub.title}
+                          placeholder='Publication Title'
+                          className='w-full text-sm border rounded px-2 py-1 mb-2'
+                          readOnly
+                        />
+                        <div className='grid grid-cols-2 gap-2 mb-2'>
+                          <input
+                            value={pub.venue}
+                            placeholder='Venue/Journal'
+                            className='text-sm border rounded px-2 py-1'
+                            readOnly
+                          />
+                          <input
+                            value={pub.date}
+                            placeholder='Date'
+                            className='text-sm border rounded px-2 py-1'
+                            readOnly
+                          />
+                        </div>
+                        <textarea
+                          value={pub.description}
+                          placeholder='Description'
+                          className='w-full text-sm border rounded px-2 py-1'
+                          rows={2}
+                          readOnly
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Hobbies & Interests */}
+                {parsedData.hobbies.length > 0 && (
+                  <div>
+                    <label className='block text-sm font-medium mb-2'>
+                      Hobbies & Interests
+                    </label>
+                    <div className='flex flex-wrap gap-2'>
+                      {parsedData.hobbies.map((hobby, index) => (
+                        <span
+                          key={index}
+                          className='bg-purple-100 text-purple-800 px-2 py-1 rounded text-sm'
+                        >
+                          {hobby}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
