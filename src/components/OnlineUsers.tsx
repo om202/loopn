@@ -755,7 +755,7 @@ export default function OnlineUsers({
 
       {/* Right push sidebar: desktop only */}
       {profileSidebarOpen && profileSidebarUser && (
-        <div className='hidden md:flex w-[500px] xl:w-[500px] flex-shrink-0'>
+        <div className='hidden md:flex w-[540px] xl:w-[540px] flex-shrink-0'>
           <ProfileSidebar
             userId={profileSidebarUser.userId}
             userPresence={profileSidebarUser}

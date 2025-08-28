@@ -49,7 +49,7 @@ export default function UserProfileContent({
   }
 
   return (
-    <div className={`space-y-6 ${className}`}>
+    <div className={`space-y-8 ${className}`}>
       {/* Professional Links */}
       {(userProfile.linkedinUrl ||
         userProfile.githubUrl ||
@@ -71,7 +71,7 @@ export default function UserProfileContent({
               href={ensureHttps(userProfile.githubUrl)}
               target='_blank'
               rel='noopener noreferrer'
-              className='flex items-center gap-2 px-3 py-1.5 bg-slate-50 text-slate-700 hover:bg-slate-100 hover:text-slate-900 rounded-full text-sm font-medium transition-colors'
+              className='flex items-center gap-2 px-3 py-1.5 bg-slate-50 text-slate-700 hover:bg-blue-50 hover:text-brand-600 rounded-full text-sm font-medium transition-colors'
             >
               <Github className='w-3.5 h-3.5' />
               <span>GitHub</span>
@@ -118,7 +118,7 @@ export default function UserProfileContent({
             {(userProfile.linkedinUrl ||
               userProfile.githubUrl ||
               userProfile.portfolioUrl) && (
-              <div className='flex flex-wrap gap-2 mt-3'>
+              <div className='flex flex-wrap gap-2 mt-2'>
                 {userProfile.linkedinUrl && (
                   <a
                     href={ensureHttps(userProfile.linkedinUrl)}
@@ -135,7 +135,7 @@ export default function UserProfileContent({
                     href={ensureHttps(userProfile.githubUrl)}
                     target='_blank'
                     rel='noopener noreferrer'
-                    className='flex items-center gap-2 px-3 py-1.5 bg-slate-50 text-slate-700 hover:bg-slate-100 hover:text-slate-900 rounded-full text-sm font-medium transition-colors'
+                    className='flex items-center gap-2 px-3 py-1.5 bg-slate-50 text-slate-700 hover:bg-blue-50 hover:text-brand-600 rounded-full text-sm font-medium transition-colors'
                   >
                     <Github className='w-3.5 h-3.5' />
                     <span>GitHub</span>
@@ -162,16 +162,16 @@ export default function UserProfileContent({
         Array.isArray(userProfile.workExperience) &&
         userProfile.workExperience.length > 0 && (
           <div>
-            <h4 className='text-base font-semibold text-brand-600 mb-3 pb-1.5 border-b border-slate-100'>
+            <h4 className='text-base font-semibold text-gray-500 mb-2 pb-1 border-b border-slate-100'>
               Work Experience
             </h4>
-            <div className='space-y-3'>
+            <div className='space-y-1.5'>
               {userProfile.workExperience.map((job: any, index: number) => (
                 <div
                   key={index}
-                  className='pb-4 last:pb-0 last:border-b-0 border-b border-slate-100'
+                  className='pb-1.5 last:pb-0 last:border-b-0 border-b border-slate-100'
                 >
-                  <div className='mb-2'>
+                  <div className='mb-1.5'>
                     <div className='flex justify-between items-start mb-1'>
                       <h5 className='text-base font-semibold text-slate-900 flex-1 mr-2'>
                         {job.position}
@@ -185,7 +185,7 @@ export default function UserProfileContent({
                     </p>
                   </div>
                   {job.description && (
-                    <p className='text-base text-slate-700 leading-relaxed mt-2'>
+                    <p className='text-base text-slate-700 leading-relaxed mt-1.5'>
                       {job.description}
                     </p>
                   )}
@@ -201,10 +201,10 @@ export default function UserProfileContent({
           userProfile.companyName ||
           userProfile.industry) && (
           <div>
-            <h4 className='text-base font-semibold text-brand-600 mb-3 pb-1.5 border-b border-slate-100'>
+            <h4 className='text-base font-semibold text-gray-500 mb-2 pb-1 border-b border-slate-100'>
               Current Position
             </h4>
-            <div className='space-y-2'>
+            <div className='space-y-1.5'>
               {userProfile.jobRole && (
                 <div>
                   <span className='text-base font-semibold text-slate-700'>
@@ -238,17 +238,17 @@ export default function UserProfileContent({
         userProfile.educationHistory.length > 0) ||
       userProfile.education ? (
         <div>
-          <h4 className='text-base font-semibold text-brand-600 mb-3 pb-1.5 border-b border-slate-100'>
+          <h4 className='text-base font-semibold text-gray-500 mb-3 pb-1.5 border-b border-slate-100'>
             Education
           </h4>
           {userProfile.educationHistory &&
           Array.isArray(userProfile.educationHistory) &&
           userProfile.educationHistory.length > 0 ? (
-            <div className='space-y-2'>
+            <div className='space-y-1.5'>
               {userProfile.educationHistory.map((edu: any, index: number) => (
                 <div
                   key={index}
-                  className='pb-2 last:pb-0 last:border-b-0 border-b border-slate-100'
+                  className='pb-1.5 last:pb-0 last:border-b-0 border-b border-slate-100'
                 >
                   <div className='flex justify-between items-start mb-1'>
                     <h5 className='text-base font-semibold text-slate-900 flex-1 mr-2'>
@@ -276,20 +276,20 @@ export default function UserProfileContent({
         Array.isArray(userProfile.projects) &&
         userProfile.projects.length > 0 && (
           <div>
-            <h4 className='text-base font-semibold text-brand-600 mb-3 pb-1.5 border-b border-slate-100'>
+            <h4 className='text-base font-semibold text-gray-500 mb-2 pb-1 border-b border-slate-100'>
               Projects
             </h4>
-            <div className='space-y-3'>
+            <div className='space-y-1.5'>
               {userProfile.projects.map((project: any, index: number) => (
                 <div
                   key={index}
-                  className='pb-3 last:pb-0 last:border-b-0 border-b border-slate-100'
+                  className='pb-1.5 last:pb-0 last:border-b-0 border-b border-slate-100'
                 >
                   <h5 className='text-base font-semibold text-slate-900 mb-1'>
                     {project.title}
                   </h5>
                   {project.description && (
-                    <p className='text-base text-slate-700 leading-relaxed mb-2'>
+                    <p className='text-base text-slate-700 leading-relaxed mb-1.5'>
                       {project.description}
                     </p>
                   )}
@@ -309,14 +309,14 @@ export default function UserProfileContent({
         Array.isArray(userProfile.certifications) &&
         userProfile.certifications.length > 0 && (
           <div>
-            <h4 className='text-base font-semibold text-brand-600 mb-3 pb-1.5 border-b border-slate-100'>
+            <h4 className='text-base font-semibold text-gray-500 mb-2 pb-1 border-b border-slate-100'>
               Certifications
             </h4>
-            <div className='space-y-2'>
+            <div className='space-y-1.5'>
               {userProfile.certifications.map((cert: any, index: number) => (
                 <div
                   key={index}
-                  className='pb-2 last:pb-0 last:border-b-0 border-b border-slate-100'
+                  className='pb-1.5 last:pb-0 last:border-b-0 border-b border-slate-100'
                 >
                   <h5 className='text-base font-semibold text-slate-900'>
                     {cert.name}
@@ -338,14 +338,14 @@ export default function UserProfileContent({
         Array.isArray(userProfile.awards) &&
         userProfile.awards.length > 0 && (
           <div>
-            <h4 className='text-base font-semibold text-brand-600 mb-3 pb-1.5 border-b border-slate-100'>
+            <h4 className='text-base font-semibold text-gray-500 mb-2 pb-1 border-b border-slate-100'>
               Awards & Recognition
             </h4>
-            <div className='space-y-2'>
+            <div className='space-y-1.5'>
               {userProfile.awards.map((award: any, index: number) => (
                 <div
                   key={index}
-                  className='pb-2 last:pb-0 last:border-b-0 border-b border-slate-100'
+                  className='pb-1.5 last:pb-0 last:border-b-0 border-b border-slate-100'
                 >
                   <h5 className='text-base font-semibold text-slate-900'>
                     {award.title}
@@ -372,7 +372,7 @@ export default function UserProfileContent({
         Array.isArray(userProfile.languages) &&
         userProfile.languages.length > 0 && (
           <div>
-            <h4 className='text-base font-semibold text-brand-600 mb-3 pb-1.5 border-b border-slate-100'>
+            <h4 className='text-base font-semibold text-gray-500 mb-2 pb-1 border-b border-slate-100'>
               Languages
             </h4>
             <div className='grid grid-cols-2 gap-2'>
@@ -395,14 +395,14 @@ export default function UserProfileContent({
         Array.isArray(userProfile.publications) &&
         userProfile.publications.length > 0 && (
           <div>
-            <h4 className='text-base font-semibold text-brand-600 mb-3 pb-1.5 border-b border-slate-100'>
+            <h4 className='text-base font-semibold text-gray-500 mb-2 pb-1 border-b border-slate-100'>
               Publications
             </h4>
-            <div className='space-y-2'>
+            <div className='space-y-1.5'>
               {userProfile.publications.map((pub: any, index: number) => (
                 <div
                   key={index}
-                  className='pb-2 last:pb-0 last:border-b-0 border-b border-slate-100'
+                  className='pb-1.5 last:pb-0 last:border-b-0 border-b border-slate-100'
                 >
                   <h5 className='text-base font-semibold text-slate-900'>
                     {pub.title}
@@ -422,7 +422,7 @@ export default function UserProfileContent({
       {/* Professional Interests */}
       {userProfile.interests && userProfile.interests.length > 0 && (
         <div>
-          <h4 className='text-base font-semibold text-brand-600 mb-3 pb-1.5 border-b border-slate-100'>
+          <h4 className='text-base font-semibold text-gray-500 mb-3 pb-1.5 border-b border-slate-100'>
             Professional Interests
           </h4>
           <div className='flex flex-wrap gap-2'>
@@ -443,7 +443,7 @@ export default function UserProfileContent({
         Array.isArray(userProfile.hobbies) &&
         userProfile.hobbies.length > 0 && (
           <div>
-            <h4 className='text-base font-semibold text-brand-600 mb-3 pb-1.5 border-b border-slate-100'>
+            <h4 className='text-base font-semibold text-gray-500 mb-2 pb-1 border-b border-slate-100'>
               Hobbies & Interests
             </h4>
             <div className='flex flex-wrap gap-2'>
@@ -462,7 +462,7 @@ export default function UserProfileContent({
       {/* Skills */}
       {userProfile.skills && userProfile.skills.length > 0 && (
         <div>
-          <h4 className='text-base font-semibold text-brand-600 mb-3 pb-1.5 border-b border-slate-100'>
+          <h4 className='text-base font-semibold text-gray-500 mb-3 pb-1.5 border-b border-slate-100'>
             Skills
           </h4>
           <div className='flex flex-wrap gap-2'>
@@ -481,7 +481,7 @@ export default function UserProfileContent({
       {/* Professional Summary/About */}
       {userProfile.about && (
         <div>
-          <h4 className='text-base font-semibold text-brand-600 mb-3 pb-1.5 border-b border-slate-100'>
+          <h4 className='text-base font-semibold text-gray-500 mb-3 pb-1.5 border-b border-slate-100'>
             Professional Summary
           </h4>
           <p className='text-base text-slate-700 leading-relaxed'>

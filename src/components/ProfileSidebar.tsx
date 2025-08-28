@@ -480,7 +480,7 @@ export default function ProfileSidebar({
 
       {/* Professional Details */}
       <div className='flex-1 overflow-y-auto'>
-        <div className='p-6 pb-8 pt-1'>
+        <div className='p-4 pb-6 pt-2'>
           {profileLoading ? (
             <ShimmerProvider>
               <ProfileDetails_Shimmer />
@@ -560,7 +560,7 @@ export default function ProfileSidebar({
 
           {/* Dialog container */}
           <div className='flex min-h-full items-center justify-center p-2'>
-            <div className='relative w-[90vw] max-w-[900px] min-w-[600px] bg-white rounded-2xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl'>
+            <div className='relative w-[90vw] max-w-[900px] min-w-[540px] bg-white rounded-2xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl'>
               {/* Header */}
               <div className='px-6 py-4 border-b border-slate-200 flex items-center justify-between'>
                 <h2 className='text-lg font-semibold text-slate-900'>
@@ -577,7 +577,7 @@ export default function ProfileSidebar({
 
               {/* Content */}
               <div className='flex-1 overflow-y-auto'>
-                <div className='px-6 py-4'>
+                <div className='px-4 py-3'>
                   {/* User Profile Header */}
                   <div className='flex items-start gap-8 mb-4'>
                     <div className='flex-shrink-0'>
