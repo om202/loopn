@@ -27,7 +27,6 @@ export function GlobalSubscriptionProvider({
 }: GlobalSubscriptionProviderProps) {
   const { user, authStatus } = useAuthenticator();
   const {
-    subscribeToOnlineUsers,
     subscribeToIncomingChatRequests,
     subscribeToSentChatRequests,
     subscribeToNotifications,
@@ -46,8 +45,6 @@ export function GlobalSubscriptionProvider({
       user.userId
     );
 
-    // Set up all core subscriptions that should persist across page navigation
-    const unsubscribeOnlineUsers = subscribeToOnlineUsers(user.userId);
     const unsubscribeIncomingRequests = subscribeToIncomingChatRequests(
       user.userId
     );
@@ -55,16 +52,7 @@ export function GlobalSubscriptionProvider({
     const unsubscribeNotifications = subscribeToNotifications(user.userId);
     const unsubscribeConversations = subscribeToConversations(user.userId);
 
-    console.log(
-      '[GlobalSubscriptionProvider] All persistent subscriptions established'
-    );
-
-    // Cleanup when user logs out or component unmounts
     return () => {
-      console.log(
-        '[GlobalSubscriptionProvider] Cleaning up persistent subscriptions'
-      );
-      unsubscribeOnlineUsers();
       unsubscribeIncomingRequests();
       unsubscribeSentRequests();
       unsubscribeNotifications();
@@ -73,7 +61,6 @@ export function GlobalSubscriptionProvider({
   }, [
     authStatus,
     user?.userId,
-    subscribeToOnlineUsers,
     subscribeToIncomingChatRequests,
     subscribeToSentChatRequests,
     subscribeToNotifications,

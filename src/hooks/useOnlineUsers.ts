@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useEffect } from 'react';
 import { useSubscriptionStore } from '../stores/subscription-store';
 import type { Schema } from '../../amplify/data/resource';
 
@@ -8,6 +8,7 @@ type UserPresence = Schema['UserPresence']['type'];
 
 interface UseOnlineUsersProps {
   enabled?: boolean;
+  currentUserId?: string;
 }
 
 interface UseOnlineUsersReturn {
@@ -28,18 +29,42 @@ interface UseOnlineUsersReturn {
  * - Centralized state in Zustand store
  */
 export function useOnlineUsers({
-  enabled: _enabled = true,
+  enabled = true,
+  currentUserId,
 }: UseOnlineUsersProps = {}): UseOnlineUsersReturn {
   const {
     onlineUsers: rawOnlineUsers,
     loading,
     errors,
+    conversations,
+    subscribeToConnectionsPresence,
   } = useSubscriptionStore();
 
-  // Note: Subscriptions are now managed globally by GlobalSubscriptionProvider
-  // This hook just provides access to the cached data
+  useEffect(() => {
+    if (!enabled) {
+      return;
+    }
 
-  // Sort online users by last seen (most recent first)
+    const connectionUserIds = Array.from(conversations.values())
+      .map(conv => {
+        if (currentUserId === conv.participant1Id) {
+          return conv.participant2Id;
+        } else if (currentUserId === conv.participant2Id) {
+          return conv.participant1Id;
+        }
+        return null;
+      })
+      .filter((id): id is string => !!id)
+      .filter((id, index, array) => array.indexOf(id) === index);
+
+    const unsubscribe = subscribeToConnectionsPresence(connectionUserIds);
+    
+    return () => {
+      unsubscribe();
+    };
+  }, [enabled, conversations, subscribeToConnectionsPresence, currentUserId]);
+
+
   const onlineUsers = useMemo(() => {
     if (!rawOnlineUsers) return [];
 

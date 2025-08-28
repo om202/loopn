@@ -86,7 +86,8 @@ export default function OnlineUsers({
     isLoading: onlineUsersLoading,
     error: onlineUsersError,
   } = useOnlineUsers({
-    enabled: !!user?.userId,
+    enabled: !!user?.userId && activeSection === 'connections',
+    currentUserId: user?.userId,
   });
 
   // Use centralized hooks for all subscriptions (no direct subscription calls)

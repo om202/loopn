@@ -93,6 +93,7 @@ export default function DashboardSectionContent({
       isProfileSidebarOpen={isProfileSidebarOpen}
       selectedUserId={selectedUserId}
       currentUserId={currentUserId || ''}
+      useRealtimeStatus={activeSection === 'connections'}
     />
   );
 
