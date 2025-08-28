@@ -37,6 +37,8 @@ import {
   Globe,
   BookOpen,
   Gamepad2,
+  Linkedin,
+  Github,
 } from 'lucide-react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import UserAvatar from './UserAvatar';
@@ -221,6 +223,15 @@ export default function ProfileSidebar({
     );
   };
 
+  // Utility function to ensure URLs have proper protocol
+  const ensureHttps = (url: string) => {
+    if (!url) return url;
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      return url;
+    }
+    return `https://${url}`;
+  };
+
   const getUserStatus = () => {
     // Check if user is in online users list
     const isOnline = onlineUsers.find(u => u.userId === userId);
@@ -286,28 +297,28 @@ export default function ProfileSidebar({
         >
           {incomingRequestSenderIds?.has(userId) ? (
             <>
-              <ConnectIcon className='w-5 h-5 text-brand-600' />
+              <ConnectIcon className='w-4 h-4 text-brand-600' />
               <span className='text-base font-medium text-brand-600'>
                 Accept
               </span>
             </>
           ) : pendingRequests.has(userId) ? (
             <>
-              <UserCheck className='w-5 h-5 text-slate-500' />
+              <UserCheck className='w-4 h-4 text-slate-500' />
               <span className='text-base font-medium text-slate-500'>
                 Pending
               </span>
             </>
           ) : existingConversations.has(userId) ? (
             <>
-              <MessageSquare className='w-5 h-5 text-brand-600' />
+              <MessageSquare className='w-4 h-4 text-brand-600' />
               <span className='text-base font-medium text-brand-600'>
                 Message
               </span>
             </>
           ) : (
             <>
-              <ConnectIcon className='w-5 h-5 text-white' />
+              <ConnectIcon className='w-4 h-4 text-white' />
               <span className='text-base font-medium text-white'>Connect</span>
             </>
           )}
@@ -325,10 +336,10 @@ export default function ProfileSidebar({
           {onClose && (
             <button
               onClick={onClose}
-              className='p-1.5 text-slate-500 hover:text-black transition-colors rounded-lg hover:bg-slate-100'
+              className='p-2 text-slate-500 hover:text-black transition-colors rounded-lg hover:bg-slate-100'
               title='Collapse sidebar'
             >
-              <ChevronsRight className='w-5 h-5' />
+              <ChevronsRight className='w-6 h-6' />
             </button>
           )}
 
@@ -338,7 +349,7 @@ export default function ProfileSidebar({
               onClick={onBack}
               className='flex items-center gap-2 text-slate-500 hover:text-black transition-colors'
             >
-              <ArrowLeft className='w-5 h-5' />
+              <ArrowLeft className='w-4 h-4' />
               <span className='text-base font-medium'>Back</span>
             </button>
           )}
@@ -371,7 +382,7 @@ export default function ProfileSidebar({
             status={getUserStatus()}
           />
           <div className='mt-1'>
-            <div className='font-medium text-black text-base flex items-center justify-center gap-2'>
+            <div className='font-semibold text-black text-lg flex items-center justify-center gap-2'>
               {getUserDisplayName()}
             </div>
             {/* Show trial chat expiration info when in sidebar context (not in chat) */}
@@ -396,7 +407,7 @@ export default function ProfileSidebar({
               onClick={() => setShowRemoveConnectionDialog(true)}
               className='flex items-center gap-2 px-2 py-2 rounded-lg hover:bg-slate-100 transition-colors'
             >
-              <ConnectIcon className='w-5 h-5 text-brand-600' />
+              <ConnectIcon className='w-4 h-4 text-brand-600' />
               <span className='font-medium'>Connected</span>
             </button>
           </div>
@@ -422,7 +433,7 @@ export default function ProfileSidebar({
                 {hasAcceptedConnection ? (
                   <div className='px-2 py-2 text-base font-medium rounded-lg flex items-center justify-center gap-2 text-slate-500'>
                     <svg
-                      className='w-5 h-5'
+                      className='w-4 h-4'
                       viewBox='30 30 160 160'
                       xmlns='http://www.w3.org/2000/svg'
                     >
@@ -438,7 +449,7 @@ export default function ProfileSidebar({
                     disabled={optimisticRequestSent} // Disable if optimistic (no real request to cancel yet)
                     className='px-2 py-2 text-base font-medium rounded-lg flex items-center justify-center gap-2 bg-slate-100 text-slate-500 hover:bg-slate-200 border border-slate-200 transition-colors disabled:cursor-not-allowed disabled:hover:bg-slate-100'
                   >
-                    <UserCheck className='w-5 h-5 text-slate-500' />
+                    <UserCheck className='w-4 h-4 text-slate-500' />
                     <span className='font-medium'>Pending</span>
                   </button>
                 ) : (
@@ -453,7 +464,7 @@ export default function ProfileSidebar({
                       }
                       className='px-2 py-2 text-base font-medium rounded-lg transition-colors flex items-center justify-center gap-2 bg-brand-500 text-white hover:bg-brand-600 disabled:bg-brand-500 disabled:cursor-not-allowed'
                     >
-                      <UserPlus className='w-5 h-5 text-white' />
+                      <UserPlus className='w-4 h-4 text-white' />
                       <span>Add Connection</span>
                     </button>
                   </Tooltip>
@@ -477,7 +488,7 @@ export default function ProfileSidebar({
 
       {/* Professional Details */}
       <div className='flex-1 overflow-y-auto'>
-        <div className='px-3 pb-4 pt-1 space-y-3'>
+        <div className='px-3 pb-4 pt-1 space-y-4'>
           {profileLoading ? (
             <ShimmerProvider>
               <ProfileDetails_Shimmer />
@@ -488,43 +499,43 @@ export default function ProfileSidebar({
               {(userProfile.linkedinUrl ||
                 userProfile.githubUrl ||
                 userProfile.portfolioUrl) && (
-                <div className='border border-slate-200 rounded-lg p-3'>
-                  <h4 className='text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2'>
+                <div className='border border-slate-200 rounded-lg p-4'>
+                  <h4 className='text-base font-semibold text-brand-600 mb-3 flex items-center gap-2'>
                     <ExternalLink className='w-4 h-4' />
                     Links
                   </h4>
-                  <div className='space-y-2'>
+                  <div className='flex flex-wrap gap-2'>
                     {userProfile.linkedinUrl && (
                       <a
-                        href={userProfile.linkedinUrl}
+                        href={ensureHttps(userProfile.linkedinUrl)}
                         target='_blank'
                         rel='noopener noreferrer'
-                        className='flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800 hover:underline'
+                        className='flex items-center gap-2 px-3 py-2 bg-slate-50 text-slate-700 hover:bg-blue-50 hover:text-blue-600 rounded-full border border-slate-200 hover:border-blue-200 transition-colors text-sm font-medium'
                       >
+                        <Linkedin className='w-4 h-4' />
                         <span>LinkedIn</span>
-                        <ExternalLink className='w-3 h-3' />
                       </a>
                     )}
                     {userProfile.githubUrl && (
                       <a
-                        href={userProfile.githubUrl}
+                        href={ensureHttps(userProfile.githubUrl)}
                         target='_blank'
                         rel='noopener noreferrer'
-                        className='flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800 hover:underline'
+                        className='flex items-center gap-2 px-3 py-2 bg-slate-50 text-slate-700 hover:bg-slate-100 hover:text-slate-900 rounded-full border border-slate-200 hover:border-slate-300 transition-colors text-sm font-medium'
                       >
+                        <Github className='w-4 h-4' />
                         <span>GitHub</span>
-                        <ExternalLink className='w-3 h-3' />
                       </a>
                     )}
                     {userProfile.portfolioUrl && (
                       <a
-                        href={userProfile.portfolioUrl}
+                        href={ensureHttps(userProfile.portfolioUrl)}
                         target='_blank'
                         rel='noopener noreferrer'
-                        className='flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800 hover:underline'
+                        className='flex items-center gap-2 px-3 py-2 bg-slate-50 text-slate-700 hover:bg-blue-50 hover:text-brand-600 rounded-full border border-slate-200 hover:border-blue-200 transition-colors text-sm font-medium'
                       >
+                        <Globe className='w-4 h-4' />
                         <span>Portfolio</span>
-                        <ExternalLink className='w-3 h-3' />
                       </a>
                     )}
                   </div>
@@ -536,18 +547,18 @@ export default function ProfileSidebar({
                 userProfile.companyName ||
                 userProfile.industry ||
                 userProfile.yearsOfExperience !== null) && (
-                <div className='border border-slate-200 rounded-lg p-3'>
-                  <h4 className='text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2'>
+                <div className='border border-slate-200 rounded-lg p-4'>
+                  <h4 className='text-base font-semibold text-brand-600 mb-3 flex items-center gap-2'>
                     <Building2 className='w-4 h-4' />
                     Current Role
                   </h4>
-                  <div className='space-y-2'>
+                  <div className='space-y-3'>
                     {userProfile.jobRole && (
                       <div>
                         <dt className='text-sm font-medium text-slate-500 mb-1'>
                           Role
                         </dt>
-                        <dd className='text-sm font-medium text-slate-900'>
+                        <dd className='text-base font-semibold text-slate-900'>
                           {userProfile.jobRole}
                         </dd>
                       </div>
@@ -557,7 +568,7 @@ export default function ProfileSidebar({
                         <dt className='text-sm font-medium text-slate-500 mb-1'>
                           Company
                         </dt>
-                        <dd className='text-sm font-medium text-slate-900'>
+                        <dd className='text-base font-medium text-slate-900'>
                           {userProfile.companyName}
                         </dd>
                       </div>
@@ -567,18 +578,19 @@ export default function ProfileSidebar({
                         <dt className='text-sm font-medium text-slate-500 mb-1'>
                           Industry
                         </dt>
-                        <dd className='text-sm font-medium text-slate-900'>
+                        <dd className='text-base font-medium text-slate-700'>
                           {userProfile.industry}
                         </dd>
                       </div>
                     )}
                     {userProfile.yearsOfExperience !== null &&
-                      userProfile.yearsOfExperience !== undefined && (
+                      userProfile.yearsOfExperience !== undefined &&
+                      userProfile.yearsOfExperience > 0 && (
                         <div>
                           <dt className='text-sm font-medium text-slate-500 mb-1'>
                             Total Experience
                           </dt>
-                          <dd className='text-sm font-medium text-slate-900'>
+                          <dd className='text-base font-medium text-slate-700'>
                             {userProfile.yearsOfExperience} years
                           </dd>
                         </div>
@@ -590,29 +602,29 @@ export default function ProfileSidebar({
               {/* Work Experience Timeline */}
               {userProfile.workExperience &&
                 (userProfile.workExperience as any[]).length > 0 && (
-                  <div className='border border-slate-200 rounded-lg p-3'>
-                    <h4 className='text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2'>
+                  <div className='border border-slate-200 rounded-lg p-4'>
+                    <h4 className='text-base font-semibold text-brand-600 mb-3 flex items-center gap-2'>
                       <Calendar className='w-4 h-4' />
                       Experience
                     </h4>
-                    <div className='space-y-3'>
+                    <div className='space-y-4'>
                       {((userProfile.workExperience as any[]) || []).map(
                         (job: any, index: number) => (
                           <div
                             key={index}
-                            className='border-l-2 border-slate-200 pl-3 pb-2'
+                            className='pb-2'
                           >
-                            <div className='text-sm font-medium text-slate-900'>
+                            <div className='text-base font-semibold text-slate-900'>
                               {job.position}
                             </div>
-                            <div className='text-sm text-slate-600'>
+                            <div className='text-base font-medium text-slate-700'>
                               {job.company}
                             </div>
-                            <div className='text-xs text-slate-500 mt-1'>
+                            <div className='text-sm text-slate-500 mt-1'>
                               {job.startDate} - {job.endDate}
                             </div>
                             {job.description && (
-                              <div className='text-xs text-slate-600 mt-1 line-clamp-2'>
+                              <div className='text-sm text-slate-900 mt-2 leading-relaxed line-clamp-3'>
                                 {job.description}
                               </div>
                             )}
@@ -625,12 +637,12 @@ export default function ProfileSidebar({
 
               {/* Education Summary */}
               {userProfile.education && (
-                <div className='border border-slate-200 rounded-lg p-3'>
-                  <h4 className='text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2'>
+                <div className='border border-slate-200 rounded-lg p-4'>
+                  <h4 className='text-base font-semibold text-brand-600 mb-3 flex items-center gap-2'>
                     <GraduationCap className='w-4 h-4' />
                     Education
                   </h4>
-                  <p className='text-sm font-medium text-slate-900'>
+                  <p className='text-base font-medium text-slate-900'>
                     {userProfile.education}
                   </p>
                 </div>
@@ -639,28 +651,28 @@ export default function ProfileSidebar({
               {/* Detailed Education History */}
               {userProfile.educationHistory &&
                 (userProfile.educationHistory as any[]).length > 0 && (
-                  <div className='border border-slate-200 rounded-lg p-3'>
-                    <h4 className='text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2'>
+                  <div className='border border-slate-200 rounded-lg p-4'>
+                    <h4 className='text-base font-semibold text-brand-600 mb-3 flex items-center gap-2'>
                       <GraduationCap className='w-4 h-4' />
                       Education History
                     </h4>
-                    <div className='space-y-3'>
+                    <div className='space-y-4'>
                       {((userProfile.educationHistory as any[]) || []).map(
                         (edu: any, index: number) => (
                           <div
                             key={index}
-                            className='border-l-2 border-slate-200 pl-3 pb-2'
+                            className='pb-2'
                           >
-                            <div className='text-sm font-medium text-slate-900'>
+                            <div className='text-base font-semibold text-slate-900'>
                               {edu.degree}
                             </div>
-                            <div className='text-sm text-slate-600'>
+                            <div className='text-base font-medium text-slate-700'>
                               {edu.field}
                             </div>
-                            <div className='text-sm text-slate-600'>
+                            <div className='text-base text-slate-600'>
                               {edu.institution}
                             </div>
-                            <div className='text-xs text-slate-500 mt-1'>
+                            <div className='text-sm text-slate-500 mt-1'>
                               {edu.startYear} - {edu.endYear}
                             </div>
                           </div>
@@ -673,40 +685,33 @@ export default function ProfileSidebar({
               {/* Projects */}
               {userProfile.projects &&
                 (userProfile.projects as any[]).length > 0 && (
-                  <div className='border border-slate-200 rounded-lg p-3'>
-                    <h4 className='text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2'>
+                  <div className='border border-slate-200 rounded-lg p-4'>
+                    <h4 className='text-base font-semibold text-brand-600 mb-3 flex items-center gap-2'>
                       <FolderOpen className='w-4 h-4' />
                       Projects
                     </h4>
-                    <div className='space-y-3'>
+                    <div className='space-y-4'>
                       {((userProfile.projects as any[]) || [])
-                        .slice(0, 3)
                         .map((project: any, index: number) => (
                           <div
                             key={index}
-                            className='border-l-2 border-slate-200 pl-3 pb-2'
+                            className='pb-2'
                           >
-                            <div className='text-sm font-medium text-slate-900'>
+                            <div className='text-base font-semibold text-slate-900'>
                               {project.title}
                             </div>
                             {project.description && (
-                              <div className='text-xs text-slate-600 mt-1 line-clamp-2'>
+                              <div className='text-sm text-slate-900 mt-1 leading-relaxed line-clamp-2'>
                                 {project.description}
                               </div>
                             )}
                             {project.technologies && (
-                              <div className='text-xs text-slate-500 mt-1'>
+                              <div className='text-sm text-slate-500 mt-1 font-medium'>
                                 {project.technologies}
                               </div>
                             )}
                           </div>
                         ))}
-                      {((userProfile.projects as any[]) || []).length > 3 && (
-                        <div className='text-xs text-slate-500 text-center'>
-                          +{(userProfile.projects as any[]).length - 3} more
-                          projects
-                        </div>
-                      )}
                     </div>
                   </div>
                 )}
@@ -714,34 +719,26 @@ export default function ProfileSidebar({
               {/* Certifications */}
               {userProfile.certifications &&
                 (userProfile.certifications as any[]).length > 0 && (
-                  <div className='border border-slate-200 rounded-lg p-3'>
-                    <h4 className='text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2'>
+                  <div className='border border-slate-200 rounded-lg p-4'>
+                    <h4 className='text-base font-semibold text-brand-600 mb-3 flex items-center gap-2'>
                       <Award className='w-4 h-4' />
                       Certifications
                     </h4>
-                    <div className='space-y-2'>
+                    <div className='space-y-3'>
                       {((userProfile.certifications as any[]) || [])
-                        .slice(0, 4)
                         .map((cert: any, index: number) => (
-                          <div key={index} className='text-sm'>
-                            <div className='font-medium text-slate-900'>
+                          <div key={index} className='pb-2'>
+                            <div className='text-base font-semibold text-slate-900'>
                               {cert.name}
                             </div>
-                            <div className='text-slate-600'>{cert.issuer}</div>
+                            <div className='text-base text-slate-700'>{cert.issuer}</div>
                             {cert.date && (
-                              <div className='text-xs text-slate-500'>
+                              <div className='text-sm text-slate-500'>
                                 {cert.date}
                               </div>
                             )}
                           </div>
                         ))}
-                      {((userProfile.certifications as any[]) || []).length >
-                        4 && (
-                        <div className='text-xs text-slate-500 text-center'>
-                          +{(userProfile.certifications as any[]).length - 4}{' '}
-                          more certifications
-                        </div>
-                      )}
                     </div>
                   </div>
                 )}
@@ -749,38 +746,31 @@ export default function ProfileSidebar({
               {/* Awards */}
               {userProfile.awards &&
                 (userProfile.awards as any[]).length > 0 && (
-                  <div className='border border-slate-200 rounded-lg p-3'>
-                    <h4 className='text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2'>
+                  <div className='border border-slate-200 rounded-lg p-4'>
+                    <h4 className='text-base font-semibold text-brand-600 mb-3 flex items-center gap-2'>
                       <Trophy className='w-4 h-4' />
                       Awards
                     </h4>
-                    <div className='space-y-2'>
+                    <div className='space-y-3'>
                       {((userProfile.awards as any[]) || [])
-                        .slice(0, 3)
                         .map((award: any, index: number) => (
-                          <div key={index} className='text-sm'>
-                            <div className='font-medium text-slate-900'>
+                          <div key={index} className='pb-2'>
+                            <div className='text-base font-semibold text-slate-900'>
                               {award.title}
                             </div>
-                            <div className='text-slate-600'>{award.issuer}</div>
+                            <div className='text-base text-slate-700'>{award.issuer}</div>
                             {award.date && (
-                              <div className='text-xs text-slate-500'>
+                              <div className='text-sm text-slate-500'>
                                 {award.date}
                               </div>
                             )}
                             {award.description && (
-                              <div className='text-xs text-slate-600 mt-1 line-clamp-2'>
+                              <div className='text-sm text-slate-900 mt-1 leading-relaxed line-clamp-2'>
                                 {award.description}
                               </div>
                             )}
                           </div>
                         ))}
-                      {((userProfile.awards as any[]) || []).length > 3 && (
-                        <div className='text-xs text-slate-500 text-center'>
-                          +{(userProfile.awards as any[]).length - 3} more
-                          awards
-                        </div>
-                      )}
                     </div>
                   </div>
                 )}
@@ -788,22 +778,22 @@ export default function ProfileSidebar({
               {/* Languages */}
               {userProfile.languages &&
                 (userProfile.languages as any[]).length > 0 && (
-                  <div className='border border-slate-200 rounded-lg p-3'>
-                    <h4 className='text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2'>
+                  <div className='border border-slate-200 rounded-lg p-4'>
+                    <h4 className='text-base font-semibold text-brand-600 mb-3 flex items-center gap-2'>
                       <Globe className='w-4 h-4' />
                       Languages
                     </h4>
-                    <div className='space-y-2'>
+                    <div className='space-y-3'>
                       {((userProfile.languages as any[]) || []).map(
                         (lang: any, index: number) => (
                           <div
                             key={index}
-                            className='flex justify-between items-center text-sm'
+                            className='flex justify-between items-center'
                           >
-                            <span className='font-medium text-slate-900'>
+                            <span className='text-base font-semibold text-slate-900'>
                               {lang.language}
                             </span>
-                            <span className='text-slate-600 text-xs'>
+                            <span className='text-sm text-slate-600 font-medium'>
                               {lang.proficiency}
                             </span>
                           </div>
@@ -816,46 +806,38 @@ export default function ProfileSidebar({
               {/* Publications */}
               {userProfile.publications &&
                 (userProfile.publications as any[]).length > 0 && (
-                  <div className='border border-slate-200 rounded-lg p-3'>
-                    <h4 className='text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2'>
+                  <div className='border border-slate-200 rounded-lg p-4'>
+                    <h4 className='text-base font-semibold text-brand-600 mb-3 flex items-center gap-2'>
                       <BookOpen className='w-4 h-4' />
                       Publications
                     </h4>
-                    <div className='space-y-2'>
+                    <div className='space-y-3'>
                       {((userProfile.publications as any[]) || [])
-                        .slice(0, 3)
                         .map((pub: any, index: number) => (
-                          <div key={index} className='text-sm'>
-                            <div className='font-medium text-slate-900'>
+                          <div key={index} className='pb-2'>
+                            <div className='text-base font-semibold text-slate-900'>
                               {pub.title}
                             </div>
-                            <div className='text-slate-600'>{pub.venue}</div>
+                            <div className='text-base text-slate-700'>{pub.venue}</div>
                             {pub.date && (
-                              <div className='text-xs text-slate-500'>
+                              <div className='text-sm text-slate-500'>
                                 {pub.date}
                               </div>
                             )}
                           </div>
                         ))}
-                      {((userProfile.publications as any[]) || []).length >
-                        3 && (
-                        <div className='text-xs text-slate-500 text-center'>
-                          +{(userProfile.publications as any[]).length - 3} more
-                          publications
-                        </div>
-                      )}
                     </div>
                   </div>
                 )}
 
               {/* About Section */}
               {userProfile.about && (
-                <div className='border border-slate-200 rounded-lg p-3'>
-                  <h4 className='text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2'>
+                <div className='border border-slate-200 rounded-lg p-4'>
+                  <h4 className='text-base font-semibold text-brand-600 mb-3 flex items-center gap-2'>
                     <Info className='w-4 h-4' />
                     About
                   </h4>
-                  <p className='text-sm font-medium text-slate-900 leading-relaxed'>
+                  <p className='text-base text-slate-900 leading-relaxed'>
                     {userProfile.about}
                   </p>
                 </div>
@@ -863,8 +845,8 @@ export default function ProfileSidebar({
 
               {/* Skills Section */}
               {userProfile.skills && userProfile.skills.length > 0 && (
-                <div className='border border-slate-200 rounded-lg p-3'>
-                  <h4 className='text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2'>
+                <div className='border border-slate-200 rounded-lg p-4'>
+                  <h4 className='text-base font-semibold text-brand-600 mb-3 flex items-center gap-2'>
                     <Target className='w-4 h-4' />
                     Skills
                   </h4>
@@ -872,7 +854,7 @@ export default function ProfileSidebar({
                     {userProfile.skills.map((skill, index) => (
                       <span
                         key={index}
-                        className='px-3 py-1.5 text-sm font-medium bg-gray-50 text-gray-700 border border-gray-200 rounded-full'
+                        className='px-3 py-2 text-sm font-medium bg-slate-50 text-slate-700 border border-slate-200 rounded-lg'
                       >
                         {skill}
                       </span>
@@ -883,8 +865,8 @@ export default function ProfileSidebar({
 
               {/* Interests Section */}
               {userProfile.interests && userProfile.interests.length > 0 && (
-                <div className='border border-slate-200 rounded-lg p-3'>
-                  <h4 className='text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2'>
+                <div className='border border-slate-200 rounded-lg p-4'>
+                  <h4 className='text-base font-semibold text-brand-600 mb-3 flex items-center gap-2'>
                     <Heart className='w-4 h-4' />
                     Professional Interests
                   </h4>
@@ -892,7 +874,7 @@ export default function ProfileSidebar({
                     {userProfile.interests.map((interest, index) => (
                       <span
                         key={index}
-                        className='px-3 py-1.5 text-sm font-medium bg-gray-50 text-gray-700 border border-gray-200 rounded-full'
+                        className='px-3 py-2 text-sm font-medium bg-slate-50 text-slate-700 border border-slate-200 rounded-lg'
                       >
                         {interest}
                       </span>
@@ -904,8 +886,8 @@ export default function ProfileSidebar({
               {/* Hobbies Section */}
               {userProfile.hobbies &&
                 (userProfile.hobbies as any[]).length > 0 && (
-                  <div className='border border-slate-200 rounded-lg p-3'>
-                    <h4 className='text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2'>
+                  <div className='border border-slate-200 rounded-lg p-4'>
+                    <h4 className='text-base font-semibold text-brand-600 mb-3 flex items-center gap-2'>
                       <Gamepad2 className='w-4 h-4' />
                       Hobbies
                     </h4>
@@ -914,7 +896,7 @@ export default function ProfileSidebar({
                         (hobby, index) => (
                           <span
                             key={index}
-                            className='px-3 py-1.5 text-sm font-medium bg-purple-50 text-purple-700 border border-purple-200 rounded-full'
+                            className='px-3 py-2 text-sm font-medium bg-slate-50 text-slate-700 border border-slate-200 rounded-lg'
                           >
                             {hobby}
                           </span>
