@@ -139,21 +139,26 @@ export default function OnboardingPage() {
     }
 
     // Always add core steps
-    steps.push(
-      { id: steps.length + 1, title: 'About', key: 'about', required: true },
-      {
-        id: steps.length + 1,
-        title: 'Interests',
-        key: 'interests',
-        required: true,
-      },
-      {
-        id: steps.length + 1,
-        title: 'Picture',
-        key: 'picture',
-        required: false,
-      }
-    );
+    steps.push({
+      id: steps.length + 1,
+      title: 'About',
+      key: 'about',
+      required: true,
+    });
+    
+    steps.push({
+      id: steps.length + 1,
+      title: 'Interests',
+      key: 'interests',
+      required: true,
+    });
+    
+    steps.push({
+      id: steps.length + 1,
+      title: 'Picture',
+      key: 'picture',
+      required: false,
+    });
 
     return steps;
   }, [
@@ -454,7 +459,7 @@ export default function OnboardingPage() {
 
 
   return (
-    <div className='min-h-screen bg-slate-100 py-8 px-3 sm:px-4'>
+    <div className='min-h-screen bg-slate-100 py-8 px-3 sm:px-4 pb-32'>
       <div className='max-w-5xl mx-auto'>
         {/* Main content card */}
         <div className='bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 lg:p-8'>
@@ -560,43 +565,6 @@ export default function OnboardingPage() {
             </div>
           )}
 
-          {/* Dynamic Stepper */}
-          <div className='mb-8 sm:mb-10'>
-            <div className='relative'>
-              {/* Solid connector line between steps (center-aligned) */}
-              <div className='absolute left-5 right-5 top-1/2 -translate-y-1/2 border-t border-slate-200 z-0' />
-              <div className='flex items-center justify-between px-5'>
-                {availableSteps.map(step => (
-                  <div key={step.id} className='flex justify-center'>
-                    <div
-                      className={`relative z-10 w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold border ${
-                        step.id <= currentStep
-                          ? 'bg-brand-500 text-white border-brand-500'
-                          : 'bg-white text-slate-500 border-slate-200'
-                      }`}
-                    >
-                      {step.id}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            {/* Labels */}
-            <div className='mt-3 flex justify-between text-center text-xs sm:text-sm px-5'>
-              {availableSteps.map(step => (
-                <div
-                  key={step.id}
-                  className={`max-w-[80px] ${
-                    step.id === currentStep
-                      ? 'text-black font-medium'
-                      : 'text-slate-500'
-                  }`}
-                >
-                  {step.title}
-                </div>
-              ))}
-            </div>
-          </div>
           {error && (
             <div className='bg-b_red-100 border border-b_red-200 text-b_red-700 px-4 py-3 rounded-2xl mb-6'>
               {error}
@@ -1647,31 +1615,95 @@ export default function OnboardingPage() {
             </div>
           )}
 
-          {/* Navigation buttons */}
-          <div className='flex justify-between mt-8'>
+        </div>
+      </div>
+
+      {/* Fixed Bottom Navigation Bar */}
+      <div className='fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-t border-slate-200 shadow-2xl z-50'>
+        <div className='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4'>
+          <div className='flex items-center justify-between'>
+            {/* Previous Button */}
             <button
               onClick={prevStep}
               disabled={currentStep === 1}
-              className={`px-6 py-3 rounded-xl font-medium border bg-white text-black border-slate-200 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-500 disabled:opacity-50 disabled:cursor-not-allowed`}
+              className={`px-4 py-3 sm:px-6 rounded-xl font-medium border bg-white text-black border-slate-200 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm sm:text-base`}
             >
-              Previous
+              <span className='hidden sm:inline'>Previous</span>
+              <span className='sm:hidden'>Prev</span>
             </button>
 
+            {/* Center Progress Indicator */}
+            <div className='flex items-center gap-2 sm:gap-4'>
+              {/* Circular Progress Indicator */}
+              <div className='relative w-10 h-10 sm:w-12 sm:h-12'>
+                <svg
+                  className='w-10 h-10 sm:w-12 sm:h-12 transform -rotate-90'
+                  viewBox='0 0 48 48'
+                >
+                  {/* Background circle */}
+                  <circle
+                    cx='24'
+                    cy='24'
+                    r='20'
+                    fill='none'
+                    stroke='#e2e8f0'
+                    strokeWidth='4'
+                  />
+                  {/* Progress circle */}
+                  <circle
+                    cx='24'
+                    cy='24'
+                    r='20'
+                    fill='none'
+                    stroke='#3b82f6'
+                    strokeWidth='4'
+                    strokeDasharray={`${2 * Math.PI * 20}`}
+                    strokeDashoffset={`${2 * Math.PI * 20 * (1 - currentStep / totalSteps)}`}
+                    strokeLinecap='round'
+                    className='transition-all duration-300 ease-out'
+                  />
+                </svg>
+                {/* Step number in center */}
+                <div className='absolute inset-0 flex items-center justify-center'>
+                  <span className='text-xs font-semibold text-slate-600'>
+                    {currentStep}/{totalSteps}
+                  </span>
+                </div>
+              </div>
+              
+              {/* Step text - Hidden on very small screens */}
+              <div className='text-center hidden sm:block'>
+                <div className='text-xs sm:text-sm text-slate-500'>
+                  Step {currentStep} of {totalSteps}
+                </div>
+                <div className='text-xs sm:text-sm font-medium text-black'>
+                  {getCurrentStepInfo().title}
+                </div>
+              </div>
+            </div>
+
+            {/* Next/Complete Button */}
             {currentStep < totalSteps ? (
               <button
                 onClick={nextStep}
                 disabled={!validateStep(currentStep)}
-                className='px-6 py-3 rounded-xl font-medium bg-brand-500 text-white hover:bg-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed'
+                className='px-4 py-3 sm:px-6 rounded-xl font-medium bg-brand-500 text-white hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm sm:text-base'
               >
-                {currentStep === totalSteps - 1 ? 'Almost Done!' : 'Next'}
+                <span className='hidden sm:inline'>
+                  {currentStep === totalSteps - 1 ? 'Almost Done!' : 'Next'}
+                </span>
+                <span className='sm:hidden'>Next</span>
               </button>
             ) : (
               <button
                 onClick={handleComplete}
                 disabled={!validateStep(totalSteps) || isLoading}
-                className='px-6 py-3 rounded-xl font-medium bg-brand-500 text-white hover:bg-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed'
+                className='px-4 py-3 sm:px-6 rounded-xl font-medium bg-brand-500 text-white hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm sm:text-base'
               >
-                {isLoading ? 'Completing...' : 'Complete Setup'}
+                <span className='hidden sm:inline'>
+                  {isLoading ? 'Completing...' : 'Complete Setup'}
+                </span>
+                <span className='sm:hidden'>Done</span>
               </button>
             )}
           </div>
