@@ -52,11 +52,9 @@ export default function OnlineUsers({
 }: OnlineUsersProps) {
   const [allUsers, setAllUsers] = useState<UserPresence[]>([]);
   const [isBugReportOpen, setIsBugReportOpen] = useState(false);
-  // Existing conversations now managed by centralized hook
   const [profileSidebarUser, setProfileSidebarUser] =
     useState<UserPresence | null>(null);
 
-  // Current user profile for search context
   const [currentUserProfile, setCurrentUserProfile] = useState<
     Schema['UserProfile']['type'] | null
   >(null);
@@ -67,7 +65,7 @@ export default function OnlineUsers({
     useState<SidebarSection>('suggested');
   const [searchQuery, setSearchQuery] = useState('');
   const [shouldTriggerSearch, setShouldTriggerSearch] = useState(false);
-  const [currentTime, setCurrentTime] = useState(new Date());
+
   const [optimisticPendingRequests, setOptimisticPendingRequests] = useState<
     Set<string>
   >(new Set());
@@ -78,7 +76,6 @@ export default function OnlineUsers({
     await simplePresenceManager.setOffline();
     handleSignOut();
   };
-  // Conversation subscription now handled by centralized hook
   const { fetchUserProfile } = useSubscriptionStore();
 
   const {
@@ -90,34 +87,28 @@ export default function OnlineUsers({
     currentUserId: user?.userId,
   });
 
-  // Use centralized hooks for all subscriptions (no direct subscription calls)
   const { conversations } = useSubscriptionStore();
 
-  // Use centralized conversations for subscription management
   useConversations({
     userId: user?.userId || '',
     enabled: !!user?.userId,
   });
 
-  // Check if conversations are still loading
   const conversationsLoading = useSubscriptionStore(
     state => state.loading.conversations
   );
 
-  // Use centralized chat requests hook (handles subscriptions internally)
   const { incomingRequests: incomingChatRequests, pendingReceiverIds } =
     useChatRequests({
       userId: user?.userId || '',
       enabled: !!user?.userId,
     });
 
-  // Use centralized notifications for mark all as read functionality
   const { notifications: centralizedNotifications } = useNotifications({
     userId: user?.userId || '',
     enabled: !!user?.userId,
   });
 
-  // Use saved users hook
   const { savedUsers: savedUserEntries, isLoading: savedUsersLoading } =
     useSavedUsers({
       userId: user?.userId || '',
@@ -133,7 +124,6 @@ export default function OnlineUsers({
     return combined;
   }, [pendingReceiverIds, optimisticPendingRequests]);
 
-  // Create a set of user IDs who have sent requests to the current user
   const incomingRequestSenderIds = useMemo(() => {
     return new Set(
       incomingChatRequests
@@ -142,7 +132,6 @@ export default function OnlineUsers({
     );
   }, [incomingChatRequests]);
 
-  // Create a map of user ID to chat request for easy lookup
   const incomingRequestsByUserId = useMemo(() => {
     const map = new Map();
     incomingChatRequests
@@ -157,16 +146,13 @@ export default function OnlineUsers({
     return allOnlineUsers.filter(u => u?.userId && u.userId !== user?.userId);
   }, [allOnlineUsers, user?.userId]);
 
-  // Convert saved user entries to UserPresence objects
   const savedUsers = useMemo(() => {
     return savedUserEntries
       .map(entry => {
-        // Try to find the user in allUsers (includes online and conversation users)
         const userPresence = allUsers.find(u => u.userId === entry.savedUserId);
         if (userPresence) {
           return userPresence;
         }
-        // If not found in allUsers, create a basic UserPresence object
         return {
           userId: entry.savedUserId,
           isOnline: false,
@@ -179,28 +165,24 @@ export default function OnlineUsers({
           updatedAt: entry.updatedAt,
         } as UserPresence;
       })
-      .filter(savedUser => savedUser.userId !== user?.userId); // Exclude current user
+      .filter(savedUser => savedUser.userId !== user?.userId);
   }, [savedUserEntries, allUsers, user?.userId]);
 
-  // Only show initial loading for the very first load, not when switching tabs
-  // This prevents the whole dashboard from showing loading when switching from discover to connections
+
   const [hasInitialLoad, setHasInitialLoad] = useState(false);
   const initialLoading = onlineUsersLoading && !hasInitialLoad;
 
-  // Mark as initially loaded once we have data or when not loading
   useEffect(() => {
     if (!onlineUsersLoading || allOnlineUsers.length > 0) {
       setHasInitialLoad(true);
     }
   }, [onlineUsersLoading, allOnlineUsers.length]);
 
-  // Load current user profile for search context
   useEffect(() => {
     let mounted = true;
     const loadCurrentUserProfile = async () => {
       if (!user?.userId) return;
       try {
-        // Use our centralized profile fetching (with caching)
         const profile = await fetchUserProfile(user.userId);
         if (mounted) setCurrentUserProfile(profile);
       } catch (error) {
@@ -213,10 +195,6 @@ export default function OnlineUsers({
     };
   }, [user?.userId, fetchUserProfile]);
 
-  // Persist and restore sidebar open/close state only (not the selected user)
-  // Profile sidebar starts closed by default (no localStorage persistence)
-
-  // Auto-select first user when sidebar is restored and users are available
   useEffect(() => {
     if (profileSidebarOpen && !profileSidebarUser && allUsers.length > 0) {
       const firstUser = allUsers[0];
@@ -271,11 +249,9 @@ export default function OnlineUsers({
         }
       });
 
-      // Create basic presence entries for conversation participants
-      // Real-time presence data will be merged later via the onlineUsers state
       const validUserPresences = Array.from(userIds).map(userId => ({
         userId,
-        isOnline: false, // Will be updated by real-time data if user is online
+        isOnline: false,
         status: 'OFFLINE' as const,
         lastSeen: null,
         createdAt: new Date().toISOString(),
@@ -292,14 +268,11 @@ export default function OnlineUsers({
     }
   }, [user]);
 
-  // Create a conversations map for compatibility with existing hooks
   const existingConversations = useMemo(() => {
     const conversationMap = new Map<string, Conversation>();
 
-    // Get all conversations from the subscription store directly
     const allConversations = Array.from(conversations.values());
 
-    // Map conversations by participant ID for quick lookup
     allConversations.forEach(conversation => {
       const otherUserId =
         conversation.participant1Id === user?.userId
@@ -316,7 +289,6 @@ export default function OnlineUsers({
     onlineUsers,
     allUsers,
     existingConversations,
-    currentTime,
   });
 
   const chatActions = useChatActions({
@@ -330,8 +302,6 @@ export default function OnlineUsers({
   );
   const [suggestedUsers, setSuggestedUsers] = useState<UserPresence[]>([]);
   const [suggestedUsersLoading, setSuggestedUsersLoading] = useState(true);
-  const [lastSuggestedUsersLoad, setLastSuggestedUsersLoad] =
-    useState<number>(0);
 
   useEffect(() => {
     if (!user) {
@@ -355,23 +325,11 @@ export default function OnlineUsers({
     };
   }, [user, loadConversations]);
 
-  // Conversation subscription now handled by centralized hook
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 10000); // Update every 10 seconds for lazy timer
-
-    return () => clearInterval(timer);
-  }, []);
-
-  // Clean up optimistic pending requests that are now reflected in real-time data
   useEffect(() => {
     setOptimisticPendingRequests(prev => {
       const newOptimistic = new Set(prev);
       let hasChanges = false;
 
-      // Remove any optimistic requests that are now in real-time data
       prev.forEach(receiverId => {
         if (pendingReceiverIds.has(receiverId)) {
           newOptimistic.delete(receiverId);
@@ -383,101 +341,51 @@ export default function OnlineUsers({
     });
   }, [pendingReceiverIds]);
 
-  // Load all users for suggested section with caching
   useEffect(() => {
-    if (!user) {
+    if (!user?.userId || conversationsLoading) {
       return;
     }
 
     const loadSuggestedUsers = async () => {
-      const now = Date.now();
-      const cacheExpiry = 2 * 60 * 1000; // 2 minutes cache
-
-      // If we have cached data that's less than 2 minutes old, don't reload
-      if (
-        lastSuggestedUsersLoad &&
-        now - lastSuggestedUsersLoad < cacheExpiry &&
-        suggestedUsers.length > 0
-      ) {
-        setSuggestedUsersLoading(false);
-        return;
-      }
-
-      // Wait for conversations to load before filtering suggested users
-      if (conversationsLoading) {
-        setSuggestedUsersLoading(false);
-        return;
-      }
-
       setSuggestedUsersLoading(true);
       try {
         const result = await userPresenceService.getAllUsers();
         if (result.error) {
           console.error('Error loading suggested users:', result.error);
+          setSuggestedUsers([]);
           setSuggestedUsersLoading(false);
           return;
         }
 
-        // Filter out current user, users with existing conversations (except reconnectable), and remove duplicates
         const filteredUsers = (result.data || []).filter((u: UserPresence) => {
-          // Exclude current user
           if (!u?.userId || u.userId === user.userId) {
             return false;
           }
 
-          const conversation = existingConversations.get(u.userId);
-
-          // If no conversation exists, include the user
-          if (!conversation) {
-            return true;
-          }
-
-          // All conversations are permanent - no need to check for reconnectable users
-          return false; // Don't include users with existing conversations in suggestions
+          return !existingConversations.has(u.userId);
         });
 
-        // Additional filtering to ensure we don't show users with active conversations
-        const finalFilteredUsers = filteredUsers.filter((u: UserPresence) => {
-          const conversation = existingConversations.get(u.userId);
-          if (!conversation) {
-            return true; // No conversation, include
-          }
-
-          // All conversations are permanent now - exclude users with any existing conversation
-          return false;
-        });
-
-        setSuggestedUsers(finalFilteredUsers);
-        setLastSuggestedUsersLoad(now);
+        setSuggestedUsers(filteredUsers);
         setSuggestedUsersLoading(false);
       } catch (error) {
         console.error('Error loading suggested users:', error);
+        setSuggestedUsers([]);
         setSuggestedUsersLoading(false);
       }
     };
 
     loadSuggestedUsers();
-  }, [
-    user,
-    lastSuggestedUsersLoad,
-    suggestedUsers.length,
-    existingConversations,
-    userCategories,
-    conversationsLoading,
-  ]);
+  }, [user?.userId, existingConversations, conversationsLoading]);
 
   useEffect(() => {
     const combinedUsers = [...onlineUsers];
     conversationUsers.forEach(userPresence => {
-      // Check if user is already in online users (has real-time presence data)
       const existingUser = combinedUsers.find(
         u => u.userId === userPresence.userId
       );
       if (!existingUser) {
-        // User is not currently online, add them with offline status
         combinedUsers.push(userPresence);
       }
-      // If user exists in onlineUsers, real-time data takes precedence
     });
     setAllUsers(combinedUsers);
   }, [onlineUsers, conversationUsers]);
@@ -518,7 +426,6 @@ export default function OnlineUsers({
       if (result.error) {
         setError(result.error);
       } else {
-        // The real-time subscription will automatically update the UI with the new conversation
         onChatRequestSent();
       }
     } catch (error) {
@@ -528,15 +435,12 @@ export default function OnlineUsers({
   };
 
   const handleProfessionalRequest = (query: string) => {
-    // Switch to search section and trigger search
     setActiveSection('search');
     setSearchQuery(query);
     setShouldTriggerSearch(true);
 
-    // Reset trigger after a moment to allow for new searches
     setTimeout(() => setShouldTriggerSearch(false), 100);
 
-    // Call the original callback if provided
     onProfessionalRequest?.(query);
   };
 
@@ -544,7 +448,7 @@ export default function OnlineUsers({
     if (!user || !centralizedNotifications.length) return;
     try {
       const markPromises = centralizedNotifications
-        .filter(notification => notification.type !== 'connection') // Skip connection requests entirely
+        .filter(notification => notification.type !== 'connection')
         .map(notification => {
           if (
             notification.type === 'message' &&
@@ -552,16 +456,13 @@ export default function OnlineUsers({
             typeof notification.data === 'object' &&
             'conversationId' in notification.data
           ) {
-            // Delete message notifications for the entire conversation
             return notificationService.deleteNotificationsForConversation(
               user.userId,
               (notification.data as { conversationId: string }).conversationId
             );
           } else if (notification.type === 'chat_request') {
-            // Delete chat requests as they should be removed on mark all as read
             return notificationService.deleteNotification(notification.id);
           } else {
-            // For other notification types (not connection requests), just mark as read
             return notificationService.markNotificationAsRead(notification.id);
           }
         });
@@ -572,7 +473,6 @@ export default function OnlineUsers({
   };
 
   const handleOpenProfileSidebar = async (userPresence: UserPresence) => {
-    // Toggle open/close (no localStorage persistence)
     if (profileSidebarOpen) {
       setProfileSidebarOpen(false);
       setProfileSidebarUser(null);
@@ -584,12 +484,10 @@ export default function OnlineUsers({
   };
 
   const handleUserCardClick = async (userPresence: UserPresence) => {
-    // If sidebar is not open, open it
     if (!profileSidebarOpen) {
       setProfileSidebarOpen(true);
     }
 
-    // Always update the selected user
     setProfileSidebarUser(userPresence);
   };
 
@@ -701,7 +599,6 @@ export default function OnlineUsers({
               const target = e.target as HTMLDivElement;
               const { scrollTop, scrollHeight, clientHeight } = target;
 
-              // Show top border when scrolled down
               const topBorder = target.parentElement?.querySelector(
                 '.scroll-top-border'
               ) as HTMLElement;
@@ -709,7 +606,6 @@ export default function OnlineUsers({
                 topBorder.style.opacity = scrollTop > 0 ? '1' : '0';
               }
 
-              // Show bottom border when not at bottom
               const bottomBorder = target.parentElement?.querySelector(
                 '.scroll-bottom-border'
               ) as HTMLElement;

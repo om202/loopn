@@ -11,14 +11,12 @@ interface UseUserCategorizationProps {
   onlineUsers: UserPresence[];
   allUsers: UserPresence[];
   existingConversations: Map<string, Conversation>;
-  currentTime: Date;
 }
 
 export function useUserCategorization({
   onlineUsers,
   allUsers,
   existingConversations,
-  currentTime: _currentTime, // No longer needed for permanent connections
 }: UseUserCategorizationProps) {
   // Helper functions to categorize users - simplified for permanent connections
   const connectionUsers = useMemo(() => {
