@@ -11,7 +11,7 @@ import LoadingContainer from '../LoadingContainer';
 
 type UserPresence = Schema['UserPresence']['type'];
 type Conversation = Schema['Conversation']['type'];
-type SidebarSection = 'all' | 'connections' | 'suggested' | 'saved' | 'search';
+type SidebarSection = 'connections' | 'suggested' | 'saved' | 'search';
 
 interface DashboardSectionContentProps {
   activeSection: SidebarSection;
@@ -174,7 +174,8 @@ export default function DashboardSectionContent({
     let users: UserPresence[];
     switch (activeSection) {
       case 'connections':
-        users = connectionUsers;
+        // Show all chat users (online users + connections) for the consolidated connections section
+        users = uniqueAllChatUsers;
         break;
       case 'suggested':
         users = suggestedUsers;
@@ -184,7 +185,6 @@ export default function DashboardSectionContent({
         break;
       case 'search':
         return []; // Search section uses its own component
-      case 'all':
       default:
         users = uniqueAllChatUsers;
         break;
@@ -200,7 +200,7 @@ export default function DashboardSectionContent({
       case 'connections':
         return {
           title: 'My Connections',
-          description: 'Your connections',
+          description: 'Your connections and conversations',
           emptyIcon: Users,
           emptyMessage: 'No connections yet',
         };
@@ -227,13 +227,12 @@ export default function DashboardSectionContent({
           emptyIcon: Search,
           emptyMessage: 'Start searching for professionals',
         };
-      case 'all':
       default:
         return {
-          title: 'My Conversations',
-          description: 'Your conversations',
-          emptyIcon: MessageSquare,
-          emptyMessage: 'No chats available',
+          title: 'My Connections',
+          description: 'Your connections and conversations',
+          emptyIcon: Users,
+          emptyMessage: 'No connections yet',
         };
     }
   };

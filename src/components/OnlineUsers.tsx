@@ -39,7 +39,6 @@ interface OnlineUsersProps {
 }
 
 type SidebarSection =
-  | 'all'
   | 'connections'
   | 'suggested'
   | 'saved'
@@ -607,9 +606,7 @@ export default function OnlineUsers({
       <DashboardSidebar
         activeSection={activeSection}
         onSectionChange={setActiveSection}
-        onlineUsersCount={userCategories.onlineUsers.length}
         connectionsCount={userCategories.connectionUsers.length}
-        chatTrialsCount={0}
         suggestedUsersCount={suggestedUsers.length}
       />
 
@@ -678,13 +675,7 @@ export default function OnlineUsers({
               </h2>
             </div>
           )}
-          {activeSection === 'all' && (
-            <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-black'>
-                My Conversations
-              </h2>
-            </div>
-          )}
+
         </div>
 
         <div className='relative flex-1 overflow-hidden'>

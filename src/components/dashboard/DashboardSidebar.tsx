@@ -15,7 +15,6 @@ import { useNotifications } from '../../hooks/useNotifications';
 import { useSavedUsers } from '../../hooks/useSavedUsers';
 
 type SidebarSection =
-  | 'all'
   | 'connections'
   | 'suggested'
   | 'saved'
@@ -26,18 +25,14 @@ type SidebarSection =
 interface DashboardSidebarProps {
   activeSection: SidebarSection;
   onSectionChange: (section: SidebarSection) => void;
-  onlineUsersCount: number;
   connectionsCount: number;
-  chatTrialsCount: number;
   suggestedUsersCount: number;
 }
 
 export default function DashboardSidebar({
   activeSection,
   onSectionChange,
-  onlineUsersCount,
   connectionsCount,
-  chatTrialsCount,
   suggestedUsersCount,
 }: DashboardSidebarProps) {
   const [isBugReportOpen, setIsBugReportOpen] = useState(false);
@@ -104,12 +99,6 @@ export default function DashboardSidebar({
       icon: Users,
       label: 'Connections',
       count: connectionsCount,
-    },
-    {
-      id: 'all' as const,
-      icon: MessageSquare,
-      label: 'Chats',
-      count: onlineUsersCount + connectionsCount + chatTrialsCount,
     },
     {
       id: 'notifications' as const,
