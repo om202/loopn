@@ -248,49 +248,26 @@ export class OnboardingService {
    * Complete user onboarding
    */
   static async completeOnboarding(data: OnboardingData): Promise<void> {
-    console.log('🔧 [ONBOARDING SERVICE] Starting completeOnboarding...');
-    console.log('📥 [ONBOARDING SERVICE] Received data:', {
-      fullName: data.fullName,
-      email: data.email,
-      hasWorkExp: data.workExperience?.length || 0,
-      hasEducation: data.educationHistory?.length || 0,
-      hasSkills: data.skills?.length || 0,
-      hasInterests: data.interests?.length || 0,
-      hasProfilePicture: !!data.profilePictureFile,
-      autoFilledCount: data.autoFilledFields?.length || 0,
-    });
+
 
     try {
       // Ensure Amplify is ready before making API calls
-      console.log(
-        '⏳ [ONBOARDING SERVICE] Waiting for Amplify initialization...'
-      );
       await amplifyInitialization.waitForReady();
 
-      console.log('👤 [ONBOARDING SERVICE] Getting current user...');
       const user = await getCurrentUser();
       if (!user) {
         throw new Error('User not authenticated');
       }
-      console.log('✅ [ONBOARDING SERVICE] User authenticated:', user.userId);
 
       // Handle profile picture upload if provided
       let profilePictureUrl: string | undefined;
       let hasProfilePicture = false;
 
       if (data.profilePictureFile) {
-        console.log(
-          '📷 [ONBOARDING SERVICE] Processing profile picture upload...'
-        );
         try {
           const fileExtension =
             data.profilePictureFile.name.split('.').pop() || 'jpg';
           const fileName = `${user.userId}/profile.${fileExtension}`;
-
-          console.log(
-            '📤 [ONBOARDING SERVICE] Uploading profile picture:',
-            fileName
-          );
 
           const uploadResult = await uploadData({
             key: `profile-pictures/${fileName}`,
@@ -302,31 +279,15 @@ export class OnboardingService {
 
           profilePictureUrl = uploadResult.key;
           hasProfilePicture = true;
-          console.log(
-            '✅ [ONBOARDING SERVICE] Profile picture uploaded successfully:',
-            {
-              key: profilePictureUrl,
-              size: data.profilePictureFile.size,
-              type: data.profilePictureFile.type,
-            }
-          );
-        } catch (uploadError) {
-          console.error(
-            '❌ [ONBOARDING SERVICE] Failed to upload profile picture:',
-            uploadError
-          );
-          console.error('🔍 [ONBOARDING SERVICE] Upload error details:', {
-            userId: user.userId,
-            fileName: `${user.userId}/profile.${data.profilePictureFile.name.split('.').pop() || 'jpg'}`,
-            fileSize: data.profilePictureFile.size,
-            fileType: data.profilePictureFile.type,
+          console.log('Profile picture uploaded successfully:', {
+            key: profilePictureUrl,
+            size: data.profilePictureFile.size,
+            type: data.profilePictureFile.type,
           });
+        } catch (uploadError) {
+          console.error('Failed to upload profile picture:', uploadError);
           // Continue with onboarding even if image upload fails
         }
-      } else {
-        console.log(
-          '🚫 [ONBOARDING SERVICE] No profile picture file provided during onboarding'
-        );
       }
 
       // Create user profile with expanded onboarding data
@@ -372,68 +333,21 @@ export class OnboardingService {
         autoFilledFields: data.autoFilledFields || [],
       };
 
-      console.log(
-        '📊 [ONBOARDING SERVICE] Profile data to be sent to server:',
-        {
-          userId: user.userId,
-          email: user.signInDetails?.loginId || '',
-          fullName: profileData.fullName,
-          jobRole: profileData.jobRole,
-          companyName: profileData.companyName,
-          industry: profileData.industry, // 🔍 Should be null if empty to avoid DynamoDB secondary index error
-          industryType: typeof profileData.industry,
-          yearsOfExperience: profileData.yearsOfExperience,
-          skillsCount: profileData.skills.length,
-          interestsCount: profileData.interests.length,
-          workExpCount: profileData.workExperience.length,
-          educationCount: profileData.educationHistory.length,
-          projectsCount: profileData.projects.length,
-          certificationsCount: profileData.certifications.length,
-          awardsCount: profileData.awards.length,
-          languagesCount: profileData.languages.length,
-          publicationsCount: profileData.publications.length,
-          hobbiesCount: profileData.hobbies.length,
-          autoFilledCount: profileData.autoFilledFields.length,
-          hasProfilePicture: profileData.hasProfilePicture,
-          profilePictureUrl: profileData.profilePictureUrl,
-        }
-      );
-
-      console.log(
-        '📤 [ONBOARDING SERVICE] Calling userProfileService.createUserProfile...'
-      );
       await userProfileService.createUserProfile(
         user.userId,
         user.signInDetails?.loginId || '',
         profileData
       );
-      console.log('✅ [ONBOARDING SERVICE] User profile created successfully!');
 
       // Update localStorage
-      console.log(
-        '💾 [ONBOARDING SERVICE] Updating localStorage with completion status...'
-      );
       const status: UserOnboardingStatus = {
         isOnboardingComplete: true,
         onboardingData: data,
       };
 
       await this.setOnboardingStatusInStorage(status);
-      console.log('✅ [ONBOARDING SERVICE] LocalStorage updated successfully!');
-      console.log(
-        '🎉 [ONBOARDING SERVICE] Onboarding completion process finished!'
-      );
     } catch (error) {
-      console.error(
-        '❌ [ONBOARDING SERVICE] Error completing onboarding:',
-        error
-      );
-      console.error('🔍 [ONBOARDING SERVICE] Error details:', {
-        message: error instanceof Error ? error.message : 'Unknown error',
-        stack: error instanceof Error ? error.stack : undefined,
-        type: typeof error,
-        name: error instanceof Error ? error.name : undefined,
-      });
+      console.error('Error completing onboarding:', error);
       throw error;
     }
   }

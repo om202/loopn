@@ -200,31 +200,12 @@ export default function OnboardingPage() {
   useEffect(() => {
     const loadPartialData = async () => {
       try {
-        console.log('💾 [LOCALSTORAGE] Loading partial onboarding data...');
         const partialData = await OnboardingService.getPartialOnboardingData();
         if (partialData) {
-          console.log('✅ [LOCALSTORAGE] Partial data found:', {
-            fullName: partialData.fullName,
-            skillsCount: partialData.skills?.length || 0,
-            interestsCount: partialData.interests?.length || 0,
-            workExpCount: partialData.workExperience?.length || 0,
-            autoFilledCount: partialData.autoFilledFields?.length || 0,
-            hasResumeData: !!(
-              partialData.autoFilledFields &&
-              partialData.autoFilledFields.length > 0
-            ),
-          });
           setFormData(prev => ({ ...prev, ...partialData }));
-        } else {
-          console.log(
-            'ℹ️ [LOCALSTORAGE] No partial data found, using defaults'
-          );
         }
       } catch (error) {
-        console.error(
-          '❌ [LOCALSTORAGE] Error loading partial onboarding data:',
-          error
-        );
+        console.error('Error loading partial onboarding data:', error);
       }
     };
 
@@ -235,19 +216,9 @@ export default function OnboardingPage() {
   useEffect(() => {
     const savePartialData = async () => {
       try {
-        console.log('💾 [LOCALSTORAGE] Saving partial onboarding data...', {
-          fullName: formData.fullName,
-          skillsCount: formData.skills?.length || 0,
-          interestsCount: formData.interests?.length || 0,
-          workExpCount: formData.workExperience?.length || 0,
-        });
         await OnboardingService.savePartialOnboardingData(formData);
-        console.log('✅ [LOCALSTORAGE] Partial data saved successfully');
       } catch (error) {
-        console.error(
-          '❌ [LOCALSTORAGE] Error saving partial onboarding data:',
-          error
-        );
+        console.error('Error saving partial onboarding data:', error);
       }
     };
 
@@ -329,20 +300,7 @@ export default function OnboardingPage() {
   };
 
   const validateStep = (step: number): boolean => {
-    const missingFields = getMissingFields(step);
-    const isValid = missingFields.length === 0;
-
-    console.log(`🔍 [VALIDATION] Step ${step} validation:`, {
-      stepInfo: getCurrentStepInfo(),
-      missingFields,
-      isValid,
-      currentFormData: {
-        fullName: formData.fullName,
-        hasContent: !!formData.fullName?.trim(),
-      },
-    });
-
-    return isValid;
+    return getMissingFields(step).length === 0;
   };
 
   const nextStep = () => {
@@ -381,33 +339,7 @@ export default function OnboardingPage() {
   };
 
   const handleComplete = async () => {
-    console.log(
-      '🎯 [ONBOARDING] Complete button clicked - starting validation...'
-    );
-    console.log('📊 [ONBOARDING] Final form state:', {
-      currentStep,
-      totalSteps,
-      stepInfo: getCurrentStepInfo(),
-      formDataSummary: {
-        fullName: formData.fullName,
-        fullNameValid: !!formData.fullName?.trim(),
-        skillsCount: formData.skills?.length || 0,
-        interestsCount: formData.interests?.length || 0,
-        workExpCount: formData.workExperience?.length || 0,
-        autoFilledCount: formData.autoFilledFields?.length || 0,
-      },
-    });
-
-    const isValid = validateStep(totalSteps);
-    if (!isValid) {
-      console.log(
-        '❌ [ONBOARDING] Validation failed - stopping completion process'
-      );
-      return;
-    }
-    console.log(
-      '✅ [ONBOARDING] Validation passed - proceeding with completion...'
-    );
+    if (!validateStep(totalSteps)) return;
 
     setIsLoading(true);
     setError('');
@@ -419,64 +351,15 @@ export default function OnboardingPage() {
         ...formData,
       };
 
-      console.log('🚀 [ONBOARDING] Starting completion process...');
-      console.log('📋 [ONBOARDING] Form data being submitted:', {
-        fullName: onboardingData.fullName,
-        email: onboardingData.email,
-        phone: onboardingData.phone,
-        city: onboardingData.city,
-        country: onboardingData.country,
-        jobRole: onboardingData.jobRole,
-        companyName: onboardingData.companyName,
-        industry: onboardingData.industry,
-        yearsOfExperience: onboardingData.yearsOfExperience,
-        education: onboardingData.education,
-        about: onboardingData.about,
-        skills: onboardingData.skills,
-        interests: onboardingData.interests,
-        workExperience: onboardingData.workExperience?.length || 0,
-        educationHistory: onboardingData.educationHistory?.length || 0,
-        projects: onboardingData.projects?.length || 0,
-        certifications: onboardingData.certifications?.length || 0,
-        awards: onboardingData.awards?.length || 0,
-        languages: onboardingData.languages?.length || 0,
-        publications: onboardingData.publications?.length || 0,
-        hobbies: onboardingData.hobbies?.length || 0,
-        autoFilledFields: onboardingData.autoFilledFields?.length || 0,
-        hasProfilePicture: !!onboardingData.profilePictureFile,
-      });
-
-      console.log(
-        '📤 [ONBOARDING] Calling OnboardingService.completeOnboarding...'
-      );
-
-      // 🔍 BREAKPOINT 1: Before submitting to server
-      // eslint-disable-next-line no-debugger
-      debugger;
-
       await OnboardingService.completeOnboarding(onboardingData);
-
-      console.log('✅ [ONBOARDING] Server responded successfully!');
-
-      // 🔍 BREAKPOINT 2: After server response
-      // eslint-disable-next-line no-debugger
-      debugger;
-      console.log('🏠 [ONBOARDING] Navigating to dashboard...');
 
       // Onboarding complete! Navigate to dashboard
       router.replace('/dashboard');
     } catch (err) {
-      console.error('❌ [ONBOARDING] Completion failed with error:', err);
-      console.error('🔍 [ONBOARDING] Error details:', {
-        message: err instanceof Error ? err.message : 'Unknown error',
-        stack: err instanceof Error ? err.stack : undefined,
-        type: typeof err,
-        stringified: JSON.stringify(err, null, 2),
-      });
-
       setError(
         err instanceof Error ? err.message : 'Failed to complete onboarding'
       );
+      console.error('Onboarding completion error:', err);
     } finally {
       setIsLoading(false);
     }
@@ -594,15 +477,8 @@ export default function OnboardingPage() {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    console.log('📄 [RESUME UPLOAD] Starting resume upload process...', {
-      fileName: file.name,
-      fileSize: file.size,
-      fileType: file.type,
-    });
-
     if (file.type !== 'application/pdf') {
       setResumeError('Please upload a PDF file');
-      console.error('❌ [RESUME UPLOAD] Invalid file type:', file.type);
       return;
     }
 
@@ -611,66 +487,28 @@ export default function OnboardingPage() {
 
     try {
       // Step 1: Extract text from PDF
-      console.log('📖 [RESUME UPLOAD] Step 1: Extracting text from PDF...');
       const text = await extractTextFromPDF(file);
-      console.log('✅ [RESUME UPLOAD] Text extracted successfully:', {
-        textLength: text.length,
-        preview: text.substring(0, 200) + '...',
-      });
 
       // Step 2: Parse with Bedrock Claude
-      console.log('🤖 [RESUME UPLOAD] Step 2: Parsing with Bedrock Claude...');
       const parsedData = await parseResumeWithBedrock(text);
-      console.log('✅ [RESUME UPLOAD] Resume parsed successfully:', {
-        firstName: parsedData.firstName,
-        lastName: parsedData.lastName,
-        email: parsedData.email,
-        workExpCount: parsedData.workExperience?.length || 0,
-        skillsCount: parsedData.skills?.length || 0,
-        educationCount: parsedData.education?.length || 0,
-        projectsCount: parsedData.projects?.length || 0,
-      });
 
       // Step 3: Merge with existing form data
-      console.log(
-        '🔀 [RESUME UPLOAD] Step 3: Merging with existing form data...'
-      );
-      console.log('📋 [RESUME UPLOAD] Current form data before merge:', {
-        fullName: formData.fullName,
-        skillsCount: formData.skills?.length || 0,
-        interestsCount: formData.interests?.length || 0,
-      });
-
       const mergedData = mergeResumeWithOnboardingData(parsedData, formData);
-      console.log('✅ [RESUME UPLOAD] Data merged successfully:', {
-        fullName: mergedData.fullName,
-        skillsCount: mergedData.skills?.length || 0,
-        workExpCount: mergedData.workExperience?.length || 0,
-        educationCount: mergedData.educationHistory?.length || 0,
-        autoFilledFields: mergedData.autoFilledFields?.length || 0,
-      });
 
       // Step 4: Update form data
-      console.log('📝 [RESUME UPLOAD] Step 4: Updating form state...');
       setFormData(mergedData);
       setResumeProcessed(true);
       setShowResumeUpload(false);
 
-      console.log('🎉 [RESUME UPLOAD] Resume processed successfully!', {
+      console.log('✅ Resume processed successfully:', {
         autoFilledFields: mergedData.autoFilledFields?.length || 0,
         totalFields: Object.keys(mergedData).length,
       });
     } catch (err) {
-      console.error('❌ [RESUME UPLOAD] Resume processing failed:', err);
-      console.error('🔍 [RESUME UPLOAD] Error details:', {
-        message: err instanceof Error ? err.message : 'Unknown error',
-        stack: err instanceof Error ? err.stack : undefined,
-        type: typeof err,
-      });
-
       setResumeError(
         err instanceof Error ? err.message : 'Failed to process resume'
       );
+      console.error('Resume processing error:', err);
     } finally {
       setIsProcessingResume(false);
     }
