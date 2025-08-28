@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { CloudUpload } from 'lucide-react';
 import * as pdfjsLib from 'pdfjs-dist';
 import { generateClient } from 'aws-amplify/data';
 import type { Schema } from '../../../amplify/data/resource';
@@ -450,14 +451,11 @@ export default function OnboardingPage() {
     setResumeError('');
   };
 
-  // Helper function to check if field was auto-filled
-  const isAutoFilled = (fieldName: string): boolean => {
-    return formData.autoFilledFields?.includes(fieldName) || false;
-  };
+
 
   return (
     <div className='min-h-screen bg-slate-100 py-8 px-3 sm:px-4'>
-      <div className='max-w-2xl mx-auto'>
+      <div className='max-w-5xl mx-auto'>
         {/* Main content card */}
         <div className='bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 lg:p-8'>
           {/* Sign Out Button - Top Right of Card */}
@@ -493,14 +491,11 @@ export default function OnboardingPage() {
           {showResumeUpload && currentStep === 1 && (
             <div className='mb-8 bg-brand-50 border border-brand-200 rounded-2xl p-6'>
               <div className='text-center'>
-                <h3 className='text-lg font-semibold text-brand-800 mb-2'>
-                  🚀 Speed up with your resume
-                </h3>
-                <p className='text-brand-700 mb-4'>
-                  Upload your resume (PDF) to auto-fill your profile information
+                <p className='text-brand-700 mb-6 text-base font-semibold'>
+                  Upload your resume, and we'll autofill the form for you.
                 </p>
 
-                <div className='flex flex-col sm:flex-row gap-3 items-center justify-center'>
+                <div className='flex justify-center'>
                   <label className='cursor-pointer'>
                     <input
                       type='file'
@@ -509,31 +504,21 @@ export default function OnboardingPage() {
                       disabled={isProcessingResume}
                       className='hidden'
                     />
-                    <div className='bg-brand-500 text-white px-4 py-2 rounded-xl font-medium hover:bg-brand-600 disabled:opacity-50 disabled:cursor-not-allowed inline-block'>
-                      {isProcessingResume
-                        ? 'Processing...'
-                        : 'Choose PDF Resume'}
+                    <div className='bg-brand-500 text-white px-6 py-3 rounded-xl font-medium hover:bg-brand-600 disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center gap-2 text-base'>
+                      {isProcessingResume ? (
+                        <>
+                          <div className='animate-spin rounded-full h-5 w-5 border-b-2 border-white'></div>
+                          Processing...
+                        </>
+                      ) : (
+                        <>
+                          <CloudUpload className='w-5 h-5' />
+                          Choose PDF Resume
+                        </>
+                      )}
                     </div>
                   </label>
-
-                  <button
-                    onClick={skipResumeUpload}
-                    className='text-brand-600 hover:text-brand-700 font-medium'
-                  >
-                    Skip and fill manually
-                  </button>
                 </div>
-
-                {isProcessingResume && (
-                  <div className='mt-4'>
-                    <div className='flex items-center justify-center space-x-2'>
-                      <div className='animate-spin rounded-full h-4 w-4 border-b-2 border-brand-500'></div>
-                      <p className='text-brand-600 text-sm'>
-                        Parsing your resume with AI...
-                      </p>
-                    </div>
-                  </div>
-                )}
 
                 {resumeError && (
                   <p className='text-b_red-600 mt-3 text-sm'>{resumeError}</p>
@@ -632,95 +617,70 @@ export default function OnboardingPage() {
                 </h3>
 
                 <div>
-                  <label className='flex items-center text-sm font-medium text-slate-500 mb-3'>
+                  <label className='block text-sm font-medium text-slate-500 mb-3'>
                     Full Name *
-                    {isAutoFilled('fullName') && (
-                      <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
-                        Auto-filled
-                      </span>
-                    )}
                   </label>
                   <input
                     type='text'
                     value={formData.fullName || ''}
                     onChange={e => updateFormData('fullName', e.target.value)}
                     placeholder='e.g., John Smith'
-                    className={`w-full px-3 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white ${isAutoFilled('fullName') ? 'border-b_green-300' : 'border-slate-200'}`}
+                    className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                   />
                 </div>
 
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                   <div>
-                    <label className='flex items-center text-sm font-medium text-slate-500 mb-3'>
+                    <label className='block text-sm font-medium text-slate-500 mb-3'>
                       Email
-                      {isAutoFilled('email') && (
-                        <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
-                          Auto-filled
-                        </span>
-                      )}
                     </label>
                     <input
                       type='email'
                       value={formData.email || ''}
                       onChange={e => updateFormData('email', e.target.value)}
                       placeholder='john@example.com'
-                      className={`w-full px-3 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white ${isAutoFilled('email') ? 'border-b_green-300' : 'border-slate-200'}`}
+                      className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                     />
                   </div>
 
                   <div>
-                    <label className='flex items-center text-sm font-medium text-slate-500 mb-3'>
+                    <label className='block text-sm font-medium text-slate-500 mb-3'>
                       Phone
-                      {isAutoFilled('phone') && (
-                        <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
-                          Auto-filled
-                        </span>
-                      )}
                     </label>
                     <input
                       type='tel'
                       value={formData.phone || ''}
                       onChange={e => updateFormData('phone', e.target.value)}
                       placeholder='+1 (555) 123-4567'
-                      className={`w-full px-3 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white ${isAutoFilled('phone') ? 'border-b_green-300' : 'border-slate-200'}`}
+                      className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                     />
                   </div>
                 </div>
 
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                   <div>
-                    <label className='flex items-center text-sm font-medium text-slate-500 mb-3'>
+                    <label className='block text-sm font-medium text-slate-500 mb-3'>
                       City
-                      {isAutoFilled('city') && (
-                        <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
-                          Auto-filled
-                        </span>
-                      )}
                     </label>
                     <input
                       type='text'
                       value={formData.city || ''}
                       onChange={e => updateFormData('city', e.target.value)}
                       placeholder='San Francisco'
-                      className={`w-full px-3 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white ${isAutoFilled('city') ? 'border-b_green-300' : 'border-slate-200'}`}
+                      className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                     />
                   </div>
 
                   <div>
-                    <label className='flex items-center text-sm font-medium text-slate-500 mb-3'>
+                    <label className='block text-sm font-medium text-slate-500 mb-3'>
                       Country
-                      {isAutoFilled('country') && (
-                        <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
-                          Auto-filled
-                        </span>
-                      )}
                     </label>
                     <input
                       type='text'
                       value={formData.country || ''}
                       onChange={e => updateFormData('country', e.target.value)}
                       placeholder='United States'
-                      className={`w-full px-3 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white ${isAutoFilled('country') ? 'border-b_green-300' : 'border-slate-200'}`}
+                      className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                     />
                   </div>
                 </div>
@@ -733,13 +693,8 @@ export default function OnboardingPage() {
                 </h3>
 
                 <div>
-                  <label className='flex items-center text-sm font-medium text-slate-500 mb-3'>
+                  <label className='block text-sm font-medium text-slate-500 mb-3'>
                     LinkedIn URL
-                    {isAutoFilled('linkedinUrl') && (
-                      <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
-                        Auto-filled
-                      </span>
-                    )}
                   </label>
                   <input
                     type='url'
@@ -748,19 +703,14 @@ export default function OnboardingPage() {
                       updateFormData('linkedinUrl', e.target.value)
                     }
                     placeholder='https://linkedin.com/in/johnsmith'
-                    className={`w-full px-3 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white ${isAutoFilled('linkedinUrl') ? 'border-b_green-300' : 'border-slate-200'}`}
+                    className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                   />
                 </div>
 
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                   <div>
-                    <label className='flex items-center text-sm font-medium text-slate-500 mb-3'>
+                    <label className='block text-sm font-medium text-slate-500 mb-3'>
                       GitHub URL
-                      {isAutoFilled('githubUrl') && (
-                        <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
-                          Auto-filled
-                        </span>
-                      )}
                     </label>
                     <input
                       type='url'
@@ -769,18 +719,13 @@ export default function OnboardingPage() {
                         updateFormData('githubUrl', e.target.value)
                       }
                       placeholder='https://github.com/johnsmith'
-                      className={`w-full px-3 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white ${isAutoFilled('githubUrl') ? 'border-b_green-300' : 'border-slate-200'}`}
+                      className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                     />
                   </div>
 
                   <div>
-                    <label className='flex items-center text-sm font-medium text-slate-500 mb-3'>
+                    <label className='block text-sm font-medium text-slate-500 mb-3'>
                       Portfolio URL
-                      {isAutoFilled('portfolioUrl') && (
-                        <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
-                          Auto-filled
-                        </span>
-                      )}
                     </label>
                     <input
                       type='url'
@@ -789,7 +734,7 @@ export default function OnboardingPage() {
                         updateFormData('portfolioUrl', e.target.value)
                       }
                       placeholder='https://johnsmith.dev'
-                      className={`w-full px-3 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white ${isAutoFilled('portfolioUrl') ? 'border-b_green-300' : 'border-slate-200'}`}
+                      className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                     />
                   </div>
                 </div>
@@ -802,31 +747,21 @@ export default function OnboardingPage() {
                 </h3>
 
                 <div>
-                  <label className='flex items-center text-sm font-medium text-slate-500 mb-3'>
+                  <label className='block text-sm font-medium text-slate-500 mb-3'>
                     Job Title *
-                    {isAutoFilled('jobRole') && (
-                      <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
-                        Auto-filled
-                      </span>
-                    )}
                   </label>
                   <input
                     type='text'
                     value={formData.jobRole || ''}
                     onChange={e => updateFormData('jobRole', e.target.value)}
                     placeholder='e.g., Software Engineer, Product Manager'
-                    className={`w-full px-3 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white ${isAutoFilled('jobRole') ? 'border-b_green-300' : 'border-slate-200'}`}
+                    className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                   />
                 </div>
 
                 <div>
-                  <label className='flex items-center text-sm font-medium text-slate-500 mb-3'>
+                  <label className='block text-sm font-medium text-slate-500 mb-3'>
                     Company *
-                    {isAutoFilled('companyName') && (
-                      <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
-                        Auto-filled
-                      </span>
-                    )}
                   </label>
                   <input
                     type='text'
@@ -835,7 +770,7 @@ export default function OnboardingPage() {
                       updateFormData('companyName', e.target.value)
                     }
                     placeholder='e.g., Google, Microsoft, Startup Inc'
-                    className={`w-full px-3 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white ${isAutoFilled('companyName') ? 'border-b_green-300' : 'border-slate-200'}`}
+                    className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                   />
                 </div>
 
@@ -858,13 +793,8 @@ export default function OnboardingPage() {
                 </div>
 
                 <div>
-                  <label className='flex items-center text-sm font-medium text-slate-500 mb-3'>
+                  <label className='block text-sm font-medium text-slate-500 mb-3'>
                     Years of Experience
-                    {isAutoFilled('yearsOfExperience') && (
-                      <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
-                        Auto-filled
-                      </span>
-                    )}
                   </label>
                   <select
                     value={formData.yearsOfExperience || 0}
@@ -874,7 +804,7 @@ export default function OnboardingPage() {
                         parseInt(e.target.value)
                       )
                     }
-                    className={`w-full px-3 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white ${isAutoFilled('yearsOfExperience') ? 'border-b_green-300' : 'border-slate-200'}`}
+                    className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                   >
                     {YEARS_OF_EXPERIENCE_OPTIONS.map(option => (
                       <option key={option.value} value={option.value}>
@@ -885,18 +815,13 @@ export default function OnboardingPage() {
                 </div>
 
                 <div>
-                  <label className='flex items-center text-sm font-medium text-slate-500 mb-3'>
+                  <label className='block text-sm font-medium text-slate-500 mb-3'>
                     Education
-                    {isAutoFilled('education') && (
-                      <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
-                        Auto-filled
-                      </span>
-                    )}
                   </label>
                   <select
                     value={formData.education || ''}
                     onChange={e => updateFormData('education', e.target.value)}
-                    className={`w-full px-3 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white ${isAutoFilled('education') ? 'border-b_green-300' : 'border-slate-200'}`}
+                    className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                   >
                     <option value=''>Select education level</option>
                     {EDUCATION_OPTIONS.map(education => (
@@ -931,9 +856,7 @@ export default function OnboardingPage() {
                       <h3 className='font-medium text-slate-800'>
                         Experience {index + 1}
                       </h3>
-                      <span className='text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
-                        Auto-filled
-                      </span>
+
                     </div>
 
                     <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
@@ -1044,9 +967,7 @@ export default function OnboardingPage() {
                           <h4 className='font-medium text-slate-800'>
                             Education {index + 1}
                           </h4>
-                          <span className='text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
-                            Auto-filled
-                          </span>
+
                         </div>
 
                         <input
@@ -1155,9 +1076,7 @@ export default function OnboardingPage() {
                         <h4 className='font-medium text-slate-800'>
                           Project {index + 1}
                         </h4>
-                        <span className='text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
-                          Auto-filled
-                        </span>
+
                       </div>
 
                       <input
@@ -1237,9 +1156,7 @@ export default function OnboardingPage() {
                           <h4 className='font-medium text-slate-800'>
                             Certification {index + 1}
                           </h4>
-                          <span className='text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
-                            Auto-filled
-                          </span>
+
                         </div>
 
                         <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
@@ -1332,9 +1249,7 @@ export default function OnboardingPage() {
                           <h4 className='font-medium text-slate-800'>
                             Language {index + 1}
                           </h4>
-                          <span className='text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
-                            Auto-filled
-                          </span>
+
                         </div>
 
                         <input
@@ -1392,9 +1307,7 @@ export default function OnboardingPage() {
                         <h4 className='font-medium text-slate-800'>
                           Award {index + 1}
                         </h4>
-                        <span className='text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
-                          Auto-filled
-                        </span>
+
                       </div>
 
                       <input
@@ -1477,9 +1390,7 @@ export default function OnboardingPage() {
                         <h4 className='font-medium text-slate-800'>
                           Publication {index + 1}
                         </h4>
-                        <span className='text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
-                          Auto-filled
-                        </span>
+
                       </div>
 
                       <input
@@ -1558,13 +1469,8 @@ export default function OnboardingPage() {
 
               {/* Skills Section (moved above About) */}
               <div>
-                <label className='flex items-center text-sm font-medium text-slate-500 mb-3'>
+                <label className='block text-sm font-medium text-slate-500 mb-3'>
                   Key skills
-                  {isAutoFilled('skills') && (
-                    <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
-                      Auto-filled
-                    </span>
-                  )}
                 </label>
                 <p className='text-sm text-slate-500 mb-3'>
                   Add what you&apos;re good at. Type a skill and press Enter (or
@@ -1600,13 +1506,8 @@ export default function OnboardingPage() {
 
               {/* About Section */}
               <div>
-                <label className='flex items-center text-sm font-medium text-slate-500 mb-3'>
+                <label className='block text-sm font-medium text-slate-500 mb-3'>
                   How do you want to use Loopn? *
-                  {isAutoFilled('about') && (
-                    <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
-                      Auto-filled
-                    </span>
-                  )}
                 </label>
                 <div className='text-sm text-slate-500 mb-3'>
                   <ul className='list-disc pl-5 space-y-1'>
@@ -1625,7 +1526,7 @@ export default function OnboardingPage() {
                   onChange={e => updateFormData('about', e.target.value)}
                   placeholder="I'm here to find collaborators for side projects and swap ideas on product strategy. Looking to meet founders and PMs for partnerships and knowledge sharing. Open to quick intros and follow-up chats."
                   rows={4}
-                  className={`w-full px-3 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white ${isAutoFilled('about') ? 'border-b_green-300' : 'border-slate-200'}`}
+                  className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                 />
                 <div className='flex justify-between text-sm mt-2'>
                   <span
@@ -1661,9 +1562,7 @@ export default function OnboardingPage() {
                     <h3 className='text-base font-medium text-slate-700'>
                       Personal Hobbies from Resume
                     </h3>
-                    <span className='text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
-                      Auto-filled
-                    </span>
+
                   </div>
                   <div className='flex flex-wrap gap-2'>
                     {formData.hobbies.map((hobby, index) => (

@@ -362,27 +362,50 @@ export function mergeResumeWithOnboardingData(
 ): Partial<OnboardingData> {
   const resumeMapped = mapResumeToOnboardingData(resumeData);
 
-  // Preserve any existing manual data over resume data
-  return {
-    ...resumeMapped,
-    ...existingData,
-    // Special handling for arrays - merge instead of overwrite
-    skills: [
-      ...(resumeMapped.skills || []),
-      ...(existingData.skills || []),
-    ].filter(
-      (skill, index, array) =>
-        array.findIndex(s => s.toLowerCase() === skill.toLowerCase()) === index
-    ),
-    interests: existingData.interests || [],
-    hobbies: [
-      ...(resumeMapped.hobbies || []),
-      ...(existingData.hobbies || []),
-    ].filter(
-      (hobby, index, array) =>
-        array.findIndex(h => h.toLowerCase() === hobby.toLowerCase()) === index
-    ),
-    // Update auto-filled tracking
-    autoFilledFields: resumeMapped.autoFilledFields,
+  // Helper function to check if a field has meaningful content
+  const hasContent = (value: any): boolean => {
+    if (value === null || value === undefined || value === '') return false;
+    if (Array.isArray(value) && value.length === 0) return false;
+    return true;
   };
+
+  // Merge fields: use existing data if it has content, otherwise use resume data
+  const merged: Partial<OnboardingData> = { ...resumeMapped };
+
+  // Only preserve existing data if it has meaningful content
+  Object.keys(existingData).forEach(key => {
+    const existingValue = existingData[key as keyof OnboardingData];
+
+    if (hasContent(existingValue)) {
+      // Special handling for arrays - merge instead of overwrite
+      if (key === 'skills') {
+        merged.skills = [
+          ...(resumeMapped.skills || []),
+          ...(existingData.skills || []),
+        ].filter(
+          (skill, index, array) =>
+            array.findIndex(s => s.toLowerCase() === skill.toLowerCase()) === index
+        );
+      } else if (key === 'hobbies') {
+        merged.hobbies = [
+          ...(resumeMapped.hobbies || []),
+          ...(existingData.hobbies || []),
+        ].filter(
+          (hobby, index, array) =>
+            array.findIndex(h => h.toLowerCase() === hobby.toLowerCase()) === index
+        );
+      } else if (key === 'interests') {
+        // Preserve existing interests (these are manually selected)
+        merged.interests = existingData.interests || [];
+      } else {
+        // For other fields, preserve existing manual data
+        (merged as any)[key] = existingValue;
+      }
+    }
+  });
+
+  // Ensure auto-filled tracking is preserved
+  merged.autoFilledFields = resumeMapped.autoFilledFields;
+
+  return merged;
 }
