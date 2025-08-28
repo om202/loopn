@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { MessageSquare, Compass, Users, Bug, Bookmark } from 'lucide-react';
+import { MessageSquare, Compass, Users, Bug, Bookmark, Infinity } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAuthenticator } from '@aws-amplify/ui-react';
@@ -90,7 +90,7 @@ export default function DashboardSidebar({
     },
     {
       id: 'connections' as const,
-      icon: Users,
+      icon: Infinity,
       label: 'Connections',
       count: connectionsCount,
     },

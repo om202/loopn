@@ -224,15 +224,13 @@ export default function UserCard({
             <button
               onClick={handleToggleSave}
               disabled={isSaveLoading}
-              className={`p-2 rounded-lg transition-colors flex-shrink-0 ${
-                isSaved
-                  ? 'text-brand-500 hover:bg-slate-50'
-                  : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50'
-              } ${isSaveLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`p-2 rounded-lg transition-colors flex-shrink-0 text-slate-600 hover:bg-slate-50 ${
+                isSaveLoading ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
               title={isSaved ? 'Remove from saved' : 'Save'}
             >
               <Bookmark
-                className={`w-5 h-5 ${isSaved ? 'fill-brand-100 stroke-brand-500' : ''}`}
+                className={`w-5 h-5 stroke-slate-500 ${isSaved ? 'fill-slate-300' : ''}`}
               />
             </button>
           )}
