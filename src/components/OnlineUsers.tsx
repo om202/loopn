@@ -613,7 +613,7 @@ export default function OnlineUsers({
   }
 
   return (
-    <div className='flex lg:gap-4 h-full pb-16 lg:pb-0'>
+    <div className='flex lg:gap-3 h-full pb-16 lg:pb-0'>
       <DashboardSidebar
         activeSection={activeSection}
         onSectionChange={setActiveSection}
@@ -621,7 +621,7 @@ export default function OnlineUsers({
         suggestedUsersCount={suggestedUsers.length}
       />
 
-      <div className='flex-1 bg-white sm:rounded-2xl border border-slate-200 py-4 px-3 sm:py-4 sm:px-6 lg:py-4 lg:px-6 ultra-compact overflow-hidden flex flex-col min-h-0'>
+      <div className='flex-1 bg-white sm:rounded-2xl border border-slate-200 py-3 px-3 sm:py-3 sm:px-3 lg:py-3 lg:px-3 ultra-compact overflow-hidden flex flex-col min-h-0'>
         {/* Search User - Always visible at top */}
         <div className='flex-shrink-0 mb-4 sm:mb-6 w-full max-w-6xl mx-auto'>
           <SearchUser
