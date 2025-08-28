@@ -1,6 +1,7 @@
 import { type ClientSchema, a, defineData } from '@aws-amplify/backend';
 import { presenceCleanup } from '../functions/presence-cleanup/resource';
 import { vespaClient } from '../functions/vespa-client/resource';
+import { resumeParser } from '../functions/resume-parser/resource';
 
 /*== LOOPN CHAT APP SCHEMA ==============================================
 This schema implements the Loopn user story:
@@ -41,6 +42,16 @@ const schema = a
       .returns(a.json())
       .authorization(allow => [allow.authenticated()])
       .handler(a.handler.function(vespaClient)),
+
+    // Resume parser using Claude 3.5 Haiku
+    parseResume: a
+      .query()
+      .arguments({
+        text: a.string().required(),
+      })
+      .returns(a.json())
+      .authorization(allow => [allow.authenticated()])
+      .handler(a.handler.function(resumeParser)),
 
     // Request to start chatting with someone (Step 1)
     ChatRequest: a

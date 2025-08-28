@@ -7,6 +7,7 @@ import { storage } from './storage/resource';
 import { presenceCleanup } from './functions/presence-cleanup/resource';
 import { vespaClient } from './functions/vespa-client/resource';
 import { autoConfirm } from './functions/auto-confirm/resource';
+import { resumeParser } from './functions/resume-parser/resource';
 import { defineVespa } from './vespa/resource';
 
 /*
@@ -51,10 +52,23 @@ const backend = defineBackend({
   presenceCleanup,
   vespaClient,
   autoConfirm,
+  resumeParser,
 });
 
+// Add Bedrock permissions to resume parser
+backend.resumeParser.resources.lambda.addToRolePolicy(
+  new PolicyStatement({
+    effect: Effect.ALLOW,
+    actions: ['bedrock:InvokeModel'],
+          resources: [
+        'arn:aws:bedrock:*:*:foundation-model/anthropic.claude-3-5-haiku-20241022-v1:0',
+        'arn:aws:bedrock:*:*:inference-profile/us.anthropic.claude-3-5-haiku-20241022-v1:0',
+      ],
+  })
+);
+
 // Set up Vespa AI search infrastructure
-const vespaResources = defineVespa(
+const _vespaResources = defineVespa(
   backend.vespaClient.resources.cfnResources.cfnFunction.stack,
   backend.vespaClient.resources.lambda.role
 );
