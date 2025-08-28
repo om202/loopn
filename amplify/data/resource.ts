@@ -186,18 +186,18 @@ const schema = a
       .model({
         userId: a.string().required(),
         email: a.string(),
-        
+
         // Personal Information
         fullName: a.string(),
         phone: a.string(),
         city: a.string(),
         country: a.string(),
-        
+
         // Professional URLs
         linkedinUrl: a.string(),
         githubUrl: a.string(),
         portfolioUrl: a.string(),
-        
+
         // Current Professional Info (for compatibility)
         jobRole: a.string(),
         companyName: a.string(),
@@ -205,12 +205,12 @@ const schema = a
         yearsOfExperience: a.integer(),
         education: a.string(),
         about: a.string(),
-        
+
         // Professional Background & Skills
         interests: a.string().array(),
         skills: a.string().array(),
         hobbies: a.string().array(),
-        
+
         // Detailed Professional Background (JSON stored as strings)
         workExperience: a.json(), // Array of work experience objects
         educationHistory: a.json(), // Array of education objects
@@ -219,16 +219,16 @@ const schema = a
         awards: a.json(), // Array of award objects
         languages: a.json(), // Array of language objects
         publications: a.json(), // Array of publication objects
-        
+
         // Profile picture fields
         profilePictureUrl: a.string(), // S3 URL for uploaded profile picture
         profilePictureThumbnailUrl: a.string(), // Optimized thumbnail version
         hasProfilePicture: a.boolean().default(false), // Quick check for avatar display
-        
+
         // Onboarding status
         isOnboardingComplete: a.boolean().default(false),
         onboardingCompletedAt: a.datetime(),
-        
+
         // Auto-fill tracking
         autoFilledFields: a.string().array(), // Track which fields were auto-populated
 

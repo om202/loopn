@@ -10,12 +10,12 @@ export interface OnboardingData {
   phone?: string;
   city?: string;
   country?: string;
-  
+
   // Professional URLs
   linkedinUrl?: string;
   githubUrl?: string;
   portfolioUrl?: string;
-  
+
   // Current Professional Info (for compatibility)
   jobRole: string;
   companyName: string;
@@ -23,7 +23,7 @@ export interface OnboardingData {
   yearsOfExperience: number;
   education: string; // Keep as string for compatibility, but also have detailed education below
   about: string;
-  
+
   // Detailed Professional Background
   workExperience: Array<{
     company: string;
@@ -32,7 +32,7 @@ export interface OnboardingData {
     endDate: string;
     description: string;
   }>;
-  
+
   // Detailed Education
   educationHistory: Array<{
     institution: string;
@@ -41,7 +41,7 @@ export interface OnboardingData {
     startYear: string;
     endYear: string;
   }>;
-  
+
   // Skills & Projects
   skills: string[];
   projects: Array<{
@@ -49,7 +49,7 @@ export interface OnboardingData {
     description: string;
     technologies: string;
   }>;
-  
+
   // Additional Qualifications
   certifications: Array<{
     name: string;
@@ -57,34 +57,34 @@ export interface OnboardingData {
     date: string;
     expiryDate: string;
   }>;
-  
+
   awards: Array<{
     title: string;
     issuer: string;
     date: string;
     description: string;
   }>;
-  
+
   languages: Array<{
     language: string;
     proficiency: string;
   }>;
-  
+
   publications: Array<{
     title: string;
     venue: string;
     date: string;
     description: string;
   }>;
-  
+
   // Personal Interests
   interests: string[]; // Professional interests from our current system
   hobbies: string[]; // Personal hobbies from resume
-  
+
   // Profile Picture
   profilePictureFile?: File; // For upload during onboarding
   profilePictureUrl?: string; // S3 URL after upload
-  
+
   // Auto-fill tracking
   autoFilledFields?: string[]; // Track which fields were auto-populated from resume
 }
@@ -159,12 +159,12 @@ export class OnboardingService {
                 phone: userProfile.phone || undefined,
                 city: userProfile.city || undefined,
                 country: userProfile.country || undefined,
-                
+
                 // Professional URLs
                 linkedinUrl: userProfile.linkedinUrl || undefined,
                 githubUrl: userProfile.githubUrl || undefined,
                 portfolioUrl: userProfile.portfolioUrl || undefined,
-                
+
                 // Current Professional Info
                 jobRole: userProfile.jobRole || '',
                 companyName: userProfile.companyName || '',
@@ -172,7 +172,7 @@ export class OnboardingService {
                 yearsOfExperience: userProfile.yearsOfExperience || 0,
                 education: userProfile.education || '',
                 about: userProfile.about || '',
-                
+
                 // Professional Background & Skills
                 interests: (userProfile.interests || []).filter(
                   (interest: string | null): interest is string =>
@@ -184,19 +184,29 @@ export class OnboardingService {
                 hobbies: (userProfile.hobbies || []).filter(
                   (hobby: string | null): hobby is string => hobby !== null
                 ),
-                
+
                 // Detailed Professional Background
-                workExperience: userProfile.workExperience as OnboardingData['workExperience'] || [],
-                educationHistory: userProfile.educationHistory as OnboardingData['educationHistory'] || [],
-                projects: userProfile.projects as OnboardingData['projects'] || [],
-                certifications: userProfile.certifications as OnboardingData['certifications'] || [],
-                awards: userProfile.awards as OnboardingData['awards'] || [],
-                languages: userProfile.languages as OnboardingData['languages'] || [],
-                publications: userProfile.publications as OnboardingData['publications'] || [],
-                
+                workExperience:
+                  (userProfile.workExperience as OnboardingData['workExperience']) ||
+                  [],
+                educationHistory:
+                  (userProfile.educationHistory as OnboardingData['educationHistory']) ||
+                  [],
+                projects:
+                  (userProfile.projects as OnboardingData['projects']) || [],
+                certifications:
+                  (userProfile.certifications as OnboardingData['certifications']) ||
+                  [],
+                awards: (userProfile.awards as OnboardingData['awards']) || [],
+                languages:
+                  (userProfile.languages as OnboardingData['languages']) || [],
+                publications:
+                  (userProfile.publications as OnboardingData['publications']) ||
+                  [],
+
                 // Profile picture fields
                 profilePictureUrl: userProfile.profilePictureUrl || undefined,
-                
+
                 // Auto-fill tracking
                 autoFilledFields: (userProfile.autoFilledFields || []).filter(
                   (field: string | null): field is string => field !== null
@@ -287,12 +297,12 @@ export class OnboardingService {
           phone: data.phone,
           city: data.city,
           country: data.country,
-          
+
           // Professional URLs
           linkedinUrl: data.linkedinUrl,
           githubUrl: data.githubUrl,
           portfolioUrl: data.portfolioUrl,
-          
+
           // Current Professional Info
           jobRole: data.jobRole,
           companyName: data.companyName,
@@ -300,12 +310,12 @@ export class OnboardingService {
           yearsOfExperience: data.yearsOfExperience,
           education: data.education,
           about: data.about,
-          
+
           // Professional Background & Skills
           interests: data.interests,
           skills: data.skills,
           hobbies: data.hobbies,
-          
+
           // Detailed Professional Background
           workExperience: data.workExperience,
           educationHistory: data.educationHistory,
@@ -314,11 +324,11 @@ export class OnboardingService {
           awards: data.awards,
           languages: data.languages,
           publications: data.publications,
-          
+
           // Profile picture fields
           profilePictureUrl: profilePictureUrl,
           hasProfilePicture: hasProfilePicture,
-          
+
           // Auto-fill tracking
           autoFilledFields: data.autoFilledFields,
         }

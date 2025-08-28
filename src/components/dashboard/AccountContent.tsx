@@ -139,7 +139,9 @@ export default function AccountContent() {
                           Location
                         </dt>
                         <dd className='text-base text-black text-right ml-4'>
-                          {[userProfile.city, userProfile.country].filter(Boolean).join(', ')}
+                          {[userProfile.city, userProfile.country]
+                            .filter(Boolean)
+                            .join(', ')}
                         </dd>
                       </div>
                     )}
@@ -306,206 +308,285 @@ export default function AccountContent() {
                       )}
 
                     {/* Hobbies */}
-                    {userProfile.hobbies && (userProfile.hobbies as any[]).length > 0 && (
-                      <div className='py-3'>
-                        <dt className='text-base font-medium text-slate-500 mb-1.5 flex items-center gap-2'>
-                          <Gamepad2 className='w-4 h-4' />
-                          Personal Hobbies
-                        </dt>
-                        <dd className='flex flex-wrap gap-2'>
-                          {((userProfile.hobbies as any[]) || []).map((hobby, index) => (
-                            <span
-                              key={index}
-                              className='px-3 py-1.5 text-base bg-purple-50 text-purple-700 border border-purple-200 rounded-lg font-medium'
-                            >
-                              {hobby}
-                            </span>
-                          ))}
-                        </dd>
-                      </div>
-                    )}
+                    {userProfile.hobbies &&
+                      (userProfile.hobbies as any[]).length > 0 && (
+                        <div className='py-3'>
+                          <dt className='text-base font-medium text-slate-500 mb-1.5 flex items-center gap-2'>
+                            <Gamepad2 className='w-4 h-4' />
+                            Personal Hobbies
+                          </dt>
+                          <dd className='flex flex-wrap gap-2'>
+                            {((userProfile.hobbies as any[]) || []).map(
+                              (hobby, index) => (
+                                <span
+                                  key={index}
+                                  className='px-3 py-1.5 text-base bg-purple-50 text-purple-700 border border-purple-200 rounded-lg font-medium'
+                                >
+                                  {hobby}
+                                </span>
+                              )
+                            )}
+                          </dd>
+                        </div>
+                      )}
                   </div>
                 </div>
               )}
 
               {/* Work Experience Timeline */}
-              {userProfile.workExperience && (userProfile.workExperience as any[]).length > 0 && (
-                <div className='pb-6'>
-                  <h4 className='text-base font-medium text-slate-500 mb-4'>
-                    Work Experience
-                  </h4>
-                  <div className='space-y-4'>
-                    {((userProfile.workExperience as any[]) || []).map((job: any, index: number) => (
-                      <div key={index} className='border border-slate-200 rounded-lg p-4'>
-                        <div className='flex items-center gap-2 mb-2'>
-                          <Calendar className='w-4 h-4 text-slate-500' />
-                          <div className='text-base font-medium text-black'>{job.position}</div>
-                        </div>
-                        <div className='text-base text-slate-600 mb-1'>{job.company}</div>
-                        <div className='text-sm text-slate-500 mb-2'>
-                          {job.startDate} - {job.endDate}
-                        </div>
-                        {job.description && (
-                          <div className='text-sm text-slate-700'>
-                            {job.description}
+              {userProfile.workExperience &&
+                (userProfile.workExperience as any[]).length > 0 && (
+                  <div className='pb-6'>
+                    <h4 className='text-base font-medium text-slate-500 mb-4'>
+                      Work Experience
+                    </h4>
+                    <div className='space-y-4'>
+                      {((userProfile.workExperience as any[]) || []).map(
+                        (job: any, index: number) => (
+                          <div
+                            key={index}
+                            className='border border-slate-200 rounded-lg p-4'
+                          >
+                            <div className='flex items-center gap-2 mb-2'>
+                              <Calendar className='w-4 h-4 text-slate-500' />
+                              <div className='text-base font-medium text-black'>
+                                {job.position}
+                              </div>
+                            </div>
+                            <div className='text-base text-slate-600 mb-1'>
+                              {job.company}
+                            </div>
+                            <div className='text-sm text-slate-500 mb-2'>
+                              {job.startDate} - {job.endDate}
+                            </div>
+                            {job.description && (
+                              <div className='text-sm text-slate-700'>
+                                {job.description}
+                              </div>
+                            )}
                           </div>
-                        )}
-                      </div>
-                    ))}
+                        )
+                      )}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
               {/* Education History */}
-              {userProfile.educationHistory && (userProfile.educationHistory as any[]).length > 0 && (
-                <div className='pb-6'>
-                  <h4 className='text-base font-medium text-slate-500 mb-4'>
-                    Education History
-                  </h4>
-                  <div className='space-y-4'>
-                    {((userProfile.educationHistory as any[]) || []).map((edu: any, index: number) => (
-                      <div key={index} className='border border-slate-200 rounded-lg p-4'>
-                        <div className='flex items-center gap-2 mb-2'>
-                          <GraduationCap className='w-4 h-4 text-slate-500' />
-                          <div className='text-base font-medium text-black'>{edu.degree}</div>
-                        </div>
-                        <div className='text-base text-slate-600 mb-1'>{edu.field}</div>
-                        <div className='text-base text-slate-600 mb-1'>{edu.institution}</div>
-                        <div className='text-sm text-slate-500'>
-                          {edu.startYear} - {edu.endYear}
-                        </div>
-                      </div>
-                    ))}
+              {userProfile.educationHistory &&
+                (userProfile.educationHistory as any[]).length > 0 && (
+                  <div className='pb-6'>
+                    <h4 className='text-base font-medium text-slate-500 mb-4'>
+                      Education History
+                    </h4>
+                    <div className='space-y-4'>
+                      {((userProfile.educationHistory as any[]) || []).map(
+                        (edu: any, index: number) => (
+                          <div
+                            key={index}
+                            className='border border-slate-200 rounded-lg p-4'
+                          >
+                            <div className='flex items-center gap-2 mb-2'>
+                              <GraduationCap className='w-4 h-4 text-slate-500' />
+                              <div className='text-base font-medium text-black'>
+                                {edu.degree}
+                              </div>
+                            </div>
+                            <div className='text-base text-slate-600 mb-1'>
+                              {edu.field}
+                            </div>
+                            <div className='text-base text-slate-600 mb-1'>
+                              {edu.institution}
+                            </div>
+                            <div className='text-sm text-slate-500'>
+                              {edu.startYear} - {edu.endYear}
+                            </div>
+                          </div>
+                        )
+                      )}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
               {/* Projects */}
-              {userProfile.projects && (userProfile.projects as any[]).length > 0 && (
-                <div className='pb-6'>
-                  <h4 className='text-base font-medium text-slate-500 mb-4'>
-                    Projects
-                  </h4>
-                  <div className='space-y-4'>
-                    {((userProfile.projects as any[]) || []).map((project: any, index: number) => (
-                      <div key={index} className='border border-slate-200 rounded-lg p-4'>
-                        <div className='flex items-center gap-2 mb-2'>
-                          <FolderOpen className='w-4 h-4 text-slate-500' />
-                          <div className='text-base font-medium text-black'>{project.title}</div>
-                        </div>
-                        {project.description && (
-                          <div className='text-sm text-slate-700 mb-2'>
-                            {project.description}
+              {userProfile.projects &&
+                (userProfile.projects as any[]).length > 0 && (
+                  <div className='pb-6'>
+                    <h4 className='text-base font-medium text-slate-500 mb-4'>
+                      Projects
+                    </h4>
+                    <div className='space-y-4'>
+                      {((userProfile.projects as any[]) || []).map(
+                        (project: any, index: number) => (
+                          <div
+                            key={index}
+                            className='border border-slate-200 rounded-lg p-4'
+                          >
+                            <div className='flex items-center gap-2 mb-2'>
+                              <FolderOpen className='w-4 h-4 text-slate-500' />
+                              <div className='text-base font-medium text-black'>
+                                {project.title}
+                              </div>
+                            </div>
+                            {project.description && (
+                              <div className='text-sm text-slate-700 mb-2'>
+                                {project.description}
+                              </div>
+                            )}
+                            {project.technologies && (
+                              <div className='text-sm text-slate-500'>
+                                <strong>Technologies:</strong>{' '}
+                                {project.technologies}
+                              </div>
+                            )}
                           </div>
-                        )}
-                        {project.technologies && (
-                          <div className='text-sm text-slate-500'>
-                            <strong>Technologies:</strong> {project.technologies}
-                          </div>
-                        )}
-                      </div>
-                    ))}
+                        )
+                      )}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
               {/* Certifications */}
-              {userProfile.certifications && (userProfile.certifications as any[]).length > 0 && (
-                <div className='pb-6'>
-                  <h4 className='text-base font-medium text-slate-500 mb-4'>
-                    Certifications
-                  </h4>
-                  <div className='space-y-4'>
-                    {((userProfile.certifications as any[]) || []).map((cert: any, index: number) => (
-                      <div key={index} className='border border-slate-200 rounded-lg p-4'>
-                        <div className='flex items-center gap-2 mb-2'>
-                          <Award className='w-4 h-4 text-slate-500' />
-                          <div className='text-base font-medium text-black'>{cert.name}</div>
-                        </div>
-                        <div className='text-base text-slate-600 mb-1'>{cert.issuer}</div>
-                        <div className='text-sm text-slate-500'>
-                          Issued: {cert.date}
-                          {cert.expiryDate && ` • Expires: ${cert.expiryDate}`}
-                        </div>
-                      </div>
-                    ))}
+              {userProfile.certifications &&
+                (userProfile.certifications as any[]).length > 0 && (
+                  <div className='pb-6'>
+                    <h4 className='text-base font-medium text-slate-500 mb-4'>
+                      Certifications
+                    </h4>
+                    <div className='space-y-4'>
+                      {((userProfile.certifications as any[]) || []).map(
+                        (cert: any, index: number) => (
+                          <div
+                            key={index}
+                            className='border border-slate-200 rounded-lg p-4'
+                          >
+                            <div className='flex items-center gap-2 mb-2'>
+                              <Award className='w-4 h-4 text-slate-500' />
+                              <div className='text-base font-medium text-black'>
+                                {cert.name}
+                              </div>
+                            </div>
+                            <div className='text-base text-slate-600 mb-1'>
+                              {cert.issuer}
+                            </div>
+                            <div className='text-sm text-slate-500'>
+                              Issued: {cert.date}
+                              {cert.expiryDate &&
+                                ` • Expires: ${cert.expiryDate}`}
+                            </div>
+                          </div>
+                        )
+                      )}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
               {/* Awards */}
-              {userProfile.awards && (userProfile.awards as any[]).length > 0 && (
-                <div className='pb-6'>
-                  <h4 className='text-base font-medium text-slate-500 mb-4'>
-                    Awards & Achievements
-                  </h4>
-                  <div className='space-y-4'>
-                    {((userProfile.awards as any[]) || []).map((award: any, index: number) => (
-                      <div key={index} className='border border-slate-200 rounded-lg p-4'>
-                        <div className='flex items-center gap-2 mb-2'>
-                          <Trophy className='w-4 h-4 text-slate-500' />
-                          <div className='text-base font-medium text-black'>{award.title}</div>
-                        </div>
-                        <div className='text-base text-slate-600 mb-1'>{award.issuer}</div>
-                        <div className='text-sm text-slate-500 mb-2'>{award.date}</div>
-                        {award.description && (
-                          <div className='text-sm text-slate-700'>
-                            {award.description}
+              {userProfile.awards &&
+                (userProfile.awards as any[]).length > 0 && (
+                  <div className='pb-6'>
+                    <h4 className='text-base font-medium text-slate-500 mb-4'>
+                      Awards & Achievements
+                    </h4>
+                    <div className='space-y-4'>
+                      {((userProfile.awards as any[]) || []).map(
+                        (award: any, index: number) => (
+                          <div
+                            key={index}
+                            className='border border-slate-200 rounded-lg p-4'
+                          >
+                            <div className='flex items-center gap-2 mb-2'>
+                              <Trophy className='w-4 h-4 text-slate-500' />
+                              <div className='text-base font-medium text-black'>
+                                {award.title}
+                              </div>
+                            </div>
+                            <div className='text-base text-slate-600 mb-1'>
+                              {award.issuer}
+                            </div>
+                            <div className='text-sm text-slate-500 mb-2'>
+                              {award.date}
+                            </div>
+                            {award.description && (
+                              <div className='text-sm text-slate-700'>
+                                {award.description}
+                              </div>
+                            )}
                           </div>
-                        )}
-                      </div>
-                    ))}
+                        )
+                      )}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
               {/* Languages */}
-              {userProfile.languages && (userProfile.languages as any[]).length > 0 && (
-                <div className='pb-6'>
-                  <h4 className='text-base font-medium text-slate-500 mb-4'>
-                    Languages
-                  </h4>
-                  <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-                    {((userProfile.languages as any[]) || []).map((lang: any, index: number) => (
-                      <div key={index} className='border border-slate-200 rounded-lg p-3'>
-                        <div className='flex items-center justify-between'>
-                          <div className='flex items-center gap-2'>
-                            <Globe className='w-4 h-4 text-slate-500' />
-                            <div className='text-base font-medium text-black'>{lang.language}</div>
+              {userProfile.languages &&
+                (userProfile.languages as any[]).length > 0 && (
+                  <div className='pb-6'>
+                    <h4 className='text-base font-medium text-slate-500 mb-4'>
+                      Languages
+                    </h4>
+                    <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+                      {((userProfile.languages as any[]) || []).map(
+                        (lang: any, index: number) => (
+                          <div
+                            key={index}
+                            className='border border-slate-200 rounded-lg p-3'
+                          >
+                            <div className='flex items-center justify-between'>
+                              <div className='flex items-center gap-2'>
+                                <Globe className='w-4 h-4 text-slate-500' />
+                                <div className='text-base font-medium text-black'>
+                                  {lang.language}
+                                </div>
+                              </div>
+                              <div className='text-sm text-slate-600'>
+                                {lang.proficiency}
+                              </div>
+                            </div>
                           </div>
-                          <div className='text-sm text-slate-600'>{lang.proficiency}</div>
-                        </div>
-                      </div>
-                    ))}
+                        )
+                      )}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
               {/* Publications */}
-              {userProfile.publications && (userProfile.publications as any[]).length > 0 && (
-                <div className='pb-6'>
-                  <h4 className='text-base font-medium text-slate-500 mb-4'>
-                    Publications
-                  </h4>
-                  <div className='space-y-4'>
-                    {((userProfile.publications as any[]) || []).map((pub: any, index: number) => (
-                      <div key={index} className='border border-slate-200 rounded-lg p-4'>
-                        <div className='flex items-center gap-2 mb-2'>
-                          <BookOpen className='w-4 h-4 text-slate-500' />
-                          <div className='text-base font-medium text-black'>{pub.title}</div>
-                        </div>
-                        <div className='text-base text-slate-600 mb-1'>{pub.venue}</div>
-                        <div className='text-sm text-slate-500 mb-2'>{pub.date}</div>
-                        {pub.description && (
-                          <div className='text-sm text-slate-700'>
-                            {pub.description}
+              {userProfile.publications &&
+                (userProfile.publications as any[]).length > 0 && (
+                  <div className='pb-6'>
+                    <h4 className='text-base font-medium text-slate-500 mb-4'>
+                      Publications
+                    </h4>
+                    <div className='space-y-4'>
+                      {((userProfile.publications as any[]) || []).map(
+                        (pub: any, index: number) => (
+                          <div
+                            key={index}
+                            className='border border-slate-200 rounded-lg p-4'
+                          >
+                            <div className='flex items-center gap-2 mb-2'>
+                              <BookOpen className='w-4 h-4 text-slate-500' />
+                              <div className='text-base font-medium text-black'>
+                                {pub.title}
+                              </div>
+                            </div>
+                            <div className='text-base text-slate-600 mb-1'>
+                              {pub.venue}
+                            </div>
+                            <div className='text-sm text-slate-500 mb-2'>
+                              {pub.date}
+                            </div>
+                            {pub.description && (
+                              <div className='text-sm text-slate-700'>
+                                {pub.description}
+                              </div>
+                            )}
                           </div>
-                        )}
-                      </div>
-                    ))}
+                        )
+                      )}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
             </div>
           ) : (
             <div className='text-sm text-slate-500 text-center py-8'>

@@ -36,14 +36,12 @@ export default function OnboardingPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [skillInput, setSkillInput] = useState('');
-  
+
   // Resume upload state
   const [isProcessingResume, setIsProcessingResume] = useState(false);
   const [resumeError, setResumeError] = useState('');
   const [showResumeUpload, setShowResumeUpload] = useState(true);
   const [resumeProcessed, setResumeProcessed] = useState(false);
-
-
 
   // Form data
   const [formData, setFormData] = useState<Partial<OnboardingData>>({
@@ -53,12 +51,12 @@ export default function OnboardingPage() {
     phone: '',
     city: '',
     country: '',
-    
+
     // Professional URLs
     linkedinUrl: '',
     githubUrl: '',
     portfolioUrl: '',
-    
+
     // Current Professional Info (for compatibility)
     jobRole: '',
     companyName: '',
@@ -66,31 +64,31 @@ export default function OnboardingPage() {
     yearsOfExperience: 0,
     education: '',
     about: '',
-    
+
     // Detailed Professional Background
     workExperience: [],
-    
+
     // Detailed Education
     educationHistory: [],
-    
+
     // Skills & Projects
     skills: [],
     projects: [],
-    
+
     // Additional Qualifications
     certifications: [],
     awards: [],
     languages: [],
     publications: [],
-    
+
     // Personal Interests
     interests: [],
     hobbies: [],
-    
+
     // Profile Picture
     profilePictureFile: undefined,
     profilePictureUrl: undefined,
-    
+
     // Auto-fill tracking
     autoFilledFields: [],
   });
@@ -103,46 +101,77 @@ export default function OnboardingPage() {
 
     // Add work experience step if data exists
     if (formData.workExperience && formData.workExperience.length > 0) {
-      steps.push({ id: steps.length + 1, title: 'Experience', key: 'workExperience', required: false });
+      steps.push({
+        id: steps.length + 1,
+        title: 'Experience',
+        key: 'workExperience',
+        required: false,
+      });
     }
 
     // Add education & projects step if data exists
-    if ((formData.educationHistory && formData.educationHistory.length > 0) || 
-        (formData.projects && formData.projects.length > 0)) {
-      steps.push({ id: steps.length + 1, title: 'Education', key: 'educationProjects', required: false });
+    if (
+      (formData.educationHistory && formData.educationHistory.length > 0) ||
+      (formData.projects && formData.projects.length > 0)
+    ) {
+      steps.push({
+        id: steps.length + 1,
+        title: 'Education',
+        key: 'educationProjects',
+        required: false,
+      });
     }
 
     // Add qualifications step if data exists
-    if ((formData.certifications && formData.certifications.length > 0) ||
-        (formData.awards && formData.awards.length > 0) ||
-        (formData.languages && formData.languages.length > 0) ||
-        (formData.publications && formData.publications.length > 0)) {
-      steps.push({ id: steps.length + 1, title: 'Qualifications', key: 'qualifications', required: false });
+    if (
+      (formData.certifications && formData.certifications.length > 0) ||
+      (formData.awards && formData.awards.length > 0) ||
+      (formData.languages && formData.languages.length > 0) ||
+      (formData.publications && formData.publications.length > 0)
+    ) {
+      steps.push({
+        id: steps.length + 1,
+        title: 'Qualifications',
+        key: 'qualifications',
+        required: false,
+      });
     }
 
     // Always add core steps
     steps.push(
       { id: steps.length + 1, title: 'About', key: 'about', required: true },
-      { id: steps.length + 1, title: 'Interests', key: 'interests', required: true },
-      { id: steps.length + 1, title: 'Picture', key: 'picture', required: false }
+      {
+        id: steps.length + 1,
+        title: 'Interests',
+        key: 'interests',
+        required: true,
+      },
+      {
+        id: steps.length + 1,
+        title: 'Picture',
+        key: 'picture',
+        required: false,
+      }
     );
 
     return steps;
   }, [
-    formData.workExperience, 
-    formData.educationHistory, 
+    formData.workExperience,
+    formData.educationHistory,
     formData.projects,
-    formData.certifications, 
-    formData.awards, 
-    formData.languages, 
-    formData.publications
+    formData.certifications,
+    formData.awards,
+    formData.languages,
+    formData.publications,
   ]);
 
   const totalSteps = availableSteps.length;
-  
+
   // Get current step info
   const getCurrentStepInfo = () => {
-    return availableSteps.find(step => step.id === currentStep) || availableSteps[0];
+    return (
+      availableSteps.find(step => step.id === currentStep) || availableSteps[0]
+    );
   };
 
   // Handle authentication and onboarding status
@@ -399,10 +428,12 @@ export default function OnboardingPage() {
 
       console.log('✅ Resume processed successfully:', {
         autoFilledFields: mergedData.autoFilledFields?.length || 0,
-        totalFields: Object.keys(mergedData).length
+        totalFields: Object.keys(mergedData).length,
       });
     } catch (err) {
-      setResumeError(err instanceof Error ? err.message : 'Failed to process resume');
+      setResumeError(
+        err instanceof Error ? err.message : 'Failed to process resume'
+      );
       console.error('Resume processing error:', err);
     } finally {
       setIsProcessingResume(false);
@@ -468,7 +499,7 @@ export default function OnboardingPage() {
                 <p className='text-brand-700 mb-4'>
                   Upload your resume (PDF) to auto-fill your profile information
                 </p>
-                
+
                 <div className='flex flex-col sm:flex-row gap-3 items-center justify-center'>
                   <label className='cursor-pointer'>
                     <input
@@ -479,10 +510,12 @@ export default function OnboardingPage() {
                       className='hidden'
                     />
                     <div className='bg-brand-500 text-white px-4 py-2 rounded-xl font-medium hover:bg-brand-600 disabled:opacity-50 disabled:cursor-not-allowed inline-block'>
-                      {isProcessingResume ? 'Processing...' : 'Choose PDF Resume'}
+                      {isProcessingResume
+                        ? 'Processing...'
+                        : 'Choose PDF Resume'}
                     </div>
                   </label>
-                  
+
                   <button
                     onClick={skipResumeUpload}
                     className='text-brand-600 hover:text-brand-700 font-medium'
@@ -490,7 +523,7 @@ export default function OnboardingPage() {
                     Skip and fill manually
                   </button>
                 </div>
-                
+
                 {isProcessingResume && (
                   <div className='mt-4'>
                     <div className='flex items-center justify-center space-x-2'>
@@ -501,7 +534,7 @@ export default function OnboardingPage() {
                     </div>
                   </div>
                 )}
-                
+
                 {resumeError && (
                   <p className='text-b_red-600 mt-3 text-sm'>{resumeError}</p>
                 )}
@@ -515,12 +548,21 @@ export default function OnboardingPage() {
               <div className='flex items-center justify-between'>
                 <div className='flex items-center space-x-2'>
                   <div className='w-5 h-5 bg-b_green-500 rounded-full flex items-center justify-center'>
-                    <svg className='w-3 h-3 text-white' fill='currentColor' viewBox='0 0 20 20'>
-                      <path fillRule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clipRule='evenodd' />
+                    <svg
+                      className='w-3 h-3 text-white'
+                      fill='currentColor'
+                      viewBox='0 0 20 20'
+                    >
+                      <path
+                        fillRule='evenodd'
+                        d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z'
+                        clipRule='evenodd'
+                      />
                     </svg>
                   </div>
                   <p className='text-b_green-800 font-medium'>
-                    Resume processed! {formData.autoFilledFields?.length || 0} fields auto-filled
+                    Resume processed! {formData.autoFilledFields?.length || 0}{' '}
+                    fields auto-filled
                   </p>
                 </div>
                 <button
@@ -532,7 +574,7 @@ export default function OnboardingPage() {
               </div>
             </div>
           )}
-          
+
           {/* Dynamic Stepper */}
           <div className='mb-8 sm:mb-10'>
             <div className='relative'>
@@ -556,7 +598,7 @@ export default function OnboardingPage() {
             </div>
             {/* Labels */}
             <div className='mt-3 flex justify-between text-center text-xs sm:text-sm px-5'>
-              {availableSteps.map((step) => (
+              {availableSteps.map(step => (
                 <div
                   key={step.id}
                   className={`max-w-[80px] ${
@@ -579,17 +621,23 @@ export default function OnboardingPage() {
           {/* Step: Personal & Professional Information */}
           {getCurrentStepInfo().key === 'personal' && (
             <div className='space-y-6'>
-              <h2 className='text-xl font-semibold text-black mb-4'>Personal & Professional Info</h2>
+              <h2 className='text-xl font-semibold text-black mb-4'>
+                Personal & Professional Info
+              </h2>
 
               {/* Personal Information Section */}
               <div className='bg-slate-50 rounded-xl p-4 space-y-4'>
-                <h3 className='text-base font-medium text-slate-700 mb-3'>Personal Information</h3>
-                
+                <h3 className='text-base font-medium text-slate-700 mb-3'>
+                  Personal Information
+                </h3>
+
                 <div>
                   <label className='flex items-center text-sm font-medium text-slate-500 mb-3'>
                     Full Name *
                     {isAutoFilled('fullName') && (
-                      <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>Auto-filled</span>
+                      <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
+                        Auto-filled
+                      </span>
                     )}
                   </label>
                   <input
@@ -606,7 +654,9 @@ export default function OnboardingPage() {
                     <label className='flex items-center text-sm font-medium text-slate-500 mb-3'>
                       Email
                       {isAutoFilled('email') && (
-                        <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>Auto-filled</span>
+                        <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
+                          Auto-filled
+                        </span>
                       )}
                     </label>
                     <input
@@ -622,7 +672,9 @@ export default function OnboardingPage() {
                     <label className='flex items-center text-sm font-medium text-slate-500 mb-3'>
                       Phone
                       {isAutoFilled('phone') && (
-                        <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>Auto-filled</span>
+                        <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
+                          Auto-filled
+                        </span>
                       )}
                     </label>
                     <input
@@ -640,7 +692,9 @@ export default function OnboardingPage() {
                     <label className='flex items-center text-sm font-medium text-slate-500 mb-3'>
                       City
                       {isAutoFilled('city') && (
-                        <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>Auto-filled</span>
+                        <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
+                          Auto-filled
+                        </span>
                       )}
                     </label>
                     <input
@@ -656,7 +710,9 @@ export default function OnboardingPage() {
                     <label className='flex items-center text-sm font-medium text-slate-500 mb-3'>
                       Country
                       {isAutoFilled('country') && (
-                        <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>Auto-filled</span>
+                        <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
+                          Auto-filled
+                        </span>
                       )}
                     </label>
                     <input
@@ -672,19 +728,25 @@ export default function OnboardingPage() {
 
               {/* Professional URLs Section */}
               <div className='bg-slate-50 rounded-xl p-4 space-y-4'>
-                <h3 className='text-base font-medium text-slate-700 mb-3'>Professional URLs</h3>
-                
+                <h3 className='text-base font-medium text-slate-700 mb-3'>
+                  Professional URLs
+                </h3>
+
                 <div>
                   <label className='flex items-center text-sm font-medium text-slate-500 mb-3'>
                     LinkedIn URL
                     {isAutoFilled('linkedinUrl') && (
-                      <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>Auto-filled</span>
+                      <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
+                        Auto-filled
+                      </span>
                     )}
                   </label>
                   <input
                     type='url'
                     value={formData.linkedinUrl || ''}
-                    onChange={e => updateFormData('linkedinUrl', e.target.value)}
+                    onChange={e =>
+                      updateFormData('linkedinUrl', e.target.value)
+                    }
                     placeholder='https://linkedin.com/in/johnsmith'
                     className={`w-full px-3 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white ${isAutoFilled('linkedinUrl') ? 'border-b_green-300' : 'border-slate-200'}`}
                   />
@@ -695,13 +757,17 @@ export default function OnboardingPage() {
                     <label className='flex items-center text-sm font-medium text-slate-500 mb-3'>
                       GitHub URL
                       {isAutoFilled('githubUrl') && (
-                        <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>Auto-filled</span>
+                        <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
+                          Auto-filled
+                        </span>
                       )}
                     </label>
                     <input
                       type='url'
                       value={formData.githubUrl || ''}
-                      onChange={e => updateFormData('githubUrl', e.target.value)}
+                      onChange={e =>
+                        updateFormData('githubUrl', e.target.value)
+                      }
                       placeholder='https://github.com/johnsmith'
                       className={`w-full px-3 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white ${isAutoFilled('githubUrl') ? 'border-b_green-300' : 'border-slate-200'}`}
                     />
@@ -711,13 +777,17 @@ export default function OnboardingPage() {
                     <label className='flex items-center text-sm font-medium text-slate-500 mb-3'>
                       Portfolio URL
                       {isAutoFilled('portfolioUrl') && (
-                        <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>Auto-filled</span>
+                        <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
+                          Auto-filled
+                        </span>
                       )}
                     </label>
                     <input
                       type='url'
                       value={formData.portfolioUrl || ''}
-                      onChange={e => updateFormData('portfolioUrl', e.target.value)}
+                      onChange={e =>
+                        updateFormData('portfolioUrl', e.target.value)
+                      }
                       placeholder='https://johnsmith.dev'
                       className={`w-full px-3 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white ${isAutoFilled('portfolioUrl') ? 'border-b_green-300' : 'border-slate-200'}`}
                     />
@@ -727,13 +797,17 @@ export default function OnboardingPage() {
 
               {/* Current Professional Info Section */}
               <div className='bg-slate-50 rounded-xl p-4 space-y-4'>
-                <h3 className='text-base font-medium text-slate-700 mb-3'>Current Professional Info</h3>
-                
+                <h3 className='text-base font-medium text-slate-700 mb-3'>
+                  Current Professional Info
+                </h3>
+
                 <div>
                   <label className='flex items-center text-sm font-medium text-slate-500 mb-3'>
                     Job Title *
                     {isAutoFilled('jobRole') && (
-                      <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>Auto-filled</span>
+                      <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
+                        Auto-filled
+                      </span>
                     )}
                   </label>
                   <input
@@ -749,13 +823,17 @@ export default function OnboardingPage() {
                   <label className='flex items-center text-sm font-medium text-slate-500 mb-3'>
                     Company *
                     {isAutoFilled('companyName') && (
-                      <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>Auto-filled</span>
+                      <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
+                        Auto-filled
+                      </span>
                     )}
                   </label>
                   <input
                     type='text'
                     value={formData.companyName || ''}
-                    onChange={e => updateFormData('companyName', e.target.value)}
+                    onChange={e =>
+                      updateFormData('companyName', e.target.value)
+                    }
                     placeholder='e.g., Google, Microsoft, Startup Inc'
                     className={`w-full px-3 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white ${isAutoFilled('companyName') ? 'border-b_green-300' : 'border-slate-200'}`}
                   />
@@ -783,7 +861,9 @@ export default function OnboardingPage() {
                   <label className='flex items-center text-sm font-medium text-slate-500 mb-3'>
                     Years of Experience
                     {isAutoFilled('yearsOfExperience') && (
-                      <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>Auto-filled</span>
+                      <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
+                        Auto-filled
+                      </span>
                     )}
                   </label>
                   <select
@@ -808,7 +888,9 @@ export default function OnboardingPage() {
                   <label className='flex items-center text-sm font-medium text-slate-500 mb-3'>
                     Education
                     {isAutoFilled('education') && (
-                      <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>Auto-filled</span>
+                      <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
+                        Auto-filled
+                      </span>
                     )}
                   </label>
                   <select
@@ -831,26 +913,39 @@ export default function OnboardingPage() {
           {/* Step: Work Experience */}
           {getCurrentStepInfo().key === 'workExperience' && (
             <div className='space-y-6'>
-              <h2 className='text-xl font-semibold text-black mb-4'>Work Experience</h2>
+              <h2 className='text-xl font-semibold text-black mb-4'>
+                Work Experience
+              </h2>
               <p className='text-sm text-slate-500 mb-4'>
-                Review and edit your work experience. This information was automatically extracted from your resume.
+                Review and edit your work experience. This information was
+                automatically extracted from your resume.
               </p>
 
               <div className='space-y-4'>
                 {(formData.workExperience || []).map((job, index) => (
-                  <div key={index} className='bg-slate-50 rounded-xl p-4 space-y-3'>
+                  <div
+                    key={index}
+                    className='bg-slate-50 rounded-xl p-4 space-y-3'
+                  >
                     <div className='flex items-center justify-between'>
-                      <h3 className='font-medium text-slate-800'>Experience {index + 1}</h3>
-                      <span className='text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>Auto-filled</span>
+                      <h3 className='font-medium text-slate-800'>
+                        Experience {index + 1}
+                      </h3>
+                      <span className='text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
+                        Auto-filled
+                      </span>
                     </div>
-                    
+
                     <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
                       <input
                         type='text'
                         value={job.company}
                         onChange={e => {
                           const updated = [...(formData.workExperience || [])];
-                          updated[index] = { ...updated[index], company: e.target.value };
+                          updated[index] = {
+                            ...updated[index],
+                            company: e.target.value,
+                          };
                           updateFormData('workExperience', updated);
                         }}
                         placeholder='Company Name'
@@ -861,21 +956,27 @@ export default function OnboardingPage() {
                         value={job.position}
                         onChange={e => {
                           const updated = [...(formData.workExperience || [])];
-                          updated[index] = { ...updated[index], position: e.target.value };
+                          updated[index] = {
+                            ...updated[index],
+                            position: e.target.value,
+                          };
                           updateFormData('workExperience', updated);
                         }}
                         placeholder='Job Title'
                         className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
                       />
                     </div>
-                    
+
                     <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
                       <input
                         type='text'
                         value={job.startDate}
                         onChange={e => {
                           const updated = [...(formData.workExperience || [])];
-                          updated[index] = { ...updated[index], startDate: e.target.value };
+                          updated[index] = {
+                            ...updated[index],
+                            startDate: e.target.value,
+                          };
                           updateFormData('workExperience', updated);
                         }}
                         placeholder='Start Date (e.g., Jan 2020)'
@@ -886,19 +987,25 @@ export default function OnboardingPage() {
                         value={job.endDate}
                         onChange={e => {
                           const updated = [...(formData.workExperience || [])];
-                          updated[index] = { ...updated[index], endDate: e.target.value };
+                          updated[index] = {
+                            ...updated[index],
+                            endDate: e.target.value,
+                          };
                           updateFormData('workExperience', updated);
                         }}
                         placeholder='End Date (e.g., Present)'
                         className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
                       />
                     </div>
-                    
+
                     <textarea
                       value={job.description}
                       onChange={e => {
                         const updated = [...(formData.workExperience || [])];
-                        updated[index] = { ...updated[index], description: e.target.value };
+                        updated[index] = {
+                          ...updated[index],
+                          description: e.target.value,
+                        };
                         updateFormData('workExperience', updated);
                       }}
                       placeholder='Job description and key achievements...'
@@ -914,129 +1021,184 @@ export default function OnboardingPage() {
           {/* Step: Education & Projects */}
           {getCurrentStepInfo().key === 'educationProjects' && (
             <div className='space-y-6'>
-              <h2 className='text-xl font-semibold text-black mb-4'>Education & Projects</h2>
+              <h2 className='text-xl font-semibold text-black mb-4'>
+                Education & Projects
+              </h2>
               <p className='text-sm text-slate-500 mb-4'>
                 Review your educational background and key projects.
               </p>
 
               {/* Education History */}
-              {formData.educationHistory && formData.educationHistory.length > 0 && (
-                <div className='space-y-4'>
-                  <h3 className='text-lg font-medium text-slate-800'>Education</h3>
-                  {formData.educationHistory.map((edu, index) => (
-                    <div key={index} className='bg-slate-50 rounded-xl p-4 space-y-3'>
-                      <div className='flex items-center justify-between'>
-                        <h4 className='font-medium text-slate-800'>Education {index + 1}</h4>
-                        <span className='text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>Auto-filled</span>
+              {formData.educationHistory &&
+                formData.educationHistory.length > 0 && (
+                  <div className='space-y-4'>
+                    <h3 className='text-lg font-medium text-slate-800'>
+                      Education
+                    </h3>
+                    {formData.educationHistory.map((edu, index) => (
+                      <div
+                        key={index}
+                        className='bg-slate-50 rounded-xl p-4 space-y-3'
+                      >
+                        <div className='flex items-center justify-between'>
+                          <h4 className='font-medium text-slate-800'>
+                            Education {index + 1}
+                          </h4>
+                          <span className='text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
+                            Auto-filled
+                          </span>
+                        </div>
+
+                        <input
+                          type='text'
+                          value={edu.institution}
+                          onChange={e => {
+                            const updated = [
+                              ...(formData.educationHistory || []),
+                            ];
+                            updated[index] = {
+                              ...updated[index],
+                              institution: e.target.value,
+                            };
+                            updateFormData('educationHistory', updated);
+                          }}
+                          placeholder='Institution Name'
+                          className='w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                        />
+
+                        <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
+                          <input
+                            type='text'
+                            value={edu.degree}
+                            onChange={e => {
+                              const updated = [
+                                ...(formData.educationHistory || []),
+                              ];
+                              updated[index] = {
+                                ...updated[index],
+                                degree: e.target.value,
+                              };
+                              updateFormData('educationHistory', updated);
+                            }}
+                            placeholder='Degree (e.g., Bachelor of Science)'
+                            className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                          />
+                          <input
+                            type='text'
+                            value={edu.field}
+                            onChange={e => {
+                              const updated = [
+                                ...(formData.educationHistory || []),
+                              ];
+                              updated[index] = {
+                                ...updated[index],
+                                field: e.target.value,
+                              };
+                              updateFormData('educationHistory', updated);
+                            }}
+                            placeholder='Field of Study'
+                            className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                          />
+                        </div>
+
+                        <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
+                          <input
+                            type='text'
+                            value={edu.startYear}
+                            onChange={e => {
+                              const updated = [
+                                ...(formData.educationHistory || []),
+                              ];
+                              updated[index] = {
+                                ...updated[index],
+                                startYear: e.target.value,
+                              };
+                              updateFormData('educationHistory', updated);
+                            }}
+                            placeholder='Start Year (e.g., 2018)'
+                            className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                          />
+                          <input
+                            type='text'
+                            value={edu.endYear}
+                            onChange={e => {
+                              const updated = [
+                                ...(formData.educationHistory || []),
+                              ];
+                              updated[index] = {
+                                ...updated[index],
+                                endYear: e.target.value,
+                              };
+                              updateFormData('educationHistory', updated);
+                            }}
+                            placeholder='End Year (e.g., 2022)'
+                            className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                          />
+                        </div>
                       </div>
-                      
-                      <input
-                        type='text'
-                        value={edu.institution}
-                        onChange={e => {
-                          const updated = [...(formData.educationHistory || [])];
-                          updated[index] = { ...updated[index], institution: e.target.value };
-                          updateFormData('educationHistory', updated);
-                        }}
-                        placeholder='Institution Name'
-                        className='w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
-                      />
-                      
-                      <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
-                        <input
-                          type='text'
-                          value={edu.degree}
-                          onChange={e => {
-                            const updated = [...(formData.educationHistory || [])];
-                            updated[index] = { ...updated[index], degree: e.target.value };
-                            updateFormData('educationHistory', updated);
-                          }}
-                          placeholder='Degree (e.g., Bachelor of Science)'
-                          className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
-                        />
-                        <input
-                          type='text'
-                          value={edu.field}
-                          onChange={e => {
-                            const updated = [...(formData.educationHistory || [])];
-                            updated[index] = { ...updated[index], field: e.target.value };
-                            updateFormData('educationHistory', updated);
-                          }}
-                          placeholder='Field of Study'
-                          className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
-                        />
-                      </div>
-                      
-                      <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
-                        <input
-                          type='text'
-                          value={edu.startYear}
-                          onChange={e => {
-                            const updated = [...(formData.educationHistory || [])];
-                            updated[index] = { ...updated[index], startYear: e.target.value };
-                            updateFormData('educationHistory', updated);
-                          }}
-                          placeholder='Start Year (e.g., 2018)'
-                          className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
-                        />
-                        <input
-                          type='text'
-                          value={edu.endYear}
-                          onChange={e => {
-                            const updated = [...(formData.educationHistory || [])];
-                            updated[index] = { ...updated[index], endYear: e.target.value };
-                            updateFormData('educationHistory', updated);
-                          }}
-                          placeholder='End Year (e.g., 2022)'
-                          className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
+                    ))}
+                  </div>
+                )}
 
               {/* Projects */}
               {formData.projects && formData.projects.length > 0 && (
                 <div className='space-y-4'>
-                  <h3 className='text-lg font-medium text-slate-800'>Projects</h3>
+                  <h3 className='text-lg font-medium text-slate-800'>
+                    Projects
+                  </h3>
                   {formData.projects.map((project, index) => (
-                    <div key={index} className='bg-slate-50 rounded-xl p-4 space-y-3'>
+                    <div
+                      key={index}
+                      className='bg-slate-50 rounded-xl p-4 space-y-3'
+                    >
                       <div className='flex items-center justify-between'>
-                        <h4 className='font-medium text-slate-800'>Project {index + 1}</h4>
-                        <span className='text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>Auto-filled</span>
+                        <h4 className='font-medium text-slate-800'>
+                          Project {index + 1}
+                        </h4>
+                        <span className='text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
+                          Auto-filled
+                        </span>
                       </div>
-                      
+
                       <input
                         type='text'
                         value={project.title}
                         onChange={e => {
                           const updated = [...(formData.projects || [])];
-                          updated[index] = { ...updated[index], title: e.target.value };
+                          updated[index] = {
+                            ...updated[index],
+                            title: e.target.value,
+                          };
                           updateFormData('projects', updated);
                         }}
                         placeholder='Project Title'
                         className='w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
                       />
-                      
+
                       <textarea
                         value={project.description}
                         onChange={e => {
                           const updated = [...(formData.projects || [])];
-                          updated[index] = { ...updated[index], description: e.target.value };
+                          updated[index] = {
+                            ...updated[index],
+                            description: e.target.value,
+                          };
                           updateFormData('projects', updated);
                         }}
                         placeholder='Project description and achievements...'
                         rows={3}
                         className='w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
                       />
-                      
+
                       <input
                         type='text'
                         value={project.technologies}
                         onChange={e => {
                           const updated = [...(formData.projects || [])];
-                          updated[index] = { ...updated[index], technologies: e.target.value };
+                          updated[index] = {
+                            ...updated[index],
+                            technologies: e.target.value,
+                          };
                           updateFormData('projects', updated);
                         }}
                         placeholder='Technologies used (e.g., React, Node.js, Python)'
@@ -1052,105 +1214,152 @@ export default function OnboardingPage() {
           {/* Step: Additional Qualifications */}
           {getCurrentStepInfo().key === 'qualifications' && (
             <div className='space-y-6'>
-              <h2 className='text-xl font-semibold text-black mb-4'>Additional Qualifications</h2>
+              <h2 className='text-xl font-semibold text-black mb-4'>
+                Additional Qualifications
+              </h2>
               <p className='text-sm text-slate-500 mb-4'>
                 Review your certifications, awards, languages, and publications.
               </p>
 
               {/* Certifications */}
-              {formData.certifications && formData.certifications.length > 0 && (
-                <div className='space-y-4'>
-                  <h3 className='text-lg font-medium text-slate-800'>Certifications</h3>
-                  {formData.certifications.map((cert, index) => (
-                    <div key={index} className='bg-slate-50 rounded-xl p-4 space-y-3'>
-                      <div className='flex items-center justify-between'>
-                        <h4 className='font-medium text-slate-800'>Certification {index + 1}</h4>
-                        <span className='text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>Auto-filled</span>
+              {formData.certifications &&
+                formData.certifications.length > 0 && (
+                  <div className='space-y-4'>
+                    <h3 className='text-lg font-medium text-slate-800'>
+                      Certifications
+                    </h3>
+                    {formData.certifications.map((cert, index) => (
+                      <div
+                        key={index}
+                        className='bg-slate-50 rounded-xl p-4 space-y-3'
+                      >
+                        <div className='flex items-center justify-between'>
+                          <h4 className='font-medium text-slate-800'>
+                            Certification {index + 1}
+                          </h4>
+                          <span className='text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
+                            Auto-filled
+                          </span>
+                        </div>
+
+                        <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
+                          <input
+                            type='text'
+                            value={cert.name}
+                            onChange={e => {
+                              const updated = [
+                                ...(formData.certifications || []),
+                              ];
+                              updated[index] = {
+                                ...updated[index],
+                                name: e.target.value,
+                              };
+                              updateFormData('certifications', updated);
+                            }}
+                            placeholder='Certification Name'
+                            className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                          />
+                          <input
+                            type='text'
+                            value={cert.issuer}
+                            onChange={e => {
+                              const updated = [
+                                ...(formData.certifications || []),
+                              ];
+                              updated[index] = {
+                                ...updated[index],
+                                issuer: e.target.value,
+                              };
+                              updateFormData('certifications', updated);
+                            }}
+                            placeholder='Issuing Organization'
+                            className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                          />
+                        </div>
+
+                        <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
+                          <input
+                            type='text'
+                            value={cert.date}
+                            onChange={e => {
+                              const updated = [
+                                ...(formData.certifications || []),
+                              ];
+                              updated[index] = {
+                                ...updated[index],
+                                date: e.target.value,
+                              };
+                              updateFormData('certifications', updated);
+                            }}
+                            placeholder='Issue Date'
+                            className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                          />
+                          <input
+                            type='text'
+                            value={cert.expiryDate}
+                            onChange={e => {
+                              const updated = [
+                                ...(formData.certifications || []),
+                              ];
+                              updated[index] = {
+                                ...updated[index],
+                                expiryDate: e.target.value,
+                              };
+                              updateFormData('certifications', updated);
+                            }}
+                            placeholder='Expiry Date (if applicable)'
+                            className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                          />
+                        </div>
                       </div>
-                      
-                      <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
-                        <input
-                          type='text'
-                          value={cert.name}
-                          onChange={e => {
-                            const updated = [...(formData.certifications || [])];
-                            updated[index] = { ...updated[index], name: e.target.value };
-                            updateFormData('certifications', updated);
-                          }}
-                          placeholder='Certification Name'
-                          className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
-                        />
-                        <input
-                          type='text'
-                          value={cert.issuer}
-                          onChange={e => {
-                            const updated = [...(formData.certifications || [])];
-                            updated[index] = { ...updated[index], issuer: e.target.value };
-                            updateFormData('certifications', updated);
-                          }}
-                          placeholder='Issuing Organization'
-                          className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
-                        />
-                      </div>
-                      
-                      <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
-                        <input
-                          type='text'
-                          value={cert.date}
-                          onChange={e => {
-                            const updated = [...(formData.certifications || [])];
-                            updated[index] = { ...updated[index], date: e.target.value };
-                            updateFormData('certifications', updated);
-                          }}
-                          placeholder='Issue Date'
-                          className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
-                        />
-                        <input
-                          type='text'
-                          value={cert.expiryDate}
-                          onChange={e => {
-                            const updated = [...(formData.certifications || [])];
-                            updated[index] = { ...updated[index], expiryDate: e.target.value };
-                            updateFormData('certifications', updated);
-                          }}
-                          placeholder='Expiry Date (if applicable)'
-                          className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
+                    ))}
+                  </div>
+                )}
 
               {/* Languages */}
               {formData.languages && formData.languages.length > 0 && (
                 <div className='space-y-4'>
-                  <h3 className='text-lg font-medium text-slate-800'>Languages</h3>
+                  <h3 className='text-lg font-medium text-slate-800'>
+                    Languages
+                  </h3>
                   <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                     {formData.languages.map((lang, index) => (
-                      <div key={index} className='bg-slate-50 rounded-xl p-4 space-y-3'>
+                      <div
+                        key={index}
+                        className='bg-slate-50 rounded-xl p-4 space-y-3'
+                      >
                         <div className='flex items-center justify-between'>
-                          <h4 className='font-medium text-slate-800'>Language {index + 1}</h4>
-                          <span className='text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>Auto-filled</span>
+                          <h4 className='font-medium text-slate-800'>
+                            Language {index + 1}
+                          </h4>
+                          <span className='text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
+                            Auto-filled
+                          </span>
                         </div>
-                        
+
                         <input
                           type='text'
                           value={lang.language}
                           onChange={e => {
                             const updated = [...(formData.languages || [])];
-                            updated[index] = { ...updated[index], language: e.target.value };
+                            updated[index] = {
+                              ...updated[index],
+                              language: e.target.value,
+                            };
                             updateFormData('languages', updated);
                           }}
                           placeholder='Language'
                           className='w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
                         />
-                        
+
                         <select
                           value={lang.proficiency}
                           onChange={e => {
                             const updated = [...(formData.languages || [])];
-                            updated[index] = { ...updated[index], proficiency: e.target.value };
+                            updated[index] = {
+                              ...updated[index],
+                              proficiency: e.target.value,
+                            };
                             updateFormData('languages', updated);
                           }}
                           className='w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
@@ -1171,33 +1380,48 @@ export default function OnboardingPage() {
               {/* Awards */}
               {formData.awards && formData.awards.length > 0 && (
                 <div className='space-y-4'>
-                  <h3 className='text-lg font-medium text-slate-800'>Awards & Achievements</h3>
+                  <h3 className='text-lg font-medium text-slate-800'>
+                    Awards & Achievements
+                  </h3>
                   {formData.awards.map((award, index) => (
-                    <div key={index} className='bg-slate-50 rounded-xl p-4 space-y-3'>
+                    <div
+                      key={index}
+                      className='bg-slate-50 rounded-xl p-4 space-y-3'
+                    >
                       <div className='flex items-center justify-between'>
-                        <h4 className='font-medium text-slate-800'>Award {index + 1}</h4>
-                        <span className='text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>Auto-filled</span>
+                        <h4 className='font-medium text-slate-800'>
+                          Award {index + 1}
+                        </h4>
+                        <span className='text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
+                          Auto-filled
+                        </span>
                       </div>
-                      
+
                       <input
                         type='text'
                         value={award.title}
                         onChange={e => {
                           const updated = [...(formData.awards || [])];
-                          updated[index] = { ...updated[index], title: e.target.value };
+                          updated[index] = {
+                            ...updated[index],
+                            title: e.target.value,
+                          };
                           updateFormData('awards', updated);
                         }}
                         placeholder='Award Title'
                         className='w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
                       />
-                      
+
                       <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
                         <input
                           type='text'
                           value={award.issuer}
                           onChange={e => {
                             const updated = [...(formData.awards || [])];
-                            updated[index] = { ...updated[index], issuer: e.target.value };
+                            updated[index] = {
+                              ...updated[index],
+                              issuer: e.target.value,
+                            };
                             updateFormData('awards', updated);
                           }}
                           placeholder='Issuing Organization'
@@ -1208,19 +1432,25 @@ export default function OnboardingPage() {
                           value={award.date}
                           onChange={e => {
                             const updated = [...(formData.awards || [])];
-                            updated[index] = { ...updated[index], date: e.target.value };
+                            updated[index] = {
+                              ...updated[index],
+                              date: e.target.value,
+                            };
                             updateFormData('awards', updated);
                           }}
                           placeholder='Date Received'
                           className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
                         />
                       </div>
-                      
+
                       <textarea
                         value={award.description}
                         onChange={e => {
                           const updated = [...(formData.awards || [])];
-                          updated[index] = { ...updated[index], description: e.target.value };
+                          updated[index] = {
+                            ...updated[index],
+                            description: e.target.value,
+                          };
                           updateFormData('awards', updated);
                         }}
                         placeholder='Award description...'
@@ -1235,33 +1465,48 @@ export default function OnboardingPage() {
               {/* Publications */}
               {formData.publications && formData.publications.length > 0 && (
                 <div className='space-y-4'>
-                  <h3 className='text-lg font-medium text-slate-800'>Publications</h3>
+                  <h3 className='text-lg font-medium text-slate-800'>
+                    Publications
+                  </h3>
                   {formData.publications.map((pub, index) => (
-                    <div key={index} className='bg-slate-50 rounded-xl p-4 space-y-3'>
+                    <div
+                      key={index}
+                      className='bg-slate-50 rounded-xl p-4 space-y-3'
+                    >
                       <div className='flex items-center justify-between'>
-                        <h4 className='font-medium text-slate-800'>Publication {index + 1}</h4>
-                        <span className='text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>Auto-filled</span>
+                        <h4 className='font-medium text-slate-800'>
+                          Publication {index + 1}
+                        </h4>
+                        <span className='text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
+                          Auto-filled
+                        </span>
                       </div>
-                      
+
                       <input
                         type='text'
                         value={pub.title}
                         onChange={e => {
                           const updated = [...(formData.publications || [])];
-                          updated[index] = { ...updated[index], title: e.target.value };
+                          updated[index] = {
+                            ...updated[index],
+                            title: e.target.value,
+                          };
                           updateFormData('publications', updated);
                         }}
                         placeholder='Publication Title'
                         className='w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
                       />
-                      
+
                       <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
                         <input
                           type='text'
                           value={pub.venue}
                           onChange={e => {
                             const updated = [...(formData.publications || [])];
-                            updated[index] = { ...updated[index], venue: e.target.value };
+                            updated[index] = {
+                              ...updated[index],
+                              venue: e.target.value,
+                            };
                             updateFormData('publications', updated);
                           }}
                           placeholder='Venue/Journal'
@@ -1272,19 +1517,25 @@ export default function OnboardingPage() {
                           value={pub.date}
                           onChange={e => {
                             const updated = [...(formData.publications || [])];
-                            updated[index] = { ...updated[index], date: e.target.value };
+                            updated[index] = {
+                              ...updated[index],
+                              date: e.target.value,
+                            };
                             updateFormData('publications', updated);
                           }}
                           placeholder='Publication Date'
                           className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
                         />
                       </div>
-                      
+
                       <textarea
                         value={pub.description}
                         onChange={e => {
                           const updated = [...(formData.publications || [])];
-                          updated[index] = { ...updated[index], description: e.target.value };
+                          updated[index] = {
+                            ...updated[index],
+                            description: e.target.value,
+                          };
                           updateFormData('publications', updated);
                         }}
                         placeholder='Publication description or abstract...'
@@ -1310,7 +1561,9 @@ export default function OnboardingPage() {
                 <label className='flex items-center text-sm font-medium text-slate-500 mb-3'>
                   Key skills
                   {isAutoFilled('skills') && (
-                    <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>Auto-filled</span>
+                    <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
+                      Auto-filled
+                    </span>
                   )}
                 </label>
                 <p className='text-sm text-slate-500 mb-3'>
@@ -1350,7 +1603,9 @@ export default function OnboardingPage() {
                 <label className='flex items-center text-sm font-medium text-slate-500 mb-3'>
                   How do you want to use Loopn? *
                   {isAutoFilled('about') && (
-                    <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>Auto-filled</span>
+                    <span className='ml-2 text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
+                      Auto-filled
+                    </span>
                   )}
                 </label>
                 <div className='text-sm text-slate-500 mb-3'>
@@ -1403,8 +1658,12 @@ export default function OnboardingPage() {
               {formData.hobbies && formData.hobbies.length > 0 && (
                 <div className='bg-slate-50 rounded-xl p-4 mb-6'>
                   <div className='flex items-center justify-between mb-3'>
-                    <h3 className='text-base font-medium text-slate-700'>Personal Hobbies from Resume</h3>
-                    <span className='text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>Auto-filled</span>
+                    <h3 className='text-base font-medium text-slate-700'>
+                      Personal Hobbies from Resume
+                    </h3>
+                    <span className='text-xs bg-b_green-100 text-b_green-700 px-2 py-0.5 rounded-full'>
+                      Auto-filled
+                    </span>
                   </div>
                   <div className='flex flex-wrap gap-2'>
                     {formData.hobbies.map((hobby, index) => (
