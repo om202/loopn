@@ -118,13 +118,11 @@ export default function OnlineUsers({
   });
 
   // Use saved users hook
-  const { 
-    savedUsers: savedUserEntries, 
-    isLoading: savedUsersLoading,
-  } = useSavedUsers({
-    userId: user?.userId || '',
-    enabled: !!user?.userId,
-  });
+  const { savedUsers: savedUserEntries, isLoading: savedUsersLoading } =
+    useSavedUsers({
+      userId: user?.userId || '',
+      enabled: !!user?.userId,
+    });
 
   // Combine real-time pending requests with optimistic updates
   const combinedPendingRequests = useMemo(() => {

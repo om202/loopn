@@ -99,12 +99,16 @@ export default function UserCard({
   const { profile: fullProfile, isLoading: _loadingProfile } = useUserProfile(
     searchProfile ? '' : userPresence.userId // Skip fetching if searchProfile is provided
   );
-  
+
   const savedUsersStore = useSavedUsersStore();
 
   // Get save status from store
-  const isSaved = currentUserId ? savedUsersStore.isUserSaved(currentUserId, userPresence.userId) : false;
-  const isSaveLoading = currentUserId ? savedUsersStore.loading[currentUserId] || false : false;
+  const isSaved = currentUserId
+    ? savedUsersStore.isUserSaved(currentUserId, userPresence.userId)
+    : false;
+  const isSaveLoading = currentUserId
+    ? savedUsersStore.loading[currentUserId] || false
+    : false;
 
   // Handle save/unsave toggle using store
   const handleToggleSave = async () => {
