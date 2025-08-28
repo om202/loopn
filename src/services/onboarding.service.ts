@@ -4,17 +4,89 @@ import { amplifyInitialization } from '../lib/amplify-initialization';
 import { userProfileService } from './user-profile.service';
 
 export interface OnboardingData {
+  // Personal Information
   fullName: string;
+  email?: string;
+  phone?: string;
+  city?: string;
+  country?: string;
+  
+  // Professional URLs
+  linkedinUrl?: string;
+  githubUrl?: string;
+  portfolioUrl?: string;
+  
+  // Current Professional Info (for compatibility)
   jobRole: string;
   companyName: string;
   industry: string;
   yearsOfExperience: number;
-  education: string;
+  education: string; // Keep as string for compatibility, but also have detailed education below
   about: string;
-  interests: string[];
+  
+  // Detailed Professional Background
+  workExperience: Array<{
+    company: string;
+    position: string;
+    startDate: string;
+    endDate: string;
+    description: string;
+  }>;
+  
+  // Detailed Education
+  educationHistory: Array<{
+    institution: string;
+    degree: string;
+    field: string;
+    startYear: string;
+    endYear: string;
+  }>;
+  
+  // Skills & Projects
   skills: string[];
+  projects: Array<{
+    title: string;
+    description: string;
+    technologies: string;
+  }>;
+  
+  // Additional Qualifications
+  certifications: Array<{
+    name: string;
+    issuer: string;
+    date: string;
+    expiryDate: string;
+  }>;
+  
+  awards: Array<{
+    title: string;
+    issuer: string;
+    date: string;
+    description: string;
+  }>;
+  
+  languages: Array<{
+    language: string;
+    proficiency: string;
+  }>;
+  
+  publications: Array<{
+    title: string;
+    venue: string;
+    date: string;
+    description: string;
+  }>;
+  
+  // Personal Interests
+  interests: string[]; // Professional interests from our current system
+  hobbies: string[]; // Personal hobbies from resume
+  
+  // Profile Picture
   profilePictureFile?: File; // For upload during onboarding
   profilePictureUrl?: string; // S3 URL after upload
+  
+  // Auto-fill tracking
+  autoFilledFields?: string[]; // Track which fields were auto-populated from resume
 }
 
 export interface UserOnboardingStatus {
