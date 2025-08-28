@@ -26,6 +26,7 @@ import { useConversations } from '../hooks/useConversations';
 import { useChatRequests } from '../hooks/useChatRequests';
 import { useNotifications } from '../hooks/useNotifications';
 import { useSavedUsers } from '../hooks/useSavedUsers';
+import { useUserProfile } from '../hooks/useUserProfile';
 import { notificationService } from '../services/notification.service';
 import { useSubscriptionStore } from '../stores/subscription-store';
 import { OnlineUsers_Shimmer, ShimmerProvider } from './ShimmerLoader/exports';
@@ -55,9 +56,6 @@ export default function OnlineUsers({
   const [profileSidebarUser, setProfileSidebarUser] =
     useState<UserPresence | null>(null);
 
-  const [currentUserProfile, setCurrentUserProfile] = useState<
-    Schema['UserProfile']['type'] | null
-  >(null);
   const [profileSidebarOpen, setProfileSidebarOpen] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [, setConversationsLoaded] = useState(false);
@@ -70,13 +68,16 @@ export default function OnlineUsers({
     Set<string>
   >(new Set());
   const { user } = useAuthenticator();
+  
+  // Use centralized user profile hook instead of manual fetching
+  const { profile: currentUserProfile } = useUserProfile(user?.userId || '');
   const { handleSignOut } = useAuth();
 
   const handleSignOutClick = async () => {
     await simplePresenceManager.setOffline();
     handleSignOut();
   };
-  const { fetchUserProfile } = useSubscriptionStore();
+  // No longer need fetchUserProfile - using useUserProfile hook instead
 
   const {
     onlineUsers: allOnlineUsers,
@@ -178,22 +179,7 @@ export default function OnlineUsers({
     }
   }, [onlineUsersLoading, allOnlineUsers.length]);
 
-  useEffect(() => {
-    let mounted = true;
-    const loadCurrentUserProfile = async () => {
-      if (!user?.userId) return;
-      try {
-        const profile = await fetchUserProfile(user.userId);
-        if (mounted) setCurrentUserProfile(profile);
-      } catch (error) {
-        console.error('Error loading current user profile for search:', error);
-      }
-    };
-    loadCurrentUserProfile();
-    return () => {
-      mounted = false;
-    };
-  }, [user?.userId, fetchUserProfile]);
+  // Current user profile is now handled by useUserProfile hook above
 
   useEffect(() => {
     if (profileSidebarOpen && !profileSidebarUser && allUsers.length > 0) {

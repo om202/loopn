@@ -12,15 +12,6 @@ interface UseUserProfileReturn {
   error: string | null;
 }
 
-/**
- * Custom hook for fetching and caching user profiles
- * This eliminates duplicate API calls by using centralized caching
- *
- * Benefits:
- * - Cached profiles are shared across all components
- * - No duplicate API calls when switching between sections
- * - Automatic caching and retrieval
- */
 export function useUserProfile(userId: string): UseUserProfileReturn {
   const { getUserProfile, fetchUserProfile } = useSubscriptionStore();
   const [isLoading, setIsLoading] = useState(false);
@@ -66,13 +57,12 @@ export function useUserProfile(userId: string): UseUserProfileReturn {
       });
   }, [userId, getUserProfile, fetchUserProfile]);
 
-  // Update profile when cache changes (in case another component fetched it)
   useEffect(() => {
     const cached = getUserProfile(userId);
     if (cached && cached !== profile) {
       setProfile(cached);
     }
-  }, [userId, getUserProfile, profile]);
+  }, [userId, getUserProfile]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     profile,

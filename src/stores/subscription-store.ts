@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { devtools } from 'zustand/middleware';
+import { devtools, persist, createJSONStorage } from 'zustand/middleware';
 import type { Schema } from '../../amplify/data/resource';
 import type { UnsubscribeFn } from '@/lib/realtime/types';
 import { getClient } from '../lib/amplify-config';
@@ -144,11 +144,12 @@ interface SubscriptionState {
 // Create the store
 export const useSubscriptionStore = create<SubscriptionState>()(
   devtools(
-    (set, get) => ({
-      // Initial state
-      activeSubscriptions: new Map(),
-      onlineUsers: [],
-      userProfiles: new Map(),
+    persist(
+      (set, get) => ({
+        // Initial state
+        activeSubscriptions: new Map(),
+        onlineUsers: [],
+        userProfiles: new Map(),
       incomingChatRequests: [],
       sentChatRequests: [],
       conversations: new Map(),
@@ -791,9 +792,21 @@ export const useSubscriptionStore = create<SubscriptionState>()(
         };
       },
     }),
-    {
-      name: 'subscription-store',
-    }
+      {
+        name: 'subscription-store',
+        storage: createJSONStorage(() => localStorage),
+        // Only persist user profiles, not subscriptions or realtime data
+        partialize: (state) => ({
+          userProfiles: Array.from(state.userProfiles.entries()),
+        }),
+        // Restore Maps from persisted arrays
+        onRehydrateStorage: () => (state) => {
+          if (state?.userProfiles && Array.isArray(state.userProfiles)) {
+            state.userProfiles = new Map(state.userProfiles as [string, UserProfile][]);
+          }
+        },
+      }
+    )
   )
 );
 
