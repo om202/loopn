@@ -37,6 +37,7 @@ export default function OnboardingPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [skillInput, setSkillInput] = useState('');
+  const [highlightedFields, setHighlightedFields] = useState<string[]>([]);
 
   // Resume upload state
   const [isProcessingResume, setIsProcessingResume] = useState(false);
@@ -160,7 +161,11 @@ export default function OnboardingPage() {
       required: false,
     });
 
-    return steps;
+    // Reassign sequential IDs to prevent gaps
+    return steps.map((step, index) => ({
+      ...step,
+      id: index + 1,
+    }));
   }, [
     formData.workExperience,
     formData.educationHistory,
@@ -175,10 +180,16 @@ export default function OnboardingPage() {
 
   // Get current step info
   const getCurrentStepInfo = () => {
-    return (
-      availableSteps.find(step => step.id === currentStep) || availableSteps[0]
-    );
+    // Ensure currentStep is within bounds
+    const stepIndex = Math.max(1, Math.min(currentStep, totalSteps));
+    return availableSteps[stepIndex - 1] || availableSteps[0];
   };
+
+  // Clean up highlighting when steps change
+  useEffect(() => {
+    setHighlightedFields([]);
+    setError('');
+  }, [currentStep]);
 
   // Handle authentication and onboarding status
   useEffect(() => {
@@ -226,6 +237,20 @@ export default function OnboardingPage() {
     value: OnboardingData[keyof OnboardingData]
   ) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+    // Clear highlights when field is updated
+    if (highlightedFields.includes(field as string)) {
+      setHighlightedFields(prev => prev.filter(f => f !== field));
+      setError(''); // Clear error message too
+    }
+  };
+
+  // Helper function to get input className with highlighting
+  const getInputClassName = (fieldName: string, baseClassName: string = 'w-full px-3 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white') => {
+    const isHighlighted = highlightedFields.includes(fieldName);
+    if (isHighlighted) {
+      return `${baseClassName.replace('border-slate-200', 'border-red-500')} ring-2 ring-red-200`;
+    }
+    return `${baseClassName} border-slate-200`;
   };
 
   const toggleInterest = (interest: string) => {
@@ -240,50 +265,80 @@ export default function OnboardingPage() {
     }
   };
 
-  const validateStep = (step: number): boolean => {
+  const getMissingFields = (step: number): string[] => {
     const stepInfo = availableSteps.find(s => s.id === step);
-    if (!stepInfo) return false;
+    if (!stepInfo) return [];
 
+    const missingFields: string[] = [];
+    
     switch (stepInfo.key) {
       case 'personal':
-        return !!(
-          formData.fullName &&
-          formData.jobRole &&
-          formData.companyName &&
-          formData.industry
-        );
+        // Only require the most essential field - Full Name
+        if (!formData.fullName?.trim()) {
+          missingFields.push('fullName');
+        }
+        // Everything else is optional - users can complete later
+        break;
       case 'workExperience':
-        return true; // Work experience is auto-filled or optional
+        // Work experience is optional
+        break;
       case 'educationProjects':
-        return true; // Education and projects are auto-filled or optional
+        // Education and projects are optional
+        break;
       case 'qualifications':
-        return true; // Qualifications are auto-filled or optional
-      case 'about': {
-        const words = (formData.about || '')
-          .trim()
-          .split(/\s+/)
-          .filter(Boolean);
-        const wordCount = words.length;
-        return wordCount >= 24 && wordCount <= 80;
-      }
+        // Qualifications are optional
+        break;
+      case 'about':
+        // About section is now completely optional
+        // Users can add this anytime in their profile
+        break;
       case 'interests':
-        return (formData.interests?.length || 0) > 0;
+        // Interests are optional - users can add later
+        break;
       case 'picture':
-        return true; // Profile picture is optional
-      default:
-        return false;
+        // Profile picture is optional
+        break;
     }
+    
+    return missingFields;
+  };
+
+  const validateStep = (step: number): boolean => {
+    return getMissingFields(step).length === 0;
   };
 
   const nextStep = () => {
-    if (validateStep(currentStep) && currentStep < totalSteps) {
+    const missingFields = getMissingFields(currentStep);
+    
+    if (missingFields.length > 0) {
+      // Highlight missing fields instead of blocking
+      setHighlightedFields(missingFields);
+      
+      // Show a brief error message
+      if (missingFields.includes('fullName')) {
+        setError('Please enter your full name to continue');
+      } else {
+        setError(`Please fill in: ${missingFields.join(', ')}`);
+      }
+      
+      // Clear error after 3 seconds
+      setTimeout(() => {
+        setError('');
+      }, 3000);
+      
+      return;
+    }
+    
+    if (currentStep < totalSteps) {
       setCurrentStep(currentStep + 1);
+      setHighlightedFields([]); // Clear highlights when moving
     }
   };
 
   const prevStep = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
+      setHighlightedFields([]); // Clear highlights when moving
     }
   };
 
@@ -446,9 +501,6 @@ export default function OnboardingPage() {
     }
   };
 
-  const skipResumeUpload = () => {
-    setShowResumeUpload(false);
-  };
 
   const showResumeUploadAgain = () => {
     setShowResumeUpload(true);
@@ -460,7 +512,7 @@ export default function OnboardingPage() {
 
   return (
     <div className='min-h-screen bg-slate-100 py-8 px-3 sm:px-4 pb-32'>
-      <div className='max-w-5xl mx-auto'>
+      <div className='max-w-4xl mx-auto'>
         {/* Main content card */}
         <div className='bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 lg:p-8'>
           {/* Sign Out Button - Top Right of Card */}
@@ -574,9 +626,12 @@ export default function OnboardingPage() {
           {/* Step: Personal & Professional Information */}
           {getCurrentStepInfo().key === 'personal' && (
             <div className='space-y-6'>
-              <h2 className='text-xl font-semibold text-black mb-4'>
+              <h2 className='text-xl font-semibold text-black mb-2'>
                 Personal & Professional Info
               </h2>
+              <p className='text-sm text-slate-500 mb-6'>
+                Only your <strong>full name</strong> is required. You can complete the rest anytime in your profile settings.
+              </p>
 
               {/* Personal Information Section */}
               <div className='bg-slate-50 rounded-xl p-4 space-y-4'>
@@ -593,7 +648,7 @@ export default function OnboardingPage() {
                     value={formData.fullName || ''}
                     onChange={e => updateFormData('fullName', e.target.value)}
                     placeholder='e.g., John Smith'
-                    className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+                    className={getInputClassName('fullName')}
                   />
                 </div>
 
@@ -716,20 +771,20 @@ export default function OnboardingPage() {
 
                 <div>
                   <label className='block text-sm font-medium text-slate-500 mb-3'>
-                    Job Title *
+                    Job Title
                   </label>
                   <input
                     type='text'
                     value={formData.jobRole || ''}
                     onChange={e => updateFormData('jobRole', e.target.value)}
                     placeholder='e.g., Software Engineer, Product Manager'
-                    className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+                    className={getInputClassName('jobRole')}
                   />
                 </div>
 
                 <div>
                   <label className='block text-sm font-medium text-slate-500 mb-3'>
-                    Company *
+                    Company
                   </label>
                   <input
                     type='text'
@@ -738,18 +793,18 @@ export default function OnboardingPage() {
                       updateFormData('companyName', e.target.value)
                     }
                     placeholder='e.g., Google, Microsoft, Startup Inc'
-                    className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+                    className={getInputClassName('companyName')}
                   />
                 </div>
 
                 <div>
                   <label className='block text-sm font-medium text-slate-500 mb-3'>
-                    Industry *
+                    Industry
                   </label>
                   <select
                     value={formData.industry || ''}
                     onChange={e => updateFormData('industry', e.target.value)}
-                    className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+                    className={getInputClassName('industry')}
                   >
                     <option value=''>Select an industry</option>
                     {INDUSTRY_OPTIONS.map(industry => (
@@ -1475,18 +1530,19 @@ export default function OnboardingPage() {
               {/* About Section */}
               <div>
                 <label className='block text-sm font-medium text-slate-500 mb-3'>
-                  How do you want to use Loopn? *
+                  How do you want to use Loopn? <span className='text-xs text-slate-400'>(Optional)</span>
                 </label>
                 <div className='text-sm text-slate-500 mb-3'>
-                  <ul className='list-disc pl-5 space-y-1'>
+                  <p className='mb-2'>Tell others about your goals and interests. This helps with matching and networking.</p>
+                  <ul className='list-disc pl-5 space-y-1 text-xs'>
                     <li>What you want (mentorship, collabs, clients)</li>
                     <li>
                       Who you want to meet (founders, designers, local pros)
                     </li>
-                    <li>How you’ll engage (intros, project help, long-term)</li>
+                    <li>How you'll engage (intros, project help, long-term)</li>
                   </ul>
-                  <div className='text-sm mt-2'>
-                    No skills here — add above.
+                  <div className='text-xs mt-2 text-slate-400'>
+                    No skills here — add those above.
                   </div>
                 </div>
                 <textarea
@@ -1496,16 +1552,12 @@ export default function OnboardingPage() {
                   rows={4}
                   className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                 />
-                <div className='flex justify-between text-sm mt-2'>
-                  <span
-                    className={`${wordCount < 24 ? 'text-b_red-500' : 'text-b_green-500'}`}
-                  >
-                    {wordCount} words (minimum 24)
+                <div className='flex justify-between text-xs mt-2'>
+                  <span className='text-slate-400'>
+                    {wordCount === 0 ? 'You can fill this out later' : `${wordCount} words`}
                   </span>
-                  <span
-                    className={`${wordCount > 80 ? 'text-b_red-500' : 'text-slate-500'}`}
-                  >
-                    {wordCount}/80 words
+                  <span className='text-slate-400'>
+                    {wordCount > 100 ? 'Consider keeping it concise' : ''}
                   </span>
                 </div>
               </div>
@@ -1516,11 +1568,10 @@ export default function OnboardingPage() {
           {getCurrentStepInfo().key === 'interests' && (
             <div className='space-y-6'>
               <h2 className='text-xl font-semibold text-black mb-4'>
-                Interests & Hobbies
+                Interests & Hobbies <span className='text-sm text-slate-400 font-normal'>(Optional)</span>
               </h2>
               <p className='text-sm text-slate-500 mb-4'>
-                Select topics you're interested in to help us connect you with
-                like-minded professionals.
+                Select topics you're interested in to help us connect you with like-minded professionals. You can always add more later in your profile.
               </p>
 
               {/* Display hobbies from resume if available */}
@@ -1620,7 +1671,7 @@ export default function OnboardingPage() {
 
       {/* Fixed Bottom Navigation Bar */}
       <div className='fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-t border-slate-200 shadow-2xl z-50'>
-        <div className='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4'>
+        <div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4'>
           <div className='flex items-center justify-between'>
             {/* Previous Button */}
             <button
@@ -1686,8 +1737,7 @@ export default function OnboardingPage() {
             {currentStep < totalSteps ? (
               <button
                 onClick={nextStep}
-                disabled={!validateStep(currentStep)}
-                className='px-4 py-3 sm:px-6 rounded-xl font-medium bg-brand-500 text-white hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm sm:text-base'
+                className='px-4 py-3 sm:px-6 rounded-xl font-medium bg-brand-500 text-white hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 transition-all text-sm sm:text-base'
               >
                 <span className='hidden sm:inline'>
                   {currentStep === totalSteps - 1 ? 'Almost Done!' : 'Next'}
