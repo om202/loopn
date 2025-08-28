@@ -182,7 +182,17 @@ export default function OnlineUsers({
       .filter(savedUser => savedUser.userId !== user?.userId); // Exclude current user
   }, [savedUserEntries, allUsers, user?.userId]);
 
-  const initialLoading = onlineUsersLoading;
+  // Only show initial loading for the very first load, not when switching tabs
+  // This prevents the whole dashboard from showing loading when switching from discover to connections
+  const [hasInitialLoad, setHasInitialLoad] = useState(false);
+  const initialLoading = onlineUsersLoading && !hasInitialLoad;
+
+  // Mark as initially loaded once we have data or when not loading
+  useEffect(() => {
+    if (!onlineUsersLoading || allOnlineUsers.length > 0) {
+      setHasInitialLoad(true);
+    }
+  }, [onlineUsersLoading, allOnlineUsers.length]);
 
   // Load current user profile for search context
   useEffect(() => {
