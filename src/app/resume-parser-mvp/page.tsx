@@ -1,12 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import * as pdfjsLib from 'pdfjs-dist';
 import { generateClient } from 'aws-amplify/data';
 import type { Schema } from '../../../amplify/data/resource';
-
-// Set up the worker for pdf.js
-pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
 
 // Initialize Amplify Data client
 const client = generateClient<Schema>();
@@ -74,6 +70,12 @@ export default function ResumeParserMVP() {
   const [error, setError] = useState('');
 
   const extractTextFromPDF = async (file: File): Promise<string> => {
+    // Dynamically import PDF.js only when needed
+    const pdfjsLib = await import('pdfjs-dist');
+
+    // Set up the worker for pdf.js
+    pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
+
     const arrayBuffer = await file.arrayBuffer();
     const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
     let fullText = '';
