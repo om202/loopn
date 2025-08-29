@@ -430,7 +430,7 @@ export default function NotificationsContent() {
             </h3>
           </div>
         ) : (
-          <div className='space-y-4'>
+          <div className='space-y-3 sm:space-y-4'>
             {getFilteredNotifications().map(notification => (
               <NotificationItem
                 key={notification.id}

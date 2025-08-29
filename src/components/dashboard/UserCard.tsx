@@ -171,7 +171,7 @@ export default function UserCard({
     <div
       key={userPresence.userId}
       onClick={handleCardClick}
-      className={`px-3 py-3 group transition-all duration-200 cursor-pointer shadow-xs ${
+      className={`px-2 py-2 sm:px-3 sm:py-3 group transition-all duration-200 cursor-pointer shadow-xs ${
         isSelected
           ? 'bg-brand-50 rounded-xl border border-brand-100'
           : 'bg-white hover:bg-slate-50 rounded-lg border border-slate-100 hover:border-brand-200'

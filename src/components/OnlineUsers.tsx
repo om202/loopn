@@ -504,9 +504,9 @@ export default function OnlineUsers({
         suggestedUsersCount={suggestedUsers.length}
       />
 
-      <div className='flex-1 bg-white sm:rounded-2xl border border-slate-200 py-3 px-3 sm:py-3 sm:px-3 lg:py-3 lg:px-3 ultra-compact overflow-hidden flex flex-col min-h-0'>
+      <div className='flex-1 bg-white sm:rounded-2xl border border-slate-200 p-2 sm:p-4 ultra-compact overflow-hidden flex flex-col min-h-0'>
         {/* Search User - Always visible at top */}
-        <div className='flex-shrink-0 mb-4 sm:mb-6 w-full max-w-6xl mx-auto'>
+        <div className='flex-shrink-0 mb-4 sm:mb-6 w-full max-w-6xl mx-auto px-1 sm:px-2'>
           <SearchUser
             onProfessionalRequest={handleProfessionalRequest}
             userProfile={currentUserProfile || undefined}
@@ -514,7 +514,7 @@ export default function OnlineUsers({
         </div>
 
         {/* Section Header - Fixed at top */}
-        <div className='flex-shrink-0 mb-4 sm:mb-5 lg:mb-6 w-full max-w-6xl mx-auto'>
+        <div className='flex-shrink-0 mb-3 sm:mb-4 lg:mb-6 w-full max-w-6xl mx-auto px-1 sm:px-2'>
           {activeSection === 'notifications' && (
             <div className='flex items-start justify-between'>
               <div>
@@ -579,7 +579,7 @@ export default function OnlineUsers({
           <div className='absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-4xl h-px bg-slate-200 opacity-0 transition-opacity duration-200 z-10 scroll-bottom-border'></div>
 
           <div
-            className='overflow-y-auto flex-1 h-full max-w-6xl mx-auto w-full'
+            className='overflow-y-auto flex-1 h-full max-w-6xl mx-auto w-full px-1 sm:px-2'
             onScroll={e => {
               const target = e.target as HTMLDivElement;
               const { scrollTop, scrollHeight, clientHeight } = target;

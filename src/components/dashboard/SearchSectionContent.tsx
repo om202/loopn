@@ -172,7 +172,7 @@ export default function SearchSectionContent({
             </h3>
           </div>
         ) : (
-          <div className='space-y-2.5 sm:space-y-3 transition-opacity duration-200 opacity-100 pt-2'>
+          <div className='space-y-2 sm:space-y-3 transition-opacity duration-200 opacity-100 pt-2'>
             {searchResults.map(result => (
               <div key={result.userId}>
                 <UserCard

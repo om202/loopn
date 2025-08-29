@@ -306,9 +306,9 @@ export default function ProfileSidebar({
   };
 
   return (
-    <div className='bg-white rounded-2xl w-full h-full flex flex-col relative border border-slate-200'>
+    <div className='bg-white rounded-2xl w-full h-full flex flex-col relative border border-slate-200 p-2 sm:p-4'>
       {/* Header with buttons */}
-      <div className='p-3 pb-2 flex items-center justify-between'>
+      <div className='pb-2 flex items-center justify-between'>
         <div className='flex items-center gap-2'>
           {/* Back Button - Only shows when onBack is provided */}
           {onBack && (
@@ -359,10 +359,10 @@ export default function ProfileSidebar({
       </div>
 
       {/* Line Separator */}
-      <div className='w-full h-px bg-slate-200'></div>
+      <div className='w-full h-px bg-slate-200 mb-4 sm:mb-6'></div>
 
       {/* User Profile Header */}
-      <div className='p-3 pt-2 pb-1 flex justify-center'>
+      <div className='pb-1 flex justify-center'>
         <div className='flex flex-col items-center text-center'>
           <UserAvatar
             email={userProfile?.email}
