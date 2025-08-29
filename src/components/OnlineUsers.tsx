@@ -551,14 +551,14 @@ export default function OnlineUsers({
           {activeSection === 'connections' && (
             <div>
               <h2 className='text-xl sm:text-2xl font-bold text-black'>
-                My Connections
+                Connections
               </h2>
             </div>
           )}
           {activeSection === 'suggested' && (
             <div>
               <h2 className='text-xl sm:text-2xl font-bold text-black'>
-                Discover Professionals
+                Professionals
               </h2>
             </div>
           )}

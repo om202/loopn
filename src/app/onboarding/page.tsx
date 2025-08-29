@@ -584,7 +584,8 @@ export default function OnboardingPage() {
           {resumeProcessed && !showResumeUpload && (
             <div className='mb-6 text-center space-y-3'>
               <p className='text-b_green-700'>
-                Resume processed! {formData.autoFilledFields?.length || 0} fields auto-filled
+                Resume processed! {formData.autoFilledFields?.length || 0}{' '}
+                fields auto-filled
               </p>
               <button
                 onClick={showResumeUploadAgain}
@@ -846,10 +847,7 @@ export default function OnboardingPage() {
 
               <div className='space-y-4'>
                 {(formData.workExperience || []).map((job, index) => (
-                  <div
-                    key={index}
-                    className='space-y-3'
-                  >
+                  <div key={index} className='space-y-3'>
                     <div className='flex items-center justify-between'>
                       <h3 className='font-medium text-slate-800'>
                         Experience {index + 1}
@@ -956,10 +954,7 @@ export default function OnboardingPage() {
                       Education
                     </h3>
                     {formData.educationHistory.map((edu, index) => (
-                      <div
-                        key={index}
-                        className='space-y-3'
-                      >
+                      <div key={index} className='space-y-3'>
                         <div className='flex items-center justify-between'>
                           <h4 className='font-medium text-slate-800'>
                             Education {index + 1}
@@ -1064,10 +1059,7 @@ export default function OnboardingPage() {
                     Projects
                   </h3>
                   {formData.projects.map((project, index) => (
-                    <div
-                      key={index}
-                      className='space-y-3'
-                    >
+                    <div key={index} className='space-y-3'>
                       <div className='flex items-center justify-between'>
                         <h4 className='font-medium text-slate-800'>
                           Project {index + 1}
@@ -1143,10 +1135,7 @@ export default function OnboardingPage() {
                       Certifications
                     </h3>
                     {formData.certifications.map((cert, index) => (
-                      <div
-                        key={index}
-                        className='space-y-3'
-                      >
+                      <div key={index} className='space-y-3'>
                         <div className='flex items-center justify-between'>
                           <h4 className='font-medium text-slate-800'>
                             Certification {index + 1}
@@ -1235,10 +1224,7 @@ export default function OnboardingPage() {
                   </h3>
                   <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                     {formData.languages.map((lang, index) => (
-                      <div
-                        key={index}
-                        className='space-y-3'
-                      >
+                      <div key={index} className='space-y-3'>
                         <div className='flex items-center justify-between'>
                           <h4 className='font-medium text-slate-800'>
                             Language {index + 1}
@@ -1292,10 +1278,7 @@ export default function OnboardingPage() {
                     Awards & Achievements
                   </h3>
                   {formData.awards.map((award, index) => (
-                    <div
-                      key={index}
-                      className='space-y-3'
-                    >
+                    <div key={index} className='space-y-3'>
                       <div className='flex items-center justify-between'>
                         <h4 className='font-medium text-slate-800'>
                           Award {index + 1}
@@ -1374,10 +1357,7 @@ export default function OnboardingPage() {
                     Publications
                   </h3>
                   {formData.publications.map((pub, index) => (
-                    <div
-                      key={index}
-                      className='space-y-3'
-                    >
+                    <div key={index} className='space-y-3'>
                       <div className='flex items-center justify-between'>
                         <h4 className='font-medium text-slate-800'>
                           Publication {index + 1}

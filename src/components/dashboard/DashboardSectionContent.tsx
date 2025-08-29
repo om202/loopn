@@ -200,14 +200,14 @@ export default function DashboardSectionContent({
     switch (activeSection) {
       case 'connections':
         return {
-          title: 'My Connections',
+          title: 'Connections',
           description: 'Your connections and conversations',
           emptyIcon: Users,
           emptyMessage: 'No connections yet',
         };
       case 'suggested':
         return {
-          title: 'Discover Professionals',
+          title: 'Professionals',
           description: 'Find and connect with new people',
           emptyIcon: Compass,
           emptyMessage: 'No suggestions available',
@@ -230,7 +230,7 @@ export default function DashboardSectionContent({
         };
       default:
         return {
-          title: 'My Connections',
+          title: 'Connections',
           description: 'Your connections and conversations',
           emptyIcon: Users,
           emptyMessage: 'No connections yet',

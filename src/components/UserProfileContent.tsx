@@ -113,8 +113,6 @@ export default function UserProfileContent({
                 </div>
               )}
             </div>
-
-
           </div>
         )}
 
