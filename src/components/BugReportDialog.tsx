@@ -67,14 +67,7 @@ export default function BugReportDialog({
       <div className='flex items-center justify-between px-6 py-4 border-b border-slate-100'>
         <div className='flex items-center gap-3'>
           <div>
-            {type === 'bug' ? (
-              <Bug className='w-7 h-7 text-brand-600' />
-            ) : (
-              <Lightbulb className='w-7 h-7 text-brand-600' />
-            )}
-          </div>
-          <div>
-            <h2 className='text-lg font-semibold text-black'>
+            <h2 className='text-lg font-semibold'>
               {type === 'bug' ? 'Report a Bug' : 'Share a Suggestion'}
             </h2>
             <p className='text-sm text-slate-500'>Help us improve Loopn</p>
@@ -94,7 +87,7 @@ export default function BugReportDialog({
       <form onSubmit={handleSubmit} className='px-6 py-5 space-y-5'>
         {/* Type Selector */}
         <div>
-          <label className='block text-sm font-medium text-black mb-3'>
+          <label className='block text-sm font-medium mb-3'>
             What would you like to share?
           </label>
           <div className='grid grid-cols-2 gap-3'>
@@ -103,22 +96,22 @@ export default function BugReportDialog({
               onClick={() => !isSubmitting && setType('bug')}
               className={`p-3 rounded-lg border transition-colors text-left ${
                 type === 'bug'
-                  ? 'border-brand-200 bg-brand-50 text-brand-600'
-                  : 'border-slate-200 hover:bg-slate-50 text-black'
+                  ? 'border-slate-300 bg-slate-100'
+                  : 'border-slate-200 hover:bg-slate-50'
               } ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
             >
               <div className='flex items-center gap-2 mb-1'>
                 <Bug
-                  className={`w-4 h-4 ${type === 'bug' ? 'text-brand-600' : 'text-slate-500'}`}
+                  className={`w-4 h-4 ${type === 'bug' ? 'text-slate-600' : 'text-slate-500'}`}
                 />
                 <span
-                  className={`font-medium text-sm ${type === 'bug' ? 'text-brand-600' : 'text-black'}`}
+                  className={`font-medium text-sm ${type === 'bug' ? 'text-slate-600' : ''}`}
                 >
                   Bug Report
                 </span>
               </div>
               <p
-                className={`text-sm ${type === 'bug' ? 'text-brand-600' : 'text-slate-500'}`}
+                className={`text-sm ${type === 'bug' ? 'text-slate-600' : 'text-slate-500'}`}
               >
                 Something isn't working
               </p>
@@ -129,22 +122,22 @@ export default function BugReportDialog({
               onClick={() => !isSubmitting && setType('suggestion')}
               className={`p-3 rounded-lg border transition-colors text-left ${
                 type === 'suggestion'
-                  ? 'border-brand-200 bg-brand-50 text-brand-600'
-                  : 'border-slate-200 hover:bg-slate-50 text-black'
+                  ? 'border-slate-300 bg-slate-100'
+                  : 'border-slate-200 hover:bg-slate-50'
               } ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
             >
               <div className='flex items-center gap-2 mb-1'>
                 <Lightbulb
-                  className={`w-4 h-4 ${type === 'suggestion' ? 'text-brand-600' : 'text-slate-500'}`}
+                  className={`w-4 h-4 ${type === 'suggestion' ? 'text-slate-600' : 'text-slate-500'}`}
                 />
                 <span
-                  className={`font-medium text-sm ${type === 'suggestion' ? 'text-brand-600' : 'text-black'}`}
+                  className={`font-medium text-sm ${type === 'suggestion' ? 'text-slate-600' : ''}`}
                 >
                   Suggestion
                 </span>
               </div>
               <p
-                className={`text-sm ${type === 'suggestion' ? 'text-brand-600' : 'text-slate-500'}`}
+                className={`text-sm ${type === 'suggestion' ? 'text-slate-600' : 'text-slate-500'}`}
               >
                 Idea for improvement
               </p>
@@ -155,7 +148,7 @@ export default function BugReportDialog({
         <div>
           <label
             htmlFor='submission-title'
-            className='block text-sm font-medium text-black mb-2'
+            className='block text-sm font-medium mb-2'
           >
             {type === 'bug' ? "What's the issue?" : "What's your idea?"}
           </label>
@@ -169,7 +162,7 @@ export default function BugReportDialog({
                 ? 'Brief description of the bug'
                 : 'Brief description of your suggestion'
             }
-            className={`w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-1 focus:ring-brand-200 focus:border-brand-300 outline-none transition-colors bg-white hover:border-slate-300 ${
+            className={`w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-1 focus:ring-slate-200 focus:border-slate-300 outline-none transition-colors bg-white hover:border-slate-300 ${
               isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
             }`}
             required
@@ -179,7 +172,7 @@ export default function BugReportDialog({
         <div>
           <label
             htmlFor='submission-description'
-            className='block text-sm font-medium text-black mb-2'
+            className='block text-sm font-medium mb-2'
           >
             Tell us more
           </label>
@@ -193,7 +186,7 @@ export default function BugReportDialog({
                 : 'Describe your suggestion in detail. How would this improve the user experience?'
             }
             rows={4}
-            className={`w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-1 focus:ring-brand-200 focus:border-brand-300 outline-none transition-colors resize-none bg-white hover:border-slate-300 ${
+            className={`w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-1 focus:ring-slate-200 focus:border-slate-300 outline-none transition-colors resize-none bg-white hover:border-slate-300 ${
               isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
             }`}
             required
@@ -205,7 +198,7 @@ export default function BugReportDialog({
           <button
             type='button'
             onClick={() => !isSubmitting && handleClose()}
-            className={`flex-1 px-4 py-2.5 text-black bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors font-medium ${
+            className={`flex-1 px-4 py-2.5 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors font-medium ${
               isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
             }`}
           >
