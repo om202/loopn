@@ -201,8 +201,8 @@ export default function UserCard({
         </div>
 
         <div className='flex-1 min-w-0'>
-          <div className='flex items-center gap-2 mb-0.5'>
-            <div className='text-black truncate no-email-detection font-medium'>
+          <div className='flex items-center gap-2 mb-1'>
+            <div className='text-black text-base truncate no-email-detection font-medium'>
               {getDisplayName(userPresence, userProfile)}
             </div>
             {/* All connections are now permanent - no trial indicators needed */}
@@ -210,7 +210,7 @@ export default function UserCard({
 
           {/* Profession */}
           {(finalFullProfile?.jobRole || finalFullProfile?.companyName) && (
-            <div className='text-sm text-slate-500 truncate'>
+            <div className='text-sm text-slate-500 font-medium truncate'>
               {finalFullProfile?.jobRole && finalFullProfile?.companyName
                 ? `${finalFullProfile.jobRole} at ${finalFullProfile.companyName}`
                 : finalFullProfile?.jobRole || finalFullProfile?.companyName}
@@ -224,7 +224,7 @@ export default function UserCard({
             <button
               onClick={handleToggleSave}
               disabled={isSaveLoading}
-              className={`p-2 rounded-lg transition-colors flex-shrink-0 text-slate-600 hover:bg-slate-50 ${
+              className={`p-2 rounded-lg transition-colors flex-shrink-0 text-slate-500 hover:bg-slate-50 ${
                 isSaveLoading ? 'opacity-50 cursor-not-allowed' : ''
               }`}
               title={isSaved ? 'Remove from saved' : 'Save'}

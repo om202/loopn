@@ -547,7 +547,7 @@ export default function OnboardingPage() {
           {/* Resume Upload Section */}
           {showResumeUpload && currentStep === 1 && (
             <div className='mb-8 text-center'>
-              <p className='text-slate-600 mb-4'>
+              <p className='text-slate-700 mb-4'>
                 Upload your resume, and we'll autofill the form for you.
               </p>
 
@@ -588,7 +588,7 @@ export default function OnboardingPage() {
               </p>
               <button
                 onClick={showResumeUploadAgain}
-                className='border border-slate-300 text-slate-600 hover:bg-slate-50 px-4 py-2 rounded-xl text-sm font-medium transition-colors'
+                className='border border-slate-300 text-slate-700 hover:bg-slate-50 px-4 py-2 rounded-xl text-sm font-medium transition-colors'
               >
                 Upload different resume
               </button>
@@ -1693,7 +1693,7 @@ export default function OnboardingPage() {
                 </svg>
                 {/* Step number in center */}
                 <div className='absolute inset-0 flex items-center justify-center'>
-                  <span className='text-xs font-semibold text-slate-600'>
+                  <span className='text-xs font-semibold text-slate-700'>
                     {currentStep}/{totalSteps}
                   </span>
                 </div>

@@ -102,16 +102,16 @@ export default function BugReportDialog({
             >
               <div className='flex items-center gap-2 mb-1'>
                 <Bug
-                  className={`w-4 h-4 ${type === 'bug' ? 'text-slate-600' : 'text-slate-500'}`}
+                  className={`w-4 h-4 ${type === 'bug' ? 'text-slate-700' : 'text-slate-500'}`}
                 />
                 <span
-                  className={`font-medium text-sm ${type === 'bug' ? 'text-slate-600' : ''}`}
+                  className={`font-medium text-sm ${type === 'bug' ? 'text-slate-700' : ''}`}
                 >
                   Bug Report
                 </span>
               </div>
               <p
-                className={`text-sm ${type === 'bug' ? 'text-slate-600' : 'text-slate-500'}`}
+                className={`text-sm ${type === 'bug' ? 'text-slate-700' : 'text-slate-500'}`}
               >
                 Something isn't working
               </p>
@@ -128,16 +128,16 @@ export default function BugReportDialog({
             >
               <div className='flex items-center gap-2 mb-1'>
                 <Lightbulb
-                  className={`w-4 h-4 ${type === 'suggestion' ? 'text-slate-600' : 'text-slate-500'}`}
+                  className={`w-4 h-4 ${type === 'suggestion' ? 'text-slate-700' : 'text-slate-500'}`}
                 />
                 <span
-                  className={`font-medium text-sm ${type === 'suggestion' ? 'text-slate-600' : ''}`}
+                  className={`font-medium text-sm ${type === 'suggestion' ? 'text-slate-700' : ''}`}
                 >
                   Suggestion
                 </span>
               </div>
               <p
-                className={`text-sm ${type === 'suggestion' ? 'text-slate-600' : 'text-slate-500'}`}
+                className={`text-sm ${type === 'suggestion' ? 'text-slate-700' : 'text-slate-500'}`}
               >
                 Idea for improvement
               </p>

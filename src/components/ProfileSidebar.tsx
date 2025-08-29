@@ -600,7 +600,7 @@ export default function ProfileSidebar({
                             {getUserDisplayName()}
                           </h1>
                           {userProfile?.jobRole && (
-                            <p className='text-base text-slate-600 mb-1'>
+                            <p className='text-base text-slate-700 mb-1'>
                               {userProfile.jobRole}
                               {userProfile.companyName && (
                                 <span className='text-slate-500'>
