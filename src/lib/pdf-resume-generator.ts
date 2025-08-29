@@ -12,9 +12,18 @@ export class ResumePDFGenerator {
   private pdf: jsPDF;
   private pageWidth: number;
   private pageHeight: number;
-  private margin: number = 20;
-  private currentY: number = 20;
-  private lineHeight: number = 6;
+  private margin: number = 15;
+  private currentY: number = 15;
+  private lineHeight: number = 5;
+
+  // Standard resume colors (hierarchical grays)
+  private colors = {
+    primary: [0, 0, 0] as [number, number, number], // Black for main content
+    secondary: [60, 60, 60] as [number, number, number], // Dark gray for job titles, degrees
+    tertiary: [100, 100, 100] as [number, number, number], // Medium gray for companies, dates
+    quaternary: [130, 130, 130] as [number, number, number], // Light gray for supporting info
+    divider: [180, 180, 180] as [number, number, number], // Very light gray for lines
+  };
 
   constructor() {
     this.pdf = new jsPDF('p', 'mm', 'a4');
@@ -23,16 +32,18 @@ export class ResumePDFGenerator {
   }
 
   private addHeader(name: string, userProfile: UserProfile): void {
+    // Name - largest, bold, black
     this.pdf.setFont('helvetica', 'bold');
-    this.pdf.setFontSize(24);
+    this.pdf.setFontSize(18);
+    this.pdf.setTextColor(...this.colors.primary);
     this.pdf.text(name, this.margin, this.currentY);
-    this.currentY += 12;
+    this.currentY += 8;
 
-    // Job title and company
+    // Job title and company - 14pt, dark gray
     if (userProfile.jobRole || userProfile.companyName) {
       this.pdf.setFont('helvetica', 'normal');
-      this.pdf.setFontSize(14);
-      this.pdf.setTextColor(60, 60, 60);
+      this.pdf.setFontSize(12);
+      this.pdf.setTextColor(...this.colors.secondary);
 
       let jobLine = '';
       if (userProfile.jobRole) jobLine += userProfile.jobRole;
@@ -43,12 +54,12 @@ export class ResumePDFGenerator {
       }
 
       this.pdf.text(jobLine, this.margin, this.currentY);
-      this.currentY += 8;
+      this.currentY += 6;
     }
 
-    // Contact information
+    // Contact information - 10pt, light gray
     this.pdf.setFontSize(10);
-    this.pdf.setTextColor(100, 100, 100);
+    this.pdf.setTextColor(...this.colors.quaternary);
     const contactInfo = [];
 
     if (userProfile.email) contactInfo.push(userProfile.email);
@@ -62,46 +73,38 @@ export class ResumePDFGenerator {
 
     if (contactInfo.length > 0) {
       this.pdf.text(contactInfo.join(' • '), this.margin, this.currentY);
-      this.currentY += 6;
+      this.currentY += 4;
     }
 
-    // Professional links
+    // Professional links - 10pt, light gray
     const linksInfo = [];
     if (userProfile.linkedinUrl)
-      linksInfo.push(`LinkedIn: ${userProfile.linkedinUrl}`);
+      linksInfo.push(userProfile.linkedinUrl.replace('https://', ''));
     if (userProfile.githubUrl)
-      linksInfo.push(`GitHub: ${userProfile.githubUrl}`);
+      linksInfo.push(userProfile.githubUrl.replace('https://', ''));
     if (userProfile.portfolioUrl)
-      linksInfo.push(`Portfolio: ${userProfile.portfolioUrl}`);
+      linksInfo.push(userProfile.portfolioUrl.replace('https://', ''));
 
     if (linksInfo.length > 0) {
       this.pdf.text(linksInfo.join(' • '), this.margin, this.currentY);
-      this.currentY += 6;
+      this.currentY += 4;
     }
 
-    this.currentY += 8;
-    this.addHorizontalLine();
-  }
-
-  private addHorizontalLine(): void {
-    this.pdf.setDrawColor(200, 200, 200);
-    this.pdf.line(
-      this.margin,
-      this.currentY - 2,
-      this.pageWidth - this.margin,
-      this.currentY - 2
-    );
-    this.currentY += 6;
+    this.currentY += 10;
   }
 
   private addSectionTitle(title: string): void {
     this.checkPageBreak(15);
+    // Add extra space before section titles (except for the first section)
+    if (this.currentY > 40) {
+      this.currentY += 8;
+    }
+
     this.pdf.setFont('helvetica', 'bold');
-    this.pdf.setFontSize(16);
-    this.pdf.setTextColor(0, 0, 0);
+    this.pdf.setFontSize(14);
+    this.pdf.setTextColor(...this.colors.primary);
     this.pdf.text(title.toUpperCase(), this.margin, this.currentY);
-    this.currentY += 8;
-    this.addHorizontalLine();
+    this.currentY += 10;
   }
 
   private checkPageBreak(spaceNeeded: number): void {
@@ -117,8 +120,8 @@ export class ResumePDFGenerator {
     this.addSectionTitle('Professional Summary');
 
     this.pdf.setFont('helvetica', 'normal');
-    this.pdf.setFontSize(11);
-    this.pdf.setTextColor(60, 60, 60);
+    this.pdf.setFontSize(12);
+    this.pdf.setTextColor(...this.colors.primary);
 
     const splitText = this.pdf.splitTextToSize(
       userProfile.about,
@@ -142,16 +145,20 @@ export class ResumePDFGenerator {
     this.addSectionTitle('Work Experience');
 
     workExperience.forEach((job, index) => {
-      this.checkPageBreak(20);
+      this.checkPageBreak(15);
 
-      // Job title and dates
+      // Job title - 14pt, dark gray, bold
       this.pdf.setFont('helvetica', 'bold');
       this.pdf.setFontSize(12);
-      this.pdf.setTextColor(0, 0, 0);
+      this.pdf.setTextColor(...this.colors.secondary);
       this.pdf.text(job.position || 'Position', this.margin, this.currentY);
 
+      // Dates - 10pt, light gray, right aligned
       if (job.startDate || job.endDate) {
         const dates = `${job.startDate || ''} - ${job.endDate || 'Present'}`;
+        this.pdf.setFont('helvetica', 'normal');
+        this.pdf.setFontSize(10);
+        this.pdf.setTextColor(...this.colors.quaternary);
         const dateWidth = this.pdf.getTextWidth(dates);
         this.pdf.text(
           dates,
@@ -160,22 +167,22 @@ export class ResumePDFGenerator {
         );
       }
 
-      this.currentY += 6;
+      this.currentY += 5;
 
-      // Company name
+      // Company name - 10pt, medium gray
       if (job.company) {
         this.pdf.setFont('helvetica', 'normal');
-        this.pdf.setFontSize(11);
-        this.pdf.setTextColor(80, 80, 80);
+        this.pdf.setFontSize(10);
+        this.pdf.setTextColor(...this.colors.tertiary);
         this.pdf.text(job.company, this.margin, this.currentY);
-        this.currentY += 6;
+        this.currentY += 5;
       }
 
-      // Job description
+      // Job description - 12pt, black
       if (job.description) {
         this.pdf.setFont('helvetica', 'normal');
-        this.pdf.setFontSize(10);
-        this.pdf.setTextColor(60, 60, 60);
+        this.pdf.setFontSize(12);
+        this.pdf.setTextColor(...this.colors.primary);
 
         const splitText = this.pdf.splitTextToSize(
           job.description,
@@ -184,15 +191,15 @@ export class ResumePDFGenerator {
         this.checkPageBreak(splitText.length * this.lineHeight);
 
         this.pdf.text(splitText, this.margin, this.currentY);
-        this.currentY += splitText.length * this.lineHeight;
+        this.currentY += splitText.length * this.lineHeight + 2;
       }
 
       if (index < workExperience.length - 1) {
-        this.currentY += 6;
+        this.currentY += 8;
       }
     });
 
-    this.currentY += 8;
+    this.currentY += 0;
   }
 
   private addEducation(userProfile: UserProfile): void {
@@ -202,10 +209,10 @@ export class ResumePDFGenerator {
       if (userProfile.education) {
         this.addSectionTitle('Education');
         this.pdf.setFont('helvetica', 'normal');
-        this.pdf.setFontSize(11);
-        this.pdf.setTextColor(60, 60, 60);
+        this.pdf.setFontSize(12);
+        this.pdf.setTextColor(...this.colors.primary);
         this.pdf.text(userProfile.education, this.margin, this.currentY);
-        this.currentY += 8;
+        this.currentY += 6;
       }
       return;
     }
@@ -213,16 +220,20 @@ export class ResumePDFGenerator {
     this.addSectionTitle('Education');
 
     education.forEach((edu, index) => {
-      this.checkPageBreak(15);
+      this.checkPageBreak(12);
 
-      // Degree and dates
+      // Degree - 12pt, dark gray, bold
       this.pdf.setFont('helvetica', 'bold');
       this.pdf.setFontSize(12);
-      this.pdf.setTextColor(0, 0, 0);
+      this.pdf.setTextColor(...this.colors.secondary);
       this.pdf.text(edu.degree || 'Degree', this.margin, this.currentY);
 
+      // Dates - 10pt, light gray, right aligned
       if (edu.startYear || edu.endYear) {
         const dates = `${edu.startYear || ''} - ${edu.endYear || ''}`;
+        this.pdf.setFont('helvetica', 'normal');
+        this.pdf.setFontSize(10);
+        this.pdf.setTextColor(...this.colors.quaternary);
         const dateWidth = this.pdf.getTextWidth(dates);
         this.pdf.text(
           dates,
@@ -231,32 +242,32 @@ export class ResumePDFGenerator {
         );
       }
 
-      this.currentY += 6;
+      this.currentY += 4;
 
-      // Field of study
+      // Field of study - 10pt, medium gray
       if (edu.field) {
         this.pdf.setFont('helvetica', 'normal');
-        this.pdf.setFontSize(11);
-        this.pdf.setTextColor(80, 80, 80);
+        this.pdf.setFontSize(10);
+        this.pdf.setTextColor(...this.colors.tertiary);
         this.pdf.text(edu.field, this.margin, this.currentY);
-        this.currentY += 6;
+        this.currentY += 4;
       }
 
-      // Institution
+      // Institution - 10pt, light gray
       if (edu.institution) {
         this.pdf.setFont('helvetica', 'normal');
         this.pdf.setFontSize(10);
-        this.pdf.setTextColor(60, 60, 60);
+        this.pdf.setTextColor(...this.colors.quaternary);
         this.pdf.text(edu.institution, this.margin, this.currentY);
-        this.currentY += 6;
+        this.currentY += 4;
       }
 
       if (index < education.length - 1) {
-        this.currentY += 4;
+        this.currentY += 6;
       }
     });
 
-    this.currentY += 8;
+    this.currentY += 0;
   }
 
   private addSkills(userProfile: UserProfile): void {
@@ -270,8 +281,8 @@ export class ResumePDFGenerator {
     this.addSectionTitle('Skills');
 
     this.pdf.setFont('helvetica', 'normal');
-    this.pdf.setFontSize(11);
-    this.pdf.setTextColor(60, 60, 60);
+    this.pdf.setFontSize(12);
+    this.pdf.setTextColor(...this.colors.primary);
 
     const skillsText = userProfile.skills.join(' • ');
     const splitText = this.pdf.splitTextToSize(
@@ -291,33 +302,33 @@ export class ResumePDFGenerator {
     this.addSectionTitle('Projects');
 
     projects.forEach((project, index) => {
-      this.checkPageBreak(15);
+      this.checkPageBreak(12);
 
-      // Project title
+      // Project title - 12pt, dark gray, bold
       this.pdf.setFont('helvetica', 'bold');
       this.pdf.setFontSize(12);
-      this.pdf.setTextColor(0, 0, 0);
+      this.pdf.setTextColor(...this.colors.secondary);
       this.pdf.text(project.title || 'Project', this.margin, this.currentY);
-      this.currentY += 6;
+      this.currentY += 4;
 
-      // Technologies
+      // Technologies - 10pt, light gray
       if (project.technologies) {
         this.pdf.setFont('helvetica', 'normal');
         this.pdf.setFontSize(10);
-        this.pdf.setTextColor(100, 100, 100);
+        this.pdf.setTextColor(...this.colors.quaternary);
         this.pdf.text(
           `Technologies: ${project.technologies}`,
           this.margin,
           this.currentY
         );
-        this.currentY += 5;
+        this.currentY += 4;
       }
 
-      // Description
+      // Description - 12pt, black
       if (project.description) {
         this.pdf.setFont('helvetica', 'normal');
-        this.pdf.setFontSize(10);
-        this.pdf.setTextColor(60, 60, 60);
+        this.pdf.setFontSize(12);
+        this.pdf.setTextColor(...this.colors.primary);
 
         const splitText = this.pdf.splitTextToSize(
           project.description,
@@ -326,7 +337,7 @@ export class ResumePDFGenerator {
         this.checkPageBreak(splitText.length * this.lineHeight);
 
         this.pdf.text(splitText, this.margin, this.currentY);
-        this.currentY += splitText.length * this.lineHeight;
+        this.currentY += splitText.length * this.lineHeight + 2;
       }
 
       if (index < projects.length - 1) {
@@ -334,7 +345,7 @@ export class ResumePDFGenerator {
       }
     });
 
-    this.currentY += 8;
+    this.currentY += 0;
   }
 
   private addCertifications(userProfile: UserProfile): void {
@@ -349,15 +360,19 @@ export class ResumePDFGenerator {
     this.addSectionTitle('Certifications');
 
     certifications.forEach((cert, index) => {
-      this.checkPageBreak(10);
+      this.checkPageBreak(8);
 
-      // Certification name and date
+      // Certification name - 12pt, dark gray, bold
       this.pdf.setFont('helvetica', 'bold');
-      this.pdf.setFontSize(11);
-      this.pdf.setTextColor(0, 0, 0);
+      this.pdf.setFontSize(12);
+      this.pdf.setTextColor(...this.colors.secondary);
       this.pdf.text(cert.name || 'Certification', this.margin, this.currentY);
 
+      // Date - 10pt, light gray, right aligned
       if (cert.date) {
+        this.pdf.setFont('helvetica', 'normal');
+        this.pdf.setFontSize(10);
+        this.pdf.setTextColor(...this.colors.quaternary);
         const dateWidth = this.pdf.getTextWidth(cert.date);
         this.pdf.text(
           cert.date,
@@ -366,23 +381,23 @@ export class ResumePDFGenerator {
         );
       }
 
-      this.currentY += 5;
+      this.currentY += 4;
 
-      // Issuer
+      // Issuer - 10pt, medium gray
       if (cert.issuer) {
         this.pdf.setFont('helvetica', 'normal');
         this.pdf.setFontSize(10);
-        this.pdf.setTextColor(60, 60, 60);
+        this.pdf.setTextColor(...this.colors.tertiary);
         this.pdf.text(cert.issuer, this.margin, this.currentY);
-        this.currentY += 5;
+        this.currentY += 4;
       }
 
       if (index < certifications.length - 1) {
-        this.currentY += 3;
+        this.currentY += 5;
       }
     });
 
-    this.currentY += 8;
+    this.currentY += 0;
   }
 
   private addLanguages(userProfile: UserProfile): void {
@@ -393,8 +408,8 @@ export class ResumePDFGenerator {
     this.addSectionTitle('Languages');
 
     this.pdf.setFont('helvetica', 'normal');
-    this.pdf.setFontSize(11);
-    this.pdf.setTextColor(60, 60, 60);
+    this.pdf.setFontSize(12);
+    this.pdf.setTextColor(...this.colors.primary);
 
     languages.forEach((lang, index) => {
       const langText = `${lang.language}${lang.proficiency ? ` (${lang.proficiency})` : ''}`;
@@ -405,7 +420,7 @@ export class ResumePDFGenerator {
       }
     });
 
-    this.currentY += 8;
+    this.currentY += 0;
   }
 
   public generateResume(data: ResumeData): void {
