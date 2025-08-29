@@ -68,7 +68,7 @@ export default function OnlineUsers({
     Set<string>
   >(new Set());
   const { user } = useAuthenticator();
-  
+
   // Use centralized user profile hook instead of manual fetching
   const { profile: currentUserProfile } = useUserProfile(user?.userId || '');
   const { handleSignOut } = useAuth();
@@ -168,7 +168,6 @@ export default function OnlineUsers({
       })
       .filter(savedUser => savedUser.userId !== user?.userId);
   }, [savedUserEntries, allUsers, user?.userId]);
-
 
   const [hasInitialLoad, setHasInitialLoad] = useState(false);
   const initialLoading = onlineUsersLoading && !hasInitialLoad;

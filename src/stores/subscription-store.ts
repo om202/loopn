@@ -150,659 +150,663 @@ export const useSubscriptionStore = create<SubscriptionState>()(
         activeSubscriptions: new Map(),
         onlineUsers: [],
         userProfiles: new Map(),
-      incomingChatRequests: [],
-      sentChatRequests: [],
-      conversations: new Map(),
-      notifications: [],
-      messages: new Map(),
-      reactions: new Map(),
-      connectionRequests: new Map(),
+        incomingChatRequests: [],
+        sentChatRequests: [],
+        conversations: new Map(),
+        notifications: [],
+        messages: new Map(),
+        reactions: new Map(),
+        connectionRequests: new Map(),
 
-      loading: {
-        onlineUsers: false,
-        incomingChatRequests: false,
-        sentChatRequests: false,
-        conversations: false,
-        notifications: false,
-      },
+        loading: {
+          onlineUsers: false,
+          incomingChatRequests: false,
+          sentChatRequests: false,
+          conversations: false,
+          notifications: false,
+        },
 
-      errors: {
-        onlineUsers: null,
-        incomingChatRequests: null,
-        sentChatRequests: null,
-        conversations: null,
-        notifications: null,
-      },
+        errors: {
+          onlineUsers: null,
+          incomingChatRequests: null,
+          sentChatRequests: null,
+          conversations: null,
+          notifications: null,
+        },
 
-      // Subscription management with reference counting
-      subscribe: (
-        key: string,
-        config: SubscriptionConfig,
-        callback: (data: unknown) => void
-      ) => {
-        const state = get();
-        const existing = state.activeSubscriptions.get(key);
+        // Subscription management with reference counting
+        subscribe: (
+          key: string,
+          config: SubscriptionConfig,
+          callback: (data: unknown) => void
+        ) => {
+          const state = get();
+          const existing = state.activeSubscriptions.get(key);
 
-        if (existing) {
-          // Increment reference count and add callback
-          existing.refCount++;
-          existing.callbacks.add(callback);
+          if (existing) {
+            // Increment reference count and add callback
+            existing.refCount++;
+            existing.callbacks.add(callback);
+
+            console.log(
+              `[SubscriptionStore] Reusing subscription ${key}, refCount: ${existing.refCount}`
+            );
+
+            // Return unsubscribe function
+            return () => {
+              get().unsubscribe(key, callback);
+            };
+          }
+
+          try {
+            // Create new subscription
+            const observable = config.query();
+            const subscription = observable.subscribe({
+              next: (data: unknown) => {
+                const currentEntry = get().activeSubscriptions.get(key);
+                if (currentEntry) {
+                  // Notify all callbacks
+                  currentEntry.callbacks.forEach(cb => {
+                    try {
+                      cb(data);
+                    } catch (error) {
+                      console.error(
+                        `[SubscriptionStore] Callback error for ${key}:`,
+                        error
+                      );
+                    }
+                  });
+                }
+              },
+              error: (error: Error) => {
+                console.error(
+                  `[SubscriptionStore] Subscription error for ${key}:`,
+                  error
+                );
+                // Clean up failed subscription
+                get().cleanup();
+              },
+            });
+
+            // Create subscription entry
+            const entry: SubscriptionEntry = {
+              subscription,
+              config,
+              refCount: 1,
+              callbacks: new Set([callback]),
+            };
+
+            // Update store
+            set(state => ({
+              activeSubscriptions: new Map(state.activeSubscriptions).set(
+                key,
+                entry
+              ),
+            }));
+
+            console.log(`[SubscriptionStore] Created subscription ${key}`);
+
+            // Return unsubscribe function
+            return () => {
+              get().unsubscribe(key, callback);
+            };
+          } catch (error) {
+            console.error(
+              `[SubscriptionStore] Failed to create subscription ${key}:`,
+              error
+            );
+            return () => {}; // Return no-op function
+          }
+        },
+
+        unsubscribe: (key: string, callback: (data: unknown) => void) => {
+          const state = get();
+          const entry = state.activeSubscriptions.get(key);
+
+          if (!entry) return;
+
+          // Remove callback and decrement reference count
+          entry.callbacks.delete(callback);
+          entry.refCount--;
 
           console.log(
-            `[SubscriptionStore] Reusing subscription ${key}, refCount: ${existing.refCount}`
+            `[SubscriptionStore] Unsubscribing from ${key}, refCount: ${entry.refCount}`
           );
 
-          // Return unsubscribe function
-          return () => {
-            get().unsubscribe(key, callback);
-          };
-        }
-
-        try {
-          // Create new subscription
-          const observable = config.query();
-          const subscription = observable.subscribe({
-            next: (data: unknown) => {
-              const currentEntry = get().activeSubscriptions.get(key);
-              if (currentEntry) {
-                // Notify all callbacks
-                currentEntry.callbacks.forEach(cb => {
-                  try {
-                    cb(data);
-                  } catch (error) {
-                    console.error(
-                      `[SubscriptionStore] Callback error for ${key}:`,
-                      error
-                    );
-                  }
-                });
-              }
-            },
-            error: (error: Error) => {
+          if (entry.refCount <= 0) {
+            // No more references, clean up subscription
+            try {
+              entry.subscription.unsubscribe();
+            } catch (error) {
               console.error(
-                `[SubscriptionStore] Subscription error for ${key}:`,
+                `[SubscriptionStore] Error unsubscribing ${key}:`,
                 error
               );
-              // Clean up failed subscription
-              get().cleanup();
-            },
+            }
+
+            // Remove from store
+            const newSubscriptions = new Map(state.activeSubscriptions);
+            newSubscriptions.delete(key);
+
+            set({ activeSubscriptions: newSubscriptions });
+
+            console.log(`[SubscriptionStore] Cleaned up subscription ${key}`);
+          }
+        },
+
+        cleanup: () => {
+          const state = get();
+
+          // Unsubscribe from all active subscriptions
+          state.activeSubscriptions.forEach((entry, key) => {
+            try {
+              entry.subscription.unsubscribe();
+            } catch (error) {
+              console.error(
+                `[SubscriptionStore] Error cleaning up ${key}:`,
+                error
+              );
+            }
           });
 
-          // Create subscription entry
-          const entry: SubscriptionEntry = {
-            subscription,
-            config,
-            refCount: 1,
-            callbacks: new Set([callback]),
-          };
+          // Clear all subscriptions
+          set({ activeSubscriptions: new Map() });
 
-          // Update store
+          console.log('[SubscriptionStore] Cleaned up all subscriptions');
+        },
+
+        // Data setters
+        setOnlineUsers: (users: UserPresence[]) => {
+          set({ onlineUsers: users });
+        },
+
+        setOnlineUsersLoading: (loading: boolean) => {
           set(state => ({
-            activeSubscriptions: new Map(state.activeSubscriptions).set(
-              key,
-              entry
-            ),
+            loading: { ...state.loading, onlineUsers: loading },
           }));
+        },
 
-          console.log(`[SubscriptionStore] Created subscription ${key}`);
+        setOnlineUsersError: (error: string | null) => {
+          set(state => ({
+            errors: { ...state.errors, onlineUsers: error },
+          }));
+        },
 
-          // Return unsubscribe function
-          return () => {
-            get().unsubscribe(key, callback);
-          };
-        } catch (error) {
-          console.error(
-            `[SubscriptionStore] Failed to create subscription ${key}:`,
-            error
-          );
-          return () => {}; // Return no-op function
-        }
-      },
+        // Chat request setters
+        setIncomingChatRequests: (requests: ChatRequest[]) => {
+          set({ incomingChatRequests: requests });
+        },
 
-      unsubscribe: (key: string, callback: (data: unknown) => void) => {
-        const state = get();
-        const entry = state.activeSubscriptions.get(key);
+        setIncomingChatRequestsLoading: (loading: boolean) => {
+          set(state => ({
+            loading: { ...state.loading, incomingChatRequests: loading },
+          }));
+        },
 
-        if (!entry) return;
+        setIncomingChatRequestsError: (error: string | null) => {
+          set(state => ({
+            errors: { ...state.errors, incomingChatRequests: error },
+          }));
+        },
 
-        // Remove callback and decrement reference count
-        entry.callbacks.delete(callback);
-        entry.refCount--;
+        setSentChatRequests: (requests: ChatRequest[]) => {
+          set({ sentChatRequests: requests });
+        },
 
-        console.log(
-          `[SubscriptionStore] Unsubscribing from ${key}, refCount: ${entry.refCount}`
-        );
+        setSentChatRequestsLoading: (loading: boolean) => {
+          set(state => ({
+            loading: { ...state.loading, sentChatRequests: loading },
+          }));
+        },
 
-        if (entry.refCount <= 0) {
-          // No more references, clean up subscription
+        setSentChatRequestsError: (error: string | null) => {
+          set(state => ({
+            errors: { ...state.errors, sentChatRequests: error },
+          }));
+        },
+
+        // Notification setters
+        setNotifications: (notifications: Notification[]) => {
+          set({ notifications });
+        },
+
+        setNotificationsLoading: (loading: boolean) => {
+          set(state => ({
+            loading: { ...state.loading, notifications: loading },
+          }));
+        },
+
+        setNotificationsError: (error: string | null) => {
+          set(state => ({
+            errors: { ...state.errors, notifications: error },
+          }));
+        },
+
+        // User profile methods
+        getUserProfile: (userId: string) => {
+          const state = get();
+          return state.userProfiles.get(userId) || null;
+        },
+
+        setUserProfile: (userId: string, profile: UserProfile) => {
+          set(state => ({
+            userProfiles: new Map(state.userProfiles).set(userId, profile),
+          }));
+        },
+
+        fetchUserProfile: async (userId: string) => {
+          const state = get();
+
+          // Return cached profile if available
+          const cached = state.userProfiles.get(userId);
+          if (cached) {
+            return cached;
+          }
+
           try {
-            entry.subscription.unsubscribe();
+            // Import here to avoid circular dependencies
+            const { UserProfileService } = await import(
+              '../services/user-profile.service'
+            );
+
+            const result = await new UserProfileService().getUserProfile(
+              userId
+            );
+            if (result.data) {
+              // Cache the profile
+              get().setUserProfile(userId, result.data);
+              return result.data;
+            }
+            return null;
           } catch (error) {
             console.error(
-              `[SubscriptionStore] Error unsubscribing ${key}:`,
+              `[SubscriptionStore] Error fetching profile for ${userId}:`,
               error
             );
+            return null;
           }
+        },
 
-          // Remove from store
-          const newSubscriptions = new Map(state.activeSubscriptions);
-          newSubscriptions.delete(key);
+        updateConversations: (conversations: Conversation[]) => {
+          const conversationMap = new Map<string, Conversation>();
+          conversations.forEach(conv => {
+            conversationMap.set(conv.id, conv);
+          });
+          set({ conversations: conversationMap });
+        },
 
-          set({ activeSubscriptions: newSubscriptions });
+        setConversationsLoading: (loading: boolean) => {
+          set(state => ({
+            loading: { ...state.loading, conversations: loading },
+          }));
+        },
 
-          console.log(`[SubscriptionStore] Cleaned up subscription ${key}`);
-        }
-      },
+        setConversationsError: (error: string | null) => {
+          set(state => ({
+            errors: { ...state.errors, conversations: error },
+          }));
+        },
 
-      cleanup: () => {
-        const state = get();
+        updateMessages: (conversationId: string, messages: Message[]) => {
+          set(state => ({
+            messages: new Map(state.messages).set(conversationId, messages),
+          }));
+        },
 
-        // Unsubscribe from all active subscriptions
-        state.activeSubscriptions.forEach((entry, key) => {
-          try {
-            entry.subscription.unsubscribe();
-          } catch (error) {
-            console.error(
-              `[SubscriptionStore] Error cleaning up ${key}:`,
-              error
-            );
-          }
-        });
+        updateReactions: (messageId: string, reactions: MessageReaction[]) => {
+          set(state => ({
+            reactions: new Map(state.reactions).set(messageId, reactions),
+          }));
+        },
 
-        // Clear all subscriptions
-        set({ activeSubscriptions: new Map() });
-
-        console.log('[SubscriptionStore] Cleaned up all subscriptions');
-      },
-
-      // Data setters
-      setOnlineUsers: (users: UserPresence[]) => {
-        set({ onlineUsers: users });
-      },
-
-      setOnlineUsersLoading: (loading: boolean) => {
-        set(state => ({
-          loading: { ...state.loading, onlineUsers: loading },
-        }));
-      },
-
-      setOnlineUsersError: (error: string | null) => {
-        set(state => ({
-          errors: { ...state.errors, onlineUsers: error },
-        }));
-      },
-
-      // Chat request setters
-      setIncomingChatRequests: (requests: ChatRequest[]) => {
-        set({ incomingChatRequests: requests });
-      },
-
-      setIncomingChatRequestsLoading: (loading: boolean) => {
-        set(state => ({
-          loading: { ...state.loading, incomingChatRequests: loading },
-        }));
-      },
-
-      setIncomingChatRequestsError: (error: string | null) => {
-        set(state => ({
-          errors: { ...state.errors, incomingChatRequests: error },
-        }));
-      },
-
-      setSentChatRequests: (requests: ChatRequest[]) => {
-        set({ sentChatRequests: requests });
-      },
-
-      setSentChatRequestsLoading: (loading: boolean) => {
-        set(state => ({
-          loading: { ...state.loading, sentChatRequests: loading },
-        }));
-      },
-
-      setSentChatRequestsError: (error: string | null) => {
-        set(state => ({
-          errors: { ...state.errors, sentChatRequests: error },
-        }));
-      },
-
-      // Notification setters
-      setNotifications: (notifications: Notification[]) => {
-        set({ notifications });
-      },
-
-      setNotificationsLoading: (loading: boolean) => {
-        set(state => ({
-          loading: { ...state.loading, notifications: loading },
-        }));
-      },
-
-      setNotificationsError: (error: string | null) => {
-        set(state => ({
-          errors: { ...state.errors, notifications: error },
-        }));
-      },
-
-      // User profile methods
-      getUserProfile: (userId: string) => {
-        const state = get();
-        return state.userProfiles.get(userId) || null;
-      },
-
-      setUserProfile: (userId: string, profile: UserProfile) => {
-        set(state => ({
-          userProfiles: new Map(state.userProfiles).set(userId, profile),
-        }));
-      },
-
-      fetchUserProfile: async (userId: string) => {
-        const state = get();
-
-        // Return cached profile if available
-        const cached = state.userProfiles.get(userId);
-        if (cached) {
-          return cached;
-        }
-
-        try {
-          // Import here to avoid circular dependencies
-          const { UserProfileService } = await import(
-            '../services/user-profile.service'
-          );
-
-          const result = await new UserProfileService().getUserProfile(userId);
-          if (result.data) {
-            // Cache the profile
-            get().setUserProfile(userId, result.data);
-            return result.data;
-          }
-          return null;
-        } catch (error) {
-          console.error(
-            `[SubscriptionStore] Error fetching profile for ${userId}:`,
-            error
-          );
-          return null;
-        }
-      },
-
-      updateConversations: (conversations: Conversation[]) => {
-        const conversationMap = new Map<string, Conversation>();
-        conversations.forEach(conv => {
-          conversationMap.set(conv.id, conv);
-        });
-        set({ conversations: conversationMap });
-      },
-
-      setConversationsLoading: (loading: boolean) => {
-        set(state => ({
-          loading: { ...state.loading, conversations: loading },
-        }));
-      },
-
-      setConversationsError: (error: string | null) => {
-        set(state => ({
-          errors: { ...state.errors, conversations: error },
-        }));
-      },
-
-      updateMessages: (conversationId: string, messages: Message[]) => {
-        set(state => ({
-          messages: new Map(state.messages).set(conversationId, messages),
-        }));
-      },
-
-      updateReactions: (messageId: string, reactions: MessageReaction[]) => {
-        set(state => ({
-          reactions: new Map(state.reactions).set(messageId, reactions),
-        }));
-      },
-
-      updateConnectionRequests: (
-        conversationId: string,
-        connections: UserConnection[]
-      ) => {
-        set(state => ({
-          connectionRequests: new Map(state.connectionRequests).set(
-            conversationId,
-            connections
-          ),
-        }));
-      },
-
-      getConnectionRequestsForConversation: (conversationId: string) => {
-        const state = get();
-        return state.connectionRequests.get(conversationId) || [];
-      },
-
-      removeConnectionRequest: (
-        conversationId: string,
-        connectionId: string
-      ) => {
-        set(state => {
-          const currentRequests =
-            state.connectionRequests.get(conversationId) || [];
-          const filteredRequests = currentRequests.filter(
-            req => req.id !== connectionId
-          );
-          return {
+        updateConnectionRequests: (
+          conversationId: string,
+          connections: UserConnection[]
+        ) => {
+          set(state => ({
             connectionRequests: new Map(state.connectionRequests).set(
               conversationId,
-              filteredRequests
+              connections
             ),
-          };
-        });
-      },
+          }));
+        },
 
-      updateConversationConnectionStatus: (
-        conversationId: string,
-        isConnected: boolean,
-        chatStatus?: 'ACTIVE' | 'PROBATION' | 'ENDED'
-      ) => {
-        set(state => {
-          const conversation = state.conversations.get(conversationId);
-          if (conversation) {
-            const updatedConversation = {
-              ...conversation,
-              isConnected,
-              ...(chatStatus && { chatStatus }),
-              ...(chatStatus === 'ENDED' && {
-                endedAt: new Date().toISOString(),
-              }),
-            };
+        getConnectionRequestsForConversation: (conversationId: string) => {
+          const state = get();
+          return state.connectionRequests.get(conversationId) || [];
+        },
+
+        removeConnectionRequest: (
+          conversationId: string,
+          connectionId: string
+        ) => {
+          set(state => {
+            const currentRequests =
+              state.connectionRequests.get(conversationId) || [];
+            const filteredRequests = currentRequests.filter(
+              req => req.id !== connectionId
+            );
             return {
-              conversations: new Map(state.conversations).set(
+              connectionRequests: new Map(state.connectionRequests).set(
                 conversationId,
-                updatedConversation
+                filteredRequests
               ),
             };
-          }
-          return state;
-        });
-      },
-
-      // High-level subscription methods
-      subscribeToOnlineUsers: (_userId: string) => {
-        const key = 'online-users';
-        const state = get();
-        const existing = state.activeSubscriptions.get(key);
-
-        const config: SubscriptionConfig = {
-          key,
-          query: () => {
-            return getClient().models.UserPresence.observeQuery({});
-          },
-        };
-
-        const callback = (data: unknown) => {
-          const typedData = data as { items: UserPresence[] };
-          const { items } = typedData;
-          const onlineUsers = items.filter(
-            (user: UserPresence) => user.isOnline === true
-          );
-
-          // Update the store with new online users
-          get().setOnlineUsers(onlineUsers);
-          get().setOnlineUsersLoading(false);
-          get().setOnlineUsersError(null);
-        };
-
-        // Only set loading state if creating a new subscription
-        if (!existing) {
-          get().setOnlineUsersLoading(true);
-          get().setOnlineUsersError(null);
-        }
-
-        return get().subscribe(key, config, callback);
-      },
-
-      subscribeToConnectionsPresence: (connectionUserIds: string[]) => {
-        const key = `connections-presence-${connectionUserIds.sort().join(',')}`;
-        const state = get();
-        const existing = state.activeSubscriptions.get(key);
-
-        if (connectionUserIds.length === 0) {
-          get().setOnlineUsers([]);
-          return () => {};
-        }
-
-        const config: SubscriptionConfig = {
-          key,
-          query: () => {
-            const userIdFilters =
-              connectionUserIds.length === 1
-                ? { userId: { eq: connectionUserIds[0] } }
-                : {
-                    or: connectionUserIds.map(userId => ({
-                      userId: { eq: userId },
-                    })),
-                  };
-
-            return getClient().models.UserPresence.observeQuery({
-              filter: {
-                ...userIdFilters,
-                isOnline: { eq: true },
-              },
-            });
-          },
-        };
-
-        const callback = (data: unknown) => {
-          const typedData = data as { items: UserPresence[] };
-          const { items } = typedData;
-
-          get().setOnlineUsers(items);
-          get().setOnlineUsersLoading(false);
-          get().setOnlineUsersError(null);
-        };
-
-        if (!existing) {
-          get().setOnlineUsersLoading(true);
-          get().setOnlineUsersError(null);
-        }
-
-        return get().subscribe(key, config, callback);
-      },
-
-      subscribeToIncomingChatRequests: (userId: string) => {
-        const key = `incoming-chat-requests-${userId}`;
-        const state = get();
-        const existing = state.activeSubscriptions.get(key);
-
-        const config: SubscriptionConfig = {
-          key,
-          query: () => {
-            return getClient().models.ChatRequest.observeQuery({
-              filter: {
-                receiverId: { eq: userId },
-              },
-            });
-          },
-        };
-
-        const callback = (data: unknown) => {
-          const typedData = data as { items: ChatRequest[] };
-          const { items } = typedData;
-          // Filter for PENDING requests on the client side
-          const pendingRequests = items.filter(
-            (request: ChatRequest) => request.status === 'PENDING'
-          );
-
-          // Update the store with new incoming chat requests
-          get().setIncomingChatRequests(pendingRequests);
-          get().setIncomingChatRequestsLoading(false);
-          get().setIncomingChatRequestsError(null);
-        };
-
-        // Only set loading state if creating a new subscription
-        if (!existing) {
-          get().setIncomingChatRequestsLoading(true);
-          get().setIncomingChatRequestsError(null);
-        }
-
-        return get().subscribe(key, config, callback);
-      },
-
-      subscribeToSentChatRequests: (userId: string) => {
-        const key = `sent-chat-requests-${userId}`;
-        const state = get();
-        const existing = state.activeSubscriptions.get(key);
-
-        const config: SubscriptionConfig = {
-          key,
-          query: () => {
-            return getClient().models.ChatRequest.observeQuery({
-              filter: {
-                requesterId: { eq: userId },
-              },
-            });
-          },
-        };
-
-        const callback = (data: unknown) => {
-          const typedData = data as { items: ChatRequest[] };
-          const { items } = typedData;
-          // Filter for PENDING requests on the client side
-          const pendingRequests = items.filter(
-            (request: ChatRequest) => request.status === 'PENDING'
-          );
-
-          // Update the store with new sent chat requests
-          get().setSentChatRequests(pendingRequests);
-          get().setSentChatRequestsLoading(false);
-          get().setSentChatRequestsError(null);
-        };
-
-        // Only set loading state if creating a new subscription
-        if (!existing) {
-          get().setSentChatRequestsLoading(true);
-          get().setSentChatRequestsError(null);
-        }
-
-        return get().subscribe(key, config, callback);
-      },
-
-      subscribeToNotifications: (userId: string) => {
-        const key = `notifications-${userId}`;
-        const state = get();
-        const existing = state.activeSubscriptions.get(key);
-
-        const config: SubscriptionConfig = {
-          key,
-          query: () => {
-            return getClient().models.Notification.observeQuery({
-              filter: {
-                userId: { eq: userId },
-                // Remove isRead filter to get all notifications, then filter client-side
-              },
-            });
-          },
-        };
-
-        const callback = (data: unknown) => {
-          const typedData = data as { items: Notification[] };
-          const { items } = typedData;
-
-          // Filter for unread notifications only (client-side)
-          const unreadNotifications = items.filter(notif => !notif.isRead);
-
-          // Sort by timestamp descending (newest first)
-          const sortedNotifications = unreadNotifications.sort(
-            (a, b) =>
-              new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-          );
-
-          // Parse JSON data field back to objects
-          const notificationsWithParsedData = sortedNotifications.map(
-            notif => ({
-              ...notif,
-              data: notif.data ? JSON.parse(notif.data as string) : undefined,
-            })
-          );
-
-          // Update the store with new notifications
-          get().setNotifications(notificationsWithParsedData);
-          get().setNotificationsLoading(false);
-          get().setNotificationsError(null);
-        };
-
-        // Only set loading state if creating a new subscription
-        if (!existing) {
-          get().setNotificationsLoading(true);
-          get().setNotificationsError(null);
-        }
-
-        return get().subscribe(key, config, callback);
-      },
-
-      subscribeToConversations: (userId: string) => {
-        const key = `conversations-${userId}`;
-        const state = get();
-        const existing = state.activeSubscriptions.get(key);
-
-        const config: SubscriptionConfig = {
-          key,
-          query: () => {
-            return getClient().models.Conversation.observeQuery({
-              filter: {
-                or: [
-                  { participant1Id: { eq: userId } },
-                  { participant2Id: { eq: userId } },
-                ],
-              },
-            });
-          },
-        };
-
-        const callback = (data: unknown) => {
-          const typedData = data as { items: Conversation[] };
-          const { items } = typedData;
-
-          // Sort conversations by creation date (newest first)
-          const sortedConversations = items.sort((a, b) => {
-            const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
-            const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
-            return dateB - dateA;
           });
+        },
 
-          // Update the store with new conversations
-          get().updateConversations(sortedConversations);
-          get().setConversationsLoading(false);
-          get().setConversationsError(null);
-        };
+        updateConversationConnectionStatus: (
+          conversationId: string,
+          isConnected: boolean,
+          chatStatus?: 'ACTIVE' | 'PROBATION' | 'ENDED'
+        ) => {
+          set(state => {
+            const conversation = state.conversations.get(conversationId);
+            if (conversation) {
+              const updatedConversation = {
+                ...conversation,
+                isConnected,
+                ...(chatStatus && { chatStatus }),
+                ...(chatStatus === 'ENDED' && {
+                  endedAt: new Date().toISOString(),
+                }),
+              };
+              return {
+                conversations: new Map(state.conversations).set(
+                  conversationId,
+                  updatedConversation
+                ),
+              };
+            }
+            return state;
+          });
+        },
 
-        // Only set loading state if creating a new subscription
-        if (!existing) {
-          get().setConversationsLoading(true);
-          get().setConversationsError(null);
-        }
+        // High-level subscription methods
+        subscribeToOnlineUsers: (_userId: string) => {
+          const key = 'online-users';
+          const state = get();
+          const existing = state.activeSubscriptions.get(key);
 
-        return get().subscribe(key, config, callback);
-      },
+          const config: SubscriptionConfig = {
+            key,
+            query: () => {
+              return getClient().models.UserPresence.observeQuery({});
+            },
+          };
 
-      // Debug helpers
-      getStats: () => {
-        const state = get();
-        return {
-          activeSubscriptions: state.activeSubscriptions.size,
-          subscriptionKeys: Array.from(state.activeSubscriptions.keys()),
-          totalCallbacks: Array.from(state.activeSubscriptions.values()).reduce(
-            (total, entry) => total + entry.callbacks.size,
-            0
-          ),
-        };
-      },
-    }),
+          const callback = (data: unknown) => {
+            const typedData = data as { items: UserPresence[] };
+            const { items } = typedData;
+            const onlineUsers = items.filter(
+              (user: UserPresence) => user.isOnline === true
+            );
+
+            // Update the store with new online users
+            get().setOnlineUsers(onlineUsers);
+            get().setOnlineUsersLoading(false);
+            get().setOnlineUsersError(null);
+          };
+
+          // Only set loading state if creating a new subscription
+          if (!existing) {
+            get().setOnlineUsersLoading(true);
+            get().setOnlineUsersError(null);
+          }
+
+          return get().subscribe(key, config, callback);
+        },
+
+        subscribeToConnectionsPresence: (connectionUserIds: string[]) => {
+          const key = `connections-presence-${connectionUserIds.sort().join(',')}`;
+          const state = get();
+          const existing = state.activeSubscriptions.get(key);
+
+          if (connectionUserIds.length === 0) {
+            get().setOnlineUsers([]);
+            return () => {};
+          }
+
+          const config: SubscriptionConfig = {
+            key,
+            query: () => {
+              const userIdFilters =
+                connectionUserIds.length === 1
+                  ? { userId: { eq: connectionUserIds[0] } }
+                  : {
+                      or: connectionUserIds.map(userId => ({
+                        userId: { eq: userId },
+                      })),
+                    };
+
+              return getClient().models.UserPresence.observeQuery({
+                filter: {
+                  ...userIdFilters,
+                  isOnline: { eq: true },
+                },
+              });
+            },
+          };
+
+          const callback = (data: unknown) => {
+            const typedData = data as { items: UserPresence[] };
+            const { items } = typedData;
+
+            get().setOnlineUsers(items);
+            get().setOnlineUsersLoading(false);
+            get().setOnlineUsersError(null);
+          };
+
+          if (!existing) {
+            get().setOnlineUsersLoading(true);
+            get().setOnlineUsersError(null);
+          }
+
+          return get().subscribe(key, config, callback);
+        },
+
+        subscribeToIncomingChatRequests: (userId: string) => {
+          const key = `incoming-chat-requests-${userId}`;
+          const state = get();
+          const existing = state.activeSubscriptions.get(key);
+
+          const config: SubscriptionConfig = {
+            key,
+            query: () => {
+              return getClient().models.ChatRequest.observeQuery({
+                filter: {
+                  receiverId: { eq: userId },
+                },
+              });
+            },
+          };
+
+          const callback = (data: unknown) => {
+            const typedData = data as { items: ChatRequest[] };
+            const { items } = typedData;
+            // Filter for PENDING requests on the client side
+            const pendingRequests = items.filter(
+              (request: ChatRequest) => request.status === 'PENDING'
+            );
+
+            // Update the store with new incoming chat requests
+            get().setIncomingChatRequests(pendingRequests);
+            get().setIncomingChatRequestsLoading(false);
+            get().setIncomingChatRequestsError(null);
+          };
+
+          // Only set loading state if creating a new subscription
+          if (!existing) {
+            get().setIncomingChatRequestsLoading(true);
+            get().setIncomingChatRequestsError(null);
+          }
+
+          return get().subscribe(key, config, callback);
+        },
+
+        subscribeToSentChatRequests: (userId: string) => {
+          const key = `sent-chat-requests-${userId}`;
+          const state = get();
+          const existing = state.activeSubscriptions.get(key);
+
+          const config: SubscriptionConfig = {
+            key,
+            query: () => {
+              return getClient().models.ChatRequest.observeQuery({
+                filter: {
+                  requesterId: { eq: userId },
+                },
+              });
+            },
+          };
+
+          const callback = (data: unknown) => {
+            const typedData = data as { items: ChatRequest[] };
+            const { items } = typedData;
+            // Filter for PENDING requests on the client side
+            const pendingRequests = items.filter(
+              (request: ChatRequest) => request.status === 'PENDING'
+            );
+
+            // Update the store with new sent chat requests
+            get().setSentChatRequests(pendingRequests);
+            get().setSentChatRequestsLoading(false);
+            get().setSentChatRequestsError(null);
+          };
+
+          // Only set loading state if creating a new subscription
+          if (!existing) {
+            get().setSentChatRequestsLoading(true);
+            get().setSentChatRequestsError(null);
+          }
+
+          return get().subscribe(key, config, callback);
+        },
+
+        subscribeToNotifications: (userId: string) => {
+          const key = `notifications-${userId}`;
+          const state = get();
+          const existing = state.activeSubscriptions.get(key);
+
+          const config: SubscriptionConfig = {
+            key,
+            query: () => {
+              return getClient().models.Notification.observeQuery({
+                filter: {
+                  userId: { eq: userId },
+                  // Remove isRead filter to get all notifications, then filter client-side
+                },
+              });
+            },
+          };
+
+          const callback = (data: unknown) => {
+            const typedData = data as { items: Notification[] };
+            const { items } = typedData;
+
+            // Filter for unread notifications only (client-side)
+            const unreadNotifications = items.filter(notif => !notif.isRead);
+
+            // Sort by timestamp descending (newest first)
+            const sortedNotifications = unreadNotifications.sort(
+              (a, b) =>
+                new Date(b.timestamp).getTime() -
+                new Date(a.timestamp).getTime()
+            );
+
+            // Parse JSON data field back to objects
+            const notificationsWithParsedData = sortedNotifications.map(
+              notif => ({
+                ...notif,
+                data: notif.data ? JSON.parse(notif.data as string) : undefined,
+              })
+            );
+
+            // Update the store with new notifications
+            get().setNotifications(notificationsWithParsedData);
+            get().setNotificationsLoading(false);
+            get().setNotificationsError(null);
+          };
+
+          // Only set loading state if creating a new subscription
+          if (!existing) {
+            get().setNotificationsLoading(true);
+            get().setNotificationsError(null);
+          }
+
+          return get().subscribe(key, config, callback);
+        },
+
+        subscribeToConversations: (userId: string) => {
+          const key = `conversations-${userId}`;
+          const state = get();
+          const existing = state.activeSubscriptions.get(key);
+
+          const config: SubscriptionConfig = {
+            key,
+            query: () => {
+              return getClient().models.Conversation.observeQuery({
+                filter: {
+                  or: [
+                    { participant1Id: { eq: userId } },
+                    { participant2Id: { eq: userId } },
+                  ],
+                },
+              });
+            },
+          };
+
+          const callback = (data: unknown) => {
+            const typedData = data as { items: Conversation[] };
+            const { items } = typedData;
+
+            // Sort conversations by creation date (newest first)
+            const sortedConversations = items.sort((a, b) => {
+              const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+              const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+              return dateB - dateA;
+            });
+
+            // Update the store with new conversations
+            get().updateConversations(sortedConversations);
+            get().setConversationsLoading(false);
+            get().setConversationsError(null);
+          };
+
+          // Only set loading state if creating a new subscription
+          if (!existing) {
+            get().setConversationsLoading(true);
+            get().setConversationsError(null);
+          }
+
+          return get().subscribe(key, config, callback);
+        },
+
+        // Debug helpers
+        getStats: () => {
+          const state = get();
+          return {
+            activeSubscriptions: state.activeSubscriptions.size,
+            subscriptionKeys: Array.from(state.activeSubscriptions.keys()),
+            totalCallbacks: Array.from(
+              state.activeSubscriptions.values()
+            ).reduce((total, entry) => total + entry.callbacks.size, 0),
+          };
+        },
+      }),
       {
         name: 'subscription-store',
         storage: createJSONStorage(() => localStorage),
         // Only persist user profiles, not subscriptions or realtime data
-        partialize: (state) => ({
+        partialize: state => ({
           userProfiles: Array.from(state.userProfiles.entries()),
         }),
         // Restore Maps from persisted arrays
-        onRehydrateStorage: () => (state) => {
+        onRehydrateStorage: () => state => {
           if (state?.userProfiles && Array.isArray(state.userProfiles)) {
-            state.userProfiles = new Map(state.userProfiles as [string, UserProfile][]);
+            state.userProfiles = new Map(
+              state.userProfiles as [string, UserProfile][]
+            );
           }
         },
       }

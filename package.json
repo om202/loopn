@@ -21,7 +21,7 @@
     "@aws-sdk/client-bedrock-runtime": "^3.876.0",
     "aws-amplify": "^6.15.4",
     "emoji-picker-react": "4.13.2",
-    "lucide-react": "0.526.0",
+    "lucide-react": "^0.542.0",
     "next": "14.2.13",
     "pdfjs-dist": "^5.4.54",
     "react": "18.3.1",
