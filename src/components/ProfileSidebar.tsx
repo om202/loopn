@@ -560,9 +560,9 @@ export default function ProfileSidebar({
 
           {/* Dialog container */}
           <div className='flex min-h-full items-center justify-center p-2'>
-            <div className='relative w-[90vw] max-w-[900px] min-w-[540px] bg-white rounded-2xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl'>
+            <div className='relative w-[95vw] max-w-[832px] min-w-[640px] bg-white rounded-2xl max-h-[94vh] flex flex-col overflow-hidden shadow-2xl'>
               {/* Header */}
-              <div className='px-6 py-4 border-b border-slate-200 flex items-center justify-between'>
+              <div className='px-4 py-3 border-b border-slate-200 flex items-center justify-between'>
                 <h2 className='text-lg font-semibold text-slate-900'>
                   Profile Details
                 </h2>
@@ -577,9 +577,9 @@ export default function ProfileSidebar({
 
               {/* Content */}
               <div className='flex-1 overflow-y-auto'>
-                <div className='px-4 py-3'>
+                <div className='p-6 pb-8 pt-4'>
                   {/* User Profile Header */}
-                  <div className='flex items-start gap-8 mb-4'>
+                  <div className='flex items-start gap-6 mb-6'>
                     <div className='flex-shrink-0'>
                       <UserAvatar
                         email={userProfile?.email}
