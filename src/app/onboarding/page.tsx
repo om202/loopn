@@ -582,34 +582,16 @@ export default function OnboardingPage() {
 
           {/* Resume Processed Indicator */}
           {resumeProcessed && !showResumeUpload && (
-            <div className='mb-6 bg-b_green-50 border border-b_green-200 rounded-2xl p-4'>
-              <div className='flex items-center justify-between'>
-                <div className='flex items-center space-x-2'>
-                  <div className='w-5 h-5 bg-b_green-500 rounded-full flex items-center justify-center'>
-                    <svg
-                      className='w-3 h-3 text-white'
-                      fill='currentColor'
-                      viewBox='0 0 20 20'
-                    >
-                      <path
-                        fillRule='evenodd'
-                        d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z'
-                        clipRule='evenodd'
-                      />
-                    </svg>
-                  </div>
-                  <p className='text-b_green-800 font-medium'>
-                    Resume processed! {formData.autoFilledFields?.length || 0}{' '}
-                    fields auto-filled
-                  </p>
-                </div>
-                <button
-                  onClick={showResumeUploadAgain}
-                  className='text-b_green-700 hover:text-b_green-800 text-sm font-medium'
-                >
-                  Upload different resume
-                </button>
-              </div>
+            <div className='mb-6 text-center space-y-3'>
+              <p className='text-b_green-700'>
+                Resume processed! {formData.autoFilledFields?.length || 0} fields auto-filled
+              </p>
+              <button
+                onClick={showResumeUploadAgain}
+                className='border border-slate-300 text-slate-600 hover:bg-slate-50 px-4 py-2 rounded-xl text-sm font-medium transition-colors'
+              >
+                Upload different resume
+              </button>
             </div>
           )}
 
@@ -627,7 +609,7 @@ export default function OnboardingPage() {
               </h2>
 
               {/* Personal Information Section */}
-              <div className='bg-slate-50 rounded-xl p-4 space-y-4'>
+              <div className='space-y-4'>
                 <h3 className='text-base font-medium text-slate-700 mb-3'>
                   Personal Information
                 </h3>
@@ -703,7 +685,7 @@ export default function OnboardingPage() {
               </div>
 
               {/* Professional URLs Section */}
-              <div className='bg-slate-50 rounded-xl p-4 space-y-4'>
+              <div className='space-y-4'>
                 <h3 className='text-base font-medium text-slate-700 mb-3'>
                   Professional URLs
                 </h3>
@@ -757,7 +739,7 @@ export default function OnboardingPage() {
               </div>
 
               {/* Current Professional Info Section */}
-              <div className='bg-slate-50 rounded-xl p-4 space-y-4'>
+              <div className='space-y-4'>
                 <h3 className='text-base font-medium text-slate-700 mb-3'>
                   Current Professional Info
                 </h3>
@@ -866,7 +848,7 @@ export default function OnboardingPage() {
                 {(formData.workExperience || []).map((job, index) => (
                   <div
                     key={index}
-                    className='bg-slate-50 rounded-xl p-4 space-y-3'
+                    className='space-y-3'
                   >
                     <div className='flex items-center justify-between'>
                       <h3 className='font-medium text-slate-800'>
@@ -976,7 +958,7 @@ export default function OnboardingPage() {
                     {formData.educationHistory.map((edu, index) => (
                       <div
                         key={index}
-                        className='bg-slate-50 rounded-xl p-4 space-y-3'
+                        className='space-y-3'
                       >
                         <div className='flex items-center justify-between'>
                           <h4 className='font-medium text-slate-800'>
@@ -1084,7 +1066,7 @@ export default function OnboardingPage() {
                   {formData.projects.map((project, index) => (
                     <div
                       key={index}
-                      className='bg-slate-50 rounded-xl p-4 space-y-3'
+                      className='space-y-3'
                     >
                       <div className='flex items-center justify-between'>
                         <h4 className='font-medium text-slate-800'>
@@ -1163,7 +1145,7 @@ export default function OnboardingPage() {
                     {formData.certifications.map((cert, index) => (
                       <div
                         key={index}
-                        className='bg-slate-50 rounded-xl p-4 space-y-3'
+                        className='space-y-3'
                       >
                         <div className='flex items-center justify-between'>
                           <h4 className='font-medium text-slate-800'>
@@ -1255,7 +1237,7 @@ export default function OnboardingPage() {
                     {formData.languages.map((lang, index) => (
                       <div
                         key={index}
-                        className='bg-slate-50 rounded-xl p-4 space-y-3'
+                        className='space-y-3'
                       >
                         <div className='flex items-center justify-between'>
                           <h4 className='font-medium text-slate-800'>
@@ -1312,7 +1294,7 @@ export default function OnboardingPage() {
                   {formData.awards.map((award, index) => (
                     <div
                       key={index}
-                      className='bg-slate-50 rounded-xl p-4 space-y-3'
+                      className='space-y-3'
                     >
                       <div className='flex items-center justify-between'>
                         <h4 className='font-medium text-slate-800'>
@@ -1394,7 +1376,7 @@ export default function OnboardingPage() {
                   {formData.publications.map((pub, index) => (
                     <div
                       key={index}
-                      className='bg-slate-50 rounded-xl p-4 space-y-3'
+                      className='space-y-3'
                     >
                       <div className='flex items-center justify-between'>
                         <h4 className='font-medium text-slate-800'>
@@ -1573,7 +1555,7 @@ export default function OnboardingPage() {
 
               {/* Display hobbies from resume if available */}
               {formData.hobbies && formData.hobbies.length > 0 && (
-                <div className='bg-slate-50 rounded-xl p-4 mb-6'>
+                <div className='mb-6'>
                   <div className='flex items-center justify-between mb-3'>
                     <h3 className='text-base font-medium text-slate-700'>
                       Personal Hobbies from Resume
