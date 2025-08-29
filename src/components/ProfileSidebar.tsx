@@ -24,6 +24,7 @@ import {
   UserCheck,
   Expand,
   X,
+  Download,
 } from 'lucide-react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import UserAvatar from './UserAvatar';
@@ -40,6 +41,7 @@ import { useRealtimeConnectionRequests } from '../hooks/realtime/useRealtimeConn
 import { useConnectionActions } from '../hooks/useConnectionActions';
 import CancelConnectionRequestDialog from './CancelConnectionRequestDialog';
 import RemoveConnectionDialog from './RemoveConnectionDialog';
+import { generateAndDownloadResume } from '../lib/pdf-resume-generator';
 
 import type { Schema } from '../../amplify/data/resource';
 
@@ -104,6 +106,7 @@ export default function ProfileSidebar({
     useState(false);
   const [showFullScreenDialog, setShowFullScreenDialog] = useState(false);
   const [optimisticRequestSent, setOptimisticRequestSent] = useState(false);
+  const [downloadingResume, setDownloadingResume] = useState(false);
   const { fetchUserProfile } = useSubscriptionStore();
   const { user } = useAuthenticator();
 
@@ -172,6 +175,21 @@ export default function ProfileSidebar({
       onRemoveConnection?.();
     } catch (error) {
       console.error('Failed to remove connection:', error);
+    }
+  };
+
+  // Handle resume download
+  const handleDownloadResume = async () => {
+    if (!userProfile) return;
+
+    setDownloadingResume(true);
+    try {
+      await generateAndDownloadResume(userProfile, getUserDisplayName());
+    } catch (error) {
+      console.error('Failed to download resume:', error);
+      // Could add a toast notification here for better UX
+    } finally {
+      setDownloadingResume(false);
     }
   };
 
@@ -323,6 +341,18 @@ export default function ProfileSidebar({
         </div>
 
         <div className='flex items-center gap-2'>
+          {/* Download Resume Button */}
+          <Tooltip content='Download resume as PDF' position='bottom'>
+            <button
+              onClick={handleDownloadResume}
+              disabled={downloadingResume || !userProfile}
+              className='p-1.5 text-slate-500 hover:text-brand-600 transition-colors rounded-lg hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50'
+              title='Download resume as PDF'
+            >
+              <Download className='w-[18px] h-[18px]' />
+            </button>
+          </Tooltip>
+
           {/* Full Screen Button */}
           <button
             onClick={() => setShowFullScreenDialog(true)}
@@ -566,13 +596,26 @@ export default function ProfileSidebar({
                 <h2 className='text-lg font-semibold text-slate-900'>
                   Profile Details
                 </h2>
-                <button
-                  onClick={() => setShowFullScreenDialog(false)}
-                  className='p-2 text-slate-500 hover:text-black transition-colors rounded-lg hover:bg-slate-100'
-                  title='Close'
-                >
-                  <X className='w-[22px] h-[22px]' />
-                </button>
+                <div className='flex items-center gap-2'>
+                  {/* Download Resume Button */}
+                  <Tooltip content='Download resume as PDF' position='bottom'>
+                    <button
+                      onClick={handleDownloadResume}
+                      disabled={downloadingResume || !userProfile}
+                      className='p-2 text-slate-500 hover:text-brand-600 transition-colors rounded-lg hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50'
+                      title='Download resume as PDF'
+                    >
+                      <Download className='w-[18px] h-[18px]' />
+                    </button>
+                  </Tooltip>
+                  <button
+                    onClick={() => setShowFullScreenDialog(false)}
+                    className='p-2 text-slate-500 hover:text-black transition-colors rounded-lg hover:bg-slate-100'
+                    title='Close'
+                  >
+                    <X className='w-[22px] h-[22px]' />
+                  </button>
+                </div>
               </div>
 
               {/* Content */}
