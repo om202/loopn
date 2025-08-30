@@ -139,7 +139,7 @@ export default function HomePage() {
       <style>{customStyles}</style>
 
       {/* Top Navigation */}
-      <nav className='bg-white border-b border-slate-200 sticky top-0 z-50'>
+      <nav className='bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm'>
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='flex justify-between items-center h-16'>
             <div className='flex items-center'>
@@ -160,8 +160,8 @@ export default function HomePage() {
             </div>
             <div className='flex items-center'>
               <Link href={authLink}>
-                <button className='bg-white hover:bg-brand-50 text-brand-600 border border-gray-300 px-6 py-2.5 rounded-lg transition-colors flex items-center gap-2 font-medium text-sm min-h-[44px]'>
-                  <LogIn className='w-4 h-4' strokeWidth={1.5} />
+                <button className='bg-white hover:bg-brand-50 text-brand-600 border border-gray-300 px-6 py-2.5 rounded-lg transition-colors flex items-center gap-2 font-semibold text-sm min-h-[44px]'>
+                  <LogIn className='w-4 h-4' strokeWidth={2} />
                   {authText}
                 </button>
               </Link>
@@ -182,26 +182,32 @@ export default function HomePage() {
           <div className='grid lg:grid-cols-2 gap-8 lg:gap-12 items-center'>
             {/* Left column - Content */}
             <div className='text-center lg:text-left'>
-              <h1 className='text-4xl sm:text-5xl font-medium text-gray-900 mb-6 leading-tight'>
-                Professional Networking{' '}
+              <h1 className='text-4xl sm:text-5xl font-medium text-gray-900 mb-14 leading-tight'>
+                Professional Networking
+                <br />
                 <span className='text-brand-600'>That Actually Works</span>
               </h1>
 
-              <p className='text-xl text-gray-600 mb-8 leading-relaxed max-w-md mx-auto lg:mx-0'>
-                Upload your resume. Get matched instantly. Start connecting.
-              </p>
-              
-              <p className='text-lg text-gray-500 mb-12 leading-relaxed max-w-lg mx-auto lg:mx-0'>
-                AI finds professionals who complement your skills and career goals. See who's online right now, send chat requests, and start building professional relationships that last.
-              </p>
+              <div className='mb-12 max-w-lg mx-auto lg:mx-0'>
+                <p className='text-xl text-gray-600 mb-4 leading-relaxed'>
+                  Upload your resume. Get matched instantly. Start connecting.
+                </p>
+                
+                <p className='text-lg text-gray-500 leading-relaxed'>
+                  AI finds professionals who complement your skills and career goals. See who's online right now, send chat requests, and start building professional relationships that last.
+                </p>
+              </div>
 
               {/* CTA Buttons */}
-              <div className='flex flex-col sm:flex-row gap-4 justify-center lg:justify-start'>
+              <div className='flex flex-col sm:flex-row gap-6 justify-center lg:justify-start'>
                 <Link
                   href={isAuthenticated ? authLink : signUpLink}
                   className='w-full sm:w-auto'
                 >
-                  <button className='group w-full bg-brand-600 hover:bg-brand-700 text-white px-8 py-4 rounded-lg text-base font-medium transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-0.5 border-0 min-h-[52px] touch-manipulation'>
+                  <button 
+                    className='group w-full bg-brand-600 hover:bg-brand-700 text-white px-8 py-4 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-0.5 border-0 min-h-[50px] touch-manipulation'
+                    style={{ fontSize: '18px' }}
+                  >
                     {ctaText}
                     <ArrowRight
                       className='w-5 h-5 group-hover:translate-x-1 transition-transform'
@@ -222,7 +228,7 @@ export default function HomePage() {
             {/* Right column - Demo */}
             <div className='relative mt-8 lg:mt-0'>
               {/* Modern Chat Interface - matching real chat UI design */}
-              <div className='bg-white rounded-2xl shadow-lg border border-slate-200 w-full max-w-sm lg:max-w-md mx-auto overflow-hidden'>
+              <div className='bg-white rounded-2xl shadow-sm border border-slate-200 w-full max-w-sm lg:max-w-md mx-auto lg:ml-auto lg:mr-0 overflow-hidden'>
                 {/* Chat Header */}
                 <div className='flex-shrink-0 bg-white border-b border-slate-200 px-4 py-3'>
                   <div className='flex items-center gap-3'>
@@ -263,7 +269,7 @@ export default function HomePage() {
                         Sarah Chen
                       </h1>
                       <div className='text-sm text-slate-500 truncate'>
-                        UX Designer • Online
+                        UX Designer
                       </div>
                     </div>
 
@@ -359,7 +365,7 @@ export default function HomePage() {
                       <div className='max-w-xs'>
                         <div className='bg-brand-500 text-white px-4 py-3 rounded-2xl rounded-tr-md relative'>
                           <p className='text-base leading-relaxed pr-6'>
-                            Absolutely. Let's schedule a call next week!
+                            Absolutely! I love discussing design challenges
                           </p>
                           <div className='absolute bottom-1 right-2'>
                             <Image
@@ -388,7 +394,7 @@ export default function HomePage() {
                       <div className='flex-1 max-w-xs'>
                         <div className='bg-slate-100 text-slate-900 px-4 py-3 rounded-2xl rounded-tl-md'>
                           <p className='text-base leading-relaxed'>
-                            Great! Just sent you my calendar link 🚀
+                            Awesome! I'll message you more about it tomorrow 🚀
                           </p>
                         </div>
                       </div>
@@ -417,7 +423,7 @@ export default function HomePage() {
                     </div>
                     <button
                       disabled
-                      className='flex-shrink-0 w-12 h-12 bg-brand-500 hover:bg-brand-600 text-white rounded-full flex items-center justify-center transition-colors shadow-lg hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-60'
+                      className='flex-shrink-0 w-12 h-12 bg-brand-500 hover:bg-brand-600 text-white rounded-full flex items-center justify-center transition-colors shadow-sm hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60'
                     >
                       <Image
                         src='/send_icon.svg'
@@ -456,28 +462,28 @@ export default function HomePage() {
 
                     {/* Dashboard Images - Responsive */}
           <div className='flex justify-center'>
-            {/* Desktop Dashboard Image */}
-            <div className='hidden lg:block w-full max-w-5xl'>
-              <Image
-                src='/desktop-dash.png'
-                alt='Loopn Dashboard - Desktop View'
-                width={800}
-                height={600}
-                className='w-full h-auto rounded-2xl shadow-lg border border-slate-200'
-                quality={100}
-                priority
-                unoptimized={true}
-              />
-            </div>
+                         {/* Desktop Dashboard Image */}
+             <div className='hidden lg:block w-full max-w-5xl'>
+               <Image
+                 src='/desktop-dash.png'
+                 alt='Loopn Dashboard - Desktop View'
+                 width={1200}
+                 height={900}
+                 className='w-full h-auto rounded-2xl shadow-sm border border-slate-200'
+                 quality={100}
+                 priority
+                 unoptimized={true}
+               />
+             </div>
             
             {/* Mobile Dashboard Image */}
             <div className='block lg:hidden w-full max-w-sm mx-auto'>
               <Image
                 src='/mobile-dash.png'
                 alt='Loopn Dashboard - Mobile View'
-                width={300}
-                height={600}
-                className='w-full h-auto rounded-2xl shadow-lg border border-slate-200'
+                width={450}
+                height={900}
+                className='w-full h-auto rounded-2xl shadow-sm border border-slate-200'
                 quality={100}
                 priority
                 unoptimized={true}
@@ -584,7 +590,10 @@ export default function HomePage() {
           {/* Bottom CTA */}
           <div className='text-center'>
             <Link href={isAuthenticated ? authLink : signUpLink}>
-              <button className='group inline-flex items-center gap-3 bg-brand-500 hover:bg-brand-600 text-white px-10 py-4 rounded-xl text-base font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 border border-brand-600 min-h-[48px]'>
+              <button 
+                className='group inline-flex items-center gap-3 bg-brand-500 hover:bg-brand-600 text-white px-10 py-4 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 border border-brand-600 min-h-[50px]'
+                style={{ fontSize: '18px' }}
+              >
                 {ctaText}
                 <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' />
               </button>
@@ -848,7 +857,10 @@ export default function HomePage() {
               href={isAuthenticated ? authLink : signUpLink}
               className='w-full sm:w-auto'
             >
-              <button className='group w-full bg-brand-600 hover:bg-brand-700 text-white px-8 py-4 rounded-lg text-base font-medium transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl border-0 min-h-[52px] touch-manipulation'>
+              <button 
+                className='group w-full bg-brand-600 hover:bg-brand-700 text-white px-8 py-4 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl border-0 min-h-[50px] touch-manipulation'
+                style={{ fontSize: '18px' }}
+              >
                 {ctaText}
                 <ArrowRight
                   className='w-5 h-5 group-hover:translate-x-1 transition-transform'
