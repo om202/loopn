@@ -1,6 +1,6 @@
 'use client';
 
-import { Compass, Users, Search, Bookmark } from 'lucide-react';
+import { Compass, Search, Bookmark } from 'lucide-react';
 
 import type { Schema } from '../../../amplify/data/resource';
 import { formatPresenceTime } from '../../lib/presence-utils';
@@ -8,6 +8,22 @@ import { formatPresenceTime } from '../../lib/presence-utils';
 import UserCard from './UserCard';
 import SearchSectionContent from './SearchSectionContent';
 import LoadingContainer from '../LoadingContainer';
+
+// Custom Connect Icon using circles from logo
+const ConnectIcon = ({ className }: { className?: string }) => (
+  <svg
+    width='20'
+    height='20'
+    viewBox='30 30 160 160'
+    className={className}
+    fill='none'
+    stroke='currentColor'
+    strokeWidth='13'
+  >
+    <circle cx='75' cy='110' r='35' />
+    <circle cx='145' cy='110' r='35' />
+  </svg>
+);
 
 type UserPresence = Schema['UserPresence']['type'];
 type Conversation = Schema['Conversation']['type'];
@@ -202,7 +218,7 @@ export default function DashboardSectionContent({
         return {
           title: 'Connections',
           description: 'Your connections and conversations',
-          emptyIcon: Users,
+          emptyIcon: ConnectIcon,
           emptyMessage: 'No connections yet',
         };
       case 'suggested':
@@ -232,7 +248,7 @@ export default function DashboardSectionContent({
         return {
           title: 'Connections',
           description: 'Your connections and conversations',
-          emptyIcon: Users,
+          emptyIcon: ConnectIcon,
           emptyMessage: 'No connections yet',
         };
     }

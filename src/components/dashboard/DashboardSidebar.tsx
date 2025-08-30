@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Compass, Bug, Bookmark, Infinity } from 'lucide-react';
+import { Compass, Bug, Bookmark } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAuthenticator } from '@aws-amplify/ui-react';
@@ -13,6 +13,22 @@ import { useUserProfile } from '../../hooks/useUserProfile';
 import { useChatRequests } from '../../hooks/useChatRequests';
 import { useNotifications } from '../../hooks/useNotifications';
 import { useSavedUsers } from '../../hooks/useSavedUsers';
+
+// Custom Connect Icon using circles from logo
+const ConnectIcon = ({ className }: { className?: string }) => (
+  <svg
+    width='20'
+    height='20'
+    viewBox='30 30 160 160'
+    className={className}
+    fill='none'
+    stroke='currentColor'
+    strokeWidth='13'
+  >
+    <circle cx='75' cy='110' r='35' />
+    <circle cx='145' cy='110' r='35' />
+  </svg>
+);
 
 type SidebarSection =
   | 'connections'
@@ -90,7 +106,7 @@ export default function DashboardSidebar({
     },
     {
       id: 'connections' as const,
-      icon: Infinity,
+      icon: 'ConnectIcon',
       label: 'Connections',
       count: connectionsCount,
     },
@@ -171,6 +187,8 @@ export default function DashboardSidebar({
                           d='M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9'
                         />
                       </svg>
+                    ) : icon === 'ConnectIcon' ? (
+                      <ConnectIcon className='w-5 h-5' />
                     ) : (
                       React.createElement(icon, {
                         className: 'w-5 h-5',
@@ -303,6 +321,8 @@ export default function DashboardSidebar({
                         showStatus={false}
                       />
                     </div>
+                  ) : icon === 'ConnectIcon' ? (
+                    <ConnectIcon className='w-6 h-6' />
                   ) : (
                     React.createElement(icon, {
                       className: 'w-6 h-6',

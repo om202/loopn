@@ -7,12 +7,12 @@ const ConnectIcon = ({ className }: { className?: string }) => (
   <svg
     width='20'
     height='20'
-    viewBox='0 0 20 20'
+    viewBox='30 30 160 160'
     className={className}
     fill='currentColor'
   >
-    <circle cx='6' cy='10' r='4' />
-    <circle cx='14' cy='10' r='4' />
+    <circle cx='75' cy='110' r='35' />
+    <circle cx='145' cy='110' r='35' />
   </svg>
 );
 import {
