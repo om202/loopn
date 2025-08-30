@@ -6,7 +6,6 @@ import {
   ArrowRight,
   CheckCircle,
   Star,
-  LogIn,
   Zap,
   Brain,
   Shield,
@@ -88,19 +87,11 @@ export default function HomePage() {
   const isAuthenticated = authStatus === 'authenticated' && user;
   const authLink = isAuthenticated ? '/dashboard' : '/auth';
   const signUpLink = isAuthenticated ? '/dashboard' : '/auth?view=signup';
-  const authText = isAuthenticated ? 'Go to Dashboard' : 'Sign In';
   const ctaText = isAuthenticated ? 'Go to Dashboard' : 'Join Loopn';
 
   // Chat animation state
   const [visibleMessages, setVisibleMessages] = useState(0);
   const chatContainerRef = useRef<HTMLDivElement>(null);
-
-  const scrollToHowItWorks = () => {
-    const element = document.getElementById('how-it-works');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
 
   // Auto-scroll chat animation
   useEffect(() => {
@@ -137,37 +128,7 @@ export default function HomePage() {
       {/* Add custom styles */}
       <style>{customStyles}</style>
 
-      {/* Top Navigation */}
-      <nav className='bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm'>
-        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='flex justify-between items-center h-16'>
-            <div className='flex items-center'>
-              <div className='flex items-center gap-3 hover:opacity-80 transition-opacity'>
-                <Image
-                  src='/loopn.svg'
-                  alt='Loopn'
-                  width={36}
-                  height={36}
-                  priority
-                />
-                <div className='flex items-center gap-2'>
-                  <h1 className='text-[26px] font-bold text-brand-600'>
-                    Loopn
-                  </h1>
-                </div>
-              </div>
-            </div>
-            <div className='flex items-center'>
-              <Link href={authLink}>
-                <button className='bg-white hover:bg-brand-50 text-brand-600 border border-gray-300 px-6 py-2.5 rounded-lg transition-colors flex items-center gap-2 font-semibold text-sm min-h-[44px]'>
-                  <LogIn className='w-4 h-4' strokeWidth={2} />
-                  {authText}
-                </button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
+
 
       {/* Hero Section */}
       <section className='bg-white py-8 lg:py-12 relative overflow-hidden'>
@@ -181,48 +142,56 @@ export default function HomePage() {
           <div className='grid lg:grid-cols-2 gap-8 lg:gap-12 items-center'>
             {/* Left column - Content */}
             <div className='text-center lg:text-left'>
-              <h1 className='text-4xl sm:text-5xl font-medium text-gray-900 mb-14 leading-tight'>
+              {/* Logo */}
+              <div className='flex items-center justify-center lg:justify-start gap-3 mb-8'>
+                <Image
+                  src='/loopn.svg'
+                  alt='Loopn'
+                  width={48}
+                  height={48}
+                  priority
+                />
+                <h2 className='text-3xl font-bold text-brand-600'>
+                  Loopn
+                </h2>
+              </div>
+              
+              <h1 className='text-4xl sm:text-5xl font-semibold text-gray-900 mb-14 leading-tight'>
                 Professional Networking
                 <br />
                 <span className='text-brand-600'>That Actually Works</span>
               </h1>
 
               <div className='mb-12 max-w-lg mx-auto lg:mx-0'>
-                <p className='text-xl text-gray-600 mb-4 leading-relaxed'>
-                  Upload your resume. Get matched instantly. Start connecting.
-                </p>
-
-                <p className='text-lg text-gray-500 leading-relaxed'>
-                  AI finds professionals who complement your skills and career
-                  goals. See who's online right now, send chat requests, and
-                  start building professional relationships that last.
+                <p className='text-xl text-gray-600 leading-relaxed font-medium'>
+                  Upload your resume. Get matched instantly. Start connecting with professionals who complement your skills and career goals.
                 </p>
               </div>
 
               {/* CTA Buttons */}
-              <div className='flex flex-col sm:flex-row gap-6 justify-center lg:justify-start'>
+              <div className='flex flex-row gap-3 sm:gap-6 justify-center lg:justify-start'>
                 <Link
                   href={isAuthenticated ? authLink : signUpLink}
-                  className='w-full sm:w-auto'
                 >
                   <button
-                    className='group w-full bg-brand-600 hover:bg-brand-700 text-white px-8 py-4 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-0.5 border-0 min-h-[50px] touch-manipulation'
+                    className='inline-flex items-center gap-3 bg-brand-500 text-white px-10 py-4 rounded-xl !font-medium shadow-lg min-h-[50px]'
                     style={{ fontSize: '18px' }}
                   >
                     {ctaText}
                     <ArrowRight
-                      className='w-5 h-5 group-hover:translate-x-1 transition-transform'
-                      strokeWidth={1.5}
+                      className='w-5 h-5'
+                      strokeWidth={2.5}
                     />
                   </button>
                 </Link>
-                <button
-                  onClick={scrollToHowItWorks}
-                  className='text-gray-600 hover:text-gray-900 text-base font-medium transition-colors flex items-center justify-center gap-2'
-                >
-                  Watch demo
-                  <ArrowRight className='w-4 h-4' strokeWidth={1.5} />
-                </button>
+                <Link href={authLink}>
+                  <button 
+                    className='text-gray-600 !font-medium flex items-center justify-center px-4 py-4 min-h-[50px] hover:underline hover:underline-offset-4 hover:decoration-2 flex-shrink-0'
+                    style={{ fontSize: '18px' }}
+                  >
+                    Sign In
+                  </button>
+                </Link>
               </div>
             </div>
 
@@ -236,7 +205,7 @@ export default function HomePage() {
                     {/* Back Button */}
                     <button
                       disabled
-                      className='p-2 -ml-2 text-slate-400 rounded-full transition-colors duration-200 cursor-not-allowed'
+                      className='p-2 -ml-2 text-slate-400 rounded-full cursor-not-allowed'
                     >
                       <svg
                         className='w-5 h-5'
@@ -247,7 +216,7 @@ export default function HomePage() {
                         <path
                           strokeLinecap='round'
                           strokeLinejoin='round'
-                          strokeWidth={2}
+                          strokeWidth={2.5}
                           d='M15 19l-7-7 7-7'
                         />
                       </svg>
@@ -275,7 +244,7 @@ export default function HomePage() {
                     </div>
 
                     {/* Connect Button */}
-                    <button className='px-2 py-2 rounded-lg text-base font-medium transition-colors flex items-center justify-center gap-2 flex-shrink-0 bg-brand-500 hover:bg-brand-600 text-white'>
+                    <button className='px-2 py-2 rounded-lg text-base font-medium flex items-center justify-center gap-2 flex-shrink-0 bg-brand-500 text-white'>
                       <ConnectIcon className='w-5 h-5 text-white' />
                       <span className='text-base font-medium text-white hidden sm:inline'>
                         Connect
@@ -410,20 +379,20 @@ export default function HomePage() {
                         type='text'
                         placeholder='Type your message...'
                         disabled
-                        className='w-full px-4 py-3 pr-12 border border-slate-200 rounded-full bg-slate-50 hover:bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent text-sm transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-60 placeholder-slate-500'
+                        className='w-full px-4 py-3 pr-12 border border-slate-200 rounded-full bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent text-sm disabled:cursor-not-allowed disabled:opacity-60 placeholder-slate-500'
                         style={{ fontSize: '16px' }}
                       />
                       <button
                         type='button'
                         disabled
-                        className='absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100 transition-colors disabled:cursor-not-allowed'
+                        className='absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 rounded-full disabled:cursor-not-allowed'
                       >
-                        <Smile className='w-5 h-5' />
+                        <Smile className='w-5 h-5' strokeWidth={2.5} />
                       </button>
                     </div>
                     <button
                       disabled
-                      className='flex-shrink-0 w-12 h-12 bg-brand-500 hover:bg-brand-600 text-white rounded-full flex items-center justify-center transition-colors shadow-sm hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60'
+                      className='flex-shrink-0 w-12 h-12 bg-brand-500 text-white rounded-full flex items-center justify-center shadow-sm disabled:cursor-not-allowed disabled:opacity-60'
                     >
                       <Image
                         src='/send_icon.svg'
@@ -442,7 +411,7 @@ export default function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section className='py-8 sm:py-12 bg-white relative'>
+      <section className='py-8 sm:py-12 bg-slate-50 relative'>
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-1/4 left-0 w-72 h-72 bg-slate-100/80 rounded-full blur-3xl' />
@@ -452,10 +421,10 @@ export default function HomePage() {
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           {/* Section Header */}
           <div className='text-center max-w-3xl mx-auto mb-12'>
-            <h2 className='text-3xl sm:text-4xl font-medium text-gray-900 mb-6 leading-tight'>
+            <h2 className='text-3xl sm:text-4xl font-semibold text-gray-900 mb-3 leading-tight'>
               Professional Networking, Reimagined
             </h2>
-            <p className='text-lg text-gray-600 leading-relaxed'>
+            <p className='text-lg text-gray-600 leading-relaxed font-medium'>
               Connect smartly with professionals who actually matter to your
               career.
             </p>
@@ -466,7 +435,7 @@ export default function HomePage() {
             {/* Desktop Dashboard Image */}
             <div className='hidden lg:block w-full max-w-5xl'>
               <Image
-                src='/desktop-dash.png'
+                src='/desktop-dash.webp'
                 alt='Loopn Dashboard - Desktop View'
                 width={1200}
                 height={900}
@@ -480,7 +449,7 @@ export default function HomePage() {
             {/* Mobile Dashboard Image */}
             <div className='block lg:hidden w-full max-w-sm mx-auto'>
               <Image
-                src='/mobile-dash.png'
+                src='/mobile-dash.webp'
                 alt='Loopn Dashboard - Mobile View'
                 width={450}
                 height={900}
@@ -495,31 +464,31 @@ export default function HomePage() {
           {/* Features Grid */}
           <div className='grid lg:grid-cols-3 gap-8 sm:gap-12 mb-12 mt-12'>
             {/* Feature 1 - Smart Matching */}
-            <div className='group bg-white rounded-2xl p-8 border border-slate-200 h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
-              <h3 className='text-xl font-semibold text-slate-900 mb-6 flex items-center gap-3'>
-                <Brain className='w-6 h-6 text-brand-600' />
+            <div className=' bg-white rounded-2xl p-8 border border-slate-200 h-full shadow-sm'>
+              <h3 className='text-xl font-semibold text-slate-900 mb-3 flex items-center gap-3'>
+                <Brain className='w-6 h-6 text-brand-600' strokeWidth={2.5} />
                 AI Resume Intelligence
               </h3>
-              <p className='text-slate-600 mb-8 leading-relaxed text-base'>
+              <p className='text-slate-600 mb-8 leading-relaxed text-base font-medium'>
                 Upload once. Get matched to perfect career opportunities
                 instantly.
               </p>
               <ul className='space-y-4'>
                 <li className='flex items-center gap-3 text-slate-600'>
-                  <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' />
-                  <span className='font-normal text-base'>
+                  <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' strokeWidth={2.5} />
+                  <span className='font-medium text-base'>
                     AI analyzes your resume in seconds
                   </span>
                 </li>
                 <li className='flex items-center gap-3 text-slate-600'>
-                  <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' />
-                  <span className='font-normal text-base'>
+                  <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' strokeWidth={2.5} />
+                  <span className='font-medium text-base'>
                     Smart compatibility matching
                   </span>
                 </li>
                 <li className='flex items-center gap-3 text-slate-600'>
-                  <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' />
-                  <span className='font-normal text-base'>
+                  <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' strokeWidth={2.5} />
+                  <span className='font-medium text-base'>
                     Industry-specific results
                   </span>
                 </li>
@@ -527,30 +496,30 @@ export default function HomePage() {
             </div>
 
             {/* Feature 2 - Real-time Chat */}
-            <div className='group bg-white rounded-2xl p-8 border border-slate-200 h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
-              <h3 className='text-xl font-semibold text-slate-900 mb-6 flex items-center gap-3'>
-                <Zap className='w-6 h-6 text-brand-600' />
+            <div className=' bg-white rounded-2xl p-8 border border-slate-200 h-full shadow-sm'>
+              <h3 className='text-xl font-semibold text-slate-900 mb-3 flex items-center gap-3'>
+                <Zap className='w-6 h-6 text-brand-600' strokeWidth={2.5} />
                 Real-Time Discovery
               </h3>
-              <p className='text-slate-600 mb-8 leading-relaxed text-base'>
+              <p className='text-slate-600 mb-8 leading-relaxed text-base font-medium'>
                 Connect with the right people at the right moment.
               </p>
               <ul className='space-y-4'>
                 <li className='flex items-center gap-3 text-slate-600'>
-                  <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' />
-                  <span className='font-normal text-base'>
+                  <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' strokeWidth={2.5} />
+                  <span className='font-medium text-base'>
                     See who's online now
                   </span>
                 </li>
                 <li className='flex items-center gap-3 text-slate-600'>
-                  <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' />
-                  <span className='font-normal text-base'>
+                  <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' strokeWidth={2.5} />
+                  <span className='font-medium text-base'>
                     Send instant chat requests
                   </span>
                 </li>
                 <li className='flex items-center gap-3 text-slate-600'>
-                  <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' />
-                  <span className='font-normal text-base'>
+                  <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' strokeWidth={2.5} />
+                  <span className='font-medium text-base'>
                     Build permanent relationships
                   </span>
                 </li>
@@ -558,31 +527,31 @@ export default function HomePage() {
             </div>
 
             {/* Feature 3 - Quality Network */}
-            <div className='group bg-white rounded-2xl p-8 border border-slate-200 h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
-              <h3 className='text-xl font-semibold text-slate-900 mb-6 flex items-center gap-3'>
-                <Shield className='w-6 h-6 text-brand-600' />
+            <div className=' bg-white rounded-2xl p-8 border border-slate-200 h-full shadow-sm'>
+              <h3 className='text-xl font-semibold text-slate-900 mb-3 flex items-center gap-3'>
+                <Shield className='w-6 h-6 text-brand-600' strokeWidth={2.5} />
                 Professional Focus
               </h3>
-              <p className='text-slate-600 mb-8 leading-relaxed text-base'>
+              <p className='text-slate-600 mb-8 leading-relaxed text-base font-medium'>
                 Quality over quantity. Every connection is verified, relevant,
                 and career-focused.
               </p>
               <ul className='space-y-4'>
                 <li className='flex items-center gap-3 text-slate-600'>
-                  <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' />
-                  <span className='font-normal text-base'>
+                  <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' strokeWidth={2.5} />
+                  <span className='font-medium text-base'>
                     Verified professionals only
                   </span>
                 </li>
                 <li className='flex items-center gap-3 text-slate-600'>
-                  <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' />
-                  <span className='font-normal text-base'>
+                  <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' strokeWidth={2.5} />
+                  <span className='font-medium text-base'>
                     No spam or casual chat
                   </span>
                 </li>
                 <li className='flex items-center gap-3 text-slate-600'>
-                  <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' />
-                  <span className='font-normal text-base'>
+                  <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' strokeWidth={2.5} />
+                  <span className='font-medium text-base'>
                     Career-advancing focus
                   </span>
                 </li>
@@ -594,11 +563,11 @@ export default function HomePage() {
           <div className='text-center'>
             <Link href={isAuthenticated ? authLink : signUpLink}>
               <button
-                className='group inline-flex items-center gap-3 bg-brand-500 hover:bg-brand-600 text-white px-10 py-4 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 border border-brand-600 min-h-[50px]'
+                className='inline-flex items-center gap-3 bg-brand-500 text-white px-10 py-4 rounded-xl !font-medium shadow-lg min-h-[50px]'
                 style={{ fontSize: '18px' }}
               >
                 {ctaText}
-                <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' />
+                <ArrowRight className='w-5 h-5' strokeWidth={2.5} />
               </button>
             </Link>
           </div>
@@ -616,10 +585,10 @@ export default function HomePage() {
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           {/* Section Header */}
           <div className='text-center max-w-3xl mx-auto mb-12'>
-            <h2 className='text-3xl sm:text-4xl font-medium text-gray-900 mb-6 leading-tight'>
+            <h2 className='text-3xl sm:text-4xl font-semibold text-gray-900 mb-3 leading-tight'>
               How It Works
             </h2>
-            <p className='text-lg text-gray-600 leading-relaxed'>
+            <p className='text-lg text-gray-600 leading-relaxed font-medium'>
               Getting started with Loopn is quick and effortless.
             </p>
           </div>
@@ -628,18 +597,18 @@ export default function HomePage() {
           <div className='grid lg:grid-cols-3 gap-8 sm:gap-12 relative'>
             {/* Step 1 */}
             <div className='relative group'>
-              <div className='bg-white rounded-2xl p-8 border border-slate-200 relative h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
+              <div className='bg-white rounded-2xl p-8 border border-slate-200 relative h-full shadow-sm'>
                 {/* Step number */}
                 <div className='absolute -top-4 left-1/2 -translate-x-1/2 w-12 h-12 border-1 border-brand-200 bg-white rounded-2xl flex items-center justify-center text-brand-600 font-bold text-lg z-20'>
                   1
                 </div>
                 {/* Content */}
                 <div className='text-center mt-6'>
-                  <h3 className='text-xl font-semibold text-slate-900 mb-6 flex items-center justify-center gap-3'>
-                    <CloudUpload className='w-6 h-6 text-brand-600' />
+                  <h3 className='text-xl font-semibold text-slate-900 mb-3 flex items-center justify-center gap-3'>
+                    <CloudUpload className='w-6 h-6 text-brand-600' strokeWidth={2.5} />
                     Upload Your Resume
                   </h3>
-                  <p className='text-slate-600 leading-relaxed text-base'>
+                  <p className='text-slate-600 leading-relaxed text-base font-medium'>
                     Drop your resume. AI builds your profile in seconds.
                   </p>
                 </div>
@@ -648,18 +617,18 @@ export default function HomePage() {
 
             {/* Step 2 */}
             <div className='relative group'>
-              <div className='bg-white rounded-2xl p-8 border border-slate-200 relative h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
+              <div className='bg-white rounded-2xl p-8 border border-slate-200 relative h-full shadow-sm'>
                 {/* Step number */}
                 <div className='absolute -top-4 left-1/2 -translate-x-1/2 w-12 h-12 border-1 border-brand-200 bg-white rounded-2xl flex items-center justify-center text-brand-600 font-bold text-lg z-20'>
                   2
                 </div>
                 {/* Content */}
                 <div className='text-center mt-6'>
-                  <h3 className='text-xl font-semibold text-slate-900 mb-6 flex items-center justify-center gap-3'>
-                    <Brain className='w-6 h-6 text-brand-600' />
+                  <h3 className='text-xl font-semibold text-slate-900 mb-3 flex items-center justify-center gap-3'>
+                    <Brain className='w-6 h-6 text-brand-600' strokeWidth={2.5} />
                     Discover Live Matches
                   </h3>
-                  <p className='text-slate-600 leading-relaxed text-base'>
+                  <p className='text-slate-600 leading-relaxed text-base font-medium'>
                     See perfect matches online right now. Connect instantly.
                   </p>
                 </div>
@@ -668,18 +637,18 @@ export default function HomePage() {
 
             {/* Step 3 */}
             <div className='relative group'>
-              <div className='bg-white rounded-2xl p-8 border border-slate-200 relative h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
+              <div className='bg-white rounded-2xl p-8 border border-slate-200 relative h-full shadow-sm'>
                 {/* Step number */}
                 <div className='absolute -top-4 left-1/2 -translate-x-1/2 w-12 h-12 border-1 border-brand-200 bg-white rounded-2xl flex items-center justify-center text-brand-600 font-bold text-lg z-20'>
                   3
                 </div>
                 {/* Content */}
                 <div className='text-center mt-6'>
-                  <h3 className='text-xl font-semibold text-slate-900 mb-6 flex items-center justify-center gap-3'>
-                    <MessageSquare className='w-6 h-6 text-brand-600' />
+                  <h3 className='text-xl font-semibold text-slate-900 mb-3 flex items-center justify-center gap-3'>
+                    <MessageSquare className='w-6 h-6 text-brand-600' strokeWidth={2.5} />
                     Build Lasting Relationships
                   </h3>
-                  <p className='text-slate-600 leading-relaxed text-base'>
+                  <p className='text-slate-600 leading-relaxed text-base font-medium'>
                     Send requests. Start conversations. Build lasting
                     professional relationships.
                   </p>
@@ -691,7 +660,7 @@ export default function HomePage() {
       </section>
 
       {/* Testimonials */}
-      <section className='py-8 sm:py-12 bg-white relative'>
+      <section className='py-8 sm:py-12 bg-slate-50 relative'>
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-1/4 right-0 w-96 h-96 bg-brand-50/40 rounded-full blur-3xl' />
@@ -700,17 +669,17 @@ export default function HomePage() {
 
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='text-center mb-12'>
-            <h2 className='text-3xl sm:text-4xl font-medium text-gray-900 mb-6 leading-tight'>
+            <h2 className='text-3xl sm:text-4xl font-semibold text-gray-900 mb-3 leading-tight'>
               What Professionals Say
             </h2>
-            <p className='text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed'>
+            <p className='text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed font-medium'>
               Real professionals. Real results. Real career growth.
             </p>
           </div>
 
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-12'>
             {/* Testimonial 1 */}
-            <div className='group bg-white border border-slate-200 rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 flex flex-col h-full'>
+            <div className=' bg-white border border-slate-200 rounded-2xl p-8 shadow-sm flex flex-col h-full'>
               <div className='flex items-center gap-1 mb-8'>
                 {[1, 2, 3, 4, 5].map(star => (
                   <Star
@@ -719,7 +688,7 @@ export default function HomePage() {
                   />
                 ))}
               </div>
-              <blockquote className='text-slate-700 mb-6 text-base leading-relaxed font-normal flex-grow'>
+              <blockquote className='text-slate-700 mb-6 text-base leading-relaxed font-medium flex-grow'>
                 &quot;Loopn made networking feel natural again. I&apos;ve built
                 genuine relationships through honest conversations about shared
                 interests.&quot;
@@ -744,7 +713,7 @@ export default function HomePage() {
             </div>
 
             {/* Testimonial 2 */}
-            <div className='group bg-white border border-slate-200 rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 flex flex-col h-full'>
+            <div className=' bg-white border border-slate-200 rounded-2xl p-8 shadow-sm flex flex-col h-full'>
               <div className='flex items-center gap-1 mb-8'>
                 {[1, 2, 3, 4, 5].map(star => (
                   <Star
@@ -753,7 +722,7 @@ export default function HomePage() {
                   />
                 ))}
               </div>
-              <blockquote className='text-slate-700 mb-6 text-base leading-relaxed font-normal flex-grow'>
+              <blockquote className='text-slate-700 mb-6 text-base leading-relaxed font-medium flex-grow'>
                 &quot;The smart matching is brilliant. I found a mentor through
                 meaningful conversations who&apos;s now a key connection in my
                 career.&quot;
@@ -778,7 +747,7 @@ export default function HomePage() {
             </div>
 
             {/* Testimonial 3 */}
-            <div className='group bg-white border border-slate-200 rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 md:col-span-2 lg:col-span-1 flex flex-col h-full'>
+            <div className=' bg-white border border-slate-200 rounded-2xl p-8 shadow-sm md:col-span-2 lg:col-span-1 flex flex-col h-full'>
               <div className='flex items-center gap-1 mb-8'>
                 {[1, 2, 3, 4, 5].map(star => (
                   <Star
@@ -787,7 +756,7 @@ export default function HomePage() {
                   />
                 ))}
               </div>
-              <blockquote className='text-slate-700 mb-6 text-base leading-relaxed font-normal flex-grow'>
+              <blockquote className='text-slate-700 mb-6 text-base leading-relaxed font-medium flex-grow'>
                 &quot;Finally, a platform where expertise matters more than
                 titles. Every conversation feels purposeful and
                 growth-oriented.&quot;
@@ -814,10 +783,10 @@ export default function HomePage() {
 
           {/* Trust Indicators */}
           <div className='mt-12 text-center'>
-            <h3 className='text-2xl font-semibold text-slate-900 mb-6'>
+            <h3 className='text-2xl font-bold text-slate-900 mb-3'>
               Every Industry. Every Career Level.
             </h3>
-            <p className='text-slate-600 mb-12 text-base'>
+            <p className='text-slate-600 mb-12 text-base font-medium'>
               Join professionals across all industries making career-changing
               connections.
             </p>
@@ -850,10 +819,10 @@ export default function HomePage() {
         </div>
 
         <div className='max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center'>
-          <h2 className='text-3xl sm:text-4xl font-medium text-gray-900 mb-6 leading-tight'>
+          <h2 className='text-3xl sm:text-4xl font-semibold text-gray-900 mb-3 leading-tight'>
             Start Connecting Today
           </h2>
-          <p className='text-lg text-gray-600 mb-12 max-w-md mx-auto'>
+          <p className='text-lg text-gray-600 mb-12 max-w-md mx-auto font-medium'>
             Join thousands of professionals already building career-changing
             relationships.
           </p>
@@ -864,18 +833,18 @@ export default function HomePage() {
               className='w-full sm:w-auto'
             >
               <button
-                className='group w-full bg-brand-600 hover:bg-brand-700 text-white px-8 py-4 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl border-0 min-h-[50px] touch-manipulation'
+                className='w-full bg-brand-500 text-white px-8 py-4 rounded-lg !font-medium flex items-center justify-center gap-3 shadow-lg border-0 min-h-[50px] touch-manipulation'
                 style={{ fontSize: '18px' }}
               >
                 {ctaText}
                 <ArrowRight
-                  className='w-5 h-5 group-hover:translate-x-1 transition-transform'
-                  strokeWidth={1.5}
+                  className='w-5 h-5'
+                  strokeWidth={2.5}
                 />
               </button>
             </Link>
-            <button className='w-full sm:w-auto bg-white hover:bg-gray-50 text-gray-600 px-8 py-4 rounded-lg text-base font-medium border border-gray-300 transition-all duration-300 flex items-center justify-center gap-3 min-h-[52px] touch-manipulation'>
-              <MessageSquare className='w-5 h-5' strokeWidth={1.5} />
+            <button className='w-full sm:w-auto bg-white text-gray-600 px-8 py-4 rounded-lg text-base !font-medium border border-gray-300 flex items-center justify-center gap-3 min-h-[52px] touch-manipulation'>
+              <MessageSquare className='w-5 h-5' strokeWidth={2.5} />
               See It In Action
             </button>
           </div>
@@ -883,7 +852,7 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className='bg-white py-8 border-t border-gray-200'>
+      <footer className='bg-slate-50 py-8 border-t border-gray-200'>
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='text-center'>
             <div className='flex items-center justify-center space-x-3 mb-4'>
@@ -892,7 +861,7 @@ export default function HomePage() {
                 <span className='text-xl font-medium text-gray-900'>Loopn</span>
               </div>
             </div>
-            <p className='text-gray-600 text-sm text-center max-w-md mx-auto mb-6 leading-relaxed'>
+            <p className='text-gray-600 text-sm text-center max-w-md mx-auto mb-6 leading-relaxed font-medium'>
               AI-powered professional discovery for career-advancing
               relationships
             </p>
@@ -901,25 +870,25 @@ export default function HomePage() {
             <div className='flex flex-col sm:flex-row justify-center items-center gap-6 mb-6'>
               <a
                 href='#'
-                className='text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium'
+                className='text-gray-600  text-sm font-medium'
               >
                 Privacy Policy
               </a>
               <a
                 href='#'
-                className='text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium'
+                className='text-gray-600  text-sm font-medium'
               >
                 Terms of Service
               </a>
               <a
                 href='#'
-                className='text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium'
+                className='text-gray-600  text-sm font-medium'
               >
                 Contact Us
               </a>
               <a
                 href='#'
-                className='text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium'
+                className='text-gray-600  text-sm font-medium'
               >
                 Help Center
               </a>
