@@ -71,6 +71,30 @@ export class MarkdownResumePDFGenerator {
     });
   }
 
+  private async convertSvgToBase64(): Promise<string | null> {
+    try {
+      // The loopn.svg content - using the actual SVG content from public folder
+      const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
+<svg width="160" height="160" viewBox="30 30 160 160" xmlns="http://www.w3.org/2000/svg">
+  <!-- slate background circle -->
+  <circle cx="110" cy="110" r="80" fill="#e5e5e5" />
+
+  <!-- Left brand blue circle (brand-500) -->
+  <circle cx="75" cy="110" r="35" fill="oklch(0.56 0.28 258)" />
+
+  <!-- Right brand blue circle (brand-500) -->
+  <circle cx="145" cy="110" r="35" fill="oklch(0.56 0.28 258)" />
+</svg>`;
+
+      // Convert SVG to base64
+      const base64 = btoa(unescape(encodeURIComponent(svgContent)));
+      return `data:image/svg+xml;base64,${base64}`;
+    } catch (error) {
+      console.error('Error converting SVG to base64:', error);
+      return null;
+    }
+  }
+
   private async generateMarkdown(data: ResumeData): Promise<string> {
     const { userProfile, name } = data;
     let markdown = '';
@@ -295,7 +319,39 @@ export class MarkdownResumePDFGenerator {
           font-size: 14px;
           max-width: 210mm;
           margin: 0 auto;
-          padding: 15mm;
+          padding: 0;
+        }
+
+        /* Loopn header at very top */
+        .loopn-header {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          padding: 6px 15mm;
+          background: #f9fafb;
+          border-bottom: 1px solid #e5e7eb;
+          font-size: 12px;
+          color: #6b7280;
+        }
+
+        .loopn-logo {
+          width: 20px;
+          height: 20px;
+          display: block;
+          flex-shrink: 0;
+        }
+
+        .loopn-text {
+          font-weight: 500;
+          display: flex;
+          align-items: center;
+          line-height: 1;
+        }
+
+        /* Resume content with proper spacing */
+        .resume-content {
+          padding: 8mm 6mm 15mm 6mm;
         }
         
         h1 {
@@ -438,8 +494,22 @@ export class MarkdownResumePDFGenerator {
         /* Print optimizations */
         @media print {
           body {
-            padding: 10mm;
+            padding: 0;
             font-size: 13px;
+          }
+
+          .loopn-header {
+            padding: 6px 10mm;
+            font-size: 11px;
+          }
+
+          .loopn-logo {
+            width: 18px;
+            height: 18px;
+          }
+
+          .resume-content {
+            padding: 6mm 5mm 10mm 5mm;
           }
           
           h1 {
@@ -491,6 +561,9 @@ export class MarkdownResumePDFGenerator {
     const htmlContent = this.md.render(markdown);
     const css = this.getResumeCSS();
 
+    // Get the loopn logo as base64
+    const logoBase64 = await this.convertSvgToBase64();
+
     const fullHtml = `
       <!DOCTYPE html>
       <html>
@@ -500,13 +573,21 @@ export class MarkdownResumePDFGenerator {
           ${css}
         </head>
         <body>
-          ${htmlContent}
+          ${logoBase64 ? `
+          <div class="loopn-header">
+            <img src="${logoBase64}" alt="loopn" class="loopn-logo" />
+            <span class="loopn-text">Downloaded from Loopn</span>
+          </div>
+          ` : ''}
+          <div class="resume-content">
+            ${htmlContent}
+          </div>
         </body>
       </html>
     `;
 
     const options = {
-      margin: [12, 12, 12, 12], // top, right, bottom, left margins in mm
+      margin: [0, 12, 12, 12], // top, right, bottom, left margins in mm - no top margin for header
       filename: `${data.name.replace(/[^a-zA-Z0-9]/g, '_')}_Resume_${new Date().toISOString().split('T')[0]}.pdf`,
       image: { type: 'png', quality: 1.0 },
       html2canvas: {
