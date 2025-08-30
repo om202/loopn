@@ -169,7 +169,7 @@ export default function DashboardSidebar({
                   className={`relative w-full flex items-center gap-3 px-2 py-2 rounded-lg text-left group transition-colors ${
                     activeSection === id
                       ? 'text-brand-600 bg-brand-50 font-medium'
-                      : 'text-black hover:bg-slate-50'
+                      : 'text-black hover:bg-slate-50 font-medium'
                   }`}
                 >
                   <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -183,7 +183,7 @@ export default function DashboardSidebar({
                         <path
                           strokeLinecap='round'
                           strokeLinejoin='round'
-                          strokeWidth={2}
+                          strokeWidth={count > 0 && id === 'notifications' ? 2.5 : 2}
                           d='M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9'
                         />
                       </svg>
@@ -197,15 +197,13 @@ export default function DashboardSidebar({
                   </div>
                   <span className='flex-1 flex items-center justify-between min-w-0'>
                     <span
-                      className={`text-base truncate ${activeSection === id ? 'font-medium' : ''}`}
+                      className={`text-base truncate ${count > 0 && id === 'notifications' ? 'font-semibold' : 'font-medium'} flex items-center gap-2`}
                     >
                       {label}
+                      {count > 0 && id === 'notifications' && (
+                        <span className='w-2 h-2 rounded-full bg-brand-500 flex-shrink-0'></span>
+                      )}
                     </span>
-                    {count > 0 && id === 'notifications' && (
-                      <span className='text-xs font-bold flex items-center justify-center h-5 w-5 rounded-full bg-b_red-600 text-white'>
-                        {count > 99 ? '99+' : count}
-                      </span>
-                    )}
                   </span>
                 </button>
               ))}
@@ -217,12 +215,12 @@ export default function DashboardSidebar({
             {/* Bug Report Button */}
             <button
               onClick={() => setIsBugReportOpen(true)}
-              className='relative w-full flex items-center gap-3 px-2 py-2 rounded-lg text-left group transition-colors text-black hover:bg-slate-50'
+              className='relative w-full flex items-center gap-3 px-2 py-2 rounded-lg text-left group transition-colors text-black hover:bg-slate-50 font-medium'
             >
               <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
                 <Bug className='w-4 h-4' />
               </div>
-              <span className='text-sm'>Report Bug</span>
+              <span className='text-sm font-medium'>Report Bug</span>
             </button>
 
             {/* Account Button */}
@@ -231,7 +229,7 @@ export default function DashboardSidebar({
               className={`relative w-full flex items-center gap-3 px-2 py-2 rounded-lg text-left group transition-colors ${
                 activeSection === accountItem.id
                   ? 'text-brand-600 bg-brand-50 font-medium'
-                  : 'text-black hover:bg-slate-50'
+                  : 'text-black hover:bg-slate-50 font-medium'
               }`}
             >
               <div className='flex-shrink-0 flex items-center justify-center'>
@@ -292,17 +290,10 @@ export default function DashboardSidebar({
                         <path
                           strokeLinecap='round'
                           strokeLinejoin='round'
-                          strokeWidth={2}
+                          strokeWidth={count > 0 && id === 'notifications' ? 2.5 : 2}
                           d='M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9'
                         />
                       </svg>
-                      {count > 0 && id === 'notifications' && (
-                        <div className='absolute -top-1 -right-1 w-4 h-4 bg-b_red-600 rounded-full flex items-center justify-center'>
-                          <span className='text-white text-[8px] font-bold leading-none'>
-                            {count > 99 ? '99+' : count}
-                          </span>
-                        </div>
-                      )}
                     </>
                   ) : icon === 'UserAvatar' ? (
                     <div className='w-8 h-8 flex items-center justify-center'>
@@ -330,7 +321,7 @@ export default function DashboardSidebar({
                   )}
                 </div>
                 <div
-                  className='text-xs font-medium leading-tight text-center flex items-center justify-center gap-1'
+                  className={`text-xs leading-tight text-center flex items-center justify-center gap-1 ${count > 0 && id === 'notifications' ? 'font-semibold' : 'font-medium'}`}
                   style={{ textShadow: '0 1px 1px rgba(255, 255, 255, 0.8)' }}
                 >
                   {id === 'account'
@@ -344,6 +335,9 @@ export default function DashboardSidebar({
                           : id === 'notifications'
                             ? 'Notify'
                             : label}
+                  {count > 0 && id === 'notifications' && (
+                    <span className='w-1.5 h-1.5 rounded-full bg-brand-500 flex-shrink-0'></span>
+                  )}
                 </div>
               </button>
             ))}
