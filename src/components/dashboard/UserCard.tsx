@@ -386,11 +386,14 @@ export default function UserCard({
                   <h1 className='text-xl font-bold text-slate-900 mb-1'>
                     {getDisplayName(userPresence, userProfile)}
                   </h1>
-                  {(finalFullProfile?.jobRole || finalFullProfile?.companyName) && (
+                  {(finalFullProfile?.jobRole ||
+                    finalFullProfile?.companyName) && (
                     <p className='text-base text-slate-700 mb-1'>
-                      {finalFullProfile?.jobRole && finalFullProfile?.companyName
+                      {finalFullProfile?.jobRole &&
+                      finalFullProfile?.companyName
                         ? `${finalFullProfile.jobRole} at ${finalFullProfile.companyName}`
-                        : finalFullProfile?.jobRole || finalFullProfile?.companyName}
+                        : finalFullProfile?.jobRole ||
+                          finalFullProfile?.companyName}
                     </p>
                   )}
                 </div>

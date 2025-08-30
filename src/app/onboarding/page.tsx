@@ -539,7 +539,6 @@ export default function OnboardingPage() {
                 <h1 className='text-3xl font-bold text-brand-600'>Loopn</h1>
               </div>
             </Link>
-
           </div>
 
           {/* Resume Upload Section */}
@@ -562,8 +561,14 @@ export default function OnboardingPage() {
                     <>
                       <div className='flex space-x-1'>
                         <div className='w-1.5 h-1.5 bg-white rounded-full animate-bounce'></div>
-                        <div className='w-1.5 h-1.5 bg-white rounded-full animate-bounce' style={{animationDelay: '0.1s'}}></div>
-                        <div className='w-1.5 h-1.5 bg-white rounded-full animate-bounce' style={{animationDelay: '0.2s'}}></div>
+                        <div
+                          className='w-1.5 h-1.5 bg-white rounded-full animate-bounce'
+                          style={{ animationDelay: '0.1s' }}
+                        ></div>
+                        <div
+                          className='w-1.5 h-1.5 bg-white rounded-full animate-bounce'
+                          style={{ animationDelay: '0.2s' }}
+                        ></div>
                       </div>
                       Processing...
                     </>
@@ -599,9 +604,7 @@ export default function OnboardingPage() {
           )}
 
           {error && (
-            <div className='text-red-600 text-center mb-6'>
-              {error}
-            </div>
+            <div className='text-red-600 text-center mb-6'>{error}</div>
           )}
 
           {/* Step: Personal & Professional Information */}

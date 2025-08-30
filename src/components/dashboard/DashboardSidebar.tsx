@@ -300,9 +300,13 @@ export default function DashboardSidebar({
                       </svg>
                     </>
                   ) : icon === 'UserAvatar' ? (
-                    <div className={`w-8 h-8 flex items-center justify-center rounded-lg transition-all duration-150 ${
-                      activeSection === id ? 'ring-2 ring-brand-500 ring-offset-1' : ''
-                    }`}>
+                    <div
+                      className={`w-8 h-8 flex items-center justify-center rounded-lg transition-all duration-150 ${
+                        activeSection === id
+                          ? 'ring-2 ring-brand-500 ring-offset-1'
+                          : ''
+                      }`}
+                    >
                       <UserAvatar
                         email={getUserEmail()}
                         userId={user?.userId}

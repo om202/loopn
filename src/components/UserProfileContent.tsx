@@ -22,7 +22,10 @@ export default function UserProfileContent({
   className = '',
 }: UserProfileContentProps) {
   const [showExternalLinkDialog, setShowExternalLinkDialog] = useState(false);
-  const [pendingExternalLink, setPendingExternalLink] = useState<{url: string; name: string} | null>(null);
+  const [pendingExternalLink, setPendingExternalLink] = useState<{
+    url: string;
+    name: string;
+  } | null>(null);
 
   // Utility function to ensure URLs have proper protocol
   const ensureHttps = (url: string) => {
@@ -107,7 +110,12 @@ export default function UserProfileContent({
         <div className='flex flex-wrap gap-2'>
           {userProfile.linkedinUrl && (
             <button
-              onClick={() => handleExternalLinkClick(userProfile.linkedinUrl!, 'LinkedIn Profile')}
+              onClick={() =>
+                handleExternalLinkClick(
+                  userProfile.linkedinUrl!,
+                  'LinkedIn Profile'
+                )
+              }
               className='flex items-center gap-2 px-3 py-1.5 bg-slate-100 text-slate-700 hover:bg-blue-50 hover:text-blue-600 rounded-full text-sm font-medium transition-colors'
             >
               <Linkedin className='w-3.5 h-3.5' />
@@ -116,7 +124,12 @@ export default function UserProfileContent({
           )}
           {userProfile.githubUrl && (
             <button
-              onClick={() => handleExternalLinkClick(userProfile.githubUrl!, 'GitHub Profile')}
+              onClick={() =>
+                handleExternalLinkClick(
+                  userProfile.githubUrl!,
+                  'GitHub Profile'
+                )
+              }
               className='flex items-center gap-2 px-3 py-1.5 bg-slate-100 text-slate-700 hover:bg-blue-50 hover:text-blue-600 rounded-full text-sm font-medium transition-colors'
             >
               <Github className='w-3.5 h-3.5' />
@@ -125,7 +138,12 @@ export default function UserProfileContent({
           )}
           {userProfile.portfolioUrl && (
             <button
-              onClick={() => handleExternalLinkClick(userProfile.portfolioUrl!, 'Portfolio Website')}
+              onClick={() =>
+                handleExternalLinkClick(
+                  userProfile.portfolioUrl!,
+                  'Portfolio Website'
+                )
+              }
               className='flex items-center gap-2 px-3 py-1.5 bg-slate-100 text-slate-700 hover:bg-blue-50 hover:text-blue-600 rounded-full text-sm font-medium transition-colors'
             >
               <Globe className='w-3.5 h-3.5' />
