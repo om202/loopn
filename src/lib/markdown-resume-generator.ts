@@ -1,4 +1,5 @@
 import MarkdownIt from 'markdown-it';
+import { imageUrlCache } from './image-cache';
 import type { Schema } from '../../amplify/data/resource';
 
 type UserProfile = Schema['UserProfile']['type'];
@@ -19,12 +20,64 @@ export class MarkdownResumePDFGenerator {
     });
   }
 
-  private generateMarkdown(data: ResumeData): string {
+  private async convertImageToBase64(imageUrl: string): Promise<string | null> {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      
+      img.onload = () => {
+        try {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          
+          canvas.width = img.width;
+          canvas.height = img.height;
+          
+          ctx?.drawImage(img, 0, 0);
+          const dataURL = canvas.toDataURL('image/jpeg', 0.8);
+          resolve(dataURL);
+        } catch (error) {
+          console.error('Error converting image to base64:', error);
+          resolve(null);
+        }
+      };
+      
+      img.onerror = () => {
+        console.error('Error loading image for base64 conversion');
+        resolve(null);
+      };
+      
+      img.src = imageUrl;
+    });
+  }
+
+  private async generateMarkdown(data: ResumeData): Promise<string> {
     const { userProfile, name } = data;
     let markdown = '';
 
-    // Header with name and contact info
-    markdown += `# ${name}\n\n`;
+    // Resolve profile picture URL and convert to base64 if available
+    let profileImageDataUrl: string | null = null;
+    if (userProfile.profilePictureUrl) {
+      try {
+        const resolvedImageUrl = await imageUrlCache.getResolvedUrl(userProfile.profilePictureUrl);
+        if (resolvedImageUrl) {
+          // Convert image to base64 for PDF generation
+          profileImageDataUrl = await this.convertImageToBase64(resolvedImageUrl);
+        }
+      } catch (error) {
+        console.error('Error resolving/converting profile picture:', error);
+        profileImageDataUrl = null;
+      }
+    }
+
+    // Header with name and contact info (with photo if available)
+    if (profileImageDataUrl) {
+      markdown += `<div class="header-container">\n`;
+      markdown += `<div class="header-content">\n\n`;
+      markdown += `# ${name}\n\n`;
+    } else {
+      markdown += `# ${name}\n\n`;
+    }
 
     // Job title and company
     if (userProfile.jobRole || userProfile.companyName) {
@@ -67,6 +120,15 @@ export class MarkdownResumePDFGenerator {
 
     if (links.length > 0) {
       markdown += `${links.join(' • ')}\n\n`;
+    }
+
+    // Close header container and add photo if available
+    if (profileImageDataUrl) {
+      markdown += `</div>\n`; // Close header-content
+      markdown += `<div class="profile-photo">\n`;
+      markdown += `<img src="${profileImageDataUrl}" alt="Profile Photo" />\n`;
+      markdown += `</div>\n`;
+      markdown += `</div>\n\n`; // Close header-container
     }
 
     markdown += '---\n\n';
@@ -268,6 +330,31 @@ export class MarkdownResumePDFGenerator {
           margin: 16px 0;
         }
         
+        /* Header with photo layout */
+        .header-container {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          margin-bottom: 16px;
+          gap: 20px;
+        }
+        
+        .header-content {
+          flex: 1;
+        }
+        
+        .profile-photo {
+          flex-shrink: 0;
+        }
+        
+        .profile-photo img {
+          width: 100px;
+          height: 100px;
+          border-radius: 8px;
+          object-fit: cover;
+          border: 2px solid #e5e7eb;
+        }
+        
         /* Header styling */
         body > p:first-of-type {
           font-size: 16px;
@@ -356,6 +443,15 @@ export class MarkdownResumePDFGenerator {
           p {
             margin-bottom: 6px;
           }
+          
+          .profile-photo img {
+            width: 80px;
+            height: 80px;
+          }
+          
+          .header-container {
+            gap: 15px;
+          }
         }
       </style>
     `;
@@ -370,7 +466,7 @@ export class MarkdownResumePDFGenerator {
     // Dynamically import html2pdf to avoid SSR issues
     const html2pdf = (await import('html2pdf.js')).default;
 
-    const markdown = this.generateMarkdown(data);
+    const markdown = await this.generateMarkdown(data);
     const htmlContent = this.md.render(markdown);
     const css = this.getResumeCSS();
 
