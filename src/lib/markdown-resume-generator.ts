@@ -43,8 +43,14 @@ export class MarkdownResumePDFGenerator {
             // Draw the cropped square portion of the image
             ctx.drawImage(
               img,
-              startX, startY, size, size, // source rectangle (cropped)
-              0, 0, size, size // destination rectangle (full canvas)
+              startX,
+              startY,
+              size,
+              size, // source rectangle (cropped)
+              0,
+              0,
+              size,
+              size // destination rectangle (full canvas)
             );
           }
 
