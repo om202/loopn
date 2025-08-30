@@ -20,6 +20,7 @@ interface UserAvatarProps {
   className?: string;
   statusTooltip?: string;
   shape?: 'square' | 'circular';
+  useLocal?: boolean;
 }
 
 export default function UserAvatar({
@@ -33,6 +34,7 @@ export default function UserAvatar({
   className = '',
   statusTooltip,
   shape = 'square',
+  useLocal = false,
 }: UserAvatarProps) {
   const getAvatarSize = () => {
     const sizes = { xs: 26, sm: 36, md: 52, lg: 64, xl: 84 };
@@ -83,6 +85,17 @@ export default function UserAvatar({
   useEffect(() => {
     const resolveImageUrl = async () => {
       if (profilePictureUrl && hasProfilePicture) {
+        // Use local images directly from public folder
+        if (useLocal) {
+          setResolvedImageUrl(profilePictureUrl);
+          setImageError(false);
+          setImageLoaded(false);
+          previousUrlRef.current = profilePictureUrl;
+          previousResolvedUrlRef.current = profilePictureUrl;
+          return;
+        }
+        
+        // Use imageUrlCache for S3/external URLs
         try {
           const url = await imageUrlCache.getResolvedUrl(profilePictureUrl);
           const wasLoadedBefore = url ? loadedImages.has(url) : false;
@@ -111,7 +124,7 @@ export default function UserAvatar({
       }
     };
     resolveImageUrl();
-  }, [profilePictureUrl, hasProfilePicture]);
+  }, [profilePictureUrl, hasProfilePicture, useLocal]);
 
   const shouldShowLoadingState = hasProfilePicture && !imageLoaded;
 

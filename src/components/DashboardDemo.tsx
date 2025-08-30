@@ -2,10 +2,7 @@
 
 import {
   MessageSquare,
-  CheckCircle2,
-  Users,
   Compass,
-  Bell,
   Search,
   User,
   MoreHorizontal,
@@ -14,9 +11,11 @@ import {
   Award,
   Target,
   UserRoundSearch,
+  Bookmark,
 } from 'lucide-react';
 import Image from 'next/image';
 import React, { useState } from 'react';
+import UserAvatar from './UserAvatar';
 
 // Dummy data
 const dummyUsers = [
@@ -150,6 +149,31 @@ const dummyConnections = [
   },
 ];
 
+const dummySavedUsers = [
+  {
+    id: '7',
+    name: 'Dr. Elena Vasquez',
+    role: 'AI Research Scientist',
+    company: 'Google DeepMind',
+    image: '/dummy-users/dummy-user6.jpg',
+    isOnline: true,
+    skills: ['Deep Learning', 'Computer Vision', 'NLP'],
+    status: 'Advancing AI safety research',
+    savedDate: '1 week ago',
+  },
+  {
+    id: '8',
+    name: 'James Chen',
+    role: 'Senior Software Architect',
+    company: 'Meta',
+    image: '/dummy-users/dummy-user7.jpg',
+    isOnline: false,
+    skills: ['System Design', 'Microservices', 'Cloud Architecture'],
+    status: 'Building scalable distributed systems',
+    savedDate: '3 days ago',
+  },
+];
+
 const currentUser = {
   name: 'Jordan Blake',
   role: 'Blockchain Developer',
@@ -165,17 +189,67 @@ const currentUser = {
 };
 
 type SectionType =
-  | 'discover'
+  | 'suggested'
   | 'connections'
-  | 'chats'
+  | 'saved'
   | 'notifications'
   | 'account'
   | 'search';
 
+// Custom Connect Icon using circles from logo
+const ConnectIcon = ({ className }: { className?: string }) => (
+  <svg
+    width='20'
+    height='20'
+    viewBox='30 30 160 160'
+    className={className}
+    fill='none'
+    stroke='currentColor'
+    strokeWidth='13'
+  >
+    <circle cx='75' cy='110' r='35' />
+    <circle cx='145' cy='110' r='35' />
+  </svg>
+);
+
+// Custom Notification Bell Icon
+const NotificationBellIcon = ({ className }: { className?: string }) => (
+  <svg
+    className={className}
+    fill='none'
+    stroke='currentColor'
+    viewBox='0 0 24 24'
+  >
+    <path
+      strokeLinecap='round'
+      strokeLinejoin='round'
+      strokeWidth={2}
+      d='M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9'
+    />
+  </svg>
+);
+
 export default function DashboardDemo() {
-  const [activeSection, setActiveSection] = useState<SectionType>('discover');
+  const [activeSection, setActiveSection] = useState<SectionType>('suggested');
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState(dummyUsers.slice(0, 3));
+  const [savedUserIds, setSavedUserIds] = useState<Set<string>>(
+    new Set(['7', '8'])
+  );
+
+  // No need to convert paths anymore - UserAvatar handles local paths directly
+  
+  const handleToggleSave = (userId: string) => {
+    setSavedUserIds(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(userId)) {
+        newSet.delete(userId);
+      } else {
+        newSet.add(userId);
+      }
+      return newSet;
+    });
+  };
   // Handle search functionality
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -195,15 +269,43 @@ export default function DashboardDemo() {
     }
   };
 
+  // Sidebar items configuration
+  const sidebarItems = [
+    {
+      id: 'suggested' as const,
+      icon: Compass,
+      label: 'Discover',
+      count: dummyUsers.length,
+    },
+    {
+      id: 'connections' as const,
+      icon: 'ConnectIcon',
+      label: 'Connections',
+      count: dummyConnections.length,
+    },
+    {
+      id: 'saved' as const,
+      icon: Bookmark,
+      label: 'Saved',
+      count: savedUserIds.size,
+    },
+    {
+      id: 'notifications' as const,
+      icon: 'NotificationBell',
+      label: 'Notifications',
+      count: dummyNotifications.filter(n => !n.isRead).length,
+    },
+  ];
+
   // Render different sections
   const renderSectionContent = () => {
     switch (activeSection) {
-      case 'discover':
-        return renderDiscoverSection();
+      case 'suggested':
+        return renderSuggestedSection();
       case 'connections':
         return renderConnectionsSection();
-      case 'chats':
-        return renderChatsSection();
+      case 'saved':
+        return renderSavedSection();
       case 'notifications':
         return renderNotificationsSection();
       case 'account':
@@ -211,14 +313,83 @@ export default function DashboardDemo() {
       case 'search':
         return renderSearchSection();
       default:
-        return renderDiscoverSection();
+        return renderSuggestedSection();
     }
   };
 
-  const renderDiscoverSection = () => (
+  const renderSuggestedSection = () => (
     <div className='flex-1 overflow-y-auto'>
       <div className='space-y-0'>
-        {dummyUsers.map((user, index) => (
+        {dummyUsers.map((user, index) => {
+          const isSaved = savedUserIds.has(user.id);
+          return (
+            <div
+              key={user.id}
+              className='px-2 py-2 sm:px-3 sm:py-3 group transition-all duration-200 cursor-pointer shadow-xs bg-white hover:bg-slate-50 rounded-lg border border-slate-100 hover:border-brand-200 opacity-0 animate-[slideUpFade_0.6s_ease-out_forwards]'
+              style={{ animationDelay: `${0.5 + index * 0.5}s` }}
+            >
+              <div className='flex items-center gap-3'>
+                <div className='flex-shrink-0 flex items-center justify-center'>
+                  <UserAvatar
+                    email={
+                      user.name.toLowerCase().replace(' ', '') + '@example.com'
+                    }
+                    userId={user.id}
+                    profilePictureUrl={user.image}
+                    hasProfilePicture={true}
+                    size='md'
+                    showStatus={user.isOnline}
+                    status={user.isOnline ? 'ONLINE' : 'OFFLINE'}
+                    shape='square'
+                    useLocal={true}
+                  />
+                </div>
+
+                <div className='flex-1 min-w-0'>
+                  <div className='flex items-center gap-2 mb-1'>
+                    <div className='text-black text-base truncate no-email-detection font-medium'>
+                      {user.name}
+                    </div>
+                  </div>
+                  <div className='text-sm text-slate-500 font-medium truncate'>
+                    {user.role}
+                    {user.company && (
+                      <span className='text-slate-400'> at {user.company}</span>
+                    )}
+                  </div>
+                </div>
+
+                <div className='flex-shrink-0 flex items-center gap-2'>
+                  <button
+                    onClick={() => handleToggleSave(user.id)}
+                    className='p-2 rounded-lg transition-colors flex-shrink-0 text-slate-500 hover:bg-slate-50'
+                    title={isSaved ? 'Remove from saved' : 'Save'}
+                  >
+                    <Bookmark
+                      className={`w-4 h-4 ${isSaved ? 'fill-slate-400' : 'stroke-slate-500'}`}
+                      strokeWidth={1.5}
+                    />
+                  </button>
+
+                  <button className='px-2 py-2 rounded-lg text-base font-medium transition-colors flex items-center justify-center gap-2 flex-shrink-0 bg-brand-500 hover:bg-brand-600 text-white'>
+                    <ConnectIcon className='w-4 h-4 text-white' />
+                    <span className='text-base font-medium text-white'>
+                      Connect
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+
+  const renderSavedSection = () => (
+    <div className='flex-1 overflow-y-auto'>
+      <div className='space-y-0'>
+        {dummySavedUsers.map((user, index) => (
           <div
             key={user.id}
             className='px-3 py-2 group transition-all duration-200 cursor-pointer bg-white hover:bg-slate-100 hover:rounded-2xl border border-transparent border-b-slate-100 opacity-0 animate-[slideUpFade_0.6s_ease-out_forwards]'
@@ -226,18 +397,19 @@ export default function DashboardDemo() {
           >
             <div className='flex items-center gap-1'>
               <div className='flex-shrink-0'>
-                <div className='relative'>
-                  <Image
-                    src={user.image}
-                    alt={user.name}
-                    width={48}
-                    height={48}
-                    className='w-12 h-12 rounded-full object-cover'
+                <UserAvatar
+                  email={
+                    user.name.toLowerCase().replace(' ', '') + '@example.com'
+                  }
+                  userId={user.id}
+                  profilePictureUrl={user.image}
+                  hasProfilePicture={true}
+                  size='md'
+                  showStatus={user.isOnline}
+                  status={user.isOnline ? 'ONLINE' : 'OFFLINE'}
+                                      shape='square'
+                    useLocal={true}
                   />
-                  <div
-                    className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 ${user.isOnline ? 'bg-b_green-400' : 'bg-slate-400'} border-2 border-white rounded-full`}
-                  ></div>
-                </div>
               </div>
 
               <div className='flex-1 min-w-0'>
@@ -252,15 +424,23 @@ export default function DashboardDemo() {
               </div>
 
               <div className='flex-shrink-0 flex items-center gap-1.5'>
-                <button className='px-2 py-1.5 text-base font-medium rounded-xl border transition-colors flex items-center justify-center flex-shrink-0 w-[40px] h-[40px] md:w-auto md:h-auto md:gap-1.5 md:min-w-[44px] bg-brand-50 text-brand-600 border-brand-200 hover:bg-brand-50 hover:border-brand-200'>
-                  <CheckCircle2 className='w-4 h-4 text-brand-600 flex-shrink-0' />
+                <button
+                  onClick={() => handleToggleSave(user.id)}
+                  className='p-1.5 text-slate-500 hover:text-brand-600 hover:bg-slate-50 rounded-lg transition-colors'
+                  title='Remove from saved'
+                >
+                  <Bookmark className='w-4 h-4 fill-slate-400' />
+                </button>
+
+                <button className='px-2 py-1.5 text-base font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 flex-shrink-0 bg-brand-500 hover:bg-brand-600 text-white'>
+                  <ConnectIcon className='w-4 h-4 text-white flex-shrink-0' />
                   <span className='hidden md:inline text-base font-medium'>
                     Connect
                   </span>
                 </button>
 
-                <button className='md:flex p-1.5 text-base font-medium rounded-full border transition-colors items-center justify-center w-[32px] h-[32px] bg-white border-slate-200 hover:bg-slate-100'>
-                  <MoreHorizontal className='w-5 h-5 text-slate-500' />
+                <button className='p-1.5 text-base font-medium rounded-lg transition-colors flex items-center justify-center w-[32px] h-[32px] bg-white border border-slate-200 hover:bg-slate-50'>
+                  <MoreHorizontal className='w-4 h-4 text-slate-500' />
                 </button>
               </div>
             </div>
@@ -280,18 +460,20 @@ export default function DashboardDemo() {
           >
             <div className='flex items-center gap-2'>
               <div className='flex-shrink-0'>
-                <div className='relative'>
-                  <Image
-                    src={connection.image}
-                    alt={connection.name}
-                    width={48}
-                    height={48}
-                    className='w-12 h-12 rounded-full object-cover'
+                <UserAvatar
+                  email={
+                    connection.name.toLowerCase().replace(' ', '') +
+                    '@example.com'
+                  }
+                  userId={connection.id}
+                  profilePictureUrl={connection.image}
+                  hasProfilePicture={true}
+                  size='md'
+                  showStatus={connection.isOnline}
+                  status={connection.isOnline ? 'ONLINE' : 'OFFLINE'}
+                                      shape='square'
+                    useLocal={true}
                   />
-                  <div
-                    className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 ${connection.isOnline ? 'bg-b_green-400' : 'bg-slate-400'} border-2 border-white rounded-full`}
-                  ></div>
-                </div>
               </div>
 
               <div className='flex-1 min-w-0'>
@@ -305,61 +487,15 @@ export default function DashboardDemo() {
 
               <div className='flex-shrink-0 flex items-center gap-2'>
                 <button className='p-2 text-brand-600 hover:bg-brand-50 rounded-lg transition-colors'>
-                  <MessageSquare className='w-5 h-5' />
+                  <MessageSquare className='w-4 h-4' />
                 </button>
-                <button className='p-2 text-slate-500 hover:bg-slate-100 rounded-lg transition-colors'>
-                  <MoreHorizontal className='w-5 h-5' />
+                <button className='p-2 text-slate-500 hover:bg-slate-50 rounded-lg transition-colors'>
+                  <MoreHorizontal className='w-4 h-4' />
                 </button>
               </div>
             </div>
           </div>
         ))}
-      </div>
-    </div>
-  );
-
-  const renderChatsSection = () => (
-    <div className='flex-1 overflow-y-auto'>
-      <div className='space-y-1'>
-        {dummyUsers
-          .filter(user => user.lastMessage)
-          .map(user => (
-            <div
-              key={user.id}
-              className='px-3 py-3 hover:bg-slate-100 rounded-xl transition-all duration-200 cursor-pointer'
-            >
-              <div className='flex items-center gap-2'>
-                <div className='flex-shrink-0'>
-                  <div className='relative'>
-                    <Image
-                      src={user.image}
-                      alt={user.name}
-                      width={48}
-                      height={48}
-                      className='w-12 h-12 rounded-full object-cover'
-                    />
-                    <div
-                      className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 ${user.isOnline ? 'bg-b_green-400' : 'bg-slate-400'} border-2 border-white rounded-full`}
-                    ></div>
-                  </div>
-                </div>
-
-                <div className='flex-1 min-w-0'>
-                  <div className='flex items-center justify-between mb-1'>
-                    <div className='text-black font-medium truncate'>
-                      {user.name}
-                    </div>
-                    <div className='text-sm text-slate-500'>
-                      {user.lastMessageTime}
-                    </div>
-                  </div>
-                  <div className='text-sm text-slate-500 truncate'>
-                    {user.lastMessage}
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
       </div>
     </div>
   );
@@ -374,13 +510,19 @@ export default function DashboardDemo() {
           >
             <div className='flex items-center gap-2'>
               <div className='flex-shrink-0'>
-                <Image
-                  src={notification.avatar}
-                  alt={notification.title}
-                  width={40}
-                  height={40}
-                  className='w-10 h-10 rounded-full object-cover'
-                />
+                <UserAvatar
+                  email={
+                    notification.title.toLowerCase().replace(' ', '') +
+                    '@example.com'
+                  }
+                  userId={notification.id}
+                  profilePictureUrl={notification.avatar}
+                  hasProfilePicture={true}
+                  size='sm'
+                  showStatus={false}
+                                      shape='square'
+                    useLocal={true}
+                  />
               </div>
 
               <div className='flex-1 min-w-0'>
@@ -395,10 +537,10 @@ export default function DashboardDemo() {
 
               {notification.type === 'chat_request' && (
                 <div className='flex-shrink-0 flex items-center gap-2'>
-                  <button className='px-3 py-1.5 bg-brand-500 text-white text-sm font-medium rounded-lg hover:bg-brand-600 transition-colors'>
+                  <button className='px-3 py-2 bg-brand-500 text-white text-base font-medium rounded-lg hover:bg-brand-600 transition-colors'>
                     Accept
                   </button>
-                  <button className='px-3 py-1.5 bg-slate-100 text-slate-500 text-sm font-medium rounded-lg hover:bg-slate-200 transition-colors'>
+                  <button className='px-3 py-2 bg-slate-100 text-slate-600 text-base font-medium rounded-lg hover:bg-slate-200 transition-colors'>
                     Decline
                   </button>
                 </div>
@@ -411,31 +553,57 @@ export default function DashboardDemo() {
   );
 
   const renderAccountSection = () => (
-    <div className='flex-1 overflow-y-auto'>
-      <div className='space-y-6'>
-        {/* Profile Header */}
-        <div className='flex items-center gap-3'>
-          <div className='relative'>
-            <Image
-              src={currentUser.image}
-              alt={currentUser.name}
-              width={80}
-              height={80}
-              className='w-20 h-20 rounded-full object-cover'
-            />
-            <div className='absolute -bottom-1 -right-1 w-6 h-6 bg-b_green-400 border-3 border-white rounded-full'></div>
-          </div>
-          <div>
-            <h3 className='text-xl font-semibold text-black'>
-              {currentUser.name}
-            </h3>
-            <p className='text-slate-500'>{currentUser.role}</p>
-            <p className='text-sm text-slate-500'>{currentUser.email}</p>
+    <div className='h-full flex flex-col'>
+      {/* Profile Section */}
+      <div className='mx-auto w-full'>
+        <div className='flex flex-col items-start mb-8'>
+          <UserAvatar
+            email={currentUser.email}
+            userId='current-user'
+            profilePictureUrl={currentUser.image}
+            hasProfilePicture={true}
+            size='xl'
+            showStatus={true}
+            status='ONLINE'
+            shape='square'
+            useLocal={true}
+            className='mb-5'
+          />
+          <div className='flex items-start justify-between w-full'>
+            <div>
+              <h3 className='font-semibold text-black text-lg mb-1'>
+                {currentUser.name} (You)
+              </h3>
+              <p className='text-base text-slate-500 font-medium'>
+                {currentUser.email}
+              </p>
+            </div>
+            <div className='flex items-center gap-2 ml-4'>
+              {/* Download Resume Button */}
+              <button
+                className='p-2 text-slate-500 hover:text-brand-600 transition-colors rounded-lg hover:bg-slate-100'
+                title='Download my resume as PDF'
+              >
+                <svg
+                  className='w-5 h-5'
+                  fill='none'
+                  stroke='currentColor'
+                  viewBox='0 0 24 24'
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth={2}
+                    d='M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
 
         {/* Profile Details */}
-        <div className='space-y-4'>
+        <div className='mt-5 space-y-4'>
           <div className='p-4 bg-white border border-slate-200 rounded-xl'>
             <div className='flex items-center gap-2 mb-3'>
               <Briefcase className='w-4 h-4 text-slate-500' />
@@ -501,6 +669,9 @@ export default function DashboardDemo() {
           </div>
         </div>
       </div>
+
+      {/* Bottom spacing */}
+      <div className='pb-8'></div>
     </div>
   );
 
@@ -525,18 +696,19 @@ export default function DashboardDemo() {
             >
               <div className='flex items-center gap-2'>
                 <div className='flex-shrink-0'>
-                  <div className='relative'>
-                    <Image
-                      src={user.image}
-                      alt={user.name}
-                      width={48}
-                      height={48}
-                      className='w-12 h-12 rounded-full object-cover'
-                    />
-                    <div
-                      className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 ${user.isOnline ? 'bg-b_green-400' : 'bg-slate-400'} border-2 border-white rounded-full`}
-                    ></div>
-                  </div>
+                  <UserAvatar
+                    email={
+                      user.name.toLowerCase().replace(' ', '') + '@example.com'
+                    }
+                    userId={user.id}
+                    profilePictureUrl={user.image}
+                    hasProfilePicture={true}
+                    size='md'
+                    showStatus={user.isOnline}
+                    status={user.isOnline ? 'ONLINE' : 'OFFLINE'}
+                    shape='square'
+                    useLocal={true}
+                  />
                 </div>
 
                 <div className='flex-1 min-w-0'>
@@ -555,7 +727,7 @@ export default function DashboardDemo() {
                 </div>
 
                 <div className='flex-shrink-0'>
-                  <button className='px-4 py-2 bg-brand-500 text-white text-sm font-medium rounded-lg hover:bg-brand-600 transition-colors'>
+                  <button className='px-4 py-2 bg-brand-500 text-white text-base font-medium rounded-lg hover:bg-brand-600 transition-colors'>
                     Connect
                   </button>
                 </div>
@@ -600,86 +772,39 @@ export default function DashboardDemo() {
           </div>
 
           {/* Navigation items */}
-          <nav className='flex-1 overflow-y-auto py-4'>
-            <div className='px-2 space-y-1'>
-              {/* Discover */}
-              <button
-                onClick={() => setActiveSection('discover')}
-                className={`relative w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
-                  activeSection === 'discover'
-                    ? 'bg-brand-50 text-brand-600 border-brand-200'
-                    : 'text-black hover:bg-slate-100 hover:text-black border-transparent'
-                }`}
-              >
-                <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
-                  <Compass className='w-5 h-5' />
-                </div>
-                <span className='font-medium text-base flex-1 flex items-center gap-2'>
-                  Discover
-                </span>
-              </button>
-
-              {/* Connections */}
-              <button
-                onClick={() => setActiveSection('connections')}
-                className={`relative w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
-                  activeSection === 'connections'
-                    ? 'bg-brand-50 text-brand-600 border-brand-200'
-                    : 'text-black hover:bg-slate-100 hover:text-black border-transparent'
-                }`}
-              >
-                <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
-                  <Users className='w-5 h-5' />
-                </div>
-                <span className='font-medium text-base flex-1 flex items-center gap-2'>
-                  Connections
-                  <span className='text-sm font-bold flex items-center justify-center h-5 w-5 rounded-full text-center bg-slate-100 text-slate-500'>
-                    {dummyConnections.length}
+          <nav className='flex-1 overflow-y-auto py-3'>
+            <div className='px-3 space-y-2'>
+              {sidebarItems.map(({ id, icon, label, count }) => (
+                <button
+                  key={id}
+                  onClick={() => setActiveSection(id)}
+                  className={`relative w-full flex items-center gap-3 px-2 py-2 rounded-lg text-left group transition-colors ${
+                    activeSection === id
+                      ? 'text-brand-600 bg-brand-50 font-medium'
+                      : 'text-black hover:bg-slate-50'
+                  }`}
+                >
+                  <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
+                    {icon === 'NotificationBell' ? (
+                      <NotificationBellIcon className='w-5 h-5' />
+                    ) : icon === 'ConnectIcon' ? (
+                      <ConnectIcon className='w-5 h-5' />
+                    ) : (
+                      React.createElement(icon, {
+                        className: 'w-5 h-5',
+                      })
+                    )}
+                  </div>
+                  <span className='flex-1 flex items-center justify-between min-w-0'>
+                    <span className='truncate'>{label}</span>
+                    {count > 0 && id === 'notifications' && (
+                      <span className='text-xs font-bold flex items-center justify-center h-5 w-5 rounded-full bg-b_red-600 text-white'>
+                        {count > 99 ? '99+' : count}
+                      </span>
+                    )}
                   </span>
-                </span>
-              </button>
-
-              {/* Chats */}
-              <button
-                onClick={() => setActiveSection('chats')}
-                className={`relative w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
-                  activeSection === 'chats'
-                    ? 'bg-brand-50 text-brand-600 border-brand-200'
-                    : 'text-black hover:bg-slate-100 hover:text-black border-transparent'
-                }`}
-              >
-                <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
-                  <MessageSquare className='w-5 h-5' />
-                </div>
-                <span className='font-medium text-base flex-1 flex items-center gap-2'>
-                  Chats
-                  <span className='text-sm font-bold flex items-center justify-center h-5 w-5 rounded-full text-center bg-brand-50 text-brand-600'>
-                    {dummyUsers
-                      .filter(u => u.unreadCount > 0)
-                      .reduce((sum, u) => sum + u.unreadCount, 0)}
-                  </span>
-                </span>
-              </button>
-
-              {/* Notifications */}
-              <button
-                onClick={() => setActiveSection('notifications')}
-                className={`relative w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
-                  activeSection === 'notifications'
-                    ? 'bg-brand-50 text-brand-600 border-brand-200'
-                    : 'text-black hover:bg-slate-100 hover:text-black border-transparent'
-                }`}
-              >
-                <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
-                  <Bell className='w-5 h-5' />
-                </div>
-                <span className='font-medium text-base flex-1 flex items-center gap-2'>
-                  Notifications
-                  <span className='text-sm font-bold flex items-center justify-center h-6 w-6 rounded-full text-center bg-brand-50 text-brand-600 border border-brand-200'>
-                    {dummyNotifications.filter(n => !n.isRead).length}
-                  </span>
-                </span>
-              </button>
+                </button>
+              ))}
             </div>
           </nav>
 
@@ -695,16 +820,17 @@ export default function DashboardDemo() {
               }`}
             >
               <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
-                <div className='relative'>
-                  <Image
-                    src='/dummy-users/dummy-user5.jpg'
-                    alt='Your Profile'
-                    width={20}
-                    height={20}
-                    className='w-5 h-5 rounded-full object-cover'
+                <UserAvatar
+                  email={currentUser.email}
+                  userId='current-user-sidebar'
+                  profilePictureUrl='/dummy-users/dummy-user5.jpg'
+                  hasProfilePicture={true}
+                  size='xs'
+                  showStatus={true}
+                  status='ONLINE'
+                                      shape='square'
+                    useLocal={true}
                   />
-                  <div className='absolute -bottom-0.5 -right-0.5 w-2 h-2 bg-b_green-400 border border-white rounded-full'></div>
-                </div>
               </div>
               <span className='font-medium text-base flex-1 truncate'>
                 Jordan Blake
@@ -757,7 +883,7 @@ export default function DashboardDemo() {
 
           {/* Section Header */}
           <div className='flex-shrink-0 mb-4 sm:mb-5 lg:mb-6'>
-            {activeSection === 'discover' && (
+            {activeSection === 'suggested' && (
               <>
                 <h2 className='text-2xl font-bold text-black mb-1'>Discover</h2>
                 <p className='text-base text-slate-500'>
@@ -775,11 +901,11 @@ export default function DashboardDemo() {
                 </p>
               </>
             )}
-            {activeSection === 'chats' && (
+            {activeSection === 'saved' && (
               <>
-                <h2 className='text-2xl font-bold text-black mb-1'>Chats</h2>
+                <h2 className='text-2xl font-bold text-black mb-1'>Saved</h2>
                 <p className='text-base text-slate-500'>
-                  Your ongoing conversations
+                  Professionals you've saved for later
                 </p>
               </>
             )}
@@ -827,16 +953,17 @@ export default function DashboardDemo() {
         <div className='p-4 border-b border-slate-200 bg-white'>
           <div className='flex items-center justify-between'>
             <div className='flex items-center gap-2'>
-              <div className='relative'>
-                <Image
-                  src='/dummy-users/dummy-user5.jpg'
-                  alt='Your Profile'
-                  width={40}
-                  height={40}
-                  className='w-10 h-10 rounded-full object-cover'
-                />
-                <div className='absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-b_green-400 border-2 border-white rounded-full'></div>
-              </div>
+              <UserAvatar
+                email={currentUser.email}
+                userId='current-user-mobile'
+                profilePictureUrl='/dummy-users/dummy-user5.jpg'
+                hasProfilePicture={true}
+                size='sm'
+                showStatus={true}
+                status='ONLINE'
+                                    shape='square'
+                    useLocal={true}
+                  />
               <div className='flex-1 min-w-0'>
                 <h3 className='text-sm font-semibold text-black truncate'>
                   Jordan Blake
@@ -851,11 +978,11 @@ export default function DashboardDemo() {
                 onClick={() => setActiveSection('notifications')}
                 className='relative'
               >
-                <Bell className='w-5 h-5 text-slate-500' />
+                <NotificationBellIcon className='w-5 h-5 text-slate-500' />
                 {dummyNotifications.filter(n => !n.isRead).length > 0 && (
-                  <div className='absolute -top-1 -right-1 w-3 h-3 bg-brand-500 rounded-full flex items-center justify-center'>
-                    <span className='text-white text-sm font-bold'>
-                      {dummyNotifications.filter(n => !n.isRead).length}
+                  <div className='absolute -top-1 -right-1 w-4 h-4 bg-b_red-600 rounded-full flex items-center justify-center'>
+                    <span className='text-white text-[8px] font-bold leading-none'>
+                      {dummyNotifications.filter(n => !n.isRead).length > 99 ? '99+' : dummyNotifications.filter(n => !n.isRead).length}
                     </span>
                   </div>
                 )}
@@ -863,8 +990,8 @@ export default function DashboardDemo() {
               <button onClick={() => setActiveSection('search')}>
                 <Search className='w-5 h-5 text-slate-500' />
               </button>
-              <button onClick={() => setActiveSection('chats')}>
-                <MessageSquare className='w-5 h-5 text-slate-500' />
+              <button onClick={() => setActiveSection('saved')}>
+                <Bookmark className='w-5 h-5 text-slate-500' />
               </button>
             </div>
           </div>
@@ -873,9 +1000,9 @@ export default function DashboardDemo() {
         {/* Mobile Navigation Tabs */}
         <div className='flex bg-slate-100 border-b border-slate-200'>
           <button
-            onClick={() => setActiveSection('discover')}
+            onClick={() => setActiveSection('suggested')}
             className={`flex-1 px-3 py-3 text-center text-sm font-medium ${
-              activeSection === 'discover'
+              activeSection === 'suggested'
                 ? 'text-brand-600 bg-white border-b-2 border-brand-500'
                 : 'text-slate-500'
             }`}
@@ -893,6 +1020,16 @@ export default function DashboardDemo() {
             Connections
           </button>
           <button
+            onClick={() => setActiveSection('saved')}
+            className={`flex-1 px-3 py-3 text-center text-sm font-medium ${
+              activeSection === 'saved'
+                ? 'text-brand-600 bg-white border-b-2 border-brand-500'
+                : 'text-slate-500'
+            }`}
+          >
+            Saved
+          </button>
+          <button
             onClick={() => setActiveSection('notifications')}
             className={`flex-1 px-3 py-3 text-center text-sm font-medium relative ${
               activeSection === 'notifications'
@@ -902,22 +1039,12 @@ export default function DashboardDemo() {
           >
             Notifications
             {dummyNotifications.filter(n => !n.isRead).length > 0 && (
-              <div className='absolute -top-1 -right-1 w-4 h-4 bg-brand-500 rounded-full flex items-center justify-center'>
-                <span className='text-white text-sm font-bold'>
-                  {dummyNotifications.filter(n => !n.isRead).length}
+              <div className='absolute -top-1 -right-1 w-4 h-4 bg-b_red-600 rounded-full flex items-center justify-center'>
+                <span className='text-white text-[8px] font-bold leading-none'>
+                  {dummyNotifications.filter(n => !n.isRead).length > 99 ? '99+' : dummyNotifications.filter(n => !n.isRead).length}
                 </span>
               </div>
             )}
-          </button>
-          <button
-            onClick={() => setActiveSection('chats')}
-            className={`flex-1 px-3 py-3 text-center text-sm font-medium ${
-              activeSection === 'chats'
-                ? 'text-brand-600 bg-white border-b-2 border-brand-500'
-                : 'text-slate-500'
-            }`}
-          >
-            Chats
           </button>
         </div>
 
@@ -941,7 +1068,7 @@ export default function DashboardDemo() {
 
           {/* Mobile Section Headers */}
           <div className='mb-4'>
-            {activeSection === 'discover' && (
+            {activeSection === 'suggested' && (
               <>
                 <h2 className='text-lg font-bold text-black mb-1'>
                   Smart Matches for You
@@ -961,13 +1088,13 @@ export default function DashboardDemo() {
                 </p>
               </>
             )}
-            {activeSection === 'chats' && (
+            {activeSection === 'saved' && (
               <>
                 <h2 className='text-lg font-bold text-black mb-1'>
-                  Recent Chats
+                  Saved Professionals
                 </h2>
                 <p className='text-sm text-slate-500'>
-                  Your ongoing conversations
+                  Professionals you've saved for later
                 </p>
               </>
             )}
@@ -996,7 +1123,7 @@ export default function DashboardDemo() {
           </div>
 
           {/* Mobile Content Sections */}
-          {activeSection === 'discover' && (
+          {activeSection === 'suggested' && (
             <div className='space-y-3'>
               {dummyUsers.slice(0, 4).map((user, index) => (
                 <div
@@ -1006,18 +1133,20 @@ export default function DashboardDemo() {
                 >
                   <div className='flex items-center gap-2'>
                     <div className='flex-shrink-0'>
-                      <div className='relative'>
-                        <Image
-                          src={user.image}
-                          alt={user.name}
-                          width={48}
-                          height={48}
-                          className='w-12 h-12 rounded-full object-cover border border-brand-500'
-                        />
-                        <div
-                          className={`absolute -bottom-0 -right-0 w-3 h-3 ${user.isOnline ? 'bg-b_green-500' : 'bg-slate-400'} rounded-full border-2 border-white box-content`}
-                        ></div>
-                      </div>
+                      <UserAvatar
+                        email={
+                          user.name.toLowerCase().replace(' ', '') +
+                          '@example.com'
+                        }
+                        userId={user.id}
+                        profilePictureUrl={user.image}
+                        hasProfilePicture={true}
+                        size='md'
+                        showStatus={user.isOnline}
+                        status={user.isOnline ? 'ONLINE' : 'OFFLINE'}
+                                            shape='square'
+                    useLocal={true}
+                  />
                     </div>
 
                     <div className='flex-1 min-w-0'>
@@ -1035,8 +1164,8 @@ export default function DashboardDemo() {
                     </div>
 
                     <div className='flex-shrink-0'>
-                      <button className='px-3 py-2 text-sm font-medium rounded-lg border transition-colors bg-white text-brand-600 border-slate-200 hover:bg-brand-50 hover:border-slate-200 flex items-center gap-1.5'>
-                        <CheckCircle2 className='w-3 h-3 text-brand-600 flex-shrink-0' />
+                      <button className='px-3 py-2 text-base font-medium rounded-lg transition-colors bg-brand-500 hover:bg-brand-600 text-white flex items-center gap-1.5'>
+                        <ConnectIcon className='w-4 h-4 text-white flex-shrink-0' />
                         Connect
                       </button>
                     </div>
@@ -1055,18 +1184,20 @@ export default function DashboardDemo() {
                 >
                   <div className='flex items-center gap-2'>
                     <div className='flex-shrink-0'>
-                      <div className='relative'>
-                        <Image
-                          src={connection.image}
-                          alt={connection.name}
-                          width={48}
-                          height={48}
-                          className='w-12 h-12 rounded-full object-cover'
-                        />
-                        <div
-                          className={`absolute -bottom-0 -right-0 w-3 h-3 ${connection.isOnline ? 'bg-b_green-500' : 'bg-slate-400'} rounded-full border-2 border-white box-content`}
-                        ></div>
-                      </div>
+                      <UserAvatar
+                        email={
+                          connection.name.toLowerCase().replace(' ', '') +
+                          '@example.com'
+                        }
+                        userId={connection.id}
+                        profilePictureUrl={connection.image}
+                        hasProfilePicture={true}
+                        size='md'
+                        showStatus={connection.isOnline}
+                        status={connection.isOnline ? 'ONLINE' : 'OFFLINE'}
+                                            shape='square'
+                    useLocal={true}
+                  />
                     </div>
 
                     <div className='flex-1 min-w-0'>
@@ -1089,47 +1220,57 @@ export default function DashboardDemo() {
             </div>
           )}
 
-          {activeSection === 'chats' && (
-            <div className='space-y-2'>
-              {dummyUsers
-                .filter(user => user.lastMessage)
-                .map(user => (
+          {activeSection === 'saved' && (
+            <div className='space-y-3'>
+              {dummySavedUsers.map(user => {
+                return (
                   <div
                     key={user.id}
-                    className='px-3 py-3 bg-white hover:bg-slate-100 rounded-xl transition-all duration-200 cursor-pointer'
+                    className='rounded-xl border px-3 py-3 bg-white border-slate-200 hover:bg-slate-100 transition-all duration-200 cursor-pointer'
                   >
                     <div className='flex items-center gap-2'>
                       <div className='flex-shrink-0'>
-                        <div className='relative'>
-                          <Image
-                            src={user.image}
-                            alt={user.name}
-                            width={40}
-                            height={40}
-                            className='w-10 h-10 rounded-full object-cover'
-                          />
-                          <div
-                            className={`absolute -bottom-0 -right-0 w-3 h-3 ${user.isOnline ? 'bg-b_green-400' : 'bg-slate-400'} rounded-full border-2 border-white`}
-                          ></div>
-                        </div>
+                        <UserAvatar
+                          email={
+                            user.name.toLowerCase().replace(' ', '') +
+                            '@example.com'
+                          }
+                          userId={user.id}
+                          profilePictureUrl={user.image}
+                          hasProfilePicture={true}
+                          size='md'
+                          showStatus={user.isOnline}
+                          status={user.isOnline ? 'ONLINE' : 'OFFLINE'}
+                                              shape='square'
+                    useLocal={true}
+                  />
                       </div>
 
                       <div className='flex-1 min-w-0'>
-                        <div className='flex items-center justify-between mb-1'>
-                          <div className='text-black font-medium text-sm truncate'>
-                            {user.name}
-                          </div>
-                          <div className='text-sm text-slate-500'>
-                            {user.lastMessageTime}
-                          </div>
+                        <div className='text-black font-medium text-sm mb-1'>
+                          {user.name}
                         </div>
-                        <div className='text-sm text-slate-500 truncate'>
-                          {user.lastMessage}
+                        <div className='text-sm text-slate-500 mb-2'>
+                          {user.role}
                         </div>
+                      </div>
+
+                      <div className='flex-shrink-0 flex items-center gap-2'>
+                        <button
+                          onClick={() => handleToggleSave(user.id)}
+                          className='p-1.5 text-slate-500 hover:text-brand-600 hover:bg-slate-50 rounded-lg transition-colors'
+                          title='Remove from saved'
+                        >
+                          <Bookmark className='w-4 h-4 fill-slate-400' />
+                        </button>
+                        <button className='px-3 py-2 bg-brand-500 text-white text-base font-medium rounded-lg hover:bg-brand-600 transition-colors'>
+                          Connect
+                        </button>
                       </div>
                     </div>
                   </div>
-                ))}
+                );
+              })}
             </div>
           )}
 
@@ -1142,13 +1283,19 @@ export default function DashboardDemo() {
                 >
                   <div className='flex items-center gap-2'>
                     <div className='flex-shrink-0'>
-                      <Image
-                        src={notification.avatar}
-                        alt={notification.title}
-                        width={36}
-                        height={36}
-                        className='w-9 h-9 rounded-full object-cover'
-                      />
+                      <UserAvatar
+                        email={
+                          notification.title.toLowerCase().replace(' ', '') +
+                          '@example.com'
+                        }
+                        userId={notification.id + '-mobile'}
+                        profilePictureUrl={notification.avatar}
+                        hasProfilePicture={true}
+                        size='sm'
+                        showStatus={false}
+                                            shape='square'
+                    useLocal={true}
+                  />
                     </div>
 
                     <div className='flex-1 min-w-0'>
@@ -1165,10 +1312,10 @@ export default function DashboardDemo() {
 
                     {notification.type === 'chat_request' && (
                       <div className='flex-shrink-0 flex flex-col gap-1'>
-                        <button className='px-2 py-1 bg-brand-500 text-white text-sm font-medium rounded hover:bg-brand-600 transition-colors'>
+                        <button className='px-2 py-1.5 bg-brand-500 text-white text-sm font-medium rounded-lg hover:bg-brand-600 transition-colors'>
                           Accept
                         </button>
-                        <button className='px-2 py-1 bg-slate-100 text-slate-500 text-sm font-medium rounded hover:bg-slate-200 transition-colors'>
+                        <button className='px-2 py-1.5 bg-slate-100 text-slate-600 text-sm font-medium rounded-lg hover:bg-slate-200 transition-colors'>
                           Decline
                         </button>
                       </div>
@@ -1205,18 +1352,20 @@ export default function DashboardDemo() {
                   >
                     <div className='flex items-center gap-2'>
                       <div className='flex-shrink-0'>
-                        <div className='relative'>
-                          <Image
-                            src={user.image}
-                            alt={user.name}
-                            width={48}
-                            height={48}
-                            className='w-12 h-12 rounded-full object-cover'
-                          />
-                          <div
-                            className={`absolute -bottom-0 -right-0 w-3 h-3 ${user.isOnline ? 'bg-b_green-500' : 'bg-slate-400'} rounded-full border-2 border-white box-content`}
-                          ></div>
-                        </div>
+                        <UserAvatar
+                          email={
+                            user.name.toLowerCase().replace(' ', '') +
+                            '@example.com'
+                          }
+                          userId={user.id}
+                          profilePictureUrl={user.image}
+                          hasProfilePicture={true}
+                          size='md'
+                          showStatus={user.isOnline}
+                          status={user.isOnline ? 'ONLINE' : 'OFFLINE'}
+                                              shape='square'
+                    useLocal={true}
+                  />
                       </div>
 
                       <div className='flex-1 min-w-0'>
@@ -1229,7 +1378,7 @@ export default function DashboardDemo() {
                       </div>
 
                       <div className='flex-shrink-0'>
-                        <button className='px-3 py-2 bg-brand-500 text-white text-sm font-medium rounded-lg hover:bg-brand-600 transition-colors'>
+                        <button className='px-3 py-2 bg-brand-500 text-white text-base font-medium rounded-lg hover:bg-brand-600 transition-colors'>
                           Connect
                         </button>
                       </div>

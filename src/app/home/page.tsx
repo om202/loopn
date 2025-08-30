@@ -119,9 +119,7 @@ export default function HomePage() {
             </div>
             <div className='flex items-center'>
               <Link href={authLink}>
-                <button
-                  className='bg-white hover:bg-brand-50 text-brand-600 border border-gray-300 px-6 py-2.5 rounded-lg transition-colors flex items-center gap-2 font-medium text-sm min-h-[44px]'
-                >
+                <button className='bg-white hover:bg-brand-50 text-brand-600 border border-gray-300 px-6 py-2.5 rounded-lg transition-colors flex items-center gap-2 font-medium text-sm min-h-[44px]'>
                   <LogIn className='w-4 h-4' strokeWidth={1.5} />
                   {authText}
                 </button>
@@ -149,7 +147,9 @@ export default function HomePage() {
               </h1>
 
               <p className='text-xl text-gray-600 mb-12 leading-relaxed max-w-2xl'>
-                Skip the noise of traditional networking. Get matched with verified professionals based on skills, interests, and career objectives — then start meaningful conversations instantly.
+                Skip the noise of traditional networking. Get matched with
+                verified professionals based on skills, interests, and career
+                objectives — then start meaningful conversations instantly.
               </p>
 
               {/* CTA Buttons */}
@@ -160,7 +160,10 @@ export default function HomePage() {
                 >
                   <button className='group w-full bg-brand-600 hover:bg-brand-700 text-white px-8 py-4 rounded-lg text-base font-medium transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-0.5 border-0 min-h-[52px] touch-manipulation'>
                     {ctaText}
-                    <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' strokeWidth={1.5} />
+                    <ArrowRight
+                      className='w-5 h-5 group-hover:translate-x-1 transition-transform'
+                      strokeWidth={1.5}
+                    />
                   </button>
                 </Link>
                 <button
@@ -185,8 +188,18 @@ export default function HomePage() {
                       disabled
                       className='p-2 -ml-2 text-slate-400 rounded-full transition-colors duration-200 cursor-not-allowed'
                     >
-                      <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                        <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15 19l-7-7 7-7' />
+                      <svg
+                        className='w-5 h-5'
+                        fill='none'
+                        stroke='currentColor'
+                        viewBox='0 0 24 24'
+                      >
+                        <path
+                          strokeLinecap='round'
+                          strokeLinejoin='round'
+                          strokeWidth={2}
+                          d='M15 19l-7-7 7-7'
+                        />
                       </svg>
                     </button>
 
@@ -216,9 +229,15 @@ export default function HomePage() {
                       disabled
                       className='px-4 py-2 text-sm font-medium rounded-xl bg-brand-50 text-brand-600 border border-brand-200 transition-colors disabled:cursor-not-allowed flex items-center gap-2'
                     >
-                      <svg width='14' height='14' viewBox='0 0 24 24' fill='none' className='text-brand-600'>
-                        <circle cx='9' cy='12' r='4' fill='currentColor'/>
-                        <circle cx='15' cy='12' r='4' fill='currentColor'/>
+                      <svg
+                        width='14'
+                        height='14'
+                        viewBox='0 0 24 24'
+                        fill='none'
+                        className='text-brand-600'
+                      >
+                        <circle cx='9' cy='12' r='4' fill='currentColor' />
+                        <circle cx='15' cy='12' r='4' fill='currentColor' />
                       </svg>
                       <span className='hidden sm:inline'>Connect</span>
                     </button>
@@ -246,7 +265,8 @@ export default function HomePage() {
                     <div className='flex-1 max-w-xs'>
                       <div className='bg-slate-100 text-slate-900 px-4 py-3 rounded-2xl rounded-tl-md'>
                         <p className='text-sm leading-relaxed'>
-                          Hey! I noticed you work in fintech. I'm redesigning a banking app - any insights on building user trust?
+                          Hey! I noticed you work in fintech. I'm redesigning a
+                          banking app - any insights on building user trust?
                         </p>
                       </div>
                     </div>
@@ -257,7 +277,9 @@ export default function HomePage() {
                     <div className='max-w-xs'>
                       <div className='bg-brand-500 text-white px-4 py-3 rounded-2xl rounded-tr-md relative'>
                         <p className='text-sm leading-relaxed pr-6'>
-                          Absolutely! Clear communication and progressive disclosure are key. Users need to understand what's happening with their money.
+                          Absolutely! Clear communication and progressive
+                          disclosure are key. Users need to understand what's
+                          happening with their money.
                         </p>
                         <div className='absolute bottom-1 right-2'>
                           <Image
@@ -284,7 +306,8 @@ export default function HomePage() {
                     <div className='flex-1 max-w-xs'>
                       <div className='bg-slate-100 text-slate-900 px-4 py-3 rounded-2xl rounded-tl-md'>
                         <p className='text-sm leading-relaxed'>
-                          That makes perfect sense! Would love to get your feedback on some wireframes I'm working on.
+                          That makes perfect sense! Would love to get your
+                          feedback on some wireframes I'm working on.
                         </p>
                       </div>
                     </div>
@@ -322,8 +345,14 @@ export default function HomePage() {
                     <div className='bg-slate-100 px-4 py-3 rounded-2xl rounded-tl-md'>
                       <div className='flex gap-1'>
                         <div className='w-2 h-2 bg-slate-400 rounded-full animate-pulse'></div>
-                        <div className='w-2 h-2 bg-slate-400 rounded-full animate-pulse' style={{animationDelay: '0.2s'}}></div>
-                        <div className='w-2 h-2 bg-slate-400 rounded-full animate-pulse' style={{animationDelay: '0.4s'}}></div>
+                        <div
+                          className='w-2 h-2 bg-slate-400 rounded-full animate-pulse'
+                          style={{ animationDelay: '0.2s' }}
+                        ></div>
+                        <div
+                          className='w-2 h-2 bg-slate-400 rounded-full animate-pulse'
+                          style={{ animationDelay: '0.4s' }}
+                        ></div>
                       </div>
                     </div>
                   </div>
@@ -383,7 +412,9 @@ export default function HomePage() {
               Professional Networking, Reimagined
             </h2>
             <p className='text-lg text-gray-600 leading-relaxed'>
-              Move beyond surface-level connections. Our AI matches you with professionals who complement your skills and align with your career goals, enabling deeper, more valuable relationships.
+              Move beyond surface-level connections. Our AI matches you with
+              professionals who complement your skills and align with your
+              career goals, enabling deeper, more valuable relationships.
             </p>
           </div>
 
@@ -630,7 +661,9 @@ export default function HomePage() {
                   className='w-12 h-12 rounded-full object-cover'
                 />
                 <div>
-                  <p className='font-semibold text-slate-900 text-sm'>Sarah Johnson</p>
+                  <p className='font-semibold text-slate-900 text-sm'>
+                    Sarah Johnson
+                  </p>
                   <p className='text-slate-600 text-sm'>
                     Software Engineer, Tech Startup
                   </p>
@@ -662,7 +695,9 @@ export default function HomePage() {
                   className='w-12 h-12 rounded-full object-cover'
                 />
                 <div>
-                  <p className='font-semibold text-slate-900 text-sm'>Michael Chen</p>
+                  <p className='font-semibold text-slate-900 text-sm'>
+                    Michael Chen
+                  </p>
                   <p className='text-slate-600 text-sm'>
                     Product Manager, E-commerce
                   </p>
@@ -718,12 +753,8 @@ export default function HomePage() {
               <div className='text-slate-600 font-medium text-sm'>
                 Technology
               </div>
-              <div className='text-slate-600 font-medium text-sm'>
-                Finance
-              </div>
-              <div className='text-slate-600 font-medium text-sm'>
-                Design
-              </div>
+              <div className='text-slate-600 font-medium text-sm'>Finance</div>
+              <div className='text-slate-600 font-medium text-sm'>Design</div>
               <div className='text-slate-600 font-medium text-sm'>
                 Marketing
               </div>
@@ -751,7 +782,9 @@ export default function HomePage() {
             Start Building Your Professional Network
           </h2>
           <p className='text-lg text-gray-600 mb-12 max-w-2xl mx-auto'>
-            Join thousands of verified professionals already connecting, collaborating, and advancing their careers through meaningful relationships.
+            Join thousands of verified professionals already connecting,
+            collaborating, and advancing their careers through meaningful
+            relationships.
           </p>
 
           <div className='flex flex-col sm:flex-row gap-4 justify-center'>
@@ -761,7 +794,10 @@ export default function HomePage() {
             >
               <button className='group w-full bg-brand-600 hover:bg-brand-700 text-white px-8 py-4 rounded-lg text-base font-medium transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl border-0 min-h-[52px] touch-manipulation'>
                 {ctaText}
-                <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' strokeWidth={1.5} />
+                <ArrowRight
+                  className='w-5 h-5 group-hover:translate-x-1 transition-transform'
+                  strokeWidth={1.5}
+                />
               </button>
             </Link>
             <button className='w-full sm:w-auto bg-white hover:bg-gray-50 text-gray-600 px-8 py-4 rounded-lg text-base font-medium border border-gray-300 transition-all duration-300 flex items-center justify-center gap-3 min-h-[52px] touch-manipulation'>
