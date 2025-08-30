@@ -49,7 +49,32 @@ export default function UserProfileContent({
   }
 
   return (
-    <div className={`space-y-8 ${className}`}>
+    <div className={`space-y-6 ${className}`}>
+      {/* Contact Information - Resume Header */}
+      {showContactInfo &&
+        (userProfile.phone || userProfile.city || userProfile.country) && (
+          <div className='pb-2'>
+            <div className='flex flex-wrap items-center gap-4 text-sm text-slate-500'>
+              {userProfile.phone && (
+                <div className='flex items-center gap-1'>
+                  <Phone className='w-4 h-4' />
+                  <span className='font-medium'>{userProfile.phone}</span>
+                </div>
+              )}
+              {(userProfile.city || userProfile.country) && (
+                <div className='flex items-center gap-1'>
+                  <MapPin className='w-4 h-4' />
+                  <span className='font-medium'>
+                    {[userProfile.city, userProfile.country]
+                      .filter(Boolean)
+                      .join(', ')}
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
       {/* Professional Links */}
       {(userProfile.linkedinUrl ||
         userProfile.githubUrl ||
@@ -90,31 +115,6 @@ export default function UserProfileContent({
           )}
         </div>
       )}
-
-      {/* Contact Information - Resume Header */}
-      {showContactInfo &&
-        (userProfile.phone || userProfile.city || userProfile.country) && (
-          <div className='pb-4 border-b-2 border-slate-200'>
-            <div className='flex flex-wrap items-center gap-4 text-sm text-slate-500'>
-              {userProfile.phone && (
-                <div className='flex items-center gap-1'>
-                  <Phone className='w-4 h-4' />
-                  <span>{userProfile.phone}</span>
-                </div>
-              )}
-              {(userProfile.city || userProfile.country) && (
-                <div className='flex items-center gap-1'>
-                  <MapPin className='w-4 h-4' />
-                  <span>
-                    {[userProfile.city, userProfile.country]
-                      .filter(Boolean)
-                      .join(', ')}
-                  </span>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
 
       {/* Work Experience */}
       {userProfile.workExperience &&

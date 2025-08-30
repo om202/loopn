@@ -117,10 +117,11 @@ export default function AccountContent() {
               <button
                 onClick={handleDownloadResume}
                 disabled={downloadingResume || !userProfile}
-                className='p-2 text-slate-500 hover:text-brand-600 transition-colors rounded-lg hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50'
-                title='Download my resume as PDF'
+                className='flex items-center gap-2 px-3 py-2 text-slate-500 hover:text-brand-600 transition-colors rounded-lg hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50 text-sm font-medium'
+                title='Download Your Profile as PDF'
               >
-                <FileDown className='w-5 h-5' />
+                <FileDown className='w-4 h-4' />
+                <span>Download Your Profile</span>
               </button>
             </div>
           </div>
