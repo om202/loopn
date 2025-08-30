@@ -41,12 +41,10 @@ export default function AccountContent() {
       return 'You';
     }
 
-    // Add "(You)" to indicate it's the current user
-    return `${name} (You)`;
+    return `${name}`;
   };
 
   const getCleanDisplayName = () => {
-    // Same logic but without "(You)" suffix for PDF filename
     if (onboardingStatus?.onboardingData?.fullName) {
       return onboardingStatus.onboardingData.fullName;
     }

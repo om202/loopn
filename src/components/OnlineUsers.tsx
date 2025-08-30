@@ -537,7 +537,7 @@ export default function OnlineUsers({
             <div className='flex items-start justify-between'>
               <div>
                 <h2 className='text-2xl sm:text-2xl font-bold text-black'>
-                  Account Settings
+                  Your Profile
                 </h2>
               </div>
               <button

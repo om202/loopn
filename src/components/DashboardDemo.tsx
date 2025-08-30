@@ -572,7 +572,7 @@ export default function DashboardDemo() {
           <div className='flex items-start justify-between w-full'>
             <div>
               <h3 className='font-semibold text-black text-lg mb-1'>
-                {currentUser.name} (You)
+                {currentUser.name}
               </h3>
               <p className='text-base text-slate-500 font-medium'>
                 {currentUser.email}
