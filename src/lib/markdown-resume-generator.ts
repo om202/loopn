@@ -502,16 +502,21 @@ export class MarkdownResumePDFGenerator {
     const options = {
       margin: [12, 12, 12, 12], // top, right, bottom, left margins in mm
       filename: `${data.name.replace(/[^a-zA-Z0-9]/g, '_')}_Resume_${new Date().toISOString().split('T')[0]}.pdf`,
-      image: { type: 'jpeg', quality: 0.98 },
+      image: { type: 'png', quality: 1.0 },
       html2canvas: {
-        scale: 2,
+        scale: 3,
         useCORS: true,
         letterRendering: true,
+        dpi: 300,
+        allowTaint: false,
+        backgroundColor: '#ffffff',
+        removeContainer: true,
       },
       jsPDF: {
         unit: 'mm',
         format: 'a4',
         orientation: 'portrait',
+        compress: false, // Don't compress to maintain quality
       },
     };
 
