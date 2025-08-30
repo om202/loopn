@@ -41,7 +41,7 @@ import { useRealtimeConnectionRequests } from '../hooks/realtime/useRealtimeConn
 import { useConnectionActions } from '../hooks/useConnectionActions';
 import CancelConnectionRequestDialog from './CancelConnectionRequestDialog';
 import RemoveConnectionDialog from './RemoveConnectionDialog';
-import { generateAndDownloadResume } from '../lib/pdf-resume-generator';
+import { generateMarkdownResume } from '../lib/markdown-resume-generator';
 
 import type { Schema } from '../../amplify/data/resource';
 
@@ -184,7 +184,7 @@ export default function ProfileSidebar({
 
     setDownloadingResume(true);
     try {
-      await generateAndDownloadResume(userProfile, getUserDisplayName());
+      await generateMarkdownResume(userProfile, getUserDisplayName());
     } catch (error) {
       console.error('Failed to download resume:', error);
       // Could add a toast notification here for better UX

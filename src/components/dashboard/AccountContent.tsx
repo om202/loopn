@@ -7,7 +7,7 @@ import UserAvatar from '../UserAvatar';
 import UserProfileContent from '../UserProfileContent';
 import Tooltip from '../Tooltip';
 import { useUserProfile } from '../../hooks/useUserProfile';
-import { generateAndDownloadResume } from '../../lib/pdf-resume-generator';
+import { generateMarkdownResume } from '../../lib/markdown-resume-generator';
 
 export default function AccountContent() {
   const { user, onboardingStatus } = useAuth();
@@ -66,7 +66,7 @@ export default function AccountContent() {
 
     setDownloadingResume(true);
     try {
-      await generateAndDownloadResume(userProfile, getCleanDisplayName());
+      await generateMarkdownResume(userProfile, getCleanDisplayName());
     } catch (error) {
       console.error('Failed to download resume:', error);
       // Could add a toast notification here for better UX
