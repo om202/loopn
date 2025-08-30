@@ -111,7 +111,7 @@ export default function HomePage() {
                   priority
                 />
                 <div className='flex items-center'>
-                  <span className='text-2xl font-semibold text-brand-600'>
+                  <span className='text-2xl font-medium text-brand-600'>
                     Loopn
                   </span>
                 </div>
@@ -120,9 +120,9 @@ export default function HomePage() {
             <div className='flex items-center'>
               <Link href={authLink}>
                 <button
-                  className='bg-white hover:bg-brand-50 text-brand-600 border border-slate-200 px-6 py-3 rounded-lg transition-colors flex items-center gap-2 font-medium text-sm min-h-[48px]'
+                  className='bg-white hover:bg-brand-50 text-brand-600 border border-gray-300 px-6 py-2.5 rounded-lg transition-colors flex items-center gap-2 font-medium text-sm min-h-[44px]'
                 >
-                  <LogIn className='w-4 h-4' strokeWidth={2.5} />
+                  <LogIn className='w-4 h-4' strokeWidth={1.5} />
                   {authText}
                 </button>
               </Link>
@@ -143,11 +143,11 @@ export default function HomePage() {
           <div className='grid lg:grid-cols-2 gap-16 lg:gap-24 items-center'>
             {/* Left column - Content */}
             <div className='text-center lg:text-left'>
-              <h1 className='text-4xl sm:text-5xl font-semibold text-slate-900 mb-8 leading-tight'>
+              <h1 className='text-4xl sm:text-5xl font-medium text-gray-900 mb-6 leading-tight'>
                 Simple and AI powered Networking Platform
               </h1>
 
-              <p className='text-xl text-slate-600 mb-16 leading-relaxed max-w-2xl font-normal'>
+              <p className='text-xl text-gray-600 mb-12 leading-relaxed max-w-2xl'>
                 Loopn helps you build meaningful professional relationships
                 through smart AI matching.
               </p>
@@ -158,17 +158,17 @@ export default function HomePage() {
                   href={isAuthenticated ? authLink : signUpLink}
                   className='w-full sm:w-auto'
                 >
-                  <button className='group w-full bg-brand-500 hover:bg-brand-600 text-white px-8 py-4 rounded-xl text-base font-semibold transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-0.5 border border-brand-600 min-h-[48px]'>
+                  <button className='group w-full bg-brand-600 hover:bg-brand-700 text-white px-8 py-3 rounded-lg text-base font-medium transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-0.5 border-0 min-h-[48px]'>
                     {ctaText}
-                    <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' />
+                    <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' strokeWidth={1.5} />
                   </button>
                 </Link>
                 <button
                   onClick={scrollToHowItWorks}
-                  className='text-slate-600 hover:text-slate-900 text-base font-medium transition-colors flex items-center justify-center gap-2'
+                  className='text-gray-600 hover:text-gray-900 text-base font-medium transition-colors flex items-center justify-center gap-2'
                 >
                   See how it works
-                  <ArrowRight className='w-4 h-4' />
+                  <ArrowRight className='w-4 h-4' strokeWidth={1.5} />
                 </button>
               </div>
             </div>
@@ -442,10 +442,10 @@ export default function HomePage() {
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           {/* Section Header */}
           <div className='text-center max-w-4xl mx-auto mb-20'>
-            <h2 className='text-3xl sm:text-4xl font-semibold text-slate-900 mb-8 leading-tight'>
+            <h2 className='text-3xl sm:text-4xl font-medium text-gray-900 mb-6 leading-tight'>
               Networking That Actually Works
             </h2>
-            <p className='text-lg text-slate-600 leading-relaxed'>
+            <p className='text-lg text-gray-600 leading-relaxed'>
               Loopn removes the noise from traditional networking, helping you
               connect based on what truly matters — your expertise, goals, and
               shared interests.
@@ -575,10 +575,10 @@ export default function HomePage() {
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           {/* Section Header */}
           <div className='text-center max-w-4xl mx-auto mb-20'>
-            <h2 className='text-3xl sm:text-4xl font-semibold text-slate-900 mb-8 leading-tight'>
+            <h2 className='text-3xl sm:text-4xl font-medium text-gray-900 mb-6 leading-tight'>
               How It Works
             </h2>
-            <p className='text-lg text-slate-600 leading-relaxed'>
+            <p className='text-lg text-gray-600 leading-relaxed'>
               Getting started with Loopn is quick and effortless.
             </p>
           </div>
@@ -661,10 +661,10 @@ export default function HomePage() {
 
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='text-center mb-20'>
-            <h2 className='text-3xl sm:text-4xl font-semibold text-slate-900 mb-8 leading-tight'>
+            <h2 className='text-3xl sm:text-4xl font-medium text-gray-900 mb-6 leading-tight'>
               What Professionals Say
             </h2>
-            <p className='text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed'>
+            <p className='text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed'>
               Loopn is built for those who value authentic networking and
               meaningful connections.
             </p>
@@ -812,10 +812,10 @@ export default function HomePage() {
         </div>
 
         <div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center'>
-          <h2 className='text-3xl sm:text-4xl font-semibold text-slate-900 mb-8 leading-tight'>
+          <h2 className='text-3xl sm:text-4xl font-medium text-gray-900 mb-6 leading-tight'>
             Ready to Transform Your Network?
           </h2>
-          <p className='text-lg text-slate-600 mb-12 max-w-2xl mx-auto'>
+          <p className='text-lg text-gray-600 mb-12 max-w-2xl mx-auto'>
             Join Loopn today and start making connections that matter.
           </p>
 
@@ -824,13 +824,13 @@ export default function HomePage() {
               href={isAuthenticated ? authLink : signUpLink}
               className='w-full sm:w-auto'
             >
-              <button className='group w-full bg-brand-500 hover:bg-brand-600 text-white px-10 py-4 rounded-xl text-base font-semibold transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl border border-brand-600 min-h-[48px]'>
+              <button className='group w-full bg-brand-600 hover:bg-brand-700 text-white px-8 py-3 rounded-lg text-base font-medium transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl border-0 min-h-[48px]'>
                 {ctaText}
-                <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' />
+                <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' strokeWidth={1.5} />
               </button>
             </Link>
-            <button className='w-full sm:w-auto bg-white hover:bg-slate-100 text-slate-600 px-10 py-4 rounded-xl text-base font-medium border border-slate-200 transition-all duration-300 flex items-center justify-center gap-3 min-h-[48px]'>
-              <MessageSquare className='w-5 h-5' />
+            <button className='w-full sm:w-auto bg-white hover:bg-gray-50 text-gray-600 px-8 py-3 rounded-lg text-base font-medium border border-gray-300 transition-all duration-300 flex items-center justify-center gap-3 min-h-[48px]'>
+              <MessageSquare className='w-5 h-5' strokeWidth={1.5} />
               Learn More
             </button>
           </div>
@@ -838,49 +838,49 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className='bg-white py-16 border-t border-slate-200'>
+      <footer className='bg-white py-8 border-t border-gray-200'>
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='text-center'>
-            <div className='flex items-center justify-center space-x-3 mb-8'>
-              <Image src='/loopn.svg' alt='Loopn' width={40} height={40} />
+            <div className='flex items-center justify-center space-x-3 mb-4'>
+              <Image src='/loopn.svg' alt='Loopn' width={32} height={32} />
               <div className='flex items-center'>
-                <span className='text-2xl font-semibold text-slate-900'>Loopn</span>
+                <span className='text-xl font-medium text-gray-900'>Loopn</span>
               </div>
             </div>
-            <p className='text-slate-600 text-base text-center max-w-2xl mx-auto mb-12 leading-relaxed'>
+            <p className='text-gray-600 text-sm text-center max-w-2xl mx-auto mb-6 leading-relaxed'>
               Build meaningful connections through smart matching
             </p>
 
             {/* Footer Links */}
-            <div className='flex flex-col sm:flex-row justify-center items-center gap-8 mb-12'>
+            <div className='flex flex-col sm:flex-row justify-center items-center gap-6 mb-6'>
               <a
                 href='#'
-                className='text-slate-600 hover:text-slate-900 transition-colors text-sm font-medium min-h-[48px] flex items-center'
+                className='text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium'
               >
                 Privacy Policy
               </a>
               <a
                 href='#'
-                className='text-slate-600 hover:text-slate-900 transition-colors text-sm font-medium min-h-[48px] flex items-center'
+                className='text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium'
               >
                 Terms of Service
               </a>
               <a
                 href='#'
-                className='text-slate-600 hover:text-slate-900 transition-colors text-sm font-medium min-h-[48px] flex items-center'
+                className='text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium'
               >
                 Contact Us
               </a>
               <a
                 href='#'
-                className='text-slate-600 hover:text-slate-900 transition-colors text-sm font-medium min-h-[48px] flex items-center'
+                className='text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium'
               >
                 Help Center
               </a>
             </div>
 
-            <div className='pt-8 border-t border-slate-200'>
-              <p className='text-slate-600 text-sm'>
+            <div className='pt-4 border-t border-gray-200'>
+              <p className='text-gray-600 text-sm'>
                 © 2025 Loopn. All rights reserved.
               </p>
             </div>
