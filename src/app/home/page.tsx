@@ -383,9 +383,7 @@ export default function HomePage() {
                         <Smile className='w-5 h-5' strokeWidth={2.5} />
                       </button>
                     </div>
-                    <button
-                      className='flex-shrink-0 w-12 h-12 bg-brand-500 text-white rounded-full flex items-center justify-center shadow-sm hover:bg-brand-600 cursor-pointer'
-                    >
+                    <button className='flex-shrink-0 w-12 h-12 bg-brand-500 text-white rounded-full flex items-center justify-center shadow-sm hover:bg-brand-600 cursor-pointer'>
                       <Image
                         src='/send_icon.svg'
                         alt='Send'
