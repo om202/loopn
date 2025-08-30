@@ -49,7 +49,7 @@ export default function ConfirmSignUpForm({
     <div className='w-full'>
       <form onSubmit={handleSubmit} className='space-y-5'>
         {error && (
-          <div className='p-4 text-sm text-b_red-500 bg-b_red-100 border border-b_red-200 rounded-xl'>
+          <div className='text-base text-b_red-500'>
             {error}
           </div>
         )}
@@ -90,12 +90,12 @@ export default function ConfirmSignUpForm({
         </button>
 
         <div className='text-center'>
-          <span className='text-sm text-black'>Didn't receive the code? </span>
+          <span className='text-base text-black'>Didn't receive the code? </span>
           <button
             type='button'
             onClick={handleResendCode}
             disabled={isLoading}
-            className='text-sm text-brand-600 hover:text-brand-600 font-medium transition-colors disabled:opacity-50'
+            className='text-base text-brand-600 hover:text-brand-600 hover:underline hover:underline-offset-4 hover:decoration-2 font-medium transition-colors disabled:opacity-50'
           >
             Resend
           </button>
@@ -105,7 +105,7 @@ export default function ConfirmSignUpForm({
           <button
             type='button'
             onClick={onSwitchToSignIn}
-            className='text-sm text-brand-600 hover:text-brand-600 font-medium transition-colors'
+            className='text-base text-brand-600 hover:text-brand-600 hover:underline hover:underline-offset-4 hover:decoration-2 font-medium transition-colors'
           >
             Back to sign in
           </button>

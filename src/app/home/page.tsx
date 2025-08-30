@@ -169,7 +169,7 @@ export default function HomePage() {
               <div className='flex flex-row gap-3 sm:gap-6 justify-center lg:justify-start'>
                 <Link href={isAuthenticated ? authLink : signUpLink}>
                   <button
-                    className='inline-flex items-center gap-3 bg-brand-500 text-white px-6 py-3 sm:px-10 sm:py-4 rounded-xl !font-medium shadow-lg min-h-[50px]'
+                    className='inline-flex items-center gap-3 bg-brand-500 text-white px-6 py-3 sm:px-10 sm:py-4 rounded-xl !font-medium min-h-[50px]'
                     style={{ fontSize: '18px' }}
                   >
                     {ctaText}
@@ -415,7 +415,7 @@ export default function HomePage() {
               Professional Networking, Reimagined
             </h2>
             <p className='text-lg text-gray-600 leading-relaxed font-medium'>
-              Connect smartly with professionals who actually matter to your
+              Connect with professionals who actually matter to your
               career.
             </p>
           </div>
@@ -580,7 +580,7 @@ export default function HomePage() {
           <div className='text-center'>
             <Link href={isAuthenticated ? authLink : signUpLink}>
               <button
-                className='inline-flex items-center gap-3 bg-brand-500 text-white px-6 py-3 sm:px-10 sm:py-4 rounded-xl !font-medium shadow-lg min-h-[50px]'
+                className='inline-flex items-center gap-3 bg-brand-500 text-white px-6 py-3 sm:px-10 sm:py-4 rounded-xl !font-medium min-h-[50px]'
                 style={{ fontSize: '18px' }}
               >
                 {ctaText}
@@ -808,7 +808,7 @@ export default function HomePage() {
           </div>
 
           {/* Trust Indicators */}
-          <div className='mt-12 text-center'>
+          <div className='mt-8 text-center'>
             <h3 className='text-2xl font-bold text-slate-900 mb-3'>
               Every Industry. Every Career Level.
             </h3>
@@ -817,18 +817,18 @@ export default function HomePage() {
               connections.
             </p>
             <div className='flex flex-wrap justify-center items-center gap-8 opacity-70'>
-              <div className='text-slate-600 font-medium text-sm'>
+              <div className='text-slate-600 font-medium text-lg'>
                 Technology
               </div>
-              <div className='text-slate-600 font-medium text-sm'>Finance</div>
-              <div className='text-slate-600 font-medium text-sm'>Design</div>
-              <div className='text-slate-600 font-medium text-sm'>
+              <div className='text-slate-600 font-medium text-lg'>Finance</div>
+              <div className='text-slate-600 font-medium text-lg'>Design</div>
+              <div className='text-slate-600 font-medium text-lg'>
                 Marketing
               </div>
-              <div className='text-slate-600 font-medium text-sm'>
+              <div className='text-slate-600 font-medium text-lg'>
                 Healthcare
               </div>
-              <div className='text-slate-600 font-medium text-sm'>
+              <div className='text-slate-600 font-medium text-lg'>
                 Consulting
               </div>
             </div>
@@ -859,7 +859,7 @@ export default function HomePage() {
               className='w-full sm:w-auto'
             >
               <button
-                className='w-full bg-brand-500 text-white px-6 py-3 sm:px-8 sm:py-4 rounded-lg !font-medium flex items-center justify-center gap-3 shadow-lg border-0 min-h-[50px] touch-manipulation'
+                className='w-full bg-brand-500 text-white px-6 py-3 sm:px-8 sm:py-4 rounded-lg !font-medium flex items-center justify-center gap-3 border-0 min-h-[50px] touch-manipulation'
                 style={{ fontSize: '18px' }}
               >
                 {ctaText}
@@ -891,16 +891,16 @@ export default function HomePage() {
 
             {/* Footer Links */}
             <div className='flex flex-col sm:flex-row justify-center items-center gap-6 mb-6'>
-              <a href='#' className='text-gray-600  text-sm font-medium'>
+              <a href='#' className='text-gray-600 text-sm font-medium hover:underline hover:underline-offset-4 hover:decoration-2'>
                 Privacy Policy
               </a>
-              <a href='#' className='text-gray-600  text-sm font-medium'>
+              <a href='#' className='text-gray-600 text-sm font-medium hover:underline hover:underline-offset-4 hover:decoration-2'>
                 Terms of Service
               </a>
-              <a href='#' className='text-gray-600  text-sm font-medium'>
+              <a href='#' className='text-gray-600 text-sm font-medium hover:underline hover:underline-offset-4 hover:decoration-2'>
                 Contact Us
               </a>
-              <a href='#' className='text-gray-600  text-sm font-medium'>
+              <a href='#' className='text-gray-600 text-sm font-medium hover:underline hover:underline-offset-4 hover:decoration-2'>
                 Help Center
               </a>
             </div>

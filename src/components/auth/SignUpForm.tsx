@@ -86,7 +86,7 @@ export default function SignUpForm({
     <div className='w-full'>
       {/* Sign in prompt at the top */}
       <div className='text-center mb-6 p-4 bg-slate-100 rounded-xl border border-slate-200'>
-        <span className='text-sm text-slate-500 mr-3 font-medium'>
+        <span className='text-base text-slate-500 mr-3 font-medium'>
           Already have an account?
         </span>
         <button
@@ -95,7 +95,7 @@ export default function SignUpForm({
             clearError();
             onSwitchToSignIn();
           }}
-          className='text-sm text-brand-600 hover:text-brand-600 transition-colors'
+          className='text-base text-brand-600 hover:text-brand-600 hover:underline hover:underline-offset-4 transition-colors'
         >
           Sign in
         </button>
@@ -103,7 +103,7 @@ export default function SignUpForm({
 
       <form onSubmit={handleSubmit} className='space-y-5'>
         {error && (
-          <div className='p-4 text-sm text-b_red-500 bg-b_red-100 border border-b_red-200 rounded-xl'>
+          <div className='text-base text-b_red-500'>
             {error}
           </div>
         )}
@@ -174,7 +174,7 @@ export default function SignUpForm({
 
           {/* Real-time password validation */}
           {showPasswordHints && (
-            <div className='mt-3 p-3 bg-slate-100 rounded-lg border border-slate-200'>
+            <div className='mt-3 p-3 bg-slate-50 rounded-lg border border-slate-200'>
               <p className='text-sm font-medium text-black mb-2'>
                 Password requirements:
               </p>
@@ -241,7 +241,7 @@ export default function SignUpForm({
             </button>
           </div>
           {confirmPassword && password !== confirmPassword && (
-            <p className='text-sm text-b_red-500 mt-2'>
+            <p className='text-base text-b_red-500 mt-2'>
               Passwords do not match
             </p>
           )}

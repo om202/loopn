@@ -55,7 +55,7 @@ export default function ResetPasswordForm({
     <div className='w-full'>
       <form onSubmit={handleSubmit} className='space-y-5'>
         {error && (
-          <div className='p-4 text-sm text-b_red-500 bg-b_red-100 border border-b_red-200 rounded-xl'>
+          <div className='text-base text-b_red-500'>
             {error}
           </div>
         )}
@@ -90,7 +90,7 @@ export default function ResetPasswordForm({
               type='button'
               onClick={handleResendCode}
               disabled={isLoading}
-              className='text-sm text-brand-600 hover:text-brand-600 font-medium transition-colors disabled:opacity-50'
+              className='text-base text-brand-600 hover:text-brand-600 hover:underline hover:underline-offset-4 hover:decoration-2 font-medium transition-colors disabled:opacity-50'
             >
               Resend code
             </button>
@@ -150,7 +150,7 @@ export default function ResetPasswordForm({
             />
           </div>
           {confirmPassword && newPassword !== confirmPassword && (
-            <p className='text-sm text-b_red-500 mt-2'>
+            <p className='text-base text-b_red-500 mt-2'>
               Passwords do not match
             </p>
           )}
@@ -174,7 +174,7 @@ export default function ResetPasswordForm({
           <button
             type='button'
             onClick={onSwitchToSignIn}
-            className='text-sm text-brand-600 hover:text-brand-600 font-medium transition-colors'
+            className='text-base text-brand-600 hover:text-brand-600 hover:underline hover:underline-offset-4 hover:decoration-2 font-medium transition-colors'
           >
             Back to sign in
           </button>

@@ -33,7 +33,7 @@ export default function CustomAuthenticator({
   const AuthHeader = () => (
     <div className='text-center mb-8'>
       <Link href='/home' className='inline-block'>
-        <div className='flex items-center justify-center gap-3 mb-6 cursor-pointer'>
+        <div className='flex items-center justify-center gap-3 mb-4 cursor-pointer'>
           <Image src='/loopn.svg' alt='Loopn' width={48} height={48} priority />
           <h2 className='text-3xl font-bold text-brand-600'>Loopn</h2>
         </div>

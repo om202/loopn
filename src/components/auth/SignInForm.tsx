@@ -35,7 +35,7 @@ export default function SignInForm({
     <div className='w-full'>
       {/* Sign up prompt at the top */}
       <div className='text-center mb-6 p-4 bg-slate-100 rounded-xl border border-slate-200'>
-        <span className='text-sm text-slate-500 mr-3 font-medium'>
+        <span className='text-base text-slate-500 mr-3 font-medium'>
           New to Loopn?
         </span>
         <button
@@ -44,7 +44,7 @@ export default function SignInForm({
             clearError();
             onSwitchToSignUp();
           }}
-          className='text-sm text-brand-600 hover:text-brand-600 transition-colors'
+          className='text-base text-brand-600 hover:text-brand-600 hover:underline hover:underline-offset-4 transition-colors'
         >
           Create an account
         </button>
@@ -52,7 +52,7 @@ export default function SignInForm({
 
       <form onSubmit={handleSubmit} className='space-y-5'>
         {error && (
-          <div className='p-4 text-sm text-b_red-500 bg-b_red-100 border border-b_red-200 rounded-xl'>
+          <div className='text-base text-b_red-500'>
             {error}
           </div>
         )}
@@ -126,7 +126,7 @@ export default function SignInForm({
           <button
             type='button'
             onClick={onSwitchToForgotPassword}
-            className='text-sm text-brand-600 hover:text-brand-600 transition-colors'
+            className='text-base text-brand-600 hover:text-brand-600 hover:underline hover:underline-offset-4 transition-colors'
           >
             Forgot your password?
           </button>

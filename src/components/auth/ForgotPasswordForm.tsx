@@ -36,7 +36,7 @@ export default function ForgotPasswordForm({
     <div className='w-full'>
       <form onSubmit={handleSubmit} className='space-y-5'>
         {error && (
-          <div className='p-4 text-sm text-b_red-500 bg-b_red-100 border border-b_red-200 rounded-xl'>
+          <div className='text-base text-b_red-500'>
             {error}
           </div>
         )}
@@ -76,7 +76,7 @@ export default function ForgotPasswordForm({
           <button
             type='button'
             onClick={onSwitchToSignIn}
-            className='text-sm text-brand-600 hover:text-brand-600 font-medium transition-colors flex items-center justify-center gap-2 mx-auto'
+            className='text-base text-brand-600 hover:text-brand-600 hover:underline hover:underline-offset-4 hover:decoration-2 font-medium transition-colors flex items-center justify-center gap-2 mx-auto'
           >
             <ArrowLeft className='w-4 h-4' />
             Back to sign in
