@@ -144,12 +144,12 @@ export default function HomePage() {
             {/* Left column - Content */}
             <div className='text-center lg:text-left'>
               <h1 className='text-4xl sm:text-5xl font-medium text-gray-900 mb-6 leading-tight'>
-                Simple and AI powered Networking Platform
+                Connect with Professionals Who Share Your{' '}
+                <span className='text-brand-600'>Goals & Expertise</span>
               </h1>
 
               <p className='text-xl text-gray-600 mb-12 leading-relaxed max-w-2xl'>
-                Loopn helps you build meaningful professional relationships
-                through smart AI matching.
+                Skip the noise of traditional networking. Get matched with verified professionals based on skills, interests, and career objectives — then start meaningful conversations instantly.
               </p>
 
               {/* CTA Buttons */}
@@ -158,7 +158,7 @@ export default function HomePage() {
                   href={isAuthenticated ? authLink : signUpLink}
                   className='w-full sm:w-auto'
                 >
-                  <button className='group w-full bg-brand-600 hover:bg-brand-700 text-white px-8 py-3 rounded-lg text-base font-medium transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-0.5 border-0 min-h-[48px]'>
+                  <button className='group w-full bg-brand-600 hover:bg-brand-700 text-white px-8 py-4 rounded-lg text-base font-medium transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-0.5 border-0 min-h-[52px] touch-manipulation'>
                     {ctaText}
                     <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' strokeWidth={1.5} />
                   </button>
@@ -175,254 +175,191 @@ export default function HomePage() {
 
             {/* Right column - Demo */}
             <div className='relative mt-16 lg:mt-0'>
-              {/* Chat Interface Mockup - matching real chat UI */}
-              <div className='bg-white md:rounded-2xl shadow-xl border border-slate-200 w-full sm:max-w-md lg:max-w-lg sm:mx-auto overflow-hidden'>
-                {/* Chat Header - matching ChatHeader.tsx */}
-                <div
-                  className='flex-shrink-0 bg-white border-b border-slate-200 relative z-10'
-                  style={{ boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.04)' }}
-                >
-                  <div className='w-full px-3 sm:px-4'>
-                    <div className='py-2 sm:py-3'>
-                      <div className='flex items-center gap-2 sm:gap-3'>
-                        {/* Back Button */}
-                        <button
-                          disabled
-                          className='p-1.5 sm:p-2 -ml-1 sm:-ml-2 text-slate-500 hover:text-black hover:bg-slate-100 rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 cursor-not-allowed opacity-50'
-                        >
-                          <svg
-                            className='w-4 h-4 sm:w-5 sm:h-5'
-                            fill='none'
-                            stroke='currentColor'
-                            viewBox='0 0 24 24'
-                          >
-                            <path
-                              strokeLinecap='round'
-                              strokeLinejoin='round'
-                              strokeWidth={2}
-                              d='M15 19l-7-7 7-7'
-                            />
-                          </svg>
-                        </button>
+              {/* Modern Chat Interface - matching real chat UI design */}
+              <div className='bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-md lg:max-w-lg mx-auto overflow-hidden'>
+                {/* Chat Header */}
+                <div className='flex-shrink-0 bg-white border-b border-slate-200 px-4 py-3'>
+                  <div className='flex items-center gap-3'>
+                    {/* Back Button */}
+                    <button
+                      disabled
+                      className='p-2 -ml-2 text-slate-400 rounded-full transition-colors duration-200 cursor-not-allowed'
+                    >
+                      <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                        <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15 19l-7-7 7-7' />
+                      </svg>
+                    </button>
 
-                        {/* User Avatar */}
-                        <div className='relative'>
-                          <Image
-                            src='/dummy-user.jpg'
-                            alt='Ethan Cole'
-                            width={40}
-                            height={40}
-                            className='w-10 h-10 rounded-full object-cover'
-                          />
-                          <div className='absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-b_green-400 border-2 border-white rounded-full'></div>
-                        </div>
+                    {/* User Info */}
+                    <div className='relative'>
+                      <Image
+                        src='/dummy-users/dummy-user2.jpg'
+                        alt='Sarah Chen'
+                        width={40}
+                        height={40}
+                        className='w-10 h-10 rounded-full object-cover'
+                      />
+                      <div className='absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-400 border-2 border-white rounded-full'></div>
+                    </div>
 
-                        <div className='flex-1 min-w-0'>
-                          <h1 className='text-sm sm:text-base font-medium text-black truncate no-email-detection'>
-                            Ethan Cole
-                          </h1>
-
-                          {/* Profession */}
-                          <div className='text-sm sm:text-sm text-slate-500 mb-1 truncate'>
-                            Product Designer
-                          </div>
-                        </div>
-
-                        {/* Trial Chat Controls */}
-                        <div className='flex items-center gap-1 sm:gap-2 text-sm sm:text-sm'>
-                          {/* Connect Button */}
-                          <button
-                            disabled
-                            className='px-4 py-2 text-base font-medium rounded-xl border transition-colors flex items-center justify-center md:w-auto md:h-auto md:gap-1.5 bg-brand-50 text-brand-600 border-brand-200 hover:bg-brand-200 hover:border-brand-400 disabled:bg-brand-50 disabled:cursor-not-allowed opacity-80'
-                          >
-                            <svg
-                              width='16'
-                              height='16'
-                              viewBox='30 30 160 160'
-                              className='w-4 h-4 flex-shrink-0'
-                              aria-hidden='true'
-                            >
-                              <circle
-                                cx='75'
-                                cy='110'
-                                r='35'
-                                fill='currentColor'
-                              />
-                              <circle
-                                cx='145'
-                                cy='110'
-                                r='35'
-                                fill='currentColor'
-                              />
-                            </svg>
-                            <span className='hidden md:inline text-base font-medium'>
-                              Connect
-                            </span>
-                          </button>
-                        </div>
+                    <div className='flex-1 min-w-0'>
+                      <h1 className='text-base font-semibold text-black truncate'>
+                        Sarah Chen
+                      </h1>
+                      <div className='text-sm text-slate-500 truncate'>
+                        UX Designer • Online
                       </div>
                     </div>
+
+                    {/* Connect Button */}
+                    <button
+                      disabled
+                      className='px-4 py-2 text-sm font-medium rounded-xl bg-brand-50 text-brand-600 border border-brand-200 transition-colors disabled:cursor-not-allowed flex items-center gap-2'
+                    >
+                      <svg width='14' height='14' viewBox='0 0 24 24' fill='none' className='text-brand-600'>
+                        <circle cx='9' cy='12' r='4' fill='currentColor'/>
+                        <circle cx='15' cy='12' r='4' fill='currentColor'/>
+                      </svg>
+                      <span className='hidden sm:inline'>Connect</span>
+                    </button>
                   </div>
                 </div>
 
-                {/* Chat Messages - matching MessageList.tsx structure */}
-                <div className='bg-white px-4 py-4 space-y-4 max-h-[500px] md:max-h-96 overflow-hidden'>
+                {/* Chat Messages */}
+                <div className='bg-white px-3 sm:px-4 py-4 sm:py-6 space-y-4 sm:space-y-6 h-80 sm:h-96 overflow-hidden relative'>
                   {/* Date separator */}
-                  <div className='flex items-center justify-center my-3'>
-                    <div className='text-slate-500 text-sm'>
-                      {getCurrentTime()}
+                  <div className='flex items-center justify-center'>
+                    <div className='text-xs text-slate-500 bg-slate-50 px-3 py-1 rounded-full'>
+                      Today at {getCurrentTime().split(' at ')[1]}
                     </div>
                   </div>
 
-                  {/* First message - Other user */}
-                  <div className='flex flex-col space-y-2 opacity-0 animate-[slideUpFade_0.6s_ease-out_0.8s_forwards]'>
-                    <div className='relative flex items-center gap-2 max-w-full'>
-                      <div className='flex-shrink-0 w-8 h-8'>
-                        <Image
-                          src='/dummy-user.jpg'
-                          alt='Ethan Cole'
-                          width={32}
-                          height={32}
-                          className='w-8 h-8 rounded-full object-cover'
-                        />
+                  {/* Message 1 - Other user */}
+                  <div className='flex gap-3 opacity-0 animate-[slideUpFade_0.6s_ease-out_0.8s_forwards]'>
+                    <Image
+                      src='/dummy-users/dummy-user2.jpg'
+                      alt='Sarah'
+                      width={32}
+                      height={32}
+                      className='w-8 h-8 rounded-full object-cover flex-shrink-0'
+                    />
+                    <div className='flex-1 max-w-xs'>
+                      <div className='bg-slate-100 text-slate-900 px-4 py-3 rounded-2xl rounded-tl-md'>
+                        <p className='text-sm leading-relaxed'>
+                          Hey! I noticed you work in fintech. I'm redesigning a banking app - any insights on building user trust?
+                        </p>
                       </div>
-                      <div className='relative max-w-[85vw] sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl'>
-                        <div className='p-2.5 rounded-2xl bg-slate-100 text-black border border-slate-200 rounded-bl-md shadow-sm'>
-                          <p className='text-base leading-normal break-words select-none m-0 pr-2'>
-                            Hey! I see you work in UX. Any tips for fintech
-                            design?
-                          </p>
+                    </div>
+                  </div>
+
+                  {/* Message 2 - You */}
+                  <div className='flex justify-end opacity-0 animate-[slideUpFade_0.6s_ease-out_1.6s_forwards]'>
+                    <div className='max-w-xs'>
+                      <div className='bg-brand-500 text-white px-4 py-3 rounded-2xl rounded-tr-md relative'>
+                        <p className='text-sm leading-relaxed pr-6'>
+                          Absolutely! Clear communication and progressive disclosure are key. Users need to understand what's happening with their money.
+                        </p>
+                        <div className='absolute bottom-1 right-2'>
+                          <Image
+                            src='/double_tick.svg'
+                            alt='read'
+                            width={16}
+                            height={16}
+                            className='opacity-70 filter brightness-0 invert'
+                          />
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  {/* Second message - You */}
-                  <div className='flex flex-col items-end space-y-2 opacity-0 animate-[slideUpFade_0.6s_ease-out_1.6s_forwards] mt-4'>
-                    <div className='relative max-w-[85vw] sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl'>
-                      <div className='p-2.5 rounded-2xl bg-brand-500 text-white border border-brand-500 rounded-br-md shadow-sm'>
-                        <div className='relative'>
-                          <p className='text-base leading-normal break-words select-none m-0 pr-10'>
-                            Thanks! Focus on trust & simplicity 👍
-                          </p>
-                          <div className='absolute bottom-0 right-0'>
-                            <Image
-                              src='/double_tick.svg'
-                              alt='delivered'
-                              width={22}
-                              height={22}
-                              className='opacity-50 filter brightness-0 invert select-none'
-                            />
-                          </div>
+                  {/* Message 3 - Other user */}
+                  <div className='flex gap-3 opacity-0 animate-[slideUpFade_0.6s_ease-out_2.4s_forwards]'>
+                    <Image
+                      src='/dummy-users/dummy-user2.jpg'
+                      alt='Sarah'
+                      width={32}
+                      height={32}
+                      className='w-8 h-8 rounded-full object-cover flex-shrink-0'
+                    />
+                    <div className='flex-1 max-w-xs'>
+                      <div className='bg-slate-100 text-slate-900 px-4 py-3 rounded-2xl rounded-tl-md'>
+                        <p className='text-sm leading-relaxed'>
+                          That makes perfect sense! Would love to get your feedback on some wireframes I'm working on.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Message 4 - You */}
+                  <div className='flex justify-end opacity-0 animate-[slideUpFade_0.6s_ease-out_3.2s_forwards]'>
+                    <div className='max-w-xs'>
+                      <div className='bg-brand-500 text-white px-4 py-3 rounded-2xl rounded-tr-md relative'>
+                        <p className='text-sm leading-relaxed pr-6'>
+                          I'd be happy to help! Send them over 🚀
+                        </p>
+                        <div className='absolute bottom-1 right-2'>
+                          <Image
+                            src='/double_tick.svg'
+                            alt='delivered'
+                            width={16}
+                            height={16}
+                            className='opacity-70 filter brightness-0 invert'
+                          />
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  {/* Third message - Other user */}
-                  <div className='flex flex-col space-y-2 opacity-0 animate-[slideUpFade_0.6s_ease-out_2.4s_forwards] mt-1'>
-                    <div className='relative flex items-center gap-2 max-w-full'>
-                      <div className='flex-shrink-0 w-8 h-8'>
-                        <Image
-                          src='/dummy-user.jpg'
-                          alt='Ethan Cole'
-                          width={32}
-                          height={32}
-                          className='w-8 h-8 rounded-full object-cover'
-                        />
-                      </div>
-                      <div className='relative max-w-[85vw] sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl'>
-                        <div className='p-2.5 rounded-2xl bg-slate-100 text-black border border-slate-200 rounded-bl-md shadow-sm'>
-                          <p className='text-base leading-normal break-words select-none m-0 pr-2'>
-                            Perfect! Working on investment education app
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Fourth message - You */}
-                  <div className='flex flex-col items-end space-y-2 opacity-0 animate-[slideUpFade_0.6s_ease-out_3.2s_forwards] mt-4'>
-                    <div className='relative max-w-[85vw] sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl'>
-                      <div className='p-2.5 rounded-2xl bg-brand-500 text-white border border-brand-500 rounded-br-md shadow-sm'>
-                        <div className='relative'>
-                          <p className='text-base leading-normal break-words select-none m-0 pr-10'>
-                            Nice! Happy to share some research findings
-                          </p>
-                          <div className='absolute bottom-0 right-0'>
-                            <Image
-                              src='/double_tick.svg'
-                              alt='delivered'
-                              width={22}
-                              height={22}
-                              className='opacity-50 filter brightness-0 invert select-none'
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Fifth message - Other user */}
-                  <div className='flex flex-col space-y-2 opacity-0 animate-[slideUpFade_0.6s_ease-out_4s_forwards] mt-1'>
-                    <div className='relative flex items-center gap-2 max-w-full'>
-                      <div className='flex-shrink-0 w-8 h-8'>
-                        <Image
-                          src='/dummy-user.jpg'
-                          alt='Ethan Cole'
-                          width={32}
-                          height={32}
-                          className='w-8 h-8 rounded-full object-cover'
-                        />
-                      </div>
-                      <div className='relative max-w-[85vw] sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl'>
-                        <div className='p-2.5 rounded-2xl bg-slate-100 text-black border border-slate-200 rounded-bl-md shadow-sm'>
-                          <p className='text-base leading-normal break-words select-none m-0 pr-2'>
-                            Thanks!
-                          </p>
-                        </div>
+                  {/* Typing indicator */}
+                  <div className='flex gap-3 opacity-0 animate-[slideUpFade_0.6s_ease-out_4s_forwards]'>
+                    <Image
+                      src='/dummy-users/dummy-user2.jpg'
+                      alt='Sarah'
+                      width={32}
+                      height={32}
+                      className='w-8 h-8 rounded-full object-cover flex-shrink-0'
+                    />
+                    <div className='bg-slate-100 px-4 py-3 rounded-2xl rounded-tl-md'>
+                      <div className='flex gap-1'>
+                        <div className='w-2 h-2 bg-slate-400 rounded-full animate-pulse'></div>
+                        <div className='w-2 h-2 bg-slate-400 rounded-full animate-pulse' style={{animationDelay: '0.2s'}}></div>
+                        <div className='w-2 h-2 bg-slate-400 rounded-full animate-pulse' style={{animationDelay: '0.4s'}}></div>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Chat Input - matching MessageInput.tsx */}
-                <div className='flex-shrink-0 bg-white border-t border-slate-200 p-3 sm:p-4 shadow-lg relative'>
-                  <div className='w-full'>
-                    <div className='flex gap-3 items-end'>
-                      <div className='flex-1 relative'>
-                        <input
-                          type='text'
-                          placeholder='Type your message...'
-                          disabled
-                          style={{
-                            fontSize: '16px',
-                            WebkitAppearance: 'none',
-                            MozAppearance: 'textfield',
-                          }}
-                          className='w-full px-5 py-3 pr-14 border border-slate-200 rounded-full focus:outline-none focus:ring-1 focus:ring-brand-500 focus:border-transparent text-base font-medium bg-slate-100 hover:bg-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed placeholder-slate-1000'
-                        />
-                        <button
-                          type='button'
-                          disabled
-                          className='absolute right-2 top-1/2 transform -translate-y-1/2 text-slate-500 hover:text-black transition-all duration-200 p-2 rounded-full hover:bg-slate-100 focus:outline-none disabled:opacity-50 cursor-not-allowed'
-                        >
-                          <Smile className='w-6 h-6' />
-                        </button>
-                      </div>
-                      <button
+                {/* Message Input */}
+                <div className='bg-white border-t border-slate-200 p-3 sm:p-4'>
+                  <div className='flex gap-3 items-end'>
+                    <div className='flex-1 relative'>
+                      <input
+                        type='text'
+                        placeholder='Type your message...'
                         disabled
-                        className='flex items-center justify-center w-12 h-12 bg-brand-500 text-white rounded-full hover:bg-brand-500 focus:bg-brand-500 transition-all duration-200 shadow-lg hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none'
+                        className='w-full px-4 py-3 pr-12 border border-slate-200 rounded-full bg-slate-50 hover:bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent text-sm transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-60 placeholder-slate-500'
+                        style={{ fontSize: '16px' }}
+                      />
+                      <button
+                        type='button'
+                        disabled
+                        className='absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100 transition-colors disabled:cursor-not-allowed'
                       >
-                        <Image
-                          src='/send_icon.svg'
-                          alt='Send'
-                          width={20}
-                          height={20}
-                          className='flex-shrink-0 brightness-0 invert translate-x-0.5 opacity-80 hover:opacity-100 transition-opacity duration-200'
-                        />
+                        <Smile className='w-5 h-5' />
                       </button>
                     </div>
+                    <button
+                      disabled
+                      className='flex-shrink-0 w-12 h-12 bg-brand-500 hover:bg-brand-600 text-white rounded-full flex items-center justify-center transition-colors shadow-lg hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-60'
+                    >
+                      <Image
+                        src='/send_icon.svg'
+                        alt='Send'
+                        width={18}
+                        height={18}
+                        className='brightness-0 invert translate-x-0.5'
+                      />
+                    </button>
                   </div>
                 </div>
               </div>
@@ -443,12 +380,10 @@ export default function HomePage() {
           {/* Section Header */}
           <div className='text-center max-w-4xl mx-auto mb-20'>
             <h2 className='text-3xl sm:text-4xl font-medium text-gray-900 mb-6 leading-tight'>
-              Networking That Actually Works
+              Professional Networking, Reimagined
             </h2>
             <p className='text-lg text-gray-600 leading-relaxed'>
-              Loopn removes the noise from traditional networking, helping you
-              connect based on what truly matters — your expertise, goals, and
-              shared interests.
+              Move beyond surface-level connections. Our AI matches you with professionals who complement your skills and align with your career goals, enabling deeper, more valuable relationships.
             </p>
           </div>
 
@@ -670,7 +605,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-12'>
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-12'>
             {/* Testimonial 1 */}
             <div className='group bg-white border border-slate-200 rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 flex flex-col h-full'>
               <div className='flex items-center gap-1 mb-8'>
@@ -813,10 +748,10 @@ export default function HomePage() {
 
         <div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center'>
           <h2 className='text-3xl sm:text-4xl font-medium text-gray-900 mb-6 leading-tight'>
-            Ready to Transform Your Network?
+            Start Building Your Professional Network
           </h2>
           <p className='text-lg text-gray-600 mb-12 max-w-2xl mx-auto'>
-            Join Loopn today and start making connections that matter.
+            Join thousands of verified professionals already connecting, collaborating, and advancing their careers through meaningful relationships.
           </p>
 
           <div className='flex flex-col sm:flex-row gap-4 justify-center'>
@@ -824,12 +759,12 @@ export default function HomePage() {
               href={isAuthenticated ? authLink : signUpLink}
               className='w-full sm:w-auto'
             >
-              <button className='group w-full bg-brand-600 hover:bg-brand-700 text-white px-8 py-3 rounded-lg text-base font-medium transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl border-0 min-h-[48px]'>
+              <button className='group w-full bg-brand-600 hover:bg-brand-700 text-white px-8 py-4 rounded-lg text-base font-medium transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl border-0 min-h-[52px] touch-manipulation'>
                 {ctaText}
                 <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' strokeWidth={1.5} />
               </button>
             </Link>
-            <button className='w-full sm:w-auto bg-white hover:bg-gray-50 text-gray-600 px-8 py-3 rounded-lg text-base font-medium border border-gray-300 transition-all duration-300 flex items-center justify-center gap-3 min-h-[48px]'>
+            <button className='w-full sm:w-auto bg-white hover:bg-gray-50 text-gray-600 px-8 py-4 rounded-lg text-base font-medium border border-gray-300 transition-all duration-300 flex items-center justify-center gap-3 min-h-[52px] touch-manipulation'>
               <MessageSquare className='w-5 h-5' strokeWidth={1.5} />
               Learn More
             </button>
