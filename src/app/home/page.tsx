@@ -154,7 +154,7 @@ export default function HomePage() {
 
               <h1 className='text-4xl sm:text-5xl font-semibold text-gray-900 mb-8 sm:mb-14 leading-tight'>
                 Professional Networking{' '}
-                <span className='text-brand-600'>That Actually Works</span>
+                <span className='text-brand-600'>That Actually Matters</span>
               </h1>
 
               <div className='mb-6 sm:mb-12 max-w-lg mx-auto lg:mx-0'>
@@ -223,7 +223,7 @@ export default function HomePage() {
                         height={40}
                         className='w-10 h-10 rounded-full object-cover'
                       />
-                      <div className='absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-400 border-2 border-white rounded-full'></div>
+                      <div className='absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-b_green-400 border-2 border-white rounded-full'></div>
                     </div>
 
                     <div className='flex-1 min-w-0'>
@@ -370,21 +370,21 @@ export default function HomePage() {
                       <input
                         type='text'
                         placeholder='Type your message...'
-                        disabled
-                        className='w-full px-4 py-3 pr-12 border border-slate-200 rounded-full bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent text-sm disabled:cursor-not-allowed disabled:opacity-60 placeholder-slate-500'
+                        readOnly
+                        className='w-full px-4 py-3 pr-12 border border-slate-200 rounded-full bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent text-sm placeholder-slate-500 cursor-pointer'
                         style={{ fontSize: '16px' }}
+                        onKeyDown={e => e.preventDefault()}
+                        onKeyPress={e => e.preventDefault()}
                       />
                       <button
                         type='button'
-                        disabled
-                        className='absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 rounded-full disabled:cursor-not-allowed'
+                        className='absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 rounded-full hover:text-slate-600 cursor-pointer'
                       >
                         <Smile className='w-5 h-5' strokeWidth={2.5} />
                       </button>
                     </div>
                     <button
-                      disabled
-                      className='flex-shrink-0 w-12 h-12 bg-brand-500 text-white rounded-full flex items-center justify-center shadow-sm disabled:cursor-not-allowed disabled:opacity-60'
+                      className='flex-shrink-0 w-12 h-12 bg-brand-500 text-white rounded-full flex items-center justify-center shadow-sm hover:bg-brand-600 cursor-pointer'
                     >
                       <Image
                         src='/send_icon.svg'

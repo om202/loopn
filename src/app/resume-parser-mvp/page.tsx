@@ -483,7 +483,7 @@ export default function ResumeParserMVP() {
                             className='flex-1 text-sm border rounded px-2 py-1'
                             readOnly
                           />
-                          <span className='bg-green-100 text-green-800 px-2 py-1 rounded text-sm'>
+                          <span className='bg-b_green-100 text-b_green-800 px-2 py-1 rounded text-sm'>
                             {lang.proficiency}
                           </span>
                         </div>
