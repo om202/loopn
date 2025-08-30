@@ -12,10 +12,25 @@ import {
   Brain,
   Shield,
   Smile,
+  CloudUpload,
 } from 'lucide-react';
+
+// Custom Connect Icon using circles from logo
+const ConnectIcon = ({ className }: { className?: string }) => (
+  <svg
+    width='20'
+    height='20'
+    viewBox='30 30 160 160'
+    className={className}
+    fill='currentColor'
+  >
+    <circle cx='75' cy='110' r='35' />
+    <circle cx='145' cy='110' r='35' />
+  </svg>
+);
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 // Optimized animations for better performance
 const customStyles = `
@@ -59,6 +74,10 @@ const customStyles = `
     animation: floatUp 6s ease-in-out infinite 2s;
     will-change: transform;
   }
+  
+  .animate-fadeInUp {
+    animation: fadeInUp 0.6s ease-out forwards;
+  }
 `;
 
 export default function HomePage() {
@@ -71,18 +90,11 @@ export default function HomePage() {
   const authLink = isAuthenticated ? '/dashboard' : '/auth';
   const signUpLink = isAuthenticated ? '/dashboard' : '/auth?view=signup';
   const authText = isAuthenticated ? 'Go to Dashboard' : 'Sign In';
-  const ctaText = isAuthenticated ? 'Go to Dashboard' : 'Create an account';
+  const ctaText = isAuthenticated ? 'Go to Dashboard' : 'Join Loopn';
 
-  // Get current time for chat demo
-  const getCurrentTime = () => {
-    const now = new Date();
-    const timeString = now.toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true,
-    });
-    return `Today at ${timeString}`;
-  };
+  // Chat animation state
+  const [visibleMessages, setVisibleMessages] = useState(0);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
 
   const scrollToHowItWorks = () => {
     const element = document.getElementById('how-it-works');
@@ -90,6 +102,36 @@ export default function HomePage() {
       element.scrollIntoView({ behavior: 'smooth' });
     }
   };
+
+  // Auto-scroll chat animation
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const interval = setInterval(() => {
+        setVisibleMessages(prev => {
+          if (prev < 5) {
+            // Scroll to bottom when new message appears
+            setTimeout(() => {
+              if (chatContainerRef.current) {
+                const container = chatContainerRef.current;
+                container.scrollTo({
+                  top: container.scrollHeight,
+                  behavior: 'smooth'
+                });
+              }
+            }, 150);
+            return prev + 1;
+          } else {
+            clearInterval(interval);
+            return prev;
+          }
+        });
+      }, 1200); // Show new message every 1.2 seconds
+
+      return () => clearInterval(interval);
+    }, 300); // Start after 300ms
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <main className='min-h-screen bg-white'>
@@ -141,13 +183,16 @@ export default function HomePage() {
             {/* Left column - Content */}
             <div className='text-center lg:text-left'>
               <h1 className='text-4xl sm:text-5xl font-medium text-gray-900 mb-6 leading-tight'>
-                Find Professionals Who{' '}
-                <span className='text-brand-600'>Match Your Skills</span>
+                Professional Networking{' '}
+                <span className='text-brand-600'>That Actually Works</span>
               </h1>
 
-              <p className='text-xl text-gray-600 mb-12 leading-relaxed max-w-md mx-auto lg:mx-0'>
-                AI matches you with professionals who complement your skills.
-                Start meaningful conversations instantly.
+              <p className='text-xl text-gray-600 mb-8 leading-relaxed max-w-md mx-auto lg:mx-0'>
+                Upload your resume. Get matched instantly. Start connecting.
+              </p>
+              
+              <p className='text-lg text-gray-500 mb-12 leading-relaxed max-w-lg mx-auto lg:mx-0'>
+                AI finds professionals who complement your skills and career goals. See who's online right now, send chat requests, and start building professional relationships that last.
               </p>
 
               {/* CTA Buttons */}
@@ -168,7 +213,7 @@ export default function HomePage() {
                   onClick={scrollToHowItWorks}
                   className='text-gray-600 hover:text-gray-900 text-base font-medium transition-colors flex items-center justify-center gap-2'
                 >
-                  See how it works
+                  Watch demo
                   <ArrowRight className='w-4 h-4' strokeWidth={1.5} />
                 </button>
               </div>
@@ -224,133 +269,131 @@ export default function HomePage() {
 
                     {/* Connect Button */}
                     <button
-                      disabled
-                      className='px-4 py-2 text-sm font-medium rounded-xl bg-brand-50 text-brand-600 border border-brand-200 transition-colors disabled:cursor-not-allowed flex items-center gap-2'
+                      className='px-2 py-2 rounded-lg text-base font-medium transition-colors flex items-center justify-center gap-2 flex-shrink-0 bg-brand-500 hover:bg-brand-600 text-white'
                     >
-                      <svg
-                        width='14'
-                        height='14'
-                        viewBox='0 0 24 24'
-                        fill='none'
-                        className='text-brand-600'
-                      >
-                        <circle cx='9' cy='12' r='4' fill='currentColor' />
-                        <circle cx='15' cy='12' r='4' fill='currentColor' />
-                      </svg>
-                      <span className='hidden sm:inline'>Connect</span>
+                      <ConnectIcon className='w-5 h-5 text-white' />
+                      <span className='text-base font-medium text-white hidden sm:inline'>
+                        Connect
+                      </span>
                     </button>
                   </div>
                 </div>
 
                 {/* Chat Messages */}
-                <div className='bg-white px-3 sm:px-4 py-4 sm:py-6 space-y-4 sm:space-y-6 h-80 overflow-hidden relative flex flex-col justify-end'>
-                  {/* Date separator */}
-                  <div className='flex items-center justify-center'>
-                    <div className='text-xs text-slate-500 bg-slate-50 px-3 py-1 rounded-full'>
-                      Today at {getCurrentTime().split(' at ')[1]}
-                    </div>
-                  </div>
+                <div 
+                  ref={chatContainerRef}
+                  className='bg-white px-3 sm:px-4 py-4 sm:py-6 space-y-4 sm:space-y-6 h-80 overflow-y-auto relative'
+                  style={{ 
+                    scrollBehavior: 'smooth',
+                    userSelect: 'none'
+                  }}
+                  onWheel={(e) => e.preventDefault()}
+                  onTouchMove={(e) => e.preventDefault()}
+                >
 
                   {/* Message 1 - Other user */}
-                  <div className='flex gap-3'>
-                    <Image
-                      src='/dummy-users/dummy-user2.jpg'
-                      alt='Sarah'
-                      width={32}
-                      height={32}
-                      className='w-8 h-8 rounded-full object-cover flex-shrink-0'
-                    />
-                    <div className='flex-1 max-w-xs'>
-                      <div className='bg-slate-100 text-slate-900 px-4 py-3 rounded-2xl rounded-tl-md'>
-                        <p className='text-base leading-relaxed'>
-                          Hi! I see we both work in UX. Need insights on fintech
-                          design?
-                        </p>
+                  {visibleMessages >= 1 && (
+                    <div className='flex gap-3 animate-fadeInUp'>
+                      <Image
+                        src='/dummy-users/dummy-user2.jpg'
+                        alt='Sarah'
+                        width={32}
+                        height={32}
+                        className='w-8 h-8 rounded-full object-cover flex-shrink-0'
+                      />
+                      <div className='flex-1 max-w-xs'>
+                        <div className='bg-slate-100 text-slate-900 px-4 py-3 rounded-2xl rounded-tl-md'>
+                          <p className='text-base leading-relaxed'>
+                            Hi! I saw you're also in UX design. Working on any fintech projects?
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  )}
 
                   {/* Message 2 - You */}
-                  <div className='flex justify-end'>
-                    <div className='max-w-xs'>
-                      <div className='bg-brand-500 text-white px-4 py-3 rounded-2xl rounded-tr-md relative'>
-                        <p className='text-base leading-relaxed pr-6'>
-                          Absolutely! User trust is key in financial apps.
-                        </p>
-                        <div className='absolute bottom-1 right-2'>
-                          <Image
-                            src='/double_tick.svg'
-                            alt='read'
-                            width={16}
-                            height={16}
-                            className='opacity-70 filter brightness-0 invert'
-                          />
+                  {visibleMessages >= 2 && (
+                    <div className='flex justify-end animate-fadeInUp'>
+                      <div className='max-w-xs'>
+                        <div className='bg-brand-500 text-white px-4 py-3 rounded-2xl rounded-tr-md relative'>
+                          <p className='text-base leading-relaxed pr-6'>
+                            Yes! Just finished a banking app redesign. You?
+                          </p>
+                          <div className='absolute bottom-1 right-2'>
+                            <Image
+                              src='/double_tick.svg'
+                              alt='read'
+                              width={16}
+                              height={16}
+                              className='opacity-70 filter brightness-0 invert'
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  )}
 
                   {/* Message 3 - Other user */}
-                  <div className='flex gap-3'>
-                    <Image
-                      src='/dummy-users/dummy-user2.jpg'
-                      alt='Sarah'
-                      width={32}
-                      height={32}
-                      className='w-8 h-8 rounded-full object-cover flex-shrink-0'
-                    />
-                    <div className='flex-1 max-w-xs'>
-                      <div className='bg-slate-100 text-slate-900 px-4 py-3 rounded-2xl rounded-tl-md'>
-                        <p className='text-base leading-relaxed'>
-                          Perfect! Can I share some wireframes for feedback?
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Message 4 - You */}
-                  <div className='flex justify-end'>
-                    <div className='max-w-xs'>
-                      <div className='bg-brand-500 text-white px-4 py-3 rounded-2xl rounded-tr-md relative'>
-                        <p className='text-base leading-relaxed pr-6'>
-                          Happy to help!
-                        </p>
-                        <div className='absolute bottom-1 right-2'>
-                          <Image
-                            src='/double_tick.svg'
-                            alt='delivered'
-                            width={16}
-                            height={16}
-                            className='opacity-70 filter brightness-0 invert'
-                          />
+                  {visibleMessages >= 3 && (
+                    <div className='flex gap-3 animate-fadeInUp'>
+                      <Image
+                        src='/dummy-users/dummy-user2.jpg'
+                        alt='Sarah'
+                        width={32}
+                        height={32}
+                        className='w-8 h-8 rounded-full object-cover flex-shrink-0'
+                      />
+                      <div className='flex-1 max-w-xs'>
+                        <div className='bg-slate-100 text-slate-900 px-4 py-3 rounded-2xl rounded-tl-md'>
+                          <p className='text-base leading-relaxed'>
+                            Perfect! I'm designing a crypto wallet. Mind if I pick your brain sometime?
+                          </p>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  )}
 
-                  {/* Typing indicator */}
-                  <div className='flex gap-3'>
-                    <Image
-                      src='/dummy-users/dummy-user2.jpg'
-                      alt='Sarah'
-                      width={32}
-                      height={32}
-                      className='w-8 h-8 rounded-full object-cover flex-shrink-0'
-                    />
-                    <div className='bg-slate-100 px-4 py-3 rounded-2xl rounded-tl-md'>
-                      <div className='flex gap-1'>
-                        <div className='w-2 h-2 bg-slate-400 rounded-full animate-pulse'></div>
-                        <div
-                          className='w-2 h-2 bg-slate-400 rounded-full animate-pulse'
-                          style={{ animationDelay: '0.2s' }}
-                        ></div>
-                        <div
-                          className='w-2 h-2 bg-slate-400 rounded-full animate-pulse'
-                          style={{ animationDelay: '0.4s' }}
-                        ></div>
+                  {/* Message 4 - You */}
+                  {visibleMessages >= 4 && (
+                    <div className='flex justify-end animate-fadeInUp'>
+                      <div className='max-w-xs'>
+                        <div className='bg-brand-500 text-white px-4 py-3 rounded-2xl rounded-tr-md relative'>
+                          <p className='text-base leading-relaxed pr-6'>
+                            Absolutely. Let's schedule a call next week!
+                          </p>
+                          <div className='absolute bottom-1 right-2'>
+                            <Image
+                              src='/double_tick.svg'
+                              alt='delivered'
+                              width={16}
+                              height={16}
+                              className='opacity-70 filter brightness-0 invert'
+                            />
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  )}
+
+                  {/* Message 5 - Other user - Final message */}
+                  {visibleMessages >= 5 && (
+                    <div className='flex gap-3 animate-fadeInUp'>
+                      <Image
+                        src='/dummy-users/dummy-user2.jpg'
+                        alt='Sarah'
+                        width={32}
+                        height={32}
+                        className='w-8 h-8 rounded-full object-cover flex-shrink-0'
+                      />
+                      <div className='flex-1 max-w-xs'>
+                        <div className='bg-slate-100 text-slate-900 px-4 py-3 rounded-2xl rounded-tl-md'>
+                          <p className='text-base leading-relaxed'>
+                            Great! Just sent you my calendar link 🚀
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Message Input */}
@@ -407,9 +450,7 @@ export default function HomePage() {
               Professional Networking, Reimagined
             </h2>
             <p className='text-lg text-gray-600 leading-relaxed'>
-              Move beyond surface-level connections. Our AI matches you with
-              professionals who complement your skills and align with your
-              career goals, enabling deeper, more valuable relationships.
+              Connect smartly with professionals who actually matter to your career.
             </p>
           </div>
 
@@ -450,29 +491,28 @@ export default function HomePage() {
             <div className='group bg-white rounded-2xl p-8 border border-slate-200 h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
               <h3 className='text-xl font-semibold text-slate-900 mb-6 flex items-center gap-3'>
                 <Brain className='w-6 h-6 text-brand-600' />
-                Smart AI Matching
+                AI Resume Intelligence
               </h3>
               <p className='text-slate-600 mb-8 leading-relaxed text-base'>
-                Meet professionals who complement your skills and align with
-                your goals.
+                Upload once. Get matched to perfect career opportunities instantly.
               </p>
               <ul className='space-y-4'>
                 <li className='flex items-center gap-3 text-slate-600'>
                   <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' />
-                  <span className='font-normal text-sm'>
-                    AI-powered matching
+                  <span className='font-normal text-base'>
+                    AI analyzes your resume in seconds
                   </span>
                 </li>
                 <li className='flex items-center gap-3 text-slate-600'>
                   <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' />
-                  <span className='font-normal text-sm'>
-                    Industry-focused connections
+                  <span className='font-normal text-base'>
+                    Smart compatibility matching
                   </span>
                 </li>
                 <li className='flex items-center gap-3 text-slate-600'>
                   <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' />
-                  <span className='font-normal text-sm'>
-                    Goal-based alignment
+                  <span className='font-normal text-base'>
+                    Industry-specific results
                   </span>
                 </li>
               </ul>
@@ -482,29 +522,28 @@ export default function HomePage() {
             <div className='group bg-white rounded-2xl p-8 border border-slate-200 h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
               <h3 className='text-xl font-semibold text-slate-900 mb-6 flex items-center gap-3'>
                 <Zap className='w-6 h-6 text-brand-600' />
-                Instant Connections
+                Real-Time Discovery
               </h3>
               <p className='text-slate-600 mb-8 leading-relaxed text-base'>
-                Start meaningful conversations the moment you match — no delays,
-                no barriers.
+                Connect with the right people at the right moment.
               </p>
               <ul className='space-y-4'>
                 <li className='flex items-center gap-3 text-slate-600'>
                   <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' />
-                  <span className='font-normal text-sm'>
-                    Real-time messaging
+                  <span className='font-normal text-base'>
+                    See who's online now
                   </span>
                 </li>
                 <li className='flex items-center gap-3 text-slate-600'>
                   <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' />
-                  <span className='font-normal text-sm'>
-                    Professional conversation starters
+                  <span className='font-normal text-base'>
+                    Send instant chat requests
                   </span>
                 </li>
                 <li className='flex items-center gap-3 text-slate-600'>
                   <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' />
-                  <span className='font-normal text-sm'>
-                    Smooth, seamless experience
+                  <span className='font-normal text-base'>
+                    Build permanent relationships
                   </span>
                 </li>
               </ul>
@@ -514,28 +553,28 @@ export default function HomePage() {
             <div className='group bg-white rounded-2xl p-8 border border-slate-200 h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
               <h3 className='text-xl font-semibold text-slate-900 mb-6 flex items-center gap-3'>
                 <Shield className='w-6 h-6 text-brand-600' />
-                Quality & Privacy
+                Professional Focus
               </h3>
               <p className='text-slate-600 mb-8 leading-relaxed text-base'>
-                Network with verified professionals in a safe, focused space.
+                Quality over quantity. Every connection is verified, relevant, and career-focused.
               </p>
               <ul className='space-y-4'>
                 <li className='flex items-center gap-3 text-slate-600'>
                   <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' />
-                  <span className='font-normal text-sm'>
-                    Verified members only
+                  <span className='font-normal text-base'>
+                    Verified professionals only
                   </span>
                 </li>
                 <li className='flex items-center gap-3 text-slate-600'>
                   <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' />
-                  <span className='font-normal text-sm'>
-                    Privacy-first design
+                  <span className='font-normal text-base'>
+                    No spam or casual chat
                   </span>
                 </li>
                 <li className='flex items-center gap-3 text-slate-600'>
                   <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' />
-                  <span className='font-normal text-sm'>
-                    Quality over quantity
+                  <span className='font-normal text-base'>
+                    Career-advancing focus
                   </span>
                 </li>
               </ul>
@@ -585,12 +624,11 @@ export default function HomePage() {
                 {/* Content */}
                 <div className='text-center mt-6'>
                   <h3 className='text-xl font-semibold text-slate-900 mb-6 flex items-center justify-center gap-3'>
-                    <User className='w-6 h-6 text-brand-600' />
-                    Create Your Profile
+                    <CloudUpload className='w-6 h-6 text-brand-600' />
+                    Upload Your Resume
                   </h3>
                   <p className='text-slate-600 leading-relaxed text-base'>
-                    Showcase your expertise, goals, and what you're looking for
-                    — so the right people can find you.
+                    Drop your resume. AI builds your profile in seconds.
                   </p>
                 </div>
               </div>
@@ -607,11 +645,10 @@ export default function HomePage() {
                 <div className='text-center mt-6'>
                   <h3 className='text-xl font-semibold text-slate-900 mb-6 flex items-center justify-center gap-3'>
                     <Brain className='w-6 h-6 text-brand-600' />
-                    Get Smart Matches
+                    Discover Live Matches
                   </h3>
                   <p className='text-slate-600 leading-relaxed text-base'>
-                    Our AI connects you with professionals who share your
-                    interests and complement your skills.
+                    See perfect matches online right now. Connect instantly.
                   </p>
                 </div>
               </div>
@@ -628,11 +665,10 @@ export default function HomePage() {
                 <div className='text-center mt-6'>
                   <h3 className='text-xl font-semibold text-slate-900 mb-6 flex items-center justify-center gap-3'>
                     <MessageSquare className='w-6 h-6 text-brand-600' />
-                    Start Connecting
+                    Build Lasting Relationships
                   </h3>
                   <p className='text-slate-600 leading-relaxed text-base'>
-                    Engage in real conversations, grow your network, and build
-                    relationships that last.
+                    Send requests. Start conversations. Build lasting professional relationships.
                   </p>
                 </div>
               </div>
@@ -655,8 +691,7 @@ export default function HomePage() {
               What Professionals Say
             </h2>
             <p className='text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed'>
-              Loopn is built for those who value authentic networking and
-              meaningful connections.
+              Real professionals. Real results. Real career growth.
             </p>
           </div>
 
@@ -767,11 +802,10 @@ export default function HomePage() {
           {/* Trust Indicators */}
           <div className='mt-12 text-center'>
             <h3 className='text-2xl font-semibold text-slate-900 mb-6'>
-              Built for Professionals in Every Field
+              Every Industry. Every Career Level.
             </h3>
             <p className='text-slate-600 mb-12 text-base'>
-              From startups to global enterprises, Loopn connects experts across
-              industries.
+              Join professionals across all industries making career-changing connections.
             </p>
             <div className='flex flex-wrap justify-center items-center gap-8 opacity-70'>
               <div className='text-slate-600 font-medium text-sm'>
@@ -803,12 +837,10 @@ export default function HomePage() {
 
         <div className='max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center'>
           <h2 className='text-3xl sm:text-4xl font-medium text-gray-900 mb-6 leading-tight'>
-            Start Building Your Professional Network
+            Start Connecting Today
           </h2>
           <p className='text-lg text-gray-600 mb-12 max-w-md mx-auto'>
-            Join thousands of verified professionals already connecting,
-            collaborating, and advancing their careers through meaningful
-            relationships.
+            Join thousands of professionals already building career-changing relationships.
           </p>
 
           <div className='flex flex-col sm:flex-row gap-4 justify-center'>
@@ -826,7 +858,7 @@ export default function HomePage() {
             </Link>
             <button className='w-full sm:w-auto bg-white hover:bg-gray-50 text-gray-600 px-8 py-4 rounded-lg text-base font-medium border border-gray-300 transition-all duration-300 flex items-center justify-center gap-3 min-h-[52px] touch-manipulation'>
               <MessageSquare className='w-5 h-5' strokeWidth={1.5} />
-              Learn More
+              See It In Action
             </button>
           </div>
         </div>
@@ -843,7 +875,7 @@ export default function HomePage() {
               </div>
             </div>
             <p className='text-gray-600 text-sm text-center max-w-md mx-auto mb-6 leading-relaxed'>
-              Build meaningful connections through smart matching
+              AI-powered professional discovery for career-advancing relationships
             </p>
 
             {/* Footer Links */}
