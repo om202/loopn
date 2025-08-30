@@ -522,13 +522,13 @@ export default function OnboardingPage() {
 
   return (
     <div className='min-h-screen bg-slate-100 py-8 px-3 sm:px-4 pb-32'>
-      <div className='max-w-4xl mx-auto'>
+      <div className='max-w-3xl mx-auto'>
         {/* Main content card */}
         <div className='bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 lg:p-8'>
           {/* Header - Logo and Title */}
-          <div className='text-center mb-8'>
+          <div className='text-center mb-4'>
             <Link href='/home' className='inline-block'>
-              <div className='flex items-center justify-center space-x-3 mb-3 cursor-pointer hover:opacity-80 transition-opacity'>
+              <div className='flex items-center justify-center space-x-3 mb-1 cursor-pointer hover:opacity-80 transition-opacity'>
                 <Image
                   src='/loopn.svg'
                   alt='Loopn'
@@ -539,15 +539,13 @@ export default function OnboardingPage() {
                 <h1 className='text-3xl font-bold text-brand-600'>Loopn</h1>
               </div>
             </Link>
-            <p className='text-black text-2xl font-bold mb-6'>
-              Let's set up your profile
-            </p>
+
           </div>
 
           {/* Resume Upload Section */}
           {showResumeUpload && currentStep === 1 && (
-            <div className='mb-8 text-center'>
-              <p className='text-slate-700 mb-4'>
+            <div className='mb-8 text-center bg-slate-50 rounded-2xl p-6'>
+              <p className='text-slate-700 mb-4 text-base'>
                 Upload your resume, and we'll autofill the form for you.
               </p>
 
@@ -1628,7 +1626,7 @@ export default function OnboardingPage() {
 
       {/* Fixed Bottom Navigation Bar */}
       <div className='fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-t border-slate-200 shadow-2xl z-50'>
-        <div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4'>
+        <div className='max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-4'>
           <div className='flex items-center justify-between'>
             {/* Previous Button */}
             <button
@@ -1673,7 +1671,7 @@ export default function OnboardingPage() {
                 </svg>
                 {/* Step number in center */}
                 <div className='absolute inset-0 flex items-center justify-center'>
-                  <span className='text-xs font-semibold text-slate-700'>
+                  <span className='text-xs font-medium text-slate-700'>
                     {currentStep}/{totalSteps}
                   </span>
                 </div>
@@ -1681,7 +1679,7 @@ export default function OnboardingPage() {
 
               {/* Step text - Hidden on very small screens */}
               <div className='text-center hidden sm:block'>
-                <div className='text-xs sm:text-sm text-slate-500'>
+                <div className='text-xs sm:text-sm text-slate-500 font-medium'>
                   Step {currentStep} of {totalSteps}
                 </div>
                 <div className='text-xs sm:text-sm font-medium text-black'>
