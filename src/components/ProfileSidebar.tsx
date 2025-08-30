@@ -283,11 +283,11 @@ export default function ProfileSidebar({
           }}
           className={`px-2 py-2 text-base font-medium rounded-lg transition-colors flex items-center justify-center gap-2 ${
             incomingRequestSenderIds?.has(userId)
-              ? 'bg-white text-brand-600 border border-brand-500 hover:bg-brand-50'
+              ? 'bg-slate-50 text-brand-600 border border-brand-500 hover:bg-slate-100'
               : pendingRequests.has(userId)
                 ? 'bg-slate-100 text-slate-500 hover:bg-slate-200 border border-slate-200'
                 : existingConversations.has(userId)
-                  ? 'bg-white text-brand-600 border border-brand-500 hover:bg-brand-50'
+                  ? 'bg-slate-50 text-brand-600 border border-brand-500 hover:bg-slate-100'
                   : 'bg-brand-500 text-white hover:bg-brand-600'
           }`}
         >
@@ -459,7 +459,7 @@ export default function ProfileSidebar({
           <div className='flex items-center justify-center text-base text-slate-500 mb-2'>
             <button
               onClick={() => setShowRemoveConnectionDialog(true)}
-              className='flex items-center gap-2 px-2 py-2 rounded-lg hover:bg-slate-100 transition-colors'
+              className='flex items-center gap-2 px-2 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 transition-colors'
             >
               <ConnectIcon className='w-4 h-4 text-brand-600' />
               <span className='font-medium'>Connected</span>
@@ -586,7 +586,7 @@ export default function ProfileSidebar({
               <div className='pt-2'>
                 <button
                   onClick={() => setShowFullScreenDialog(true)}
-                  className='text-base text-brand-600 hover:text-brand-700 font-medium'
+                  className='text-base text-brand-600 hover:text-brand-700 font-medium bg-slate-100 hover:bg-slate-200 px-3 py-2 rounded-lg transition-colors'
                 >
                   View Full Profile
                 </button>

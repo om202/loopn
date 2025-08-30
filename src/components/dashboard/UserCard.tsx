@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { MessageSquare, UserCheck, Bookmark } from 'lucide-react';
+import { MessageSquare, UserCheck, Bookmark, User, X } from 'lucide-react';
 
 // Custom Connect Icon using circles from logo
 const ConnectIcon = ({ className }: { className?: string }) => (
@@ -23,6 +23,7 @@ import { useUserProfile } from '../../hooks/useUserProfile';
 
 import DialogContainer from '../DialogContainer';
 import UserAvatar from '../UserAvatar';
+import UserProfileContent from '../UserProfileContent';
 import { useSavedUsersStore } from '../../stores/saved-users-store';
 
 type UserPresence = Schema['UserPresence']['type'];
@@ -94,6 +95,7 @@ export default function UserCard({
   currentUserId,
 }: UserCardProps) {
   const [showCancelDialog, setShowCancelDialog] = useState(false);
+  const [showProfileDialog, setShowProfileDialog] = useState(false);
 
   // Use our centralized stores
   const { profile: fullProfile, isLoading: _loadingProfile } = useUserProfile(
@@ -171,7 +173,7 @@ export default function UserCard({
     <div
       key={userPresence.userId}
       onClick={handleCardClick}
-      className={`px-2 py-2 sm:px-3 sm:py-3 group transition-all duration-200 cursor-pointer shadow-xs ${
+      className={`px-3 py-3 group transition-all duration-200 cursor-pointer shadow-xs ${
         isSelected
           ? 'bg-brand-50 rounded-xl border border-brand-100'
           : 'bg-white hover:bg-slate-50 rounded-lg border border-slate-100 hover:border-brand-200'
@@ -218,7 +220,16 @@ export default function UserCard({
           )}
         </div>
 
-        <div className='flex-shrink-0 flex items-center gap-2'>
+        <div className='flex-shrink-0 flex items-center gap-1 sm:gap-2'>
+          {/* Profile Button - only show on mobile */}
+          <button
+            onClick={() => setShowProfileDialog(true)}
+            className='p-2 rounded-lg transition-colors flex-shrink-0 text-slate-500 hover:bg-slate-50 sm:hidden'
+            title='View Profile'
+          >
+            <User className='w-5 h-5' strokeWidth={1.5} />
+          </button>
+
           {/* Save Button - only show for other users */}
           {currentUserId && userPresence.userId !== currentUserId && (
             <button
@@ -323,6 +334,86 @@ export default function UserCard({
       </div>
 
       {/* Sidebar rendering moved to parent to allow push layout */}
+
+      {/* Profile Details Dialog */}
+      <DialogContainer
+        isOpen={showProfileDialog}
+        onClose={() => setShowProfileDialog(false)}
+        maxWidth='lg'
+      >
+        <div className='flex flex-col max-h-[90vh]'>
+          {/* Header */}
+          <div className='px-6 py-4 border-b border-slate-200 flex items-center justify-between flex-shrink-0'>
+            <h2 className='text-lg font-semibold text-slate-900'>
+              Profile Details
+            </h2>
+            <button
+              onClick={() => setShowProfileDialog(false)}
+              className='p-2 text-slate-500 hover:text-black transition-colors rounded-lg hover:bg-slate-100'
+              title='Close'
+            >
+              <X className='w-5 h-5' />
+            </button>
+          </div>
+
+          {/* Content */}
+          <div className='flex-1 overflow-y-auto'>
+            <div className='p-6'>
+              {/* User Profile Header */}
+              <div className='flex items-start gap-4 mb-6'>
+                <div className='flex-shrink-0'>
+                  <UserAvatar
+                    email={userProfile?.email}
+                    userId={userPresence.userId}
+                    profilePictureUrl={userProfile?.profilePictureUrl}
+                    hasProfilePicture={userProfile?.hasProfilePicture || false}
+                    size='xl'
+                    showStatus={useRealtimeStatus}
+                    status={
+                      useRealtimeStatus
+                        ? isOnline
+                          ? 'ONLINE'
+                          : userPresence.lastSeen &&
+                              formatPresenceTime(userPresence.lastSeen) ===
+                                'Recently active'
+                            ? 'RECENTLY_ACTIVE'
+                            : 'OFFLINE'
+                        : 'OFFLINE'
+                    }
+                  />
+                </div>
+                <div className='flex-1 min-w-0'>
+                  <h1 className='text-xl font-bold text-slate-900 mb-1'>
+                    {getDisplayName(userPresence, userProfile)}
+                  </h1>
+                  {(finalFullProfile?.jobRole || finalFullProfile?.companyName) && (
+                    <p className='text-base text-slate-700 mb-1'>
+                      {finalFullProfile?.jobRole && finalFullProfile?.companyName
+                        ? `${finalFullProfile.jobRole} at ${finalFullProfile.companyName}`
+                        : finalFullProfile?.jobRole || finalFullProfile?.companyName}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              {/* Profile Content */}
+              {finalFullProfile && (
+                <UserProfileContent
+                  userProfile={finalFullProfile}
+                  loading={false}
+                  showContactInfo={false}
+                />
+              )}
+
+              {!finalFullProfile && (
+                <div className='text-center py-8 text-slate-500'>
+                  No profile details available.
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </DialogContainer>
 
       {/* Cancel Request Confirmation Dialog */}
       <DialogContainer

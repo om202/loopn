@@ -1,7 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Phone, MapPin, Linkedin, Github, Globe } from 'lucide-react';
+import ExternalLinkWarningDialog from './ExternalLinkWarningDialog';
 
 import type { Schema } from '../../amplify/data/resource';
 
@@ -20,6 +21,9 @@ export default function UserProfileContent({
   showContactInfo = false,
   className = '',
 }: UserProfileContentProps) {
+  const [showExternalLinkDialog, setShowExternalLinkDialog] = useState(false);
+  const [pendingExternalLink, setPendingExternalLink] = useState<{url: string; name: string} | null>(null);
+
   // Utility function to ensure URLs have proper protocol
   const ensureHttps = (url: string) => {
     if (!url) return url;
@@ -27,6 +31,27 @@ export default function UserProfileContent({
       return url;
     }
     return `https://${url}`;
+  };
+
+  // Handle external link click
+  const handleExternalLinkClick = (url: string, name: string) => {
+    setPendingExternalLink({ url: ensureHttps(url), name });
+    setShowExternalLinkDialog(true);
+  };
+
+  // Handle dialog confirm
+  const handleExternalLinkConfirm = () => {
+    if (pendingExternalLink) {
+      window.open(pendingExternalLink.url, '_blank', 'noopener,noreferrer');
+    }
+    setShowExternalLinkDialog(false);
+    setPendingExternalLink(null);
+  };
+
+  // Handle dialog close
+  const handleExternalLinkClose = () => {
+    setShowExternalLinkDialog(false);
+    setPendingExternalLink(null);
   };
 
   if (loading) {
@@ -81,37 +106,31 @@ export default function UserProfileContent({
         userProfile.portfolioUrl) && (
         <div className='flex flex-wrap gap-2'>
           {userProfile.linkedinUrl && (
-            <a
-              href={ensureHttps(userProfile.linkedinUrl)}
-              target='_blank'
-              rel='noopener noreferrer'
-              className='flex items-center gap-2 px-3 py-1.5 bg-slate-50 text-slate-700 hover:bg-blue-50 hover:text-blue-600 rounded-full text-sm font-medium transition-colors'
+            <button
+              onClick={() => handleExternalLinkClick(userProfile.linkedinUrl!, 'LinkedIn Profile')}
+              className='flex items-center gap-2 px-3 py-1.5 bg-slate-100 text-slate-700 hover:bg-blue-50 hover:text-blue-600 rounded-full text-sm font-medium transition-colors'
             >
               <Linkedin className='w-3.5 h-3.5' />
               <span>LinkedIn</span>
-            </a>
+            </button>
           )}
           {userProfile.githubUrl && (
-            <a
-              href={ensureHttps(userProfile.githubUrl)}
-              target='_blank'
-              rel='noopener noreferrer'
-              className='flex items-center gap-2 px-3 py-1.5 bg-slate-50 text-slate-700 hover:bg-blue-50 hover:text-blue-600 rounded-full text-sm font-medium transition-colors'
+            <button
+              onClick={() => handleExternalLinkClick(userProfile.githubUrl!, 'GitHub Profile')}
+              className='flex items-center gap-2 px-3 py-1.5 bg-slate-100 text-slate-700 hover:bg-blue-50 hover:text-blue-600 rounded-full text-sm font-medium transition-colors'
             >
               <Github className='w-3.5 h-3.5' />
               <span>GitHub</span>
-            </a>
+            </button>
           )}
           {userProfile.portfolioUrl && (
-            <a
-              href={ensureHttps(userProfile.portfolioUrl)}
-              target='_blank'
-              rel='noopener noreferrer'
-              className='flex items-center gap-2 px-3 py-1.5 bg-slate-50 text-slate-700 hover:bg-blue-50 hover:text-blue-600 rounded-full text-sm font-medium transition-colors'
+            <button
+              onClick={() => handleExternalLinkClick(userProfile.portfolioUrl!, 'Portfolio Website')}
+              className='flex items-center gap-2 px-3 py-1.5 bg-slate-100 text-slate-700 hover:bg-blue-50 hover:text-blue-600 rounded-full text-sm font-medium transition-colors'
             >
               <Globe className='w-3.5 h-3.5' />
               <span>Portfolio</span>
-            </a>
+            </button>
           )}
         </div>
       )}
@@ -448,6 +467,15 @@ export default function UserProfileContent({
           </p>
         </div>
       )}
+
+      {/* External Link Warning Dialog */}
+      <ExternalLinkWarningDialog
+        isOpen={showExternalLinkDialog}
+        onClose={handleExternalLinkClose}
+        onConfirm={handleExternalLinkConfirm}
+        url={pendingExternalLink?.url || ''}
+        linkName={pendingExternalLink?.name || ''}
+      />
     </div>
   );
 }
