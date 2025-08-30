@@ -6,7 +6,6 @@ import {
   ArrowRight,
   CheckCircle,
   Star,
-  User,
   LogIn,
   Zap,
   Brain,
@@ -115,7 +114,7 @@ export default function HomePage() {
                 const container = chatContainerRef.current;
                 container.scrollTo({
                   top: container.scrollHeight,
-                  behavior: 'smooth'
+                  behavior: 'smooth',
                 });
               }
             }, 150);
@@ -192,9 +191,11 @@ export default function HomePage() {
                 <p className='text-xl text-gray-600 mb-4 leading-relaxed'>
                   Upload your resume. Get matched instantly. Start connecting.
                 </p>
-                
+
                 <p className='text-lg text-gray-500 leading-relaxed'>
-                  AI finds professionals who complement your skills and career goals. See who's online right now, send chat requests, and start building professional relationships that last.
+                  AI finds professionals who complement your skills and career
+                  goals. See who's online right now, send chat requests, and
+                  start building professional relationships that last.
                 </p>
               </div>
 
@@ -204,7 +205,7 @@ export default function HomePage() {
                   href={isAuthenticated ? authLink : signUpLink}
                   className='w-full sm:w-auto'
                 >
-                  <button 
+                  <button
                     className='group w-full bg-brand-600 hover:bg-brand-700 text-white px-8 py-4 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-0.5 border-0 min-h-[50px] touch-manipulation'
                     style={{ fontSize: '18px' }}
                   >
@@ -274,9 +275,7 @@ export default function HomePage() {
                     </div>
 
                     {/* Connect Button */}
-                    <button
-                      className='px-2 py-2 rounded-lg text-base font-medium transition-colors flex items-center justify-center gap-2 flex-shrink-0 bg-brand-500 hover:bg-brand-600 text-white'
-                    >
+                    <button className='px-2 py-2 rounded-lg text-base font-medium transition-colors flex items-center justify-center gap-2 flex-shrink-0 bg-brand-500 hover:bg-brand-600 text-white'>
                       <ConnectIcon className='w-5 h-5 text-white' />
                       <span className='text-base font-medium text-white hidden sm:inline'>
                         Connect
@@ -286,17 +285,16 @@ export default function HomePage() {
                 </div>
 
                 {/* Chat Messages */}
-                <div 
+                <div
                   ref={chatContainerRef}
                   className='bg-white px-3 sm:px-4 py-4 sm:py-6 space-y-4 sm:space-y-6 h-80 overflow-y-auto relative'
-                  style={{ 
+                  style={{
                     scrollBehavior: 'smooth',
-                    userSelect: 'none'
+                    userSelect: 'none',
                   }}
-                  onWheel={(e) => e.preventDefault()}
-                  onTouchMove={(e) => e.preventDefault()}
+                  onWheel={e => e.preventDefault()}
+                  onTouchMove={e => e.preventDefault()}
                 >
-
                   {/* Message 1 - Other user */}
                   {visibleMessages >= 1 && (
                     <div className='flex gap-3 animate-fadeInUp'>
@@ -310,7 +308,8 @@ export default function HomePage() {
                       <div className='flex-1 max-w-xs'>
                         <div className='bg-slate-100 text-slate-900 px-4 py-3 rounded-2xl rounded-tl-md'>
                           <p className='text-base leading-relaxed'>
-                            Hi! I saw you're also in UX design. Working on any fintech projects?
+                            Hi! I saw you're also in UX design. Working on any
+                            fintech projects?
                           </p>
                         </div>
                       </div>
@@ -352,7 +351,8 @@ export default function HomePage() {
                       <div className='flex-1 max-w-xs'>
                         <div className='bg-slate-100 text-slate-900 px-4 py-3 rounded-2xl rounded-tl-md'>
                           <p className='text-base leading-relaxed'>
-                            Perfect! I'm designing a crypto wallet. Mind if I pick your brain sometime?
+                            Perfect! I'm designing a crypto wallet. Mind if I
+                            pick your brain sometime?
                           </p>
                         </div>
                       </div>
@@ -456,26 +456,27 @@ export default function HomePage() {
               Professional Networking, Reimagined
             </h2>
             <p className='text-lg text-gray-600 leading-relaxed'>
-              Connect smartly with professionals who actually matter to your career.
+              Connect smartly with professionals who actually matter to your
+              career.
             </p>
           </div>
 
-                    {/* Dashboard Images - Responsive */}
+          {/* Dashboard Images - Responsive */}
           <div className='flex justify-center'>
-                         {/* Desktop Dashboard Image */}
-             <div className='hidden lg:block w-full max-w-5xl'>
-               <Image
-                 src='/desktop-dash.png'
-                 alt='Loopn Dashboard - Desktop View'
-                 width={1200}
-                 height={900}
-                 className='w-full h-auto rounded-2xl shadow-sm border border-slate-200'
-                 quality={100}
-                 priority
-                 unoptimized={true}
-               />
-             </div>
-            
+            {/* Desktop Dashboard Image */}
+            <div className='hidden lg:block w-full max-w-5xl'>
+              <Image
+                src='/desktop-dash.png'
+                alt='Loopn Dashboard - Desktop View'
+                width={1200}
+                height={900}
+                className='w-full h-auto rounded-2xl shadow-sm border border-slate-200'
+                quality={100}
+                priority
+                unoptimized={true}
+              />
+            </div>
+
             {/* Mobile Dashboard Image */}
             <div className='block lg:hidden w-full max-w-sm mx-auto'>
               <Image
@@ -500,7 +501,8 @@ export default function HomePage() {
                 AI Resume Intelligence
               </h3>
               <p className='text-slate-600 mb-8 leading-relaxed text-base'>
-                Upload once. Get matched to perfect career opportunities instantly.
+                Upload once. Get matched to perfect career opportunities
+                instantly.
               </p>
               <ul className='space-y-4'>
                 <li className='flex items-center gap-3 text-slate-600'>
@@ -562,7 +564,8 @@ export default function HomePage() {
                 Professional Focus
               </h3>
               <p className='text-slate-600 mb-8 leading-relaxed text-base'>
-                Quality over quantity. Every connection is verified, relevant, and career-focused.
+                Quality over quantity. Every connection is verified, relevant,
+                and career-focused.
               </p>
               <ul className='space-y-4'>
                 <li className='flex items-center gap-3 text-slate-600'>
@@ -590,7 +593,7 @@ export default function HomePage() {
           {/* Bottom CTA */}
           <div className='text-center'>
             <Link href={isAuthenticated ? authLink : signUpLink}>
-              <button 
+              <button
                 className='group inline-flex items-center gap-3 bg-brand-500 hover:bg-brand-600 text-white px-10 py-4 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 border border-brand-600 min-h-[50px]'
                 style={{ fontSize: '18px' }}
               >
@@ -677,7 +680,8 @@ export default function HomePage() {
                     Build Lasting Relationships
                   </h3>
                   <p className='text-slate-600 leading-relaxed text-base'>
-                    Send requests. Start conversations. Build lasting professional relationships.
+                    Send requests. Start conversations. Build lasting
+                    professional relationships.
                   </p>
                 </div>
               </div>
@@ -814,7 +818,8 @@ export default function HomePage() {
               Every Industry. Every Career Level.
             </h3>
             <p className='text-slate-600 mb-12 text-base'>
-              Join professionals across all industries making career-changing connections.
+              Join professionals across all industries making career-changing
+              connections.
             </p>
             <div className='flex flex-wrap justify-center items-center gap-8 opacity-70'>
               <div className='text-slate-600 font-medium text-sm'>
@@ -849,7 +854,8 @@ export default function HomePage() {
             Start Connecting Today
           </h2>
           <p className='text-lg text-gray-600 mb-12 max-w-md mx-auto'>
-            Join thousands of professionals already building career-changing relationships.
+            Join thousands of professionals already building career-changing
+            relationships.
           </p>
 
           <div className='flex flex-col sm:flex-row gap-4 justify-center'>
@@ -857,7 +863,7 @@ export default function HomePage() {
               href={isAuthenticated ? authLink : signUpLink}
               className='w-full sm:w-auto'
             >
-              <button 
+              <button
                 className='group w-full bg-brand-600 hover:bg-brand-700 text-white px-8 py-4 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl border-0 min-h-[50px] touch-manipulation'
                 style={{ fontSize: '18px' }}
               >
@@ -887,7 +893,8 @@ export default function HomePage() {
               </div>
             </div>
             <p className='text-gray-600 text-sm text-center max-w-md mx-auto mb-6 leading-relaxed'>
-              AI-powered professional discovery for career-advancing relationships
+              AI-powered professional discovery for career-advancing
+              relationships
             </p>
 
             {/* Footer Links */}
