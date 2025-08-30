@@ -21,18 +21,18 @@ export class MarkdownResumePDFGenerator {
   }
 
   private async convertImageToBase64(imageUrl: string): Promise<string | null> {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const img = new Image();
       img.crossOrigin = 'anonymous';
-      
+
       img.onload = () => {
         try {
           const canvas = document.createElement('canvas');
           const ctx = canvas.getContext('2d');
-          
+
           canvas.width = img.width;
           canvas.height = img.height;
-          
+
           ctx?.drawImage(img, 0, 0);
           const dataURL = canvas.toDataURL('image/jpeg', 0.8);
           resolve(dataURL);
@@ -41,12 +41,12 @@ export class MarkdownResumePDFGenerator {
           resolve(null);
         }
       };
-      
+
       img.onerror = () => {
         console.error('Error loading image for base64 conversion');
         resolve(null);
       };
-      
+
       img.src = imageUrl;
     });
   }
@@ -59,10 +59,13 @@ export class MarkdownResumePDFGenerator {
     let profileImageDataUrl: string | null = null;
     if (userProfile.profilePictureUrl) {
       try {
-        const resolvedImageUrl = await imageUrlCache.getResolvedUrl(userProfile.profilePictureUrl);
+        const resolvedImageUrl = await imageUrlCache.getResolvedUrl(
+          userProfile.profilePictureUrl
+        );
         if (resolvedImageUrl) {
           // Convert image to base64 for PDF generation
-          profileImageDataUrl = await this.convertImageToBase64(resolvedImageUrl);
+          profileImageDataUrl =
+            await this.convertImageToBase64(resolvedImageUrl);
         }
       } catch (error) {
         console.error('Error resolving/converting profile picture:', error);
@@ -130,8 +133,6 @@ export class MarkdownResumePDFGenerator {
       markdown += `</div>\n`;
       markdown += `</div>\n\n`; // Close header-container
     }
-
-
 
     // Professional Summary
     if (userProfile.about) {
