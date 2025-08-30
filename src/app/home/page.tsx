@@ -102,7 +102,7 @@ export default function HomePage() {
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='flex justify-between items-center h-16'>
             <div className='flex items-center'>
-              <div className='flex items-center space-x-2'>
+              <div className='flex items-center space-x-3'>
                 <Image
                   src='/loopn.svg'
                   alt='Loopn'
@@ -110,7 +110,7 @@ export default function HomePage() {
                   height={36}
                   priority
                 />
-                <div className='flex items-center gap-2'>
+                <div className='flex items-center'>
                   <span className='text-2xl font-semibold text-brand-600'>
                     Loopn
                   </span>
@@ -120,7 +120,7 @@ export default function HomePage() {
             <div className='flex items-center'>
               <Link href={authLink}>
                 <button
-                  className='bg-white hover:bg-brand-50 text-brand-600 border border-slate-200 px-6 py-2.5 rounded-lg transition-colors flex items-center gap-2 font-medium text-sm'
+                  className='bg-white hover:bg-brand-50 text-brand-600 border border-slate-200 px-6 py-3 rounded-lg transition-colors flex items-center gap-2 font-medium text-sm min-h-[48px]'
                 >
                   <LogIn className='w-4 h-4' strokeWidth={2.5} />
                   {authText}
@@ -132,7 +132,7 @@ export default function HomePage() {
       </nav>
 
       {/* Hero Section */}
-      <section className='bg-white py-12 lg:py-16 relative overflow-hidden'>
+      <section className='bg-white py-16 lg:py-24 relative overflow-hidden'>
         {/* Background Elements */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-20 left-10 w-72 h-72 bg-brand-50/30 rounded-full blur-3xl animate-float' />
@@ -140,14 +140,14 @@ export default function HomePage() {
         </div>
 
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full'>
-          <div className='grid lg:grid-cols-2 gap-12 lg:gap-16 items-center'>
+          <div className='grid lg:grid-cols-2 gap-16 lg:gap-24 items-center'>
             {/* Left column - Content */}
             <div className='text-center lg:text-left'>
-              <h1 className='text-4xl sm:text-5xl font-semibold text-slate-900 mb-6 leading-tight'>
+              <h1 className='text-4xl sm:text-5xl font-semibold text-slate-900 mb-8 leading-tight'>
                 Simple and AI powered Networking Platform
               </h1>
 
-              <p className='text-xl text-slate-600 mb-12 leading-relaxed max-w-2xl font-normal'>
+              <p className='text-xl text-slate-600 mb-16 leading-relaxed max-w-2xl font-normal'>
                 Loopn helps you build meaningful professional relationships
                 through smart AI matching.
               </p>
@@ -158,7 +158,7 @@ export default function HomePage() {
                   href={isAuthenticated ? authLink : signUpLink}
                   className='w-full sm:w-auto'
                 >
-                  <button className='group w-full bg-brand-500 hover:bg-brand-600 text-white px-8 py-4 rounded-xl text-base font-semibold transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-0.5 border border-brand-600'>
+                  <button className='group w-full bg-brand-500 hover:bg-brand-600 text-white px-8 py-4 rounded-xl text-base font-semibold transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-0.5 border border-brand-600 min-h-[48px]'>
                     {ctaText}
                     <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' />
                   </button>
@@ -174,7 +174,7 @@ export default function HomePage() {
             </div>
 
             {/* Right column - Demo */}
-            <div className='relative mt-12 lg:mt-0'>
+            <div className='relative mt-16 lg:mt-0'>
               {/* Chat Interface Mockup - matching real chat UI */}
               <div className='bg-white md:rounded-2xl shadow-xl border border-slate-200 w-full sm:max-w-md lg:max-w-lg sm:mx-auto overflow-hidden'>
                 {/* Chat Header - matching ChatHeader.tsx */}
@@ -432,7 +432,7 @@ export default function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section className='py-12 sm:py-16 bg-white relative'>
+      <section className='py-16 sm:py-24 bg-white relative'>
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-1/4 left-0 w-72 h-72 bg-slate-100/80 rounded-full blur-3xl' />
@@ -441,8 +441,8 @@ export default function HomePage() {
 
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           {/* Section Header */}
-          <div className='text-center max-w-4xl mx-auto mb-16'>
-            <h2 className='text-3xl sm:text-4xl font-semibold text-slate-900 mb-6 leading-tight'>
+          <div className='text-center max-w-4xl mx-auto mb-20'>
+            <h2 className='text-3xl sm:text-4xl font-semibold text-slate-900 mb-8 leading-tight'>
               Networking That Actually Works
             </h2>
             <p className='text-lg text-slate-600 leading-relaxed'>
@@ -455,18 +455,18 @@ export default function HomePage() {
           <DashboardDemo />
 
           {/* Features Grid */}
-          <div className='grid lg:grid-cols-3 gap-6 sm:gap-8 mb-16 mt-16'>
+          <div className='grid lg:grid-cols-3 gap-8 sm:gap-12 mb-20 mt-20'>
             {/* Feature 1 - Smart Matching */}
-            <div className='group bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
-              <h3 className='text-xl font-semibold text-slate-900 mb-4 flex items-center gap-3'>
+            <div className='group bg-white rounded-2xl p-8 border border-slate-200 h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
+              <h3 className='text-xl font-semibold text-slate-900 mb-6 flex items-center gap-3'>
                 <Brain className='w-6 h-6 text-brand-600' />
                 Smart AI Matching
               </h3>
-              <p className='text-slate-600 mb-6 leading-relaxed text-base'>
+              <p className='text-slate-600 mb-8 leading-relaxed text-base'>
                 Meet professionals who complement your skills and align with
                 your goals.
               </p>
-              <ul className='space-y-3'>
+              <ul className='space-y-4'>
                 <li className='flex items-center gap-3 text-slate-600'>
                   <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' />
                   <span className='font-normal text-sm'>
@@ -489,16 +489,16 @@ export default function HomePage() {
             </div>
 
             {/* Feature 2 - Real-time Chat */}
-            <div className='group bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
-              <h3 className='text-xl font-semibold text-slate-900 mb-4 flex items-center gap-3'>
+            <div className='group bg-white rounded-2xl p-8 border border-slate-200 h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
+              <h3 className='text-xl font-semibold text-slate-900 mb-6 flex items-center gap-3'>
                 <Zap className='w-6 h-6 text-brand-600' />
                 Instant Connections
               </h3>
-              <p className='text-slate-600 mb-6 leading-relaxed text-base'>
+              <p className='text-slate-600 mb-8 leading-relaxed text-base'>
                 Start meaningful conversations the moment you match — no delays,
                 no barriers.
               </p>
-              <ul className='space-y-3'>
+              <ul className='space-y-4'>
                 <li className='flex items-center gap-3 text-slate-600'>
                   <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' />
                   <span className='font-normal text-sm'>
@@ -521,15 +521,15 @@ export default function HomePage() {
             </div>
 
             {/* Feature 3 - Quality Network */}
-            <div className='group bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
-              <h3 className='text-xl font-semibold text-slate-900 mb-4 flex items-center gap-3'>
+            <div className='group bg-white rounded-2xl p-8 border border-slate-200 h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
+              <h3 className='text-xl font-semibold text-slate-900 mb-6 flex items-center gap-3'>
                 <Shield className='w-6 h-6 text-brand-600' />
                 Quality & Privacy
               </h3>
-              <p className='text-slate-600 mb-6 leading-relaxed text-base'>
+              <p className='text-slate-600 mb-8 leading-relaxed text-base'>
                 Network with verified professionals in a safe, focused space.
               </p>
-              <ul className='space-y-3'>
+              <ul className='space-y-4'>
                 <li className='flex items-center gap-3 text-slate-600'>
                   <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' />
                   <span className='font-normal text-sm'>
@@ -555,7 +555,7 @@ export default function HomePage() {
           {/* Bottom CTA */}
           <div className='text-center'>
             <Link href={isAuthenticated ? authLink : signUpLink}>
-              <button className='group inline-flex items-center gap-3 bg-brand-500 hover:bg-brand-600 text-white px-10 py-4 rounded-xl text-base font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 border border-brand-600'>
+              <button className='group inline-flex items-center gap-3 bg-brand-500 hover:bg-brand-600 text-white px-10 py-4 rounded-xl text-base font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 border border-brand-600 min-h-[48px]'>
                 {ctaText}
                 <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' />
               </button>
@@ -565,7 +565,7 @@ export default function HomePage() {
       </section>
 
       {/* How It Works */}
-      <section id='how-it-works' className='py-12 sm:py-16 bg-white relative'>
+      <section id='how-it-works' className='py-16 sm:py-24 bg-white relative'>
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-1/3 right-0 w-96 h-96 bg-brand-50/60 rounded-full blur-3xl' />
@@ -574,8 +574,8 @@ export default function HomePage() {
 
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           {/* Section Header */}
-          <div className='text-center max-w-4xl mx-auto mb-16'>
-            <h2 className='text-3xl sm:text-4xl font-semibold text-slate-900 mb-6 leading-tight'>
+          <div className='text-center max-w-4xl mx-auto mb-20'>
+            <h2 className='text-3xl sm:text-4xl font-semibold text-slate-900 mb-8 leading-tight'>
               How It Works
             </h2>
             <p className='text-lg text-slate-600 leading-relaxed'>
@@ -584,17 +584,17 @@ export default function HomePage() {
           </div>
 
           {/* Steps */}
-          <div className='grid lg:grid-cols-3 gap-6 sm:gap-8 relative'>
+          <div className='grid lg:grid-cols-3 gap-8 sm:gap-12 relative'>
             {/* Step 1 */}
             <div className='relative group'>
-              <div className='bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 relative h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
+              <div className='bg-white rounded-2xl p-8 border border-slate-200 relative h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
                 {/* Step number */}
                 <div className='absolute -top-4 left-1/2 -translate-x-1/2 w-12 h-12 border-1 border-brand-200 bg-white rounded-2xl flex items-center justify-center text-brand-600 font-bold text-lg z-20'>
                   1
                 </div>
                 {/* Content */}
-                <div className='text-center mt-4'>
-                  <h3 className='text-xl font-semibold text-slate-900 mb-4 flex items-center justify-center gap-3'>
+                <div className='text-center mt-6'>
+                  <h3 className='text-xl font-semibold text-slate-900 mb-6 flex items-center justify-center gap-3'>
                     <User className='w-6 h-6 text-brand-600' />
                     Create Your Profile
                   </h3>
@@ -608,14 +608,14 @@ export default function HomePage() {
 
             {/* Step 2 */}
             <div className='relative group'>
-              <div className='bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 relative h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
+              <div className='bg-white rounded-2xl p-8 border border-slate-200 relative h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
                 {/* Step number */}
                 <div className='absolute -top-4 left-1/2 -translate-x-1/2 w-12 h-12 border-1 border-brand-200 bg-white rounded-2xl flex items-center justify-center text-brand-600 font-bold text-lg z-20'>
                   2
                 </div>
                 {/* Content */}
-                <div className='text-center mt-4'>
-                  <h3 className='text-xl font-semibold text-slate-900 mb-4 flex items-center justify-center gap-3'>
+                <div className='text-center mt-6'>
+                  <h3 className='text-xl font-semibold text-slate-900 mb-6 flex items-center justify-center gap-3'>
                     <Brain className='w-6 h-6 text-brand-600' />
                     Get Smart Matches
                   </h3>
@@ -629,14 +629,14 @@ export default function HomePage() {
 
             {/* Step 3 */}
             <div className='relative group'>
-              <div className='bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 relative h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
+              <div className='bg-white rounded-2xl p-8 border border-slate-200 relative h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
                 {/* Step number */}
                 <div className='absolute -top-4 left-1/2 -translate-x-1/2 w-12 h-12 border-1 border-brand-200 bg-white rounded-2xl flex items-center justify-center text-brand-600 font-bold text-lg z-20'>
                   3
                 </div>
                 {/* Content */}
-                <div className='text-center mt-4'>
-                  <h3 className='text-xl font-semibold text-slate-900 mb-4 flex items-center justify-center gap-3'>
+                <div className='text-center mt-6'>
+                  <h3 className='text-xl font-semibold text-slate-900 mb-6 flex items-center justify-center gap-3'>
                     <MessageSquare className='w-6 h-6 text-brand-600' />
                     Start Connecting
                   </h3>
@@ -652,7 +652,7 @@ export default function HomePage() {
       </section>
 
       {/* Testimonials */}
-      <section className='py-12 sm:py-16 bg-white relative'>
+      <section className='py-16 sm:py-24 bg-white relative'>
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-1/4 right-0 w-96 h-96 bg-brand-50/40 rounded-full blur-3xl' />
@@ -660,8 +660,8 @@ export default function HomePage() {
         </div>
 
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='text-center mb-16'>
-            <h2 className='text-3xl sm:text-4xl font-semibold text-slate-900 mb-6 leading-tight'>
+          <div className='text-center mb-20'>
+            <h2 className='text-3xl sm:text-4xl font-semibold text-slate-900 mb-8 leading-tight'>
               What Professionals Say
             </h2>
             <p className='text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed'>
@@ -670,10 +670,10 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8'>
+          <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-12'>
             {/* Testimonial 1 */}
-            <div className='group bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 flex flex-col h-full'>
-              <div className='flex items-center gap-1 mb-6'>
+            <div className='group bg-white border border-slate-200 rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 flex flex-col h-full'>
+              <div className='flex items-center gap-1 mb-8'>
                 {[1, 2, 3, 4, 5].map(star => (
                   <Star
                     key={`testimonial-1-star-${star}`}
@@ -704,8 +704,8 @@ export default function HomePage() {
             </div>
 
             {/* Testimonial 2 */}
-            <div className='group bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 flex flex-col h-full'>
-              <div className='flex items-center gap-1 mb-6'>
+            <div className='group bg-white border border-slate-200 rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 flex flex-col h-full'>
+              <div className='flex items-center gap-1 mb-8'>
                 {[1, 2, 3, 4, 5].map(star => (
                   <Star
                     key={`testimonial-2-star-${star}`}
@@ -736,8 +736,8 @@ export default function HomePage() {
             </div>
 
             {/* Testimonial 3 */}
-            <div className='group bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 md:col-span-2 lg:col-span-1 flex flex-col h-full'>
-              <div className='flex items-center gap-1 mb-6'>
+            <div className='group bg-white border border-slate-200 rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 md:col-span-2 lg:col-span-1 flex flex-col h-full'>
+              <div className='flex items-center gap-1 mb-8'>
                 {[1, 2, 3, 4, 5].map(star => (
                   <Star
                     key={`testimonial-3-star-${star}`}
@@ -771,15 +771,15 @@ export default function HomePage() {
           </div>
 
           {/* Trust Indicators */}
-          <div className='mt-16 text-center'>
-            <h3 className='text-2xl font-semibold text-slate-900 mb-4'>
+          <div className='mt-20 text-center'>
+            <h3 className='text-2xl font-semibold text-slate-900 mb-6'>
               Built for Professionals in Every Field
             </h3>
-            <p className='text-slate-600 mb-8 text-base'>
+            <p className='text-slate-600 mb-12 text-base'>
               From startups to global enterprises, Loopn connects experts across
               industries.
             </p>
-            <div className='flex flex-wrap justify-center items-center gap-6 sm:gap-8 opacity-70'>
+            <div className='flex flex-wrap justify-center items-center gap-8 opacity-70'>
               <div className='text-slate-600 font-medium text-sm'>
                 Technology
               </div>
@@ -804,7 +804,7 @@ export default function HomePage() {
       </section>
 
       {/* Final CTA Section */}
-      <section className='py-12 sm:py-16 bg-white text-black relative overflow-hidden'>
+      <section className='py-16 sm:py-24 bg-white text-black relative overflow-hidden'>
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl' />
@@ -812,10 +812,10 @@ export default function HomePage() {
         </div>
 
         <div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center'>
-          <h2 className='text-3xl sm:text-4xl font-semibold text-slate-900 mb-6 leading-tight'>
+          <h2 className='text-3xl sm:text-4xl font-semibold text-slate-900 mb-8 leading-tight'>
             Ready to Transform Your Network?
           </h2>
-          <p className='text-lg text-slate-600 mb-8 max-w-2xl mx-auto'>
+          <p className='text-lg text-slate-600 mb-12 max-w-2xl mx-auto'>
             Join Loopn today and start making connections that matter.
           </p>
 
@@ -824,12 +824,12 @@ export default function HomePage() {
               href={isAuthenticated ? authLink : signUpLink}
               className='w-full sm:w-auto'
             >
-              <button className='group w-full bg-brand-500 hover:bg-brand-600 text-white px-10 py-4 rounded-xl text-base font-semibold transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl border border-brand-600'>
+              <button className='group w-full bg-brand-500 hover:bg-brand-600 text-white px-10 py-4 rounded-xl text-base font-semibold transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl border border-brand-600 min-h-[48px]'>
                 {ctaText}
                 <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' />
               </button>
             </Link>
-            <button className='w-full sm:w-auto bg-white hover:bg-slate-100 text-slate-600 px-10 py-4 rounded-xl text-base font-medium border border-slate-200 transition-all duration-300 flex items-center justify-center gap-3'>
+            <button className='w-full sm:w-auto bg-white hover:bg-slate-100 text-slate-600 px-10 py-4 rounded-xl text-base font-medium border border-slate-200 transition-all duration-300 flex items-center justify-center gap-3 min-h-[48px]'>
               <MessageSquare className='w-5 h-5' />
               Learn More
             </button>
@@ -838,42 +838,42 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className='bg-white py-12 border-t border-slate-200'>
+      <footer className='bg-white py-16 border-t border-slate-200'>
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='text-center'>
-            <div className='flex items-center justify-center space-x-3 mb-6'>
+            <div className='flex items-center justify-center space-x-3 mb-8'>
               <Image src='/loopn.svg' alt='Loopn' width={40} height={40} />
-              <div className='flex items-center gap-2'>
+              <div className='flex items-center'>
                 <span className='text-2xl font-semibold text-slate-900'>Loopn</span>
               </div>
             </div>
-            <p className='text-slate-600 text-base text-center max-w-2xl mx-auto mb-8 leading-relaxed'>
+            <p className='text-slate-600 text-base text-center max-w-2xl mx-auto mb-12 leading-relaxed'>
               Build meaningful connections through smart matching
             </p>
 
             {/* Footer Links */}
-            <div className='flex flex-col sm:flex-row justify-center items-center gap-8 mb-8'>
+            <div className='flex flex-col sm:flex-row justify-center items-center gap-8 mb-12'>
               <a
                 href='#'
-                className='text-slate-600 hover:text-slate-900 transition-colors text-sm font-medium'
+                className='text-slate-600 hover:text-slate-900 transition-colors text-sm font-medium min-h-[48px] flex items-center'
               >
                 Privacy Policy
               </a>
               <a
                 href='#'
-                className='text-slate-600 hover:text-slate-900 transition-colors text-sm font-medium'
+                className='text-slate-600 hover:text-slate-900 transition-colors text-sm font-medium min-h-[48px] flex items-center'
               >
                 Terms of Service
               </a>
               <a
                 href='#'
-                className='text-slate-600 hover:text-slate-900 transition-colors text-sm font-medium'
+                className='text-slate-600 hover:text-slate-900 transition-colors text-sm font-medium min-h-[48px] flex items-center'
               >
                 Contact Us
               </a>
               <a
                 href='#'
-                className='text-slate-600 hover:text-slate-900 transition-colors text-sm font-medium'
+                className='text-slate-600 hover:text-slate-900 transition-colors text-sm font-medium min-h-[48px] flex items-center'
               >
                 Help Center
               </a>
