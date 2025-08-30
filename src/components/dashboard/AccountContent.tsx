@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Download } from 'lucide-react';
+import { FileDown } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import UserAvatar from '../UserAvatar';
 import UserProfileContent from '../UserProfileContent';
@@ -114,16 +114,14 @@ export default function AccountContent() {
             </div>
             <div className='flex items-center gap-2 ml-4'>
               {/* Download Resume Button */}
-              <Tooltip content='Download my resume as PDF' position='bottom'>
-                <button
-                  onClick={handleDownloadResume}
-                  disabled={downloadingResume || !userProfile}
-                  className='p-2 text-slate-500 hover:text-brand-600 transition-colors rounded-lg hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50'
-                  title='Download my resume as PDF'
-                >
-                  <Download className='w-5 h-5' />
-                </button>
-              </Tooltip>
+              <button
+                onClick={handleDownloadResume}
+                disabled={downloadingResume || !userProfile}
+                className='p-2 text-slate-500 hover:text-brand-600 transition-colors rounded-lg hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50'
+                title='Download my resume as PDF'
+              >
+                <FileDown className='w-5 h-5' />
+              </button>
             </div>
           </div>
         </div>

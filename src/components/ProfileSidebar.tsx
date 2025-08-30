@@ -24,7 +24,7 @@ import {
   UserCheck,
   Expand,
   X,
-  Download,
+  FileDown,
 } from 'lucide-react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import UserAvatar from './UserAvatar';
@@ -351,16 +351,14 @@ export default function ProfileSidebar({
 
         <div className='flex items-center gap-2'>
           {/* Download Resume Button */}
-          <Tooltip content='Download resume as PDF' position='bottom'>
-            <button
-              onClick={handleDownloadResume}
-              disabled={downloadingResume || !userProfile}
-              className='p-1.5 text-slate-500 hover:text-brand-600 transition-colors rounded-lg hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50'
-              title='Download resume as PDF'
-            >
-              <Download className='w-[18px] h-[18px]' />
-            </button>
-          </Tooltip>
+          <button
+            onClick={handleDownloadResume}
+            disabled={downloadingResume || !userProfile}
+            className='p-1.5 text-slate-500 hover:text-brand-600 transition-colors rounded-lg hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50'
+            title='Download resume as PDF'
+          >
+            <FileDown className='w-[18px] h-[18px]' />
+          </button>
 
           {/* Full Screen Button */}
           <button
@@ -607,16 +605,14 @@ export default function ProfileSidebar({
                 </h2>
                 <div className='flex items-center gap-2'>
                   {/* Download Resume Button */}
-                  <Tooltip content='Download resume as PDF' position='bottom'>
-                    <button
-                      onClick={handleDownloadResume}
-                      disabled={downloadingResume || !userProfile}
-                      className='p-2 text-slate-500 hover:text-brand-600 transition-colors rounded-lg hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50'
-                      title='Download resume as PDF'
-                    >
-                      <Download className='w-[18px] h-[18px]' />
-                    </button>
-                  </Tooltip>
+                  <button
+                    onClick={handleDownloadResume}
+                    disabled={downloadingResume || !userProfile}
+                    className='p-2 text-slate-500 hover:text-brand-600 transition-colors rounded-lg hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50'
+                    title='Download resume as PDF'
+                  >
+                    <FileDown className='w-[18px] h-[18px]' />
+                  </button>
                   <button
                     onClick={() => setShowFullScreenDialog(false)}
                     className='p-2 text-slate-500 hover:text-black transition-colors rounded-lg hover:bg-slate-100'
