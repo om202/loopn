@@ -14,7 +14,7 @@ export class ResumePDFGenerator {
   private pageHeight: number;
   private margin: number = 15;
   private currentY: number = 15;
-  private lineHeight: number = 5;
+  private lineHeight: number = 6;
 
   // Standard resume colors (hierarchical grays)
   private colors = {
@@ -37,7 +37,7 @@ export class ResumePDFGenerator {
     this.pdf.setFontSize(18);
     this.pdf.setTextColor(...this.colors.primary);
     this.pdf.text(name, this.margin, this.currentY);
-    this.currentY += 8;
+    this.currentY += 6;
 
     // Job title and company - 14pt, dark gray
     if (userProfile.jobRole || userProfile.companyName) {
@@ -54,7 +54,7 @@ export class ResumePDFGenerator {
       }
 
       this.pdf.text(jobLine, this.margin, this.currentY);
-      this.currentY += 6;
+      this.currentY += 4;
     }
 
     // Contact information - 10pt, light gray
@@ -90,21 +90,21 @@ export class ResumePDFGenerator {
       this.currentY += 4;
     }
 
-    this.currentY += 10;
+    this.currentY += 5;
   }
 
   private addSectionTitle(title: string): void {
     this.checkPageBreak(15);
     // Add extra space before section titles (except for the first section)
     if (this.currentY > 40) {
-      this.currentY += 8;
+      this.currentY += 3;
     }
 
     this.pdf.setFont('helvetica', 'bold');
     this.pdf.setFontSize(14);
     this.pdf.setTextColor(...this.colors.primary);
     this.pdf.text(title.toUpperCase(), this.margin, this.currentY);
-    this.currentY += 10;
+    this.currentY += 7;
   }
 
   private checkPageBreak(spaceNeeded: number): void {
@@ -130,7 +130,7 @@ export class ResumePDFGenerator {
     this.checkPageBreak(splitText.length * this.lineHeight);
 
     this.pdf.text(splitText, this.margin, this.currentY);
-    this.currentY += splitText.length * this.lineHeight + 8;
+    this.currentY += splitText.length * this.lineHeight + 5;
   }
 
   private addWorkExperience(userProfile: UserProfile): void {
@@ -167,7 +167,7 @@ export class ResumePDFGenerator {
         );
       }
 
-      this.currentY += 5;
+      this.currentY += 4;
 
       // Company name - 10pt, medium gray
       if (job.company) {
@@ -175,7 +175,7 @@ export class ResumePDFGenerator {
         this.pdf.setFontSize(10);
         this.pdf.setTextColor(...this.colors.tertiary);
         this.pdf.text(job.company, this.margin, this.currentY);
-        this.currentY += 5;
+        this.currentY += 4;
       }
 
       // Job description - 12pt, black
@@ -195,11 +195,11 @@ export class ResumePDFGenerator {
       }
 
       if (index < workExperience.length - 1) {
-        this.currentY += 8;
+        this.currentY += 3;
       }
     });
 
-    this.currentY += 0;
+    this.currentY += 5;
   }
 
   private addEducation(userProfile: UserProfile): void {
@@ -212,7 +212,7 @@ export class ResumePDFGenerator {
         this.pdf.setFontSize(12);
         this.pdf.setTextColor(...this.colors.primary);
         this.pdf.text(userProfile.education, this.margin, this.currentY);
-        this.currentY += 6;
+        this.currentY += 5;
       }
       return;
     }
@@ -263,11 +263,11 @@ export class ResumePDFGenerator {
       }
 
       if (index < education.length - 1) {
-        this.currentY += 6;
+        this.currentY += 3;
       }
     });
 
-    this.currentY += 0;
+    this.currentY += 5;
   }
 
   private addSkills(userProfile: UserProfile): void {
@@ -292,7 +292,7 @@ export class ResumePDFGenerator {
     this.checkPageBreak(splitText.length * this.lineHeight);
 
     this.pdf.text(splitText, this.margin, this.currentY);
-    this.currentY += splitText.length * this.lineHeight + 8;
+    this.currentY += splitText.length * this.lineHeight + 5;
   }
 
   private addProjects(userProfile: UserProfile): void {
@@ -341,11 +341,11 @@ export class ResumePDFGenerator {
       }
 
       if (index < projects.length - 1) {
-        this.currentY += 6;
+        this.currentY += 3;
       }
     });
 
-    this.currentY += 0;
+    this.currentY += 5;
   }
 
   private addCertifications(userProfile: UserProfile): void {
@@ -393,11 +393,11 @@ export class ResumePDFGenerator {
       }
 
       if (index < certifications.length - 1) {
-        this.currentY += 5;
+        this.currentY += 3;
       }
     });
 
-    this.currentY += 0;
+    this.currentY += 5;
   }
 
   private addLanguages(userProfile: UserProfile): void {
@@ -416,11 +416,11 @@ export class ResumePDFGenerator {
       this.pdf.text(langText, this.margin + (index % 2) * 90, this.currentY);
 
       if (index % 2 === 1 || index === languages.length - 1) {
-        this.currentY += 6;
+        this.currentY += 5;
       }
     });
 
-    this.currentY += 0;
+    this.currentY += 5;
   }
 
   public generateResume(data: ResumeData): void {
