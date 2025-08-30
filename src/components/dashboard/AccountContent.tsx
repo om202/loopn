@@ -79,8 +79,9 @@ export default function AccountContent() {
       {/* PDF Generation Overlay */}
       {downloadingResume && (
         <div className='fixed inset-0 bg-white flex items-center justify-center z-[9999]'>
-          <div className='text-center'>
-            <div className='text-lg'>Just a moment...</div>
+          <div className='flex flex-col items-center'>
+            <FileDown className='w-8 h-8 animate-pulse text-brand-600 mb-3' />
+            <div className='text-lg'>Generating PDF. Please wait.</div>
           </div>
         </div>
       )}

@@ -1,6 +1,17 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import {
+  ClockFading,
+  ArrowLeft,
+  MessageSquare,
+  UserRoundMinus,
+  UserPlus,
+  UserCheck,
+  Expand,
+  X,
+  FileDown,
+} from 'lucide-react';
 
 // Custom Connect Icon using circles from logo
 const ConnectIcon = ({ className }: { className?: string }) => (
@@ -15,17 +26,6 @@ const ConnectIcon = ({ className }: { className?: string }) => (
     <circle cx='145' cy='110' r='35' />
   </svg>
 );
-import {
-  ClockFading,
-  ArrowLeft,
-  MessageSquare,
-  UserRoundMinus,
-  UserPlus,
-  UserCheck,
-  Expand,
-  X,
-  FileDown,
-} from 'lucide-react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import UserAvatar from './UserAvatar';
 import UserProfileContent from './UserProfileContent';
@@ -328,8 +328,9 @@ export default function ProfileSidebar({
       {/* PDF Generation Overlay */}
       {downloadingResume && (
         <div className='fixed inset-0 bg-white flex items-center justify-center z-[9999]'>
-          <div className='text-center'>
-            <div className='text-lg'>Just a moment...</div>
+          <div className='flex flex-col items-center'>
+            <FileDown className='w-8 h-8 animate-pulse text-brand-600 mb-3' />
+            <div className='text-lg'>Generating PDF. Please wait.</div>
           </div>
         </div>
       )}
