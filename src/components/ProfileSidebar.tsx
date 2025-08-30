@@ -323,8 +323,12 @@ export default function ProfileSidebar({
     );
   };
 
+  const isInChatContext = !!conversation;
+
   return (
-    <div className='bg-white rounded-2xl w-full h-full flex flex-col relative border border-slate-200 p-2 sm:p-4'>
+    <div className={`bg-white rounded-2xl w-full h-full flex flex-col relative border border-slate-200 p-2 sm:p-4 ${
+      isInChatContext ? 'w-[330px] xl:w-[360px]' : ''
+    }`}>
       {/* PDF Generation Overlay */}
       {downloadingResume && (
         <div className='fixed inset-0 bg-white flex items-center justify-center z-[9999]'>
@@ -351,34 +355,52 @@ export default function ProfileSidebar({
         </div>
 
         <div className='flex items-center gap-2'>
-          {/* Download Resume Button */}
-          <button
-            onClick={handleDownloadResume}
-            disabled={downloadingResume || !userProfile}
-            className='p-1.5 text-slate-500 hover:text-brand-600 transition-colors rounded-lg hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50'
-            title='Download resume as PDF'
-          >
-            <FileDown className='w-[18px] h-[18px]' />
-          </button>
+          {/* In chat context, show minimal buttons */}
+          {isInChatContext ? (
+            <>
+              {/* Collapse Button - Always visible when onClose is provided */}
+              {onClose && (
+                <button
+                  onClick={onClose}
+                  className='p-1.5 text-slate-500 hover:text-black transition-colors rounded-lg hover:bg-slate-100'
+                  title='Collapse sidebar'
+                >
+                  <X className='w-[22px] h-[22px]' />
+                </button>
+              )}
+            </>
+          ) : (
+            <>
+              {/* Download Resume Button */}
+              <button
+                onClick={handleDownloadResume}
+                disabled={downloadingResume || !userProfile}
+                className='p-1.5 text-slate-500 hover:text-brand-600 transition-colors rounded-lg hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50'
+                title='Download resume as PDF'
+              >
+                <FileDown className='w-[18px] h-[18px]' />
+              </button>
 
-          {/* Full Screen Button */}
-          <button
-            onClick={() => setShowFullScreenDialog(true)}
-            className='p-1.5 text-slate-500 hover:text-black transition-colors rounded-lg hover:bg-slate-100'
-            title='Open in full view'
-          >
-            <Expand className='w-[18px] h-[18px]' />
-          </button>
+              {/* Full Screen Button */}
+              <button
+                onClick={() => setShowFullScreenDialog(true)}
+                className='p-1.5 text-slate-500 hover:text-black transition-colors rounded-lg hover:bg-slate-100'
+                title='Open in full view'
+              >
+                <Expand className='w-[18px] h-[18px]' />
+              </button>
 
-          {/* Collapse Button - Always visible when onClose is provided */}
-          {onClose && (
-            <button
-              onClick={onClose}
-              className='p-1.5 text-slate-500 hover:text-black transition-colors rounded-lg hover:bg-slate-100'
-              title='Collapse sidebar'
-            >
-              <X className='w-[22px] h-[22px]' />
-            </button>
+              {/* Collapse Button - Always visible when onClose is provided */}
+              {onClose && (
+                <button
+                  onClick={onClose}
+                  className='p-1.5 text-slate-500 hover:text-black transition-colors rounded-lg hover:bg-slate-100'
+                  title='Collapse sidebar'
+                >
+                  <X className='w-[22px] h-[22px]' />
+                </button>
+              )}
+            </>
           )}
 
           {/* Remove Connection Button - Only shows when onEndChat is provided */}
@@ -430,7 +452,7 @@ export default function ProfileSidebar({
 
       {/* Chat Header Section - when in chat context */}
       {conversation && (
-        <div className='px-4 pb-3 border-b border-slate-200'>
+        <div className='px-4 pb-3'>
           {/* Connection Status - All conversations are now permanent connections */}
           <div className='flex items-center justify-center text-base text-slate-500 mb-2'>
             <button
@@ -523,6 +545,41 @@ export default function ProfileSidebar({
             <ShimmerProvider>
               <ProfileDetails_Shimmer />
             </ShimmerProvider>
+          ) : isInChatContext ? (
+            /* Minimal details for chat context */
+            <div className='space-y-3'>
+              {userProfile?.jobRole && (
+                <div>
+                  <h3 className='text-base font-medium text-slate-900 mb-1'>Role</h3>
+                  <p className='text-base text-slate-600'>{userProfile.jobRole}</p>
+                </div>
+              )}
+              {userProfile?.companyName && (
+                <div>
+                  <h3 className='text-base font-medium text-slate-900 mb-1'>Company</h3>
+                  <p className='text-base text-slate-600'>{userProfile.companyName}</p>
+                </div>
+              )}
+              {(userProfile?.city || userProfile?.country) && (
+                <div>
+                  <h3 className='text-base font-medium text-slate-900 mb-1'>Location</h3>
+                  <p className='text-base text-slate-600'>
+                    {[userProfile.city, userProfile.country]
+                      .filter(Boolean)
+                      .join(', ')}
+                  </p>
+                </div>
+              )}
+
+              <div className='pt-2'>
+                <button
+                  onClick={() => setShowFullScreenDialog(true)}
+                  className='text-base text-brand-600 hover:text-brand-700 font-medium'
+                >
+                  View Full Profile
+                </button>
+              </div>
+            </div>
           ) : (
             <UserProfileContent
               userProfile={userProfile}

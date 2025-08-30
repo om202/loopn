@@ -234,33 +234,31 @@ export default function ChatPage({ params }: ChatPageProps) {
   return (
     <ProtectedRoute requireOnboarding={true}>
       <div
-        className='h-screen bg-white lg:bg-slate-100'
+        className='h-screen bg-white lg:bg-slate-100 flex flex-col overflow-hidden'
         style={{ height: '100dvh' }}
       >
-        <div className='h-full flex justify-center'>
-          <div className='w-full  h-full flex'>
+        <div className='flex-1 w-full flex justify-center px-1 sm:px-3 lg:px-3 py-1 sm:py-3 lg:py-3 min-h-0'>
+          <div className='w-full mx-auto flex lg:gap-3 h-full'>
             {/* Left Sidebar - Desktop Only */}
-            <div className='hidden lg:flex lg:w-[540px] xl:w-[540px] flex-shrink-0 h-full'>
-              <div className='w-full p-3 lg:p-4 h-full'>
-                <ProfileSidebar
-                  userId={otherParticipantId}
-                  userPresence={otherUserPresence}
-                  onlineUsers={onlineUsers}
-                  conversation={conversation || undefined}
-                  sendingConnectionRequest={sendingConnectionRequest}
-                  onBack={() => router.push('/dashboard')}
-                  onSendConnectionRequest={handleSendConnectionRequest}
-                  onCancelConnectionRequest={handleCancelConnectionRequest}
-                  onRemoveConnection={handleRemoveConnection}
-                />
-              </div>
+            <div className='hidden lg:block flex-shrink-0'>
+              <ProfileSidebar
+                userId={otherParticipantId}
+                userPresence={otherUserPresence}
+                onlineUsers={onlineUsers}
+                conversation={conversation || undefined}
+                sendingConnectionRequest={sendingConnectionRequest}
+                onBack={() => router.push('/dashboard')}
+                onSendConnectionRequest={handleSendConnectionRequest}
+                onCancelConnectionRequest={handleCancelConnectionRequest}
+                onRemoveConnection={handleRemoveConnection}
+              />
             </div>
 
             {/* Main Chat Area */}
-            <div className='flex-1 flex flex-col min-w-0 h-full'>
+            <div className='flex-1 bg-white sm:rounded-2xl border border-slate-200 p-2 sm:p-4 overflow-hidden flex flex-col min-h-0'>
               {/* Mobile ChatHeader - shown only on small screens */}
               {conversation && (
-                <div className='lg:hidden flex-shrink-0'>
+                <div className='lg:hidden flex-shrink-0 mb-2'>
                   <ChatHeader
                     conversation={conversation}
                     otherParticipantId={otherParticipantId}
@@ -272,8 +270,8 @@ export default function ChatPage({ params }: ChatPageProps) {
                 </div>
               )}
 
-              <div className='flex-1 p-3 lg:p-4 lg:pl-0 min-h-0'>
-                <div className='h-full lg:bg-white lg:rounded-2xl lg:border lg:border-slate-200 overflow-hidden'>
+              <div className='flex-1 min-h-0'>
+                <div className='h-full overflow-hidden'>
                   <ChatWindow
                     conversation={
                       conversation || {
@@ -281,7 +279,6 @@ export default function ChatPage({ params }: ChatPageProps) {
                         participant1Id: '',
                         participant2Id: '',
                         isConnected: false,
-
                         createdAt: '',
                         updatedAt: '',
                       }
