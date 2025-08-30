@@ -30,10 +30,24 @@ export class MarkdownResumePDFGenerator {
           const canvas = document.createElement('canvas');
           const ctx = canvas.getContext('2d');
 
-          canvas.width = img.width;
-          canvas.height = img.height;
+          // Always create a square canvas
+          const size = Math.min(img.width, img.height);
+          canvas.width = size;
+          canvas.height = size;
 
-          ctx?.drawImage(img, 0, 0);
+          if (ctx) {
+            // Calculate crop coordinates to center the image
+            const startX = (img.width - size) / 2;
+            const startY = (img.height - size) / 2;
+
+            // Draw the cropped square portion of the image
+            ctx.drawImage(
+              img,
+              startX, startY, size, size, // source rectangle (cropped)
+              0, 0, size, size // destination rectangle (full canvas)
+            );
+          }
+
           const dataURL = canvas.toDataURL('image/jpeg', 0.8);
           resolve(dataURL);
         } catch (error) {
