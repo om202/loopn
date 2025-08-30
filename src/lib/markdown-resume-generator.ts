@@ -573,12 +573,16 @@ export class MarkdownResumePDFGenerator {
           ${css}
         </head>
         <body>
-          ${logoBase64 ? `
+          ${
+            logoBase64
+              ? `
           <div class="loopn-header">
             <img src="${logoBase64}" alt="loopn" class="loopn-logo" />
             <span class="loopn-text">Downloaded from Loopn</span>
           </div>
-          ` : ''}
+          `
+              : ''
+          }
           <div class="resume-content">
             ${htmlContent}
           </div>

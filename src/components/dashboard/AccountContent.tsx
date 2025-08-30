@@ -5,7 +5,6 @@ import { FileDown } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import UserAvatar from '../UserAvatar';
 import UserProfileContent from '../UserProfileContent';
-import Tooltip from '../Tooltip';
 import { useUserProfile } from '../../hooks/useUserProfile';
 import { generateMarkdownResume } from '../../lib/markdown-resume-generator';
 
