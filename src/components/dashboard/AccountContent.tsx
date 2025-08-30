@@ -77,6 +77,15 @@ export default function AccountContent() {
 
   return (
     <div className='h-full flex flex-col'>
+      {/* PDF Generation Overlay */}
+      {downloadingResume && (
+        <div className='fixed inset-0 bg-white flex items-center justify-center z-[9999]'>
+          <div className='text-center'>
+            <div className='text-lg'>Just a moment...</div>
+          </div>
+        </div>
+      )}
+
       {/* Profile Section */}
       <div className='mx-auto w-full'>
         <div className='flex flex-col items-start mb-8'>
