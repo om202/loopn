@@ -741,8 +741,6 @@ export default function DashboardDemo() {
 
   return (
     <div className='bg-white md:rounded-2xl shadow-lg border border-slate-200 md:max-w-7xl md:mx-auto overflow-hidden w-full p-4'>
-
-
       {/* Dashboard Layout - Desktop and Tablet */}
       <div className='hidden md:flex h-[650px]'>
         {/* Left Sidebar */}

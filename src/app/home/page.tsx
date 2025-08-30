@@ -13,7 +13,6 @@ import {
   Shield,
   Smile,
 } from 'lucide-react';
-import DashboardDemo from '@/components/DashboardDemo';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -264,7 +263,8 @@ export default function HomePage() {
                     <div className='flex-1 max-w-xs'>
                       <div className='bg-slate-100 text-slate-900 px-4 py-3 rounded-2xl rounded-tl-md'>
                         <p className='text-base leading-relaxed'>
-                          Hi! I see we both work in UX. Need insights on fintech design?
+                          Hi! I see we both work in UX. Need insights on fintech
+                          design?
                         </p>
                       </div>
                     </div>
@@ -413,7 +413,36 @@ export default function HomePage() {
             </p>
           </div>
 
-          <DashboardDemo />
+                    {/* Dashboard Images - Responsive */}
+          <div className='flex justify-center'>
+            {/* Desktop Dashboard Image */}
+            <div className='hidden lg:block w-full max-w-5xl'>
+              <Image
+                src='/desktop-dash.png'
+                alt='Loopn Dashboard - Desktop View'
+                width={800}
+                height={600}
+                className='w-full h-auto rounded-2xl shadow-lg border border-slate-200'
+                quality={100}
+                priority
+                unoptimized={true}
+              />
+            </div>
+            
+            {/* Mobile Dashboard Image */}
+            <div className='block lg:hidden w-full max-w-sm mx-auto'>
+              <Image
+                src='/mobile-dash.png'
+                alt='Loopn Dashboard - Mobile View'
+                width={300}
+                height={600}
+                className='w-full h-auto rounded-2xl shadow-lg border border-slate-200'
+                quality={100}
+                priority
+                unoptimized={true}
+              />
+            </div>
+          </div>
 
           {/* Features Grid */}
           <div className='grid lg:grid-cols-3 gap-8 sm:gap-12 mb-12 mt-12'>
