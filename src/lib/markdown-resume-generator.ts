@@ -273,7 +273,7 @@ export class MarkdownResumePDFGenerator {
   private getResumeCSS(): string {
     return `
       <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap');
         
         * {
           margin: 0;
@@ -282,7 +282,7 @@ export class MarkdownResumePDFGenerator {
         }
         
         body {
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+          font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
           line-height: 1.5;
           color: #1f2937;
           background: white;
