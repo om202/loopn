@@ -94,7 +94,7 @@ export default function UserAvatar({
           previousResolvedUrlRef.current = profilePictureUrl;
           return;
         }
-        
+
         // Use imageUrlCache for S3/external URLs
         try {
           const url = await imageUrlCache.getResolvedUrl(profilePictureUrl);

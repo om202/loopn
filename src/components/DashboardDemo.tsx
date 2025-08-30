@@ -238,7 +238,7 @@ export default function DashboardDemo() {
   );
 
   // No need to convert paths anymore - UserAvatar handles local paths directly
-  
+
   const handleToggleSave = (userId: string) => {
     setSavedUserIds(prev => {
       const newSet = new Set(prev);
@@ -407,9 +407,9 @@ export default function DashboardDemo() {
                   size='md'
                   showStatus={user.isOnline}
                   status={user.isOnline ? 'ONLINE' : 'OFFLINE'}
-                                      shape='square'
-                    useLocal={true}
-                  />
+                  shape='square'
+                  useLocal={true}
+                />
               </div>
 
               <div className='flex-1 min-w-0'>
@@ -471,9 +471,9 @@ export default function DashboardDemo() {
                   size='md'
                   showStatus={connection.isOnline}
                   status={connection.isOnline ? 'ONLINE' : 'OFFLINE'}
-                                      shape='square'
-                    useLocal={true}
-                  />
+                  shape='square'
+                  useLocal={true}
+                />
               </div>
 
               <div className='flex-1 min-w-0'>
@@ -520,9 +520,9 @@ export default function DashboardDemo() {
                   hasProfilePicture={true}
                   size='sm'
                   showStatus={false}
-                                      shape='square'
-                    useLocal={true}
-                  />
+                  shape='square'
+                  useLocal={true}
+                />
               </div>
 
               <div className='flex-1 min-w-0'>
@@ -740,14 +740,8 @@ export default function DashboardDemo() {
   );
 
   return (
-    <div className='bg-white md:rounded-2xl shadow-xl border border-slate-200 md:max-w-7xl md:mx-auto overflow-hidden w-full p-4'>
-      {/* Interactive Demo Header */}
-      <div className='text-center mb-4 flex items-center justify-center gap-2'>
-        <Target className='w-4 h-4 text-brand-600' />
-        <span className='text-brand-600 font-semibold text-sm'>
-          Interactive Demo
-        </span>
-      </div>
+    <div className='bg-white md:rounded-2xl shadow-lg border border-slate-200 md:max-w-7xl md:mx-auto overflow-hidden w-full p-4'>
+
 
       {/* Dashboard Layout - Desktop and Tablet */}
       <div className='hidden md:flex h-[650px]'>
@@ -828,9 +822,9 @@ export default function DashboardDemo() {
                   size='xs'
                   showStatus={true}
                   status='ONLINE'
-                                      shape='square'
-                    useLocal={true}
-                  />
+                  shape='square'
+                  useLocal={true}
+                />
               </div>
               <span className='font-medium text-base flex-1 truncate'>
                 Jordan Blake
@@ -961,9 +955,9 @@ export default function DashboardDemo() {
                 size='sm'
                 showStatus={true}
                 status='ONLINE'
-                                    shape='square'
-                    useLocal={true}
-                  />
+                shape='square'
+                useLocal={true}
+              />
               <div className='flex-1 min-w-0'>
                 <h3 className='text-sm font-semibold text-black truncate'>
                   Jordan Blake
@@ -982,7 +976,9 @@ export default function DashboardDemo() {
                 {dummyNotifications.filter(n => !n.isRead).length > 0 && (
                   <div className='absolute -top-1 -right-1 w-4 h-4 bg-b_red-600 rounded-full flex items-center justify-center'>
                     <span className='text-white text-[8px] font-bold leading-none'>
-                      {dummyNotifications.filter(n => !n.isRead).length > 99 ? '99+' : dummyNotifications.filter(n => !n.isRead).length}
+                      {dummyNotifications.filter(n => !n.isRead).length > 99
+                        ? '99+'
+                        : dummyNotifications.filter(n => !n.isRead).length}
                     </span>
                   </div>
                 )}
@@ -1041,7 +1037,9 @@ export default function DashboardDemo() {
             {dummyNotifications.filter(n => !n.isRead).length > 0 && (
               <div className='absolute -top-1 -right-1 w-4 h-4 bg-b_red-600 rounded-full flex items-center justify-center'>
                 <span className='text-white text-[8px] font-bold leading-none'>
-                  {dummyNotifications.filter(n => !n.isRead).length > 99 ? '99+' : dummyNotifications.filter(n => !n.isRead).length}
+                  {dummyNotifications.filter(n => !n.isRead).length > 99
+                    ? '99+'
+                    : dummyNotifications.filter(n => !n.isRead).length}
                 </span>
               </div>
             )}
@@ -1144,9 +1142,9 @@ export default function DashboardDemo() {
                         size='md'
                         showStatus={user.isOnline}
                         status={user.isOnline ? 'ONLINE' : 'OFFLINE'}
-                                            shape='square'
-                    useLocal={true}
-                  />
+                        shape='square'
+                        useLocal={true}
+                      />
                     </div>
 
                     <div className='flex-1 min-w-0'>
@@ -1195,9 +1193,9 @@ export default function DashboardDemo() {
                         size='md'
                         showStatus={connection.isOnline}
                         status={connection.isOnline ? 'ONLINE' : 'OFFLINE'}
-                                            shape='square'
-                    useLocal={true}
-                  />
+                        shape='square'
+                        useLocal={true}
+                      />
                     </div>
 
                     <div className='flex-1 min-w-0'>
@@ -1241,9 +1239,9 @@ export default function DashboardDemo() {
                           size='md'
                           showStatus={user.isOnline}
                           status={user.isOnline ? 'ONLINE' : 'OFFLINE'}
-                                              shape='square'
-                    useLocal={true}
-                  />
+                          shape='square'
+                          useLocal={true}
+                        />
                       </div>
 
                       <div className='flex-1 min-w-0'>
@@ -1293,9 +1291,9 @@ export default function DashboardDemo() {
                         hasProfilePicture={true}
                         size='sm'
                         showStatus={false}
-                                            shape='square'
-                    useLocal={true}
-                  />
+                        shape='square'
+                        useLocal={true}
+                      />
                     </div>
 
                     <div className='flex-1 min-w-0'>
@@ -1363,9 +1361,9 @@ export default function DashboardDemo() {
                           size='md'
                           showStatus={user.isOnline}
                           status={user.isOnline ? 'ONLINE' : 'OFFLINE'}
-                                              shape='square'
-                    useLocal={true}
-                  />
+                          shape='square'
+                          useLocal={true}
+                        />
                       </div>
 
                       <div className='flex-1 min-w-0'>

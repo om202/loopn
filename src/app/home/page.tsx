@@ -102,7 +102,7 @@ export default function HomePage() {
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='flex justify-between items-center h-16'>
             <div className='flex items-center'>
-              <div className='flex items-center space-x-3'>
+              <div className='flex items-center gap-3 hover:opacity-80 transition-opacity'>
                 <Image
                   src='/loopn.svg'
                   alt='Loopn'
@@ -110,10 +110,10 @@ export default function HomePage() {
                   height={36}
                   priority
                 />
-                <div className='flex items-center'>
-                  <span className='text-2xl font-medium text-brand-600'>
+                <div className='flex items-center gap-2'>
+                  <h1 className='text-[26px] font-bold text-brand-600'>
                     Loopn
-                  </span>
+                  </h1>
                 </div>
               </div>
             </div>
@@ -130,26 +130,25 @@ export default function HomePage() {
       </nav>
 
       {/* Hero Section */}
-      <section className='bg-white py-16 lg:py-24 relative overflow-hidden'>
+      <section className='bg-white py-8 lg:py-12 relative overflow-hidden'>
         {/* Background Elements */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-20 left-10 w-72 h-72 bg-brand-50/30 rounded-full blur-3xl animate-float' />
           <div className='absolute bottom-20 right-10 w-80 h-80 bg-brand-50/50 rounded-full blur-3xl animate-float-delayed' />
         </div>
 
-        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full'>
-          <div className='grid lg:grid-cols-2 gap-16 lg:gap-24 items-center'>
+        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+          <div className='grid lg:grid-cols-2 gap-8 lg:gap-12 items-center'>
             {/* Left column - Content */}
             <div className='text-center lg:text-left'>
               <h1 className='text-4xl sm:text-5xl font-medium text-gray-900 mb-6 leading-tight'>
-                Connect with Professionals Who Share Your{' '}
-                <span className='text-brand-600'>Goals & Expertise</span>
+                Find Professionals Who{' '}
+                <span className='text-brand-600'>Match Your Skills</span>
               </h1>
 
-              <p className='text-xl text-gray-600 mb-12 leading-relaxed max-w-2xl'>
-                Skip the noise of traditional networking. Get matched with
-                verified professionals based on skills, interests, and career
-                objectives — then start meaningful conversations instantly.
+              <p className='text-xl text-gray-600 mb-12 leading-relaxed max-w-md mx-auto lg:mx-0'>
+                AI matches you with professionals who complement your skills.
+                Start meaningful conversations instantly.
               </p>
 
               {/* CTA Buttons */}
@@ -177,9 +176,9 @@ export default function HomePage() {
             </div>
 
             {/* Right column - Demo */}
-            <div className='relative mt-16 lg:mt-0'>
+            <div className='relative mt-8 lg:mt-0'>
               {/* Modern Chat Interface - matching real chat UI design */}
-              <div className='bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-md lg:max-w-lg mx-auto overflow-hidden'>
+              <div className='bg-white rounded-2xl shadow-lg border border-slate-200 w-full max-w-sm lg:max-w-md mx-auto overflow-hidden'>
                 {/* Chat Header */}
                 <div className='flex-shrink-0 bg-white border-b border-slate-200 px-4 py-3'>
                   <div className='flex items-center gap-3'>
@@ -245,7 +244,7 @@ export default function HomePage() {
                 </div>
 
                 {/* Chat Messages */}
-                <div className='bg-white px-3 sm:px-4 py-4 sm:py-6 space-y-4 sm:space-y-6 h-80 sm:h-96 overflow-hidden relative'>
+                <div className='bg-white px-3 sm:px-4 py-4 sm:py-6 space-y-4 sm:space-y-6 h-80 overflow-hidden relative flex flex-col justify-end'>
                   {/* Date separator */}
                   <div className='flex items-center justify-center'>
                     <div className='text-xs text-slate-500 bg-slate-50 px-3 py-1 rounded-full'>
@@ -254,7 +253,7 @@ export default function HomePage() {
                   </div>
 
                   {/* Message 1 - Other user */}
-                  <div className='flex gap-3 opacity-0 animate-[slideUpFade_0.6s_ease-out_0.8s_forwards]'>
+                  <div className='flex gap-3'>
                     <Image
                       src='/dummy-users/dummy-user2.jpg'
                       alt='Sarah'
@@ -264,22 +263,19 @@ export default function HomePage() {
                     />
                     <div className='flex-1 max-w-xs'>
                       <div className='bg-slate-100 text-slate-900 px-4 py-3 rounded-2xl rounded-tl-md'>
-                        <p className='text-sm leading-relaxed'>
-                          Hey! I noticed you work in fintech. I'm redesigning a
-                          banking app - any insights on building user trust?
+                        <p className='text-base leading-relaxed'>
+                          Hi! I see we both work in UX. Need insights on fintech design?
                         </p>
                       </div>
                     </div>
                   </div>
 
                   {/* Message 2 - You */}
-                  <div className='flex justify-end opacity-0 animate-[slideUpFade_0.6s_ease-out_1.6s_forwards]'>
+                  <div className='flex justify-end'>
                     <div className='max-w-xs'>
                       <div className='bg-brand-500 text-white px-4 py-3 rounded-2xl rounded-tr-md relative'>
-                        <p className='text-sm leading-relaxed pr-6'>
-                          Absolutely! Clear communication and progressive
-                          disclosure are key. Users need to understand what's
-                          happening with their money.
+                        <p className='text-base leading-relaxed pr-6'>
+                          Absolutely! User trust is key in financial apps.
                         </p>
                         <div className='absolute bottom-1 right-2'>
                           <Image
@@ -295,7 +291,7 @@ export default function HomePage() {
                   </div>
 
                   {/* Message 3 - Other user */}
-                  <div className='flex gap-3 opacity-0 animate-[slideUpFade_0.6s_ease-out_2.4s_forwards]'>
+                  <div className='flex gap-3'>
                     <Image
                       src='/dummy-users/dummy-user2.jpg'
                       alt='Sarah'
@@ -305,20 +301,19 @@ export default function HomePage() {
                     />
                     <div className='flex-1 max-w-xs'>
                       <div className='bg-slate-100 text-slate-900 px-4 py-3 rounded-2xl rounded-tl-md'>
-                        <p className='text-sm leading-relaxed'>
-                          That makes perfect sense! Would love to get your
-                          feedback on some wireframes I'm working on.
+                        <p className='text-base leading-relaxed'>
+                          Perfect! Can I share some wireframes for feedback?
                         </p>
                       </div>
                     </div>
                   </div>
 
                   {/* Message 4 - You */}
-                  <div className='flex justify-end opacity-0 animate-[slideUpFade_0.6s_ease-out_3.2s_forwards]'>
+                  <div className='flex justify-end'>
                     <div className='max-w-xs'>
                       <div className='bg-brand-500 text-white px-4 py-3 rounded-2xl rounded-tr-md relative'>
-                        <p className='text-sm leading-relaxed pr-6'>
-                          I'd be happy to help! Send them over 🚀
+                        <p className='text-base leading-relaxed pr-6'>
+                          Happy to help!
                         </p>
                         <div className='absolute bottom-1 right-2'>
                           <Image
@@ -334,7 +329,7 @@ export default function HomePage() {
                   </div>
 
                   {/* Typing indicator */}
-                  <div className='flex gap-3 opacity-0 animate-[slideUpFade_0.6s_ease-out_4s_forwards]'>
+                  <div className='flex gap-3'>
                     <Image
                       src='/dummy-users/dummy-user2.jpg'
                       alt='Sarah'
@@ -398,7 +393,7 @@ export default function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section className='py-16 sm:py-24 bg-white relative'>
+      <section className='py-8 sm:py-12 bg-white relative'>
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-1/4 left-0 w-72 h-72 bg-slate-100/80 rounded-full blur-3xl' />
@@ -407,7 +402,7 @@ export default function HomePage() {
 
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           {/* Section Header */}
-          <div className='text-center max-w-4xl mx-auto mb-20'>
+          <div className='text-center max-w-3xl mx-auto mb-12'>
             <h2 className='text-3xl sm:text-4xl font-medium text-gray-900 mb-6 leading-tight'>
               Professional Networking, Reimagined
             </h2>
@@ -421,7 +416,7 @@ export default function HomePage() {
           <DashboardDemo />
 
           {/* Features Grid */}
-          <div className='grid lg:grid-cols-3 gap-8 sm:gap-12 mb-20 mt-20'>
+          <div className='grid lg:grid-cols-3 gap-8 sm:gap-12 mb-12 mt-12'>
             {/* Feature 1 - Smart Matching */}
             <div className='group bg-white rounded-2xl p-8 border border-slate-200 h-full shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
               <h3 className='text-xl font-semibold text-slate-900 mb-6 flex items-center gap-3'>
@@ -531,7 +526,7 @@ export default function HomePage() {
       </section>
 
       {/* How It Works */}
-      <section id='how-it-works' className='py-16 sm:py-24 bg-white relative'>
+      <section id='how-it-works' className='py-8 sm:py-12 bg-white relative'>
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-1/3 right-0 w-96 h-96 bg-brand-50/60 rounded-full blur-3xl' />
@@ -540,7 +535,7 @@ export default function HomePage() {
 
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           {/* Section Header */}
-          <div className='text-center max-w-4xl mx-auto mb-20'>
+          <div className='text-center max-w-3xl mx-auto mb-12'>
             <h2 className='text-3xl sm:text-4xl font-medium text-gray-900 mb-6 leading-tight'>
               How It Works
             </h2>
@@ -618,7 +613,7 @@ export default function HomePage() {
       </section>
 
       {/* Testimonials */}
-      <section className='py-16 sm:py-24 bg-white relative'>
+      <section className='py-8 sm:py-12 bg-white relative'>
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-1/4 right-0 w-96 h-96 bg-brand-50/40 rounded-full blur-3xl' />
@@ -626,11 +621,11 @@ export default function HomePage() {
         </div>
 
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='text-center mb-20'>
+          <div className='text-center mb-12'>
             <h2 className='text-3xl sm:text-4xl font-medium text-gray-900 mb-6 leading-tight'>
               What Professionals Say
             </h2>
-            <p className='text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed'>
+            <p className='text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed'>
               Loopn is built for those who value authentic networking and
               meaningful connections.
             </p>
@@ -741,7 +736,7 @@ export default function HomePage() {
           </div>
 
           {/* Trust Indicators */}
-          <div className='mt-20 text-center'>
+          <div className='mt-12 text-center'>
             <h3 className='text-2xl font-semibold text-slate-900 mb-6'>
               Built for Professionals in Every Field
             </h3>
@@ -770,18 +765,18 @@ export default function HomePage() {
       </section>
 
       {/* Final CTA Section */}
-      <section className='py-16 sm:py-24 bg-white text-black relative overflow-hidden'>
+      <section className='py-8 sm:py-12 bg-white text-black relative overflow-hidden'>
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl' />
           <div className='absolute bottom-0 right-0 w-80 h-80 bg-white/5 rounded-full blur-3xl' />
         </div>
 
-        <div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center'>
+        <div className='max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center'>
           <h2 className='text-3xl sm:text-4xl font-medium text-gray-900 mb-6 leading-tight'>
             Start Building Your Professional Network
           </h2>
-          <p className='text-lg text-gray-600 mb-12 max-w-2xl mx-auto'>
+          <p className='text-lg text-gray-600 mb-12 max-w-md mx-auto'>
             Join thousands of verified professionals already connecting,
             collaborating, and advancing their careers through meaningful
             relationships.
@@ -818,7 +813,7 @@ export default function HomePage() {
                 <span className='text-xl font-medium text-gray-900'>Loopn</span>
               </div>
             </div>
-            <p className='text-gray-600 text-sm text-center max-w-2xl mx-auto mb-6 leading-relaxed'>
+            <p className='text-gray-600 text-sm text-center max-w-md mx-auto mb-6 leading-relaxed'>
               Build meaningful connections through smart matching
             </p>
 
