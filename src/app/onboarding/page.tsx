@@ -492,17 +492,17 @@ export default function OnboardingPage() {
       // Step 2: Parse with Bedrock Claude
       const parsedData = await parseResumeWithBedrock(text);
 
-      // Step 3: Merge with existing form data
-      const mergedData = mergeResumeWithOnboardingData(parsedData, formData);
+      // Step 3: Replace existing form data with parsed data (no merging)
+      const replacedData = mergeResumeWithOnboardingData(parsedData, {});
 
-      // Step 4: Update form data
-      setFormData(mergedData);
+      // Step 4: Update form data (replacing existing)
+      setFormData(replacedData);
       setResumeProcessed(true);
       setShowResumeUpload(false);
 
       console.log('✅ Resume processed successfully:', {
-        autoFilledFields: mergedData.autoFilledFields?.length || 0,
-        totalFields: Object.keys(mergedData).length,
+        autoFilledFields: replacedData.autoFilledFields?.length || 0,
+        totalFields: Object.keys(replacedData).length,
       });
     } catch (err) {
       setResumeError(
@@ -557,10 +557,14 @@ export default function OnboardingPage() {
                   disabled={isProcessingResume}
                   className='hidden'
                 />
-                <div className='bg-brand-500 text-white px-6 py-3 rounded-xl font-medium hover:bg-brand-600 disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center gap-2 text-base'>
+                <div className='bg-brand-500 text-white px-6 py-3 rounded-xl font-medium hover:bg-brand-600 disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center gap-3 text-base'>
                   {isProcessingResume ? (
                     <>
-                      <div className='animate-spin rounded-full h-5 w-5 border-b-2 border-white'></div>
+                      <div className='flex space-x-1'>
+                        <div className='w-1.5 h-1.5 bg-white rounded-full animate-bounce'></div>
+                        <div className='w-1.5 h-1.5 bg-white rounded-full animate-bounce' style={{animationDelay: '0.1s'}}></div>
+                        <div className='w-1.5 h-1.5 bg-white rounded-full animate-bounce' style={{animationDelay: '0.2s'}}></div>
+                      </div>
                       Processing...
                     </>
                   ) : (
@@ -581,7 +585,7 @@ export default function OnboardingPage() {
           {/* Resume Processed Indicator */}
           {resumeProcessed && !showResumeUpload && (
             <div className='mb-6 text-center space-y-3'>
-              <p className='text-b_green-700'>
+              <p className='text-slate-700'>
                 Resume processed! {formData.autoFilledFields?.length || 0}{' '}
                 fields auto-filled
               </p>
@@ -595,7 +599,7 @@ export default function OnboardingPage() {
           )}
 
           {error && (
-            <div className='bg-b_red-100 border border-b_red-200 text-b_red-700 px-4 py-3 rounded-2xl mb-6'>
+            <div className='text-red-600 text-center mb-6'>
               {error}
             </div>
           )}
