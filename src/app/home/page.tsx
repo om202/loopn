@@ -152,14 +152,13 @@ export default function HomePage() {
                 <h2 className='text-3xl font-bold text-brand-600'>Loopn</h2>
               </div>
 
-              <h1 className='text-4xl sm:text-5xl font-semibold text-gray-900 mb-14 leading-tight'>
-                Professional Networking
-                <br />
+              <h1 className='text-4xl sm:text-5xl font-semibold text-gray-900 mb-8 sm:mb-14 leading-tight'>
+                Professional Networking{' '}
                 <span className='text-brand-600'>That Actually Works</span>
               </h1>
 
-              <div className='mb-12 max-w-lg mx-auto lg:mx-0'>
-                <p className='text-xl text-gray-600 leading-relaxed font-medium'>
+              <div className='mb-6 sm:mb-12 max-w-lg mx-auto lg:mx-0'>
+                <p className='text-lg sm:text-xl text-gray-600 leading-relaxed font-medium'>
                   Upload your resume. Get matched instantly. Start connecting
                   with professionals who complement your skills and career
                   goals.
@@ -170,7 +169,7 @@ export default function HomePage() {
               <div className='flex flex-row gap-3 sm:gap-6 justify-center lg:justify-start'>
                 <Link href={isAuthenticated ? authLink : signUpLink}>
                   <button
-                    className='inline-flex items-center gap-3 bg-brand-500 text-white px-10 py-4 rounded-xl !font-medium shadow-lg min-h-[50px]'
+                    className='inline-flex items-center gap-3 bg-brand-500 text-white px-6 py-3 sm:px-10 sm:py-4 rounded-xl !font-medium shadow-lg min-h-[50px]'
                     style={{ fontSize: '18px' }}
                   >
                     {ctaText}
@@ -179,7 +178,7 @@ export default function HomePage() {
                 </Link>
                 <Link href={authLink}>
                   <button
-                    className='text-gray-600 !font-medium flex items-center justify-center px-4 py-4 min-h-[50px] hover:underline hover:underline-offset-4 hover:decoration-2 flex-shrink-0'
+                    className='text-gray-600 !font-medium flex items-center justify-center px-3 py-3 sm:px-4 sm:py-4 min-h-[50px] hover:underline hover:underline-offset-4 hover:decoration-2 flex-shrink-0'
                     style={{ fontSize: '18px' }}
                   >
                     Sign In
@@ -239,7 +238,7 @@ export default function HomePage() {
                     {/* Connect Button */}
                     <button className='px-2 py-2 rounded-lg text-base font-medium flex items-center justify-center gap-2 flex-shrink-0 bg-brand-500 text-white'>
                       <ConnectIcon className='w-5 h-5 text-white' />
-                      <span className='text-base font-medium text-white hidden sm:inline'>
+                      <span className='text-base font-medium text-white'>
                         Connect
                       </span>
                     </button>
@@ -583,7 +582,7 @@ export default function HomePage() {
           <div className='text-center'>
             <Link href={isAuthenticated ? authLink : signUpLink}>
               <button
-                className='inline-flex items-center gap-3 bg-brand-500 text-white px-10 py-4 rounded-xl !font-medium shadow-lg min-h-[50px]'
+                className='inline-flex items-center gap-3 bg-brand-500 text-white px-6 py-3 sm:px-10 sm:py-4 rounded-xl !font-medium shadow-lg min-h-[50px]'
                 style={{ fontSize: '18px' }}
               >
                 {ctaText}
@@ -862,14 +861,14 @@ export default function HomePage() {
               className='w-full sm:w-auto'
             >
               <button
-                className='w-full bg-brand-500 text-white px-8 py-4 rounded-lg !font-medium flex items-center justify-center gap-3 shadow-lg border-0 min-h-[50px] touch-manipulation'
+                className='w-full bg-brand-500 text-white px-6 py-3 sm:px-8 sm:py-4 rounded-lg !font-medium flex items-center justify-center gap-3 shadow-lg border-0 min-h-[50px] touch-manipulation'
                 style={{ fontSize: '18px' }}
               >
                 {ctaText}
                 <ArrowRight className='w-5 h-5' strokeWidth={2.5} />
               </button>
             </Link>
-            <button className='w-full sm:w-auto bg-white text-gray-600 px-8 py-4 rounded-lg text-base !font-medium border border-gray-300 flex items-center justify-center gap-3 min-h-[52px] touch-manipulation'>
+            <button className='w-full sm:w-auto bg-white text-gray-600 px-6 py-3 sm:px-8 sm:py-4 rounded-lg text-base !font-medium border border-gray-300 flex items-center justify-center gap-3 min-h-[52px] touch-manipulation'>
               <MessageSquare className='w-5 h-5' strokeWidth={2.5} />
               See It In Action
             </button>
