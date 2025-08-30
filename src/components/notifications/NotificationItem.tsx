@@ -258,175 +258,77 @@ export default function NotificationItem({
 
       {/* Action Buttons Area - Separate container for responsive layout */}
       <div className='flex flex-wrap gap-2 mt-3 ml-12 sm:ml-0 sm:flex-row justify-end'>
-          {notification.type === 'chat_request' &&
-          notification.data &&
-          'requesterId' in notification.data ? (
-            (() => {
-              const chatRequestData = notification.data as ChatRequestWithUser;
-              return (
-                <>
-                  <button
-                    onClick={e => {
-                      e.stopPropagation();
-                      onRespondToRequest(
-                        notification.id,
-                        'ACCEPTED',
-                        chatRequestData
-                      );
-                    }}
-                    disabled={decliningId === notification.id}
-                    className='px-4 py-2 bg-transparent text-brand-600 text-sm font-semibold rounded-lg hover:bg-brand-50 disabled:opacity-50 transition-colors border border-brand-200'
-                  >
-                    Accept
-                  </button>
-                  <button
-                    onClick={e => {
-                      e.stopPropagation();
-                      onRespondToRequest(
-                        notification.id,
-                        'REJECTED',
-                        chatRequestData
-                      );
-                    }}
-                    disabled={decliningId === notification.id}
-                    className='px-4 py-2 text-sm font-semibold text-slate-600 bg-slate-100 border border-slate-200 rounded-lg hover:bg-slate-200 disabled:opacity-50 transition-colors'
-                  >
-                    {decliningId === notification.id
-                      ? 'Declining...'
-                      : 'Decline'}
-                  </button>
-                </>
-              );
-            })()
-          ) : notification.type === 'message' ? (
-            <>
-              <button
-                onClick={e => {
-                  e.stopPropagation();
-                  onNotificationClick(notification);
-                }}
-                className='px-4 py-2 bg-transparent text-brand-600 text-sm font-semibold rounded-lg hover:bg-brand-50 transition-colors border border-brand-200'
-              >
-                Reply
-              </button>
-              <button
-                onClick={async e => {
-                  e.stopPropagation();
-                  if (!user) return;
-                  try {
-                    if (
-                      notification.data &&
-                      'conversationId' in notification.data
-                    ) {
-                      await notificationService.deleteNotificationsForConversation(
-                        user.userId,
-                        (notification.data as MessageNotificationData)
-                          .conversationId
-                      );
-                    }
-                    // Remove from local state via parent callback
-                    onRemoveNotification(notification.id);
-                  } catch (error) {
-                    console.error(
-                      'Error marking message notification as read:',
-                      error
+        {notification.type === 'chat_request' &&
+        notification.data &&
+        'requesterId' in notification.data ? (
+          (() => {
+            const chatRequestData = notification.data as ChatRequestWithUser;
+            return (
+              <>
+                <button
+                  onClick={e => {
+                    e.stopPropagation();
+                    onRespondToRequest(
+                      notification.id,
+                      'ACCEPTED',
+                      chatRequestData
                     );
-                    onError('Failed to mark notification as read');
-                  }
-                }}
-                className='px-4 py-2 text-sm font-semibold text-slate-600 bg-slate-100 border border-slate-200 rounded-lg hover:bg-slate-200 transition-colors'
-              >
-                Mark as Read
-              </button>
-            </>
-          ) : notification.type === 'connection' ? (
-            <>
-              {/* Check if this is an incoming connection request that needs response */}
-              {notification.data &&
-              'connectionRequestId' in notification.data &&
-              notification.title === 'Connect' &&
-              onRespondToConnectionRequest ? (
-                <>
-                  <button
-                    onClick={async e => {
-                      e.stopPropagation();
-                      const connectionData =
-                        notification.data as ConnectionRequestNotificationData;
-                      await onRespondToConnectionRequest(
-                        connectionData.connectionRequestId,
-                        'ACCEPTED'
-                      );
-                      // Note: onRemoveNotification is now handled inside onRespondToConnectionRequest
-                    }}
-                    className='px-4 py-2 bg-transparent text-b_green-500 text-sm font-semibold rounded-lg hover:bg-b_green-50 transition-colors border border-b_green-500'
-                  >
-                    Accept
-                  </button>
-                  <button
-                    onClick={async e => {
-                      e.stopPropagation();
-                      const connectionData =
-                        notification.data as ConnectionRequestNotificationData;
-                      await onRespondToConnectionRequest(
-                        connectionData.connectionRequestId,
-                        'REJECTED'
-                      );
-                      // Note: onRemoveNotification is now handled inside onRespondToConnectionRequest
-                    }}
-                    className='px-4 py-2 text-sm font-semibold text-slate-600 bg-slate-100 border border-slate-200 rounded-lg hover:bg-slate-200 transition-colors'
-                  >
-                    Decline
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button
-                    onClick={e => {
-                      e.stopPropagation();
-                      onNotificationClick(notification);
-                    }}
-                    className='px-4 py-2 bg-transparent text-b_green-500 text-sm font-semibold rounded-lg hover:bg-b_green-50 transition-colors border border-b_green-500'
-                  >
-                    View Chat
-                  </button>
-                  <button
-                    onClick={async e => {
-                      e.stopPropagation();
-                      if (!user) return;
-                      try {
-                        await notificationService.markNotificationAsRead(
-                          notification.id
-                        );
-                        // Remove from local state via parent callback
-                        onRemoveNotification(notification.id);
-                      } catch (error) {
-                        console.error(
-                          'Error marking connection notification as read:',
-                          error
-                        );
-                        onError('Failed to mark notification as read');
-                      }
-                    }}
-                    className='px-4 py-2 text-sm font-semibold text-slate-600 bg-slate-100 border border-slate-200 rounded-lg hover:bg-slate-200 transition-colors'
-                  >
-                    Mark as Read
-                  </button>
-                </>
-              )}
-            </>
-          ) : (
+                  }}
+                  disabled={decliningId === notification.id}
+                  className='px-4 py-2 bg-transparent text-brand-600 text-sm font-semibold rounded-lg hover:bg-brand-50 disabled:opacity-50 transition-colors border border-brand-200'
+                >
+                  Accept
+                </button>
+                <button
+                  onClick={e => {
+                    e.stopPropagation();
+                    onRespondToRequest(
+                      notification.id,
+                      'REJECTED',
+                      chatRequestData
+                    );
+                  }}
+                  disabled={decliningId === notification.id}
+                  className='px-4 py-2 text-sm font-semibold text-slate-600 bg-slate-100 border border-slate-200 rounded-lg hover:bg-slate-200 disabled:opacity-50 transition-colors'
+                >
+                  {decliningId === notification.id ? 'Declining...' : 'Decline'}
+                </button>
+              </>
+            );
+          })()
+        ) : notification.type === 'message' ? (
+          <>
+            <button
+              onClick={e => {
+                e.stopPropagation();
+                onNotificationClick(notification);
+              }}
+              className='px-4 py-2 bg-transparent text-brand-600 text-sm font-semibold rounded-lg hover:bg-brand-50 transition-colors border border-brand-200'
+            >
+              Reply
+            </button>
             <button
               onClick={async e => {
                 e.stopPropagation();
                 if (!user) return;
                 try {
-                  await notificationService.markNotificationAsRead(
-                    notification.id
-                  );
+                  if (
+                    notification.data &&
+                    'conversationId' in notification.data
+                  ) {
+                    await notificationService.deleteNotificationsForConversation(
+                      user.userId,
+                      (notification.data as MessageNotificationData)
+                        .conversationId
+                    );
+                  }
                   // Remove from local state via parent callback
                   onRemoveNotification(notification.id);
                 } catch (error) {
-                  console.error('Error marking notification as read:', error);
+                  console.error(
+                    'Error marking message notification as read:',
+                    error
+                  );
                   onError('Failed to mark notification as read');
                 }
               }}
@@ -434,7 +336,103 @@ export default function NotificationItem({
             >
               Mark as Read
             </button>
-          )}
+          </>
+        ) : notification.type === 'connection' ? (
+          <>
+            {/* Check if this is an incoming connection request that needs response */}
+            {notification.data &&
+            'connectionRequestId' in notification.data &&
+            notification.title === 'Connect' &&
+            onRespondToConnectionRequest ? (
+              <>
+                <button
+                  onClick={async e => {
+                    e.stopPropagation();
+                    const connectionData =
+                      notification.data as ConnectionRequestNotificationData;
+                    await onRespondToConnectionRequest(
+                      connectionData.connectionRequestId,
+                      'ACCEPTED'
+                    );
+                    // Note: onRemoveNotification is now handled inside onRespondToConnectionRequest
+                  }}
+                  className='px-4 py-2 bg-transparent text-b_green-500 text-sm font-semibold rounded-lg hover:bg-b_green-50 transition-colors border border-b_green-500'
+                >
+                  Accept
+                </button>
+                <button
+                  onClick={async e => {
+                    e.stopPropagation();
+                    const connectionData =
+                      notification.data as ConnectionRequestNotificationData;
+                    await onRespondToConnectionRequest(
+                      connectionData.connectionRequestId,
+                      'REJECTED'
+                    );
+                    // Note: onRemoveNotification is now handled inside onRespondToConnectionRequest
+                  }}
+                  className='px-4 py-2 text-sm font-semibold text-slate-600 bg-slate-100 border border-slate-200 rounded-lg hover:bg-slate-200 transition-colors'
+                >
+                  Decline
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={e => {
+                    e.stopPropagation();
+                    onNotificationClick(notification);
+                  }}
+                  className='px-4 py-2 bg-transparent text-b_green-500 text-sm font-semibold rounded-lg hover:bg-b_green-50 transition-colors border border-b_green-500'
+                >
+                  View Chat
+                </button>
+                <button
+                  onClick={async e => {
+                    e.stopPropagation();
+                    if (!user) return;
+                    try {
+                      await notificationService.markNotificationAsRead(
+                        notification.id
+                      );
+                      // Remove from local state via parent callback
+                      onRemoveNotification(notification.id);
+                    } catch (error) {
+                      console.error(
+                        'Error marking connection notification as read:',
+                        error
+                      );
+                      onError('Failed to mark notification as read');
+                    }
+                  }}
+                  className='px-4 py-2 text-sm font-semibold text-slate-600 bg-slate-100 border border-slate-200 rounded-lg hover:bg-slate-200 transition-colors'
+                >
+                  Mark as Read
+                </button>
+              </>
+            )}
+          </>
+        ) : (
+          <button
+            onClick={async e => {
+              e.stopPropagation();
+              if (!user) return;
+              try {
+                await notificationService.markNotificationAsRead(
+                  notification.id
+                );
+                // Remove from local state via parent callback
+                onRemoveNotification(notification.id);
+              } catch (error) {
+                console.error('Error marking notification as read:', error);
+                onError('Failed to mark notification as read');
+              }
+            }}
+            className='px-4 py-2 text-sm font-semibold text-slate-600 bg-slate-100 border border-slate-200 rounded-lg hover:bg-slate-200 transition-colors'
+          >
+            Mark as Read
+          </button>
+        )}
       </div>
     </div>
   );

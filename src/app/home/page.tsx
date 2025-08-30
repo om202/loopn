@@ -128,8 +128,6 @@ export default function HomePage() {
       {/* Add custom styles */}
       <style>{customStyles}</style>
 
-
-
       {/* Hero Section */}
       <section className='bg-white py-8 lg:py-12 relative overflow-hidden'>
         {/* Background Elements */}
@@ -151,11 +149,9 @@ export default function HomePage() {
                   height={48}
                   priority
                 />
-                <h2 className='text-3xl font-bold text-brand-600'>
-                  Loopn
-                </h2>
+                <h2 className='text-3xl font-bold text-brand-600'>Loopn</h2>
               </div>
-              
+
               <h1 className='text-4xl sm:text-5xl font-semibold text-gray-900 mb-14 leading-tight'>
                 Professional Networking
                 <br />
@@ -164,28 +160,25 @@ export default function HomePage() {
 
               <div className='mb-12 max-w-lg mx-auto lg:mx-0'>
                 <p className='text-xl text-gray-600 leading-relaxed font-medium'>
-                  Upload your resume. Get matched instantly. Start connecting with professionals who complement your skills and career goals.
+                  Upload your resume. Get matched instantly. Start connecting
+                  with professionals who complement your skills and career
+                  goals.
                 </p>
               </div>
 
               {/* CTA Buttons */}
               <div className='flex flex-row gap-3 sm:gap-6 justify-center lg:justify-start'>
-                <Link
-                  href={isAuthenticated ? authLink : signUpLink}
-                >
+                <Link href={isAuthenticated ? authLink : signUpLink}>
                   <button
                     className='inline-flex items-center gap-3 bg-brand-500 text-white px-10 py-4 rounded-xl !font-medium shadow-lg min-h-[50px]'
                     style={{ fontSize: '18px' }}
                   >
                     {ctaText}
-                    <ArrowRight
-                      className='w-5 h-5'
-                      strokeWidth={2.5}
-                    />
+                    <ArrowRight className='w-5 h-5' strokeWidth={2.5} />
                   </button>
                 </Link>
                 <Link href={authLink}>
-                  <button 
+                  <button
                     className='text-gray-600 !font-medium flex items-center justify-center px-4 py-4 min-h-[50px] hover:underline hover:underline-offset-4 hover:decoration-2 flex-shrink-0'
                     style={{ fontSize: '18px' }}
                   >
@@ -475,19 +468,28 @@ export default function HomePage() {
               </p>
               <ul className='space-y-4'>
                 <li className='flex items-center gap-3 text-slate-600'>
-                  <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' strokeWidth={2.5} />
+                  <CheckCircle
+                    className='w-4 h-4 text-brand-600 flex-shrink-0'
+                    strokeWidth={2.5}
+                  />
                   <span className='font-medium text-base'>
                     AI analyzes your resume in seconds
                   </span>
                 </li>
                 <li className='flex items-center gap-3 text-slate-600'>
-                  <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' strokeWidth={2.5} />
+                  <CheckCircle
+                    className='w-4 h-4 text-brand-600 flex-shrink-0'
+                    strokeWidth={2.5}
+                  />
                   <span className='font-medium text-base'>
                     Smart compatibility matching
                   </span>
                 </li>
                 <li className='flex items-center gap-3 text-slate-600'>
-                  <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' strokeWidth={2.5} />
+                  <CheckCircle
+                    className='w-4 h-4 text-brand-600 flex-shrink-0'
+                    strokeWidth={2.5}
+                  />
                   <span className='font-medium text-base'>
                     Industry-specific results
                   </span>
@@ -506,19 +508,28 @@ export default function HomePage() {
               </p>
               <ul className='space-y-4'>
                 <li className='flex items-center gap-3 text-slate-600'>
-                  <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' strokeWidth={2.5} />
+                  <CheckCircle
+                    className='w-4 h-4 text-brand-600 flex-shrink-0'
+                    strokeWidth={2.5}
+                  />
                   <span className='font-medium text-base'>
                     See who's online now
                   </span>
                 </li>
                 <li className='flex items-center gap-3 text-slate-600'>
-                  <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' strokeWidth={2.5} />
+                  <CheckCircle
+                    className='w-4 h-4 text-brand-600 flex-shrink-0'
+                    strokeWidth={2.5}
+                  />
                   <span className='font-medium text-base'>
                     Send instant chat requests
                   </span>
                 </li>
                 <li className='flex items-center gap-3 text-slate-600'>
-                  <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' strokeWidth={2.5} />
+                  <CheckCircle
+                    className='w-4 h-4 text-brand-600 flex-shrink-0'
+                    strokeWidth={2.5}
+                  />
                   <span className='font-medium text-base'>
                     Build permanent relationships
                   </span>
@@ -538,19 +549,28 @@ export default function HomePage() {
               </p>
               <ul className='space-y-4'>
                 <li className='flex items-center gap-3 text-slate-600'>
-                  <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' strokeWidth={2.5} />
+                  <CheckCircle
+                    className='w-4 h-4 text-brand-600 flex-shrink-0'
+                    strokeWidth={2.5}
+                  />
                   <span className='font-medium text-base'>
                     Verified professionals only
                   </span>
                 </li>
                 <li className='flex items-center gap-3 text-slate-600'>
-                  <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' strokeWidth={2.5} />
+                  <CheckCircle
+                    className='w-4 h-4 text-brand-600 flex-shrink-0'
+                    strokeWidth={2.5}
+                  />
                   <span className='font-medium text-base'>
                     No spam or casual chat
                   </span>
                 </li>
                 <li className='flex items-center gap-3 text-slate-600'>
-                  <CheckCircle className='w-4 h-4 text-brand-600 flex-shrink-0' strokeWidth={2.5} />
+                  <CheckCircle
+                    className='w-4 h-4 text-brand-600 flex-shrink-0'
+                    strokeWidth={2.5}
+                  />
                   <span className='font-medium text-base'>
                     Career-advancing focus
                   </span>
@@ -605,7 +625,10 @@ export default function HomePage() {
                 {/* Content */}
                 <div className='text-center mt-6'>
                   <h3 className='text-xl font-semibold text-slate-900 mb-3 flex items-center justify-center gap-3'>
-                    <CloudUpload className='w-6 h-6 text-brand-600' strokeWidth={2.5} />
+                    <CloudUpload
+                      className='w-6 h-6 text-brand-600'
+                      strokeWidth={2.5}
+                    />
                     Upload Your Resume
                   </h3>
                   <p className='text-slate-600 leading-relaxed text-base font-medium'>
@@ -625,7 +648,10 @@ export default function HomePage() {
                 {/* Content */}
                 <div className='text-center mt-6'>
                   <h3 className='text-xl font-semibold text-slate-900 mb-3 flex items-center justify-center gap-3'>
-                    <Brain className='w-6 h-6 text-brand-600' strokeWidth={2.5} />
+                    <Brain
+                      className='w-6 h-6 text-brand-600'
+                      strokeWidth={2.5}
+                    />
                     Discover Live Matches
                   </h3>
                   <p className='text-slate-600 leading-relaxed text-base font-medium'>
@@ -645,7 +671,10 @@ export default function HomePage() {
                 {/* Content */}
                 <div className='text-center mt-6'>
                   <h3 className='text-xl font-semibold text-slate-900 mb-3 flex items-center justify-center gap-3'>
-                    <MessageSquare className='w-6 h-6 text-brand-600' strokeWidth={2.5} />
+                    <MessageSquare
+                      className='w-6 h-6 text-brand-600'
+                      strokeWidth={2.5}
+                    />
                     Build Lasting Relationships
                   </h3>
                   <p className='text-slate-600 leading-relaxed text-base font-medium'>
@@ -837,10 +866,7 @@ export default function HomePage() {
                 style={{ fontSize: '18px' }}
               >
                 {ctaText}
-                <ArrowRight
-                  className='w-5 h-5'
-                  strokeWidth={2.5}
-                />
+                <ArrowRight className='w-5 h-5' strokeWidth={2.5} />
               </button>
             </Link>
             <button className='w-full sm:w-auto bg-white text-gray-600 px-8 py-4 rounded-lg text-base !font-medium border border-gray-300 flex items-center justify-center gap-3 min-h-[52px] touch-manipulation'>
@@ -868,28 +894,16 @@ export default function HomePage() {
 
             {/* Footer Links */}
             <div className='flex flex-col sm:flex-row justify-center items-center gap-6 mb-6'>
-              <a
-                href='#'
-                className='text-gray-600  text-sm font-medium'
-              >
+              <a href='#' className='text-gray-600  text-sm font-medium'>
                 Privacy Policy
               </a>
-              <a
-                href='#'
-                className='text-gray-600  text-sm font-medium'
-              >
+              <a href='#' className='text-gray-600  text-sm font-medium'>
                 Terms of Service
               </a>
-              <a
-                href='#'
-                className='text-gray-600  text-sm font-medium'
-              >
+              <a href='#' className='text-gray-600  text-sm font-medium'>
                 Contact Us
               </a>
-              <a
-                href='#'
-                className='text-gray-600  text-sm font-medium'
-              >
+              <a href='#' className='text-gray-600  text-sm font-medium'>
                 Help Center
               </a>
             </div>

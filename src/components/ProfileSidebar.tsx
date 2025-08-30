@@ -326,9 +326,11 @@ export default function ProfileSidebar({
   const isInChatContext = !!conversation;
 
   return (
-    <div className={`bg-white rounded-2xl w-full h-full flex flex-col relative border border-slate-200 p-2 sm:p-4 ${
-      isInChatContext ? 'w-[330px] xl:w-[360px]' : ''
-    }`}>
+    <div
+      className={`bg-white rounded-2xl w-full h-full flex flex-col relative border border-slate-200 p-2 sm:p-4 ${
+        isInChatContext ? 'w-[330px] xl:w-[360px]' : ''
+      }`}
+    >
       {/* PDF Generation Overlay */}
       {downloadingResume && (
         <div className='fixed inset-0 bg-white flex items-center justify-center z-[9999]'>
@@ -550,19 +552,29 @@ export default function ProfileSidebar({
             <div className='space-y-3'>
               {userProfile?.jobRole && (
                 <div>
-                  <h3 className='text-base font-medium text-slate-900 mb-1'>Role</h3>
-                  <p className='text-base text-slate-600'>{userProfile.jobRole}</p>
+                  <h3 className='text-base font-medium text-slate-900 mb-1'>
+                    Role
+                  </h3>
+                  <p className='text-base text-slate-600'>
+                    {userProfile.jobRole}
+                  </p>
                 </div>
               )}
               {userProfile?.companyName && (
                 <div>
-                  <h3 className='text-base font-medium text-slate-900 mb-1'>Company</h3>
-                  <p className='text-base text-slate-600'>{userProfile.companyName}</p>
+                  <h3 className='text-base font-medium text-slate-900 mb-1'>
+                    Company
+                  </h3>
+                  <p className='text-base text-slate-600'>
+                    {userProfile.companyName}
+                  </p>
                 </div>
               )}
               {(userProfile?.city || userProfile?.country) && (
                 <div>
-                  <h3 className='text-base font-medium text-slate-900 mb-1'>Location</h3>
+                  <h3 className='text-base font-medium text-slate-900 mb-1'>
+                    Location
+                  </h3>
                   <p className='text-base text-slate-600'>
                     {[userProfile.city, userProfile.country]
                       .filter(Boolean)

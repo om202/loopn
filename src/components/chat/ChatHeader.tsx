@@ -106,7 +106,6 @@ export default function ChatHeader({
                   {userProfile.jobRole}
                 </div>
               )}
-
             </div>
 
             {/* Connection Actions - Right Side */}
