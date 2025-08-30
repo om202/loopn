@@ -131,7 +131,7 @@ export class MarkdownResumePDFGenerator {
       markdown += `</div>\n\n`; // Close header-container
     }
 
-    markdown += '---\n\n';
+
 
     // Professional Summary
     if (userProfile.about) {
@@ -326,7 +326,7 @@ export class MarkdownResumePDFGenerator {
         
         hr {
           border: none;
-          border-top: 1px solid #e5e7eb;
+          border-top: 2px solid #d1d5db;
           margin: 16px 0;
         }
         
