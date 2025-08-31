@@ -225,7 +225,10 @@ export default function SearchUser({
               {isProcessing ? (
                 <div className='w-5 h-5 border-2 border-brand-600 border-t-transparent rounded-full animate-spin flex-shrink-0' />
               ) : (
-                <Search className='w-5 h-5 text-brand-600 flex-shrink-0' strokeWidth={2.5} />
+                <Search
+                  className='w-5 h-5 text-brand-600 flex-shrink-0'
+                  strokeWidth={2.5}
+                />
               )}
             </button>
           </div>

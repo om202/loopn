@@ -415,8 +415,7 @@ export default function HomePage() {
               Professional Networking, Reimagined
             </h2>
             <p className='text-lg text-gray-600 leading-relaxed font-medium'>
-              Connect with professionals who actually matter to your
-              career.
+              Connect with professionals who actually matter to your career.
             </p>
           </div>
 
@@ -891,16 +890,28 @@ export default function HomePage() {
 
             {/* Footer Links */}
             <div className='flex flex-col sm:flex-row justify-center items-center gap-6 mb-6'>
-              <a href='#' className='text-gray-600 text-sm font-medium hover:underline hover:underline-offset-4 hover:decoration-2'>
+              <a
+                href='#'
+                className='text-gray-600 text-sm font-medium hover:underline hover:underline-offset-4 hover:decoration-2'
+              >
                 Privacy Policy
               </a>
-              <a href='#' className='text-gray-600 text-sm font-medium hover:underline hover:underline-offset-4 hover:decoration-2'>
+              <a
+                href='#'
+                className='text-gray-600 text-sm font-medium hover:underline hover:underline-offset-4 hover:decoration-2'
+              >
                 Terms of Service
               </a>
-              <a href='#' className='text-gray-600 text-sm font-medium hover:underline hover:underline-offset-4 hover:decoration-2'>
+              <a
+                href='#'
+                className='text-gray-600 text-sm font-medium hover:underline hover:underline-offset-4 hover:decoration-2'
+              >
                 Contact Us
               </a>
-              <a href='#' className='text-gray-600 text-sm font-medium hover:underline hover:underline-offset-4 hover:decoration-2'>
+              <a
+                href='#'
+                className='text-gray-600 text-sm font-medium hover:underline hover:underline-offset-4 hover:decoration-2'
+              >
                 Help Center
               </a>
             </div>

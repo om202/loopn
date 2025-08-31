@@ -48,11 +48,7 @@ export default function ConfirmSignUpForm({
   return (
     <div className='w-full'>
       <form onSubmit={handleSubmit} className='space-y-5'>
-        {error && (
-          <div className='text-base text-b_red-500'>
-            {error}
-          </div>
-        )}
+        {error && <div className='text-base text-b_red-500'>{error}</div>}
 
         <div>
           <label
@@ -90,7 +86,9 @@ export default function ConfirmSignUpForm({
         </button>
 
         <div className='text-center'>
-          <span className='text-base text-black'>Didn't receive the code? </span>
+          <span className='text-base text-black'>
+            Didn't receive the code?{' '}
+          </span>
           <button
             type='button'
             onClick={handleResendCode}

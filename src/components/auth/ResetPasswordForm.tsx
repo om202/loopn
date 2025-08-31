@@ -54,11 +54,7 @@ export default function ResetPasswordForm({
   return (
     <div className='w-full'>
       <form onSubmit={handleSubmit} className='space-y-5'>
-        {error && (
-          <div className='text-base text-b_red-500'>
-            {error}
-          </div>
-        )}
+        {error && <div className='text-base text-b_red-500'>{error}</div>}
 
         <div>
           <label
