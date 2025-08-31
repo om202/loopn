@@ -21,6 +21,7 @@
     "@aws-sdk/client-bedrock-runtime": "^3.876.0",
     "@types/markdown-it": "^14.1.2",
     "aws-amplify": "^6.15.4",
+    "bm25": "^0.1.1",
     "emoji-picker-react": "4.13.2",
     "html2canvas": "^1.4.1",
     "html2pdf.js": "^0.11.2",

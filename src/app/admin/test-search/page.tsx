@@ -22,16 +22,28 @@ export default function TestSearchPage() {
   const [searchResults, setSearchResults] = useState<SearchResponse | null>(
     null
   );
-  const [testQueries] = useState([
-    'React developers',
-    'Python engineers',
-    'UX designers',
-    'Software engineers in San Francisco',
-    'Machine learning researchers',
-    'Full stack developers',
-    'Data scientists with Python',
-    'Frontend developers with JavaScript',
-  ]);
+  const [testQueries] = useState({
+    semantic: [
+      'React developers',
+      'Python engineers', 
+      'UX designers',
+      'Software engineers in San Francisco',
+      'Machine learning researchers',
+      'Full stack developers',
+      'Data scientists with Python',
+      'Frontend developers with JavaScript',
+    ],
+    exact: [
+      'blockappsai',
+      'JavaScript',
+      'TypeScript',
+      'AWS',
+      'Google',
+      'Microsoft',
+      'Netflix',
+      'Uber'
+    ]
+  });
 
   const performSearch = async (searchQuery: string) => {
     if (!searchQuery.trim()) return;
@@ -195,22 +207,51 @@ export default function TestSearchPage() {
           {/* Quick Test Queries */}
           <div className='mb-6'>
             <h3 className='text-sm font-medium text-gray-700 mb-3'>
-              Quick Test Queries:
+              Quick Hybrid Search Tests:
             </h3>
-            <div className='flex flex-wrap gap-2'>
-              {testQueries.map((testQuery, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => {
-                    setQuery(testQuery);
-                    performSearch(testQuery);
-                  }}
-                  disabled={isSearching}
-                  className='px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 disabled:opacity-50'
-                >
-                  {testQuery}
-                </button>
-              ))}
+            
+            {/* Semantic Queries */}
+            <div className='mb-4'>
+              <h4 className='text-xs font-medium text-blue-600 mb-2 uppercase tracking-wide'>
+                Semantic Queries (Vector-weighted)
+              </h4>
+              <div className='flex flex-wrap gap-2'>
+                {testQueries.semantic.map((testQuery, idx) => (
+                  <button
+                    key={`semantic-${idx}`}
+                    onClick={() => {
+                      setQuery(testQuery);
+                      performSearch(testQuery);
+                    }}
+                    disabled={isSearching}
+                    className='px-3 py-1 text-sm bg-blue-50 text-blue-700 rounded-md hover:bg-blue-100 disabled:opacity-50 border border-blue-200'
+                  >
+                    {testQuery}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Exact Term Queries */}
+            <div className='mb-4'>
+              <h4 className='text-xs font-medium text-purple-600 mb-2 uppercase tracking-wide'>
+                Exact Terms (BM25-weighted)
+              </h4>
+              <div className='flex flex-wrap gap-2'>
+                {testQueries.exact.map((testQuery, idx) => (
+                  <button
+                    key={`exact-${idx}`}
+                    onClick={() => {
+                      setQuery(testQuery);
+                      performSearch(testQuery);
+                    }}
+                    disabled={isSearching}
+                    className='px-3 py-1 text-sm bg-purple-50 text-purple-700 rounded-md hover:bg-purple-100 disabled:opacity-50 border border-purple-200'
+                  >
+                    {testQuery}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -218,10 +259,15 @@ export default function TestSearchPage() {
         {/* Search Results */}
         {searchResults && (
           <div className='bg-white rounded-lg shadow-sm border border-gray-200 p-6'>
-            <h2 className='text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2'>
-              <Database className='w-5 h-5' />
-              Search Results
-            </h2>
+            <div className='flex items-center justify-between mb-4'>
+              <h2 className='text-xl font-semibold text-gray-900 flex items-center gap-2'>
+                <Database className='w-5 h-5' />
+                Hybrid Search Results
+              </h2>
+              <div className='text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full'>
+                Query: "{searchResults.query}"
+              </div>
+            </div>
 
             {/* Search Metrics */}
             <div className='grid grid-cols-1 md:grid-cols-4 gap-4 mb-6'>

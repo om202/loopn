@@ -10,8 +10,9 @@ import {
   AlertCircle,
   Users,
   Database,
+  Search,
 } from 'lucide-react';
-import { EmbeddingManager, UserProfileService } from '../../../services';
+import { EmbeddingManager, UserProfileService, RAGSearchService } from '../../../services';
 import type {
   BatchEmbeddingResult,
   EmbeddingJob,
@@ -37,6 +38,13 @@ export default function EmbeddingIndexerPage() {
     null
   );
   const [isLoadingHealth, setIsLoadingHealth] = useState(false);
+  const [hybridInitStatus, setHybridInitStatus] = useState<{
+    isInitializing: boolean;
+    success?: boolean;
+    vectorCount?: number;
+    bm25Count?: number;
+    error?: string;
+  }>({ isInitializing: false });
 
   // Check service health
   const performHealthCheck = async () => {
@@ -191,6 +199,28 @@ export default function EmbeddingIndexerPage() {
       }));
 
       console.log('Indexing completed:', finalResult);
+
+      // After successful indexing, initialize BM25 index
+      if (totalSuccessful.length > 0) {
+        console.log('Initializing BM25 index after successful embedding generation...');
+        try {
+          const hybridInit = await RAGSearchService.initializeHybridSearch();
+          setHybridInitStatus({
+            isInitializing: false,
+            success: hybridInit.success,
+            vectorCount: hybridInit.vectorCount,
+            bm25Count: hybridInit.bm25Count,
+            error: hybridInit.error
+          });
+        } catch (hybridError) {
+          console.error('BM25 initialization failed:', hybridError);
+          setHybridInitStatus({
+            isInitializing: false,
+            success: false,
+            error: hybridError instanceof Error ? hybridError.message : 'BM25 initialization failed'
+          });
+        }
+      }
     } catch (error) {
       console.error('Indexing process failed:', error);
       setIndexingProgress(prev => ({
@@ -202,6 +232,33 @@ export default function EmbeddingIndexerPage() {
       }));
     } finally {
       setIsIndexing(false);
+    }
+  };
+
+  // Initialize BM25 index manually
+  const initializeBM25Index = async () => {
+    setHybridInitStatus({ isInitializing: true });
+    
+    try {
+      console.log('Manually initializing BM25 hybrid search...');
+      const result = await RAGSearchService.initializeHybridSearch();
+      
+      setHybridInitStatus({
+        isInitializing: false,
+        success: result.success,
+        vectorCount: result.vectorCount,
+        bm25Count: result.bm25Count,
+        error: result.error
+      });
+      
+      console.log('BM25 initialization result:', result);
+    } catch (error) {
+      console.error('Manual BM25 initialization failed:', error);
+      setHybridInitStatus({
+        isInitializing: false,
+        success: false,
+        error: error instanceof Error ? error.message : 'BM25 initialization failed'
+      });
     }
   };
 
@@ -395,6 +452,69 @@ export default function EmbeddingIndexerPage() {
                   )}
                 </ul>
               </div>
+            </div>
+          )}
+        </div>
+
+        {/* BM25 Hybrid Search Initialization */}
+        <div className='bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6'>
+          <div className='flex items-center justify-between mb-4'>
+            <h2 className='text-xl font-semibold text-gray-900 flex items-center gap-2'>
+              <Search className='w-5 h-5' />
+              Hybrid Search (BM25) Setup
+            </h2>
+            <button
+              onClick={initializeBM25Index}
+              disabled={hybridInitStatus.isInitializing}
+              className='px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50 flex items-center gap-2'
+            >
+              {hybridInitStatus.isInitializing ? (
+                <RefreshCw className='w-4 h-4 animate-spin' />
+              ) : (
+                <Database className='w-4 h-4' />
+              )}
+              Initialize BM25 Index
+            </button>
+          </div>
+
+          <p className='text-gray-600 mb-4'>
+            Initialize the BM25 keyword search index to enable hybrid search functionality. 
+            This combines vector embeddings with keyword matching for better exact term searches.
+          </p>
+
+          {hybridInitStatus.success !== undefined && (
+            <div className={`p-4 rounded-lg border ${
+              hybridInitStatus.success 
+                ? 'bg-green-50 border-green-200' 
+                : 'bg-red-50 border-red-200'
+            }`}>
+              <div className={`flex items-center gap-2 mb-2 ${
+                hybridInitStatus.success ? 'text-green-800' : 'text-red-800'
+              }`}>
+                {hybridInitStatus.success ? (
+                  <CheckCircle className='w-5 h-5' />
+                ) : (
+                  <AlertCircle className='w-5 h-5' />
+                )}
+                <span className='font-medium'>
+                  {hybridInitStatus.success ? 'BM25 Index Initialized' : 'Initialization Failed'}
+                </span>
+              </div>
+              
+              {hybridInitStatus.success ? (
+                <div className='grid grid-cols-2 gap-4 text-sm'>
+                  <div>
+                    <span className='font-medium'>Vector Embeddings:</span> {hybridInitStatus.vectorCount}
+                  </div>
+                  <div>
+                    <span className='font-medium'>BM25 Documents:</span> {hybridInitStatus.bm25Count}
+                  </div>
+                </div>
+              ) : (
+                <p className={`text-sm ${hybridInitStatus.success ? 'text-green-700' : 'text-red-700'}`}>
+                  {hybridInitStatus.error || 'Unknown error occurred'}
+                </p>
+              )}
             </div>
           )}
         </div>
