@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback } from 'react';
 import { Search } from 'lucide-react';
-import UserAvatar from '../UserAvatar';
+import UserCard from './UserCard';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import LoadingContainer from '../LoadingContainer';
 import { RAGSearchService } from '../../services';
@@ -42,7 +42,18 @@ interface SearchSectionContentProps {
 export default function SearchSectionContent({
   searchQuery = '',
   shouldSearch = false,
-  onCancelChatRequest: _onCancelChatRequest,
+  onOpenProfileSidebar: _onOpenProfileSidebar,
+  onUserCardClick,
+  isProfileSidebarOpen: _isProfileSidebarOpen,
+  selectedUserId,
+  existingConversations,
+  pendingRequests,
+  optimisticPendingRequests,
+  incomingRequestSenderIds,
+  onlineUsers,
+  onCancelChatRequest,
+  onAcceptChatRequest,
+  setOptimisticPendingRequests,
 }: SearchSectionContentProps) {
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -106,6 +117,12 @@ export default function SearchSectionContent({
     }
   }, [shouldSearch, searchQuery, performSearch]);
 
+  // Handle chat action for search results
+  const handleChatAction = (userId: string) => {
+    setOptimisticPendingRequests(prev => new Set(prev).add(userId));
+    // Additional chat action logic would go here
+  };
+
   return (
     <div className='h-full flex flex-col'>
       {/* Search Results */}
@@ -150,7 +167,7 @@ export default function SearchSectionContent({
           <div className='space-y-4 p-4'>
             {/* Search Results Header */}
             {searchMetrics && (
-              <div className='text-sm text-slate-500 pb-2 border-b border-slate-100'>
+              <div className='text-sm text-slate-500 pb-4 border-b border-slate-100'>
                 Found {searchResults.length} of {searchMetrics.totalMatched}{' '}
                 matches (
                 {searchMetrics.processingTimeMs + searchMetrics.fetchTimeMs}ms)
@@ -158,61 +175,56 @@ export default function SearchSectionContent({
             )}
 
             {/* Results List */}
-            {searchResults.map(result => (
-              <div
-                key={result.userId}
-                className='bg-white rounded-xl border border-slate-200 p-4 hover:border-brand-200 transition-colors'
-              >
-                <div className='flex items-start gap-4'>
-                  {/* Profile Picture */}
-                  <UserAvatar
-                    userId={result.userId}
-                    profilePictureUrl={result.profile.profilePictureUrl}
-                    hasProfilePicture={result.profile.hasProfilePicture}
-                    size='sm'
-                    shape='circular'
-                    className='flex-shrink-0'
+            <div className='space-y-2'>
+              {searchResults.map(result => {
+                // Convert search result to UserPresence format for UserCard
+                const userPresence: UserPresence = {
+                  userId: result.userId,
+                  isOnline: false,
+                  status: 'OFFLINE',
+                  lastSeen: null,
+                  lastHeartbeat: null,
+                  activeChatId: null,
+                  lastChatActivity: null,
+                  createdAt: new Date().toISOString(),
+                  updatedAt: new Date().toISOString(),
+                };
+
+                return (
+                  <UserCard
+                    key={result.userId}
+                    userPresence={userPresence}
+                    onlineUsers={onlineUsers}
+                    existingConversations={existingConversations}
+                    pendingRequests={pendingRequests}
+                    optimisticPendingRequests={optimisticPendingRequests}
+                    incomingRequestSenderIds={incomingRequestSenderIds}
+                    onChatAction={handleChatAction}
+                    onCancelChatRequest={onCancelChatRequest}
+                    onAcceptChatRequest={onAcceptChatRequest}
+                    onUserCardClick={onUserCardClick}
+                    selectedUserId={selectedUserId}
+                    searchProfile={{
+                      userId: result.userId,
+                      fullName: result.profile.fullName,
+                      email: result.profile.email,
+                      jobRole: result.profile.jobRole,
+                      companyName: result.profile.companyName,
+                      industry: result.profile.industry,
+                      yearsOfExperience: result.profile.yearsOfExperience,
+                      education: result.profile.education,
+                      about: result.profile.about,
+                      interests: result.profile.interests,
+                      skills: result.profile.skills,
+                      profilePictureUrl: result.profile.profilePictureUrl,
+                      isOnboardingComplete: result.profile.isOnboardingComplete,
+                    }}
+                    useRealtimeStatus={false} // Don't show real-time status for search results
+                    currentUserId={user?.userId || ''}
                   />
-
-                  {/* Profile Info */}
-                  <div className='flex-1 min-w-0'>
-                    <h3 className='font-medium text-black truncate'>
-                      {result.profile.fullName || 'Professional'}
-                    </h3>
-                    <p className='text-sm text-slate-600 truncate'>
-                      {result.profile.jobRole}{' '}
-                      {result.profile.companyName &&
-                        `at ${result.profile.companyName}`}
-                    </p>
-                    {result.profile.skills &&
-                      result.profile.skills.length > 0 && (
-                        <div className='flex flex-wrap gap-1 mt-2'>
-                          {result.profile.skills
-                            .slice(0, 3)
-                            .map((skill: string, idx: number) => (
-                              <span
-                                key={idx}
-                                className='px-2 py-1 bg-slate-100 text-xs text-slate-700 rounded-md'
-                              >
-                                {skill}
-                              </span>
-                            ))}
-                          {result.profile.skills.length > 3 && (
-                            <span className='px-2 py-1 bg-slate-100 text-xs text-slate-500 rounded-md'>
-                              +{result.profile.skills.length - 3} more
-                            </span>
-                          )}
-                        </div>
-                      )}
-                  </div>
-
-                  {/* Similarity Score */}
-                  <div className='text-xs text-slate-400 flex-shrink-0'>
-                    {Math.round(result.similarity * 100)}% match
-                  </div>
-                </div>
-              </div>
-            ))}
+                );
+              })}
+            </div>
           </div>
         )}
       </div>
