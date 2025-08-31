@@ -27,7 +27,7 @@ export default function SearchUser({
   const [isProcessing, setIsProcessing] = useState(false);
   const [searchHistory, setSearchHistory] = useState<SearchHistoryItem[]>([]);
   const [showHistory, setShowHistory] = useState(false);
-  const [searchError, setSearchError] = useState<string | null>(null);
+
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -60,7 +60,7 @@ export default function SearchUser({
     e.preventDefault();
     if (query.trim() && !isProcessing) {
       setIsProcessing(true);
-      setSearchError(null);
+
 
       // Add to search history
       addToSearchHistory(query.trim());
@@ -85,14 +85,24 @@ export default function SearchUser({
         }
       } catch (error) {
         console.error('Search failed:', error);
-        const errorMessage =
-          error instanceof Error
-            ? error.message
-            : 'Search failed. Please try again.';
-        setSearchError(errorMessage);
-
-        // Clear error after 3 seconds
-        setTimeout(() => setSearchError(null), 3000);
+        
+        // Still call onSearchResults with empty results so SearchSectionContent can show error state
+        if (onSearchResults) {
+          const errorMessage = error instanceof Error ? error.message : 'Search failed. Please try again.';
+          onSearchResults({
+            results: [],
+            metrics: {
+              totalProcessed: 0,
+              totalMatched: 0,
+              queryEmbeddingTimeMs: 0,
+              processingTimeMs: 0,
+              fetchTimeMs: 0,
+            },
+            query: query.trim(),
+            totalFound: 0,
+            error: errorMessage, // Pass error to SearchSectionContent
+          });
+        }
       } finally {
         setIsProcessing(false);
       }
@@ -257,23 +267,6 @@ export default function SearchUser({
             </button>
           </div>
         </form>
-
-        {/* Search Error Message */}
-        {searchError && (
-          <div className='absolute top-full left-0 right-0 bg-red-50 border border-red-200 rounded-xl shadow-sm z-50 mt-2 p-4'>
-            <div className='flex items-center gap-3'>
-              <div className='w-5 h-5 bg-red-500 rounded-full flex items-center justify-center flex-shrink-0'>
-                <X className='w-3 h-3 text-white' />
-              </div>
-              <div>
-                <p className='text-sm font-medium text-red-800 mb-1'>
-                  Search Error
-                </p>
-                <p className='text-xs text-red-700'>{searchError}</p>
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Search History Dropdown */}
         {showHistory && searchHistory.length > 0 && (

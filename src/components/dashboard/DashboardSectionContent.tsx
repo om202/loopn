@@ -3,6 +3,7 @@
 import { Compass, Search, Bookmark } from 'lucide-react';
 
 import type { Schema } from '../../../amplify/data/resource';
+import type { SearchResponse } from '../../types/search.types';
 import { formatPresenceTime } from '../../lib/presence-utils';
 
 import UserCard from './UserCard';
@@ -51,6 +52,7 @@ interface DashboardSectionContentProps {
   selectedUserId?: string;
   searchQuery?: string;
   shouldTriggerSearch?: boolean;
+  searchResponse?: SearchResponse | null;
   // For search section optimistic updates
   setOptimisticPendingRequests: (
     fn: (prev: Set<string>) => Set<string>
@@ -79,6 +81,7 @@ export default function DashboardSectionContent({
   selectedUserId,
   searchQuery,
   shouldTriggerSearch,
+  searchResponse,
   setOptimisticPendingRequests,
 }: DashboardSectionContentProps) {
   // Combine all users for "All Chats" section - now just online users and connections
@@ -267,6 +270,7 @@ export default function DashboardSectionContent({
         }}
         searchQuery={searchQuery}
         shouldSearch={shouldTriggerSearch}
+        searchResponse={searchResponse}
         onOpenProfileSidebar={onOpenProfileSidebar}
         onUserCardClick={onUserCardClick}
         isProfileSidebarOpen={isProfileSidebarOpen}

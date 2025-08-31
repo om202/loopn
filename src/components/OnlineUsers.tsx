@@ -64,6 +64,7 @@ export default function OnlineUsers({
     useState<SidebarSection>('suggested');
   const [searchQuery, setSearchQuery] = useState('');
   const [shouldTriggerSearch, setShouldTriggerSearch] = useState(false);
+  const [searchResponse, setSearchResponse] = useState<SearchResponse | null>(null);
 
   const [optimisticPendingRequests, setOptimisticPendingRequests] = useState<
     Set<string>
@@ -432,9 +433,10 @@ export default function OnlineUsers({
 
   // Handle search results from SearchUser component
   const handleSearchResults = (response: SearchResponse) => {
-    // Switch to search section and trigger search with results
+    // Switch to search section and store the response (including any error)
     setActiveSection('search');
     setSearchQuery(response.query);
+    setSearchResponse(response); // Store the entire response
     setShouldTriggerSearch(true);
     
     // Reset trigger after a short delay
@@ -640,6 +642,7 @@ export default function OnlineUsers({
                 selectedUserId={profileSidebarUser?.userId}
                 searchQuery={searchQuery}
                 shouldTriggerSearch={shouldTriggerSearch}
+                searchResponse={searchResponse}
                 setOptimisticPendingRequests={setOptimisticPendingRequests}
               />
             )}

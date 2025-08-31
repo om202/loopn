@@ -20,6 +20,7 @@ interface SearchSectionContentProps {
   onChatRequestSent?: () => void;
   searchQuery?: string;
   shouldSearch?: boolean;
+  searchResponse?: SearchResponse | null;
   onOpenProfileSidebar?: (user: UserPresence) => void;
   onUserCardClick?: (user: UserPresence) => void;
   isProfileSidebarOpen?: boolean;
@@ -42,6 +43,7 @@ interface SearchSectionContentProps {
 export default function SearchSectionContent({
   searchQuery = '',
   shouldSearch = false,
+  searchResponse,
   onOpenProfileSidebar: _onOpenProfileSidebar,
   onUserCardClick,
   isProfileSidebarOpen: _isProfileSidebarOpen,
@@ -94,6 +96,11 @@ export default function SearchSectionContent({
 
         setSearchResults(response.results);
         setSearchMetrics(response.metrics);
+        
+        // Check if response contains error from SearchUser component
+        if (response.error) {
+          setError(response.error);
+        }
 
 
       } catch (searchError) {
@@ -110,12 +117,25 @@ export default function SearchSectionContent({
     [isSearching, user]
   );
 
-  // Effect to handle search from external search bar
+  // Effect to handle search from external search bar or direct response
   React.useEffect(() => {
-    if (shouldSearch && searchQuery.trim()) {
+    if (searchResponse) {
+      // Use direct response from SearchUser (includes results and/or errors)
+      setSearchResults(searchResponse.results);
+      setSearchMetrics(searchResponse.metrics);
+      setHasSearched(true);
+      setIsSearching(false);
+      
+      if (searchResponse.error) {
+        setError(searchResponse.error);
+      } else {
+        setError(null);
+      }
+    } else if (shouldSearch && searchQuery.trim()) {
+      // Normal search flow (for other triggers)
       performSearch(searchQuery.trim());
     }
-  }, [shouldSearch, searchQuery, performSearch]);
+  }, [shouldSearch, searchQuery, searchResponse, performSearch]);
 
   // Handle chat action for search results
   const handleChatAction = (userId: string) => {
@@ -140,24 +160,23 @@ export default function SearchSectionContent({
           <div className='transition-opacity duration-200 opacity-100'>
             <LoadingContainer size='lg' />
           </div>
-        ) : error ? (
-          <div className='flex flex-col items-center justify-center h-full text-center p-8 transition-opacity duration-200 opacity-100'>
-            <div className='text-b_red-600 text-sm mb-2'>Search Error</div>
-            <p className='text-slate-500 text-sm'>{error}</p>
-          </div>
-        ) : searchResults.length === 0 ? (
+        ) : error || searchResults.length === 0 ? (
           <div className='flex flex-col items-center justify-center h-full text-center p-8 transition-opacity duration-200 opacity-100'>
             <div className='w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-full flex items-center justify-center'>
               <Search className='w-8 h-8 text-slate-500' />
             </div>
             <h3 className='text-lg font-medium text-black mb-2'>
-              No Results Found
+              No Matches Found
             </h3>
-            <p className='text-slate-500 text-sm max-w-md mx-auto'>
-              Try adjusting your search terms or using different keywords.
+            <p className='text-slate-500 text-sm max-w-md mx-auto mb-3'>
+              {searchQuery ? (
+                <>No professionals found matching <span className='font-medium'>"{searchQuery}"</span>. Try different keywords or broader terms.</>
+              ) : (
+                'Try adjusting your search terms or using different keywords.'
+              )}
             </p>
-            {searchMetrics && (
-              <div className='mt-4 text-xs text-slate-400'>
+            {searchMetrics && !error && (
+              <div className='text-xs text-slate-400'>
                 Searched {searchMetrics.totalProcessed} profiles in{' '}
                 {searchMetrics.processingTimeMs + searchMetrics.fetchTimeMs}ms
               </div>

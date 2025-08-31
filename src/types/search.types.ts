@@ -64,6 +64,7 @@ export interface SearchResponse {
   metrics: SearchMetrics;
   query: string;
   totalFound: number;
+  error?: string; // Optional error message for failed searches
 }
 
 /**
