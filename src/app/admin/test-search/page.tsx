@@ -207,7 +207,7 @@ export default function TestSearchPage() {
           {/* Quick Test Queries */}
           <div className='mb-6'>
             <h3 className='text-sm font-medium text-gray-700 mb-3'>
-              Hybrid Search Tests (50% Vector + 50% Text):
+              Hybrid Search Tests (80% Vector + 20% Text):
             </h3>
 
             {/* Semantic Queries */}

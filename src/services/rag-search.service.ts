@@ -54,32 +54,9 @@ export class RAGSearchService {
     try {
       const processingStart = Date.now();
 
-      // Step 1: Run both searches in parallel
+      // Step 1: Get embedding chunks first
       console.log(`Starting hybrid search for: "${searchOptions.query}"`);
-
-      const [queryEmbedding, embeddingChunks] = await Promise.all([
-        // Vector search: Generate query embedding
-        (async () => {
-          const start = Date.now();
-          const embedding = await EmbeddingService.generateEmbedding(
-            searchOptions.query
-          );
-          queryEmbeddingTimeMs = Date.now() - start;
-          return embedding;
-        })(),
-
-        // Get all embeddings for both vector and text search
-        EmbeddingManager.getAllEmbeddings(),
-      ]);
-
-      // Text search: Search in profile texts
-      const textSearchStart = Date.now();
-      const textResults = RAGSearchService.performTextSearch(
-        searchOptions.query,
-        embeddingChunks,
-        (searchOptions.limit || 20) * 2
-      );
-      textSearchTimeMs = Date.now() - textSearchStart;
+      const embeddingChunks = await EmbeddingManager.getAllEmbeddings();
 
       if (embeddingChunks.length === 0) {
         console.warn('No profile embeddings found in database');
@@ -89,21 +66,47 @@ export class RAGSearchService {
         );
       }
 
-      // Step 2: Vector search - calculate similarities
-      const parsedEmbeddings =
-        RAGSearchService.parseEmbeddings(embeddingChunks);
-      const vectorResults = RAGSearchService.calculateSimilarities(
-        queryEmbedding,
-        parsedEmbeddings,
-        searchOptions
-      );
+      // Step 2: Try vector search, fallback to text-only if it fails
+      let queryEmbedding: number[] | null = null;
+      let vectorResults: Array<{ userId: string; similarity: number; embeddingText?: string }> = [];
+      let isVectorSearchAvailable = true;
 
-      // Step 3: Combine and score results using hybrid approach
+      try {
+        const embeddingStart = Date.now();
+        queryEmbedding = await EmbeddingService.generateEmbedding(searchOptions.query);
+        queryEmbeddingTimeMs = Date.now() - embeddingStart;
+
+        // Vector search - calculate similarities
+        const parsedEmbeddings = RAGSearchService.parseEmbeddings(embeddingChunks);
+        vectorResults = RAGSearchService.calculateSimilarities(
+          queryEmbedding,
+          parsedEmbeddings,
+          searchOptions
+        );
+        
+        console.log(`✅ Vector search successful: ${vectorResults.length} results`);
+      } catch (embeddingError) {
+        isVectorSearchAvailable = false;
+        console.warn('⚠️ Vector search failed, falling back to text-only search');
+        console.warn('Embedding error:', embeddingError);
+      }
+
+      // Step 3: Text search (always run)
+      const textSearchStart = Date.now();
+      const textResults = RAGSearchService.performTextSearch(
+        searchOptions.query,
+        embeddingChunks,
+        (searchOptions.limit || 20) * 2
+      );
+      textSearchTimeMs = Date.now() - textSearchStart;
+
+      // Step 4: Combine results or use text-only
       const hybridResults = RAGSearchService.combineHybridResults(
         vectorResults,
         textResults,
         searchOptions.query,
-        searchOptions
+        searchOptions,
+        isVectorSearchAvailable
       );
 
       processingTimeMs = Date.now() - processingStart;
@@ -141,8 +144,9 @@ export class RAGSearchService {
         totalFound: hybridResults.length,
       };
 
+      const mode = isVectorSearchAvailable ? 'Hybrid' : 'Text-only fallback';
       console.log(
-        `Hybrid search completed: ${results.length} results in ${
+        `${mode} search completed: ${results.length} results in ${
           queryEmbeddingTimeMs +
           processingTimeMs +
           textSearchTimeMs +
@@ -385,26 +389,41 @@ export class RAGSearchService {
     embeddings: Array<{ userId: string; embeddingText?: string | null }>,
     limit: number = 20
   ): Array<{ userId: string; score: number }> {
+    console.log('🔍 TEXT SEARCH START');
+    console.log(`Query: "${query}"`);
+    
     const queryTerms = query
       .toLowerCase()
       .trim()
       .split(/\s+/)
       .filter(term => term.length > 2);
 
+    console.log(`Search terms: [${queryTerms.join(', ')}]`);
+    console.log(`Processing ${embeddings.length} profile texts...`);
+
     if (queryTerms.length === 0) {
+      console.log('❌ No valid search terms found');
       return [];
     }
 
     const results: Array<{ userId: string; score: number }> = [];
+    let processedCount = 0;
+    let matchedCount = 0;
 
     for (const embedding of embeddings) {
-      if (!embedding.embeddingText) continue;
+      processedCount++;
+      
+      if (!embedding.embeddingText) {
+        console.log(`⚠️  Profile ${embedding.userId}: No text available`);
+        continue;
+      }
 
       const text = embedding.embeddingText.toLowerCase();
-      let score = 0;
+      let totalScore = 0;
+      const matchDetails: string[] = [];
 
       for (const term of queryTerms) {
-        // Count exact matches
+        // Count exact matches (word boundaries)
         const exactMatches = (
           text.match(new RegExp(`\\b${term}\\b`, 'g')) || []
         ).length;
@@ -414,23 +433,45 @@ export class RAGSearchService {
           (text.match(new RegExp(term, 'g')) || []).length - exactMatches;
 
         // Score calculation: exact matches worth more
-        score += exactMatches * 2 + partialMatches * 1;
+        const termScore = exactMatches * 2 + partialMatches * 1;
+        totalScore += termScore;
+
+        if (termScore > 0) {
+          matchDetails.push(`"${term}": ${exactMatches} exact + ${partialMatches} partial = ${termScore} pts`);
+        }
       }
 
-      if (score > 0) {
+      if (totalScore > 0) {
+        matchedCount++;
+        console.log(`✅ ${embedding.userId}: Score ${totalScore}`);
+        console.log(`   Matches: ${matchDetails.join(', ')}`);
+        console.log(`   Text preview: "${text.substring(0, 100)}..."`);
+        
         results.push({
           userId: embedding.userId,
-          score: score,
+          score: totalScore,
         });
       }
     }
 
     // Sort by score and limit results
-    return results.sort((a, b) => b.score - a.score).slice(0, limit);
+    const sortedResults = results.sort((a, b) => b.score - a.score).slice(0, limit);
+    
+    console.log(`📊 TEXT SEARCH RESULTS:`);
+    console.log(`   Processed: ${processedCount} profiles`);
+    console.log(`   Matched: ${matchedCount} profiles`);
+    console.log(`   Returned: ${sortedResults.length} top results`);
+    
+    if (sortedResults.length > 0) {
+      console.log(`   Top scores: ${sortedResults.slice(0, 3).map(r => `${r.userId}(${r.score})`).join(', ')}`);
+    }
+    
+    console.log('🔍 TEXT SEARCH END\n');
+    return sortedResults;
   }
 
   /**
-   * Combine vector and text search results with 50/50 hybrid scoring
+   * Combine vector and text search results with hybrid or text-only scoring
    */
   private static combineHybridResults(
     vectorResults: Array<{
@@ -440,13 +481,20 @@ export class RAGSearchService {
     }>,
     textResults: Array<{ userId: string; score: number }>,
     query: string,
-    options: SearchOptions
+    options: SearchOptions,
+    isVectorSearchAvailable: boolean = true
   ): Array<{ userId: string; similarity: number; embeddingText?: string }> {
-    // Simple 50/50 weighting - no complex classification needed
-    const vectorWeight = 0.5;
-    const textWeight = 0.5;
+    
+    // Semantic-focused weighting: 80% vector + 20% text
+    const vectorWeight = isVectorSearchAvailable ? 0.8 : 0.0;
+    const textWeight = 0.2; // Always 20% regardless of vector availability
 
-    console.log(`Hybrid search: 50% vector + 50% text for "${query}"`);
+    console.log(`🔄 HYBRID SCORING START`);
+    if (isVectorSearchAvailable) {
+      console.log(`Query: "${query}" | Weights: 80% vector + 20% text`);
+    } else {
+      console.log(`Query: "${query}" | FALLBACK MODE: 20% text only (taking top 20% matches, vector service unavailable)`);
+    }
 
     // Normalize scores to 0-1 range
     const maxVectorScore = Math.max(
@@ -454,6 +502,10 @@ export class RAGSearchService {
       0.001
     );
     const maxTextScore = Math.max(...textResults.map(r => r.score), 0.001);
+    
+    console.log(`Vector results: ${vectorResults.length} (max score: ${maxVectorScore.toFixed(4)})`);
+    console.log(`Text results: ${textResults.length} (max score: ${maxTextScore.toFixed(1)})`);
+    console.log(`Normalizing scores to 0-1 range...`);
 
     // Create maps for fast lookup
     const vectorMap = new Map(
@@ -475,12 +527,15 @@ export class RAGSearchService {
       ...textResults.map(r => r.userId),
     ]);
 
-    // Combine scores for each user
+        // Combine scores for each user
     const hybridResults: Array<{
       userId: string;
       similarity: number;
       embeddingText?: string;
     }> = [];
+    
+    console.log(`\n🎯 COMBINING SCORES:`);
+    let combinedCount = 0;
 
     for (const userId of allUserIds) {
       // Skip excluded users
@@ -494,8 +549,17 @@ export class RAGSearchService {
       // Calculate hybrid score
       const hybridScore = vectorScore * vectorWeight + textScore * textWeight;
 
-      // Apply minimum similarity threshold
+      // Apply minimum similarity threshold 
       if (vectorScore >= options.minSimilarity! || textScore > 0) {
+        combinedCount++;
+        
+        if (combinedCount <= 5) { // Show first 5 for debugging
+          console.log(`${userId}:`);
+          console.log(`   Vector: ${vectorScore.toFixed(4)} × ${vectorWeight} = ${(vectorScore * vectorWeight).toFixed(4)}`);
+          console.log(`   Text:   ${textScore.toFixed(4)} × ${textWeight} = ${(textScore * textWeight).toFixed(4)}`);
+          console.log(`   Final:  ${hybridScore.toFixed(4)}`);
+        }
+        
         hybridResults.push({
           userId,
           similarity: hybridScore,
@@ -507,10 +571,17 @@ export class RAGSearchService {
     // Sort by hybrid score (descending)
     hybridResults.sort((a, b) => b.similarity - a.similarity);
 
-    console.log(
-      `Hybrid scoring: ${hybridResults.length} combined results (vector: ${vectorResults.length}, text: ${textResults.length})`
-    );
-
+    console.log(`\n📈 FINAL HYBRID RESULTS:`);
+    console.log(`   Combined: ${hybridResults.length} total results`);
+    console.log(`   From: ${vectorResults.length} vector + ${textResults.length} text results`);
+    
+    if (hybridResults.length > 0) {
+      console.log(`   Top 3 scores: ${hybridResults.slice(0, 3).map(r => 
+        `${r.userId}(${r.similarity.toFixed(4)})`
+      ).join(', ')}`);
+    }
+    
+    console.log(`🔄 HYBRID SCORING END\n`);
     return hybridResults;
   }
 
