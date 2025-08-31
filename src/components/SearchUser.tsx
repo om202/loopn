@@ -61,36 +61,39 @@ export default function SearchUser({
     if (query.trim() && !isProcessing) {
       setIsProcessing(true);
       setSearchError(null);
-      
+
       // Add to search history
       addToSearchHistory(query.trim());
       setSearchHistory(getSearchHistory());
-      
+
       // Hide dropdown
       setShowHistory(false);
 
       try {
-        console.log('Performing search from SearchUser component:', query.trim());
-        
+        console.log(
+          'Performing search from SearchUser component:',
+          query.trim()
+        );
+
         const response = await RAGSearchService.searchProfiles(query.trim(), {
           limit: 20,
-          minSimilarity: 0.3
+          minSimilarity: 0.3,
         });
 
         console.log('Search completed:', response);
-        
+
         // Notify parent component with results
         if (onSearchResults) {
           onSearchResults(response);
         }
-        
       } catch (error) {
         console.error('Search failed:', error);
-        const errorMessage = error instanceof Error 
-          ? error.message 
-          : 'Search failed. Please try again.';
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : 'Search failed. Please try again.';
         setSearchError(errorMessage);
-        
+
         // Clear error after 3 seconds
         setTimeout(() => setSearchError(null), 3000);
       } finally {
@@ -118,7 +121,7 @@ export default function SearchUser({
   const handleHistoryItemClick = (historyQuery: string) => {
     setQuery(historyQuery);
     setShowHistory(false);
-    
+
     // Trigger search for history item
     if (!isProcessing) {
       // Simulate form submission
@@ -269,9 +272,7 @@ export default function SearchUser({
                 <p className='text-sm font-medium text-red-800 mb-1'>
                   Search Error
                 </p>
-                <p className='text-xs text-red-700'>
-                  {searchError}
-                </p>
+                <p className='text-xs text-red-700'>{searchError}</p>
               </div>
             </div>
           </div>

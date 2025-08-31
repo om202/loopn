@@ -132,7 +132,6 @@ function parseUserProfileJsonFields(profile: UserProfile): UserProfile {
 }
 
 export class UserProfileService {
-
   /**
    * Get all user profiles (for admin/indexing purposes)
    * @returns Promise<UserProfile[]> - All user profiles
@@ -141,7 +140,7 @@ export class UserProfileService {
     try {
       const client = getClient();
       const result = await client.models.UserProfile.list();
-      
+
       if (result.data) {
         console.log(`Retrieved ${result.data.length} user profiles`);
         return result.data;

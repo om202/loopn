@@ -1,9 +1,9 @@
 // Export RAG search utilities
-export { 
-  createProfileText, 
-  generateProfileVersion, 
+export {
+  createProfileText,
+  generateProfileVersion,
   validateProfileText,
-  testProfileTextGeneration 
+  testProfileTextGeneration,
 } from './profile-text-generator';
 
 // Re-export existing utilities for convenience
@@ -14,15 +14,15 @@ export { ImageCache } from './image-cache';
 export { compressImage, generateThumbnail } from './image-utils';
 export { INTERESTS } from './interests-data';
 export { generateMarkdownResume } from './markdown-resume-generator';
-export { 
-  updateUserPresence, 
-  cleanupOfflineUsers, 
-  isUserOnline 
+export {
+  updateUserPresence,
+  cleanupOfflineUsers,
+  isUserOnline,
 } from './presence-utils';
 export { mapResumeToProfile } from './resume-mapper';
-export { 
-  saveSearchHistory, 
-  getSearchHistory, 
-  clearSearchHistory 
+export {
+  saveSearchHistory,
+  getSearchHistory,
+  clearSearchHistory,
 } from './search-history-utils';
 export { isValidUrl, sanitizeUrl } from './url-utils';

@@ -8,8 +8,8 @@
 export interface ProfileEmbedding {
   userId: string;
   embeddingVector: string; // JSON stringified array of 1024 numbers
-  embeddingText: string;   // Raw text that was embedded
-  profileVersion: string;  // Version for cache invalidation
+  embeddingText: string; // Raw text that was embedded
+  profileVersion: string; // Version for cache invalidation
   createdAt?: string;
   updatedAt?: string;
 }
@@ -147,9 +147,9 @@ export interface SearchAnalytics {
 /**
  * Error types specific to RAG search operations
  */
-export type SearchErrorType = 
+export type SearchErrorType =
   | 'EMBEDDING_GENERATION_FAILED'
-  | 'SIMILARITY_CALCULATION_FAILED' 
+  | 'SIMILARITY_CALCULATION_FAILED'
   | 'PROFILE_FETCH_FAILED'
   | 'INVALID_QUERY'
   | 'SERVICE_UNAVAILABLE'
