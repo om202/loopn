@@ -19,8 +19,8 @@ export class EmbeddingService {
         .trim()
         .substring(0, 8000); // Cap at 8K characters (Titan v2 limit)
 
-      if (!cleanText || cleanText.length < 10) {
-        throw new Error('Profile text too short for meaningful embedding');
+      if (!cleanText || cleanText.length < 2) {
+        throw new Error('Text too short for meaningful embedding (minimum 2 characters)');
       }
 
       console.log('Generating embedding for text length:', cleanText.length);
@@ -34,12 +34,35 @@ export class EmbeddingService {
         throw new Error('No response data from embedding service');
       }
 
-      // Simple like resume parser - direct data access
-      const result = response.data as {
+      // Handle different response structures
+      let result: {
         embedding: number[];
         dimensions: number;
         inputLength: number;
       };
+
+      // Check if response.data is already parsed
+      if (typeof response.data === 'object' && response.data && 'embedding' in response.data) {
+        result = response.data as {
+          embedding: number[];
+          dimensions: number;
+          inputLength: number;
+        };
+      } else if (typeof response.data === 'string') {
+        // If it's a string, try to parse it
+        try {
+          result = JSON.parse(response.data);
+        } catch (e) {
+          throw new Error(`Failed to parse response data: ${response.data}. Error: ${e}`);
+        }
+      } else {
+        // Direct access as the response structure might be different
+        result = response.data as {
+          embedding: number[];
+          dimensions: number;
+          inputLength: number;
+        };
+      }
 
       if (!result.embedding || !Array.isArray(result.embedding)) {
         throw new Error('Invalid embedding response format');
