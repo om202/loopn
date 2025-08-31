@@ -82,10 +82,10 @@ export class EmbeddingService {
     const client = new BedrockRuntimeClient({ region: 'us-east-1' });
 
     const command = new InvokeModelCommand({
-      modelId: 'amazon.titan-embed-text-v1',
+      modelId: 'amazon.titan-embed-text-v2:0',
       body: JSON.stringify({
         inputText: cleanText,
-        dimensions: 1536,
+        dimensions: 1024,
         normalize: true,
       }),
     });
@@ -93,7 +93,7 @@ export class EmbeddingService {
     const response = await client.send(command);
     const result = JSON.parse(new TextDecoder().decode(response.body));
 
-    return result.embedding; // Array of 1536 floating point numbers
+    return result.embedding; // Array of 1024 floating point numbers
   }
 }
 ```
@@ -107,7 +107,7 @@ export class EmbeddingService {
 ProfileEmbedding: a
   .model({
     userId: a.string().required(),           // Link back to UserProfile
-    embeddingVector: a.string().required(),  // JSON array of 1536 numbers
+    embeddingVector: a.string().required(),  // JSON array of 1024 numbers
     embeddingText: a.string().required(),    // Raw text that was embedded
     profileVersion: a.string(),              // Track profile updates
     createdAt: a.datetime(),
@@ -328,23 +328,23 @@ Return combined results:
 
 **New Approach (separate embedding table):**
 
-- Fetch 1000 embedding records = ~6MB data transfer
+- Fetch 1000 embedding records = ~4MB data transfer
 - Process lightweight chunks
 - Fetch only top 20 full profiles = ~1MB
-- **Total: ~7MB vs 50MB (7x improvement!)**
+- **Total: ~5MB vs 50MB (10x improvement!)**
 
 ### Storage Breakdown
 
 ```
 ProfileEmbedding table (per record):
 - userId: ~50 bytes
-- embeddingVector: ~6KB (1536 floats as JSON)
+- embeddingVector: ~4KB (1024 floats as JSON)
 - embeddingText: ~2KB (compressed profile text)
 - metadata: ~100 bytes
-Total: ~8KB per user
+Total: ~6KB per user
 
 UserProfile table: ~20-50KB per user (with all JSON fields)
-Search efficiency: 2.5-6x improvement
+Search efficiency: 3.5-8x improvement
 ```
 
 ## Query Examples
@@ -390,10 +390,11 @@ The system will handle natural language queries like:
 
 ### AWS Bedrock Setup
 
-- Model: `amazon.titan-embed-text-v1`
-- Dimensions: 1536
+- Model: `amazon.titan-embed-text-v2:0`
+- Dimensions: 1024 (default, can use 512 or 256 for smaller vectors)
 - Region: `us-east-1`
 - Normalization: `true`
+- Multilingual: 100+ languages supported
 
 ### Search Parameters
 
@@ -405,7 +406,7 @@ The system will handle natural language queries like:
 
 1. **Zero Field Logic** - Works with any profile structure
 2. **Future Proof** - New fields automatically included
-3. **High Performance** - 7x faster than fetching full profiles
+3. **High Performance** - 10x faster than fetching full profiles
 4. **Semantic Power** - Natural language understanding
 5. **Scalable** - Clean separation of concerns
 6. **Cost Effective** - Optimized DynamoDB usage

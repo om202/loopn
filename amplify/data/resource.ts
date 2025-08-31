@@ -227,6 +227,19 @@ const schema = a
         // index('isAvailableForChat').sortKeys(['lastSeen'])
       ]),
 
+    // Profile embeddings for semantic search (RAG search functionality)
+    ProfileEmbedding: a
+      .model({
+        userId: a.string().required(),           // Link back to UserProfile
+        embeddingVector: a.string().required(),  // JSON array of 1024 numbers (Titan v2)
+        embeddingText: a.string().required(),    // Raw text that was embedded for search
+        profileVersion: a.string(),              // Track profile updates for cache invalidation
+        createdAt: a.datetime(),
+        updatedAt: a.datetime(),
+      })
+      .identifier(['userId'])
+      .authorization(allow => [allow.authenticated()]),
+
     // User presence - only online/offline status and chat activity
     UserPresence: a
       .model({

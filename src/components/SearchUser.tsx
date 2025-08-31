@@ -2,28 +2,32 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { X, Clock, Search, AlertTriangle } from 'lucide-react';
+import { X, Clock, Search } from 'lucide-react';
 import {
   getSearchHistory,
   addToSearchHistory,
   removeFromSearchHistory,
   type SearchHistoryItem,
 } from '../lib/search-history-utils';
+import { RAGSearchService } from '../services';
+import type { SearchResponse } from '../types/search.types';
 
 interface SearchUserProps {
   onProfessionalRequest?: (request: string) => void;
+  onSearchResults?: (response: SearchResponse) => void;
   userProfile?: Record<string, unknown>;
 }
 
 export default function SearchUser({
   onProfessionalRequest: _onProfessionalRequest,
+  onSearchResults,
   userProfile: _userProfile,
 }: SearchUserProps) {
   const [query, setQuery] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [searchHistory, setSearchHistory] = useState<SearchHistoryItem[]>([]);
   const [showHistory, setShowHistory] = useState(false);
-  const [showUnavailableMessage, setShowUnavailableMessage] = useState(false);
+  const [searchError, setSearchError] = useState<string | null>(null);
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -56,20 +60,42 @@ export default function SearchUser({
     e.preventDefault();
     if (query.trim() && !isProcessing) {
       setIsProcessing(true);
-      // Add to search history for UI purposes
+      setSearchError(null);
+      
+      // Add to search history
       addToSearchHistory(query.trim());
       setSearchHistory(getSearchHistory());
+      
       // Hide dropdown
       setShowHistory(false);
 
-      // Show unavailable message instead of triggering search
-      setShowUnavailableMessage(true);
+      try {
+        console.log('Performing search from SearchUser component:', query.trim());
+        
+        const response = await RAGSearchService.searchProfiles(query.trim(), {
+          limit: 20,
+          minSimilarity: 0.3
+        });
 
-      // Reset processing state and hide message after delay
-      setTimeout(() => {
+        console.log('Search completed:', response);
+        
+        // Notify parent component with results
+        if (onSearchResults) {
+          onSearchResults(response);
+        }
+        
+      } catch (error) {
+        console.error('Search failed:', error);
+        const errorMessage = error instanceof Error 
+          ? error.message 
+          : 'Search failed. Please try again.';
+        setSearchError(errorMessage);
+        
+        // Clear error after 3 seconds
+        setTimeout(() => setSearchError(null), 3000);
+      } finally {
         setIsProcessing(false);
-        setTimeout(() => setShowUnavailableMessage(false), 2000);
-      }, 300);
+      }
     }
   };
 
@@ -92,20 +118,12 @@ export default function SearchUser({
   const handleHistoryItemClick = (historyQuery: string) => {
     setQuery(historyQuery);
     setShowHistory(false);
-    // Show unavailable message instead of triggering search
+    
+    // Trigger search for history item
     if (!isProcessing) {
-      setIsProcessing(true);
-      // Move to top of history
-      addToSearchHistory(historyQuery);
-      setSearchHistory(getSearchHistory());
-
-      // Show unavailable message
-      setShowUnavailableMessage(true);
-
-      setTimeout(() => {
-        setIsProcessing(false);
-        setTimeout(() => setShowUnavailableMessage(false), 2000);
-      }, 300);
+      // Simulate form submission
+      const fakeEvent = { preventDefault: () => {} } as React.FormEvent;
+      handleSubmit(fakeEvent);
     }
   };
 
@@ -240,18 +258,19 @@ export default function SearchUser({
           </div>
         </form>
 
-        {/* Search Unavailable Message */}
-        {showUnavailableMessage && (
-          <div className='absolute top-full left-0 right-0 bg-orange-50 border border-orange-200 rounded-xl shadow-sm z-50 mt-2 p-4'>
+        {/* Search Error Message */}
+        {searchError && (
+          <div className='absolute top-full left-0 right-0 bg-red-50 border border-red-200 rounded-xl shadow-sm z-50 mt-2 p-4'>
             <div className='flex items-center gap-3'>
-              <AlertTriangle className='w-5 h-5 text-orange-500 flex-shrink-0' />
+              <div className='w-5 h-5 bg-red-500 rounded-full flex items-center justify-center flex-shrink-0'>
+                <X className='w-3 h-3 text-white' />
+              </div>
               <div>
-                <p className='text-sm font-medium text-orange-800 mb-1'>
-                  Search Temporarily Unavailable
+                <p className='text-sm font-medium text-red-800 mb-1'>
+                  Search Error
                 </p>
-                <p className='text-xs text-orange-700'>
-                  We're updating our search functionality. Please check back
-                  soon!
+                <p className='text-xs text-red-700'>
+                  {searchError}
                 </p>
               </div>
             </div>

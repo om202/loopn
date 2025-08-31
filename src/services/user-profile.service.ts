@@ -88,7 +88,7 @@ export interface ProfileData {
 }
 
 // Helper function to safely parse JSON fields from database
-function safeParseJsonField<T>(jsonField: any): T | null {
+function safeParseJsonField<T>(jsonField: unknown): T | null {
   if (!jsonField) return null;
 
   // If it's already an object/array, return as is
@@ -132,6 +132,28 @@ function parseUserProfileJsonFields(profile: UserProfile): UserProfile {
 }
 
 export class UserProfileService {
+
+  /**
+   * Get all user profiles (for admin/indexing purposes)
+   * @returns Promise<UserProfile[]> - All user profiles
+   */
+  static async getAllUserProfiles(): Promise<UserProfile[]> {
+    try {
+      const client = getClient();
+      const result = await client.models.UserProfile.list();
+      
+      if (result.data) {
+        console.log(`Retrieved ${result.data.length} user profiles`);
+        return result.data;
+      } else {
+        console.warn('No user profiles found');
+        return [];
+      }
+    } catch (error) {
+      console.error('Error getting all user profiles:', error);
+      return [];
+    }
+  }
   /**
    * Get user profile details for display (replaces anonymous summary)
    */
