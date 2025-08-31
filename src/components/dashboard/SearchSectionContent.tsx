@@ -83,8 +83,6 @@ export default function SearchSectionContent({
       setSearchMetrics(null);
 
       try {
-
-
         const response: SearchResponse = await RAGSearchService.searchProfiles(
           searchTerm,
           {
@@ -96,13 +94,11 @@ export default function SearchSectionContent({
 
         setSearchResults(response.results);
         setSearchMetrics(response.metrics);
-        
+
         // Check if response contains error from SearchUser component
         if (response.error) {
           setError(response.error);
         }
-
-
       } catch (searchError) {
         console.error('Search failed:', searchError);
         const errorMessage =
@@ -125,7 +121,7 @@ export default function SearchSectionContent({
       setSearchMetrics(searchResponse.metrics);
       setHasSearched(true);
       setIsSearching(false);
-      
+
       if (searchResponse.error) {
         setError(searchResponse.error);
       } else {
@@ -152,9 +148,7 @@ export default function SearchSectionContent({
             <div className='w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-full flex items-center justify-center'>
               <Search className='w-8 h-8 text-slate-500' />
             </div>
-            <h3 className='text-lg font-medium text-black mb-1'>
-              Search
-            </h3>
+            <h3 className='text-lg font-medium text-black mb-1'>Search</h3>
           </div>
         ) : isSearching ? (
           <div className='transition-opacity duration-200 opacity-100'>
@@ -170,7 +164,11 @@ export default function SearchSectionContent({
             </h3>
             <p className='text-slate-500 text-sm max-w-md mx-auto mb-3'>
               {searchQuery ? (
-                <>No professionals found matching <span className='font-medium'>"{searchQuery}"</span>. Try different keywords or broader terms.</>
+                <>
+                  No professionals found matching{' '}
+                  <span className='font-medium'>"{searchQuery}"</span>. Try
+                  different keywords or broader terms.
+                </>
               ) : (
                 'Try adjusting your search terms or using different keywords.'
               )}

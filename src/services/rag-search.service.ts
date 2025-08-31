@@ -51,16 +51,12 @@ export class RAGSearchService {
     }
 
     try {
-
-
       // Step 1: Convert query to embedding vector
       const embeddingStart = Date.now();
       const queryEmbedding = await EmbeddingService.generateEmbedding(
         searchOptions.query
       );
       queryEmbeddingTimeMs = Date.now() - embeddingStart;
-
-
 
       // Step 2: Fetch all embedding chunks (lightweight operation)
       const processingStart = Date.now();
@@ -74,8 +70,6 @@ export class RAGSearchService {
         );
       }
 
-
-
       // Step 3: Parse embeddings and calculate similarities
       const parsedEmbeddings =
         RAGSearchService.parseEmbeddings(embeddingChunks);
@@ -86,7 +80,6 @@ export class RAGSearchService {
       );
 
       processingTimeMs = Date.now() - processingStart;
-
 
       // Step 4: Sort by similarity and apply limit
       const topChunks = matchedChunks
@@ -110,8 +103,6 @@ export class RAGSearchService {
       );
       fetchTimeMs = Date.now() - fetchStart;
 
-
-
       // Step 6: Build response with metrics
       const metrics: SearchMetrics = {
         totalProcessed: embeddingChunks.length,
@@ -128,8 +119,6 @@ export class RAGSearchService {
         totalFound: matchedChunks.length,
       };
 
-
-
       return response;
     } catch (error) {
       console.error('RAG search failed:', error);
@@ -144,14 +133,16 @@ export class RAGSearchService {
   /**
    * Parse embedding vectors from database records
    */
-  private static parseEmbeddings(embeddingChunks: Array<{
-    userId: string;
-    embeddingVector: string;
-    embeddingText?: string | null;
-    profileVersion?: string | null;
-    createdAt?: string | null;
-    updatedAt?: string | null;
-  }>): ParsedEmbedding[] {
+  private static parseEmbeddings(
+    embeddingChunks: Array<{
+      userId: string;
+      embeddingVector: string;
+      embeddingText?: string | null;
+      profileVersion?: string | null;
+      createdAt?: string | null;
+      updatedAt?: string | null;
+    }>
+  ): ParsedEmbedding[] {
     const parsedEmbeddings: ParsedEmbedding[] = [];
 
     for (const chunk of embeddingChunks) {

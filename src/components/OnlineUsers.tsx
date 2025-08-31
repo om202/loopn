@@ -64,7 +64,9 @@ export default function OnlineUsers({
     useState<SidebarSection>('suggested');
   const [searchQuery, setSearchQuery] = useState('');
   const [shouldTriggerSearch, setShouldTriggerSearch] = useState(false);
-  const [searchResponse, setSearchResponse] = useState<SearchResponse | null>(null);
+  const [searchResponse, setSearchResponse] = useState<SearchResponse | null>(
+    null
+  );
 
   const [optimisticPendingRequests, setOptimisticPendingRequests] = useState<
     Set<string>
@@ -438,7 +440,7 @@ export default function OnlineUsers({
     setSearchQuery(response.query);
     setSearchResponse(response); // Store the entire response
     setShouldTriggerSearch(true);
-    
+
     // Reset trigger after a short delay
     setTimeout(() => setShouldTriggerSearch(false), 100);
   };

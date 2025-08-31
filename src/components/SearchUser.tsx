@@ -59,7 +59,7 @@ export default function SearchUser({
   const handleSubmit = async (e: React.FormEvent, searchQuery?: string) => {
     e.preventDefault();
     const queryToSearch = searchQuery || query.trim();
-    
+
     if (queryToSearch && !isProcessing) {
       setIsProcessing(true);
 
@@ -82,10 +82,13 @@ export default function SearchUser({
         }
       } catch (error) {
         console.error('Search failed:', error);
-        
+
         // Still call onSearchResults with empty results so SearchSectionContent can show error state
         if (onSearchResults) {
-          const errorMessage = error instanceof Error ? error.message : 'Search failed. Please try again.';
+          const errorMessage =
+            error instanceof Error
+              ? error.message
+              : 'Search failed. Please try again.';
           onSearchResults({
             results: [],
             metrics: {

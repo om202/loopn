@@ -1,5 +1,6 @@
 import type { Schema } from '../../amplify/data/resource';
 import { getClient } from '../lib/amplify-config';
+import { EmbeddingManager } from './embedding-manager.service';
 
 type UserProfile = Schema['UserProfile']['type'];
 type DataResult<T> = { data: T | null; error: string | null };
@@ -230,8 +231,36 @@ export class UserProfileService {
         onboardingCompletedAt: new Date().toISOString(),
       });
 
-      // Note: User profile indexing for search has been removed
-      console.log('User profile created successfully:', userId);
+      if (result.data) {
+        console.log('User profile created successfully:', userId);
+
+        // Auto-index the new profile for RAG search
+        try {
+          console.log('Creating embedding for new user profile:', userId);
+          const embeddingResult = await EmbeddingManager.createProfileEmbedding(
+            userId,
+            result.data
+          );
+
+          if (embeddingResult.error) {
+            console.warn(
+              'Failed to create embedding for new profile:',
+              embeddingResult.error
+            );
+          } else {
+            console.log(
+              'Successfully created embedding for new profile:',
+              userId
+            );
+          }
+        } catch (embeddingError) {
+          // Don't fail profile creation if embedding fails
+          console.error(
+            'Error creating embedding for new profile:',
+            embeddingError
+          );
+        }
+      }
 
       return {
         data: result.data,
@@ -292,8 +321,33 @@ export class UserProfileService {
         ...filteredJsonFields,
       });
 
-      // Note: User profile re-indexing for search has been removed
-      console.log('User profile updated successfully:', userId);
+      if (result.data) {
+        console.log('User profile updated successfully:', userId);
+
+        // Auto-update the profile embedding for RAG search
+        try {
+          console.log('Updating embedding for modified user profile:', userId);
+          const embeddingResult = await EmbeddingManager.updateProfileEmbedding(
+            userId,
+            result.data
+          );
+
+          if (embeddingResult.error) {
+            console.warn(
+              'Failed to update embedding for profile:',
+              embeddingResult.error
+            );
+          } else {
+            console.log('Successfully updated embedding for profile:', userId);
+          }
+        } catch (embeddingError) {
+          // Don't fail profile update if embedding fails
+          console.error(
+            'Error updating embedding for profile:',
+            embeddingError
+          );
+        }
+      }
 
       return {
         data: result.data,

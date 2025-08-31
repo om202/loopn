@@ -20,10 +20,10 @@ export class EmbeddingService {
         .substring(0, 8000); // Cap at 8K characters (Titan v2 limit)
 
       if (!cleanText || cleanText.length < 2) {
-        throw new Error('Text too short for meaningful embedding (minimum 2 characters)');
+        throw new Error(
+          'Text too short for meaningful embedding (minimum 2 characters)'
+        );
       }
-
-
 
       const client = getClient();
       const response = await client.queries.generateEmbedding({
@@ -42,7 +42,11 @@ export class EmbeddingService {
       };
 
       // Check if response.data is already parsed
-      if (typeof response.data === 'object' && response.data && 'embedding' in response.data) {
+      if (
+        typeof response.data === 'object' &&
+        response.data &&
+        'embedding' in response.data
+      ) {
         result = response.data as {
           embedding: number[];
           dimensions: number;
@@ -53,7 +57,9 @@ export class EmbeddingService {
         try {
           result = JSON.parse(response.data);
         } catch (e) {
-          throw new Error(`Failed to parse response data: ${response.data}. Error: ${e}`);
+          throw new Error(
+            `Failed to parse response data: ${response.data}. Error: ${e}`
+          );
         }
       } else {
         // Direct access as the response structure might be different
@@ -73,7 +79,6 @@ export class EmbeddingService {
           `Expected 1024 dimensions, got ${result.embedding.length}`
         );
       }
-
 
       return result.embedding; // Array of 1024 floating point numbers
     } catch (error) {
