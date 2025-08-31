@@ -193,7 +193,7 @@ export class EmbeddingManager {
         userId: userId,
       });
 
-      return { data: result.data, error: result.error || null };
+      return { data: result.data, error: result.errors?.[0]?.message || null };
     } catch (error) {
       const errorMessage =
         error instanceof Error
