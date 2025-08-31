@@ -18,6 +18,7 @@ import {
   AccountContent,
 } from './dashboard';
 import SearchUser from './SearchUser';
+import type { SearchResponse } from '../types/search.types';
 import BugReportDialog from './BugReportDialog';
 import { useChatActions } from '../hooks/useChatActions';
 import { useUserCategorization } from '../hooks/useUserCategorization';
@@ -429,6 +430,17 @@ export default function OnlineUsers({
     onProfessionalRequest?.(query);
   };
 
+  // Handle search results from SearchUser component
+  const handleSearchResults = (response: SearchResponse) => {
+    // Switch to search section and trigger search with results
+    setActiveSection('search');
+    setSearchQuery(response.query);
+    setShouldTriggerSearch(true);
+    
+    // Reset trigger after a short delay
+    setTimeout(() => setShouldTriggerSearch(false), 100);
+  };
+
   const handleMarkAllAsRead = async () => {
     if (!user || !centralizedNotifications.length) return;
     try {
@@ -509,6 +521,7 @@ export default function OnlineUsers({
         <div className='flex-shrink-0 mb-4 sm:mb-6 w-full max-w-5xl mx-auto px-1 sm:px-2'>
           <SearchUser
             onProfessionalRequest={handleProfessionalRequest}
+            onSearchResults={handleSearchResults}
             userProfile={currentUserProfile || undefined}
           />
         </div>

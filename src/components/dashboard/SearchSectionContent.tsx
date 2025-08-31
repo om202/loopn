@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useCallback } from 'react';
-import Image from 'next/image';
-import { Search, User } from 'lucide-react';
+import { Search } from 'lucide-react';
+import UserAvatar from '../UserAvatar';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import LoadingContainer from '../LoadingContainer';
 import { RAGSearchService } from '../../services';
@@ -165,19 +165,14 @@ export default function SearchSectionContent({
               >
                 <div className='flex items-start gap-4'>
                   {/* Profile Picture */}
-                  <div className='w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center flex-shrink-0'>
-                    {result.profile.profilePictureUrl ? (
-                      <Image
-                        src={result.profile.profilePictureUrl}
-                        alt={result.profile.fullName || 'User'}
-                        width={48}
-                        height={48}
-                        className='w-12 h-12 rounded-full object-cover'
-                      />
-                    ) : (
-                      <User className='w-6 h-6 text-slate-500' />
-                    )}
-                  </div>
+                  <UserAvatar
+                    userId={result.userId}
+                    profilePictureUrl={result.profile.profilePictureUrl}
+                    hasProfilePicture={result.profile.hasProfilePicture}
+                    size='sm'
+                    shape='circular'
+                    className='flex-shrink-0'
+                  />
 
                   {/* Profile Info */}
                   <div className='flex-1 min-w-0'>

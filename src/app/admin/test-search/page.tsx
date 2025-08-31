@@ -2,7 +2,8 @@
 
 import React, { useState } from 'react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
-import { Search, User, Database, CheckCircle } from 'lucide-react';
+import { Search, Database, CheckCircle } from 'lucide-react';
+import UserAvatar from '../../../components/UserAvatar';
 import {
   RAGSearchService,
   EmbeddingService,
@@ -293,17 +294,14 @@ export default function TestSearchPage() {
                     >
                       <div className='flex items-start gap-4'>
                         {/* Profile Picture */}
-                        <div className='w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0'>
-                          {result.profile.profilePictureUrl ? (
-                            <img
-                              src={result.profile.profilePictureUrl}
-                              alt={result.profile.fullName || 'User'}
-                              className='w-12 h-12 rounded-full object-cover'
-                            />
-                          ) : (
-                            <User className='w-6 h-6 text-gray-500' />
-                          )}
-                        </div>
+                        <UserAvatar
+                          userId={result.userId}
+                          profilePictureUrl={result.profile.profilePictureUrl}
+                          hasProfilePicture={result.profile.hasProfilePicture}
+                          size='sm'
+                          shape='circular'
+                          className='flex-shrink-0'
+                        />
 
                         {/* Profile Info */}
                         <div className='flex-1 min-w-0'>
