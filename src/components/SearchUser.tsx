@@ -56,28 +56,25 @@ export default function SearchUser({
     };
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent, searchQuery?: string) => {
     e.preventDefault();
-    if (query.trim() && !isProcessing) {
+    const queryToSearch = searchQuery || query.trim();
+    
+    if (queryToSearch && !isProcessing) {
       setIsProcessing(true);
 
-
       // Add to search history
-      addToSearchHistory(query.trim());
+      addToSearchHistory(queryToSearch);
       setSearchHistory(getSearchHistory());
 
       // Hide dropdown
       setShowHistory(false);
 
       try {
-
-
-        const response = await RAGSearchService.searchProfiles(query.trim(), {
+        const response = await RAGSearchService.searchProfiles(queryToSearch, {
           limit: 20,
           minSimilarity: 0.3,
         });
-
-
 
         // Notify parent component with results
         if (onSearchResults) {
@@ -98,7 +95,7 @@ export default function SearchUser({
               processingTimeMs: 0,
               fetchTimeMs: 0,
             },
-            query: query.trim(),
+            query: queryToSearch,
             totalFound: 0,
             error: errorMessage, // Pass error to SearchSectionContent
           });
@@ -131,9 +128,9 @@ export default function SearchUser({
 
     // Trigger search for history item
     if (!isProcessing) {
-      // Simulate form submission
+      // Create a fake event and pass the query directly
       const fakeEvent = { preventDefault: () => {} } as React.FormEvent;
-      handleSubmit(fakeEvent);
+      handleSubmit(fakeEvent, historyQuery);
     }
   };
 
