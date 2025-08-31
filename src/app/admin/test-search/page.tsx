@@ -25,7 +25,7 @@ export default function TestSearchPage() {
   const [testQueries] = useState({
     semantic: [
       'React developers',
-      'Python engineers', 
+      'Python engineers',
       'UX designers',
       'Software engineers in San Francisco',
       'Machine learning researchers',
@@ -41,8 +41,8 @@ export default function TestSearchPage() {
       'Google',
       'Microsoft',
       'Netflix',
-      'Uber'
-    ]
+      'Uber',
+    ],
   });
 
   const performSearch = async (searchQuery: string) => {
@@ -209,7 +209,7 @@ export default function TestSearchPage() {
             <h3 className='text-sm font-medium text-gray-700 mb-3'>
               Quick Hybrid Search Tests:
             </h3>
-            
+
             {/* Semantic Queries */}
             <div className='mb-4'>
               <h4 className='text-xs font-medium text-blue-600 mb-2 uppercase tracking-wide'>

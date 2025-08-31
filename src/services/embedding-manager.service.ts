@@ -65,15 +65,18 @@ export class EmbeddingManager {
           dimensions: embeddingVector.length,
           version: profileVersion,
         });
-        
+
         // Also add to BM25 index
         try {
           BM25SearchService.addDocument(userId, profileText);
           console.log('Successfully added profile to BM25 index:', userId);
         } catch (bm25Error) {
-          console.warn('Failed to add to BM25 index (non-critical):', bm25Error);
+          console.warn(
+            'Failed to add to BM25 index (non-critical):',
+            bm25Error
+          );
         }
-        
+
         return { data: result.data, error: null };
       } else {
         const error = 'Failed to create profile embedding - no data returned';
@@ -135,15 +138,18 @@ export class EmbeddingManager {
           dimensions: embeddingVector.length,
           version: profileVersion,
         });
-        
+
         // Also update BM25 index
         try {
           BM25SearchService.updateDocument(userId, profileText);
           console.log('Successfully updated profile in BM25 index:', userId);
         } catch (bm25Error) {
-          console.warn('Failed to update BM25 index (non-critical):', bm25Error);
+          console.warn(
+            'Failed to update BM25 index (non-critical):',
+            bm25Error
+          );
         }
-        
+
         return { data: result.data, error: null };
       } else {
         const error = 'Failed to update profile embedding - no data returned';
@@ -180,15 +186,18 @@ export class EmbeddingManager {
 
       if (result.data) {
         console.log('Successfully deleted profile embedding for user:', userId);
-        
+
         // Also remove from BM25 index
         try {
           BM25SearchService.removeDocument(userId);
           console.log('Successfully removed profile from BM25 index:', userId);
         } catch (bm25Error) {
-          console.warn('Failed to remove from BM25 index (non-critical):', bm25Error);
+          console.warn(
+            'Failed to remove from BM25 index (non-critical):',
+            bm25Error
+          );
         }
-        
+
         return { success: true, error: null };
       } else {
         const error = 'Failed to delete profile embedding - no data returned';
@@ -463,16 +472,16 @@ export class EmbeddingManager {
    * Should be called on application startup
    * @returns Promise<{ success: boolean; count: number; error?: string }>
    */
-  static async initializeBM25Index(): Promise<{ 
-    success: boolean; 
-    count: number; 
-    error?: string 
+  static async initializeBM25Index(): Promise<{
+    success: boolean;
+    count: number;
+    error?: string;
   }> {
     try {
       console.log('Initializing BM25 index with existing embeddings...');
-      
+
       const embeddings = await EmbeddingManager.getAllEmbeddings();
-      
+
       if (embeddings.length === 0) {
         console.log('No embeddings found, BM25 index will be empty');
         BM25SearchService.buildIndex([]);
@@ -481,24 +490,26 @@ export class EmbeddingManager {
 
       // Extract text data for BM25 indexing
       const bm25Data = embeddings
-        .filter(embedding => embedding.embeddingText && embedding.embeddingText.trim())
+        .filter(
+          embedding => embedding.embeddingText && embedding.embeddingText.trim()
+        )
         .map(embedding => ({
           userId: embedding.userId,
-          text: embedding.embeddingText || ''
+          text: embedding.embeddingText || '',
         }));
 
       // Initialize BM25 index (convert to expected format)
       const bm25FormattedData = bm25Data.map(item => ({
         userId: item.userId,
-        embeddingText: item.text
+        embeddingText: item.text,
       }));
       await BM25SearchService.initializeFromEmbeddings(bm25FormattedData);
-      
+
       console.log(`BM25 index initialized with ${bm25Data.length} profiles`);
       return { success: true, count: bm25Data.length };
-      
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
       console.error('Failed to initialize BM25 index:', errorMessage);
       return { success: false, count: 0, error: errorMessage };
     }
