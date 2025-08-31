@@ -207,13 +207,13 @@ export default function TestSearchPage() {
           {/* Quick Test Queries */}
           <div className='mb-6'>
             <h3 className='text-sm font-medium text-gray-700 mb-3'>
-              Quick Hybrid Search Tests:
+              Hybrid Search Tests (50% Vector + 50% Text):
             </h3>
 
             {/* Semantic Queries */}
             <div className='mb-4'>
               <h4 className='text-xs font-medium text-blue-600 mb-2 uppercase tracking-wide'>
-                Semantic Queries (Vector-weighted)
+                Semantic Queries
               </h4>
               <div className='flex flex-wrap gap-2'>
                 {testQueries.semantic.map((testQuery, idx) => (
@@ -234,8 +234,8 @@ export default function TestSearchPage() {
 
             {/* Exact Term Queries */}
             <div className='mb-4'>
-              <h4 className='text-xs font-medium text-purple-600 mb-2 uppercase tracking-wide'>
-                Exact Terms (BM25-weighted)
+              <h4 className='text-xs font-medium text-green-600 mb-2 uppercase tracking-wide'>
+                Exact Terms
               </h4>
               <div className='flex flex-wrap gap-2'>
                 {testQueries.exact.map((testQuery, idx) => (
@@ -246,7 +246,7 @@ export default function TestSearchPage() {
                       performSearch(testQuery);
                     }}
                     disabled={isSearching}
-                    className='px-3 py-1 text-sm bg-purple-50 text-purple-700 rounded-md hover:bg-purple-100 disabled:opacity-50 border border-purple-200'
+                    className='px-3 py-1 text-sm bg-green-50 text-green-700 rounded-md hover:bg-green-100 disabled:opacity-50 border border-green-200'
                   >
                     {testQuery}
                   </button>

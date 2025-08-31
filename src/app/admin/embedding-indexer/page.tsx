@@ -46,7 +46,6 @@ export default function EmbeddingIndexerPage() {
     isInitializing: boolean;
     success?: boolean;
     vectorCount?: number;
-    bm25Count?: number;
     error?: string;
   }>({ isInitializing: false });
 
@@ -207,7 +206,7 @@ export default function EmbeddingIndexerPage() {
       // After successful indexing, initialize BM25 index
       if (totalSuccessful.length > 0) {
         console.log(
-          'Initializing BM25 index after successful embedding generation...'
+          'Initializing hybrid search after successful embedding generation...'
         );
         try {
           const hybridInit = await RAGSearchService.initializeHybridSearch();
@@ -215,18 +214,17 @@ export default function EmbeddingIndexerPage() {
             isInitializing: false,
             success: hybridInit.success,
             vectorCount: hybridInit.vectorCount,
-            bm25Count: hybridInit.bm25Count,
             error: hybridInit.error,
           });
         } catch (hybridError) {
-          console.error('BM25 initialization failed:', hybridError);
+          console.error('Hybrid search initialization failed:', hybridError);
           setHybridInitStatus({
             isInitializing: false,
             success: false,
             error:
               hybridError instanceof Error
                 ? hybridError.message
-                : 'BM25 initialization failed',
+                : 'Hybrid search initialization failed',
           });
         }
       }
@@ -249,18 +247,17 @@ export default function EmbeddingIndexerPage() {
     setHybridInitStatus({ isInitializing: true });
 
     try {
-      console.log('Manually initializing BM25 hybrid search...');
+      console.log('Manually initializing hybrid search...');
       const result = await RAGSearchService.initializeHybridSearch();
 
       setHybridInitStatus({
         isInitializing: false,
         success: result.success,
         vectorCount: result.vectorCount,
-        bm25Count: result.bm25Count,
         error: result.error,
       });
 
-      console.log('BM25 initialization result:', result);
+      console.log('Hybrid search initialization result:', result);
     } catch (error) {
       console.error('Manual BM25 initialization failed:', error);
       setHybridInitStatus({
@@ -471,7 +468,7 @@ export default function EmbeddingIndexerPage() {
           <div className='flex items-center justify-between mb-4'>
             <h2 className='text-xl font-semibold text-gray-900 flex items-center gap-2'>
               <Search className='w-5 h-5' />
-              Hybrid Search (BM25) Setup
+              Hybrid Search Setup
             </h2>
             <button
               onClick={initializeBM25Index}
@@ -483,14 +480,14 @@ export default function EmbeddingIndexerPage() {
               ) : (
                 <Database className='w-4 h-4' />
               )}
-              Initialize BM25 Index
+              Initialize Hybrid Search
             </button>
           </div>
 
           <p className='text-gray-600 mb-4'>
-            Initialize the BM25 keyword search index to enable hybrid search
-            functionality. This combines vector embeddings with keyword matching
-            for better exact term searches.
+            Initialize the hybrid search functionality. This combines vector
+            embeddings with text keyword matching for better exact term
+            searches.
           </p>
 
           {hybridInitStatus.success !== undefined && (
@@ -513,7 +510,7 @@ export default function EmbeddingIndexerPage() {
                 )}
                 <span className='font-medium'>
                   {hybridInitStatus.success
-                    ? 'BM25 Index Initialized'
+                    ? 'Hybrid Search Initialized'
                     : 'Initialization Failed'}
                 </span>
               </div>
@@ -525,8 +522,7 @@ export default function EmbeddingIndexerPage() {
                     {hybridInitStatus.vectorCount}
                   </div>
                   <div>
-                    <span className='font-medium'>BM25 Documents:</span>{' '}
-                    {hybridInitStatus.bm25Count}
+                    <span className='font-medium'>Text Search:</span> Ready ✓
                   </div>
                 </div>
               ) : (

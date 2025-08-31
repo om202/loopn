@@ -1,7 +1,6 @@
 import { getClient } from '../lib/amplify-config';
 import { EmbeddingService } from './embedding.service';
 import { EmbeddingManager } from './embedding-manager.service';
-import { BM25SearchService } from './bm25-search.service';
 import type {
   SearchOptions,
   SearchResponse,
@@ -15,12 +14,12 @@ import type {
 // type UserProfile = Schema['UserProfile']['type'];
 
 /**
- * RAG (Retrieval-Augmented Generation) Search Service
- * Provides semantic search across user profiles using embedding similarity
+ * Hybrid Search Service
+ * Combines semantic vector search with text-based keyword matching
  */
 export class RAGSearchService {
   /**
-   * Main search function - hybrid search using Vector + BM25
+   * Main search function - hybrid search using Vector + Text Search
    * @param query - Natural language search query
    * @param options - Search options and parameters
    * @returns Promise<SearchResponse> - Search results with metrics
@@ -30,7 +29,7 @@ export class RAGSearchService {
     options: Partial<SearchOptions> = {}
   ): Promise<SearchResponse> {
     let queryEmbeddingTimeMs = 0;
-    let bm25SearchTimeMs = 0;
+    let textSearchTimeMs = 0;
     let processingTimeMs = 0;
     let fetchTimeMs = 0;
 
@@ -58,7 +57,7 @@ export class RAGSearchService {
       // Step 1: Run both searches in parallel
       console.log(`Starting hybrid search for: "${searchOptions.query}"`);
 
-      const [queryEmbedding, bm25Results, embeddingChunks] = await Promise.all([
+      const [queryEmbedding, embeddingChunks] = await Promise.all([
         // Vector search: Generate query embedding
         (async () => {
           const start = Date.now();
@@ -69,20 +68,18 @@ export class RAGSearchService {
           return embedding;
         })(),
 
-        // BM25 search: Get keyword-based results
-        (async () => {
-          const start = Date.now();
-          const results = BM25SearchService.search(
-            searchOptions.query,
-            (searchOptions.limit || 20) * 2
-          );
-          bm25SearchTimeMs = Date.now() - start;
-          return results;
-        })(),
-
-        // Get all embeddings for vector search
+        // Get all embeddings for both vector and text search
         EmbeddingManager.getAllEmbeddings(),
       ]);
+
+      // Text search: Search in profile texts
+      const textSearchStart = Date.now();
+      const textResults = RAGSearchService.performTextSearch(
+        searchOptions.query,
+        embeddingChunks,
+        (searchOptions.limit || 20) * 2
+      );
+      textSearchTimeMs = Date.now() - textSearchStart;
 
       if (embeddingChunks.length === 0) {
         console.warn('No profile embeddings found in database');
@@ -104,7 +101,7 @@ export class RAGSearchService {
       // Step 3: Combine and score results using hybrid approach
       const hybridResults = RAGSearchService.combineHybridResults(
         vectorResults,
-        bm25Results,
+        textResults,
         searchOptions.query,
         searchOptions
       );
@@ -133,7 +130,7 @@ export class RAGSearchService {
         totalProcessed: embeddingChunks.length,
         totalMatched: hybridResults.length,
         queryEmbeddingTimeMs,
-        processingTimeMs: processingTimeMs + bm25SearchTimeMs, // Include BM25 time
+        processingTimeMs: processingTimeMs + textSearchTimeMs, // Include text search time
         fetchTimeMs,
       };
 
@@ -148,7 +145,7 @@ export class RAGSearchService {
         `Hybrid search completed: ${results.length} results in ${
           queryEmbeddingTimeMs +
           processingTimeMs +
-          bm25SearchTimeMs +
+          textSearchTimeMs +
           fetchTimeMs
         }ms`
       );
@@ -381,12 +378,59 @@ export class RAGSearchService {
   }
 
   /**
-   * Combine vector and BM25 results with intelligent hybrid scoring
-   * @param vectorResults - Results from vector similarity search
-   * @param bm25Results - Results from BM25 keyword search
-   * @param query - Original search query
-   * @param options - Search options
-   * @returns Combined and sorted hybrid results
+   * Perform simple text-based keyword search on profile texts
+   */
+  private static performTextSearch(
+    query: string,
+    embeddings: Array<{ userId: string; embeddingText?: string | null }>,
+    limit: number = 20
+  ): Array<{ userId: string; score: number }> {
+    const queryTerms = query
+      .toLowerCase()
+      .trim()
+      .split(/\s+/)
+      .filter(term => term.length > 2);
+
+    if (queryTerms.length === 0) {
+      return [];
+    }
+
+    const results: Array<{ userId: string; score: number }> = [];
+
+    for (const embedding of embeddings) {
+      if (!embedding.embeddingText) continue;
+
+      const text = embedding.embeddingText.toLowerCase();
+      let score = 0;
+
+      for (const term of queryTerms) {
+        // Count exact matches
+        const exactMatches = (
+          text.match(new RegExp(`\\b${term}\\b`, 'g')) || []
+        ).length;
+
+        // Count partial matches (less weight)
+        const partialMatches =
+          (text.match(new RegExp(term, 'g')) || []).length - exactMatches;
+
+        // Score calculation: exact matches worth more
+        score += exactMatches * 2 + partialMatches * 1;
+      }
+
+      if (score > 0) {
+        results.push({
+          userId: embedding.userId,
+          score: score,
+        });
+      }
+    }
+
+    // Sort by score and limit results
+    return results.sort((a, b) => b.score - a.score).slice(0, limit);
+  }
+
+  /**
+   * Combine vector and text search results with 50/50 hybrid scoring
    */
   private static combineHybridResults(
     vectorResults: Array<{
@@ -394,27 +438,22 @@ export class RAGSearchService {
       similarity: number;
       embeddingText?: string;
     }>,
-    bm25Results: Array<{ userId: string; score: number }>,
+    textResults: Array<{ userId: string; score: number }>,
     query: string,
     options: SearchOptions
   ): Array<{ userId: string; similarity: number; embeddingText?: string }> {
-    // Determine if this is an exact term query
-    const isExactQuery = BM25SearchService.isExactTermQuery(query);
+    // Simple 50/50 weighting - no complex classification needed
+    const vectorWeight = 0.5;
+    const textWeight = 0.5;
 
-    // Set weights based on query type
-    const vectorWeight = isExactQuery ? 0.3 : 0.7;
-    const bm25Weight = isExactQuery ? 0.7 : 0.3;
-
-    console.log(
-      `Query "${query}" classified as ${isExactQuery ? 'exact term' : 'semantic'} - using weights: vector=${vectorWeight}, BM25=${bm25Weight}`
-    );
+    console.log(`Hybrid search: 50% vector + 50% text for "${query}"`);
 
     // Normalize scores to 0-1 range
     const maxVectorScore = Math.max(
       ...vectorResults.map(r => r.similarity),
       0.001
     );
-    const maxBM25Score = Math.max(...bm25Results.map(r => r.score), 0.001);
+    const maxTextScore = Math.max(...textResults.map(r => r.score), 0.001);
 
     // Create maps for fast lookup
     const vectorMap = new Map(
@@ -426,14 +465,14 @@ export class RAGSearchService {
         },
       ])
     );
-    const bm25Map = new Map(
-      bm25Results.map(r => [r.userId, r.score / maxBM25Score])
+    const textMap = new Map(
+      textResults.map(r => [r.userId, r.score / maxTextScore])
     );
 
     // Get all unique user IDs from both searches
     const allUserIds = new Set([
       ...vectorResults.map(r => r.userId),
-      ...bm25Results.map(r => r.userId),
+      ...textResults.map(r => r.userId),
     ]);
 
     // Combine scores for each user
@@ -450,16 +489,13 @@ export class RAGSearchService {
       }
 
       const vectorScore = vectorMap.get(userId)?.score || 0;
-      const bm25Score = bm25Map.get(userId) || 0;
+      const textScore = textMap.get(userId) || 0;
 
       // Calculate hybrid score
-      const hybridScore = vectorScore * vectorWeight + bm25Score * bm25Weight;
+      const hybridScore = vectorScore * vectorWeight + textScore * textWeight;
 
-      // Apply minimum similarity threshold (based on vector component for semantic relevance)
-      if (
-        vectorScore >= options.minSimilarity! ||
-        (isExactQuery && bm25Score > 0)
-      ) {
+      // Apply minimum similarity threshold
+      if (vectorScore >= options.minSimilarity! || textScore > 0) {
         hybridResults.push({
           userId,
           similarity: hybridScore,
@@ -472,7 +508,7 @@ export class RAGSearchService {
     hybridResults.sort((a, b) => b.similarity - a.similarity);
 
     console.log(
-      `Hybrid scoring: ${hybridResults.length} combined results (vector: ${vectorResults.length}, BM25: ${bm25Results.length})`
+      `Hybrid scoring: ${hybridResults.length} combined results (vector: ${vectorResults.length}, text: ${textResults.length})`
     );
 
     return hybridResults;
@@ -510,44 +546,28 @@ export class RAGSearchService {
 
   /**
    * Initialize the hybrid search system (call on app startup)
-   * Sets up both vector embeddings and BM25 index
-   * @returns Promise<{ success: boolean; vectorCount: number; bm25Count: number; error?: string }>
+   * Sets up vector embeddings (text search requires no setup)
+   * @returns Promise<{ success: boolean; vectorCount: number; error?: string }>
    */
   static async initializeHybridSearch(): Promise<{
     success: boolean;
     vectorCount: number;
-    bm25Count: number;
     error?: string;
   }> {
     try {
       console.log('Initializing hybrid search system...');
 
-      // Initialize BM25 index from existing embeddings
-      const bm25Result = await EmbeddingManager.initializeBM25Index();
-
-      if (!bm25Result.success) {
-        return {
-          success: false,
-          vectorCount: 0,
-          bm25Count: 0,
-          error: `BM25 initialization failed: ${bm25Result.error}`,
-        };
-      }
-
-      // Get stats on vector embeddings
+      // Get stats on vector embeddings (text search needs no initialization)
       const embeddings = await EmbeddingManager.getAllEmbeddings();
-      const bm25Stats = BM25SearchService.getIndexStats();
 
       console.log('Hybrid search system initialized successfully:', {
         vectorEmbeddings: embeddings.length,
-        bm25Documents: bm25Stats.totalDocuments,
-        bm25Ready: bm25Stats.isReady,
+        textSearchReady: true, // Text search is always ready
       });
 
       return {
         success: true,
         vectorCount: embeddings.length,
-        bm25Count: bm25Stats.totalDocuments,
       };
     } catch (error) {
       const errorMessage =
@@ -557,7 +577,6 @@ export class RAGSearchService {
       return {
         success: false,
         vectorCount: 0,
-        bm25Count: 0,
         error: errorMessage,
       };
     }
