@@ -28,39 +28,35 @@ export class EmbeddingService {
       const client = getClient();
       const response = await client.queries.generateEmbedding({
         text: cleanText,
-        action: 'generate',
       });
 
       if (!response.data) {
         throw new Error('No response data from embedding service');
       }
 
+      // Simple like resume parser - direct data access
       const result = response.data as {
-        success: boolean;
-        data?: { embedding: number[]; dimensions: number; inputLength: number };
-        error?: string;
+        embedding: number[];
+        dimensions: number;
+        inputLength: number;
       };
 
-      if (!result.success) {
-        throw new Error(result.error || 'Embedding generation failed');
-      }
-
-      if (!result.data?.embedding || !Array.isArray(result.data.embedding)) {
+      if (!result.embedding || !Array.isArray(result.embedding)) {
         throw new Error('Invalid embedding response format');
       }
 
-      if (result.data.embedding.length !== 1024) {
+      if (result.embedding.length !== 1024) {
         throw new Error(
-          `Expected 1024 dimensions, got ${result.data.embedding.length}`
+          `Expected 1024 dimensions, got ${result.embedding.length}`
         );
       }
 
       console.log(
         'Successfully generated embedding with',
-        result.data.embedding.length,
+        result.embedding.length,
         'dimensions'
       );
-      return result.data.embedding; // Array of 1024 floating point numbers
+      return result.embedding; // Array of 1024 floating point numbers
     } catch (error) {
       console.error('Error generating embedding:', error);
 
@@ -146,32 +142,18 @@ export class EmbeddingService {
     testText: string = 'Software engineer with React and Node.js experience'
   ): Promise<boolean> {
     try {
-      const client = getClient();
-      const response = await client.queries.generateEmbedding({
-        text: testText,
-        action: 'test',
+      // Simple test - just try to generate an embedding
+      const embedding = await EmbeddingService.generateEmbedding(testText);
+
+      console.log('Embedding service test successful:', {
+        dimensions: embedding.length,
+        sampleValues: embedding.slice(0, 5),
+        vectorNorm: Math.sqrt(
+          embedding.reduce((sum, val) => sum + val * val, 0)
+        ),
       });
 
-      if (!response.data) {
-        throw new Error('No response data from test service');
-      }
-
-      const result = response.data as {
-        success: boolean;
-        data?: {
-          dimensions: number;
-          sampleValues: number[];
-          vectorNorm: number;
-        };
-        error?: string;
-      };
-
-      if (!result.success) {
-        throw new Error(result.error || 'Test service failed');
-      }
-
-      console.log('Embedding service test successful:', result);
-      return result.success;
+      return true;
     } catch (error) {
       console.error('Embedding service test failed:', error);
       return false;

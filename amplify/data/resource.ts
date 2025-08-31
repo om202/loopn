@@ -41,7 +41,6 @@ const schema = a
       .query()
       .arguments({
         text: a.string().required(),
-        action: a.string().required(),
       })
       .returns(a.json())
       .authorization(allow => [allow.authenticated()])
