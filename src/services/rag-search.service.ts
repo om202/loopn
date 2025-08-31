@@ -28,7 +28,6 @@ export class RAGSearchService {
     query: string,
     options: Partial<SearchOptions> = {}
   ): Promise<SearchResponse> {
-    const startTime = Date.now();
     let queryEmbeddingTimeMs = 0;
     let processingTimeMs = 0;
     let fetchTimeMs = 0;
@@ -52,11 +51,7 @@ export class RAGSearchService {
     }
 
     try {
-      console.log('Starting RAG search:', {
-        query: searchOptions.query,
-        limit: searchOptions.limit,
-        minSimilarity: searchOptions.minSimilarity,
-      });
+
 
       // Step 1: Convert query to embedding vector
       const embeddingStart = Date.now();
@@ -65,7 +60,7 @@ export class RAGSearchService {
       );
       queryEmbeddingTimeMs = Date.now() - embeddingStart;
 
-      console.log(`Generated query embedding in ${queryEmbeddingTimeMs}ms`);
+
 
       // Step 2: Fetch all embedding chunks (lightweight operation)
       const processingStart = Date.now();
@@ -79,7 +74,7 @@ export class RAGSearchService {
         );
       }
 
-      console.log(`Fetched ${embeddingChunks.length} embedding chunks`);
+
 
       // Step 3: Parse embeddings and calculate similarities
       const parsedEmbeddings =
@@ -91,9 +86,7 @@ export class RAGSearchService {
       );
 
       processingTimeMs = Date.now() - processingStart;
-      console.log(
-        `Processed similarities in ${processingTimeMs}ms, found ${matchedChunks.length} matches`
-      );
+
 
       // Step 4: Sort by similarity and apply limit
       const topChunks = matchedChunks
@@ -117,9 +110,7 @@ export class RAGSearchService {
       );
       fetchTimeMs = Date.now() - fetchStart;
 
-      console.log(
-        `Fetched ${results.length} profile results in ${fetchTimeMs}ms`
-      );
+
 
       // Step 6: Build response with metrics
       const metrics: SearchMetrics = {
@@ -137,13 +128,7 @@ export class RAGSearchService {
         totalFound: matchedChunks.length,
       };
 
-      console.log('RAG search completed:', {
-        query: searchOptions.query,
-        resultsReturned: results.length,
-        totalMatched: matchedChunks.length,
-        totalTime: Date.now() - startTime,
-        metrics,
-      });
+
 
       return response;
     } catch (error) {
@@ -159,7 +144,14 @@ export class RAGSearchService {
   /**
    * Parse embedding vectors from database records
    */
-  private static parseEmbeddings(embeddingChunks: any[]): ParsedEmbedding[] {
+  private static parseEmbeddings(embeddingChunks: Array<{
+    userId: string;
+    embeddingVector: string;
+    embeddingText?: string | null;
+    profileVersion?: string | null;
+    createdAt?: string | null;
+    updatedAt?: string | null;
+  }>): ParsedEmbedding[] {
     const parsedEmbeddings: ParsedEmbedding[] = [];
 
     for (const chunk of embeddingChunks) {
@@ -331,7 +323,7 @@ export class RAGSearchService {
       userId,
       timestamp: new Date().toISOString(),
       details: null,
-    } as any; // Cast to bypass Promise return type issue
+    } as SearchError; // Properly typed search error
   }
 
   /**

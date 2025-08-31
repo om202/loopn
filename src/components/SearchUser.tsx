@@ -70,17 +70,14 @@ export default function SearchUser({
       setShowHistory(false);
 
       try {
-        console.log(
-          'Performing search from SearchUser component:',
-          query.trim()
-        );
+
 
         const response = await RAGSearchService.searchProfiles(query.trim(), {
           limit: 20,
           minSimilarity: 0.3,
         });
 
-        console.log('Search completed:', response);
+
 
         // Notify parent component with results
         if (onSearchResults) {

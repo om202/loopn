@@ -23,7 +23,7 @@ export class EmbeddingService {
         throw new Error('Text too short for meaningful embedding (minimum 2 characters)');
       }
 
-      console.log('Generating embedding for text length:', cleanText.length);
+
 
       const client = getClient();
       const response = await client.queries.generateEmbedding({
@@ -74,11 +74,7 @@ export class EmbeddingService {
         );
       }
 
-      console.log(
-        'Successfully generated embedding with',
-        result.embedding.length,
-        'dimensions'
-      );
+
       return result.embedding; // Array of 1024 floating point numbers
     } catch (error) {
       console.error('Error generating embedding:', error);

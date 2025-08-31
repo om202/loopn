@@ -70,7 +70,7 @@ export default function SearchSectionContent({
       setSearchMetrics(null);
 
       try {
-        console.log('Performing RAG search for:', searchTerm);
+
 
         const response: SearchResponse = await RAGSearchService.searchProfiles(
           searchTerm,
@@ -84,12 +84,7 @@ export default function SearchSectionContent({
         setSearchResults(response.results);
         setSearchMetrics(response.metrics);
 
-        console.log('Search completed:', {
-          query: response.query,
-          resultsCount: response.results.length,
-          totalFound: response.totalFound,
-          metrics: response.metrics,
-        });
+
       } catch (searchError) {
         console.error('Search failed:', searchError);
         const errorMessage =
