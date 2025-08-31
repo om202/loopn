@@ -1,6 +1,7 @@
 import { type ClientSchema, a, defineData } from '@aws-amplify/backend';
 import { presenceCleanup } from '../functions/presence-cleanup/resource';
 import { resumeParser } from '../functions/resume-parser/resource';
+import { embeddingGenerator } from '../functions/embedding-generator/resource';
 
 /*== LOOPN CHAT APP SCHEMA ==============================================
 This schema implements the Loopn user story:
@@ -34,6 +35,17 @@ const schema = a
       .returns(a.json())
       .authorization(allow => [allow.authenticated()])
       .handler(a.handler.function(resumeParser)),
+
+    // Embedding generator using AWS Bedrock Titan v2
+    generateEmbedding: a
+      .query()
+      .arguments({
+        text: a.string().required(),
+        action: a.string().required(),
+      })
+      .returns(a.json())
+      .authorization(allow => [allow.authenticated()])
+      .handler(a.handler.function(embeddingGenerator)),
 
     // Request to start chatting with someone (Step 1)
     ChatRequest: a

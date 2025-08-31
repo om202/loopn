@@ -7,6 +7,7 @@ import { storage } from './storage/resource';
 import { presenceCleanup } from './functions/presence-cleanup/resource';
 import { autoConfirm } from './functions/auto-confirm/resource';
 import { resumeParser } from './functions/resume-parser/resource';
+import { embeddingGenerator } from './functions/embedding-generator/resource';
 
 /*
  * 📈 SCALING CONFIGURATION GUIDE
@@ -43,6 +44,7 @@ const backend = defineBackend({
   presenceCleanup,
   autoConfirm,
   resumeParser,
+  embeddingGenerator,
 });
 
 // Add Bedrock permissions to resume parser
@@ -53,6 +55,18 @@ backend.resumeParser.resources.lambda.addToRolePolicy(
     resources: [
       'arn:aws:bedrock:*:*:foundation-model/anthropic.claude-3-5-haiku-20241022-v1:0',
       'arn:aws:bedrock:*:*:inference-profile/us.anthropic.claude-3-5-haiku-20241022-v1:0',
+    ],
+  })
+);
+
+// Add Bedrock permissions to embedding generator
+backend.embeddingGenerator.resources.lambda.addToRolePolicy(
+  new PolicyStatement({
+    effect: Effect.ALLOW,
+    actions: ['bedrock:InvokeModel'],
+    resources: [
+      'arn:aws:bedrock:*:*:foundation-model/amazon.titan-embed-text-v2:0',
+      'arn:aws:bedrock:*:*:inference-profile/us.amazon.titan-embed-text-v2:0',
     ],
   })
 );

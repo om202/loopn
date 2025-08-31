@@ -1,29 +1,12 @@
-import {
-  BedrockRuntimeClient,
-  InvokeModelCommand,
-} from '@aws-sdk/client-bedrock-runtime';
+import { getClient } from '../lib/amplify-config';
 
 /**
- * Service for generating embeddings using AWS Bedrock Titan Text v2
+ * Service for generating embeddings using AWS Bedrock Titan Text v2 via Lambda
  * Used for semantic search (RAG) functionality across user profiles
  */
 export class EmbeddingService {
-  private static client: BedrockRuntimeClient | null = null;
-
   /**
-   * Initialize the Bedrock client (lazy initialization)
-   */
-  private static getClient(): BedrockRuntimeClient {
-    if (!EmbeddingService.client) {
-      EmbeddingService.client = new BedrockRuntimeClient({
-        region: 'us-east-1', // Titan v2 is available in us-east-1
-      });
-    }
-    return EmbeddingService.client;
-  }
-
-  /**
-   * Generate embedding vector from profile text using AWS Bedrock Titan Text v2
+   * Generate embedding vector from profile text using AWS Lambda + Bedrock Titan Text v2
    * @param profileText - The text content to embed
    * @returns Promise<number[]> - Array of 1024 floating point numbers
    * @throws Error if embedding generation fails
@@ -40,42 +23,44 @@ export class EmbeddingService {
         throw new Error('Profile text too short for meaningful embedding');
       }
 
-      const client = EmbeddingService.getClient();
+      console.log('Generating embedding for text length:', cleanText.length);
 
-      const command = new InvokeModelCommand({
-        modelId: 'amazon.titan-embed-text-v2:0',
-        body: JSON.stringify({
-          inputText: cleanText,
-          dimensions: 1024, // Use default 1024 dimensions for best performance
-          normalize: true, // Normalize vectors for cosine similarity
-        }),
+      const client = getClient();
+      const response = await client.queries.generateEmbedding({
+        text: cleanText,
+        action: 'generate',
       });
 
-      console.log('Generating embedding for text length:', cleanText.length);
-      const response = await client.send(command);
-
-      if (!response.body) {
-        throw new Error('Empty response from Bedrock');
+      if (!response.data) {
+        throw new Error('No response data from embedding service');
       }
 
-      const result = JSON.parse(new TextDecoder().decode(response.body));
+      const result = response.data as {
+        success: boolean;
+        data?: { embedding: number[]; dimensions: number; inputLength: number };
+        error?: string;
+      };
 
-      if (!result.embedding || !Array.isArray(result.embedding)) {
+      if (!result.success) {
+        throw new Error(result.error || 'Embedding generation failed');
+      }
+
+      if (!result.data?.embedding || !Array.isArray(result.data.embedding)) {
         throw new Error('Invalid embedding response format');
       }
 
-      if (result.embedding.length !== 1024) {
+      if (result.data.embedding.length !== 1024) {
         throw new Error(
-          `Expected 1024 dimensions, got ${result.embedding.length}`
+          `Expected 1024 dimensions, got ${result.data.embedding.length}`
         );
       }
 
       console.log(
         'Successfully generated embedding with',
-        result.embedding.length,
+        result.data.embedding.length,
         'dimensions'
       );
-      return result.embedding; // Array of 1024 floating point numbers
+      return result.data.embedding; // Array of 1024 floating point numbers
     } catch (error) {
       console.error('Error generating embedding:', error);
 
@@ -161,15 +146,32 @@ export class EmbeddingService {
     testText: string = 'Software engineer with React and Node.js experience'
   ): Promise<boolean> {
     try {
-      const embedding = await EmbeddingService.generateEmbedding(testText);
-      console.log('Embedding service test successful:', {
-        dimensions: embedding.length,
-        sampleValues: embedding.slice(0, 5),
-        vectorNorm: Math.sqrt(
-          embedding.reduce((sum, val) => sum + val * val, 0)
-        ),
+      const client = getClient();
+      const response = await client.queries.generateEmbedding({
+        text: testText,
+        action: 'test',
       });
-      return true;
+
+      if (!response.data) {
+        throw new Error('No response data from test service');
+      }
+
+      const result = response.data as {
+        success: boolean;
+        data?: {
+          dimensions: number;
+          sampleValues: number[];
+          vectorNorm: number;
+        };
+        error?: string;
+      };
+
+      if (!result.success) {
+        throw new Error(result.error || 'Test service failed');
+      }
+
+      console.log('Embedding service test successful:', result);
+      return result.success;
     } catch (error) {
       console.error('Embedding service test failed:', error);
       return false;
