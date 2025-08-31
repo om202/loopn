@@ -1,6 +1,5 @@
 import type { Schema } from '../../amplify/data/resource';
 import { getClient } from '../lib/amplify-config';
-import { VespaService } from './vespa.service';
 
 type UserProfile = Schema['UserProfile']['type'];
 type DataResult<T> = { data: T | null; error: string | null };
@@ -210,28 +209,8 @@ export class UserProfileService {
         onboardingCompletedAt: new Date().toISOString(),
       });
 
-      // Automatically index the user profile for vector search
-      if (result.data) {
-        try {
-          console.log('Indexing user profile for search:', userId);
-          const indexResult = await VespaService.indexUser(userId, {
-            ...profileData,
-            userId,
-            industry: profileData.industry || undefined,
-          } as any);
-          console.log('User indexing result:', indexResult);
-
-          if (!indexResult.success) {
-            console.error('Failed to index user:', indexResult.error);
-          }
-        } catch (indexError) {
-          console.error(
-            'Failed to index user profile for vector search:',
-            indexError
-          );
-          // Continue even if indexing fails
-        }
-      }
+      // Note: User profile indexing for search has been removed
+      console.log('User profile created successfully:', userId);
 
       return {
         data: result.data,
@@ -292,88 +271,8 @@ export class UserProfileService {
         ...filteredJsonFields,
       });
 
-      // Re-index the user profile for vector search if update was successful
-      if (result.data) {
-        try {
-          // Get the full profile to re-index
-          const fullProfile =
-            await UserProfileService.getProfileDetails(userId);
-          if (fullProfile) {
-            const profileData: ProfileData = {
-              // Personal Information
-              fullName: fullProfile.fullName || '',
-              phone: fullProfile.phone || undefined,
-              city: fullProfile.city || undefined,
-              country: fullProfile.country || undefined,
-
-              // Professional URLs
-              linkedinUrl: fullProfile.linkedinUrl || undefined,
-              githubUrl: fullProfile.githubUrl || undefined,
-              portfolioUrl: fullProfile.portfolioUrl || undefined,
-
-              // Current Professional Info
-              jobRole: fullProfile.jobRole || '',
-              companyName: fullProfile.companyName || '',
-              industry: fullProfile.industry || null,
-              yearsOfExperience: fullProfile.yearsOfExperience || 0,
-              education: fullProfile.education || '',
-              about: fullProfile.about || '',
-
-              // Professional Background & Skills
-              interests: (fullProfile.interests || []).filter(
-                (item): item is string => item !== null
-              ),
-              skills: (fullProfile.skills || []).filter(
-                (item): item is string => item !== null
-              ),
-              hobbies: (fullProfile.hobbies || []).filter(
-                (item): item is string => item !== null
-              ),
-
-              // Detailed Professional Background
-              workExperience:
-                (fullProfile.workExperience as ProfileData['workExperience']) ||
-                undefined,
-              educationHistory:
-                (fullProfile.educationHistory as ProfileData['educationHistory']) ||
-                undefined,
-              projects:
-                (fullProfile.projects as ProfileData['projects']) || undefined,
-              certifications:
-                (fullProfile.certifications as ProfileData['certifications']) ||
-                undefined,
-              awards:
-                (fullProfile.awards as ProfileData['awards']) || undefined,
-              languages:
-                (fullProfile.languages as ProfileData['languages']) ||
-                undefined,
-              publications:
-                (fullProfile.publications as ProfileData['publications']) ||
-                undefined,
-
-              // Profile picture fields
-              profilePictureUrl: fullProfile.profilePictureUrl || undefined,
-              hasProfilePicture: fullProfile.hasProfilePicture || false,
-
-              // Auto-fill tracking
-              autoFilledFields: (fullProfile.autoFilledFields || []).filter(
-                (item): item is string => item !== null
-              ),
-            };
-            await VespaService.indexUser(userId, {
-              ...profileData,
-              userId,
-              industry: profileData.industry || undefined,
-            } as any);
-          }
-        } catch (indexError) {
-          console.error(
-            'Failed to re-index user profile for vector search:',
-            indexError
-          );
-          // Continue even if indexing fails
-        }
-      }
+      // Note: User profile re-indexing for search has been removed
+      console.log('User profile updated successfully:', userId);
 
       return {
         data: result.data,

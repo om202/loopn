@@ -1,13 +1,22 @@
 'use client';
 
 import React, { useState, useCallback } from 'react';
-import { Search } from 'lucide-react';
+import { Search, AlertTriangle } from 'lucide-react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
-import { VespaService, SearchResult } from '../../services/vespa.service';
-import { useChatActions } from '../../hooks/useChatActions';
-import UserCard from './UserCard';
 import LoadingContainer from '../LoadingContainer';
 import type { Schema } from '../../../amplify/data/resource';
+
+// Placeholder type since Vespa service was removed
+interface SearchResult {
+  userId: string;
+  profile: {
+    fullName?: string;
+    jobRole?: string;
+    companyName?: string;
+    skills?: string[];
+    profilePictureUrl?: string;
+  };
+}
 
 type UserPresence = Schema['UserPresence']['type'];
 type Conversation = Schema['Conversation']['type'];
@@ -36,22 +45,9 @@ interface SearchSectionContentProps {
 }
 
 export default function SearchSectionContent({
-  onChatRequestSent,
   searchQuery = '',
   shouldSearch = false,
-  onOpenProfileSidebar,
-  onUserCardClick,
-  isProfileSidebarOpen,
-  selectedUserId,
-  existingConversations,
-  pendingRequests,
-  optimisticPendingRequests,
-  incomingRequestSenderIds,
-  onlineUsers,
-
   onCancelChatRequest: _onCancelChatRequest,
-  onAcceptChatRequest,
-  setOptimisticPendingRequests,
 }: SearchSectionContentProps) {
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -60,35 +56,10 @@ export default function SearchSectionContent({
   const { user } = useAuthenticator();
 
   // Initialize chat actions
-  const chatActions = useChatActions({
-    user: user ? { userId: user.userId } : { userId: '' },
-    existingConversations,
-    onChatRequestSent: onChatRequestSent || (() => {}),
-  });
 
   // Handle chat action for search results
-  const handleChatAction = async (receiverId: string) => {
-    if (!user) return;
-
-    const action = await chatActions.handleChatAction(
-      receiverId,
-      pendingRequests
-    );
-    if (action === 'send-request') {
-      chatActions.handleSendChatRequest(
-        receiverId,
-        setOptimisticPendingRequests
-      );
-    }
-  };
 
   // Handle cancel chat request
-  const handleCancelChatRequest = (receiverId: string) => {
-    chatActions.handleCancelChatRequest(
-      receiverId,
-      setOptimisticPendingRequests
-    );
-  };
 
   const performSearch = useCallback(
     async (searchTerm: string) => {
@@ -99,36 +70,11 @@ export default function SearchSectionContent({
       setHasSearched(true);
       setSearchResults([]); // Clear previous results immediately
 
-      try {
-        // Use semantic search for better AI-powered understanding
-        const response = await VespaService.searchUsers(
-          searchTerm.trim(),
-          10,
-          undefined, // no filters
-          'semantic' // Use semantic ranking for best AI-powered results
-        );
-
-        if (!response.success) {
-          setError(response.error || 'Search failed');
-          setSearchResults([]);
-          return;
-        }
-
-        // Filter out current user - OpenSearch already provides complete profile data
-        const searchResults = response.results || [];
-        const filteredResults = searchResults.filter(
-          (result: SearchResult) => result.userId !== user.userId
-        );
-
-        // Set results directly - no need for additional profile fetching
-        setSearchResults(filteredResults);
-      } catch (error) {
-        console.error('Search error:', error);
-        setError('An error occurred while searching');
+      // Simulate search but return no results since search is disabled
+      setTimeout(() => {
         setSearchResults([]);
-      } finally {
         setIsSearching(false);
-      }
+      }, 1000);
     },
     [isSearching, user]
   );
@@ -144,69 +90,40 @@ export default function SearchSectionContent({
     <div className='h-full flex flex-col'>
       {/* Search Results */}
       <div className='flex-1 overflow-y-auto w-full'>
-        {!hasSearched ? (
-          <div className='flex flex-col items-center justify-center h-full text-center p-8 transition-opacity duration-200 opacity-100'>
-            <div className='w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-full flex items-center justify-center'>
-              <Search className='w-8 h-8 text-slate-500' />
-            </div>
-            <h3 className='text-lg font-medium text-black mb-1'>
-              Search Professionals
-            </h3>
-          </div>
-        ) : isSearching ? (
-          <div className='transition-opacity duration-200 opacity-100'>
-            <LoadingContainer size='lg' />
-          </div>
-        ) : error ? (
-          <div className='flex flex-col items-center justify-center h-full text-center p-8 transition-opacity duration-200 opacity-100'>
-            <div className='text-b_red-600 text-sm mb-2'>Search Error</div>
-            <p className='text-slate-500 text-sm'>{error}</p>
-          </div>
-        ) : searchResults.length === 0 ? (
-          <div className='flex flex-col items-center justify-center h-full text-center p-8 transition-opacity duration-200 opacity-100'>
-            <div className='w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-full flex items-center justify-center'>
-              <Search className='w-8 h-8 text-slate-500' />
-            </div>
-            <h3 className='text-lg font-medium text-black mb-1'>
-              Hmm… nothing matched.
-            </h3>
-          </div>
-        ) : (
-          <div className='space-y-2 sm:space-y-3 transition-opacity duration-200 opacity-100 pt-2'>
-            {searchResults.map(result => (
-              <div key={result.userId}>
-                <UserCard
-                  userPresence={{
-                    userId: result.userId,
-                    isOnline: false, // Not relevant for search results
-                    status: 'OFFLINE', // Static status for search
-                    lastSeen: null,
-                    lastHeartbeat: null,
-                    activeChatId: null,
-                    lastChatActivity: null,
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString(),
-                  }}
-                  onlineUsers={onlineUsers} // Pass real online users data
-                  existingConversations={existingConversations} // Pass real conversations
-                  pendingRequests={pendingRequests} // Pass real pending requests
-                  optimisticPendingRequests={optimisticPendingRequests} // Pass optimistic pending requests
-                  incomingRequestSenderIds={incomingRequestSenderIds} // Pass incoming request data
-                  onChatAction={handleChatAction} // Use proper chat action handler
-                  onCancelChatRequest={handleCancelChatRequest} // Use proper cancel handler
-                  onAcceptChatRequest={onAcceptChatRequest} // Use proper accept handler
-                  onOpenProfileSidebar={onOpenProfileSidebar}
-                  onUserCardClick={onUserCardClick}
-                  isProfileSidebarOpen={isProfileSidebarOpen}
-                  selectedUserId={selectedUserId}
-                  currentUserId={user?.userId || ''} // Add the missing currentUserId prop
-                  searchProfile={result.profile} // OpenSearch profile data
-                  useRealtimeStatus={false} // Disable real-time status for search results
-                />
+        {
+          !hasSearched ? (
+            <div className='flex flex-col items-center justify-center h-full text-center p-8 transition-opacity duration-200 opacity-100'>
+              <div className='w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-full flex items-center justify-center'>
+                <Search className='w-8 h-8 text-slate-500' />
               </div>
-            ))}
-          </div>
-        )}
+              <h3 className='text-lg font-medium text-black mb-1'>
+                Search Professionals
+              </h3>
+            </div>
+          ) : isSearching ? (
+            <div className='transition-opacity duration-200 opacity-100'>
+              <LoadingContainer size='lg' />
+            </div>
+          ) : error ? (
+            <div className='flex flex-col items-center justify-center h-full text-center p-8 transition-opacity duration-200 opacity-100'>
+              <div className='text-b_red-600 text-sm mb-2'>Search Error</div>
+              <p className='text-slate-500 text-sm'>{error}</p>
+            </div>
+          ) : searchResults.length === 0 ? (
+            <div className='flex flex-col items-center justify-center h-full text-center p-8 transition-opacity duration-200 opacity-100'>
+              <div className='w-16 h-16 mx-auto mb-4 bg-orange-100 rounded-full flex items-center justify-center'>
+                <AlertTriangle className='w-8 h-8 text-orange-500' />
+              </div>
+              <h3 className='text-lg font-medium text-black mb-2'>
+                Search Temporarily Unavailable
+              </h3>
+              <p className='text-slate-500 text-sm max-w-md mx-auto'>
+                We're currently updating our search functionality to provide you
+                with better results. Please check back soon!
+              </p>
+            </div>
+          ) : null // This case shouldn't happen since searchResults is always empty now
+        }
       </div>
     </div>
   );

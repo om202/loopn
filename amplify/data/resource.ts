@@ -1,6 +1,5 @@
 import { type ClientSchema, a, defineData } from '@aws-amplify/backend';
 import { presenceCleanup } from '../functions/presence-cleanup/resource';
-import { vespaClient } from '../functions/vespa-client/resource';
 import { resumeParser } from '../functions/resume-parser/resource';
 
 /*== LOOPN CHAT APP SCHEMA ==============================================
@@ -26,23 +25,6 @@ Models:
 
 const schema = a
   .schema({
-    // Vespa AI user search - enhanced with vector search and hybrid ranking
-    searchUsers: a
-      .query()
-      .arguments({
-        action: a.string().required(),
-        query: a.string(),
-        userId: a.string(),
-        userProfile: a.json(),
-        limit: a.integer(),
-        filters: a.json(),
-        rankingProfile: a.string(), // New: support for different ranking profiles
-        queryVector: a.json(), // New: support for vector search
-      })
-      .returns(a.json())
-      .authorization(allow => [allow.authenticated()])
-      .handler(a.handler.function(vespaClient)),
-
     // Resume parser using Claude 3.5 Haiku
     parseResume: a
       .query()

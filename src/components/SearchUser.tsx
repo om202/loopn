@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { X, Clock, Search } from 'lucide-react';
+import { X, Clock, Search, AlertTriangle } from 'lucide-react';
 import {
   getSearchHistory,
   addToSearchHistory,
@@ -16,13 +16,14 @@ interface SearchUserProps {
 }
 
 export default function SearchUser({
-  onProfessionalRequest,
+  onProfessionalRequest: _onProfessionalRequest,
   userProfile: _userProfile,
 }: SearchUserProps) {
   const [query, setQuery] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [searchHistory, setSearchHistory] = useState<SearchHistoryItem[]>([]);
   const [showHistory, setShowHistory] = useState(false);
+  const [showUnavailableMessage, setShowUnavailableMessage] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -55,20 +56,20 @@ export default function SearchUser({
     e.preventDefault();
     if (query.trim() && !isProcessing) {
       setIsProcessing(true);
-      // Add to search history
+      // Add to search history for UI purposes
       addToSearchHistory(query.trim());
       setSearchHistory(getSearchHistory());
       // Hide dropdown
       setShowHistory(false);
 
-      const searchQuery = query.trim();
+      // Show unavailable message instead of triggering search
+      setShowUnavailableMessage(true);
 
-      // Immediately trigger the search without doing RAG processing here
-      // The SearchSectionContent component will handle the actual search
-      onProfessionalRequest?.(searchQuery);
-
-      // Quick reset of processing state - no artificial delay
-      setTimeout(() => setIsProcessing(false), 200);
+      // Reset processing state and hide message after delay
+      setTimeout(() => {
+        setIsProcessing(false);
+        setTimeout(() => setShowUnavailableMessage(false), 2000);
+      }, 300);
     }
   };
 
@@ -91,15 +92,20 @@ export default function SearchUser({
   const handleHistoryItemClick = (historyQuery: string) => {
     setQuery(historyQuery);
     setShowHistory(false);
-    // Trigger search immediately
+    // Show unavailable message instead of triggering search
     if (!isProcessing) {
       setIsProcessing(true);
       // Move to top of history
       addToSearchHistory(historyQuery);
       setSearchHistory(getSearchHistory());
 
-      onProfessionalRequest?.(historyQuery);
-      setTimeout(() => setIsProcessing(false), 200);
+      // Show unavailable message
+      setShowUnavailableMessage(true);
+
+      setTimeout(() => {
+        setIsProcessing(false);
+        setTimeout(() => setShowUnavailableMessage(false), 2000);
+      }, 300);
     }
   };
 
@@ -233,6 +239,24 @@ export default function SearchUser({
             </button>
           </div>
         </form>
+
+        {/* Search Unavailable Message */}
+        {showUnavailableMessage && (
+          <div className='absolute top-full left-0 right-0 bg-orange-50 border border-orange-200 rounded-xl shadow-sm z-50 mt-2 p-4'>
+            <div className='flex items-center gap-3'>
+              <AlertTriangle className='w-5 h-5 text-orange-500 flex-shrink-0' />
+              <div>
+                <p className='text-sm font-medium text-orange-800 mb-1'>
+                  Search Temporarily Unavailable
+                </p>
+                <p className='text-xs text-orange-700'>
+                  We're updating our search functionality. Please check back
+                  soon!
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Search History Dropdown */}
         {showHistory && searchHistory.length > 0 && (
