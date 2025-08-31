@@ -580,7 +580,7 @@ export default function OnlineUsers({
           {activeSection === 'search' && (
             <div>
               <h2 className='text-xl sm:text-2xl font-bold text-black'>
-                Search Professionals
+                Search Results
               </h2>
             </div>
           )}

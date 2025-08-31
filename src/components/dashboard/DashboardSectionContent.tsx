@@ -240,7 +240,7 @@ export default function DashboardSectionContent({
         };
       case 'search':
         return {
-          title: 'Search Professionals',
+          title: 'Search',
           description: searchQuery
             ? `"${searchQuery}"`
             : 'Search for professionals',

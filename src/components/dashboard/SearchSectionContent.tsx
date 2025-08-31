@@ -153,7 +153,7 @@ export default function SearchSectionContent({
               <Search className='w-8 h-8 text-slate-500' />
             </div>
             <h3 className='text-lg font-medium text-black mb-1'>
-              Search Professionals
+              Search
             </h3>
           </div>
         ) : isSearching ? (
@@ -183,7 +183,7 @@ export default function SearchSectionContent({
             )}
           </div>
         ) : (
-          <div className='space-y-4 p-4'>
+          <div className='space-y-4'>
             {/* Search Results Header */}
             {searchMetrics && (
               <div className='text-sm text-slate-500 pb-4 border-b border-slate-100'>
