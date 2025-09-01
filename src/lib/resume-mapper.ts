@@ -310,6 +310,8 @@ export function mapResumeToOnboardingData(
   return {
     // Personal Information
     fullName: `${resumeData.firstName} ${resumeData.lastName}`.trim(),
+    gender: undefined, // Gender is not extracted from resumes for privacy reasons
+    genderCustom: undefined,
     email: resumeData.email || undefined,
     phone: resumeData.phone || undefined,
     city: resumeData.city || undefined,
@@ -347,6 +349,9 @@ export function mapResumeToOnboardingData(
     // Personal Interests
     interests: [], // Will be selected manually in onboarding
     hobbies: resumeData.hobbies || [],
+
+    // Professional Status
+    hiringStatus: 'NOT_SPECIFIED', // Cannot be determined from resume
 
     // Auto-fill tracking
     autoFilledFields,

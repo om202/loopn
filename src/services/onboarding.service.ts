@@ -6,6 +6,8 @@ import { userProfileService } from './user-profile.service';
 export interface OnboardingData {
   // Personal Information
   fullName: string;
+  gender?: 'MALE' | 'FEMALE' | 'NON_BINARY' | 'PREFER_NOT_TO_SAY' | 'SELF_DESCRIBE';
+  genderCustom?: string; // For self-describe option
   email?: string;
   phone?: string;
   city?: string;
@@ -81,6 +83,9 @@ export interface OnboardingData {
   interests?: string[]; // Professional interests from our current system
   hobbies?: string[]; // Personal hobbies from resume
 
+  // Professional Status
+  hiringStatus?: 'NOT_SPECIFIED' | 'HIRING' | 'LOOKING_FOR_JOB' | 'OPEN_TO_OPPORTUNITIES' | 'NOT_LOOKING';
+
   // Profile Picture
   profilePictureFile?: File; // For upload during onboarding
   profilePictureUrl?: string; // S3 URL after upload
@@ -155,6 +160,8 @@ export class OnboardingService {
             ? {
                 // Personal Information
                 fullName: userProfile.fullName || '',
+                gender: userProfile.gender || undefined,
+                genderCustom: userProfile.genderCustom || undefined,
                 email: userProfile.email || undefined,
                 phone: userProfile.phone || undefined,
                 city: userProfile.city || undefined,
@@ -184,6 +191,9 @@ export class OnboardingService {
                 hobbies: (userProfile.hobbies || []).filter(
                   (hobby: string | null): hobby is string => hobby !== null
                 ),
+
+                // Professional Status
+                hiringStatus: userProfile.hiringStatus || 'NOT_SPECIFIED',
 
                 // Detailed Professional Background - parse JSON strings back to objects
                 workExperience:
@@ -292,6 +302,8 @@ export class OnboardingService {
       const profileData = {
         // Personal Information
         fullName: data.fullName,
+        gender: data.gender || null,
+        genderCustom: data.genderCustom || null,
         phone: data.phone,
         city: data.city,
         country: data.country,
@@ -313,6 +325,9 @@ export class OnboardingService {
         interests: data.interests || [],
         skills: data.skills || [],
         hobbies: data.hobbies || [],
+
+        // Professional Status
+        hiringStatus: data.hiringStatus || 'NOT_SPECIFIED',
 
         // Detailed Professional Background - provide defaults for arrays
         workExperience: data.workExperience || [],

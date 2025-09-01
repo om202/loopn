@@ -42,6 +42,8 @@ export default function OnboardingPage() {
   const [formData, setFormData] = useState<Partial<OnboardingData>>({
     // Personal Information
     fullName: '',
+    gender: undefined,
+    genderCustom: '',
     email: '',
     phone: '',
     city: '',
@@ -79,6 +81,9 @@ export default function OnboardingPage() {
     // Personal Interests - initialize as empty arrays
     interests: [],
     hobbies: [],
+
+    // Professional Status
+    hiringStatus: 'NOT_SPECIFIED',
 
     // Profile Picture
     profilePictureFile: undefined,
@@ -269,11 +274,11 @@ export default function OnboardingPage() {
 
     switch (stepInfo.key) {
       case 'personal':
-        // Only require the most essential field - Full Name
+        // Only require Full Name - everything else is optional
         if (!formData.fullName?.trim()) {
           missingFields.push('fullName');
         }
-        // Everything else is optional - users can complete later
+        // Gender and everything else is optional - users can complete later
         break;
       case 'workExperience':
         // Work experience is optional
@@ -345,7 +350,7 @@ export default function OnboardingPage() {
     setError('');
 
     try {
-      // Ensure we have a valid OnboardingData object with at least fullName
+      // Ensure we have a valid OnboardingData object with required fields
       const onboardingData: OnboardingData = {
         fullName: formData.fullName || '', // This should be validated above
         ...formData,
@@ -631,6 +636,36 @@ export default function OnboardingPage() {
                     placeholder='e.g., John Smith'
                     className={getInputClassName('fullName')}
                   />
+                </div>
+
+                <div>
+                  <label className='block text-sm font-medium text-slate-500 mb-3'>
+                    Gender
+                  </label>
+                  <select
+                    value={formData.gender || ''}
+                    onChange={e => updateFormData('gender', e.target.value as 'MALE' | 'FEMALE' | 'NON_BINARY' | 'PREFER_NOT_TO_SAY' | 'SELF_DESCRIBE' | undefined)}
+                    className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+                  >
+                    <option value=''>Select gender</option>
+                    <option value='MALE'>Male</option>
+                    <option value='FEMALE'>Female</option>
+                    <option value='NON_BINARY'>Non-binary</option>
+                    <option value='PREFER_NOT_TO_SAY'>Prefer not to say</option>
+                    <option value='SELF_DESCRIBE'>Self-describe</option>
+                  </select>
+                  
+                  {formData.gender === 'SELF_DESCRIBE' && (
+                    <div className='mt-3'>
+                      <input
+                        type='text'
+                        value={formData.genderCustom || ''}
+                        onChange={e => updateFormData('genderCustom', e.target.value)}
+                        placeholder='Please describe your gender identity'
+                        className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+                      />
+                    </div>
+                  )}
                 </div>
 
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
@@ -1438,17 +1473,17 @@ export default function OnboardingPage() {
 
           {/* Step: About Section */}
           {getCurrentStepInfo().key === 'about' && (
-            <div className='space-y-6'>
+            <div className='space-y-8'>
               <h2 className='text-xl font-semibold text-black mb-4'>
                 About You
               </h2>
 
               {/* Skills Section (moved above About) */}
               <div>
-                <label className='block text-sm font-medium text-slate-500 mb-3'>
+                <label className='block font-medium text-slate-500 mb-3'>
                   Key skills
                 </label>
-                <p className='text-sm text-slate-500 mb-3'>
+                <p className='text-slate-500 mb-3'>
                   Add what you&apos;re good at. Type a skill and press Enter (or
                   comma).
                 </p>
@@ -1480,27 +1515,111 @@ export default function OnboardingPage() {
                 />
               </div>
 
+              {/* Professional Status Section */}
+              <div>
+                <label className='block font-medium text-slate-500 mb-3'>
+                  Professional Status
+                </label>
+                <p className='text-slate-600 mb-4'>
+                  Help others understand your current professional situation to facilitate better networking.
+                </p>
+
+                <div className='space-y-3'>
+                  <div className='flex items-center space-x-3'>
+                    <input
+                      type='radio'
+                      id='not-specified'
+                      name='hiringStatus'
+                      value='NOT_SPECIFIED'
+                      checked={formData.hiringStatus === 'NOT_SPECIFIED'}
+                      onChange={e => updateFormData('hiringStatus', e.target.value as 'NOT_SPECIFIED')}
+                      className='w-4 h-4 text-brand-500 focus:ring-brand-500 focus:ring-2'
+                    />
+                    <label htmlFor='not-specified' className='text-slate-700'>
+                      Prefer not to specify
+                    </label>
+                  </div>
+
+                  <div className='flex items-center space-x-3'>
+                    <input
+                      type='radio'
+                      id='hiring'
+                      name='hiringStatus'
+                      value='HIRING'
+                      checked={formData.hiringStatus === 'HIRING'}
+                      onChange={e => updateFormData('hiringStatus', e.target.value as 'HIRING')}
+                      className='w-4 h-4 text-brand-500 focus:ring-brand-500 focus:ring-2'
+                    />
+                    <label htmlFor='hiring' className='text-slate-700'>
+                      I'm hiring or looking to recruit
+                    </label>
+                  </div>
+
+                  <div className='flex items-center space-x-3'>
+                    <input
+                      type='radio'
+                      id='looking-for-job'
+                      name='hiringStatus'
+                      value='LOOKING_FOR_JOB'
+                      checked={formData.hiringStatus === 'LOOKING_FOR_JOB'}
+                      onChange={e => updateFormData('hiringStatus', e.target.value as 'LOOKING_FOR_JOB')}
+                      className='w-4 h-4 text-brand-500 focus:ring-brand-500 focus:ring-2'
+                    />
+                    <label htmlFor='looking-for-job' className='text-slate-700'>
+                      I'm actively looking for a job
+                    </label>
+                  </div>
+
+                  <div className='flex items-center space-x-3'>
+                    <input
+                      type='radio'
+                      id='open-to-opportunities'
+                      name='hiringStatus'
+                      value='OPEN_TO_OPPORTUNITIES'
+                      checked={formData.hiringStatus === 'OPEN_TO_OPPORTUNITIES'}
+                      onChange={e => updateFormData('hiringStatus', e.target.value as 'OPEN_TO_OPPORTUNITIES')}
+                      className='w-4 h-4 text-brand-500 focus:ring-brand-500 focus:ring-2'
+                    />
+                    <label htmlFor='open-to-opportunities' className='text-slate-700'>
+                      I'm open to new opportunities
+                    </label>
+                  </div>
+
+                  <div className='flex items-center space-x-3'>
+                    <input
+                      type='radio'
+                      id='not-looking'
+                      name='hiringStatus'
+                      value='NOT_LOOKING'
+                      checked={formData.hiringStatus === 'NOT_LOOKING'}
+                      onChange={e => updateFormData('hiringStatus', e.target.value as 'NOT_LOOKING')}
+                      className='w-4 h-4 text-brand-500 focus:ring-brand-500 focus:ring-2'
+                    />
+                    <label htmlFor='not-looking' className='text-slate-700'>
+                      I'm happy in my current role
+                    </label>
+                  </div>
+                </div>
+              </div>
+
               {/* About Section */}
               <div>
-                <label className='block text-sm font-medium text-slate-500 mb-3'>
-                  How do you want to use Loopn?{' '}
-                  <span className='text-xs text-slate-400'>(Optional)</span>
+                <label className='block font-medium text-slate-500 mb-3'>
+                  How do you want to use Loopn?
                 </label>
-                <div className='text-sm text-slate-500 mb-3'>
+                <div className='text-slate-500 mb-3'>
                   <p className='mb-2'>
                     Tell others about your goals and interests. This helps with
                     matching and networking.
                   </p>
-                  <ul className='list-disc pl-5 space-y-1 text-xs'>
+                  <ul className='list-disc pl-5 space-y-1'>
                     <li>What you want (mentorship, collabs, clients)</li>
                     <li>
                       Who you want to meet (founders, designers, local pros)
                     </li>
                     <li>How you'll engage (intros, project help, long-term)</li>
                   </ul>
-                  <div className='text-xs mt-2 text-slate-400'>
-                    No skills here — add those above.
-                  </div>
+
                 </div>
                 <textarea
                   value={formData.about || ''}
@@ -1509,11 +1628,9 @@ export default function OnboardingPage() {
                   rows={4}
                   className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                 />
-                <div className='flex justify-between text-xs mt-2'>
+                <div className='flex justify-between mt-2'>
                   <span className='text-slate-400'>
-                    {wordCount === 0
-                      ? 'You can fill this out later'
-                      : `${wordCount} words`}
+                    {wordCount > 0 ? `${wordCount} words` : ''}
                   </span>
                   <span className='text-slate-400'>
                     {wordCount > 100 ? 'Consider keeping it concise' : ''}
@@ -1527,12 +1644,9 @@ export default function OnboardingPage() {
           {getCurrentStepInfo().key === 'interests' && (
             <div className='space-y-6'>
               <h2 className='text-xl font-semibold text-black mb-4'>
-                Interests & Hobbies{' '}
-                <span className='text-sm text-slate-400 font-normal'>
-                  (Optional)
-                </span>
+                Interests & Hobbies
               </h2>
-              <p className='text-sm text-slate-500 mb-4'>
+              <p className='text-slate-500 mb-4'>
                 Select topics you're interested in to help us connect you with
                 like-minded professionals. You can always add more later in your
                 profile.
@@ -1565,7 +1679,7 @@ export default function OnboardingPage() {
                     key={group.title}
                     className={`${idx !== 0 ? 'pt-6 mt-6 border-t border-slate-200' : ''}`}
                   >
-                    <div className='text-sm font-medium text-black mb-4'>
+                    <div className='font-medium text-black mb-4'>
                       {group.title}
                     </div>
                     <div className='grid grid-cols-2 md:grid-cols-3 gap-3'>
@@ -1573,10 +1687,10 @@ export default function OnboardingPage() {
                         <button
                           key={interest}
                           onClick={() => toggleInterest(interest)}
-                          className={`px-2.5 py-2 rounded-xl text-sm transition-colors border text-center ${
+                          className={`px-2 py-1.5 rounded-lg text-sm font-medium transition-colors border text-center ${
                             formData.interests?.includes(interest)
                               ? 'bg-brand-500 text-white border-brand-500'
-                              : 'bg-white text-slate-500 border-slate-200 hover:bg-brand-50'
+                              : 'bg-slate-50 text-slate-500 border-slate-200 hover:bg-brand-50'
                           }`}
                         >
                           {interest}
@@ -1589,14 +1703,14 @@ export default function OnboardingPage() {
 
               {formData.interests && formData.interests.length > 0 && (
                 <div className='mt-6'>
-                  <p className='text-sm text-slate-500 mb-2'>
+                  <p className='text-slate-500 mb-2'>
                     Selected interests ({formData.interests.length}):
                   </p>
                   <div className='flex flex-wrap gap-2'>
                     {formData.interests.map(interest => (
                       <span
                         key={interest}
-                        className='px-2 py-1 bg-brand-50 text-brand-600 border border-brand-200 text-sm rounded-full'
+                        className='px-2 py-1 bg-slate-50 text-slate-600 border border-slate-200 text-sm rounded-full'
                       >
                         {interest}
                       </span>
