@@ -890,12 +890,12 @@ export default function HomePage() {
 
             {/* Footer Links */}
             <div className='flex flex-col sm:flex-row justify-center items-center gap-6 mb-6'>
-              <a
-                href='#'
+              <Link
+                href='/privacy'
                 className='text-gray-600 text-sm font-medium hover:underline hover:underline-offset-4 hover:decoration-2'
               >
                 Privacy Policy
-              </a>
+              </Link>
               <a
                 href='#'
                 className='text-gray-600 text-sm font-medium hover:underline hover:underline-offset-4 hover:decoration-2'
