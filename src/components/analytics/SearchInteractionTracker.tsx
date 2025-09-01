@@ -31,7 +31,7 @@ export function useSearchInteractionTracker({
         query: searchQuery,
         resultIndex,
         resultScore,
-        userId: resultUserId
+        userId: resultUserId,
       });
 
       analytics.trackSearch('search_result_clicked', {
@@ -39,7 +39,7 @@ export function useSearchInteractionTracker({
         result_index: resultIndex || 0,
         result_score: resultScore || 0,
         clicked_user_id: resultUserId || '',
-        interaction_type: 'profile_view'
+        interaction_type: 'profile_view',
       });
     }
   };
@@ -50,7 +50,7 @@ export function useSearchInteractionTracker({
         query: searchQuery,
         resultIndex,
         resultScore,
-        userId: resultUserId
+        userId: resultUserId,
       });
 
       analytics.trackSearch('search_result_chat_request', {
@@ -59,7 +59,7 @@ export function useSearchInteractionTracker({
         result_score: resultScore || 0,
         target_user_id: resultUserId || '',
         interaction_type: 'chat_request',
-        conversion_type: 'search_to_chat'
+        conversion_type: 'search_to_chat',
       });
 
       // Also track as a conversion event
@@ -74,7 +74,7 @@ export function useSearchInteractionTracker({
         result_index: resultIndex || 0,
         result_score: resultScore || 0,
         viewed_user_id: resultUserId,
-        view_type: 'card_impression'
+        view_type: 'card_impression',
       });
     }
   };

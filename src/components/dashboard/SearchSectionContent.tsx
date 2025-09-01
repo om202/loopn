@@ -246,7 +246,7 @@ export default function SearchSectionContent({
           </div>
         )}
       </div>
-      
+
       {/* Search Analytics Tracker */}
       <SearchAnalyticsTracker
         searchQuery={searchQuery}

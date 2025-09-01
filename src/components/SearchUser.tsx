@@ -136,7 +136,7 @@ export default function SearchUser({
       search_term: historyQuery,
       history_action: 'history_item_clicked',
       query_length: historyQuery.length,
-      word_count: historyQuery.split(' ').length
+      word_count: historyQuery.split(' ').length,
     });
 
     // Trigger search for history item

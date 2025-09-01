@@ -74,13 +74,13 @@ export const useAnalytics = () => {
 
   // Track dashboard interactions
   const trackDashboard = (
-    action: 
-      | 'view_matches' 
-      | 'filter_users' 
-      | 'search_users' 
+    action:
+      | 'view_matches'
+      | 'filter_users'
+      | 'search_users'
       | 'export_data'
       | 'view_suggested'
-      | 'view_connections' 
+      | 'view_connections'
       | 'view_saved'
       | 'view_search'
       | 'view_notifications'
@@ -153,9 +153,9 @@ export const useAnalytics = () => {
 
   // Track search interactions
   const trackSearch = (
-    action: 
+    action:
       | 'search_initiated'
-      | 'search_completed' 
+      | 'search_completed'
       | 'search_failed'
       | 'search_performance'
       | 'search_results_analysis'
@@ -180,7 +180,7 @@ export const useAnalytics = () => {
         event_category: 'search',
         user_id: userId || 'anonymous',
         ...searchData,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       });
     }
   };

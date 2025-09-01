@@ -31,14 +31,14 @@ export function SearchAnalyticsTracker({
       console.log('🔍 Search Query Started:', {
         query: searchQuery,
         queryLength: searchQuery.length,
-        queryWords: searchQuery.split(' ').length
+        queryWords: searchQuery.split(' ').length,
       });
 
       analytics.trackSearch('search_initiated', {
         search_term: searchQuery,
         query_length: searchQuery.length,
         word_count: searchQuery.split(' ').length,
-        search_type: 'user_profiles'
+        search_type: 'user_profiles',
       });
     }
   }, [searchQuery, isSearching, analytics]);
@@ -48,13 +48,13 @@ export function SearchAnalyticsTracker({
     if (searchResponse && hasSearched && !isSearching) {
       const results = searchResponse.results || [];
       const metrics = searchResponse.metrics;
-      
+
       console.log('🔍 Search Results Received:', {
         query: searchResponse.query,
         resultsCount: results.length,
         totalFound: searchResponse.totalFound || 0,
         responseTime: metrics?.processingTimeMs || 0,
-        hasResults: results.length > 0
+        hasResults: results.length > 0,
       });
 
       // Track search completion
@@ -64,7 +64,7 @@ export function SearchAnalyticsTracker({
         total_found: searchResponse.totalFound || 0,
         has_results: results.length > 0,
         response_time_ms: metrics?.processingTimeMs || 0,
-        search_success: !searchError
+        search_success: !searchError,
       });
 
       // Track search performance metrics
@@ -75,48 +75,58 @@ export function SearchAnalyticsTracker({
           processing_time_ms: metrics.processingTimeMs || 0,
           fetch_time_ms: metrics.fetchTimeMs || 0,
           total_processed: metrics.totalProcessed || 0,
-          total_matched: metrics.totalMatched || 0
+          total_matched: metrics.totalMatched || 0,
         });
       }
 
       // Track result categories
       if (results.length > 0) {
         const topScore = Math.max(...results.map(r => r.score || 0));
-        const avgScore = results.reduce((sum, r) => sum + (r.score || 0), 0) / results.length;
-        
+        const avgScore =
+          results.reduce((sum, r) => sum + (r.score || 0), 0) / results.length;
+
         analytics.trackSearch('search_results_analysis', {
           search_term: searchResponse.query || searchQuery || '',
           top_score: Math.round(topScore * 100) / 100,
           avg_score: Math.round(avgScore * 100) / 100,
           score_distribution: categorizeScores(results),
-          result_diversity: analyzeDiversity(results)
+          result_diversity: analyzeDiversity(results),
         });
       } else {
         // Track empty results
         analytics.trackSearch('search_no_results', {
           search_term: searchResponse.query || searchQuery || '',
           total_processed: metrics?.totalProcessed || 0,
-          search_reason: searchError ? 'error' : 'no_matches'
+          search_reason: searchError ? 'error' : 'no_matches',
         });
       }
     }
-  }, [searchResponse, hasSearched, isSearching, searchQuery, searchError, analytics]);
+  }, [
+    searchResponse,
+    hasSearched,
+    isSearching,
+    searchQuery,
+    searchError,
+    analytics,
+  ]);
 
   // Track search errors
   useEffect(() => {
     if (searchError && hasSearched) {
       console.log('🔍 Search Error:', {
         query: searchQuery,
-        error: searchError
+        error: searchError,
       });
 
       analytics.trackSearch('search_failed', {
         search_term: searchQuery || '',
         error_message: searchError,
-        error_type: categorizeSearchError(searchError)
+        error_type: categorizeSearchError(searchError),
       });
 
-      analytics.trackError(`search_error_${categorizeSearchError(searchError)}`);
+      analytics.trackError(
+        `search_error_${categorizeSearchError(searchError)}`
+      );
     }
   }, [searchError, hasSearched, searchQuery, analytics]);
 
@@ -129,21 +139,28 @@ function categorizeScores(results: Array<{ score?: number }>): string {
   const highQuality = scores.filter(s => s >= 0.8).length;
   const mediumQuality = scores.filter(s => s >= 0.6 && s < 0.8).length;
   const lowQuality = scores.filter(s => s < 0.6).length;
-  
+
   return `high:${highQuality},medium:${mediumQuality},low:${lowQuality}`;
 }
 
 // Helper function to analyze result diversity
-function analyzeDiversity(results: Array<{ user?: { industry?: string; jobRole?: string } }>): string {
+function analyzeDiversity(
+  results: Array<{ user?: { industry?: string; jobRole?: string } }>
+): string {
   if (results.length === 0) return 'none';
   if (results.length === 1) return 'single';
-  
+
   // Simple diversity check - could be enhanced based on user profile fields
-  const industries = new Set(results.map(r => r.user?.industry).filter(Boolean));
+  const industries = new Set(
+    results.map(r => r.user?.industry).filter(Boolean)
+  );
   const roles = new Set(results.map(r => r.user?.jobRole).filter(Boolean));
-  
-  if (industries.size > results.length * 0.7) return 'high_diversity';
-  if (industries.size > results.length * 0.3) return 'medium_diversity';
+
+  // Calculate diversity based on both industries and roles
+  const combinedDiversity = Math.max(industries.size, roles.size);
+
+  if (combinedDiversity > results.length * 0.7) return 'high_diversity';
+  if (combinedDiversity > results.length * 0.3) return 'medium_diversity';
   return 'low_diversity';
 }
 

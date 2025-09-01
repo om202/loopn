@@ -162,7 +162,7 @@ export default function RootLayout({
             <RealtimeProvider>
               <GlobalSubscriptionProvider>
                 {children}
-                
+
                 {/* Google Analytics 4 Tracking - Inside AuthProvider */}
                 <GoogleAnalytics />
                 <PageTracker />
