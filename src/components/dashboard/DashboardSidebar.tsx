@@ -154,6 +154,9 @@ export default function DashboardSidebar({
                   <h1 className='text-[26px] font-bold text-brand-600'>
                     Loopn
                   </h1>
+                  <span className='px-1 py-0.5 text-[9px] font-bold text-slate-500 bg-slate-50 rounded border border-slate-300'>
+                    PREVIEW
+                  </span>
                 </div>
               </Link>
             </div>

@@ -1,6 +1,7 @@
 'use client';
 
-import { Compass, Search, Bookmark } from 'lucide-react';
+import { Compass, Search, Bookmark, PartyPopper, X } from 'lucide-react';
+import { useState } from 'react';
 
 import type { Schema } from '../../../amplify/data/resource';
 import type { SearchResponse } from '../../types/search.types';
@@ -84,6 +85,8 @@ export default function DashboardSectionContent({
   searchResponse,
   setOptimisticPendingRequests,
 }: DashboardSectionContentProps) {
+  // State to track if early users message has been dismissed
+  const [isEarlyMessageDismissed, setIsEarlyMessageDismissed] = useState(false);
   // Combine all users for "All Chats" section - now just online users and connections
   const allChatUsers = [...onlineUsers, ...connectionUsers];
 
@@ -318,6 +321,36 @@ export default function DashboardSectionContent({
           <h3 className='text-lg font-medium text-black mb-1'>
             {emptyMessage}
           </h3>
+        </div>
+      )}
+      
+      {/* Early users message for suggested section when count < 7 - Fixed at bottom */}
+      {(() => {
+        const now = new Date();
+        const startDate = new Date('2025-09-01');
+        const endDate = new Date('2025-09-15'); // 14 days from Sep 1 (inclusive)
+        const isWithinLaunchPeriod = now >= startDate && now < endDate;
+        
+        return activeSection === 'suggested' && 
+               suggestedUsers.length < 7 && 
+               suggestedUsers.length > 0 && 
+               isWithinLaunchPeriod &&
+               !isEarlyMessageDismissed;
+      })() && (
+        <div className='fixed bottom-20 lg:bottom-8 left-4 right-4 lg:left-1/2 lg:right-auto lg:transform lg:-translate-x-1/2 lg:w-auto lg:max-w-lg z-10 bg-white border border-slate-200 rounded-lg shadow-sm px-4 py-2'>
+          <div className='flex items-center justify-center gap-2 relative'>
+            <PartyPopper className='w-4 h-4 text-slate-500' />
+            <p className='text-sm text-slate-500'>
+              We've just launched. Thank you for being among our first users.
+            </p>
+            <button
+              onClick={() => setIsEarlyMessageDismissed(true)}
+              className='ml-2 p-0.5 hover:bg-slate-100 rounded transition-colors'
+              title='Dismiss message'
+            >
+              <X className='w-3 h-3 text-slate-400 hover:text-slate-600' />
+            </button>
+          </div>
         </div>
       )}
     </div>
