@@ -896,24 +896,12 @@ export default function HomePage() {
               >
                 Privacy Policy
               </Link>
-              <a
-                href='#'
+              <Link
+                href='/terms'
                 className='text-gray-600 text-sm font-medium hover:underline hover:underline-offset-4 hover:decoration-2'
               >
                 Terms of Service
-              </a>
-              <a
-                href='#'
-                className='text-gray-600 text-sm font-medium hover:underline hover:underline-offset-4 hover:decoration-2'
-              >
-                Contact Us
-              </a>
-              <a
-                href='#'
-                className='text-gray-600 text-sm font-medium hover:underline hover:underline-offset-4 hover:decoration-2'
-              >
-                Help Center
-              </a>
+              </Link>
             </div>
 
             <div className='pt-4 border-t border-gray-200'>
