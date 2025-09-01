@@ -6,6 +6,7 @@ import UserCard from './UserCard';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import LoadingContainer from '../LoadingContainer';
 import { RAGSearchService } from '../../services';
+import SearchAnalyticsTracker from '../analytics/SearchAnalyticsTracker';
 import type {
   SearchResult,
   SearchResponse,
@@ -245,6 +246,15 @@ export default function SearchSectionContent({
           </div>
         )}
       </div>
+      
+      {/* Search Analytics Tracker */}
+      <SearchAnalyticsTracker
+        searchQuery={searchQuery}
+        searchResponse={searchResponse}
+        isSearching={isSearching}
+        searchError={error}
+        hasSearched={hasSearched}
+      />
     </div>
   );
 }

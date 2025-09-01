@@ -11,6 +11,7 @@ import {
 } from '../lib/search-history-utils';
 import { RAGSearchService } from '../services';
 import type { SearchResponse } from '../types/search.types';
+import { useAnalytics } from '../hooks/useAnalytics';
 
 interface SearchUserProps {
   onProfessionalRequest?: (request: string) => void;
@@ -31,6 +32,7 @@ export default function SearchUser({
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const analytics = useAnalytics();
 
   // Load search history on component mount
   useEffect(() => {
@@ -128,6 +130,14 @@ export default function SearchUser({
   const handleHistoryItemClick = (historyQuery: string) => {
     setQuery(historyQuery);
     setShowHistory(false);
+
+    // Track search history usage
+    analytics.trackSearch('search_history_used', {
+      search_term: historyQuery,
+      history_action: 'history_item_clicked',
+      query_length: historyQuery.length,
+      word_count: historyQuery.split(' ').length
+    });
 
     // Trigger search for history item
     if (!isProcessing) {

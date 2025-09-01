@@ -58,6 +58,8 @@ const pageview = (url: string, userId?: string) => {
       user_id: userId || 'anonymous',
       environment: environment,
       timestamp: Date.now(),
+      // Add page-specific custom parameters
+      custom_parameter_3: getPageType(url),
     });
   }
 };
@@ -199,6 +201,17 @@ const getSessionId = () => {
     return sessionId;
   }
   return 'unknown_session';
+};
+
+const getPageType = (url: string) => {
+  const path = url.split('?')[0];
+  if (path === '/') return 'landing';
+  if (path === '/dashboard') return 'dashboard';
+  if (path === '/chat') return 'chat';
+  if (path === '/auth') return 'authentication';
+  if (path === '/onboarding') return 'onboarding';
+  if (path.includes('/resume-parser')) return 'tools';
+  return 'content';
 };
 
 // Main Google Analytics component

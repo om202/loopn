@@ -30,6 +30,7 @@ import { useUserProfile } from '../hooks/useUserProfile';
 import { notificationService } from '../services/notification.service';
 import { useSubscriptionStore } from '../stores/subscription-store';
 import { OnlineUsers_Shimmer, ShimmerProvider } from './ShimmerLoader/exports';
+import DashboardSectionTracker from './analytics/DashboardSectionTracker';
 
 type UserPresence = Schema['UserPresence']['type'];
 type Conversation = Schema['Conversation']['type'];
@@ -618,6 +619,9 @@ export default function OnlineUsers({
         isOpen={isBugReportOpen}
         onClose={() => setIsBugReportOpen(false)}
       />
+
+      {/* Dashboard Section Analytics Tracker */}
+      <DashboardSectionTracker activeSection={activeSection} />
     </div>
   );
 }

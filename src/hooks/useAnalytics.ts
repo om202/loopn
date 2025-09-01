@@ -74,7 +74,17 @@ export const useAnalytics = () => {
 
   // Track dashboard interactions
   const trackDashboard = (
-    action: 'view_matches' | 'filter_users' | 'search_users' | 'export_data'
+    action: 
+      | 'view_matches' 
+      | 'filter_users' 
+      | 'search_users' 
+      | 'export_data'
+      | 'view_suggested'
+      | 'view_connections' 
+      | 'view_saved'
+      | 'view_search'
+      | 'view_notifications'
+      | 'view_account'
   ) => {
     event({
       action: action,
@@ -141,6 +151,40 @@ export const useAnalytics = () => {
     });
   };
 
+  // Track search interactions
+  const trackSearch = (
+    action: 
+      | 'search_initiated'
+      | 'search_completed' 
+      | 'search_failed'
+      | 'search_performance'
+      | 'search_results_analysis'
+      | 'search_no_results'
+      | 'search_result_clicked'
+      | 'search_result_chat_request'
+      | 'search_result_viewed'
+      | 'search_history_used'
+      | 'search_filter_applied',
+    searchData?: Record<string, unknown>
+  ) => {
+    event({
+      action: action,
+      category: 'search',
+      label: `search_${action}`,
+      userId,
+    });
+
+    // Send detailed search event with custom parameters
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', action, {
+        event_category: 'search',
+        user_id: userId || 'anonymous',
+        ...searchData,
+        timestamp: Date.now()
+      });
+    }
+  };
+
   // Generic custom event tracker
   const trackCustomEvent = (
     action: string,
@@ -168,6 +212,7 @@ export const useAnalytics = () => {
     trackEngagement,
     trackError,
     trackBusiness,
+    trackSearch,
     trackCustomEvent,
   };
 };
