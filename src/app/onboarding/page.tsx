@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { CloudUpload } from 'lucide-react';
 import { generateClient } from 'aws-amplify/data';
+
 import type { Schema } from '../../../amplify/data/resource';
 import { useAuth } from '@/contexts/AuthContext';
 import {
@@ -23,7 +24,7 @@ import LoadingContainer from '@/components/LoadingContainer';
 import ProfilePictureUpload from '@/components/ProfilePictureUpload';
 
 export default function OnboardingPage() {
-  const { authStatus, onboardingStatus } = useAuth();
+  const { authStatus, onboardingStatus, handleSignOut } = useAuth();
   const router = useRouter();
 
   const [currentStep, setCurrentStep] = useState(1);
@@ -530,6 +531,16 @@ export default function OnboardingPage() {
       <div className='max-w-3xl mx-auto'>
         {/* Main content card */}
         <div className='bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 lg:p-8'>
+          {/* Sign Out Button */}
+          <div className='flex justify-end mb-4'>
+            <button
+              onClick={handleSignOut}
+              className='text-sm text-slate-600 hover:text-slate-800 transition-colors'
+            >
+              Sign Out
+            </button>
+          </div>
+
           {/* Header - Logo and Title */}
           <div className='text-center mb-4'>
             <Link href='/home' className='inline-block'>
