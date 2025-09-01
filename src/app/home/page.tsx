@@ -713,14 +713,16 @@ export default function HomePage() {
           <div className='space-y-4'>
             {/* FAQ Item 1 */}
             <div className='bg-white border border-slate-200 rounded-2xl shadow-sm'>
-              <button 
+              <button
                 className='w-full text-left p-4 sm:p-5 flex items-center justify-between hover:bg-slate-50/50 transition-colors rounded-2xl'
                 onClick={() => toggleFAQ(0)}
               >
                 <h3 className='text-lg font-semibold text-slate-900 pr-4'>
                   How does Loopn work?
                 </h3>
-                <ChevronDown className={`w-5 h-5 text-slate-500 flex-shrink-0 transition-transform ${expandedFAQ === 0 ? 'rotate-180' : ''}`} />
+                <ChevronDown
+                  className={`w-5 h-5 text-slate-500 flex-shrink-0 transition-transform ${expandedFAQ === 0 ? 'rotate-180' : ''}`}
+                />
               </button>
               {expandedFAQ === 0 && (
                 <div className='px-4 sm:px-5 pb-4 sm:pb-5 -mt-1'>
@@ -736,22 +738,24 @@ export default function HomePage() {
 
             {/* FAQ Item 2 */}
             <div className='bg-white border border-slate-200 rounded-2xl shadow-sm'>
-              <button 
+              <button
                 className='w-full text-left p-4 sm:p-5 flex items-center justify-between hover:bg-slate-50/50 transition-colors rounded-2xl'
                 onClick={() => toggleFAQ(1)}
               >
                 <h3 className='text-lg font-semibold text-slate-900 pr-4'>
                   Who can I connect with?
                 </h3>
-                <ChevronDown className={`w-5 h-5 text-slate-500 flex-shrink-0 transition-transform ${expandedFAQ === 1 ? 'rotate-180' : ''}`} />
+                <ChevronDown
+                  className={`w-5 h-5 text-slate-500 flex-shrink-0 transition-transform ${expandedFAQ === 1 ? 'rotate-180' : ''}`}
+                />
               </button>
               {expandedFAQ === 1 && (
                 <div className='px-4 sm:px-5 pb-4 sm:pb-5 -mt-1'>
                   <p className='text-slate-600 leading-relaxed'>
-                    All Loopn users are professionals across various
-                    industries. You'll connect with people who share your
-                    interests, career goals, or expertise areas - from software
-                    engineers and designers to consultants and entrepreneurs.
+                    All Loopn users are professionals across various industries.
+                    You'll connect with people who share your interests, career
+                    goals, or expertise areas - from software engineers and
+                    designers to consultants and entrepreneurs.
                   </p>
                 </div>
               )}
@@ -759,23 +763,25 @@ export default function HomePage() {
 
             {/* FAQ Item 3 */}
             <div className='bg-white border border-slate-200 rounded-2xl shadow-sm'>
-              <button 
+              <button
                 className='w-full text-left p-4 sm:p-5 flex items-center justify-between hover:bg-slate-50/50 transition-colors rounded-2xl'
                 onClick={() => toggleFAQ(2)}
               >
                 <h3 className='text-lg font-semibold text-slate-900 pr-4'>
                   How do I get started?
                 </h3>
-                <ChevronDown className={`w-5 h-5 text-slate-500 flex-shrink-0 transition-transform ${expandedFAQ === 2 ? 'rotate-180' : ''}`} />
+                <ChevronDown
+                  className={`w-5 h-5 text-slate-500 flex-shrink-0 transition-transform ${expandedFAQ === 2 ? 'rotate-180' : ''}`}
+                />
               </button>
               {expandedFAQ === 2 && (
                 <div className='px-4 sm:px-5 pb-4 sm:pb-5 -mt-1'>
                   <p className='text-slate-600 leading-relaxed'>
-                    Getting started is simple: sign up, complete your professional
-                    profile including your interests and career goals, and we'll
-                    suggest relevant connections. You can then browse profiles and
-                    send chat requests to professionals you'd like to connect
-                    with.
+                    Getting started is simple: sign up, complete your
+                    professional profile including your interests and career
+                    goals, and we'll suggest relevant connections. You can then
+                    browse profiles and send chat requests to professionals
+                    you'd like to connect with.
                   </p>
                 </div>
               )}
@@ -783,23 +789,25 @@ export default function HomePage() {
 
             {/* FAQ Item 4 */}
             <div className='bg-white border border-slate-200 rounded-2xl shadow-sm'>
-              <button 
+              <button
                 className='w-full text-left p-4 sm:p-5 flex items-center justify-between hover:bg-slate-50/50 transition-colors rounded-2xl'
                 onClick={() => toggleFAQ(3)}
               >
                 <h3 className='text-lg font-semibold text-slate-900 pr-4'>
                   What makes Loopn different from other platforms?
                 </h3>
-                <ChevronDown className={`w-5 h-5 text-slate-500 flex-shrink-0 transition-transform ${expandedFAQ === 3 ? 'rotate-180' : ''}`} />
+                <ChevronDown
+                  className={`w-5 h-5 text-slate-500 flex-shrink-0 transition-transform ${expandedFAQ === 3 ? 'rotate-180' : ''}`}
+                />
               </button>
               {expandedFAQ === 3 && (
                 <div className='px-4 sm:px-5 pb-4 sm:pb-5 -mt-1'>
                   <p className='text-slate-600 leading-relaxed'>
                     Loopn focuses exclusively on meaningful professional
                     conversations. Unlike casual social platforms, every
-                    interaction is career-focused, quality-driven, and designed to
-                    help you build genuine professional relationships that advance
-                    your career.
+                    interaction is career-focused, quality-driven, and designed
+                    to help you build genuine professional relationships that
+                    advance your career.
                   </p>
                 </div>
               )}
