@@ -12,6 +12,7 @@ import AmplifyProvider from './amplify-provider';
 import { RealtimeProvider } from '@/contexts/RealtimeContext';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { GlobalSubscriptionProvider } from '@/contexts/GlobalSubscriptionContext';
+import GoogleAnalytics, { PageTracker } from '@/components/GoogleAnalytics';
 
 export const metadata: Metadata = {
   title: 'Loopn - Professional Networking & Career Matching using AI',
@@ -164,6 +165,10 @@ export default function RootLayout({
             </RealtimeProvider>
           </AuthProvider>
         </AmplifyProvider>
+
+        {/* Google Analytics 4 Tracking */}
+        <GoogleAnalytics />
+        <PageTracker />
       </body>
     </html>
   );
