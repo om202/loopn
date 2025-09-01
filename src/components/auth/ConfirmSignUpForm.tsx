@@ -32,10 +32,10 @@ export default function ConfirmSignUpForm({
       return;
     }
 
-    await handleConfirmSignUp(email, confirmationCode);
+    const success = await handleConfirmSignUp(email, confirmationCode);
 
     // If successful, go to sign in
-    if (!error) {
+    if (success) {
       onConfirmSuccess();
     }
   };

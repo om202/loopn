@@ -48,7 +48,7 @@ export interface AuthContextType extends AuthState {
   handleConfirmSignUp: (
     email: string,
     confirmationCode: string
-  ) => Promise<void>;
+  ) => Promise<boolean>;
   handleResendSignUpCode: (email: string) => Promise<void>;
 
   // Password Reset
@@ -57,7 +57,7 @@ export interface AuthContextType extends AuthState {
     email: string,
     confirmationCode: string,
     newPassword: string
-  ) => Promise<void>;
+  ) => Promise<boolean>;
 
   // Sign Out
   handleSignOut: () => Promise<void>;
@@ -219,7 +219,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const handleConfirmSignUp = async (
     email: string,
     confirmationCode: string
-  ) => {
+  ): Promise<boolean> => {
     try {
       setLoading(true);
       setError(null);
@@ -231,11 +231,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       // After confirmation, user can sign in
       setError(null);
+      return true;
     } catch (err) {
       console.error('Confirm sign up error:', err);
       setError(
         err instanceof Error ? err.message : 'Failed to confirm sign up'
       );
+      return false;
     } finally {
       setLoading(false);
     }
@@ -288,7 +290,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     email: string,
     confirmationCode: string,
     newPassword: string
-  ) => {
+  ): Promise<boolean> => {
     try {
       setLoading(true);
       setError(null);
@@ -300,11 +302,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
       });
 
       console.log('Password reset successful');
+      return true;
     } catch (err) {
       console.error('Confirm reset password error:', err);
       setError(
         err instanceof Error ? err.message : 'Failed to confirm password reset'
       );
+      return false;
     } finally {
       setLoading(false);
     }

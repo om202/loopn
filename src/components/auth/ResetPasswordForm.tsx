@@ -38,10 +38,14 @@ export default function ResetPasswordForm({
       return;
     }
 
-    await handleConfirmResetPassword(email, confirmationCode, newPassword);
+    const success = await handleConfirmResetPassword(
+      email,
+      confirmationCode,
+      newPassword
+    );
 
     // If successful, go to sign in
-    if (!error) {
+    if (success) {
       onResetSuccess();
     }
   };
