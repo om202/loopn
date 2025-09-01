@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { chatService } from '../services/chat.service';
 import { useSubscriptionStore } from '../stores/subscription-store';
+import { useAnalytics } from '../hooks/useAnalytics';
 
 interface UseConnectionActionsProps {
   conversationId: string;
@@ -30,6 +31,7 @@ export function useConnectionActions({
   const [error, setError] = useState<string | null>(null);
   const { removeConnectionRequest, updateConversationConnectionStatus } =
     useSubscriptionStore();
+  const analytics = useAnalytics();
 
   const sendConnectionRequest = useCallback(async () => {
     if (!conversationId || !currentUserId || !otherUserId) {
@@ -95,6 +97,9 @@ export function useConnectionActions({
           if (status === 'ACCEPTED' && optimisticConversationId) {
             updateConversationConnectionStatus(optimisticConversationId, false);
           }
+        } else if (status === 'ACCEPTED') {
+          // Track successful connection when user accepts
+          analytics.trackConnectionMade();
         }
       } catch (err) {
         setError(

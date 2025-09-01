@@ -30,7 +30,7 @@ import { useUserProfile } from '../hooks/useUserProfile';
 import { notificationService } from '../services/notification.service';
 import { useSubscriptionStore } from '../stores/subscription-store';
 import { OnlineUsers_Shimmer, ShimmerProvider } from './ShimmerLoader/exports';
-import DashboardSectionTracker from './analytics/DashboardSectionTracker';
+import { useAnalytics } from '../hooks/useAnalytics';
 
 type UserPresence = Schema['UserPresence']['type'];
 type Conversation = Schema['Conversation']['type'];
@@ -52,6 +52,7 @@ export default function OnlineUsers({
   onChatRequestSent,
   onProfessionalRequest,
 }: OnlineUsersProps) {
+  const analytics = useAnalytics();
   const [allUsers, setAllUsers] = useState<UserPresence[]>([]);
   const [isBugReportOpen, setIsBugReportOpen] = useState(false);
   const [profileSidebarUser, setProfileSidebarUser] =
@@ -61,6 +62,11 @@ export default function OnlineUsers({
   const [error, setError] = useState<string | null>(null);
   const [activeSection, setActiveSection] =
     useState<SidebarSection>('suggested');
+
+  // Track dashboard tab changes
+  useEffect(() => {
+    analytics.trackDashboardTabViewed(activeSection);
+  }, [activeSection, analytics]);
   const [searchQuery, setSearchQuery] = useState('');
   const [shouldTriggerSearch, setShouldTriggerSearch] = useState(false);
   const [searchResponse, setSearchResponse] = useState<SearchResponse | null>(
@@ -619,9 +625,6 @@ export default function OnlineUsers({
         isOpen={isBugReportOpen}
         onClose={() => setIsBugReportOpen(false)}
       />
-
-      {/* Dashboard Section Analytics Tracker */}
-      <DashboardSectionTracker activeSection={activeSection} />
     </div>
   );
 }

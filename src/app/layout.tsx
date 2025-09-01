@@ -13,7 +13,6 @@ import { RealtimeProvider } from '@/contexts/RealtimeContext';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { GlobalSubscriptionProvider } from '@/contexts/GlobalSubscriptionContext';
 import GoogleAnalytics, { PageTracker } from '@/components/GoogleAnalytics';
-import { StandardWebAppAnalytics } from '@/components/analytics/StandardWebAppAnalytics';
 
 export const metadata: Metadata = {
   title: 'Loopn - Professional Networking & Career Matching using AI',
@@ -166,7 +165,6 @@ export default function RootLayout({
                 {/* Google Analytics 4 Tracking - Inside AuthProvider */}
                 <GoogleAnalytics />
                 <PageTracker />
-                <StandardWebAppAnalytics />
               </GlobalSubscriptionProvider>
             </RealtimeProvider>
           </AuthProvider>

@@ -131,13 +131,8 @@ export default function SearchUser({
     setQuery(historyQuery);
     setShowHistory(false);
 
-    // Track search history usage
-    analytics.trackSearch('search_history_used', {
-      search_term: historyQuery,
-      history_action: 'history_item_clicked',
-      query_length: historyQuery.length,
-      word_count: historyQuery.split(' ').length,
-    });
+    // Track search performed (using simplified analytics)
+    analytics.trackSearchPerformed(historyQuery, 0); // 0 results initially, will be updated when search completes
 
     // Trigger search for history item
     if (!isProcessing) {

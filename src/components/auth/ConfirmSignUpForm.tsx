@@ -23,6 +23,7 @@ export default function ConfirmSignUpForm({
     error,
     clearError,
   } = useAuth();
+  const analytics = useAnalytics();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,6 +37,8 @@ export default function ConfirmSignUpForm({
 
     // If successful, go to sign in
     if (success) {
+      // Track signup completion
+      analytics.trackSignupCompleted();
       onConfirmSuccess();
     }
   };

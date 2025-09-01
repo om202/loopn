@@ -6,7 +6,8 @@ import UserCard from './UserCard';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import LoadingContainer from '../LoadingContainer';
 import { RAGSearchService } from '../../services';
-import SearchAnalyticsTracker from '../analytics/SearchAnalyticsTracker';
+import { useAnalytics } from '../../hooks/useAnalytics';
+
 import type {
   SearchResult,
   SearchResponse,
@@ -66,6 +67,7 @@ export default function SearchSectionContent({
     null
   );
   const { user } = useAuthenticator();
+  const analytics = useAnalytics();
 
   // Initialize chat actions
 
@@ -95,6 +97,9 @@ export default function SearchSectionContent({
 
         setSearchResults(response.results);
         setSearchMetrics(response.metrics);
+
+        // Track search performed with actual results
+        analytics.trackSearchPerformed(searchTerm, response.results.length);
 
         // Check if response contains error from SearchUser component
         if (response.error) {
@@ -246,15 +251,6 @@ export default function SearchSectionContent({
           </div>
         )}
       </div>
-
-      {/* Search Analytics Tracker */}
-      <SearchAnalyticsTracker
-        searchQuery={searchQuery}
-        searchResponse={searchResponse}
-        isSearching={isSearching}
-        searchError={error}
-        hasSearched={hasSearched}
-      />
     </div>
   );
 }

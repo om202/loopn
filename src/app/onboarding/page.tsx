@@ -9,6 +9,7 @@ import { generateClient } from 'aws-amplify/data';
 
 import type { Schema } from '../../../amplify/data/resource';
 import { useAuth } from '@/contexts/AuthContext';
+import { useAnalytics } from '@/hooks/useAnalytics';
 import {
   OnboardingService,
   OnboardingData,
@@ -26,6 +27,7 @@ import ProfilePictureUpload from '@/components/ProfilePictureUpload';
 export default function OnboardingPage() {
   const { authStatus, onboardingStatus, handleSignOut } = useAuth();
   const router = useRouter();
+  const analytics = useAnalytics();
 
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -358,6 +360,9 @@ export default function OnboardingPage() {
       };
 
       await OnboardingService.completeOnboarding(onboardingData);
+
+      // Track onboarding completion
+      analytics.trackOnboardingCompleted();
 
       // Onboarding complete! Navigate to dashboard
       router.replace('/dashboard');
