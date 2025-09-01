@@ -1,6 +1,24 @@
 'use client';
 
 import OnlineUsers from '../../components/OnlineUsers';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Dashboard - Find Professionals | Loopn',
+  description: 'Discover and connect with professionals who are online now. AI-powered matching helps you find the right people for your career goals.',
+  keywords: [
+    'professional dashboard',
+    'find professionals',
+    'online networking',
+    'professional discovery',
+    'career connections',
+    'live professional matching'
+  ],
+  robots: {
+    index: false, // Private dashboard - don't index
+    follow: false,
+  },
+};
 import ProtectedRoute from '../../components/protected-route';
 
 export default function DashboardPage() {

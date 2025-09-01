@@ -44,12 +44,21 @@ export const metadata: Metadata = {
     siteName: 'Loopn',
     locale: 'en_US',
     url: 'https://www.loopn.io',
+    images: [
+      {
+        url: 'https://www.loopn.io/loopn.png',
+        width: 1200,
+        height: 630,
+        alt: 'Loopn - AI-Powered Professional Networking Platform',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Loopn - AI-Powered Professional Networking & Career Matching',
     description:
       'Upload your resume, get matched instantly with compatible professionals. AI-powered career networking for meaningful professional relationships.',
+    images: ['https://www.loopn.io/loopn.png'],
   },
   robots: {
     index: true,
@@ -84,6 +93,11 @@ export default function RootLayout({
           content='width=device-width, initial-scale=1, viewport-fit=cover'
         />
         <meta name='format-detection' content='telephone=no,email=no' />
+        <link rel='manifest' href='/manifest.json' />
+        <meta name='theme-color' content='#0ea5e9' />
+        <meta name='apple-mobile-web-app-capable' content='yes' />
+        <meta name='apple-mobile-web-app-status-bar-style' content='default' />
+        <meta name='apple-mobile-web-app-title' content='Loopn' />
         <script
           type='application/ld+json'
           dangerouslySetInnerHTML={{
@@ -94,7 +108,7 @@ export default function RootLayout({
               description:
                 'AI-powered professional networking platform that connects professionals through resume-based career matching for meaningful career advancement.',
               url: 'https://www.loopn.io',
-              logo: 'https://www.loopn.io/loopn.svg',
+              logo: 'https://www.loopn.io/loopn.png',
               foundingDate: '2024',
               contactPoint: {
                 '@type': 'ContactPoint',
@@ -135,7 +149,7 @@ export default function RootLayout({
               publisher: {
                 '@type': 'Organization',
                 name: 'Loopn',
-                logo: 'https://www.loopn.io/loopn.svg',
+                logo: 'https://www.loopn.io/loopn.png',
               },
             }),
           }}

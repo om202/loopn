@@ -1,6 +1,39 @@
 'use client';
 
 import { useAuthenticator } from '@aws-amplify/ui-react';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Professional Networking Reimagined | Loopn',
+  description: 'Upload your resume and get instantly matched with compatible professionals. AI-powered career networking that connects you with the right people for meaningful relationships.',
+  keywords: [
+    'professional networking',
+    'AI resume matching',
+    'career networking',
+    'professional connections',
+    'resume-based networking',
+    'career advancement',
+    'professional discovery',
+    'networking platform'
+  ],
+  openGraph: {
+    title: 'Professional Networking Reimagined | Loopn',
+    description: 'Upload your resume and get instantly matched with compatible professionals. Start building meaningful career relationships today.',
+    type: 'website',
+    url: 'https://www.loopn.io/home',
+    images: [
+      {
+        url: 'https://www.loopn.io/loopn.png',
+        width: 1200,
+        height: 630,
+        alt: 'Loopn Professional Networking Platform',
+      },
+    ],
+  },
+  alternates: {
+    canonical: 'https://www.loopn.io/home',
+  },
+};
 import {
   MessageSquare,
   ArrowRight,

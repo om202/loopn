@@ -1,0 +1,27 @@
+# Robots.txt for Loopn - AI-Powered Professional Networking Platform
+
+User-agent: *
+Allow: /
+Allow: /home
+Allow: /auth
+
+# Disallow private/protected pages
+Disallow: /dashboard
+Disallow: /chat
+Disallow: /onboarding
+Disallow: /admin
+Disallow: /debug
+Disallow: /api/
+Disallow: /_next/
+Disallow: /static/
+
+# Allow important files
+Allow: /favicon.ico
+Allow: /loopn.svg
+Allow: /sitemap.xml
+
+# Sitemap location
+Sitemap: https://www.loopn.io/sitemap.xml
+
+# Crawl delay (optional - be respectful)
+Crawl-delay: 1
