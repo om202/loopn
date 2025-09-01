@@ -37,7 +37,7 @@ export class RAGSearchService {
     const searchOptions: SearchOptions = {
       query: query.trim(),
       limit: options.limit || 20,
-      minSimilarity: options.minSimilarity || 0.3,
+      minSimilarity: options.minSimilarity || 0.6,
       includeEmbeddingText: options.includeEmbeddingText || false,
       excludeUserIds: options.excludeUserIds || [],
     };

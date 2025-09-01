@@ -40,7 +40,7 @@ export interface SearchResult {
 export interface SearchOptions {
   query: string;
   limit?: number; // Default 20
-  minSimilarity?: number; // Default 0.3 (30%)
+  minSimilarity?: number; // Default 0.6 (60%)
   includeEmbeddingText?: boolean; // Include matched text in results
   excludeUserIds?: string[]; // Exclude specific users from results
 }
@@ -208,7 +208,7 @@ export const DEFAULT_SEARCH_CONFIG: SearchConfig = {
     dimensions: 1024,
   },
   similarity: {
-    threshold: 0.3, // 30% similarity
+    threshold: 0.6, // 60% similarity - stricter matching
     maxResults: 20,
   },
   performance: {
