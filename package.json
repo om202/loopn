@@ -27,7 +27,7 @@
     "lucide-react": "^0.542.0",
     "markdown-it": "^14.1.0",
     "next": "14.2.13",
-    "pdfjs-dist": "^5.4.54",
+    "pdfjs-dist": "5.4.54",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-loading-skeleton": "^3.5.0",
