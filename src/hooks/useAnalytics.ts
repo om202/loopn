@@ -1,7 +1,10 @@
 import { event } from '@/components/GoogleAnalytics';
+import { useAuth } from '@/contexts/AuthContext';
 
 export const useAnalytics = () => {
-  // Track page visits
+  const { user } = useAuth();
+  const userId = user?.userId;
+  // Track page visits with user context
   const trackPageView = (
     pageName: string,
     additionalData?: Record<string, unknown>
@@ -10,6 +13,7 @@ export const useAnalytics = () => {
       action: 'page_view',
       category: 'engagement',
       label: pageName,
+      userId,
       ...additionalData,
     });
   };
@@ -20,6 +24,7 @@ export const useAnalytics = () => {
       action: action,
       category: 'authentication',
       label: `user_${action}`,
+      userId,
     });
   };
 
@@ -31,6 +36,7 @@ export const useAnalytics = () => {
       action: action,
       category: 'chat',
       label: `chat_${action}`,
+      userId,
     });
   };
 
@@ -46,6 +52,7 @@ export const useAnalytics = () => {
       action: action,
       category: 'networking',
       label: `connection_${action}`,
+      userId,
     });
   };
 
@@ -61,6 +68,7 @@ export const useAnalytics = () => {
       action: action,
       category: 'onboarding',
       label: `onboarding_${action}`,
+      userId,
     });
   };
 
@@ -72,6 +80,7 @@ export const useAnalytics = () => {
       action: action,
       category: 'dashboard',
       label: `dashboard_${action}`,
+      userId,
     });
   };
 
@@ -84,12 +93,21 @@ export const useAnalytics = () => {
       action: `file_${action}`,
       category: 'files',
       label: fileType ? `${fileType}_${action}` : `file_${action}`,
+      userId,
     });
   };
 
   // Track user engagement
   const trackEngagement = (
-    action: 'scroll_to_bottom' | 'time_on_page' | 'click_external_link',
+    action:
+      | 'scroll_to_bottom'
+      | 'time_on_page'
+      | 'click_external_link'
+      | 'page_load_time'
+      | 'scroll_25_percent'
+      | 'scroll_50_percent'
+      | 'scroll_75_percent'
+      | 'home_page_time_spent',
     value?: number
   ) => {
     event({
@@ -97,6 +115,7 @@ export const useAnalytics = () => {
       category: 'engagement',
       label: `user_${action}`,
       value: value,
+      userId,
     });
   };
 
@@ -106,6 +125,7 @@ export const useAnalytics = () => {
       action: 'error_occurred',
       category: 'errors',
       label: errorType,
+      userId,
     });
   };
 
@@ -117,6 +137,7 @@ export const useAnalytics = () => {
       action: action,
       category: 'business',
       label: `business_${action}`,
+      userId,
     });
   };
 
@@ -132,6 +153,7 @@ export const useAnalytics = () => {
       category,
       label,
       value,
+      userId,
     });
   };
 
