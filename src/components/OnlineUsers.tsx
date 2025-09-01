@@ -1,8 +1,7 @@
 'use client';
 
 import { useAuthenticator } from '@aws-amplify/ui-react';
-import { fetchAuthSession } from 'aws-amplify/auth';
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import ProfileSidebar from './ProfileSidebar';
 import { simplePresenceManager } from '../lib/presence-utils';
 import { useAuth } from '../contexts/AuthContext';
@@ -59,7 +58,6 @@ export default function OnlineUsers({
 
   const [profileSidebarOpen, setProfileSidebarOpen] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [, setConversationsLoaded] = useState(false);
   const [activeSection, setActiveSection] =
     useState<SidebarSection>('suggested');
   const [searchQuery, setSearchQuery] = useState('');
@@ -191,71 +189,9 @@ export default function OnlineUsers({
     }
   }, [profileSidebarOpen, profileSidebarUser, allUsers]);
 
-  const isAuthSessionReady = async (): Promise<boolean> => {
-    try {
-      const session = await fetchAuthSession();
-      return !!(session.tokens?.accessToken && session.credentials);
-    } catch (error) {
-      console.error('Auth session not ready yet:', error);
-      return false;
-    }
-  };
 
-  const loadConversations = useCallback(async () => {
-    if (!user) {
-      setConversationsLoaded(true);
-      return;
-    }
 
-    try {
-      const conversationsResult = await chatService.getUserConversations(
-        user.userId
-      );
-      if (conversationsResult.error) {
-        setError(conversationsResult.error);
-        setConversationsLoaded(true);
-        return;
-      }
 
-      const conversations = conversationsResult.data || [];
-      const conversationMap = new Map<string, Conversation>();
-      const userIds = new Set<string>();
-
-      const sortedConversations = conversations.sort((a, b) => {
-        const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
-        const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
-        return dateB - dateA;
-      });
-
-      sortedConversations.forEach(conv => {
-        const otherUserId =
-          conv.participant1Id === user.userId
-            ? conv.participant2Id
-            : conv.participant1Id;
-        if (otherUserId && !conversationMap.has(otherUserId)) {
-          conversationMap.set(otherUserId, conv);
-          userIds.add(otherUserId);
-        }
-      });
-
-      const validUserPresences = Array.from(userIds).map(userId => ({
-        userId,
-        isOnline: false,
-        status: 'OFFLINE' as const,
-        lastSeen: null,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      }));
-
-      return validUserPresences;
-    } catch (error) {
-      console.error('Error loading conversations:', error);
-      setError('Failed to load conversations');
-      return [];
-    } finally {
-      setConversationsLoaded(true);
-    }
-  }, [user]);
 
   const existingConversations = useMemo(() => {
     const conversationMap = new Map<string, Conversation>();
@@ -286,33 +222,11 @@ export default function OnlineUsers({
     onChatRequestSent,
   });
 
-  const [conversationUsers, setConversationUsers] = useState<UserPresence[]>(
-    []
-  );
+
   const [suggestedUsers, setSuggestedUsers] = useState<UserPresence[]>([]);
   const [suggestedUsersLoading, setSuggestedUsersLoading] = useState(true);
 
-  useEffect(() => {
-    if (!user) {
-      return;
-    }
 
-    const conversationDelay = setTimeout(async () => {
-      const authReady = await isAuthSessionReady();
-      if (authReady) {
-        loadConversations().then(users => {
-          setConversationUsers(users || []);
-        });
-      } else {
-        console.error('Auth session not ready for conversation loading');
-        setConversationsLoaded(true);
-      }
-    }, 800);
-
-    return () => {
-      clearTimeout(conversationDelay);
-    };
-  }, [user, loadConversations]);
 
   useEffect(() => {
     setOptimisticPendingRequests(prev => {
@@ -366,9 +280,38 @@ export default function OnlineUsers({
     loadSuggestedUsers();
   }, [user?.userId, existingConversations, conversationsLoading]);
 
+  // Create conversation users directly from Zustand store instead of legacy loadConversations
+  const conversationUsersFromStore = useMemo(() => {
+    const allConversations = Array.from(conversations.values());
+    const userIds = new Set<string>();
+    
+    allConversations.forEach(conversation => {
+      const otherUserId =
+        conversation.participant1Id === user?.userId
+          ? conversation.participant2Id
+          : conversation.participant1Id;
+      
+      if (otherUserId && otherUserId !== user?.userId) {
+        userIds.add(otherUserId);
+      }
+    });
+
+    return Array.from(userIds).map(userId => ({
+      userId,
+      isOnline: false,
+      status: 'OFFLINE' as const,
+      lastSeen: null,
+      lastHeartbeat: null,
+      activeChatId: null,
+      lastChatActivity: null,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    } as UserPresence));
+  }, [conversations, user?.userId]);
+
   useEffect(() => {
     const combinedUsers = [...onlineUsers];
-    conversationUsers.forEach(userPresence => {
+    conversationUsersFromStore.forEach(userPresence => {
       const existingUser = combinedUsers.find(
         u => u.userId === userPresence.userId
       );
@@ -377,7 +320,7 @@ export default function OnlineUsers({
       }
     });
     setAllUsers(combinedUsers);
-  }, [onlineUsers, conversationUsers]);
+  }, [onlineUsers, conversationUsersFromStore]);
 
   const handleChatAction = async (receiverId: string) => {
     const action = await chatActions.handleChatAction(

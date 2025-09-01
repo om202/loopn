@@ -22,7 +22,8 @@ interface NotificationItemProps {
   ) => void;
   onRespondToConnectionRequest?: (
     connectionRequestId: string,
-    status: 'ACCEPTED' | 'REJECTED'
+    status: 'ACCEPTED' | 'REJECTED',
+    conversationId?: string
   ) => void;
   onRemoveNotification: (notificationId: string) => void;
   decliningId: string | null;
@@ -352,7 +353,8 @@ export default function NotificationItem({
                       notification.data as ConnectionRequestNotificationData;
                     await onRespondToConnectionRequest(
                       connectionData.connectionRequestId,
-                      'ACCEPTED'
+                      'ACCEPTED',
+                      connectionData.conversationId
                     );
                     // Note: onRemoveNotification is now handled inside onRespondToConnectionRequest
                   }}
@@ -367,7 +369,8 @@ export default function NotificationItem({
                       notification.data as ConnectionRequestNotificationData;
                     await onRespondToConnectionRequest(
                       connectionData.connectionRequestId,
-                      'REJECTED'
+                      'REJECTED',
+                      connectionData.conversationId
                     );
                     // Note: onRemoveNotification is now handled inside onRespondToConnectionRequest
                   }}

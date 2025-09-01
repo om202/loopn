@@ -12,7 +12,8 @@ interface UseConnectionActionsReturn {
   sendConnectionRequest: () => Promise<void>;
   respondToConnectionRequest: (
     connectionId: string,
-    status: 'ACCEPTED' | 'REJECTED'
+    status: 'ACCEPTED' | 'REJECTED',
+    optimisticConversationId?: string
   ) => Promise<void>;
   cancelConnectionRequest: (connectionId: string) => Promise<void>;
   removeConnection: () => Promise<void>;
@@ -59,7 +60,11 @@ export function useConnectionActions({
   }, [conversationId, currentUserId, otherUserId]);
 
   const respondToConnectionRequest = useCallback(
-    async (connectionId: string, status: 'ACCEPTED' | 'REJECTED') => {
+    async (
+      connectionId: string, 
+      status: 'ACCEPTED' | 'REJECTED',
+      optimisticConversationId?: string
+    ) => {
       if (!connectionId) {
         setError('Missing connection request ID');
         return;
@@ -67,6 +72,11 @@ export function useConnectionActions({
 
       setIsLoading(true);
       setError(null);
+
+      // Optimistically update the conversation status if accepting and we have the conversation ID
+      if (status === 'ACCEPTED' && optimisticConversationId) {
+        updateConversationConnectionStatus(optimisticConversationId, true, 'ACTIVE');
+      }
 
       try {
         const result = await chatService.respondToConnectionRequest(
@@ -76,6 +86,11 @@ export function useConnectionActions({
 
         if (result.error) {
           setError(result.error);
+          
+          // Revert optimistic update on error
+          if (status === 'ACCEPTED' && optimisticConversationId) {
+            updateConversationConnectionStatus(optimisticConversationId, false);
+          }
         }
       } catch (err) {
         setError(
@@ -83,11 +98,16 @@ export function useConnectionActions({
             ? err.message
             : 'Failed to respond to connection request'
         );
+        
+        // Revert optimistic update on error
+        if (status === 'ACCEPTED' && optimisticConversationId) {
+          updateConversationConnectionStatus(optimisticConversationId, false);
+        }
       } finally {
         setIsLoading(false);
       }
     },
-    []
+    [updateConversationConnectionStatus]
   );
 
   const cancelConnectionRequest = useCallback(

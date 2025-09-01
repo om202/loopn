@@ -362,7 +362,8 @@ export default function NotificationsContent() {
 
   const handleRespondToConnectionRequest = async (
     connectionRequestId: string,
-    status: 'ACCEPTED' | 'REJECTED'
+    status: 'ACCEPTED' | 'REJECTED',
+    conversationId?: string
   ) => {
     // Find the notification that corresponds to this connection request
     const connectionNotification = notifications.find(
@@ -382,7 +383,8 @@ export default function NotificationsContent() {
     }
 
     try {
-      await respondToConnectionRequest(connectionRequestId, status);
+      // Use the improved hook that handles optimistic updates internally
+      await respondToConnectionRequest(connectionRequestId, status, conversationId);
 
       // If successful, also remove the notification from the backend
       if (connectionNotification && user) {
