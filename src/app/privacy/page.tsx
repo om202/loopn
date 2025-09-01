@@ -130,8 +130,7 @@ export default function PrivacyPolicyPage() {
               profile fields
             </li>
             <li>
-              We track which fields were auto-filled vs. manually entered by
-              you
+              We track which fields were auto-filled vs. manually entered by you
             </li>
           </ul>
 
@@ -168,16 +167,16 @@ export default function PrivacyPolicyPage() {
           </h3>
           <ul className='list-disc pl-6 text-gray-700 mb-4 space-y-2'>
             <li>
-              <strong>Presence Information:</strong> Online/offline status,
-              last seen timestamps, active chat sessions
+              <strong>Presence Information:</strong> Online/offline status, last
+              seen timestamps, active chat sessions
             </li>
             <li>
               <strong>Notifications:</strong> In-app notifications and their
               read status
             </li>
             <li>
-              <strong>Search Activity:</strong> User searches and search
-              history (stored locally in your browser)
+              <strong>Search Activity:</strong> User searches and search history
+              (stored locally in your browser)
             </li>
           </ul>
 
@@ -288,7 +287,9 @@ export default function PrivacyPolicyPage() {
           <ul className='list-disc pl-6 text-gray-700 mb-6 space-y-2'>
             <li>All data is encrypted in transit and at rest</li>
             <li>AWS provides enterprise-level security and compliance</li>
-            <li>Access to your data is restricted to authorized personnel only</li>
+            <li>
+              Access to your data is restricted to authorized personnel only
+            </li>
             <li>
               We follow AWS security best practices and regularly review our
               security measures

@@ -35,11 +35,11 @@ export default function TermsOfServicePage() {
           <div className='bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8'>
             <p className='text-blue-800 font-medium'>
               <strong>Quick Summary:</strong> Loopn is a professional networking
-              platform. By using our service, you agree to behave professionally,
-              respect other users, and not misuse the platform. We provide the
-              service as-is and reserve the right to suspend accounts that violate
-              our rules. All conversations and connections are permanent once
-              established.
+              platform. By using our service, you agree to behave
+              professionally, respect other users, and not misuse the platform.
+              We provide the service as-is and reserve the right to suspend
+              accounts that violate our rules. All conversations and connections
+              are permanent once established.
             </p>
           </div>
 
@@ -62,8 +62,8 @@ export default function TermsOfServicePage() {
           </p>
           <ul className='list-disc pl-6 text-gray-700 mb-6 space-y-2'>
             <li>
-              Uses AI to help match professionals based on skills, interests, and
-              career goals
+              Uses AI to help match professionals based on skills, interests,
+              and career goals
             </li>
             <li>
               Enables real-time messaging and permanent conversation history
@@ -93,7 +93,9 @@ export default function TermsOfServicePage() {
             <li>You must provide accurate and complete information</li>
             <li>You are responsible for maintaining account security</li>
             <li>One account per person - no duplicate accounts</li>
-            <li>Professional use only - this is not a casual dating platform</li>
+            <li>
+              Professional use only - this is not a casual dating platform
+            </li>
           </ul>
 
           <h3 className='text-xl font-medium text-gray-900 mt-6 mb-3'>
@@ -101,15 +103,14 @@ export default function TermsOfServicePage() {
           </h3>
           <ul className='list-disc pl-6 text-gray-700 mb-6 space-y-2'>
             <li>
-              Keep your login credentials secure and do not share them with others
+              Keep your login credentials secure and do not share them with
+              others
             </li>
             <li>
               Notify us immediately of any unauthorized access to your account
             </li>
             <li>You are responsible for all activities under your account</li>
-            <li>
-              Maintain accurate and up-to-date profile information
-            </li>
+            <li>Maintain accurate and up-to-date profile information</li>
           </ul>
 
           <h2 className='text-2xl font-semibold text-gray-900 mt-8 mb-4'>
@@ -123,9 +124,13 @@ export default function TermsOfServicePage() {
             Loopn is designed for professional networking. You agree to:
           </p>
           <ul className='list-disc pl-6 text-gray-700 mb-4 space-y-2'>
-            <li>Use the platform for legitimate professional networking purposes</li>
+            <li>
+              Use the platform for legitimate professional networking purposes
+            </li>
             <li>Maintain professional and respectful communication</li>
-            <li>Provide truthful information about your professional background</li>
+            <li>
+              Provide truthful information about your professional background
+            </li>
             <li>Respect other users&apos; time and professional boundaries</li>
             <li>Use appropriate language and conduct in all interactions</li>
           </ul>
@@ -136,8 +141,8 @@ export default function TermsOfServicePage() {
           <p className='text-gray-700 mb-4'>You may NOT:</p>
           <ul className='list-disc pl-6 text-gray-700 mb-6 space-y-2'>
             <li>
-              <strong>Harassment:</strong> Harass, abuse, threaten, or intimidate
-              other users
+              <strong>Harassment:</strong> Harass, abuse, threaten, or
+              intimidate other users
             </li>
             <li>
               <strong>Spam:</strong> Send unsolicited promotional messages or
@@ -160,8 +165,8 @@ export default function TermsOfServicePage() {
               our systems
             </li>
             <li>
-              <strong>Data Scraping:</strong> Use automated tools to collect user
-              data
+              <strong>Data Scraping:</strong> Use automated tools to collect
+              user data
             </li>
             <li>
               <strong>Commercial Misuse:</strong> Use the platform for
@@ -190,7 +195,8 @@ export default function TermsOfServicePage() {
               Right to process your data as described in our Privacy Policy
             </li>
             <li>
-              You remain responsible for the accuracy and legality of your content
+              You remain responsible for the accuracy and legality of your
+              content
             </li>
           </ul>
 
@@ -198,9 +204,10 @@ export default function TermsOfServicePage() {
             Permanent Conversations
           </h3>
           <p className='text-gray-700 mb-6'>
-            <strong>Important:</strong> All conversations on Loopn are permanent.
-            Once you accept a chat request, the conversation history is preserved
-            indefinitely. Consider this before sharing sensitive information.
+            <strong>Important:</strong> All conversations on Loopn are
+            permanent. Once you accept a chat request, the conversation history
+            is preserved indefinitely. Consider this before sharing sensitive
+            information.
           </p>
 
           <h2 className='text-2xl font-semibold text-gray-900 mt-8 mb-4'>
@@ -244,8 +251,8 @@ export default function TermsOfServicePage() {
           </h2>
 
           <p className='text-gray-700 mb-4'>
-            The Loopn platform, including its design, functionality, and content,
-            is protected by intellectual property laws. You agree that:
+            The Loopn platform, including its design, functionality, and
+            content, is protected by intellectual property laws. You agree that:
           </p>
           <ul className='list-disc pl-6 text-gray-700 mb-6 space-y-2'>
             <li>
@@ -276,11 +283,10 @@ export default function TermsOfServicePage() {
               without notice
             </li>
             <li>Change these Terms at any time with reasonable notice</li>
+            <li>Implement new features or remove existing ones as needed</li>
             <li>
-              Implement new features or remove existing ones as needed
-            </li>
-            <li>
-              Perform maintenance that may temporarily limit Service availability
+              Perform maintenance that may temporarily limit Service
+              availability
             </li>
           </ul>
 
@@ -299,16 +305,19 @@ export default function TermsOfServicePage() {
             <li>Engage in fraudulent or illegal activities</li>
             <li>Harass or abuse other users</li>
             <li>Attempt to circumvent our systems or security measures</li>
-            <li>Fail to respond to our requests for verification or information</li>
+            <li>
+              Fail to respond to our requests for verification or information
+            </li>
           </ul>
 
           <h3 className='text-xl font-medium text-gray-900 mt-6 mb-3'>
             Your Rights
           </h3>
           <p className='text-gray-700 mb-6'>
-            You may delete your account at any time through your account settings.
-            Upon deletion, your profile will be removed, but conversation history
-            with other users may be retained as described in our Privacy Policy.
+            You may delete your account at any time through your account
+            settings. Upon deletion, your profile will be removed, but
+            conversation history with other users may be retained as described
+            in our Privacy Policy.
           </p>
 
           <h2 className='text-2xl font-semibold text-gray-900 mt-8 mb-4'>
@@ -329,7 +338,10 @@ export default function TermsOfServicePage() {
             <li>
               That you will achieve specific professional or networking outcomes
             </li>
-            <li>The security of communications (though we implement best practices)</li>
+            <li>
+              The security of communications (though we implement best
+              practices)
+            </li>
           </ul>
 
           <h3 className='text-xl font-medium text-gray-900 mt-6 mb-3'>
@@ -337,10 +349,10 @@ export default function TermsOfServicePage() {
           </h3>
           <p className='text-gray-700 mb-6'>
             TO THE MAXIMUM EXTENT PERMITTED BY LAW, WE SHALL NOT BE LIABLE FOR
-            ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES,
-            OR ANY LOSS OF PROFITS OR REVENUES, WHETHER INCURRED DIRECTLY OR
-            INDIRECTLY, OR ANY LOSS OF DATA, USE, GOODWILL, OR OTHER INTANGIBLE
-            LOSSES RESULTING FROM YOUR USE OF THE SERVICE.
+            ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE
+            DAMAGES, OR ANY LOSS OF PROFITS OR REVENUES, WHETHER INCURRED
+            DIRECTLY OR INDIRECTLY, OR ANY LOSS OF DATA, USE, GOODWILL, OR OTHER
+            INTANGIBLE LOSSES RESULTING FROM YOUR USE OF THE SERVICE.
           </p>
 
           <h2 className='text-2xl font-semibold text-gray-900 mt-8 mb-4'>
@@ -349,9 +361,10 @@ export default function TermsOfServicePage() {
 
           <p className='text-gray-700 mb-6'>
             You agree to defend, indemnify, and hold harmless Loopn and its
-            officers, directors, employees, and agents from and against any claims,
-            liabilities, damages, losses, and expenses arising out of or in any
-            way connected with your use of the Service or violation of these Terms.
+            officers, directors, employees, and agents from and against any
+            claims, liabilities, damages, losses, and expenses arising out of or
+            in any way connected with your use of the Service or violation of
+            these Terms.
           </p>
 
           <h2 className='text-2xl font-semibold text-gray-900 mt-8 mb-4'>
@@ -362,8 +375,9 @@ export default function TermsOfServicePage() {
             Governing Law
           </h3>
           <p className='text-gray-700 mb-4'>
-            These Terms shall be governed by and construed in accordance with the
-            laws of the United States, without regard to conflict of law principles.
+            These Terms shall be governed by and construed in accordance with
+            the laws of the United States, without regard to conflict of law
+            principles.
           </p>
 
           <h3 className='text-xl font-medium text-gray-900 mt-6 mb-3'>
@@ -386,11 +400,12 @@ export default function TermsOfServicePage() {
           </h2>
 
           <p className='text-gray-700 mb-6'>
-            We may update these Terms from time to time to reflect changes in our
-            Service or legal requirements. We will provide notice of material
-            changes by posting the updated Terms on this page and updating the
-            &quot;Last updated&quot; date. Your continued use of the Service
-            after such changes constitutes acceptance of the new Terms.
+            We may update these Terms from time to time to reflect changes in
+            our Service or legal requirements. We will provide notice of
+            material changes by posting the updated Terms on this page and
+            updating the &quot;Last updated&quot; date. Your continued use of
+            the Service after such changes constitutes acceptance of the new
+            Terms.
           </p>
 
           <h2 className='text-2xl font-semibold text-gray-900 mt-8 mb-4'>
@@ -398,9 +413,9 @@ export default function TermsOfServicePage() {
           </h2>
 
           <p className='text-gray-700 mb-6'>
-            If any provision of these Terms is held to be invalid or unenforceable,
-            the remaining provisions will continue to be valid and enforceable to
-            the fullest extent permitted by law.
+            If any provision of these Terms is held to be invalid or
+            unenforceable, the remaining provisions will continue to be valid
+            and enforceable to the fullest extent permitted by law.
           </p>
 
           <h2 className='text-2xl font-semibold text-gray-900 mt-8 mb-4'>

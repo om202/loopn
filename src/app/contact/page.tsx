@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { Mail, MessageSquare, Clock, CheckCircle } from 'lucide-react';
+import { Mail, Clock, CheckCircle } from 'lucide-react';
 
 export default function ContactPage() {
   return (
@@ -32,8 +32,9 @@ export default function ContactPage() {
             Contact Us
           </h1>
           <p className='text-lg text-gray-600 max-w-2xl mx-auto'>
-            Have questions, feedback, or need support? We&apos;d love to hear from you.
-            Get in touch and we&apos;ll get back to you as soon as possible.
+            Have questions, feedback, or need support? We&apos;d love to hear
+            from you. Get in touch and we&apos;ll get back to you as soon as
+            possible.
           </p>
         </div>
 
@@ -43,7 +44,7 @@ export default function ContactPage() {
             <h2 className='text-2xl font-semibold text-gray-900 mb-6'>
               Get in Touch
             </h2>
-            
+
             {/* Email Contact */}
             <div className='bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6'>
               <div className='flex items-start space-x-4'>
@@ -92,7 +93,8 @@ export default function ContactPage() {
                   </h3>
                   <p className='text-green-700'>
                     We typically respond within 24 hours during business days.
-                    For urgent technical issues, we aim to respond within 4-6 hours.
+                    For urgent technical issues, we aim to respond within 4-6
+                    hours.
                   </p>
                 </div>
               </div>
@@ -104,7 +106,7 @@ export default function ContactPage() {
             <h2 className='text-2xl font-semibold text-gray-900 mb-6'>
               What Can We Help With?
             </h2>
-            
+
             <div className='space-y-4'>
               {/* Support Categories */}
               <div className='border border-gray-200 rounded-lg p-4'>
@@ -115,7 +117,8 @@ export default function ContactPage() {
                       Technical Support
                     </h4>
                     <p className='text-sm text-gray-600'>
-                      Issues with login, profile setup, messaging, or app functionality
+                      Issues with login, profile setup, messaging, or app
+                      functionality
                     </p>
                   </div>
                 </div>
@@ -129,7 +132,8 @@ export default function ContactPage() {
                       Account Questions
                     </h4>
                     <p className='text-sm text-gray-600'>
-                      Profile visibility, privacy settings, data deletion, or account management
+                      Profile visibility, privacy settings, data deletion, or
+                      account management
                     </p>
                   </div>
                 </div>
@@ -143,7 +147,8 @@ export default function ContactPage() {
                       Platform Feedback
                     </h4>
                     <p className='text-sm text-gray-600'>
-                      Feature requests, suggestions, or general feedback about Loopn
+                      Feature requests, suggestions, or general feedback about
+                      Loopn
                     </p>
                   </div>
                 </div>
@@ -171,7 +176,8 @@ export default function ContactPage() {
                       Privacy & Legal
                     </h4>
                     <p className='text-sm text-gray-600'>
-                      Questions about our Privacy Policy, Terms of Service, or data practices
+                      Questions about our Privacy Policy, Terms of Service, or
+                      data practices
                     </p>
                   </div>
                 </div>
@@ -187,7 +193,9 @@ export default function ContactPage() {
           </h3>
           <div className='grid md:grid-cols-2 gap-6 text-sm text-gray-700'>
             <div>
-              <h4 className='font-medium text-gray-900 mb-2'>Include in your email:</h4>
+              <h4 className='font-medium text-gray-900 mb-2'>
+                Include in your email:
+              </h4>
               <ul className='space-y-1 text-sm'>
                 <li>• Clear subject line describing the issue</li>
                 <li>• Your account email address</li>
@@ -196,7 +204,9 @@ export default function ContactPage() {
               </ul>
             </div>
             <div>
-              <h4 className='font-medium text-gray-900 mb-2'>Sample subject lines:</h4>
+              <h4 className='font-medium text-gray-900 mb-2'>
+                Sample subject lines:
+              </h4>
               <ul className='space-y-1 text-sm text-gray-600'>
                 <li>• &quot;Login Issue - Cannot Access Account&quot;</li>
                 <li>• &quot;Feature Request - Export Conversations&quot;</li>
