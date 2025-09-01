@@ -1,16 +1,17 @@
 'use client';
 
+import React, { useState, useEffect, useRef } from 'react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import {
   MessageSquare,
   ArrowRight,
   CheckCircle,
-  Star,
   Zap,
   Brain,
   Shield,
   Smile,
   CloudUpload,
+  ChevronDown,
 } from 'lucide-react';
 
 // Custom Connect Icon using circles from logo
@@ -28,7 +29,6 @@ const ConnectIcon = ({ className }: { className?: string }) => (
 );
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useState, useEffect, useRef } from 'react';
 
 // Optimized animations for better performance
 const customStyles = `
@@ -83,6 +83,13 @@ export default function HomePage() {
     context.user,
     context.authStatus,
   ]);
+
+  // FAQ state management
+  const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
+
+  const toggleFAQ = (index: number) => {
+    setExpandedFAQ(expandedFAQ === index ? null : index);
+  };
 
   const isAuthenticated = authStatus === 'authenticated' && user;
   const authLink = isAuthenticated ? '/dashboard' : '/auth';
@@ -684,7 +691,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Testimonials */}
+      {/* FAQ Section */}
       <section className='py-8 sm:py-12 bg-slate-50 relative'>
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
@@ -692,144 +699,110 @@ export default function HomePage() {
           <div className='absolute bottom-1/4 left-0 w-80 h-80 bg-slate-100/80 rounded-full blur-3xl' />
         </div>
 
-        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+        <div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='text-center mb-12'>
             <h2 className='text-3xl sm:text-4xl font-semibold text-gray-900 mb-3 leading-tight'>
-              What Professionals Say
+              Frequently Asked Questions
             </h2>
             <p className='text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed font-medium'>
-              Real professionals. Real results. Real career growth.
+              Everything you need to know about professional networking on
+              Loopn.
             </p>
           </div>
 
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-12'>
-            {/* Testimonial 1 */}
-            <div className=' bg-white border border-slate-200 rounded-2xl p-8 shadow-sm flex flex-col h-full'>
-              <div className='flex items-center gap-1 mb-8'>
-                {[1, 2, 3, 4, 5].map(star => (
-                  <Star
-                    key={`testimonial-1-star-${star}`}
-                    className='w-5 h-5 text-b_yellow-400 fill-current'
-                  />
-                ))}
-              </div>
-              <blockquote className='text-slate-700 mb-6 text-base leading-relaxed font-medium flex-grow'>
-                &quot;Loopn made networking feel natural again. I&apos;ve built
-                genuine relationships through honest conversations about shared
-                interests.&quot;
-              </blockquote>
-              <div className='flex items-center gap-4 mt-auto'>
-                <Image
-                  src='/dummy-users/dummy-user2.jpg'
-                  alt='Sarah Johnson'
-                  width={48}
-                  height={48}
-                  className='w-12 h-12 rounded-full object-cover'
-                />
-                <div>
-                  <p className='font-semibold text-slate-900 text-sm'>
-                    Sarah Johnson
-                  </p>
-                  <p className='text-slate-600 text-sm'>
-                    Software Engineer, Tech Startup
+          <div className='space-y-4'>
+            {/* FAQ Item 1 */}
+            <div className='bg-white border border-slate-200 rounded-2xl shadow-sm'>
+              <button 
+                className='w-full text-left p-4 sm:p-5 flex items-center justify-between hover:bg-slate-50/50 transition-colors rounded-2xl'
+                onClick={() => toggleFAQ(0)}
+              >
+                <h3 className='text-lg font-semibold text-slate-900 pr-4'>
+                  How does Loopn work?
+                </h3>
+                <ChevronDown className={`w-5 h-5 text-slate-500 flex-shrink-0 transition-transform ${expandedFAQ === 0 ? 'rotate-180' : ''}`} />
+              </button>
+              {expandedFAQ === 0 && (
+                <div className='px-4 sm:px-5 pb-4 sm:pb-5 -mt-1'>
+                  <p className='text-slate-600 leading-relaxed'>
+                    Loopn connects you with verified professionals based on shared
+                    interests and career goals. Simply complete your profile,
+                    browse suggested connections, and start meaningful
+                    conversations that can advance your career.
                   </p>
                 </div>
-              </div>
+              )}
             </div>
 
-            {/* Testimonial 2 */}
-            <div className=' bg-white border border-slate-200 rounded-2xl p-8 shadow-sm flex flex-col h-full'>
-              <div className='flex items-center gap-1 mb-8'>
-                {[1, 2, 3, 4, 5].map(star => (
-                  <Star
-                    key={`testimonial-2-star-${star}`}
-                    className='w-5 h-5 text-b_yellow-400 fill-current'
-                  />
-                ))}
-              </div>
-              <blockquote className='text-slate-700 mb-6 text-base leading-relaxed font-medium flex-grow'>
-                &quot;The smart matching is brilliant. I found a mentor through
-                meaningful conversations who&apos;s now a key connection in my
-                career.&quot;
-              </blockquote>
-              <div className='flex items-center gap-4 mt-auto'>
-                <Image
-                  src='/dummy-users/dummy-user3.jpg'
-                  alt='Michael Chen'
-                  width={48}
-                  height={48}
-                  className='w-12 h-12 rounded-full object-cover'
-                />
-                <div>
-                  <p className='font-semibold text-slate-900 text-sm'>
-                    Michael Chen
-                  </p>
-                  <p className='text-slate-600 text-sm'>
-                    Product Manager, E-commerce
+            {/* FAQ Item 2 */}
+            <div className='bg-white border border-slate-200 rounded-2xl shadow-sm'>
+              <button 
+                className='w-full text-left p-4 sm:p-5 flex items-center justify-between hover:bg-slate-50/50 transition-colors rounded-2xl'
+                onClick={() => toggleFAQ(1)}
+              >
+                <h3 className='text-lg font-semibold text-slate-900 pr-4'>
+                  Who can I connect with?
+                </h3>
+                <ChevronDown className={`w-5 h-5 text-slate-500 flex-shrink-0 transition-transform ${expandedFAQ === 1 ? 'rotate-180' : ''}`} />
+              </button>
+              {expandedFAQ === 1 && (
+                <div className='px-4 sm:px-5 pb-4 sm:pb-5 -mt-1'>
+                  <p className='text-slate-600 leading-relaxed'>
+                    All Loopn users are verified professionals across various
+                    industries. You'll connect with people who share your
+                    interests, career goals, or expertise areas - from software
+                    engineers and designers to consultants and entrepreneurs.
                   </p>
                 </div>
-              </div>
+              )}
             </div>
 
-            {/* Testimonial 3 */}
-            <div className=' bg-white border border-slate-200 rounded-2xl p-8 shadow-sm md:col-span-2 lg:col-span-1 flex flex-col h-full'>
-              <div className='flex items-center gap-1 mb-8'>
-                {[1, 2, 3, 4, 5].map(star => (
-                  <Star
-                    key={`testimonial-3-star-${star}`}
-                    className='w-5 h-5 text-b_yellow-400 fill-current'
-                  />
-                ))}
-              </div>
-              <blockquote className='text-slate-700 mb-6 text-base leading-relaxed font-medium flex-grow'>
-                &quot;Finally, a platform where expertise matters more than
-                titles. Every conversation feels purposeful and
-                growth-oriented.&quot;
-              </blockquote>
-              <div className='flex items-center gap-4 mt-auto'>
-                <Image
-                  src='/dummy-users/dummy-user4.jpg'
-                  alt='Emily Rodriguez'
-                  width={48}
-                  height={48}
-                  className='w-12 h-12 rounded-full object-cover'
-                />
-                <div>
-                  <p className='font-semibold text-slate-900 text-sm'>
-                    Emily Rodriguez
-                  </p>
-                  <p className='text-slate-600 text-sm'>
-                    UX Designer, Design Agency
+            {/* FAQ Item 3 */}
+            <div className='bg-white border border-slate-200 rounded-2xl shadow-sm'>
+              <button 
+                className='w-full text-left p-4 sm:p-5 flex items-center justify-between hover:bg-slate-50/50 transition-colors rounded-2xl'
+                onClick={() => toggleFAQ(2)}
+              >
+                <h3 className='text-lg font-semibold text-slate-900 pr-4'>
+                  How do I get started?
+                </h3>
+                <ChevronDown className={`w-5 h-5 text-slate-500 flex-shrink-0 transition-transform ${expandedFAQ === 2 ? 'rotate-180' : ''}`} />
+              </button>
+              {expandedFAQ === 2 && (
+                <div className='px-4 sm:px-5 pb-4 sm:pb-5 -mt-1'>
+                  <p className='text-slate-600 leading-relaxed'>
+                    Getting started is simple: sign up, complete your professional
+                    profile including your interests and career goals, and we'll
+                    suggest relevant connections. You can then browse profiles and
+                    send chat requests to professionals you'd like to connect
+                    with.
                   </p>
                 </div>
-              </div>
+              )}
             </div>
-          </div>
 
-          {/* Trust Indicators */}
-          <div className='mt-8 text-center'>
-            <h3 className='text-2xl font-bold text-slate-900 mb-3'>
-              Every Industry. Every Career Level.
-            </h3>
-            <p className='text-slate-600 mb-12 text-base font-medium'>
-              Join professionals across all industries making career-changing
-              connections.
-            </p>
-            <div className='flex flex-wrap justify-center items-center gap-8 opacity-70'>
-              <div className='text-slate-600 font-medium text-lg'>
-                Technology
-              </div>
-              <div className='text-slate-600 font-medium text-lg'>Finance</div>
-              <div className='text-slate-600 font-medium text-lg'>Design</div>
-              <div className='text-slate-600 font-medium text-lg'>
-                Marketing
-              </div>
-              <div className='text-slate-600 font-medium text-lg'>
-                Healthcare
-              </div>
-              <div className='text-slate-600 font-medium text-lg'>
-                Consulting
-              </div>
+            {/* FAQ Item 4 */}
+            <div className='bg-white border border-slate-200 rounded-2xl shadow-sm'>
+              <button 
+                className='w-full text-left p-4 sm:p-5 flex items-center justify-between hover:bg-slate-50/50 transition-colors rounded-2xl'
+                onClick={() => toggleFAQ(3)}
+              >
+                <h3 className='text-lg font-semibold text-slate-900 pr-4'>
+                  What makes Loopn different from other platforms?
+                </h3>
+                <ChevronDown className={`w-5 h-5 text-slate-500 flex-shrink-0 transition-transform ${expandedFAQ === 3 ? 'rotate-180' : ''}`} />
+              </button>
+              {expandedFAQ === 3 && (
+                <div className='px-4 sm:px-5 pb-4 sm:pb-5 -mt-1'>
+                  <p className='text-slate-600 leading-relaxed'>
+                    Loopn focuses exclusively on meaningful professional
+                    conversations. Unlike casual social platforms, every
+                    interaction is career-focused, quality-driven, and designed to
+                    help you build genuine professional relationships that advance
+                    your career.
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>
