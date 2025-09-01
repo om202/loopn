@@ -15,7 +15,7 @@ import type {
 
 /**
  * RRF Hybrid Search Service
- * Combines semantic vector search with text-based keyword matching using 
+ * Combines semantic vector search with text-based keyword matching using
  * Reciprocal Rank Fusion (RRF) - the industry standard hybrid search approach
  */
 export class RAGSearchService {
@@ -70,26 +70,37 @@ export class RAGSearchService {
 
       // Step 2: Try vector search, fallback to text-only if it fails
       let queryEmbedding: number[] | null = null;
-      let vectorResults: Array<{ userId: string; similarity: number; embeddingText?: string }> = [];
+      let vectorResults: Array<{
+        userId: string;
+        similarity: number;
+        embeddingText?: string;
+      }> = [];
       let isVectorSearchAvailable = true;
 
       try {
         const embeddingStart = Date.now();
-        queryEmbedding = await EmbeddingService.generateEmbedding(searchOptions.query);
+        queryEmbedding = await EmbeddingService.generateEmbedding(
+          searchOptions.query
+        );
         queryEmbeddingTimeMs = Date.now() - embeddingStart;
 
         // Vector search - calculate similarities
-        const parsedEmbeddings = RAGSearchService.parseEmbeddings(embeddingChunks);
+        const parsedEmbeddings =
+          RAGSearchService.parseEmbeddings(embeddingChunks);
         vectorResults = RAGSearchService.calculateSimilarities(
           queryEmbedding,
           parsedEmbeddings,
           searchOptions
         );
-        
-        console.log(`✅ Vector search successful: ${vectorResults.length} results`);
+
+        console.log(
+          `✅ Vector search successful: ${vectorResults.length} results`
+        );
       } catch (embeddingError) {
         isVectorSearchAvailable = false;
-        console.warn('⚠️ Vector search failed, falling back to text-only search');
+        console.warn(
+          '⚠️ Vector search failed, falling back to text-only search'
+        );
         console.warn('Embedding error:', embeddingError);
       }
 
@@ -146,7 +157,9 @@ export class RAGSearchService {
         totalFound: hybridResults.length,
       };
 
-      const mode = isVectorSearchAvailable ? 'RRF Hybrid' : 'Text-only fallback';
+      const mode = isVectorSearchAvailable
+        ? 'RRF Hybrid'
+        : 'Text-only fallback';
       console.log(
         `${mode} search completed: ${results.length} results in ${
           queryEmbeddingTimeMs +
@@ -393,7 +406,7 @@ export class RAGSearchService {
   ): Array<{ userId: string; score: number }> {
     console.log('🔍 TEXT SEARCH START');
     console.log(`Query: "${query}"`);
-    
+
     const queryTerms = query
       .toLowerCase()
       .trim()
@@ -414,7 +427,7 @@ export class RAGSearchService {
 
     for (const embedding of embeddings) {
       processedCount++;
-      
+
       if (!embedding.embeddingText) {
         console.log(`⚠️  Profile ${embedding.userId}: No text available`);
         continue;
@@ -439,7 +452,9 @@ export class RAGSearchService {
         totalScore += termScore;
 
         if (termScore > 0) {
-          matchDetails.push(`"${term}": ${exactMatches} exact + ${partialMatches} partial = ${termScore} pts`);
+          matchDetails.push(
+            `"${term}": ${exactMatches} exact + ${partialMatches} partial = ${termScore} pts`
+          );
         }
       }
 
@@ -448,7 +463,7 @@ export class RAGSearchService {
         console.log(`✅ ${embedding.userId}: Score ${totalScore}`);
         console.log(`   Matches: ${matchDetails.join(', ')}`);
         console.log(`   Text preview: "${text.substring(0, 100)}..."`);
-        
+
         results.push({
           userId: embedding.userId,
           score: totalScore,
@@ -457,17 +472,24 @@ export class RAGSearchService {
     }
 
     // Sort by score and limit results
-    const sortedResults = results.sort((a, b) => b.score - a.score).slice(0, limit);
-    
+    const sortedResults = results
+      .sort((a, b) => b.score - a.score)
+      .slice(0, limit);
+
     console.log(`📊 TEXT SEARCH RESULTS:`);
     console.log(`   Processed: ${processedCount} profiles`);
     console.log(`   Matched: ${matchedCount} profiles`);
     console.log(`   Returned: ${sortedResults.length} top results`);
-    
+
     if (sortedResults.length > 0) {
-      console.log(`   Top scores: ${sortedResults.slice(0, 3).map(r => `${r.userId}(${r.score})`).join(', ')}`);
+      console.log(
+        `   Top scores: ${sortedResults
+          .slice(0, 3)
+          .map(r => `${r.userId}(${r.score})`)
+          .join(', ')}`
+      );
     }
-    
+
     console.log('🔍 TEXT SEARCH END\n');
     return sortedResults;
   }
@@ -498,20 +520,22 @@ export class RAGSearchService {
     options: SearchOptions,
     _isVectorSearchAvailable: boolean = true
   ): Array<{ userId: string; similarity: number; embeddingText?: string }> {
-
     console.log(`🔄 RRF HYBRID FUSION START`);
     console.log(`Query: "${query}" | Method: Reciprocal Rank Fusion (k=60)`);
-    console.log(`Vector results: ${vectorResults.length} | Text results: ${textResults.length}`);
+    console.log(
+      `Vector results: ${vectorResults.length} | Text results: ${textResults.length}`
+    );
 
     // Sort results by their respective scores (best first)
     const sortedVectorResults = vectorResults
       .filter(r => r.similarity >= options.minSimilarity!) // Apply min similarity filter
       .sort((a, b) => b.similarity - a.similarity);
 
-    const sortedTextResults = textResults
-      .sort((a, b) => b.score - a.score);
+    const sortedTextResults = textResults.sort((a, b) => b.score - a.score);
 
-    console.log(`After filtering: ${sortedVectorResults.length} vector | ${sortedTextResults.length} text`);
+    console.log(
+      `After filtering: ${sortedVectorResults.length} vector | ${sortedTextResults.length} text`
+    );
 
     // Create ranking maps: userId -> rank (1-based)
     const vectorRanks = new Map<string, number>();
@@ -526,23 +550,25 @@ export class RAGSearchService {
       }
     });
 
-    // Text rankings  
+    // Text rankings
     sortedTextResults.forEach((result, index) => {
       textRanks.set(result.userId, index + 1); // 1-based ranking
     });
 
     // Get all unique users from both searches
-    const allUserIds = new Set([
-      ...vectorRanks.keys(),
-      ...textRanks.keys(),
-    ]);
+    const allUserIds = new Set([...vectorRanks.keys(), ...textRanks.keys()]);
 
     // Calculate RRF scores for each user
     const rrfResults: Array<{
       userId: string;
       similarity: number;
       embeddingText?: string;
-      rrfDetails?: { vectorRank?: number; textRank?: number; vectorScore: number; textScore: number };
+      rrfDetails?: {
+        vectorRank?: number;
+        textRank?: number;
+        vectorScore: number;
+        textScore: number;
+      };
     }> = [];
 
     console.log(`\n🎯 RRF SCORING:`);
@@ -558,8 +584,12 @@ export class RAGSearchService {
       const textRank = textRanks.get(userId);
 
       // Calculate RRF scores (0 if not present in that search)
-      const vectorRrfScore = vectorRank ? RAGSearchService.calculateRRFScore(vectorRank) : 0;
-      const textRrfScore = textRank ? RAGSearchService.calculateRRFScore(textRank) : 0;
+      const vectorRrfScore = vectorRank
+        ? RAGSearchService.calculateRRFScore(vectorRank)
+        : 0;
+      const textRrfScore = textRank
+        ? RAGSearchService.calculateRRFScore(textRank)
+        : 0;
 
       // Combined RRF score is sum of individual RRF scores
       const combinedRrfScore = vectorRrfScore + textRrfScore;
@@ -567,11 +597,16 @@ export class RAGSearchService {
       // Only include if user appears in at least one search
       if (combinedRrfScore > 0) {
         debugCount++;
-        
-        if (debugCount <= 5) { // Show first 5 for debugging
+
+        if (debugCount <= 5) {
+          // Show first 5 for debugging
           console.log(`${userId}:`);
-          console.log(`   Vector rank: ${vectorRank || 'N/A'} -> RRF: ${vectorRrfScore.toFixed(6)}`);
-          console.log(`   Text rank:   ${textRank || 'N/A'} -> RRF: ${textRrfScore.toFixed(6)}`);
+          console.log(
+            `   Vector rank: ${vectorRank || 'N/A'} -> RRF: ${vectorRrfScore.toFixed(6)}`
+          );
+          console.log(
+            `   Text rank:   ${textRank || 'N/A'} -> RRF: ${textRrfScore.toFixed(6)}`
+          );
           console.log(`   Combined:    ${combinedRrfScore.toFixed(6)}`);
         }
 
@@ -596,14 +631,16 @@ export class RAGSearchService {
     console.log(`   Total candidates: ${allUserIds.size}`);
     console.log(`   Final results: ${rrfResults.length}`);
     console.log(`   Fusion method: RRF with k=60`);
-    
+
     if (rrfResults.length > 0) {
       const topResults = rrfResults.slice(0, 3);
-      console.log(`   Top 3 RRF scores: ${topResults.map(r => 
-        `${r.userId}(${r.similarity.toFixed(6)})`
-      ).join(', ')}`);
+      console.log(
+        `   Top 3 RRF scores: ${topResults
+          .map(r => `${r.userId}(${r.similarity.toFixed(6)})`)
+          .join(', ')}`
+      );
     }
-    
+
     console.log(`🔄 RRF HYBRID FUSION END\n`);
     return rrfResults;
   }
