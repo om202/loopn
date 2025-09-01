@@ -14,32 +14,42 @@ import { AuthProvider } from '@/contexts/AuthContext';
 import { GlobalSubscriptionProvider } from '@/contexts/GlobalSubscriptionContext';
 
 export const metadata: Metadata = {
-  title: 'Loopn - Real-Time Messaging Platform',
+  title:
+    'Loopn - AI-Powered Professional Networking & Career Matching Platform',
   description:
-    'Connect and chat with people instantly. Secure real-time messaging with chat requests, user presence, message reactions, and time-limited conversations.',
+    'Upload your resume, get matched instantly with compatible professionals. AI-powered career networking that connects you with the right people for meaningful professional relationships and career advancement.',
   keywords: [
-    'real-time messaging',
-    'chat platform',
-    'instant messaging',
-    'secure chat',
-    'online communication',
-    'message reactions',
-    'user presence',
-    'chat requests',
+    'AI-powered professional networking',
+    'resume-based career matching',
+    'professional networking platform',
+    'career advancement connections',
+    'resume intelligence matching',
+    'professional discovery app',
+    'AI career networking',
+    'professional relationship building',
+    'career-focused networking',
+    'intelligent professional matching',
+    'resume analysis networking',
+    'career growth platform',
   ],
   authors: [{ name: 'Loopn Team' }],
+  creator: 'Loopn',
+  publisher: 'Loopn',
+  category: 'Professional Networking',
   openGraph: {
-    title: 'Loopn - Real-Time Messaging Platform',
+    title: 'Loopn - AI-Powered Professional Networking & Career Matching',
     description:
-      'Connect and chat with people instantly. Secure real-time messaging with chat requests, user presence, message reactions, and time-limited conversations.',
+      'Upload your resume, get matched instantly with compatible professionals. AI-powered career networking that connects you with the right people for meaningful professional relationships.',
     type: 'website',
     siteName: 'Loopn',
+    locale: 'en_US',
+    url: 'https://www.loopn.io',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Loopn - Real-Time Messaging Platform',
+    title: 'Loopn - AI-Powered Professional Networking & Career Matching',
     description:
-      'Connect and chat with people instantly. Secure real-time messaging with chat requests, user presence, message reactions, and time-limited conversations.',
+      'Upload your resume, get matched instantly with compatible professionals. AI-powered career networking for meaningful professional relationships.',
   },
   robots: {
     index: true,
@@ -56,6 +66,9 @@ export const metadata: Metadata = {
     telephone: false,
     email: false,
   },
+  alternates: {
+    canonical: 'https://www.loopn.io',
+  },
 };
 
 export default function RootLayout({
@@ -71,6 +84,62 @@ export default function RootLayout({
           content='width=device-width, initial-scale=1, viewport-fit=cover'
         />
         <meta name='format-detection' content='telephone=no,email=no' />
+        <script
+          type='application/ld+json'
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Organization',
+              name: 'Loopn',
+              description:
+                'AI-powered professional networking platform that connects professionals through resume-based career matching for meaningful career advancement.',
+              url: 'https://www.loopn.io',
+              logo: 'https://www.loopn.io/loopn.svg',
+              foundingDate: '2024',
+              contactPoint: {
+                '@type': 'ContactPoint',
+                contactType: 'customer support',
+                email: 'support@loopn.io',
+              },
+              applicationCategory: 'Professional Networking',
+              operatingSystem: 'Web',
+              offers: {
+                '@type': 'Offer',
+                price: '0',
+                priceCurrency: 'USD',
+                description: 'Free professional networking platform',
+              },
+              audience: {
+                '@type': 'Audience',
+                audienceType:
+                  'Professionals seeking career advancement and networking opportunities',
+              },
+            }),
+          }}
+        />
+        <script
+          type='application/ld+json'
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'WebSite',
+              name: 'Loopn',
+              url: 'https://www.loopn.io',
+              description:
+                'AI-powered professional networking platform for career matching and professional relationship building',
+              potentialAction: {
+                '@type': 'SearchAction',
+                target: 'https://www.loopn.io/search?q={search_term_string}',
+                'query-input': 'required name=search_term_string',
+              },
+              publisher: {
+                '@type': 'Organization',
+                name: 'Loopn',
+                logo: 'https://www.loopn.io/loopn.svg',
+              },
+            }),
+          }}
+        />
       </head>
       <body className={`${switzer.variable} antialiased`}>
         <AmplifyProvider>
