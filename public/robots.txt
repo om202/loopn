@@ -1,4 +1,4 @@
-# Robots.txt for Loopn - AI-Powered Professional Networking Platform
+# Robots.txt for Loopn - Professional Networking & Career Matching using AI
 
 User-agent: *
 Allow: /

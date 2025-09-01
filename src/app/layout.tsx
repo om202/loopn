@@ -14,18 +14,17 @@ import { AuthProvider } from '@/contexts/AuthContext';
 import { GlobalSubscriptionProvider } from '@/contexts/GlobalSubscriptionContext';
 
 export const metadata: Metadata = {
-  title:
-    'Loopn - AI-Powered Professional Networking & Career Matching Platform',
+  title: 'Loopn - Professional Networking & Career Matching using AI',
   description:
-    'Upload your resume, get matched instantly with compatible professionals. AI-powered career networking that connects you with the right people for meaningful professional relationships and career advancement.',
+    'Upload your resume, get matched instantly with compatible professionals. Career networking using AI that connects you with the right people for meaningful professional relationships and career advancement.',
   keywords: [
-    'AI-powered professional networking',
+    'professional networking using AI',
     'resume-based career matching',
     'professional networking platform',
     'career advancement connections',
     'resume intelligence matching',
     'professional discovery app',
-    'AI career networking',
+    'career networking using AI',
     'professional relationship building',
     'career-focused networking',
     'intelligent professional matching',
@@ -37,9 +36,9 @@ export const metadata: Metadata = {
   publisher: 'Loopn',
   category: 'Professional Networking',
   openGraph: {
-    title: 'Loopn - AI-Powered Professional Networking & Career Matching',
+    title: 'Loopn - Professional Networking & Career Matching using AI',
     description:
-      'Upload your resume, get matched instantly with compatible professionals. AI-powered career networking that connects you with the right people for meaningful professional relationships.',
+      'Upload your resume, get matched instantly with compatible professionals. Career networking using AI that connects you with the right people for meaningful professional relationships.',
     type: 'website',
     siteName: 'Loopn',
     locale: 'en_US',
@@ -49,15 +48,15 @@ export const metadata: Metadata = {
         url: 'https://www.loopn.io/loopn.png',
         width: 1200,
         height: 630,
-        alt: 'Loopn - AI-Powered Professional Networking Platform',
+        alt: 'Loopn - Professional Networking & Career Matching using AI',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Loopn - AI-Powered Professional Networking & Career Matching',
+    title: 'Loopn - Professional Networking & Career Matching using AI',
     description:
-      'Upload your resume, get matched instantly with compatible professionals. AI-powered career networking for meaningful professional relationships.',
+      'Upload your resume, get matched instantly with compatible professionals. Career networking using AI for meaningful professional relationships.',
     images: ['https://www.loopn.io/loopn.png'],
   },
   robots: {
@@ -106,7 +105,7 @@ export default function RootLayout({
               '@type': 'Organization',
               name: 'Loopn',
               description:
-                'AI-powered professional networking platform that connects professionals through resume-based career matching for meaningful career advancement.',
+                'Professional networking platform using AI that connects professionals through resume-based career matching for meaningful career advancement.',
               url: 'https://www.loopn.io',
               logo: 'https://www.loopn.io/loopn.png',
               foundingDate: '2024',
@@ -140,7 +139,7 @@ export default function RootLayout({
               name: 'Loopn',
               url: 'https://www.loopn.io',
               description:
-                'AI-powered professional networking platform for career matching and professional relationship building',
+                'Professional networking platform using AI for career matching and professional relationship building',
               potentialAction: {
                 '@type': 'SearchAction',
                 target: 'https://www.loopn.io/search?q={search_term_string}',

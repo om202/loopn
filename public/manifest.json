@@ -1,7 +1,7 @@
 {
-  "name": "Loopn - AI-Powered Professional Networking",
+  "name": "Loopn - Professional Networking & Career Matching using AI",
   "short_name": "Loopn",
-  "description": "AI-powered professional networking platform. Upload your resume, get matched with compatible professionals, and build meaningful career relationships.",
+  "description": "Professional networking platform using AI. Upload your resume, get matched with compatible professionals, and build meaningful career relationships.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
