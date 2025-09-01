@@ -1,33 +1,6 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import type { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: 'Setup Your Profile | Loopn',
-  description: 'Complete your professional profile on Loopn. Upload your resume, add your skills, and start connecting with compatible professionals.',
-  keywords: [
-    'setup professional profile',
-    'resume upload',
-    'professional onboarding',
-    'career profile setup',
-    'networking profile',
-    'professional skills'
-  ],
-  openGraph: {
-    title: 'Setup Your Professional Profile | Loopn',
-    description: 'Upload your resume and complete your profile to get matched with the right professionals.',
-    type: 'website',
-    url: 'https://www.loopn.io/onboarding',
-  },
-  robots: {
-    index: false, // Don't index onboarding - requires auth
-    follow: false,
-  },
-  alternates: {
-    canonical: 'https://www.loopn.io/onboarding',
-  },
-};
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
