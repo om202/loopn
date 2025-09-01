@@ -547,8 +547,8 @@ export default function HomePage() {
                 Professional Focus
               </h3>
               <p className='text-slate-600 mb-8 leading-relaxed text-base font-medium'>
-                Quality over quantity. Every connection is verified, relevant,
-                and career-focused.
+                Quality over quantity. Every connection is relevant and
+                career-focused.
               </p>
               <ul className='space-y-4'>
                 <li className='flex items-center gap-3 text-slate-600'>
@@ -557,7 +557,7 @@ export default function HomePage() {
                     strokeWidth={2.5}
                   />
                   <span className='font-medium text-base'>
-                    Verified professionals only
+                    Serious professionals only
                   </span>
                 </li>
                 <li className='flex items-center gap-3 text-slate-600'>
@@ -622,7 +622,7 @@ export default function HomePage() {
             <div className='relative group'>
               <div className='bg-white rounded-2xl p-8 border border-slate-200 relative h-full shadow-sm'>
                 {/* Step number */}
-                <div className='absolute -top-4 left-1/2 -translate-x-1/2 w-12 h-12 border-1 border-brand-200 bg-white rounded-2xl flex items-center justify-center text-brand-600 font-bold text-lg z-20'>
+                <div className='absolute top-4 left-1/2 -translate-x-1/2 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-brand-600 font-bold text-sm mb-4'>
                   1
                 </div>
                 {/* Content */}
@@ -645,7 +645,7 @@ export default function HomePage() {
             <div className='relative group'>
               <div className='bg-white rounded-2xl p-8 border border-slate-200 relative h-full shadow-sm'>
                 {/* Step number */}
-                <div className='absolute -top-4 left-1/2 -translate-x-1/2 w-12 h-12 border-1 border-brand-200 bg-white rounded-2xl flex items-center justify-center text-brand-600 font-bold text-lg z-20'>
+                <div className='absolute top-4 left-1/2 -translate-x-1/2 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-brand-600 font-bold text-sm mb-4'>
                   2
                 </div>
                 {/* Content */}
@@ -668,7 +668,7 @@ export default function HomePage() {
             <div className='relative group'>
               <div className='bg-white rounded-2xl p-8 border border-slate-200 relative h-full shadow-sm'>
                 {/* Step number */}
-                <div className='absolute -top-4 left-1/2 -translate-x-1/2 w-12 h-12 border-1 border-brand-200 bg-white rounded-2xl flex items-center justify-center text-brand-600 font-bold text-lg z-20'>
+                <div className='absolute top-4 left-1/2 -translate-x-1/2 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-brand-600 font-bold text-sm mb-4'>
                   3
                 </div>
                 {/* Content */}
@@ -725,7 +725,7 @@ export default function HomePage() {
               {expandedFAQ === 0 && (
                 <div className='px-4 sm:px-5 pb-4 sm:pb-5 -mt-1'>
                   <p className='text-slate-600 leading-relaxed'>
-                    Loopn connects you with verified professionals based on shared
+                    Loopn connects you with professionals based on shared
                     interests and career goals. Simply complete your profile,
                     browse suggested connections, and start meaningful
                     conversations that can advance your career.
@@ -748,7 +748,7 @@ export default function HomePage() {
               {expandedFAQ === 1 && (
                 <div className='px-4 sm:px-5 pb-4 sm:pb-5 -mt-1'>
                   <p className='text-slate-600 leading-relaxed'>
-                    All Loopn users are verified professionals across various
+                    All Loopn users are professionals across various
                     industries. You'll connect with people who share your
                     interests, career goals, or expertise areas - from software
                     engineers and designers to consultants and entrepreneurs.
