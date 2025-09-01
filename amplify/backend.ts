@@ -76,5 +76,5 @@ backend.embeddingGenerator.resources.lambda.addToRolePolicy(
 // Set to 'false' to enable normal email verification (for production)
 backend.autoConfirm.addEnvironment(
   'DISABLE_EMAIL_VERIFICATION',
-  'true' // Manually change this value as needed
+  'false' // Email verification is now enabled
 );
