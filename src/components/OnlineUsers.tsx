@@ -189,10 +189,6 @@ export default function OnlineUsers({
     }
   }, [profileSidebarOpen, profileSidebarUser, allUsers]);
 
-
-
-
-
   const existingConversations = useMemo(() => {
     const conversationMap = new Map<string, Conversation>();
 
@@ -222,11 +218,8 @@ export default function OnlineUsers({
     onChatRequestSent,
   });
 
-
   const [suggestedUsers, setSuggestedUsers] = useState<UserPresence[]>([]);
   const [suggestedUsersLoading, setSuggestedUsersLoading] = useState(true);
-
-
 
   useEffect(() => {
     setOptimisticPendingRequests(prev => {
@@ -284,29 +277,32 @@ export default function OnlineUsers({
   const conversationUsersFromStore = useMemo(() => {
     const allConversations = Array.from(conversations.values());
     const userIds = new Set<string>();
-    
+
     allConversations.forEach(conversation => {
       const otherUserId =
         conversation.participant1Id === user?.userId
           ? conversation.participant2Id
           : conversation.participant1Id;
-      
+
       if (otherUserId && otherUserId !== user?.userId) {
         userIds.add(otherUserId);
       }
     });
 
-    return Array.from(userIds).map(userId => ({
-      userId,
-      isOnline: false,
-      status: 'OFFLINE' as const,
-      lastSeen: null,
-      lastHeartbeat: null,
-      activeChatId: null,
-      lastChatActivity: null,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    } as UserPresence));
+    return Array.from(userIds).map(
+      userId =>
+        ({
+          userId,
+          isOnline: false,
+          status: 'OFFLINE' as const,
+          lastSeen: null,
+          lastHeartbeat: null,
+          activeChatId: null,
+          lastChatActivity: null,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        }) as UserPresence
+    );
   }, [conversations, user?.userId]);
 
   useEffect(() => {

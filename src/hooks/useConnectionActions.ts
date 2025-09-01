@@ -61,7 +61,7 @@ export function useConnectionActions({
 
   const respondToConnectionRequest = useCallback(
     async (
-      connectionId: string, 
+      connectionId: string,
       status: 'ACCEPTED' | 'REJECTED',
       optimisticConversationId?: string
     ) => {
@@ -75,7 +75,11 @@ export function useConnectionActions({
 
       // Optimistically update the conversation status if accepting and we have the conversation ID
       if (status === 'ACCEPTED' && optimisticConversationId) {
-        updateConversationConnectionStatus(optimisticConversationId, true, 'ACTIVE');
+        updateConversationConnectionStatus(
+          optimisticConversationId,
+          true,
+          'ACTIVE'
+        );
       }
 
       try {
@@ -86,7 +90,7 @@ export function useConnectionActions({
 
         if (result.error) {
           setError(result.error);
-          
+
           // Revert optimistic update on error
           if (status === 'ACCEPTED' && optimisticConversationId) {
             updateConversationConnectionStatus(optimisticConversationId, false);
@@ -98,7 +102,7 @@ export function useConnectionActions({
             ? err.message
             : 'Failed to respond to connection request'
         );
-        
+
         // Revert optimistic update on error
         if (status === 'ACCEPTED' && optimisticConversationId) {
           updateConversationConnectionStatus(optimisticConversationId, false);

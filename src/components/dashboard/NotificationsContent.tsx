@@ -384,7 +384,11 @@ export default function NotificationsContent() {
 
     try {
       // Use the improved hook that handles optimistic updates internally
-      await respondToConnectionRequest(connectionRequestId, status, conversationId);
+      await respondToConnectionRequest(
+        connectionRequestId,
+        status,
+        conversationId
+      );
 
       // If successful, also remove the notification from the backend
       if (connectionNotification && user) {

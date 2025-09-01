@@ -655,7 +655,18 @@ export default function OnboardingPage() {
                   </label>
                   <select
                     value={formData.gender || ''}
-                    onChange={e => updateFormData('gender', e.target.value as 'MALE' | 'FEMALE' | 'NON_BINARY' | 'PREFER_NOT_TO_SAY' | 'SELF_DESCRIBE' | undefined)}
+                    onChange={e =>
+                      updateFormData(
+                        'gender',
+                        e.target.value as
+                          | 'MALE'
+                          | 'FEMALE'
+                          | 'NON_BINARY'
+                          | 'PREFER_NOT_TO_SAY'
+                          | 'SELF_DESCRIBE'
+                          | undefined
+                      )
+                    }
                     className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                   >
                     <option value=''>Select gender</option>
@@ -665,13 +676,15 @@ export default function OnboardingPage() {
                     <option value='PREFER_NOT_TO_SAY'>Prefer not to say</option>
                     <option value='SELF_DESCRIBE'>Self-describe</option>
                   </select>
-                  
+
                   {formData.gender === 'SELF_DESCRIBE' && (
                     <div className='mt-3'>
                       <input
                         type='text'
                         value={formData.genderCustom || ''}
-                        onChange={e => updateFormData('genderCustom', e.target.value)}
+                        onChange={e =>
+                          updateFormData('genderCustom', e.target.value)
+                        }
                         placeholder='Please describe your gender identity'
                         className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                       />
@@ -1532,7 +1545,8 @@ export default function OnboardingPage() {
                   Professional Status
                 </label>
                 <p className='text-slate-600 mb-4'>
-                  Help others understand your current professional situation to facilitate better networking.
+                  Help others understand your current professional situation to
+                  facilitate better networking.
                 </p>
 
                 <div className='space-y-3'>
@@ -1543,7 +1557,12 @@ export default function OnboardingPage() {
                       name='hiringStatus'
                       value='NOT_SPECIFIED'
                       checked={formData.hiringStatus === 'NOT_SPECIFIED'}
-                      onChange={e => updateFormData('hiringStatus', e.target.value as 'NOT_SPECIFIED')}
+                      onChange={e =>
+                        updateFormData(
+                          'hiringStatus',
+                          e.target.value as 'NOT_SPECIFIED'
+                        )
+                      }
                       className='w-4 h-4 text-brand-500 focus:ring-brand-500 focus:ring-2'
                     />
                     <label htmlFor='not-specified' className='text-slate-700'>
@@ -1558,7 +1577,12 @@ export default function OnboardingPage() {
                       name='hiringStatus'
                       value='HIRING'
                       checked={formData.hiringStatus === 'HIRING'}
-                      onChange={e => updateFormData('hiringStatus', e.target.value as 'HIRING')}
+                      onChange={e =>
+                        updateFormData(
+                          'hiringStatus',
+                          e.target.value as 'HIRING'
+                        )
+                      }
                       className='w-4 h-4 text-brand-500 focus:ring-brand-500 focus:ring-2'
                     />
                     <label htmlFor='hiring' className='text-slate-700'>
@@ -1573,7 +1597,12 @@ export default function OnboardingPage() {
                       name='hiringStatus'
                       value='LOOKING_FOR_JOB'
                       checked={formData.hiringStatus === 'LOOKING_FOR_JOB'}
-                      onChange={e => updateFormData('hiringStatus', e.target.value as 'LOOKING_FOR_JOB')}
+                      onChange={e =>
+                        updateFormData(
+                          'hiringStatus',
+                          e.target.value as 'LOOKING_FOR_JOB'
+                        )
+                      }
                       className='w-4 h-4 text-brand-500 focus:ring-brand-500 focus:ring-2'
                     />
                     <label htmlFor='looking-for-job' className='text-slate-700'>
@@ -1587,11 +1616,21 @@ export default function OnboardingPage() {
                       id='open-to-opportunities'
                       name='hiringStatus'
                       value='OPEN_TO_OPPORTUNITIES'
-                      checked={formData.hiringStatus === 'OPEN_TO_OPPORTUNITIES'}
-                      onChange={e => updateFormData('hiringStatus', e.target.value as 'OPEN_TO_OPPORTUNITIES')}
+                      checked={
+                        formData.hiringStatus === 'OPEN_TO_OPPORTUNITIES'
+                      }
+                      onChange={e =>
+                        updateFormData(
+                          'hiringStatus',
+                          e.target.value as 'OPEN_TO_OPPORTUNITIES'
+                        )
+                      }
                       className='w-4 h-4 text-brand-500 focus:ring-brand-500 focus:ring-2'
                     />
-                    <label htmlFor='open-to-opportunities' className='text-slate-700'>
+                    <label
+                      htmlFor='open-to-opportunities'
+                      className='text-slate-700'
+                    >
                       I'm open to new opportunities
                     </label>
                   </div>
@@ -1603,7 +1642,12 @@ export default function OnboardingPage() {
                       name='hiringStatus'
                       value='NOT_LOOKING'
                       checked={formData.hiringStatus === 'NOT_LOOKING'}
-                      onChange={e => updateFormData('hiringStatus', e.target.value as 'NOT_LOOKING')}
+                      onChange={e =>
+                        updateFormData(
+                          'hiringStatus',
+                          e.target.value as 'NOT_LOOKING'
+                        )
+                      }
                       className='w-4 h-4 text-brand-500 focus:ring-brand-500 focus:ring-2'
                     />
                     <label htmlFor='not-looking' className='text-slate-700'>
@@ -1630,7 +1674,6 @@ export default function OnboardingPage() {
                     </li>
                     <li>How you'll engage (intros, project help, long-term)</li>
                   </ul>
-
                 </div>
                 <textarea
                   value={formData.about || ''}

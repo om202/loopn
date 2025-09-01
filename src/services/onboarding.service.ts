@@ -6,7 +6,12 @@ import { userProfileService } from './user-profile.service';
 export interface OnboardingData {
   // Personal Information
   fullName: string;
-  gender?: 'MALE' | 'FEMALE' | 'NON_BINARY' | 'PREFER_NOT_TO_SAY' | 'SELF_DESCRIBE';
+  gender?:
+    | 'MALE'
+    | 'FEMALE'
+    | 'NON_BINARY'
+    | 'PREFER_NOT_TO_SAY'
+    | 'SELF_DESCRIBE';
   genderCustom?: string; // For self-describe option
   email?: string;
   phone?: string;
@@ -84,7 +89,12 @@ export interface OnboardingData {
   hobbies?: string[]; // Personal hobbies from resume
 
   // Professional Status
-  hiringStatus?: 'NOT_SPECIFIED' | 'HIRING' | 'LOOKING_FOR_JOB' | 'OPEN_TO_OPPORTUNITIES' | 'NOT_LOOKING';
+  hiringStatus?:
+    | 'NOT_SPECIFIED'
+    | 'HIRING'
+    | 'LOOKING_FOR_JOB'
+    | 'OPEN_TO_OPPORTUNITIES'
+    | 'NOT_LOOKING';
 
   // Profile Picture
   profilePictureFile?: File; // For upload during onboarding

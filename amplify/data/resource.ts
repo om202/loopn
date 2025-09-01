@@ -182,7 +182,13 @@ const schema = a
 
         // Personal Information
         fullName: a.string(),
-        gender: a.enum(['MALE', 'FEMALE', 'NON_BINARY', 'PREFER_NOT_TO_SAY', 'SELF_DESCRIBE']),
+        gender: a.enum([
+          'MALE',
+          'FEMALE',
+          'NON_BINARY',
+          'PREFER_NOT_TO_SAY',
+          'SELF_DESCRIBE',
+        ]),
         genderCustom: a.string(), // For self-describe option
         phone: a.string(),
         city: a.string(),
@@ -207,7 +213,13 @@ const schema = a
         hobbies: a.string().array(),
 
         // Professional Status
-        hiringStatus: a.enum(['NOT_SPECIFIED', 'HIRING', 'LOOKING_FOR_JOB', 'OPEN_TO_OPPORTUNITIES', 'NOT_LOOKING']),
+        hiringStatus: a.enum([
+          'NOT_SPECIFIED',
+          'HIRING',
+          'LOOKING_FOR_JOB',
+          'OPEN_TO_OPPORTUNITIES',
+          'NOT_LOOKING',
+        ]),
 
         // Detailed Professional Background (JSON stored as strings)
         workExperience: a.json(), // Array of work experience objects

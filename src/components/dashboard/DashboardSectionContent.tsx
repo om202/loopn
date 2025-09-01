@@ -323,19 +323,21 @@ export default function DashboardSectionContent({
           </h3>
         </div>
       )}
-      
+
       {/* Early users message for suggested section when count < 7 - Fixed at bottom */}
       {(() => {
         const now = new Date();
         const startDate = new Date('2025-09-01');
         const endDate = new Date('2025-09-15'); // 14 days from Sep 1 (inclusive)
         const isWithinLaunchPeriod = now >= startDate && now < endDate;
-        
-        return activeSection === 'suggested' && 
-               suggestedUsers.length < 7 && 
-               suggestedUsers.length > 0 && 
-               isWithinLaunchPeriod &&
-               !isEarlyMessageDismissed;
+
+        return (
+          activeSection === 'suggested' &&
+          suggestedUsers.length < 7 &&
+          suggestedUsers.length > 0 &&
+          isWithinLaunchPeriod &&
+          !isEarlyMessageDismissed
+        );
       })() && (
         <div className='fixed bottom-20 lg:bottom-8 left-4 right-4 lg:left-1/2 lg:right-auto lg:transform lg:-translate-x-1/2 lg:w-auto lg:max-w-lg z-10 bg-white border border-slate-200 rounded-lg shadow-sm px-4 py-2'>
           <div className='flex items-center justify-center gap-2 relative'>
