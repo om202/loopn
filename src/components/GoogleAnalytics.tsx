@@ -49,7 +49,7 @@ export function PageTracker() {
   const { user } = useAuth();
 
   useEffect(() => {
-    if (GA_MEASUREMENT_ID) {
+    if (GA_MEASUREMENT_ID && typeof window !== 'undefined') {
       const search = searchParams?.toString();
       const url = pathname + (search ? `?${search}` : '');
       const userId = user?.userId || null;

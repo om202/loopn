@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Shield } from 'lucide-react';
+import { useAnalytics } from '../../hooks/useAnalytics';
 
 interface ConfirmSignUpFormProps {
   email: string;

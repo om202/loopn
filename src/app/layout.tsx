@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
+import { Suspense } from 'react';
 
 import './globals.css';
 
@@ -164,7 +165,9 @@ export default function RootLayout({
 
                 {/* Google Analytics 4 Tracking - Inside AuthProvider */}
                 <GoogleAnalytics />
-                <PageTracker />
+                <Suspense fallback={null}>
+                  <PageTracker />
+                </Suspense>
               </GlobalSubscriptionProvider>
             </RealtimeProvider>
           </AuthProvider>

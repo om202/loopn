@@ -116,7 +116,7 @@ export default function SearchSectionContent({
         setIsSearching(false);
       }
     },
-    [isSearching, user]
+    [isSearching, user, analytics]
   );
 
   // Effect to handle search from external search bar or direct response

@@ -59,7 +59,7 @@ export function useConnectionActions({
     } finally {
       setIsLoading(false);
     }
-  }, [conversationId, currentUserId, otherUserId]);
+  }, [conversationId, currentUserId, otherUserId, analytics]);
 
   const respondToConnectionRequest = useCallback(
     async (
