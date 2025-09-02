@@ -209,7 +209,7 @@ export default function HomePage() {
             {/* Right column - Demo */}
             <div className='relative mt-8 lg:mt-0'>
               {/* Modern Chat Interface - matching real chat UI design */}
-              <div className='bg-white rounded-2xl shadow-sm border border-neutral-200 w-full max-w-sm lg:max-w-md mx-auto lg:ml-auto lg:mr-0 overflow-hidden'>
+              <div className='bg-white rounded-2xl border border-neutral-200 w-full max-w-sm lg:max-w-md mx-auto lg:ml-auto lg:mr-0 overflow-hidden'>
                 {/* Chat Header */}
                 <div className='flex-shrink-0 bg-white border-b border-neutral-200 px-4 py-3'>
                   <div className='flex items-center gap-3'>
@@ -402,7 +402,7 @@ export default function HomePage() {
                         <Smile className='w-5 h-5' strokeWidth={2.5} />
                       </button>
                     </div>
-                    <button className='flex-shrink-0 w-12 h-12 bg-brand-500 text-white rounded-full flex items-center justify-center shadow-sm hover:bg-brand-600 cursor-pointer'>
+                    <button className='flex-shrink-0 w-12 h-12 bg-brand-500 text-white rounded-full flex items-center justify-center hover:bg-brand-600 cursor-pointer'>
                       <Image
                         src='/send_icon.svg'
                         alt='Send'
@@ -420,7 +420,7 @@ export default function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section className='py-8 sm:py-12 bg-neutral-50 relative'>
+      <section className='py-8 sm:py-12 bg-neutral-50 relative border-t border-neutral-200'>
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-1/4 left-0 w-72 h-72 bg-neutral-100/80 rounded-full blur-3xl' />
@@ -448,7 +448,7 @@ export default function HomePage() {
                 alt='Loopn Dashboard - Desktop View'
                 width={1200}
                 height={900}
-                className='w-full h-auto rounded-2xl shadow-sm border border-neutral-200'
+                className='w-full h-auto rounded-2xl border border-neutral-200'
                 quality={100}
                 priority
                 unoptimized={true}
@@ -462,7 +462,7 @@ export default function HomePage() {
                 alt='Loopn Dashboard - Mobile View'
                 width={450}
                 height={900}
-                className='w-full h-auto rounded-2xl shadow-sm border border-neutral-200'
+                className='w-full h-auto rounded-2xl border border-neutral-200'
                 quality={100}
                 priority
                 unoptimized={true}
@@ -473,7 +473,7 @@ export default function HomePage() {
           {/* Features Grid */}
           <div className='grid lg:grid-cols-3 gap-8 sm:gap-12 mb-12 mt-12'>
             {/* Feature 1 - Smart Matching */}
-            <div className=' bg-white rounded-2xl p-8 border border-neutral-200 h-full shadow-sm'>
+            <div className=' bg-white rounded-2xl p-8 border border-neutral-200 h-full'>
               <h3 className='text-xl font-semibold text-neutral-900 mb-3 flex items-center gap-3'>
                 <Brain className='w-6 h-6 text-brand-600' strokeWidth={2.5} />
                 AI Resume Intelligence
@@ -514,7 +514,7 @@ export default function HomePage() {
             </div>
 
             {/* Feature 2 - Real-time Chat */}
-            <div className=' bg-white rounded-2xl p-8 border border-neutral-200 h-full shadow-sm'>
+            <div className=' bg-white rounded-2xl p-8 border border-neutral-200 h-full'>
               <h3 className='text-xl font-semibold text-neutral-900 mb-3 flex items-center gap-3'>
                 <Zap className='w-6 h-6 text-brand-600' strokeWidth={2.5} />
                 Real-Time Discovery
@@ -554,7 +554,7 @@ export default function HomePage() {
             </div>
 
             {/* Feature 3 - Quality Network */}
-            <div className=' bg-white rounded-2xl p-8 border border-neutral-200 h-full shadow-sm'>
+            <div className=' bg-white rounded-2xl p-8 border border-neutral-200 h-full'>
               <h3 className='text-xl font-semibold text-neutral-900 mb-3 flex items-center gap-3'>
                 <Shield className='w-6 h-6 text-brand-600' strokeWidth={2.5} />
                 Professional Focus
@@ -611,7 +611,7 @@ export default function HomePage() {
       </section>
 
       {/* How It Works */}
-      <section id='how-it-works' className='py-8 sm:py-12 bg-white relative'>
+      <section id='how-it-works' className='py-8 sm:py-12 bg-white relative border-t border-neutral-200'>
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-1/3 right-0 w-96 h-96 bg-brand-50/60 rounded-full blur-3xl' />
@@ -633,7 +633,7 @@ export default function HomePage() {
           <div className='grid lg:grid-cols-3 gap-8 sm:gap-12 relative'>
             {/* Step 1 */}
             <div className='relative group'>
-              <div className='bg-white rounded-2xl p-8 border border-neutral-200 relative h-full shadow-sm'>
+              <div className='bg-white rounded-2xl p-8 border border-neutral-200 relative h-full'>
                 {/* Step number */}
                 <div className='absolute top-4 left-1/2 -translate-x-1/2 w-8 h-8 bg-neutral-100 rounded-full flex items-center justify-center text-brand-600 font-bold text-sm mb-4'>
                   1
@@ -656,7 +656,7 @@ export default function HomePage() {
 
             {/* Step 2 */}
             <div className='relative group'>
-              <div className='bg-white rounded-2xl p-8 border border-neutral-200 relative h-full shadow-sm'>
+              <div className='bg-white rounded-2xl p-8 border border-neutral-200 relative h-full'>
                 {/* Step number */}
                 <div className='absolute top-4 left-1/2 -translate-x-1/2 w-8 h-8 bg-neutral-100 rounded-full flex items-center justify-center text-brand-600 font-bold text-sm mb-4'>
                   2
@@ -679,7 +679,7 @@ export default function HomePage() {
 
             {/* Step 3 */}
             <div className='relative group'>
-              <div className='bg-white rounded-2xl p-8 border border-neutral-200 relative h-full shadow-sm'>
+              <div className='bg-white rounded-2xl p-8 border border-neutral-200 relative h-full'>
                 {/* Step number */}
                 <div className='absolute top-4 left-1/2 -translate-x-1/2 w-8 h-8 bg-neutral-100 rounded-full flex items-center justify-center text-brand-600 font-bold text-sm mb-4'>
                   3
@@ -705,7 +705,7 @@ export default function HomePage() {
       </section>
 
       {/* FAQ Section */}
-      <section className='py-8 sm:py-12 bg-neutral-50 relative'>
+      <section className='py-8 sm:py-12 bg-neutral-50 relative border-t border-neutral-200'>
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-1/4 right-0 w-96 h-96 bg-brand-50/40 rounded-full blur-3xl' />
@@ -725,7 +725,7 @@ export default function HomePage() {
 
           <div className='space-y-4'>
             {/* FAQ Item 1 */}
-            <div className='bg-white border border-neutral-200 rounded-2xl shadow-sm'>
+            <div className='bg-white border border-neutral-200 rounded-2xl'>
               <button
                 className='w-full text-left p-4 sm:p-5 flex items-center justify-between hover:bg-neutral-50/50 transition-colors rounded-2xl'
                 onClick={() => toggleFAQ(0)}
@@ -750,7 +750,7 @@ export default function HomePage() {
             </div>
 
             {/* FAQ Item 2 */}
-            <div className='bg-white border border-neutral-200 rounded-2xl shadow-sm'>
+            <div className='bg-white border border-neutral-200 rounded-2xl'>
               <button
                 className='w-full text-left p-4 sm:p-5 flex items-center justify-between hover:bg-neutral-50/50 transition-colors rounded-2xl'
                 onClick={() => toggleFAQ(1)}
@@ -775,7 +775,7 @@ export default function HomePage() {
             </div>
 
             {/* FAQ Item 3 */}
-            <div className='bg-white border border-neutral-200 rounded-2xl shadow-sm'>
+            <div className='bg-white border border-neutral-200 rounded-2xl'>
               <button
                 className='w-full text-left p-4 sm:p-5 flex items-center justify-between hover:bg-neutral-50/50 transition-colors rounded-2xl'
                 onClick={() => toggleFAQ(2)}
@@ -801,7 +801,7 @@ export default function HomePage() {
             </div>
 
             {/* FAQ Item 4 */}
-            <div className='bg-white border border-neutral-200 rounded-2xl shadow-sm'>
+            <div className='bg-white border border-neutral-200 rounded-2xl'>
               <button
                 className='w-full text-left p-4 sm:p-5 flex items-center justify-between hover:bg-neutral-50/50 transition-colors rounded-2xl'
                 onClick={() => toggleFAQ(3)}
@@ -830,7 +830,7 @@ export default function HomePage() {
       </section>
 
       {/* Final CTA Section */}
-      <section className='py-8 sm:py-12 bg-white text-neutral-900 relative overflow-hidden'>
+      <section className='py-8 sm:py-12 bg-white text-neutral-900 relative overflow-hidden border-t border-neutral-200'>
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl' />
