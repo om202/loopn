@@ -283,11 +283,11 @@ export default function ProfileSidebar({
           }}
           className={`px-2 py-2 text-base font-medium rounded-lg transition-colors flex items-center justify-center gap-2 ${
             incomingRequestSenderIds?.has(userId)
-              ? 'bg-slate-50 text-brand-600 border border-brand-500 hover:bg-slate-100'
+              ? 'bg-neutral-50 text-brand-600 border border-brand-500 hover:bg-neutral-100'
               : pendingRequests.has(userId)
-                ? 'bg-slate-100 text-slate-500 hover:bg-slate-200 border border-slate-200'
+                ? 'bg-neutral-100 text-neutral-500 hover:bg-neutral-200 border border-neutral-200'
                 : existingConversations.has(userId)
-                  ? 'bg-slate-50 text-brand-600 border border-brand-500 hover:bg-slate-100'
+                  ? 'bg-neutral-50 text-brand-600 border border-brand-500 hover:bg-neutral-100'
                   : 'bg-brand-500 text-white hover:bg-brand-600'
           }`}
         >
@@ -300,8 +300,8 @@ export default function ProfileSidebar({
             </>
           ) : pendingRequests.has(userId) ? (
             <>
-              <UserCheck className='w-4 h-4 text-slate-500' />
-              <span className='text-base font-medium text-slate-500'>
+              <UserCheck className='w-4 h-4 text-neutral-500' />
+              <span className='text-base font-medium text-neutral-500'>
                 Pending
               </span>
             </>
@@ -327,7 +327,7 @@ export default function ProfileSidebar({
 
   return (
     <div
-      className={`bg-white rounded-2xl w-full h-full flex flex-col relative border border-slate-200 p-2 sm:p-4 ${
+      className={`bg-white rounded-2xl w-full h-full flex flex-col relative border border-neutral-200 p-2 sm:p-4 ${
         isInChatContext ? 'w-[330px] xl:w-[360px]' : ''
       }`}
     >
@@ -348,7 +348,7 @@ export default function ProfileSidebar({
           {onBack && (
             <button
               onClick={onBack}
-              className='flex items-center gap-2 text-slate-500 hover:text-black transition-colors'
+              className='flex items-center gap-2 text-neutral-500 hover:text-black transition-colors'
             >
               <ArrowLeft className='w-4 h-4' />
               <span className='text-base font-medium'>Back</span>
@@ -364,7 +364,7 @@ export default function ProfileSidebar({
               {onClose && (
                 <button
                   onClick={onClose}
-                  className='p-1.5 text-slate-500 hover:text-black transition-colors rounded-lg hover:bg-slate-100'
+                  className='p-1.5 text-neutral-500 hover:text-black transition-colors rounded-lg hover:bg-neutral-100'
                   title='Collapse sidebar'
                 >
                   <X className='w-[22px] h-[22px]' />
@@ -377,7 +377,7 @@ export default function ProfileSidebar({
               <button
                 onClick={handleDownloadResume}
                 disabled={downloadingResume || !userProfile}
-                className='p-1.5 text-slate-500 hover:text-brand-600 transition-colors rounded-lg hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50'
+                className='p-1.5 text-neutral-500 hover:text-brand-600 transition-colors rounded-lg hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50'
                 title='Download resume as PDF'
               >
                 <FileDown className='w-[18px] h-[18px]' />
@@ -386,7 +386,7 @@ export default function ProfileSidebar({
               {/* Full Screen Button */}
               <button
                 onClick={() => setShowFullScreenDialog(true)}
-                className='p-1.5 text-slate-500 hover:text-black transition-colors rounded-lg hover:bg-slate-100'
+                className='p-1.5 text-neutral-500 hover:text-black transition-colors rounded-lg hover:bg-neutral-100'
                 title='Open in full view'
               >
                 <Expand className='w-[18px] h-[18px]' />
@@ -396,7 +396,7 @@ export default function ProfileSidebar({
               {onClose && (
                 <button
                   onClick={onClose}
-                  className='p-1.5 text-slate-500 hover:text-black transition-colors rounded-lg hover:bg-slate-100'
+                  className='p-1.5 text-neutral-500 hover:text-black transition-colors rounded-lg hover:bg-neutral-100'
                   title='Collapse sidebar'
                 >
                   <X className='w-[22px] h-[22px]' />
@@ -409,7 +409,7 @@ export default function ProfileSidebar({
           {onEndChat && (
             <button
               onClick={() => setShowEndChatDialog(true)}
-              className='text-sm text-slate-500 hover:text-black transition-colors font-medium flex items-center gap-1.5'
+              className='text-sm text-neutral-500 hover:text-black transition-colors font-medium flex items-center gap-1.5'
             >
               <>
                 <UserRoundMinus className='w-3.5 h-3.5' />
@@ -421,7 +421,7 @@ export default function ProfileSidebar({
       </div>
 
       {/* Line Separator */}
-      <div className='w-full h-px bg-slate-200 mb-4 sm:mb-6'></div>
+      <div className='w-full h-px bg-neutral-200 mb-4 sm:mb-6'></div>
 
       {/* User Profile Header */}
       <div className='pb-1 flex justify-center'>
@@ -441,7 +441,7 @@ export default function ProfileSidebar({
             </div>
             {/* Show trial chat expiration info when in sidebar context (not in chat) */}
             {!conversation && isTrialConversation() && getTrialTimeLeft() && (
-              <div className='flex items-center justify-center gap-1 text-gray-400 mt-0.5'>
+              <div className='flex items-center justify-center gap-1 text-neutral-400 mt-0.5'>
                 <ClockFading className='w-3.5 h-3.5 flex-shrink-0' />
                 <span className='text-sm font-medium'>
                   Chat Expires in {getTrialTimeLeft()}
@@ -456,10 +456,10 @@ export default function ProfileSidebar({
       {conversation && (
         <div className='px-4 pb-3'>
           {/* Connection Status - All conversations are now permanent connections */}
-          <div className='flex items-center justify-center text-base text-slate-500 mb-2'>
+          <div className='flex items-center justify-center text-base text-neutral-500 mb-2'>
             <button
               onClick={() => setShowRemoveConnectionDialog(true)}
-              className='flex items-center gap-2 px-2 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 transition-colors'
+              className='flex items-center gap-2 px-2 py-2 rounded-lg bg-neutral-100 hover:bg-neutral-200 transition-colors'
             >
               <ConnectIcon className='w-4 h-4 text-brand-600' />
               <span className='font-medium'>Connected</span>
@@ -470,9 +470,9 @@ export default function ProfileSidebar({
           {false && (
             <div className='mb-1 mt-1'>
               {/* Trial Chat Info with End Chat Icon - Centered */}
-              <div className='text-center text-sm text-slate-500 mb-2'>
+              <div className='text-center text-sm text-neutral-500 mb-2'>
                 <div className='flex items-center justify-center gap-1 mb-1'>
-                  <ClockFading className='w-3.5 h-3.5 text-gray-400' />
+                  <ClockFading className='w-3.5 h-3.5 text-neutral-400' />
                   <span className='font-medium'>
                     Connection Expires in{' '}
                     <span className='font-bold text-black text-base'>
@@ -485,7 +485,7 @@ export default function ProfileSidebar({
               {/* Connect Button */}
               <div className='flex justify-center'>
                 {hasAcceptedConnection ? (
-                  <div className='px-2 py-2 text-base font-medium rounded-lg flex items-center justify-center gap-2 text-slate-500'>
+                  <div className='px-2 py-2 text-base font-medium rounded-lg flex items-center justify-center gap-2 text-neutral-500'>
                     <svg
                       className='w-4 h-4'
                       viewBox='30 30 160 160'
@@ -501,9 +501,9 @@ export default function ProfileSidebar({
                   <button
                     onClick={() => setShowCancelRequestDialog(true)}
                     disabled={optimisticRequestSent} // Disable if optimistic (no real request to cancel yet)
-                    className='px-2 py-2 text-base font-medium rounded-lg flex items-center justify-center gap-2 bg-slate-100 text-slate-500 hover:bg-slate-200 border border-slate-200 transition-colors disabled:cursor-not-allowed disabled:hover:bg-slate-100'
+                    className='px-2 py-2 text-base font-medium rounded-lg flex items-center justify-center gap-2 bg-neutral-100 text-neutral-500 hover:bg-neutral-200 border border-neutral-200 transition-colors disabled:cursor-not-allowed disabled:hover:bg-neutral-100'
                   >
-                    <UserCheck className='w-4 h-4 text-slate-500' />
+                    <UserCheck className='w-4 h-4 text-neutral-500' />
                     <span className='font-medium'>Pending</span>
                   </button>
                 ) : (
@@ -552,30 +552,30 @@ export default function ProfileSidebar({
             <div className='space-y-3'>
               {userProfile?.jobRole && (
                 <div>
-                  <h3 className='text-base font-medium text-slate-900 mb-1'>
+                  <h3 className='text-base font-medium text-neutral-900 mb-1'>
                     Role
                   </h3>
-                  <p className='text-base text-slate-600'>
+                  <p className='text-base text-neutral-600'>
                     {userProfile.jobRole}
                   </p>
                 </div>
               )}
               {userProfile?.companyName && (
                 <div>
-                  <h3 className='text-base font-medium text-slate-900 mb-1'>
+                  <h3 className='text-base font-medium text-neutral-900 mb-1'>
                     Company
                   </h3>
-                  <p className='text-base text-slate-600'>
+                  <p className='text-base text-neutral-600'>
                     {userProfile.companyName}
                   </p>
                 </div>
               )}
               {(userProfile?.city || userProfile?.country) && (
                 <div>
-                  <h3 className='text-base font-medium text-slate-900 mb-1'>
+                  <h3 className='text-base font-medium text-neutral-900 mb-1'>
                     Location
                   </h3>
-                  <p className='text-base text-slate-600'>
+                  <p className='text-base text-neutral-600'>
                     {[userProfile.city, userProfile.country]
                       .filter(Boolean)
                       .join(', ')}
@@ -586,7 +586,7 @@ export default function ProfileSidebar({
               <div className='pt-2'>
                 <button
                   onClick={() => setShowFullScreenDialog(true)}
-                  className='text-base text-brand-600 hover:text-brand-700 font-medium bg-slate-100 hover:bg-slate-200 px-3 py-2 rounded-lg transition-colors'
+                  className='text-base text-brand-600 hover:text-brand-700 font-medium bg-neutral-100 hover:bg-neutral-200 px-3 py-2 rounded-lg transition-colors'
                 >
                   View Full Profile
                 </button>
@@ -614,14 +614,14 @@ export default function ProfileSidebar({
             <h3 className='text-sm font-medium text-black text-center mb-3'>
               Remove {getUserDisplayName()} from your connections?
             </h3>
-            <p className='text-base text-slate-500 text-center mb-4'>
+            <p className='text-base text-neutral-500 text-center mb-4'>
               This will permanently remove them from your professional network.
               You can reconnect later if needed.
             </p>
             <div className='flex gap-2'>
               <button
                 onClick={() => setShowEndChatDialog(false)}
-                className='flex-1 px-3 py-2 text-base font-medium text-black bg-slate-100 rounded-lg hover:bg-slate-200 focus:outline-none transition-colors'
+                className='flex-1 px-3 py-2 text-base font-medium text-black bg-neutral-100 rounded-lg hover:bg-neutral-200 focus:outline-none transition-colors'
               >
                 Cancel
               </button>
@@ -630,7 +630,7 @@ export default function ProfileSidebar({
                   onRemoveConnection?.();
                   setShowEndChatDialog(false);
                 }}
-                className='flex-1 px-3 py-2 text-base font-medium text-b_red-600 bg-slate-100 rounded-lg hover:bg-slate-200 focus:outline-none transition-colors'
+                className='flex-1 px-3 py-2 text-base font-medium text-b_red-600 bg-neutral-100 rounded-lg hover:bg-neutral-200 focus:outline-none transition-colors'
               >
                 Remove Connection
               </button>
@@ -661,7 +661,7 @@ export default function ProfileSidebar({
         <div className='fixed inset-0 z-50 overflow-y-auto'>
           {/* Background overlay */}
           <div
-            className='fixed inset-0 bg-slate-950/16'
+            className='fixed inset-0 bg-neutral-950/16'
             onClick={() => setShowFullScreenDialog(false)}
           />
 
@@ -669,8 +669,8 @@ export default function ProfileSidebar({
           <div className='flex min-h-full items-center justify-center p-2'>
             <div className='relative w-[95vw] max-w-[832px] min-w-[640px] bg-white rounded-2xl max-h-[94vh] flex flex-col overflow-hidden shadow-2xl'>
               {/* Header */}
-              <div className='px-6 py-4 border-b border-slate-200 flex items-center justify-between'>
-                <h2 className='text-lg font-semibold text-slate-900'>
+              <div className='px-6 py-4 border-b border-neutral-200 flex items-center justify-between'>
+                <h2 className='text-lg font-semibold text-neutral-900'>
                   Profile Details
                 </h2>
                 <div className='flex items-center gap-2'>
@@ -678,14 +678,14 @@ export default function ProfileSidebar({
                   <button
                     onClick={handleDownloadResume}
                     disabled={downloadingResume || !userProfile}
-                    className='p-2 text-slate-500 hover:text-brand-600 transition-colors rounded-lg hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50'
+                    className='p-2 text-neutral-500 hover:text-brand-600 transition-colors rounded-lg hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50'
                     title='Download resume as PDF'
                   >
                     <FileDown className='w-[18px] h-[18px]' />
                   </button>
                   <button
                     onClick={() => setShowFullScreenDialog(false)}
-                    className='p-2 text-slate-500 hover:text-black transition-colors rounded-lg hover:bg-slate-100'
+                    className='p-2 text-neutral-500 hover:text-black transition-colors rounded-lg hover:bg-neutral-100'
                     title='Close'
                   >
                     <X className='w-[22px] h-[22px]' />
@@ -714,14 +714,14 @@ export default function ProfileSidebar({
                     <div className='flex-1 min-w-0'>
                       <div className='flex items-start justify-between mb-3'>
                         <div>
-                          <h1 className='text-xl font-bold text-slate-900 mb-1'>
+                          <h1 className='text-xl font-bold text-neutral-900 mb-1'>
                             {getUserDisplayName()}
                           </h1>
                           {userProfile?.jobRole && (
-                            <p className='text-base text-slate-700 mb-1'>
+                            <p className='text-base text-neutral-700 mb-1'>
                               {userProfile.jobRole}
                               {userProfile.companyName && (
-                                <span className='text-slate-500'>
+                                <span className='text-neutral-500'>
                                   {' '}
                                   at {userProfile.companyName}
                                 </span>
@@ -729,7 +729,7 @@ export default function ProfileSidebar({
                             </p>
                           )}
                           {userProfile?.city || userProfile?.country ? (
-                            <p className='text-base text-slate-500'>
+                            <p className='text-base text-neutral-500'>
                               {[userProfile.city, userProfile.country]
                                 .filter(Boolean)
                                 .join(', ')}

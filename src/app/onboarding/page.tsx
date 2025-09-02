@@ -252,9 +252,9 @@ export default function OnboardingPage() {
   ) => {
     const isHighlighted = highlightedFields.includes(fieldName);
     if (isHighlighted) {
-      return `${baseClassName.replace('border-slate-200', 'border-red-500')} ring-2 ring-red-200`;
+      return `${baseClassName.replace('border-neutral-200', 'border-red-500')} ring-2 ring-red-200`;
     }
-    return `${baseClassName} border-slate-200`;
+    return `${baseClassName} border-neutral-200`;
   };
 
   const toggleInterest = (interest: string) => {
@@ -532,15 +532,15 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className='min-h-screen bg-slate-100 py-8 px-3 sm:px-4 pb-32'>
+    <div className='min-h-screen bg-neutral-100 py-8 px-3 sm:px-4 pb-32'>
       <div className='max-w-3xl mx-auto'>
         {/* Main content card */}
-        <div className='bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 lg:p-8'>
+        <div className='bg-white rounded-2xl border border-neutral-200 p-4 sm:p-6 lg:p-8'>
           {/* Sign Out Button */}
           <div className='flex justify-end mb-4'>
             <button
               onClick={handleSignOut}
-              className='text-sm text-slate-600 hover:text-slate-800 transition-colors'
+              className='text-sm text-neutral-600 hover:text-neutral-800 transition-colors'
             >
               Sign Out
             </button>
@@ -564,8 +564,8 @@ export default function OnboardingPage() {
 
           {/* Resume Upload Section */}
           {showResumeUpload && currentStep === 1 && (
-            <div className='mb-8 text-center bg-slate-50 rounded-2xl p-6'>
-              <p className='text-slate-700 mb-4 text-base'>
+            <div className='mb-8 text-center bg-neutral-50 rounded-2xl p-6'>
+              <p className='text-neutral-700 mb-4 text-base'>
                 Upload your resume, and we'll autofill the form for you.
               </p>
 
@@ -611,13 +611,13 @@ export default function OnboardingPage() {
           {/* Resume Processed Indicator */}
           {resumeProcessed && !showResumeUpload && (
             <div className='mb-6 text-center space-y-3'>
-              <p className='text-slate-700'>
+              <p className='text-neutral-700'>
                 Resume processed! {formData.autoFilledFields?.length || 0}{' '}
                 fields auto-filled
               </p>
               <button
                 onClick={showResumeUploadAgain}
-                className='border border-slate-300 text-slate-700 hover:bg-slate-50 px-4 py-2 rounded-xl text-sm font-medium transition-colors'
+                className='border border-neutral-300 text-neutral-700 hover:bg-neutral-50 px-4 py-2 rounded-xl text-sm font-medium transition-colors'
               >
                 Upload different resume
               </button>
@@ -637,12 +637,12 @@ export default function OnboardingPage() {
 
               {/* Personal Information Section */}
               <div className='space-y-4'>
-                <h3 className='text-base font-medium text-slate-700 mb-3'>
+                <h3 className='text-base font-medium text-neutral-700 mb-3'>
                   Personal Information
                 </h3>
 
                 <div>
-                  <label className='block text-sm font-medium text-slate-500 mb-3'>
+                  <label className='block text-sm font-medium text-neutral-500 mb-3'>
                     Full Name *
                   </label>
                   <input
@@ -655,7 +655,7 @@ export default function OnboardingPage() {
                 </div>
 
                 <div>
-                  <label className='block text-sm font-medium text-slate-500 mb-3'>
+                  <label className='block text-sm font-medium text-neutral-500 mb-3'>
                     Gender
                   </label>
                   <select
@@ -672,7 +672,7 @@ export default function OnboardingPage() {
                           | undefined
                       )
                     }
-                    className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+                    className='w-full px-3 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                   >
                     <option value=''>Select gender</option>
                     <option value='MALE'>Male</option>
@@ -691,7 +691,7 @@ export default function OnboardingPage() {
                           updateFormData('genderCustom', e.target.value)
                         }
                         placeholder='Please describe your gender identity'
-                        className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+                        className='w-full px-3 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                       />
                     </div>
                   )}
@@ -699,7 +699,7 @@ export default function OnboardingPage() {
 
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                   <div>
-                    <label className='block text-sm font-medium text-slate-500 mb-3'>
+                    <label className='block text-sm font-medium text-neutral-500 mb-3'>
                       Email
                     </label>
                     <input
@@ -707,12 +707,12 @@ export default function OnboardingPage() {
                       value={formData.email || ''}
                       onChange={e => updateFormData('email', e.target.value)}
                       placeholder='john@example.com'
-                      className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+                      className='w-full px-3 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                     />
                   </div>
 
                   <div>
-                    <label className='block text-sm font-medium text-slate-500 mb-3'>
+                    <label className='block text-sm font-medium text-neutral-500 mb-3'>
                       Phone
                     </label>
                     <input
@@ -720,14 +720,14 @@ export default function OnboardingPage() {
                       value={formData.phone || ''}
                       onChange={e => updateFormData('phone', e.target.value)}
                       placeholder='+1 (555) 123-4567'
-                      className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+                      className='w-full px-3 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                     />
                   </div>
                 </div>
 
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                   <div>
-                    <label className='block text-sm font-medium text-slate-500 mb-3'>
+                    <label className='block text-sm font-medium text-neutral-500 mb-3'>
                       City
                     </label>
                     <input
@@ -735,12 +735,12 @@ export default function OnboardingPage() {
                       value={formData.city || ''}
                       onChange={e => updateFormData('city', e.target.value)}
                       placeholder='San Francisco'
-                      className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+                      className='w-full px-3 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                     />
                   </div>
 
                   <div>
-                    <label className='block text-sm font-medium text-slate-500 mb-3'>
+                    <label className='block text-sm font-medium text-neutral-500 mb-3'>
                       Country
                     </label>
                     <input
@@ -748,7 +748,7 @@ export default function OnboardingPage() {
                       value={formData.country || ''}
                       onChange={e => updateFormData('country', e.target.value)}
                       placeholder='United States'
-                      className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+                      className='w-full px-3 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                     />
                   </div>
                 </div>
@@ -756,12 +756,12 @@ export default function OnboardingPage() {
 
               {/* Professional URLs Section */}
               <div className='space-y-4'>
-                <h3 className='text-base font-medium text-slate-700 mb-3'>
+                <h3 className='text-base font-medium text-neutral-700 mb-3'>
                   Professional URLs
                 </h3>
 
                 <div>
-                  <label className='block text-sm font-medium text-slate-500 mb-3'>
+                  <label className='block text-sm font-medium text-neutral-500 mb-3'>
                     LinkedIn URL
                   </label>
                   <input
@@ -771,13 +771,13 @@ export default function OnboardingPage() {
                       updateFormData('linkedinUrl', e.target.value)
                     }
                     placeholder='https://linkedin.com/in/johnsmith'
-                    className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+                    className='w-full px-3 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                   />
                 </div>
 
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                   <div>
-                    <label className='block text-sm font-medium text-slate-500 mb-3'>
+                    <label className='block text-sm font-medium text-neutral-500 mb-3'>
                       GitHub URL
                     </label>
                     <input
@@ -787,12 +787,12 @@ export default function OnboardingPage() {
                         updateFormData('githubUrl', e.target.value)
                       }
                       placeholder='https://github.com/johnsmith'
-                      className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+                      className='w-full px-3 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                     />
                   </div>
 
                   <div>
-                    <label className='block text-sm font-medium text-slate-500 mb-3'>
+                    <label className='block text-sm font-medium text-neutral-500 mb-3'>
                       Portfolio URL
                     </label>
                     <input
@@ -802,7 +802,7 @@ export default function OnboardingPage() {
                         updateFormData('portfolioUrl', e.target.value)
                       }
                       placeholder='https://johnsmith.dev'
-                      className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+                      className='w-full px-3 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                     />
                   </div>
                 </div>
@@ -810,12 +810,12 @@ export default function OnboardingPage() {
 
               {/* Current Professional Info Section */}
               <div className='space-y-4'>
-                <h3 className='text-base font-medium text-slate-700 mb-3'>
+                <h3 className='text-base font-medium text-neutral-700 mb-3'>
                   Current Professional Info
                 </h3>
 
                 <div>
-                  <label className='block text-sm font-medium text-slate-500 mb-3'>
+                  <label className='block text-sm font-medium text-neutral-500 mb-3'>
                     Job Title
                   </label>
                   <input
@@ -828,7 +828,7 @@ export default function OnboardingPage() {
                 </div>
 
                 <div>
-                  <label className='block text-sm font-medium text-slate-500 mb-3'>
+                  <label className='block text-sm font-medium text-neutral-500 mb-3'>
                     Company
                   </label>
                   <input
@@ -843,7 +843,7 @@ export default function OnboardingPage() {
                 </div>
 
                 <div>
-                  <label className='block text-sm font-medium text-slate-500 mb-3'>
+                  <label className='block text-sm font-medium text-neutral-500 mb-3'>
                     Industry
                   </label>
                   <select
@@ -861,7 +861,7 @@ export default function OnboardingPage() {
                 </div>
 
                 <div>
-                  <label className='block text-sm font-medium text-slate-500 mb-3'>
+                  <label className='block text-sm font-medium text-neutral-500 mb-3'>
                     Years of Experience
                   </label>
                   <select
@@ -872,7 +872,7 @@ export default function OnboardingPage() {
                         parseInt(e.target.value)
                       )
                     }
-                    className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+                    className='w-full px-3 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                   >
                     {YEARS_OF_EXPERIENCE_OPTIONS.map(option => (
                       <option key={option.value} value={option.value}>
@@ -883,13 +883,13 @@ export default function OnboardingPage() {
                 </div>
 
                 <div>
-                  <label className='block text-sm font-medium text-slate-500 mb-3'>
+                  <label className='block text-sm font-medium text-neutral-500 mb-3'>
                     Education
                   </label>
                   <select
                     value={formData.education || ''}
                     onChange={e => updateFormData('education', e.target.value)}
-                    className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+                    className='w-full px-3 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                   >
                     <option value=''>Select education level</option>
                     {EDUCATION_OPTIONS.map(education => (
@@ -909,7 +909,7 @@ export default function OnboardingPage() {
               <h2 className='text-xl font-semibold text-black mb-4'>
                 Work Experience
               </h2>
-              <p className='text-sm text-slate-500 mb-4'>
+              <p className='text-sm text-neutral-500 mb-4'>
                 Review and edit your work experience. This information was
                 automatically extracted from your resume.
               </p>
@@ -918,7 +918,7 @@ export default function OnboardingPage() {
                 {(formData.workExperience || []).map((job, index) => (
                   <div key={index} className='space-y-3'>
                     <div className='flex items-center justify-between'>
-                      <h3 className='font-medium text-slate-800'>
+                      <h3 className='font-medium text-neutral-800'>
                         Experience {index + 1}
                       </h3>
                     </div>
@@ -936,7 +936,7 @@ export default function OnboardingPage() {
                           updateFormData('workExperience', updated);
                         }}
                         placeholder='Company Name'
-                        className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                        className='px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
                       />
                       <input
                         type='text'
@@ -950,7 +950,7 @@ export default function OnboardingPage() {
                           updateFormData('workExperience', updated);
                         }}
                         placeholder='Job Title'
-                        className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                        className='px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
                       />
                     </div>
 
@@ -967,7 +967,7 @@ export default function OnboardingPage() {
                           updateFormData('workExperience', updated);
                         }}
                         placeholder='Start Date (e.g., Jan 2020)'
-                        className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                        className='px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
                       />
                       <input
                         type='text'
@@ -981,7 +981,7 @@ export default function OnboardingPage() {
                           updateFormData('workExperience', updated);
                         }}
                         placeholder='End Date (e.g., Present)'
-                        className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                        className='px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
                       />
                     </div>
 
@@ -997,7 +997,7 @@ export default function OnboardingPage() {
                       }}
                       placeholder='Job description and key achievements...'
                       rows={3}
-                      className='w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                      className='w-full px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
                     />
                   </div>
                 ))}
@@ -1011,7 +1011,7 @@ export default function OnboardingPage() {
               <h2 className='text-xl font-semibold text-black mb-4'>
                 Education & Projects
               </h2>
-              <p className='text-sm text-slate-500 mb-4'>
+              <p className='text-sm text-neutral-500 mb-4'>
                 Review your educational background and key projects.
               </p>
 
@@ -1019,13 +1019,13 @@ export default function OnboardingPage() {
               {formData.educationHistory &&
                 formData.educationHistory.length > 0 && (
                   <div className='space-y-4'>
-                    <h3 className='text-lg font-medium text-slate-800'>
+                    <h3 className='text-lg font-medium text-neutral-800'>
                       Education
                     </h3>
                     {formData.educationHistory.map((edu, index) => (
                       <div key={index} className='space-y-3'>
                         <div className='flex items-center justify-between'>
-                          <h4 className='font-medium text-slate-800'>
+                          <h4 className='font-medium text-neutral-800'>
                             Education {index + 1}
                           </h4>
                         </div>
@@ -1044,7 +1044,7 @@ export default function OnboardingPage() {
                             updateFormData('educationHistory', updated);
                           }}
                           placeholder='Institution Name'
-                          className='w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                          className='w-full px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
                         />
 
                         <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
@@ -1062,7 +1062,7 @@ export default function OnboardingPage() {
                               updateFormData('educationHistory', updated);
                             }}
                             placeholder='Degree (e.g., Bachelor of Science)'
-                            className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                            className='px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
                           />
                           <input
                             type='text'
@@ -1078,7 +1078,7 @@ export default function OnboardingPage() {
                               updateFormData('educationHistory', updated);
                             }}
                             placeholder='Field of Study'
-                            className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                            className='px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
                           />
                         </div>
 
@@ -1097,7 +1097,7 @@ export default function OnboardingPage() {
                               updateFormData('educationHistory', updated);
                             }}
                             placeholder='Start Year (e.g., 2018)'
-                            className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                            className='px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
                           />
                           <input
                             type='text'
@@ -1113,7 +1113,7 @@ export default function OnboardingPage() {
                               updateFormData('educationHistory', updated);
                             }}
                             placeholder='End Year (e.g., 2022)'
-                            className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                            className='px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
                           />
                         </div>
                       </div>
@@ -1124,13 +1124,13 @@ export default function OnboardingPage() {
               {/* Projects */}
               {formData.projects && formData.projects.length > 0 && (
                 <div className='space-y-4'>
-                  <h3 className='text-lg font-medium text-slate-800'>
+                  <h3 className='text-lg font-medium text-neutral-800'>
                     Projects
                   </h3>
                   {formData.projects.map((project, index) => (
                     <div key={index} className='space-y-3'>
                       <div className='flex items-center justify-between'>
-                        <h4 className='font-medium text-slate-800'>
+                        <h4 className='font-medium text-neutral-800'>
                           Project {index + 1}
                         </h4>
                       </div>
@@ -1147,7 +1147,7 @@ export default function OnboardingPage() {
                           updateFormData('projects', updated);
                         }}
                         placeholder='Project Title'
-                        className='w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                        className='w-full px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
                       />
 
                       <textarea
@@ -1162,7 +1162,7 @@ export default function OnboardingPage() {
                         }}
                         placeholder='Project description and achievements...'
                         rows={3}
-                        className='w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                        className='w-full px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
                       />
 
                       <input
@@ -1177,7 +1177,7 @@ export default function OnboardingPage() {
                           updateFormData('projects', updated);
                         }}
                         placeholder='Technologies used (e.g., React, Node.js, Python)'
-                        className='w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                        className='w-full px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
                       />
                     </div>
                   ))}
@@ -1192,7 +1192,7 @@ export default function OnboardingPage() {
               <h2 className='text-xl font-semibold text-black mb-4'>
                 Additional Qualifications
               </h2>
-              <p className='text-sm text-slate-500 mb-4'>
+              <p className='text-sm text-neutral-500 mb-4'>
                 Review your certifications, awards, languages, and publications.
               </p>
 
@@ -1200,13 +1200,13 @@ export default function OnboardingPage() {
               {formData.certifications &&
                 formData.certifications.length > 0 && (
                   <div className='space-y-4'>
-                    <h3 className='text-lg font-medium text-slate-800'>
+                    <h3 className='text-lg font-medium text-neutral-800'>
                       Certifications
                     </h3>
                     {formData.certifications.map((cert, index) => (
                       <div key={index} className='space-y-3'>
                         <div className='flex items-center justify-between'>
-                          <h4 className='font-medium text-slate-800'>
+                          <h4 className='font-medium text-neutral-800'>
                             Certification {index + 1}
                           </h4>
                         </div>
@@ -1226,7 +1226,7 @@ export default function OnboardingPage() {
                               updateFormData('certifications', updated);
                             }}
                             placeholder='Certification Name'
-                            className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                            className='px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
                           />
                           <input
                             type='text'
@@ -1242,7 +1242,7 @@ export default function OnboardingPage() {
                               updateFormData('certifications', updated);
                             }}
                             placeholder='Issuing Organization'
-                            className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                            className='px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
                           />
                         </div>
 
@@ -1261,7 +1261,7 @@ export default function OnboardingPage() {
                               updateFormData('certifications', updated);
                             }}
                             placeholder='Issue Date'
-                            className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                            className='px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
                           />
                           <input
                             type='text'
@@ -1277,7 +1277,7 @@ export default function OnboardingPage() {
                               updateFormData('certifications', updated);
                             }}
                             placeholder='Expiry Date (if applicable)'
-                            className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                            className='px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
                           />
                         </div>
                       </div>
@@ -1288,14 +1288,14 @@ export default function OnboardingPage() {
               {/* Languages */}
               {formData.languages && formData.languages.length > 0 && (
                 <div className='space-y-4'>
-                  <h3 className='text-lg font-medium text-slate-800'>
+                  <h3 className='text-lg font-medium text-neutral-800'>
                     Languages
                   </h3>
                   <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                     {formData.languages.map((lang, index) => (
                       <div key={index} className='space-y-3'>
                         <div className='flex items-center justify-between'>
-                          <h4 className='font-medium text-slate-800'>
+                          <h4 className='font-medium text-neutral-800'>
                             Language {index + 1}
                           </h4>
                         </div>
@@ -1312,7 +1312,7 @@ export default function OnboardingPage() {
                             updateFormData('languages', updated);
                           }}
                           placeholder='Language'
-                          className='w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                          className='w-full px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
                         />
 
                         <select
@@ -1325,7 +1325,7 @@ export default function OnboardingPage() {
                             };
                             updateFormData('languages', updated);
                           }}
-                          className='w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                          className='w-full px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
                         >
                           <option value=''>Select Proficiency</option>
                           <option value='Native'>Native</option>
@@ -1343,13 +1343,13 @@ export default function OnboardingPage() {
               {/* Awards */}
               {formData.awards && formData.awards.length > 0 && (
                 <div className='space-y-4'>
-                  <h3 className='text-lg font-medium text-slate-800'>
+                  <h3 className='text-lg font-medium text-neutral-800'>
                     Awards & Achievements
                   </h3>
                   {formData.awards.map((award, index) => (
                     <div key={index} className='space-y-3'>
                       <div className='flex items-center justify-between'>
-                        <h4 className='font-medium text-slate-800'>
+                        <h4 className='font-medium text-neutral-800'>
                           Award {index + 1}
                         </h4>
                       </div>
@@ -1366,7 +1366,7 @@ export default function OnboardingPage() {
                           updateFormData('awards', updated);
                         }}
                         placeholder='Award Title'
-                        className='w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                        className='w-full px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
                       />
 
                       <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
@@ -1382,7 +1382,7 @@ export default function OnboardingPage() {
                             updateFormData('awards', updated);
                           }}
                           placeholder='Issuing Organization'
-                          className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                          className='px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
                         />
                         <input
                           type='text'
@@ -1396,7 +1396,7 @@ export default function OnboardingPage() {
                             updateFormData('awards', updated);
                           }}
                           placeholder='Date Received'
-                          className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                          className='px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
                         />
                       </div>
 
@@ -1412,7 +1412,7 @@ export default function OnboardingPage() {
                         }}
                         placeholder='Award description...'
                         rows={2}
-                        className='w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                        className='w-full px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
                       />
                     </div>
                   ))}
@@ -1422,13 +1422,13 @@ export default function OnboardingPage() {
               {/* Publications */}
               {formData.publications && formData.publications.length > 0 && (
                 <div className='space-y-4'>
-                  <h3 className='text-lg font-medium text-slate-800'>
+                  <h3 className='text-lg font-medium text-neutral-800'>
                     Publications
                   </h3>
                   {formData.publications.map((pub, index) => (
                     <div key={index} className='space-y-3'>
                       <div className='flex items-center justify-between'>
-                        <h4 className='font-medium text-slate-800'>
+                        <h4 className='font-medium text-neutral-800'>
                           Publication {index + 1}
                         </h4>
                       </div>
@@ -1445,7 +1445,7 @@ export default function OnboardingPage() {
                           updateFormData('publications', updated);
                         }}
                         placeholder='Publication Title'
-                        className='w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                        className='w-full px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
                       />
 
                       <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
@@ -1461,7 +1461,7 @@ export default function OnboardingPage() {
                             updateFormData('publications', updated);
                           }}
                           placeholder='Venue/Journal'
-                          className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                          className='px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
                         />
                         <input
                           type='text'
@@ -1475,7 +1475,7 @@ export default function OnboardingPage() {
                             updateFormData('publications', updated);
                           }}
                           placeholder='Publication Date'
-                          className='px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                          className='px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
                         />
                       </div>
 
@@ -1491,7 +1491,7 @@ export default function OnboardingPage() {
                         }}
                         placeholder='Publication description or abstract...'
                         rows={3}
-                        className='w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
+                        className='w-full px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500'
                       />
                     </div>
                   ))}
@@ -1509,10 +1509,10 @@ export default function OnboardingPage() {
 
               {/* Skills Section (moved above About) */}
               <div>
-                <label className='block font-medium text-slate-500 mb-3'>
+                <label className='block font-medium text-neutral-500 mb-3'>
                   Key skills
                 </label>
-                <p className='text-slate-500 mb-3'>
+                <p className='text-neutral-500 mb-3'>
                   Add what you&apos;re good at. Type a skill and press Enter (or
                   comma).
                 </p>
@@ -1540,16 +1540,16 @@ export default function OnboardingPage() {
                   onChange={e => setSkillInput(e.target.value)}
                   onKeyDown={handleSkillKeyDown}
                   placeholder='ReactJS, AI Expert, Marriage Law, Public Speaking'
-                  className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+                  className='w-full px-3 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                 />
               </div>
 
               {/* Professional Status Section */}
               <div>
-                <label className='block font-medium text-slate-500 mb-3'>
+                <label className='block font-medium text-neutral-500 mb-3'>
                   Professional Status
                 </label>
-                <p className='text-slate-600 mb-4'>
+                <p className='text-neutral-600 mb-4'>
                   Help others understand your current professional situation to
                   facilitate better networking.
                 </p>
@@ -1570,7 +1570,7 @@ export default function OnboardingPage() {
                       }
                       className='w-4 h-4 text-brand-500 focus:ring-brand-500 focus:ring-2'
                     />
-                    <label htmlFor='not-specified' className='text-slate-700'>
+                    <label htmlFor='not-specified' className='text-neutral-700'>
                       Prefer not to specify
                     </label>
                   </div>
@@ -1590,7 +1590,7 @@ export default function OnboardingPage() {
                       }
                       className='w-4 h-4 text-brand-500 focus:ring-brand-500 focus:ring-2'
                     />
-                    <label htmlFor='hiring' className='text-slate-700'>
+                    <label htmlFor='hiring' className='text-neutral-700'>
                       I'm hiring or looking to recruit
                     </label>
                   </div>
@@ -1610,7 +1610,7 @@ export default function OnboardingPage() {
                       }
                       className='w-4 h-4 text-brand-500 focus:ring-brand-500 focus:ring-2'
                     />
-                    <label htmlFor='looking-for-job' className='text-slate-700'>
+                    <label htmlFor='looking-for-job' className='text-neutral-700'>
                       I'm actively looking for a job
                     </label>
                   </div>
@@ -1634,7 +1634,7 @@ export default function OnboardingPage() {
                     />
                     <label
                       htmlFor='open-to-opportunities'
-                      className='text-slate-700'
+                      className='text-neutral-700'
                     >
                       I'm open to new opportunities
                     </label>
@@ -1655,7 +1655,7 @@ export default function OnboardingPage() {
                       }
                       className='w-4 h-4 text-brand-500 focus:ring-brand-500 focus:ring-2'
                     />
-                    <label htmlFor='not-looking' className='text-slate-700'>
+                    <label htmlFor='not-looking' className='text-neutral-700'>
                       I'm happy in my current role
                     </label>
                   </div>
@@ -1664,10 +1664,10 @@ export default function OnboardingPage() {
 
               {/* About Section */}
               <div>
-                <label className='block font-medium text-slate-500 mb-3'>
+                <label className='block font-medium text-neutral-500 mb-3'>
                   How do you want to use Loopn?
                 </label>
-                <div className='text-slate-500 mb-3'>
+                <div className='text-neutral-500 mb-3'>
                   <p className='mb-2'>
                     Tell others about your goals and interests. This helps with
                     matching and networking.
@@ -1685,13 +1685,13 @@ export default function OnboardingPage() {
                   onChange={e => updateFormData('about', e.target.value)}
                   placeholder="I'm here to find collaborators for side projects and swap ideas on product strategy. Looking to meet founders and PMs for partnerships and knowledge sharing. Open to quick intros and follow-up chats."
                   rows={4}
-                  className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
+                  className='w-full px-3 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white'
                 />
                 <div className='flex justify-between mt-2'>
-                  <span className='text-slate-400'>
+                  <span className='text-neutral-400'>
                     {wordCount > 0 ? `${wordCount} words` : ''}
                   </span>
-                  <span className='text-slate-400'>
+                  <span className='text-neutral-400'>
                     {wordCount > 100 ? 'Consider keeping it concise' : ''}
                   </span>
                 </div>
@@ -1705,7 +1705,7 @@ export default function OnboardingPage() {
               <h2 className='text-xl font-semibold text-black mb-4'>
                 Interests & Hobbies
               </h2>
-              <p className='text-slate-500 mb-4'>
+              <p className='text-neutral-500 mb-4'>
                 Select topics you're interested in to help us connect you with
                 like-minded professionals. You can always add more later in your
                 profile.
@@ -1715,7 +1715,7 @@ export default function OnboardingPage() {
               {formData.hobbies && formData.hobbies.length > 0 && (
                 <div className='mb-6'>
                   <div className='flex items-center justify-between mb-3'>
-                    <h3 className='text-base font-medium text-slate-700'>
+                    <h3 className='text-base font-medium text-neutral-700'>
                       Personal Hobbies from Resume
                     </h3>
                   </div>
@@ -1736,7 +1736,7 @@ export default function OnboardingPage() {
                 {INTERESTS_GROUPS.map((group, idx) => (
                   <div
                     key={group.title}
-                    className={`${idx !== 0 ? 'pt-6 mt-6 border-t border-slate-200' : ''}`}
+                    className={`${idx !== 0 ? 'pt-6 mt-6 border-t border-neutral-200' : ''}`}
                   >
                     <div className='font-medium text-black mb-4'>
                       {group.title}
@@ -1749,7 +1749,7 @@ export default function OnboardingPage() {
                           className={`px-2 py-1.5 rounded-lg text-sm font-medium transition-colors border text-center ${
                             formData.interests?.includes(interest)
                               ? 'bg-brand-500 text-white border-brand-500'
-                              : 'bg-slate-50 text-slate-500 border-slate-200 hover:bg-brand-50'
+                              : 'bg-neutral-50 text-neutral-500 border-neutral-200 hover:bg-brand-50'
                           }`}
                         >
                           {interest}
@@ -1762,14 +1762,14 @@ export default function OnboardingPage() {
 
               {formData.interests && formData.interests.length > 0 && (
                 <div className='mt-6'>
-                  <p className='text-slate-500 mb-2'>
+                  <p className='text-neutral-500 mb-2'>
                     Selected interests ({formData.interests.length}):
                   </p>
                   <div className='flex flex-wrap gap-2'>
                     {formData.interests.map(interest => (
                       <span
                         key={interest}
-                        className='px-2 py-1 bg-slate-50 text-slate-600 border border-slate-200 text-sm rounded-full'
+                        className='px-2 py-1 bg-neutral-50 text-neutral-600 border border-neutral-200 text-sm rounded-full'
                       >
                         {interest}
                       </span>
@@ -1786,7 +1786,7 @@ export default function OnboardingPage() {
               <h2 className='text-xl font-semibold text-black mb-4'>
                 Profile Picture
               </h2>
-              <p className='text-sm text-slate-500 mb-6'>
+              <p className='text-sm text-neutral-500 mb-6'>
                 Add a profile picture to help others recognize you. This is
                 optional but recommended for building trust in professional
                 connections.
@@ -1805,14 +1805,14 @@ export default function OnboardingPage() {
       </div>
 
       {/* Fixed Bottom Navigation Bar */}
-      <div className='fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-t border-slate-200 shadow-2xl z-50'>
+      <div className='fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-t border-neutral-200 shadow-2xl z-50'>
         <div className='max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-4'>
           <div className='flex items-center justify-between'>
             {/* Previous Button */}
             <button
               onClick={prevStep}
               disabled={currentStep === 1}
-              className={`px-4 py-3 sm:px-6 rounded-xl font-medium border bg-white text-black border-slate-200 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm sm:text-base`}
+              className={`px-4 py-3 sm:px-6 rounded-xl font-medium border bg-white text-black border-neutral-200 hover:bg-neutral-100 focus:outline-none focus:ring-2 focus:ring-brand-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm sm:text-base`}
             >
               <span className='hidden sm:inline'>Previous</span>
               <span className='sm:hidden'>Prev</span>
@@ -1851,7 +1851,7 @@ export default function OnboardingPage() {
                 </svg>
                 {/* Step number in center */}
                 <div className='absolute inset-0 flex items-center justify-center'>
-                  <span className='text-xs font-medium text-slate-700'>
+                  <span className='text-xs font-medium text-neutral-700'>
                     {currentStep}/{totalSteps}
                   </span>
                 </div>
@@ -1859,7 +1859,7 @@ export default function OnboardingPage() {
 
               {/* Step text - Hidden on very small screens */}
               <div className='text-center hidden sm:block'>
-                <div className='text-xs sm:text-sm text-slate-500 font-medium'>
+                <div className='text-xs sm:text-sm text-neutral-500 font-medium'>
                   Step {currentStep} of {totalSteps}
                 </div>
                 <div className='text-xs sm:text-sm font-medium text-black'>

@@ -49,7 +49,7 @@ export default function ChatHeader({
 
   return (
     <div
-      className='flex-shrink-0 bg-white border-b border-slate-200 relative z-10'
+      className='flex-shrink-0 bg-white border-b border-neutral-200 relative z-10'
       style={{ boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.04)' }}
     >
       <div className='w-full px-3 sm:px-4 lg:px-6'>
@@ -58,7 +58,7 @@ export default function ChatHeader({
             {/* Back Button */}
             <button
               onClick={onBack}
-              className='p-1.5 sm:p-2 -ml-1 sm:-ml-2 text-slate-500 hover:text-black hover:bg-slate-100 rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2'
+              className='p-1.5 sm:p-2 -ml-1 sm:-ml-2 text-neutral-500 hover:text-black hover:bg-neutral-100 rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2'
             >
               <svg
                 className='w-4 h-4 sm:w-5 sm:h-5'
@@ -102,7 +102,7 @@ export default function ChatHeader({
 
               {/* Profession */}
               {userProfile?.jobRole && (
-                <div className='text-sm sm:text-sm text-slate-500 truncate'>
+                <div className='text-sm sm:text-sm text-neutral-500 truncate'>
                   {userProfile.jobRole}
                 </div>
               )}
@@ -111,7 +111,7 @@ export default function ChatHeader({
             {/* Connection Actions - Right Side */}
             <div className='flex items-center gap-1 sm:gap-2'>
               {/* Line Separator - hidden on small screens */}
-              <div className='w-0.5 h-6 sm:h-8 bg-slate-100 mr-1 sm:mr-2 hidden sm:block'></div>
+              <div className='w-0.5 h-6 sm:h-8 bg-neutral-100 mr-1 sm:mr-2 hidden sm:block'></div>
 
               {/* Optional Connect Button for social features */}
               <button

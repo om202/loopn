@@ -7,16 +7,16 @@ export default function PrivacyPolicyPage() {
   return (
     <main className='min-h-screen bg-white'>
       {/* Header */}
-      <header className='bg-white shadow-sm border-b border-gray-200'>
+      <header className='bg-white shadow-sm border-b border-neutral-200'>
         <div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4'>
           <div className='flex items-center justify-between'>
             <Link href='/home' className='flex items-center space-x-3'>
               <Image src='/loopn.svg' alt='Loopn' width={32} height={32} />
-              <span className='text-xl font-medium text-gray-900'>Loopn</span>
+              <span className='text-xl font-medium text-neutral-900'>Loopn</span>
             </Link>
             <Link
               href='/home'
-              className='text-gray-600 hover:text-gray-900 font-medium'
+              className='text-neutral-600 hover:text-neutral-900 font-medium'
             >
               ← Back to Home
             </Link>
@@ -27,10 +27,10 @@ export default function PrivacyPolicyPage() {
       {/* Privacy Policy Content */}
       <div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
         <div className='prose prose-gray max-w-none'>
-          <h1 className='text-3xl font-semibold text-gray-900 mb-2'>
+          <h1 className='text-3xl font-semibold text-neutral-900 mb-2'>
             Privacy Policy
           </h1>
-          <p className='text-gray-600 mb-8'>Last updated: September 1, 2025</p>
+          <p className='text-neutral-600 mb-8'>Last updated: September 1, 2025</p>
 
           <div className='bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8'>
             <p className='text-blue-800 font-medium'>
@@ -44,17 +44,17 @@ export default function PrivacyPolicyPage() {
             </p>
           </div>
 
-          <h2 className='text-2xl font-semibold text-gray-900 mt-8 mb-4'>
+          <h2 className='text-2xl font-semibold text-neutral-900 mt-8 mb-4'>
             1. Information We Collect
           </h2>
 
-          <h3 className='text-xl font-medium text-gray-900 mt-6 mb-3'>
+          <h3 className='text-xl font-medium text-neutral-900 mt-6 mb-3'>
             Personal Information
           </h3>
-          <p className='text-gray-700 mb-4'>
+          <p className='text-neutral-700 mb-4'>
             When you create an account and complete your profile, we collect:
           </p>
-          <ul className='list-disc pl-6 text-gray-700 mb-4 space-y-2'>
+          <ul className='list-disc pl-6 text-neutral-700 mb-4 space-y-2'>
             <li>
               <strong>Basic Information:</strong> Full name, email address,
               phone number, city, country
@@ -73,13 +73,13 @@ export default function PrivacyPolicyPage() {
             </li>
           </ul>
 
-          <h3 className='text-xl font-medium text-gray-900 mt-6 mb-3'>
+          <h3 className='text-xl font-medium text-neutral-900 mt-6 mb-3'>
             Professional Information
           </h3>
-          <p className='text-gray-700 mb-4'>
+          <p className='text-neutral-700 mb-4'>
             To help match you with relevant professionals, we collect:
           </p>
-          <ul className='list-disc pl-6 text-gray-700 mb-4 space-y-2'>
+          <ul className='list-disc pl-6 text-neutral-700 mb-4 space-y-2'>
             <li>
               <strong>Current Role:</strong> Job title, company name, industry,
               years of experience
@@ -110,13 +110,13 @@ export default function PrivacyPolicyPage() {
             </li>
           </ul>
 
-          <h3 className='text-xl font-medium text-gray-900 mt-6 mb-3'>
+          <h3 className='text-xl font-medium text-neutral-900 mt-6 mb-3'>
             Resume and Document Processing
           </h3>
-          <p className='text-gray-700 mb-4'>
+          <p className='text-neutral-700 mb-4'>
             When you upload a resume or other documents:
           </p>
-          <ul className='list-disc pl-6 text-gray-700 mb-4 space-y-2'>
+          <ul className='list-disc pl-6 text-neutral-700 mb-4 space-y-2'>
             <li>
               We extract text content from your PDF files using PDF.js
               technology
@@ -134,13 +134,13 @@ export default function PrivacyPolicyPage() {
             </li>
           </ul>
 
-          <h3 className='text-xl font-medium text-gray-900 mt-6 mb-3'>
+          <h3 className='text-xl font-medium text-neutral-900 mt-6 mb-3'>
             Communication Data
           </h3>
-          <p className='text-gray-700 mb-4'>
+          <p className='text-neutral-700 mb-4'>
             To provide our messaging and networking features:
           </p>
-          <ul className='list-disc pl-6 text-gray-700 mb-4 space-y-2'>
+          <ul className='list-disc pl-6 text-neutral-700 mb-4 space-y-2'>
             <li>
               <strong>Chat Requests:</strong> Requests you send or receive to
               start conversations
@@ -162,10 +162,10 @@ export default function PrivacyPolicyPage() {
             </li>
           </ul>
 
-          <h3 className='text-xl font-medium text-gray-900 mt-6 mb-3'>
+          <h3 className='text-xl font-medium text-neutral-900 mt-6 mb-3'>
             Usage and Activity Data
           </h3>
-          <ul className='list-disc pl-6 text-gray-700 mb-4 space-y-2'>
+          <ul className='list-disc pl-6 text-neutral-700 mb-4 space-y-2'>
             <li>
               <strong>Presence Information:</strong> Online/offline status, last
               seen timestamps, active chat sessions
@@ -180,12 +180,12 @@ export default function PrivacyPolicyPage() {
             </li>
           </ul>
 
-          <h2 className='text-2xl font-semibold text-gray-900 mt-8 mb-4'>
+          <h2 className='text-2xl font-semibold text-neutral-900 mt-8 mb-4'>
             2. How We Use Your Information
           </h2>
 
-          <p className='text-gray-700 mb-4'>We use your information to:</p>
-          <ul className='list-disc pl-6 text-gray-700 mb-6 space-y-2'>
+          <p className='text-neutral-700 mb-4'>We use your information to:</p>
+          <ul className='list-disc pl-6 text-neutral-700 mb-6 space-y-2'>
             <li>
               <strong>Provide Core Services:</strong> Create your profile,
               facilitate messaging, and enable professional networking
@@ -212,14 +212,14 @@ export default function PrivacyPolicyPage() {
             </li>
           </ul>
 
-          <h2 className='text-2xl font-semibold text-gray-900 mt-8 mb-4'>
+          <h2 className='text-2xl font-semibold text-neutral-900 mt-8 mb-4'>
             3. AI and Machine Learning
           </h2>
 
-          <p className='text-gray-700 mb-4'>
+          <p className='text-neutral-700 mb-4'>
             We use artificial intelligence to enhance your experience:
           </p>
-          <ul className='list-disc pl-6 text-gray-700 mb-6 space-y-2'>
+          <ul className='list-disc pl-6 text-neutral-700 mb-6 space-y-2'>
             <li>
               <strong>Resume Parsing:</strong> AWS Bedrock&apos;s Claude 3.5
               Haiku model processes your resume text to extract structured
@@ -240,17 +240,17 @@ export default function PrivacyPolicyPage() {
             </li>
           </ul>
 
-          <h2 className='text-2xl font-semibold text-gray-900 mt-8 mb-4'>
+          <h2 className='text-2xl font-semibold text-neutral-900 mt-8 mb-4'>
             4. Data Storage and Security
           </h2>
 
-          <h3 className='text-xl font-medium text-gray-900 mt-6 mb-3'>
+          <h3 className='text-xl font-medium text-neutral-900 mt-6 mb-3'>
             AWS Infrastructure
           </h3>
-          <p className='text-gray-700 mb-4'>
+          <p className='text-neutral-700 mb-4'>
             Your data is stored and processed using Amazon Web Services (AWS):
           </p>
-          <ul className='list-disc pl-6 text-gray-700 mb-6 space-y-2'>
+          <ul className='list-disc pl-6 text-neutral-700 mb-6 space-y-2'>
             <li>
               <strong>AWS Amplify:</strong> Hosts our application and provides
               authentication
@@ -281,10 +281,10 @@ export default function PrivacyPolicyPage() {
             </li>
           </ul>
 
-          <h3 className='text-xl font-medium text-gray-900 mt-6 mb-3'>
+          <h3 className='text-xl font-medium text-neutral-900 mt-6 mb-3'>
             Security Measures
           </h3>
-          <ul className='list-disc pl-6 text-gray-700 mb-6 space-y-2'>
+          <ul className='list-disc pl-6 text-neutral-700 mb-6 space-y-2'>
             <li>All data is encrypted in transit and at rest</li>
             <li>AWS provides enterprise-level security and compliance</li>
             <li>
@@ -296,15 +296,15 @@ export default function PrivacyPolicyPage() {
             </li>
           </ul>
 
-          <h2 className='text-2xl font-semibold text-gray-900 mt-8 mb-4'>
+          <h2 className='text-2xl font-semibold text-neutral-900 mt-8 mb-4'>
             5. Data Sharing and Disclosure
           </h2>
 
-          <p className='text-gray-700 mb-4'>
+          <p className='text-neutral-700 mb-4'>
             We do not sell your personal information to third parties. We may
             share your information in these limited circumstances:
           </p>
-          <ul className='list-disc pl-6 text-gray-700 mb-6 space-y-2'>
+          <ul className='list-disc pl-6 text-neutral-700 mb-6 space-y-2'>
             <li>
               <strong>With Other Users:</strong> Your professional profile
               information is visible to other users for networking purposes
@@ -323,12 +323,12 @@ export default function PrivacyPolicyPage() {
             </li>
           </ul>
 
-          <h2 className='text-2xl font-semibold text-gray-900 mt-8 mb-4'>
+          <h2 className='text-2xl font-semibold text-neutral-900 mt-8 mb-4'>
             6. Data Retention
           </h2>
 
-          <p className='text-gray-700 mb-4'>We retain your data as follows:</p>
-          <ul className='list-disc pl-6 text-gray-700 mb-6 space-y-2'>
+          <p className='text-neutral-700 mb-4'>We retain your data as follows:</p>
+          <ul className='list-disc pl-6 text-neutral-700 mb-6 space-y-2'>
             <li>
               <strong>Profile Data:</strong> Until you delete your account
             </li>
@@ -349,12 +349,12 @@ export default function PrivacyPolicyPage() {
             </li>
           </ul>
 
-          <h2 className='text-2xl font-semibold text-gray-900 mt-8 mb-4'>
+          <h2 className='text-2xl font-semibold text-neutral-900 mt-8 mb-4'>
             7. Your Rights and Choices
           </h2>
 
-          <p className='text-gray-700 mb-4'>You have the right to:</p>
-          <ul className='list-disc pl-6 text-gray-700 mb-6 space-y-2'>
+          <p className='text-neutral-700 mb-4'>You have the right to:</p>
+          <ul className='list-disc pl-6 text-neutral-700 mb-6 space-y-2'>
             <li>
               <strong>Access:</strong> View and download your personal data
             </li>
@@ -376,36 +376,36 @@ export default function PrivacyPolicyPage() {
             </li>
           </ul>
 
-          <h2 className='text-2xl font-semibold text-gray-900 mt-8 mb-4'>
+          <h2 className='text-2xl font-semibold text-neutral-900 mt-8 mb-4'>
             8. Cookies and Local Storage
           </h2>
 
-          <p className='text-gray-700 mb-4'>
+          <p className='text-neutral-700 mb-4'>
             We use cookies and local browser storage to:
           </p>
-          <ul className='list-disc pl-6 text-gray-700 mb-6 space-y-2'>
+          <ul className='list-disc pl-6 text-neutral-700 mb-6 space-y-2'>
             <li>Keep you signed in to your account</li>
             <li>Remember your preferences and settings</li>
             <li>Store your search history locally (not sent to our servers)</li>
             <li>Improve the performance and functionality of our platform</li>
           </ul>
 
-          <h2 className='text-2xl font-semibold text-gray-900 mt-8 mb-4'>
+          <h2 className='text-2xl font-semibold text-neutral-900 mt-8 mb-4'>
             9. Children&apos;s Privacy
           </h2>
 
-          <p className='text-gray-700 mb-6'>
+          <p className='text-neutral-700 mb-6'>
             Loopn is designed for professionals and is not intended for use by
             children under 18. We do not knowingly collect personal information
             from children under 18. If we become aware that we have collected
             such information, we will take steps to delete it.
           </p>
 
-          <h2 className='text-2xl font-semibold text-gray-900 mt-8 mb-4'>
+          <h2 className='text-2xl font-semibold text-neutral-900 mt-8 mb-4'>
             10. International Users
           </h2>
 
-          <p className='text-gray-700 mb-6'>
+          <p className='text-neutral-700 mb-6'>
             Our services are hosted in the United States using AWS
             infrastructure. If you are accessing our services from outside the
             United States, your information will be transferred to, stored, and
@@ -413,30 +413,30 @@ export default function PrivacyPolicyPage() {
             to this transfer.
           </p>
 
-          <h2 className='text-2xl font-semibold text-gray-900 mt-8 mb-4'>
+          <h2 className='text-2xl font-semibold text-neutral-900 mt-8 mb-4'>
             11. Changes to This Policy
           </h2>
 
-          <p className='text-gray-700 mb-6'>
+          <p className='text-neutral-700 mb-6'>
             We may update this Privacy Policy from time to time. We will notify
             you of any material changes by posting the new Privacy Policy on
             this page and updating the &quot;Last updated&quot; date. We
             encourage you to review this Privacy Policy periodically.
           </p>
 
-          <h2 className='text-2xl font-semibold text-gray-900 mt-8 mb-4'>
+          <h2 className='text-2xl font-semibold text-neutral-900 mt-8 mb-4'>
             12. Contact Us
           </h2>
 
-          <p className='text-gray-700 mb-4'>
+          <p className='text-neutral-700 mb-4'>
             If you have any questions about this Privacy Policy or our data
             practices, please contact us:
           </p>
-          <div className='bg-gray-50 border border-gray-200 rounded-lg p-6 mb-8'>
-            <p className='text-gray-700 mb-2'>
+          <div className='bg-neutral-50 border border-neutral-200 rounded-lg p-6 mb-8'>
+            <p className='text-neutral-700 mb-2'>
               <strong>Email:</strong> exonary.build@gmail.com
             </p>
-            <p className='text-gray-700'>
+            <p className='text-neutral-700'>
               <strong>Subject Line:</strong> Privacy Policy Question
             </p>
           </div>
@@ -456,37 +456,37 @@ export default function PrivacyPolicyPage() {
       </div>
 
       {/* Footer */}
-      <footer className='bg-slate-50 py-8 border-t border-gray-200'>
+      <footer className='bg-neutral-50 py-8 border-t border-neutral-200'>
         <div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='text-center'>
             <div className='flex items-center justify-center space-x-3 mb-4'>
               <Image src='/loopn.svg' alt='Loopn' width={32} height={32} />
-              <span className='text-xl font-medium text-gray-900'>Loopn</span>
+              <span className='text-xl font-medium text-neutral-900'>Loopn</span>
             </div>
-            <p className='text-gray-600 text-sm mb-6'>
+            <p className='text-neutral-600 text-sm mb-6'>
               Professional networking that actually matters
             </p>
             <div className='flex justify-center items-center gap-6 mb-6'>
               <Link
                 href='/privacy'
-                className='text-gray-600 text-sm font-medium hover:underline'
+                className='text-neutral-600 text-sm font-medium hover:underline'
               >
                 Privacy Policy
               </Link>
               <Link
                 href='/terms'
-                className='text-gray-600 text-sm font-medium hover:underline'
+                className='text-neutral-600 text-sm font-medium hover:underline'
               >
                 Terms of Service
               </Link>
               <Link
                 href='/home'
-                className='text-gray-600 text-sm font-medium hover:underline'
+                className='text-neutral-600 text-sm font-medium hover:underline'
               >
                 Home
               </Link>
             </div>
-            <p className='text-gray-600 text-sm'>
+            <p className='text-neutral-600 text-sm'>
               © 2025 Loopn. All rights reserved.
             </p>
           </div>

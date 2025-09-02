@@ -5,7 +5,7 @@ import UserAvatar_Shimmer from './UserAvatar_Shimmer';
 
 export default function UserCard_Shimmer() {
   return (
-    <div className='rounded-2xl border bg-white border-slate-200 px-3 py-3'>
+    <div className='rounded-2xl border bg-white border-neutral-200 px-3 py-3'>
       <div className='flex items-center gap-3'>
         {/* Avatar shimmer */}
         <div className='flex-shrink-0'>

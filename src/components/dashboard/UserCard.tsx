@@ -176,7 +176,7 @@ export default function UserCard({
       className={`px-3 py-3 group transition-all duration-200 cursor-pointer shadow-xs ${
         isSelected
           ? 'bg-brand-50 rounded-xl border border-brand-100'
-          : 'bg-white hover:bg-slate-50 rounded-lg border border-slate-100 hover:border-brand-200'
+          : 'bg-white hover:bg-neutral-50 rounded-lg border border-neutral-100 hover:border-brand-200'
       }`}
     >
       <div className='flex items-center gap-3'>
@@ -212,7 +212,7 @@ export default function UserCard({
 
           {/* Profession */}
           {(finalFullProfile?.jobRole || finalFullProfile?.companyName) && (
-            <div className='text-sm text-slate-500 font-medium truncate'>
+            <div className='text-sm text-neutral-500 font-medium truncate'>
               {finalFullProfile?.jobRole && finalFullProfile?.companyName
                 ? `${finalFullProfile.jobRole} at ${finalFullProfile.companyName}`
                 : finalFullProfile?.jobRole || finalFullProfile?.companyName}
@@ -224,7 +224,7 @@ export default function UserCard({
           {/* Profile Button - only show on mobile */}
           <button
             onClick={() => setShowProfileDialog(true)}
-            className='p-2 rounded-lg transition-colors flex-shrink-0 text-slate-500 hover:bg-slate-50 sm:hidden'
+            className='p-2 rounded-lg transition-colors flex-shrink-0 text-neutral-500 hover:bg-neutral-50 sm:hidden'
             title='View Profile'
           >
             <User className='w-5 h-5' strokeWidth={1.5} />
@@ -235,13 +235,13 @@ export default function UserCard({
             <button
               onClick={handleToggleSave}
               disabled={isSaveLoading}
-              className={`p-2 rounded-lg transition-colors flex-shrink-0 text-slate-500 hover:bg-slate-50 ${
+              className={`p-2 rounded-lg transition-colors flex-shrink-0 text-neutral-500 hover:bg-neutral-50 ${
                 isSaveLoading ? 'opacity-50 cursor-not-allowed' : ''
               }`}
               title={isSaved ? 'Remove from saved' : 'Save'}
             >
               <Bookmark
-                className={`w-5 h-5 stroke-slate-500 ${isSaved ? 'fill-slate-300' : ''}`}
+                className={`w-5 h-5 stroke-neutral-500 ${isSaved ? 'fill-neutral-300' : ''}`}
                 strokeWidth={1.5}
               />
             </button>
@@ -265,15 +265,15 @@ export default function UserCard({
                 <button
                   onClick={() => setShowCancelDialog(true)}
                   disabled={isOptimisticRequest}
-                  className='flex items-center justify-center gap-2 px-2 py-2 text-base font-medium text-slate-500 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors disabled:cursor-not-allowed disabled:hover:bg-slate-100 border border-slate-200'
+                  className='flex items-center justify-center gap-2 px-2 py-2 text-base font-medium text-neutral-500 bg-neutral-100 hover:bg-neutral-200 rounded-lg transition-colors disabled:cursor-not-allowed disabled:hover:bg-neutral-100 border border-neutral-200'
                   title={
                     isOptimisticRequest
                       ? 'Request being sent...'
                       : 'Cancel Request'
                   }
                 >
-                  <UserCheck className='w-5 h-5 text-slate-500' />
-                  <span className='text-base font-medium text-slate-500'>
+                  <UserCheck className='w-5 h-5 text-neutral-500' />
+                  <span className='text-base font-medium text-neutral-500'>
                     Pending
                   </span>
                 </button>
@@ -343,13 +343,13 @@ export default function UserCard({
       >
         <div className='flex flex-col max-h-[90vh]'>
           {/* Header */}
-          <div className='px-6 py-4 border-b border-slate-200 flex items-center justify-between flex-shrink-0'>
-            <h2 className='text-lg font-semibold text-slate-900'>
+          <div className='px-6 py-4 border-b border-neutral-200 flex items-center justify-between flex-shrink-0'>
+            <h2 className='text-lg font-semibold text-neutral-900'>
               Profile Details
             </h2>
             <button
               onClick={() => setShowProfileDialog(false)}
-              className='p-2 text-slate-500 hover:text-black transition-colors rounded-lg hover:bg-slate-100'
+              className='p-2 text-neutral-500 hover:text-black transition-colors rounded-lg hover:bg-neutral-100'
               title='Close'
             >
               <X className='w-5 h-5' />
@@ -383,12 +383,12 @@ export default function UserCard({
                   />
                 </div>
                 <div className='flex-1 min-w-0'>
-                  <h1 className='text-xl font-bold text-slate-900 mb-1'>
+                  <h1 className='text-xl font-bold text-neutral-900 mb-1'>
                     {getDisplayName(userPresence, userProfile)}
                   </h1>
                   {(finalFullProfile?.jobRole ||
                     finalFullProfile?.companyName) && (
-                    <p className='text-base text-slate-700 mb-1'>
+                    <p className='text-base text-neutral-700 mb-1'>
                       {finalFullProfile?.jobRole &&
                       finalFullProfile?.companyName
                         ? `${finalFullProfile.jobRole} at ${finalFullProfile.companyName}`
@@ -409,7 +409,7 @@ export default function UserCard({
               )}
 
               {!finalFullProfile && (
-                <div className='text-center py-8 text-slate-500'>
+                <div className='text-center py-8 text-neutral-500'>
                   No profile details available.
                 </div>
               )}
@@ -435,7 +435,7 @@ export default function UserCard({
           <div className='flex gap-2'>
             <button
               onClick={() => setShowCancelDialog(false)}
-              className='flex-1 px-3 py-2 text-base font-medium text-black bg-slate-100 rounded-lg hover:bg-slate-100 focus:outline-none transition-colors'
+              className='flex-1 px-3 py-2 text-base font-medium text-black bg-neutral-100 rounded-lg hover:bg-neutral-100 focus:outline-none transition-colors'
             >
               Done
             </button>
@@ -444,7 +444,7 @@ export default function UserCard({
                 onCancelChatRequest(userPresence.userId);
                 setShowCancelDialog(false);
               }}
-              className='flex-1 px-3 py-2 text-base font-medium text-b_red-600 bg-slate-100 rounded-lg hover:bg-slate-200 focus:outline-none transition-colors'
+              className='flex-1 px-3 py-2 text-base font-medium text-b_red-600 bg-neutral-100 rounded-lg hover:bg-neutral-200 focus:outline-none transition-colors'
             >
               Cancel Request
             </button>

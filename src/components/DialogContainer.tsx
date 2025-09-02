@@ -71,7 +71,7 @@ export default function DialogContainer({
     >
       {/* Background overlay */}
       <div
-        className={`fixed inset-0 bg-slate-950/16 transition-opacity duration-100 ${
+        className={`fixed inset-0 bg-neutral-950/16 transition-opacity duration-100 ${
           isVisible ? 'opacity-100' : 'opacity-0'
         }`}
         onClick={onClose}
@@ -80,7 +80,7 @@ export default function DialogContainer({
       {/* Dialog container */}
       <div className='flex min-h-full items-center justify-center p-4'>
         <div
-          className={`relative w-full ${maxWidthClasses[maxWidth]} transform overflow-hidden rounded-xl bg-white border border-slate-200 shadow-lg transition-all duration-100 ${
+          className={`relative w-full ${maxWidthClasses[maxWidth]} transform overflow-hidden rounded-xl bg-white border border-neutral-200 shadow-lg transition-all duration-100 ${
             isVisible
               ? 'opacity-100 scale-100 translate-y-0'
               : 'opacity-0 scale-95 translate-y-4'

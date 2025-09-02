@@ -142,9 +142,9 @@ export default function ResumeParserMVP() {
   };
 
   return (
-    <div className='min-h-screen bg-gray-50 p-8'>
+    <div className='min-h-screen bg-neutral-50 p-8'>
       <div className='max-w-6xl mx-auto'>
-        <h1 className='text-3xl font-bold text-gray-900 mb-8'>
+        <h1 className='text-3xl font-bold text-neutral-900 mb-8'>
           Resume Parser MVP
         </h1>
 
@@ -156,7 +156,7 @@ export default function ResumeParserMVP() {
             accept='.pdf'
             onChange={handleFileUpload}
             disabled={isProcessing}
-            className='block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100'
+            className='block w-full text-sm text-neutral-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100'
           />
           {isProcessing && (
             <p className='text-blue-600 mt-2'>Processing resume...</p>
@@ -169,7 +169,7 @@ export default function ResumeParserMVP() {
           {extractedText && (
             <div className='bg-white rounded-lg shadow p-6'>
               <h2 className='text-xl font-semibold mb-4'>Extracted Text</h2>
-              <div className='bg-gray-100 p-4 rounded max-h-96 overflow-y-auto'>
+              <div className='bg-neutral-100 p-4 rounded max-h-96 overflow-y-auto'>
                 <pre className='text-sm whitespace-pre-wrap'>
                   {extractedText}
                 </pre>

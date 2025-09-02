@@ -315,8 +315,8 @@ export default function DashboardSectionContent({
         usersToShow.map(renderUserCard)
       ) : (
         <div className='flex flex-col items-center justify-center py-12 text-center'>
-          <div className='w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-full flex items-center justify-center'>
-            <EmptyIcon className='w-8 h-8 text-slate-500' />
+          <div className='w-16 h-16 mx-auto mb-4 bg-neutral-100 rounded-full flex items-center justify-center'>
+            <EmptyIcon className='w-8 h-8 text-neutral-500' />
           </div>
           <h3 className='text-lg font-medium text-black mb-1'>
             {emptyMessage}
@@ -339,18 +339,18 @@ export default function DashboardSectionContent({
           !isEarlyMessageDismissed
         );
       })() && (
-        <div className='fixed bottom-20 lg:bottom-8 left-4 right-4 lg:left-1/2 lg:right-auto lg:transform lg:-translate-x-1/2 lg:w-auto lg:max-w-lg z-10 bg-white border border-slate-200 rounded-lg shadow-sm px-4 py-2'>
+        <div className='fixed bottom-20 lg:bottom-8 left-4 right-4 lg:left-1/2 lg:right-auto lg:transform lg:-translate-x-1/2 lg:w-auto lg:max-w-lg z-10 bg-white border border-neutral-200 rounded-lg shadow-sm px-4 py-2'>
           <div className='flex items-center justify-center gap-2 relative'>
-            <PartyPopper className='w-4 h-4 text-slate-500' />
-            <p className='text-sm text-slate-500'>
+            <PartyPopper className='w-4 h-4 text-neutral-500' />
+            <p className='text-sm text-neutral-500'>
               We've just launched. Thank you for being among our first users.
             </p>
             <button
               onClick={() => setIsEarlyMessageDismissed(true)}
-              className='ml-2 p-0.5 hover:bg-slate-100 rounded transition-colors'
+              className='ml-2 p-0.5 hover:bg-neutral-100 rounded transition-colors'
               title='Dismiss message'
             >
-              <X className='w-3 h-3 text-slate-400 hover:text-slate-600' />
+              <X className='w-3 h-3 text-neutral-400 hover:text-neutral-600' />
             </button>
           </div>
         </div>

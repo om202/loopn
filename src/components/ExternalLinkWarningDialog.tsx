@@ -37,13 +37,13 @@ export default function ExternalLinkWarningDialog({
             <div className='p-2 bg-amber-100 rounded-lg'>
               <ExternalLink className='w-5 h-5 text-amber-600' />
             </div>
-            <h3 className='text-lg font-semibold text-slate-900'>
+            <h3 className='text-lg font-semibold text-neutral-900'>
               This will open an external link
             </h3>
           </div>
           <button
             onClick={onClose}
-            className='p-1 text-slate-500 hover:text-slate-700 transition-colors rounded-lg hover:bg-slate-100'
+            className='p-1 text-neutral-500 hover:text-neutral-700 transition-colors rounded-lg hover:bg-neutral-100'
           >
             <X className='w-5 h-5' />
           </button>
@@ -51,13 +51,13 @@ export default function ExternalLinkWarningDialog({
 
         {/* Content */}
         <div className='mb-6'>
-          <div className='p-3 bg-slate-50 rounded-lg border'>
-            <p className='text-sm font-medium text-slate-900 mb-1'>
+          <div className='p-3 bg-neutral-50 rounded-lg border'>
+            <p className='text-sm font-medium text-neutral-900 mb-1'>
               {linkName}
             </p>
-            <p className='text-sm text-slate-600 break-all'>{getDomain(url)}</p>
+            <p className='text-sm text-neutral-600 break-all'>{getDomain(url)}</p>
           </div>
-          <p className='text-sm text-slate-500 mt-3'>
+          <p className='text-sm text-neutral-500 mt-3'>
             This will open in a new tab.
           </p>
         </div>
@@ -66,7 +66,7 @@ export default function ExternalLinkWarningDialog({
         <div className='flex gap-3'>
           <button
             onClick={onClose}
-            className='flex-1 px-4 py-2.5 text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg font-medium transition-colors'
+            className='flex-1 px-4 py-2.5 text-neutral-700 bg-neutral-100 hover:bg-neutral-200 rounded-lg font-medium transition-colors'
           >
             Cancel
           </button>

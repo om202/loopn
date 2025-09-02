@@ -159,13 +159,13 @@ export default function HomePage() {
                 <h2 className='text-3xl font-bold text-brand-600'>Loopn</h2>
               </div>
 
-              <h1 className='text-4xl sm:text-5xl font-semibold text-gray-900 mb-8 sm:mb-14 leading-tight'>
+              <h1 className='text-4xl sm:text-5xl font-semibold text-neutral-900 mb-8 sm:mb-14 leading-tight'>
                 Professional Networking{' '}
                 <span className='text-brand-600'>That Actually Matters</span>
               </h1>
 
               <div className='mb-6 sm:mb-12 max-w-lg mx-auto lg:mx-0'>
-                <p className='text-lg sm:text-xl text-gray-600 leading-relaxed font-medium'>
+                <p className='text-lg sm:text-xl text-neutral-600 leading-relaxed font-medium'>
                   Upload your resume. Get matched instantly. Start connecting
                   with professionals who complement your skills and career
                   goals.
@@ -185,7 +185,7 @@ export default function HomePage() {
                 </Link>
                 <Link href={authLink}>
                   <button
-                    className='text-gray-600 !font-medium flex items-center justify-center px-3 py-3 sm:px-4 sm:py-4 min-h-[50px] hover:underline hover:underline-offset-4 hover:decoration-2 flex-shrink-0'
+                    className='text-neutral-600 !font-medium flex items-center justify-center px-3 py-3 sm:px-4 sm:py-4 min-h-[50px] hover:underline hover:underline-offset-4 hover:decoration-2 flex-shrink-0'
                     style={{ fontSize: '18px' }}
                   >
                     Sign In
@@ -197,14 +197,14 @@ export default function HomePage() {
             {/* Right column - Demo */}
             <div className='relative mt-8 lg:mt-0'>
               {/* Modern Chat Interface - matching real chat UI design */}
-              <div className='bg-white rounded-2xl shadow-sm border border-slate-200 w-full max-w-sm lg:max-w-md mx-auto lg:ml-auto lg:mr-0 overflow-hidden'>
+              <div className='bg-white rounded-2xl shadow-sm border border-neutral-200 w-full max-w-sm lg:max-w-md mx-auto lg:ml-auto lg:mr-0 overflow-hidden'>
                 {/* Chat Header */}
-                <div className='flex-shrink-0 bg-white border-b border-slate-200 px-4 py-3'>
+                <div className='flex-shrink-0 bg-white border-b border-neutral-200 px-4 py-3'>
                   <div className='flex items-center gap-3'>
                     {/* Back Button */}
                     <button
                       disabled
-                      className='p-2 -ml-2 text-slate-400 rounded-full cursor-not-allowed'
+                      className='p-2 -ml-2 text-neutral-400 rounded-full cursor-not-allowed'
                     >
                       <svg
                         className='w-5 h-5'
@@ -237,7 +237,7 @@ export default function HomePage() {
                       <h1 className='text-base font-semibold text-black truncate'>
                         Sarah Chen
                       </h1>
-                      <div className='text-sm text-slate-500 truncate'>
+                      <div className='text-sm text-neutral-500 truncate'>
                         UX Designer
                       </div>
                     </div>
@@ -274,7 +274,7 @@ export default function HomePage() {
                         className='w-8 h-8 rounded-full object-cover flex-shrink-0'
                       />
                       <div className='flex-1 max-w-xs'>
-                        <div className='bg-slate-100 text-slate-900 px-4 py-3 rounded-2xl rounded-tl-md'>
+                        <div className='bg-neutral-100 text-neutral-900 px-4 py-3 rounded-2xl rounded-tl-md'>
                           <p className='text-base leading-relaxed'>
                             Hi! I saw you're also in UX design. Working on any
                             fintech projects?
@@ -317,7 +317,7 @@ export default function HomePage() {
                         className='w-8 h-8 rounded-full object-cover flex-shrink-0'
                       />
                       <div className='flex-1 max-w-xs'>
-                        <div className='bg-slate-100 text-slate-900 px-4 py-3 rounded-2xl rounded-tl-md'>
+                        <div className='bg-neutral-100 text-neutral-900 px-4 py-3 rounded-2xl rounded-tl-md'>
                           <p className='text-base leading-relaxed'>
                             Perfect! I'm designing a crypto wallet. Mind if I
                             pick your brain sometime?
@@ -360,7 +360,7 @@ export default function HomePage() {
                         className='w-8 h-8 rounded-full object-cover flex-shrink-0'
                       />
                       <div className='flex-1 max-w-xs'>
-                        <div className='bg-slate-100 text-slate-900 px-4 py-3 rounded-2xl rounded-tl-md'>
+                        <div className='bg-neutral-100 text-neutral-900 px-4 py-3 rounded-2xl rounded-tl-md'>
                           <p className='text-base leading-relaxed'>
                             Awesome! I'll message you more about it tomorrow 🚀
                           </p>
@@ -371,21 +371,21 @@ export default function HomePage() {
                 </div>
 
                 {/* Message Input */}
-                <div className='bg-white border-t border-slate-200 p-3 sm:p-4'>
+                <div className='bg-white border-t border-neutral-200 p-3 sm:p-4'>
                   <div className='flex gap-3 items-end'>
                     <div className='flex-1 relative'>
                       <input
                         type='text'
                         placeholder='Type your message...'
                         readOnly
-                        className='w-full px-4 py-3 pr-12 border border-slate-200 rounded-full bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent text-sm placeholder-slate-500 cursor-pointer'
+                        className='w-full px-4 py-3 pr-12 border border-neutral-200 rounded-full bg-neutral-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent text-sm placeholder-neutral-500 cursor-pointer'
                         style={{ fontSize: '16px' }}
                         onKeyDown={e => e.preventDefault()}
                         onKeyPress={e => e.preventDefault()}
                       />
                       <button
                         type='button'
-                        className='absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 rounded-full hover:text-slate-600 cursor-pointer'
+                        className='absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-neutral-400 rounded-full hover:text-neutral-600 cursor-pointer'
                       >
                         <Smile className='w-5 h-5' strokeWidth={2.5} />
                       </button>
@@ -408,20 +408,20 @@ export default function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section className='py-8 sm:py-12 bg-slate-50 relative'>
+      <section className='py-8 sm:py-12 bg-neutral-50 relative'>
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
-          <div className='absolute top-1/4 left-0 w-72 h-72 bg-slate-100/80 rounded-full blur-3xl' />
+          <div className='absolute top-1/4 left-0 w-72 h-72 bg-neutral-100/80 rounded-full blur-3xl' />
           <div className='absolute bottom-1/4 right-1/4 w-80 h-80 bg-brand-50/60 rounded-full blur-3xl' />
         </div>
 
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           {/* Section Header */}
           <div className='text-center max-w-3xl mx-auto mb-12'>
-            <h2 className='text-3xl sm:text-4xl font-semibold text-gray-900 mb-3 leading-tight'>
+            <h2 className='text-3xl sm:text-4xl font-semibold text-neutral-900 mb-3 leading-tight'>
               Professional Networking, Reimagined
             </h2>
-            <p className='text-lg text-gray-600 leading-relaxed font-medium'>
+            <p className='text-lg text-neutral-600 leading-relaxed font-medium'>
               Connect with professionals who actually matter to your career.
             </p>
           </div>
@@ -435,7 +435,7 @@ export default function HomePage() {
                 alt='Loopn Dashboard - Desktop View'
                 width={1200}
                 height={900}
-                className='w-full h-auto rounded-2xl shadow-sm border border-slate-200'
+                className='w-full h-auto rounded-2xl shadow-sm border border-neutral-200'
                 quality={100}
                 priority
                 unoptimized={true}
@@ -449,7 +449,7 @@ export default function HomePage() {
                 alt='Loopn Dashboard - Mobile View'
                 width={450}
                 height={900}
-                className='w-full h-auto rounded-2xl shadow-sm border border-slate-200'
+                className='w-full h-auto rounded-2xl shadow-sm border border-neutral-200'
                 quality={100}
                 priority
                 unoptimized={true}
@@ -460,17 +460,17 @@ export default function HomePage() {
           {/* Features Grid */}
           <div className='grid lg:grid-cols-3 gap-8 sm:gap-12 mb-12 mt-12'>
             {/* Feature 1 - Smart Matching */}
-            <div className=' bg-white rounded-2xl p-8 border border-slate-200 h-full shadow-sm'>
-              <h3 className='text-xl font-semibold text-slate-900 mb-3 flex items-center gap-3'>
+            <div className=' bg-white rounded-2xl p-8 border border-neutral-200 h-full shadow-sm'>
+              <h3 className='text-xl font-semibold text-neutral-900 mb-3 flex items-center gap-3'>
                 <Brain className='w-6 h-6 text-brand-600' strokeWidth={2.5} />
                 AI Resume Intelligence
               </h3>
-              <p className='text-slate-600 mb-8 leading-relaxed text-base font-medium'>
+              <p className='text-neutral-600 mb-8 leading-relaxed text-base font-medium'>
                 Upload once. Get matched to perfect career opportunities
                 instantly.
               </p>
               <ul className='space-y-4'>
-                <li className='flex items-center gap-3 text-slate-600'>
+                <li className='flex items-center gap-3 text-neutral-600'>
                   <CheckCircle
                     className='w-4 h-4 text-brand-600 flex-shrink-0'
                     strokeWidth={2.5}
@@ -479,7 +479,7 @@ export default function HomePage() {
                     AI analyzes your resume in seconds
                   </span>
                 </li>
-                <li className='flex items-center gap-3 text-slate-600'>
+                <li className='flex items-center gap-3 text-neutral-600'>
                   <CheckCircle
                     className='w-4 h-4 text-brand-600 flex-shrink-0'
                     strokeWidth={2.5}
@@ -488,7 +488,7 @@ export default function HomePage() {
                     Smart compatibility matching
                   </span>
                 </li>
-                <li className='flex items-center gap-3 text-slate-600'>
+                <li className='flex items-center gap-3 text-neutral-600'>
                   <CheckCircle
                     className='w-4 h-4 text-brand-600 flex-shrink-0'
                     strokeWidth={2.5}
@@ -501,16 +501,16 @@ export default function HomePage() {
             </div>
 
             {/* Feature 2 - Real-time Chat */}
-            <div className=' bg-white rounded-2xl p-8 border border-slate-200 h-full shadow-sm'>
-              <h3 className='text-xl font-semibold text-slate-900 mb-3 flex items-center gap-3'>
+            <div className=' bg-white rounded-2xl p-8 border border-neutral-200 h-full shadow-sm'>
+              <h3 className='text-xl font-semibold text-neutral-900 mb-3 flex items-center gap-3'>
                 <Zap className='w-6 h-6 text-brand-600' strokeWidth={2.5} />
                 Real-Time Discovery
               </h3>
-              <p className='text-slate-600 mb-8 leading-relaxed text-base font-medium'>
+              <p className='text-neutral-600 mb-8 leading-relaxed text-base font-medium'>
                 Connect with the right people at the right moment.
               </p>
               <ul className='space-y-4'>
-                <li className='flex items-center gap-3 text-slate-600'>
+                <li className='flex items-center gap-3 text-neutral-600'>
                   <CheckCircle
                     className='w-4 h-4 text-brand-600 flex-shrink-0'
                     strokeWidth={2.5}
@@ -519,7 +519,7 @@ export default function HomePage() {
                     See who's online now
                   </span>
                 </li>
-                <li className='flex items-center gap-3 text-slate-600'>
+                <li className='flex items-center gap-3 text-neutral-600'>
                   <CheckCircle
                     className='w-4 h-4 text-brand-600 flex-shrink-0'
                     strokeWidth={2.5}
@@ -528,7 +528,7 @@ export default function HomePage() {
                     Send instant chat requests
                   </span>
                 </li>
-                <li className='flex items-center gap-3 text-slate-600'>
+                <li className='flex items-center gap-3 text-neutral-600'>
                   <CheckCircle
                     className='w-4 h-4 text-brand-600 flex-shrink-0'
                     strokeWidth={2.5}
@@ -541,17 +541,17 @@ export default function HomePage() {
             </div>
 
             {/* Feature 3 - Quality Network */}
-            <div className=' bg-white rounded-2xl p-8 border border-slate-200 h-full shadow-sm'>
-              <h3 className='text-xl font-semibold text-slate-900 mb-3 flex items-center gap-3'>
+            <div className=' bg-white rounded-2xl p-8 border border-neutral-200 h-full shadow-sm'>
+              <h3 className='text-xl font-semibold text-neutral-900 mb-3 flex items-center gap-3'>
                 <Shield className='w-6 h-6 text-brand-600' strokeWidth={2.5} />
                 Professional Focus
               </h3>
-              <p className='text-slate-600 mb-8 leading-relaxed text-base font-medium'>
+              <p className='text-neutral-600 mb-8 leading-relaxed text-base font-medium'>
                 Quality over quantity. Every connection is relevant and
                 career-focused.
               </p>
               <ul className='space-y-4'>
-                <li className='flex items-center gap-3 text-slate-600'>
+                <li className='flex items-center gap-3 text-neutral-600'>
                   <CheckCircle
                     className='w-4 h-4 text-brand-600 flex-shrink-0'
                     strokeWidth={2.5}
@@ -560,7 +560,7 @@ export default function HomePage() {
                     Serious professionals only
                   </span>
                 </li>
-                <li className='flex items-center gap-3 text-slate-600'>
+                <li className='flex items-center gap-3 text-neutral-600'>
                   <CheckCircle
                     className='w-4 h-4 text-brand-600 flex-shrink-0'
                     strokeWidth={2.5}
@@ -569,7 +569,7 @@ export default function HomePage() {
                     No spam or casual chat
                   </span>
                 </li>
-                <li className='flex items-center gap-3 text-slate-600'>
+                <li className='flex items-center gap-3 text-neutral-600'>
                   <CheckCircle
                     className='w-4 h-4 text-brand-600 flex-shrink-0'
                     strokeWidth={2.5}
@@ -602,16 +602,16 @@ export default function HomePage() {
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-1/3 right-0 w-96 h-96 bg-brand-50/60 rounded-full blur-3xl' />
-          <div className='absolute bottom-1/3 left-0 w-80 h-80 bg-slate-100/80 rounded-full blur-3xl' />
+          <div className='absolute bottom-1/3 left-0 w-80 h-80 bg-neutral-100/80 rounded-full blur-3xl' />
         </div>
 
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           {/* Section Header */}
           <div className='text-center max-w-3xl mx-auto mb-12'>
-            <h2 className='text-3xl sm:text-4xl font-semibold text-gray-900 mb-3 leading-tight'>
+            <h2 className='text-3xl sm:text-4xl font-semibold text-neutral-900 mb-3 leading-tight'>
               How It Works
             </h2>
-            <p className='text-lg text-gray-600 leading-relaxed font-medium'>
+            <p className='text-lg text-neutral-600 leading-relaxed font-medium'>
               Getting started with Loopn is quick and effortless.
             </p>
           </div>
@@ -620,21 +620,21 @@ export default function HomePage() {
           <div className='grid lg:grid-cols-3 gap-8 sm:gap-12 relative'>
             {/* Step 1 */}
             <div className='relative group'>
-              <div className='bg-white rounded-2xl p-8 border border-slate-200 relative h-full shadow-sm'>
+              <div className='bg-white rounded-2xl p-8 border border-neutral-200 relative h-full shadow-sm'>
                 {/* Step number */}
-                <div className='absolute top-4 left-1/2 -translate-x-1/2 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-brand-600 font-bold text-sm mb-4'>
+                <div className='absolute top-4 left-1/2 -translate-x-1/2 w-8 h-8 bg-neutral-100 rounded-full flex items-center justify-center text-brand-600 font-bold text-sm mb-4'>
                   1
                 </div>
                 {/* Content */}
                 <div className='text-center mt-6'>
-                  <h3 className='text-xl font-semibold text-slate-900 mb-3 flex items-center justify-center gap-3'>
+                  <h3 className='text-xl font-semibold text-neutral-900 mb-3 flex items-center justify-center gap-3'>
                     <CloudUpload
                       className='w-6 h-6 text-brand-600'
                       strokeWidth={2.5}
                     />
                     Upload Your Resume
                   </h3>
-                  <p className='text-slate-600 leading-relaxed text-base font-medium'>
+                  <p className='text-neutral-600 leading-relaxed text-base font-medium'>
                     Drop your resume. AI builds your profile in seconds.
                   </p>
                 </div>
@@ -643,21 +643,21 @@ export default function HomePage() {
 
             {/* Step 2 */}
             <div className='relative group'>
-              <div className='bg-white rounded-2xl p-8 border border-slate-200 relative h-full shadow-sm'>
+              <div className='bg-white rounded-2xl p-8 border border-neutral-200 relative h-full shadow-sm'>
                 {/* Step number */}
-                <div className='absolute top-4 left-1/2 -translate-x-1/2 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-brand-600 font-bold text-sm mb-4'>
+                <div className='absolute top-4 left-1/2 -translate-x-1/2 w-8 h-8 bg-neutral-100 rounded-full flex items-center justify-center text-brand-600 font-bold text-sm mb-4'>
                   2
                 </div>
                 {/* Content */}
                 <div className='text-center mt-6'>
-                  <h3 className='text-xl font-semibold text-slate-900 mb-3 flex items-center justify-center gap-3'>
+                  <h3 className='text-xl font-semibold text-neutral-900 mb-3 flex items-center justify-center gap-3'>
                     <Brain
                       className='w-6 h-6 text-brand-600'
                       strokeWidth={2.5}
                     />
                     Discover Live Matches
                   </h3>
-                  <p className='text-slate-600 leading-relaxed text-base font-medium'>
+                  <p className='text-neutral-600 leading-relaxed text-base font-medium'>
                     See perfect matches online right now. Connect instantly.
                   </p>
                 </div>
@@ -666,21 +666,21 @@ export default function HomePage() {
 
             {/* Step 3 */}
             <div className='relative group'>
-              <div className='bg-white rounded-2xl p-8 border border-slate-200 relative h-full shadow-sm'>
+              <div className='bg-white rounded-2xl p-8 border border-neutral-200 relative h-full shadow-sm'>
                 {/* Step number */}
-                <div className='absolute top-4 left-1/2 -translate-x-1/2 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-brand-600 font-bold text-sm mb-4'>
+                <div className='absolute top-4 left-1/2 -translate-x-1/2 w-8 h-8 bg-neutral-100 rounded-full flex items-center justify-center text-brand-600 font-bold text-sm mb-4'>
                   3
                 </div>
                 {/* Content */}
                 <div className='text-center mt-6'>
-                  <h3 className='text-xl font-semibold text-slate-900 mb-3 flex items-center justify-center gap-3'>
+                  <h3 className='text-xl font-semibold text-neutral-900 mb-3 flex items-center justify-center gap-3'>
                     <MessageSquare
                       className='w-6 h-6 text-brand-600'
                       strokeWidth={2.5}
                     />
                     Build Lasting Relationships
                   </h3>
-                  <p className='text-slate-600 leading-relaxed text-base font-medium'>
+                  <p className='text-neutral-600 leading-relaxed text-base font-medium'>
                     Send requests. Start conversations. Build lasting
                     professional relationships.
                   </p>
@@ -692,19 +692,19 @@ export default function HomePage() {
       </section>
 
       {/* FAQ Section */}
-      <section className='py-8 sm:py-12 bg-slate-50 relative'>
+      <section className='py-8 sm:py-12 bg-neutral-50 relative'>
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-1/4 right-0 w-96 h-96 bg-brand-50/40 rounded-full blur-3xl' />
-          <div className='absolute bottom-1/4 left-0 w-80 h-80 bg-slate-100/80 rounded-full blur-3xl' />
+          <div className='absolute bottom-1/4 left-0 w-80 h-80 bg-neutral-100/80 rounded-full blur-3xl' />
         </div>
 
         <div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='text-center mb-12'>
-            <h2 className='text-3xl sm:text-4xl font-semibold text-gray-900 mb-3 leading-tight'>
+            <h2 className='text-3xl sm:text-4xl font-semibold text-neutral-900 mb-3 leading-tight'>
               Frequently Asked Questions
             </h2>
-            <p className='text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed font-medium'>
+            <p className='text-lg text-neutral-600 max-w-2xl mx-auto leading-relaxed font-medium'>
               Everything you need to know about professional networking on
               Loopn.
             </p>
@@ -712,21 +712,21 @@ export default function HomePage() {
 
           <div className='space-y-4'>
             {/* FAQ Item 1 */}
-            <div className='bg-white border border-slate-200 rounded-2xl shadow-sm'>
+            <div className='bg-white border border-neutral-200 rounded-2xl shadow-sm'>
               <button
-                className='w-full text-left p-4 sm:p-5 flex items-center justify-between hover:bg-slate-50/50 transition-colors rounded-2xl'
+                className='w-full text-left p-4 sm:p-5 flex items-center justify-between hover:bg-neutral-50/50 transition-colors rounded-2xl'
                 onClick={() => toggleFAQ(0)}
               >
-                <h3 className='text-lg font-semibold text-slate-900 pr-4'>
+                <h3 className='text-lg font-semibold text-neutral-900 pr-4'>
                   How does Loopn work?
                 </h3>
                 <ChevronDown
-                  className={`w-5 h-5 text-slate-500 flex-shrink-0 transition-transform ${expandedFAQ === 0 ? 'rotate-180' : ''}`}
+                  className={`w-5 h-5 text-neutral-500 flex-shrink-0 transition-transform ${expandedFAQ === 0 ? 'rotate-180' : ''}`}
                 />
               </button>
               {expandedFAQ === 0 && (
                 <div className='px-4 sm:px-5 pb-4 sm:pb-5 -mt-1'>
-                  <p className='text-slate-600 leading-relaxed'>
+                  <p className='text-neutral-600 leading-relaxed'>
                     Loopn connects you with professionals based on shared
                     interests and career goals. Simply complete your profile,
                     browse suggested connections, and start meaningful
@@ -737,21 +737,21 @@ export default function HomePage() {
             </div>
 
             {/* FAQ Item 2 */}
-            <div className='bg-white border border-slate-200 rounded-2xl shadow-sm'>
+            <div className='bg-white border border-neutral-200 rounded-2xl shadow-sm'>
               <button
-                className='w-full text-left p-4 sm:p-5 flex items-center justify-between hover:bg-slate-50/50 transition-colors rounded-2xl'
+                className='w-full text-left p-4 sm:p-5 flex items-center justify-between hover:bg-neutral-50/50 transition-colors rounded-2xl'
                 onClick={() => toggleFAQ(1)}
               >
-                <h3 className='text-lg font-semibold text-slate-900 pr-4'>
+                <h3 className='text-lg font-semibold text-neutral-900 pr-4'>
                   Who can I connect with?
                 </h3>
                 <ChevronDown
-                  className={`w-5 h-5 text-slate-500 flex-shrink-0 transition-transform ${expandedFAQ === 1 ? 'rotate-180' : ''}`}
+                  className={`w-5 h-5 text-neutral-500 flex-shrink-0 transition-transform ${expandedFAQ === 1 ? 'rotate-180' : ''}`}
                 />
               </button>
               {expandedFAQ === 1 && (
                 <div className='px-4 sm:px-5 pb-4 sm:pb-5 -mt-1'>
-                  <p className='text-slate-600 leading-relaxed'>
+                  <p className='text-neutral-600 leading-relaxed'>
                     All Loopn users are professionals across various industries.
                     You'll connect with people who share your interests, career
                     goals, or expertise areas - from software engineers and
@@ -762,21 +762,21 @@ export default function HomePage() {
             </div>
 
             {/* FAQ Item 3 */}
-            <div className='bg-white border border-slate-200 rounded-2xl shadow-sm'>
+            <div className='bg-white border border-neutral-200 rounded-2xl shadow-sm'>
               <button
-                className='w-full text-left p-4 sm:p-5 flex items-center justify-between hover:bg-slate-50/50 transition-colors rounded-2xl'
+                className='w-full text-left p-4 sm:p-5 flex items-center justify-between hover:bg-neutral-50/50 transition-colors rounded-2xl'
                 onClick={() => toggleFAQ(2)}
               >
-                <h3 className='text-lg font-semibold text-slate-900 pr-4'>
+                <h3 className='text-lg font-semibold text-neutral-900 pr-4'>
                   How do I get started?
                 </h3>
                 <ChevronDown
-                  className={`w-5 h-5 text-slate-500 flex-shrink-0 transition-transform ${expandedFAQ === 2 ? 'rotate-180' : ''}`}
+                  className={`w-5 h-5 text-neutral-500 flex-shrink-0 transition-transform ${expandedFAQ === 2 ? 'rotate-180' : ''}`}
                 />
               </button>
               {expandedFAQ === 2 && (
                 <div className='px-4 sm:px-5 pb-4 sm:pb-5 -mt-1'>
-                  <p className='text-slate-600 leading-relaxed'>
+                  <p className='text-neutral-600 leading-relaxed'>
                     Getting started is simple: sign up, complete your
                     professional profile including your interests and career
                     goals, and we'll suggest relevant connections. You can then
@@ -788,21 +788,21 @@ export default function HomePage() {
             </div>
 
             {/* FAQ Item 4 */}
-            <div className='bg-white border border-slate-200 rounded-2xl shadow-sm'>
+            <div className='bg-white border border-neutral-200 rounded-2xl shadow-sm'>
               <button
-                className='w-full text-left p-4 sm:p-5 flex items-center justify-between hover:bg-slate-50/50 transition-colors rounded-2xl'
+                className='w-full text-left p-4 sm:p-5 flex items-center justify-between hover:bg-neutral-50/50 transition-colors rounded-2xl'
                 onClick={() => toggleFAQ(3)}
               >
-                <h3 className='text-lg font-semibold text-slate-900 pr-4'>
+                <h3 className='text-lg font-semibold text-neutral-900 pr-4'>
                   What makes Loopn different from other platforms?
                 </h3>
                 <ChevronDown
-                  className={`w-5 h-5 text-slate-500 flex-shrink-0 transition-transform ${expandedFAQ === 3 ? 'rotate-180' : ''}`}
+                  className={`w-5 h-5 text-neutral-500 flex-shrink-0 transition-transform ${expandedFAQ === 3 ? 'rotate-180' : ''}`}
                 />
               </button>
               {expandedFAQ === 3 && (
                 <div className='px-4 sm:px-5 pb-4 sm:pb-5 -mt-1'>
-                  <p className='text-slate-600 leading-relaxed'>
+                  <p className='text-neutral-600 leading-relaxed'>
                     Loopn focuses exclusively on meaningful professional
                     conversations. Unlike casual social platforms, every
                     interaction is career-focused, quality-driven, and designed
@@ -825,10 +825,10 @@ export default function HomePage() {
         </div>
 
         <div className='max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center'>
-          <h2 className='text-3xl sm:text-4xl font-semibold text-gray-900 mb-3 leading-tight'>
+          <h2 className='text-3xl sm:text-4xl font-semibold text-neutral-900 mb-3 leading-tight'>
             Start Connecting Today
           </h2>
-          <p className='text-lg text-gray-600 mb-12 max-w-md mx-auto font-medium'>
+          <p className='text-lg text-neutral-600 mb-12 max-w-md mx-auto font-medium'>
             Join thousands of professionals already building career-changing
             relationships.
           </p>
@@ -846,7 +846,7 @@ export default function HomePage() {
                 <ArrowRight className='w-5 h-5' strokeWidth={2.5} />
               </button>
             </Link>
-            <button className='w-full sm:w-auto bg-white text-gray-600 px-6 py-3 sm:px-8 sm:py-4 rounded-lg text-base !font-medium border border-gray-300 flex items-center justify-center gap-3 min-h-[52px] touch-manipulation'>
+            <button className='w-full sm:w-auto bg-white text-neutral-600 px-6 py-3 sm:px-8 sm:py-4 rounded-lg text-base !font-medium border border-neutral-300 flex items-center justify-center gap-3 min-h-[52px] touch-manipulation'>
               <MessageSquare className='w-5 h-5' strokeWidth={2.5} />
               See It In Action
             </button>
@@ -855,16 +855,16 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className='bg-slate-50 py-8 border-t border-gray-200'>
+      <footer className='bg-neutral-50 py-8 border-t border-neutral-200'>
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='text-center'>
             <div className='flex items-center justify-center space-x-3 mb-4'>
               <Image src='/loopn.svg' alt='Loopn' width={32} height={32} />
               <div className='flex items-center'>
-                <span className='text-xl font-medium text-gray-900'>Loopn</span>
+                <span className='text-xl font-medium text-neutral-900'>Loopn</span>
               </div>
             </div>
-            <p className='text-gray-600 text-sm text-center max-w-md mx-auto mb-6 leading-relaxed font-medium'>
+            <p className='text-neutral-600 text-sm text-center max-w-md mx-auto mb-6 leading-relaxed font-medium'>
               AI-powered professional discovery for career-advancing
               relationships
             </p>
@@ -873,20 +873,20 @@ export default function HomePage() {
             <div className='flex flex-col sm:flex-row justify-center items-center gap-6 mb-6'>
               <Link
                 href='/privacy'
-                className='text-gray-600 text-sm font-medium hover:underline hover:underline-offset-4 hover:decoration-2'
+                className='text-neutral-600 text-sm font-medium hover:underline hover:underline-offset-4 hover:decoration-2'
               >
                 Privacy Policy
               </Link>
               <Link
                 href='/terms'
-                className='text-gray-600 text-sm font-medium hover:underline hover:underline-offset-4 hover:decoration-2'
+                className='text-neutral-600 text-sm font-medium hover:underline hover:underline-offset-4 hover:decoration-2'
               >
                 Terms of Service
               </Link>
             </div>
 
-            <div className='pt-4 border-t border-gray-200'>
-              <p className='text-gray-600 text-sm'>
+            <div className='pt-4 border-t border-neutral-200'>
+              <p className='text-neutral-600 text-sm'>
                 © 2025 Loopn. All rights reserved.
               </p>
             </div>

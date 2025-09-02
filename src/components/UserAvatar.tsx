@@ -65,7 +65,7 @@ export default function UserAvatar({
     if (status === 'RECENTLY_ACTIVE')
       return (
         <div
-          className={`${sizes.active} bg-slate-300 ${baseClass} flex items-center justify-center`}
+          className={`${sizes.active} bg-neutral-300 ${baseClass} flex items-center justify-center`}
         >
           <Clock
             className={`${sizes.activeIcon} text-black`}
@@ -202,7 +202,7 @@ export default function UserAvatar({
           {(!hasProfilePicture || imageError) && (
             <div className='bg-gradient-to-br from-neutral-50 to-neutral-150 w-full h-full flex items-center justify-center absolute inset-0 shadow-inner'>
               <User
-                className='w-3/5 h-3/5 text-slate-500 drop-shadow-sm'
+                className='w-3/5 h-3/5 text-neutral-500 drop-shadow-sm'
                 strokeWidth={1.5}
               />
             </div>

@@ -46,14 +46,14 @@ export default function ForgotPasswordForm({
           </label>
           <div className='relative'>
             <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-              <Mail className='h-5 w-5 text-slate-500' />
+              <Mail className='h-5 w-5 text-neutral-500' />
             </div>
             <input
               id='email'
               type='email'
               value={email}
               onChange={e => setEmail(e.target.value)}
-              className='w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white'
+              className='w-full pl-10 pr-4 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white'
               placeholder='Enter your email'
               required
             />
@@ -68,7 +68,7 @@ export default function ForgotPasswordForm({
           {isLoading ? 'Sending reset code...' : 'Send Reset Code'}
         </button>
 
-        <div className='text-center pt-2 border-t border-slate-200'>
+        <div className='text-center pt-2 border-t border-neutral-200'>
           <button
             type='button'
             onClick={onSwitchToSignIn}

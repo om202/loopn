@@ -234,7 +234,7 @@ export default function ChatPage({ params }: ChatPageProps) {
   return (
     <ProtectedRoute requireOnboarding={true}>
       <div
-        className='h-screen bg-white lg:bg-slate-100 flex flex-col overflow-hidden'
+        className='h-screen bg-white lg:bg-neutral-100 flex flex-col overflow-hidden'
         style={{ height: '100dvh' }}
       >
         <div className='flex-1 w-full flex justify-center px-1 sm:px-3 lg:px-3 py-1 sm:py-3 lg:py-3 min-h-0'>
@@ -255,7 +255,7 @@ export default function ChatPage({ params }: ChatPageProps) {
             </div>
 
             {/* Main Chat Area */}
-            <div className='flex-1 bg-white sm:rounded-2xl border border-slate-200 p-2 sm:p-4 overflow-hidden flex flex-col min-h-0'>
+            <div className='flex-1 bg-white sm:rounded-2xl border border-neutral-200 p-2 sm:p-4 overflow-hidden flex flex-col min-h-0'>
               {/* Mobile ChatHeader - shown only on small screens */}
               {conversation && (
                 <div className='lg:hidden flex-shrink-0 mb-2'>

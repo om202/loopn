@@ -151,8 +151,8 @@ export default function SearchSectionContent({
       <div className='flex-1 overflow-y-auto w-full'>
         {!hasSearched ? (
           <div className='flex flex-col items-center justify-center h-full text-center p-8 transition-opacity duration-200 opacity-100'>
-            <div className='w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-full flex items-center justify-center'>
-              <Search className='w-8 h-8 text-slate-500' />
+            <div className='w-16 h-16 mx-auto mb-4 bg-neutral-100 rounded-full flex items-center justify-center'>
+              <Search className='w-8 h-8 text-neutral-500' />
             </div>
             <h3 className='text-lg font-medium text-black mb-1'>Search</h3>
           </div>
@@ -162,13 +162,13 @@ export default function SearchSectionContent({
           </div>
         ) : error || searchResults.length === 0 ? (
           <div className='flex flex-col items-center justify-center h-full text-center p-8 transition-opacity duration-200 opacity-100'>
-            <div className='w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-full flex items-center justify-center'>
-              <Search className='w-8 h-8 text-slate-500' />
+            <div className='w-16 h-16 mx-auto mb-4 bg-neutral-100 rounded-full flex items-center justify-center'>
+              <Search className='w-8 h-8 text-neutral-500' />
             </div>
             <h3 className='text-lg font-medium text-black mb-2'>
               No Matches Found
             </h3>
-            <p className='text-slate-500 text-sm max-w-md mx-auto mb-3'>
+            <p className='text-neutral-500 text-sm max-w-md mx-auto mb-3'>
               {searchQuery ? (
                 <>
                   No professionals found matching{' '}
@@ -180,7 +180,7 @@ export default function SearchSectionContent({
               )}
             </p>
             {searchMetrics && !error && (
-              <div className='text-xs text-slate-400'>
+              <div className='text-xs text-neutral-400'>
                 Searched {searchMetrics.totalProcessed} profiles in{' '}
                 {searchMetrics.processingTimeMs + searchMetrics.fetchTimeMs}ms
               </div>
@@ -190,7 +190,7 @@ export default function SearchSectionContent({
           <div className='space-y-4'>
             {/* Search Results Header */}
             {searchMetrics && (
-              <div className='text-sm text-slate-500 pb-4 border-b border-slate-100'>
+              <div className='text-sm text-neutral-500 pb-4 border-b border-neutral-100'>
                 Found {searchResults.length} of {searchMetrics.totalMatched}{' '}
                 matches (
                 {searchMetrics.processingTimeMs + searchMetrics.fetchTimeMs}ms)

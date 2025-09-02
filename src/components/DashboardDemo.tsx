@@ -325,7 +325,7 @@ export default function DashboardDemo() {
           return (
             <div
               key={user.id}
-              className='px-2 py-2 sm:px-3 sm:py-3 group transition-all duration-200 cursor-pointer shadow-xs bg-white hover:bg-slate-50 rounded-lg border border-slate-100 hover:border-brand-200 opacity-0 animate-[slideUpFade_0.6s_ease-out_forwards]'
+              className='px-2 py-2 sm:px-3 sm:py-3 group transition-all duration-200 cursor-pointer shadow-xs bg-white hover:bg-neutral-50 rounded-lg border border-neutral-100 hover:border-brand-200 opacity-0 animate-[slideUpFade_0.6s_ease-out_forwards]'
               style={{ animationDelay: `${0.5 + index * 0.5}s` }}
             >
               <div className='flex items-center gap-3'>
@@ -351,10 +351,10 @@ export default function DashboardDemo() {
                       {user.name}
                     </div>
                   </div>
-                  <div className='text-sm text-slate-500 font-medium truncate'>
+                  <div className='text-sm text-neutral-500 font-medium truncate'>
                     {user.role}
                     {user.company && (
-                      <span className='text-slate-400'> at {user.company}</span>
+                      <span className='text-neutral-400'> at {user.company}</span>
                     )}
                   </div>
                 </div>
@@ -362,11 +362,11 @@ export default function DashboardDemo() {
                 <div className='flex-shrink-0 flex items-center gap-2'>
                   <button
                     onClick={() => handleToggleSave(user.id)}
-                    className='p-2 rounded-lg transition-colors flex-shrink-0 text-slate-500 hover:bg-slate-50'
+                    className='p-2 rounded-lg transition-colors flex-shrink-0 text-neutral-500 hover:bg-neutral-50'
                     title={isSaved ? 'Remove from saved' : 'Save'}
                   >
                     <Bookmark
-                      className={`w-4 h-4 ${isSaved ? 'fill-slate-400' : 'stroke-slate-500'}`}
+                      className={`w-4 h-4 ${isSaved ? 'fill-neutral-400' : 'stroke-neutral-500'}`}
                       strokeWidth={1.5}
                     />
                   </button>
@@ -392,7 +392,7 @@ export default function DashboardDemo() {
         {dummySavedUsers.map((user, index) => (
           <div
             key={user.id}
-            className='px-3 py-2 group transition-all duration-200 cursor-pointer bg-white hover:bg-slate-100 hover:rounded-2xl border border-transparent border-b-slate-100 opacity-0 animate-[slideUpFade_0.6s_ease-out_forwards]'
+            className='px-3 py-2 group transition-all duration-200 cursor-pointer bg-white hover:bg-neutral-100 hover:rounded-2xl border border-transparent border-b-neutral-100 opacity-0 animate-[slideUpFade_0.6s_ease-out_forwards]'
             style={{ animationDelay: `${0.5 + index * 0.5}s` }}
           >
             <div className='flex items-center gap-1'>
@@ -418,7 +418,7 @@ export default function DashboardDemo() {
                     {user.name}
                   </div>
                 </div>
-                <div className='text-[15px] text-slate-500 mb-1.5 truncate'>
+                <div className='text-[15px] text-neutral-500 mb-1.5 truncate'>
                   {user.role}
                 </div>
               </div>
@@ -426,10 +426,10 @@ export default function DashboardDemo() {
               <div className='flex-shrink-0 flex items-center gap-1.5'>
                 <button
                   onClick={() => handleToggleSave(user.id)}
-                  className='p-1.5 text-slate-500 hover:text-brand-600 hover:bg-slate-50 rounded-lg transition-colors'
+                  className='p-1.5 text-neutral-500 hover:text-brand-600 hover:bg-neutral-50 rounded-lg transition-colors'
                   title='Remove from saved'
                 >
-                  <Bookmark className='w-4 h-4 fill-slate-400' />
+                  <Bookmark className='w-4 h-4 fill-neutral-400' />
                 </button>
 
                 <button className='px-2 py-1.5 text-base font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 flex-shrink-0 bg-brand-500 hover:bg-brand-600 text-white'>
@@ -439,8 +439,8 @@ export default function DashboardDemo() {
                   </span>
                 </button>
 
-                <button className='p-1.5 text-base font-medium rounded-lg transition-colors flex items-center justify-center w-[32px] h-[32px] bg-white border border-slate-200 hover:bg-slate-50'>
-                  <MoreHorizontal className='w-4 h-4 text-slate-500' />
+                <button className='p-1.5 text-base font-medium rounded-lg transition-colors flex items-center justify-center w-[32px] h-[32px] bg-white border border-neutral-200 hover:bg-neutral-50'>
+                  <MoreHorizontal className='w-4 h-4 text-neutral-500' />
                 </button>
               </div>
             </div>
@@ -456,7 +456,7 @@ export default function DashboardDemo() {
         {dummyConnections.map(connection => (
           <div
             key={connection.id}
-            className='px-3 py-3 bg-white hover:bg-slate-100 rounded-xl border border-slate-200 transition-all duration-200 cursor-pointer'
+            className='px-3 py-3 bg-white hover:bg-neutral-100 rounded-xl border border-neutral-200 transition-all duration-200 cursor-pointer'
           >
             <div className='flex items-center gap-2'>
               <div className='flex-shrink-0'>
@@ -480,7 +480,7 @@ export default function DashboardDemo() {
                 <div className='text-black font-medium mb-1'>
                   {connection.name}
                 </div>
-                <div className='text-sm text-slate-500 mb-1'>
+                <div className='text-sm text-neutral-500 mb-1'>
                   {connection.role}
                 </div>
               </div>
@@ -489,7 +489,7 @@ export default function DashboardDemo() {
                 <button className='p-2 text-brand-600 hover:bg-brand-50 rounded-lg transition-colors'>
                   <MessageSquare className='w-4 h-4' />
                 </button>
-                <button className='p-2 text-slate-500 hover:bg-slate-50 rounded-lg transition-colors'>
+                <button className='p-2 text-neutral-500 hover:bg-neutral-50 rounded-lg transition-colors'>
                   <MoreHorizontal className='w-4 h-4' />
                 </button>
               </div>
@@ -506,7 +506,7 @@ export default function DashboardDemo() {
         {dummyNotifications.map(notification => (
           <div
             key={notification.id}
-            className={`px-4 py-3 rounded-xl border transition-all duration-200 cursor-pointer ${notification.isRead ? 'bg-white border-slate-200' : 'bg-brand-50 border-brand-200'}`}
+            className={`px-4 py-3 rounded-xl border transition-all duration-200 cursor-pointer ${notification.isRead ? 'bg-white border-neutral-200' : 'bg-brand-50 border-brand-200'}`}
           >
             <div className='flex items-center gap-2'>
               <div className='flex-shrink-0'>
@@ -530,7 +530,7 @@ export default function DashboardDemo() {
                   <span className=''>{notification.title}</span>{' '}
                   {notification.content}
                 </div>
-                <div className='text-sm text-slate-500'>
+                <div className='text-sm text-neutral-500'>
                   {notification.timestamp}
                 </div>
               </div>
@@ -540,7 +540,7 @@ export default function DashboardDemo() {
                   <button className='px-3 py-2 bg-brand-500 text-white text-base font-medium rounded-lg hover:bg-brand-600 transition-colors'>
                     Accept
                   </button>
-                  <button className='px-3 py-2 bg-slate-100 text-slate-600 text-base font-medium rounded-lg hover:bg-slate-200 transition-colors'>
+                  <button className='px-3 py-2 bg-neutral-100 text-neutral-600 text-base font-medium rounded-lg hover:bg-neutral-200 transition-colors'>
                     Decline
                   </button>
                 </div>
@@ -574,14 +574,14 @@ export default function DashboardDemo() {
               <h3 className='font-semibold text-black text-lg mb-1'>
                 {currentUser.name}
               </h3>
-              <p className='text-base text-slate-500 font-medium'>
+              <p className='text-base text-neutral-500 font-medium'>
                 {currentUser.email}
               </p>
             </div>
             <div className='flex items-center gap-2 ml-4'>
               {/* Download Resume Button */}
               <button
-                className='p-2 text-slate-500 hover:text-brand-600 transition-colors rounded-lg hover:bg-slate-100'
+                className='p-2 text-neutral-500 hover:text-brand-600 transition-colors rounded-lg hover:bg-neutral-100'
                 title='Download my resume as PDF'
               >
                 <svg
@@ -604,30 +604,30 @@ export default function DashboardDemo() {
 
         {/* Profile Details */}
         <div className='mt-5 space-y-4'>
-          <div className='p-4 bg-white border border-slate-200 rounded-xl'>
+          <div className='p-4 bg-white border border-neutral-200 rounded-xl'>
             <div className='flex items-center gap-2 mb-3'>
-              <Briefcase className='w-4 h-4 text-slate-500' />
-              <span className='text-sm font-medium text-slate-500'>
+              <Briefcase className='w-4 h-4 text-neutral-500' />
+              <span className='text-sm font-medium text-neutral-500'>
                 Experience
               </span>
             </div>
             <p className='text-black'>{currentUser.experience}</p>
           </div>
 
-          <div className='p-4 bg-white border border-slate-200 rounded-xl'>
+          <div className='p-4 bg-white border border-neutral-200 rounded-xl'>
             <div className='flex items-center gap-2 mb-3'>
-              <GraduationCap className='w-4 h-4 text-slate-500' />
-              <span className='text-sm font-medium text-slate-500'>
+              <GraduationCap className='w-4 h-4 text-neutral-500' />
+              <span className='text-sm font-medium text-neutral-500'>
                 Education
               </span>
             </div>
             <p className='text-black'>{currentUser.education}</p>
           </div>
 
-          <div className='p-4 bg-white border border-slate-200 rounded-xl'>
+          <div className='p-4 bg-white border border-neutral-200 rounded-xl'>
             <div className='flex items-center gap-2 mb-3'>
-              <Award className='w-4 h-4 text-slate-500' />
-              <span className='text-sm font-medium text-slate-500'>Skills</span>
+              <Award className='w-4 h-4 text-neutral-500' />
+              <span className='text-sm font-medium text-neutral-500'>Skills</span>
             </div>
             <div className='flex flex-wrap gap-2'>
               {currentUser.skills.map((skill, index) => (
@@ -641,10 +641,10 @@ export default function DashboardDemo() {
             </div>
           </div>
 
-          <div className='p-4 bg-white border border-slate-200 rounded-xl'>
+          <div className='p-4 bg-white border border-neutral-200 rounded-xl'>
             <div className='flex items-center gap-2 mb-3'>
-              <Target className='w-4 h-4 text-slate-500' />
-              <span className='text-sm font-medium text-slate-500'>
+              <Target className='w-4 h-4 text-neutral-500' />
+              <span className='text-sm font-medium text-neutral-500'>
                 Interests
               </span>
             </div>
@@ -652,7 +652,7 @@ export default function DashboardDemo() {
               {currentUser.interests.map((interest, index) => (
                 <span
                   key={index}
-                  className='px-3 py-1 bg-slate-100 text-slate-500 text-sm rounded-full font-medium'
+                  className='px-3 py-1 bg-neutral-100 text-neutral-500 text-sm rounded-full font-medium'
                 >
                   {interest}
                 </span>
@@ -660,10 +660,10 @@ export default function DashboardDemo() {
             </div>
           </div>
 
-          <div className='p-4 bg-white border border-slate-200 rounded-xl'>
+          <div className='p-4 bg-white border border-neutral-200 rounded-xl'>
             <div className='flex items-center gap-2 mb-3'>
-              <User className='w-4 h-4 text-slate-500' />
-              <span className='text-sm font-medium text-slate-500'>About</span>
+              <User className='w-4 h-4 text-neutral-500' />
+              <span className='text-sm font-medium text-neutral-500'>About</span>
             </div>
             <p className='text-black leading-relaxed'>{currentUser.about}</p>
           </div>
@@ -679,20 +679,20 @@ export default function DashboardDemo() {
     <div className='flex-1 overflow-y-auto'>
       {searchResults.length === 0 ? (
         <div className='flex flex-col items-center justify-center h-full text-center p-8'>
-          <div className='w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-full flex items-center justify-center'>
-            <Search className='w-8 h-8 text-slate-500' />
+          <div className='w-16 h-16 mx-auto mb-4 bg-neutral-100 rounded-full flex items-center justify-center'>
+            <Search className='w-8 h-8 text-neutral-500' />
           </div>
           <h3 className='text-lg font-medium text-black mb-2'>
             No results found
           </h3>
-          <p className='text-slate-500'>Try searching for something else</p>
+          <p className='text-neutral-500'>Try searching for something else</p>
         </div>
       ) : (
         <div className='space-y-3'>
           {searchResults.map(user => (
             <div
               key={user.id}
-              className='px-3 py-3 bg-white hover:bg-slate-100 rounded-xl border border-slate-200 transition-all duration-200 cursor-pointer'
+              className='px-3 py-3 bg-white hover:bg-neutral-100 rounded-xl border border-neutral-200 transition-all duration-200 cursor-pointer'
             >
               <div className='flex items-center gap-2'>
                 <div className='flex-shrink-0'>
@@ -713,7 +713,7 @@ export default function DashboardDemo() {
 
                 <div className='flex-1 min-w-0'>
                   <div className='text-black font-medium mb-1'>{user.name}</div>
-                  <div className='text-sm text-slate-500 mb-2'>{user.role}</div>
+                  <div className='text-sm text-neutral-500 mb-2'>{user.role}</div>
                   <div className='flex flex-wrap gap-1'>
                     {user.skills.slice(0, 3).map((skill, idx) => (
                       <span
@@ -740,13 +740,13 @@ export default function DashboardDemo() {
   );
 
   return (
-    <div className='bg-white md:rounded-2xl shadow-lg border border-slate-200 md:max-w-7xl md:mx-auto overflow-hidden w-full p-4'>
+    <div className='bg-white md:rounded-2xl shadow-lg border border-neutral-200 md:max-w-7xl md:mx-auto overflow-hidden w-full p-4'>
       {/* Dashboard Layout - Desktop and Tablet */}
       <div className='hidden md:flex h-[650px]'>
         {/* Left Sidebar */}
-        <div className='w-64 bg-white rounded-2xl border border-slate-200 flex flex-col'>
+        <div className='w-64 bg-white rounded-2xl border border-neutral-200 flex flex-col'>
           {/* Logo at top */}
-          <div className='px-4 py-6 border-b border-slate-200'>
+          <div className='px-4 py-6 border-b border-neutral-200'>
             <div className='flex items-center justify-between'>
               <div className='flex items-center gap-2'>
                 <Image
@@ -773,7 +773,7 @@ export default function DashboardDemo() {
                   className={`relative w-full flex items-center gap-3 px-2 py-2 rounded-lg text-left group transition-colors ${
                     activeSection === id
                       ? 'text-brand-600 bg-brand-50 font-medium'
-                      : 'text-black hover:bg-slate-50'
+                      : 'text-black hover:bg-neutral-50'
                   }`}
                 >
                   <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -801,14 +801,14 @@ export default function DashboardDemo() {
           </nav>
 
           {/* Account buttons at bottom */}
-          <div className='border-t border-slate-200 p-2 space-y-1'>
+          <div className='border-t border-neutral-200 p-2 space-y-1'>
             {/* Account Button */}
             <button
               onClick={() => setActiveSection('account')}
               className={`relative w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                 activeSection === 'account'
                   ? 'bg-brand-50 text-brand-600 border-brand-200'
-                  : 'text-black hover:bg-slate-100 hover:text-black border-transparent'
+                  : 'text-black hover:bg-neutral-100 hover:text-black border-transparent'
               }`}
             >
               <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -832,12 +832,12 @@ export default function DashboardDemo() {
         </div>
 
         {/* Main Content Area */}
-        <div className='flex-1 bg-white rounded-2xl border border-slate-200 p-6 overflow-hidden flex flex-col min-h-0 ml-4'>
+        <div className='flex-1 bg-white rounded-2xl border border-neutral-200 p-6 overflow-hidden flex flex-col min-h-0 ml-4'>
           {/* Search User - Always visible at top */}
           <div className='flex-shrink-0 mb-2 sm:mb-2'>
             <div className='max-w-xl mx-auto relative'>
               <div className='relative'>
-                <UserRoundSearch className='absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 z-10' />
+                <UserRoundSearch className='absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500 z-10' />
                 <input
                   type='text'
                   placeholder='Search'
@@ -848,12 +848,12 @@ export default function DashboardDemo() {
                     WebkitAppearance: 'none',
                     MozAppearance: 'textfield',
                   }}
-                  className='w-full pl-9 pr-16 py-3 rounded-full border border-slate-200 focus:outline-none focus:ring-1 focus:ring-brand-200 focus:bg-white bg-slate-100 hover:bg-white transition-colors placeholder-slate-1000'
+                  className='w-full pl-9 pr-16 py-3 rounded-full border border-neutral-200 focus:outline-none focus:ring-1 focus:ring-brand-200 focus:bg-white bg-neutral-100 hover:bg-white transition-colors placeholder-neutral-1000'
                 />
                 <button
                   type='button'
                   onClick={() => handleSearch(searchQuery)}
-                  className='absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full hover:bg-slate-50 flex items-center justify-center transition-colors duration-150 shadow-sm'
+                  className='absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full hover:bg-neutral-50 flex items-center justify-center transition-colors duration-150 shadow-sm'
                 >
                   <svg
                     className='w-5 h-5 text-brand-600'
@@ -878,7 +878,7 @@ export default function DashboardDemo() {
             {activeSection === 'suggested' && (
               <>
                 <h2 className='text-2xl font-bold text-black mb-1'>Discover</h2>
-                <p className='text-base text-slate-500'>
+                <p className='text-base text-neutral-500'>
                   AI-curated professionals based on your interests
                 </p>
               </>
@@ -888,7 +888,7 @@ export default function DashboardDemo() {
                 <h2 className='text-2xl font-bold text-black mb-1'>
                   Connections
                 </h2>
-                <p className='text-base text-slate-500'>
+                <p className='text-base text-neutral-500'>
                   People you're connected with
                 </p>
               </>
@@ -896,7 +896,7 @@ export default function DashboardDemo() {
             {activeSection === 'saved' && (
               <>
                 <h2 className='text-2xl font-bold text-black mb-1'>Saved</h2>
-                <p className='text-base text-slate-500'>
+                <p className='text-base text-neutral-500'>
                   Professionals you've saved for later
                 </p>
               </>
@@ -906,7 +906,7 @@ export default function DashboardDemo() {
                 <h2 className='text-2xl font-bold text-black mb-1'>
                   Notifications
                 </h2>
-                <p className='text-base text-slate-500'>
+                <p className='text-base text-neutral-500'>
                   Stay updated with your network
                 </p>
               </>
@@ -917,7 +917,7 @@ export default function DashboardDemo() {
                 <h2 className='text-xl font-bold text-black mb-1'>
                   Your Profile
                 </h2>
-                <p className='text-sm text-slate-500'>
+                <p className='text-sm text-neutral-500'>
                   Manage your account and profile
                 </p>
               </>
@@ -927,7 +927,7 @@ export default function DashboardDemo() {
                 <h2 className='text-xl font-bold text-black mb-1'>
                   Search Results
                 </h2>
-                <p className='text-sm text-slate-500'>
+                <p className='text-sm text-neutral-500'>
                   Found {searchResults.length} results for "{searchQuery}"
                 </p>
               </>
@@ -942,7 +942,7 @@ export default function DashboardDemo() {
       {/* Mobile Dashboard Layout */}
       <div className='md:hidden'>
         {/* Mobile Header */}
-        <div className='p-4 border-b border-slate-200 bg-white'>
+        <div className='p-4 border-b border-neutral-200 bg-white'>
           <div className='flex items-center justify-between'>
             <div className='flex items-center gap-2'>
               <UserAvatar
@@ -960,7 +960,7 @@ export default function DashboardDemo() {
                 <h3 className='text-sm font-semibold text-black truncate'>
                   Jordan Blake
                 </h3>
-                <p className='text-sm text-slate-500 truncate'>
+                <p className='text-sm text-neutral-500 truncate'>
                   Blockchain Developer
                 </p>
               </div>
@@ -970,7 +970,7 @@ export default function DashboardDemo() {
                 onClick={() => setActiveSection('notifications')}
                 className='relative'
               >
-                <NotificationBellIcon className='w-5 h-5 text-slate-500' />
+                <NotificationBellIcon className='w-5 h-5 text-neutral-500' />
                 {dummyNotifications.filter(n => !n.isRead).length > 0 && (
                   <div className='absolute -top-1 -right-1 w-4 h-4 bg-b_red-600 rounded-full flex items-center justify-center'>
                     <span className='text-white text-[8px] font-bold leading-none'>
@@ -982,23 +982,23 @@ export default function DashboardDemo() {
                 )}
               </button>
               <button onClick={() => setActiveSection('search')}>
-                <Search className='w-5 h-5 text-slate-500' />
+                <Search className='w-5 h-5 text-neutral-500' />
               </button>
               <button onClick={() => setActiveSection('saved')}>
-                <Bookmark className='w-5 h-5 text-slate-500' />
+                <Bookmark className='w-5 h-5 text-neutral-500' />
               </button>
             </div>
           </div>
         </div>
 
         {/* Mobile Navigation Tabs */}
-        <div className='flex bg-slate-100 border-b border-slate-200'>
+        <div className='flex bg-neutral-100 border-b border-neutral-200'>
           <button
             onClick={() => setActiveSection('suggested')}
             className={`flex-1 px-3 py-3 text-center text-sm font-medium ${
               activeSection === 'suggested'
                 ? 'text-brand-600 bg-white border-b-2 border-brand-500'
-                : 'text-slate-500'
+                : 'text-neutral-500'
             }`}
           >
             Discover
@@ -1008,7 +1008,7 @@ export default function DashboardDemo() {
             className={`flex-1 px-3 py-3 text-center text-sm font-medium ${
               activeSection === 'connections'
                 ? 'text-brand-600 bg-white border-b-2 border-brand-500'
-                : 'text-slate-500'
+                : 'text-neutral-500'
             }`}
           >
             Connections
@@ -1018,7 +1018,7 @@ export default function DashboardDemo() {
             className={`flex-1 px-3 py-3 text-center text-sm font-medium ${
               activeSection === 'saved'
                 ? 'text-brand-600 bg-white border-b-2 border-brand-500'
-                : 'text-slate-500'
+                : 'text-neutral-500'
             }`}
           >
             Saved
@@ -1028,7 +1028,7 @@ export default function DashboardDemo() {
             className={`flex-1 px-3 py-3 text-center text-sm font-medium relative ${
               activeSection === 'notifications'
                 ? 'text-brand-600 bg-white border-b-2 border-brand-500'
-                : 'text-slate-500'
+                : 'text-neutral-500'
             }`}
           >
             Notifications
@@ -1045,18 +1045,18 @@ export default function DashboardDemo() {
         </div>
 
         {/* Mobile Content */}
-        <div className='p-4 bg-slate-100 min-h-[500px]'>
+        <div className='p-4 bg-neutral-100 min-h-[500px]'>
           {/* Mobile Search */}
           {activeSection === 'search' && (
             <div className='mb-4'>
               <div className='relative'>
-                <UserRoundSearch className='absolute left-2 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500' />
+                <UserRoundSearch className='absolute left-2 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500' />
                 <input
                   type='text'
                   placeholder='Search professionals...'
                   value={searchQuery}
                   onChange={e => handleSearch(e.target.value)}
-                  className='w-full pl-9 pr-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-1 focus:ring-brand-200 bg-white'
+                  className='w-full pl-9 pr-4 py-3 rounded-lg border border-neutral-200 focus:outline-none focus:ring-1 focus:ring-brand-200 bg-white'
                 />
               </div>
             </div>
@@ -1069,7 +1069,7 @@ export default function DashboardDemo() {
                 <h2 className='text-lg font-bold text-black mb-1'>
                   Smart Matches for You
                 </h2>
-                <p className='text-sm text-slate-500'>
+                <p className='text-sm text-neutral-500'>
                   AI-curated professionals based on your interests
                 </p>
               </>
@@ -1079,7 +1079,7 @@ export default function DashboardDemo() {
                 <h2 className='text-lg font-bold text-black mb-1'>
                   Your Connections
                 </h2>
-                <p className='text-sm text-slate-500'>
+                <p className='text-sm text-neutral-500'>
                   People you're connected with
                 </p>
               </>
@@ -1089,7 +1089,7 @@ export default function DashboardDemo() {
                 <h2 className='text-lg font-bold text-black mb-1'>
                   Saved Professionals
                 </h2>
-                <p className='text-sm text-slate-500'>
+                <p className='text-sm text-neutral-500'>
                   Professionals you've saved for later
                 </p>
               </>
@@ -1099,7 +1099,7 @@ export default function DashboardDemo() {
                 <h2 className='text-lg font-bold text-black mb-1'>
                   Notifications
                 </h2>
-                <p className='text-sm text-slate-500'>
+                <p className='text-sm text-neutral-500'>
                   Stay updated with your network
                 </p>
               </>
@@ -1109,7 +1109,7 @@ export default function DashboardDemo() {
                 <h2 className='text-lg font-bold text-black mb-1'>
                   Search Results
                 </h2>
-                <p className='text-sm text-slate-500'>
+                <p className='text-sm text-neutral-500'>
                   {searchQuery
                     ? `Found ${searchResults.length} results for "${searchQuery}"`
                     : 'Search for professionals'}
@@ -1124,7 +1124,7 @@ export default function DashboardDemo() {
               {dummyUsers.slice(0, 4).map((user, index) => (
                 <div
                   key={user.id}
-                  className='rounded-xl border px-3 py-3 group transition-all duration-200 cursor-pointer bg-white border-slate-200 hover:bg-slate-100 opacity-0 animate-[slideUpFade_0.6s_ease-out_forwards]'
+                  className='rounded-xl border px-3 py-3 group transition-all duration-200 cursor-pointer bg-white border-neutral-200 hover:bg-neutral-100 opacity-0 animate-[slideUpFade_0.6s_ease-out_forwards]'
                   style={{ animationDelay: `${0.5 + index * 0.5}s` }}
                 >
                   <div className='flex items-center gap-2'>
@@ -1154,7 +1154,7 @@ export default function DashboardDemo() {
                           <div className='w-2 h-2 bg-brand-500 rounded-full animate-pulse'></div>
                         )}
                       </div>
-                      <div className='text-sm mb-2 text-slate-500'>
+                      <div className='text-sm mb-2 text-neutral-500'>
                         {user.role}
                       </div>
                     </div>
@@ -1176,7 +1176,7 @@ export default function DashboardDemo() {
               {dummyConnections.map(connection => (
                 <div
                   key={connection.id}
-                  className='rounded-xl border px-3 py-3 bg-white border-slate-200 hover:bg-slate-100 transition-all duration-200 cursor-pointer'
+                  className='rounded-xl border px-3 py-3 bg-white border-neutral-200 hover:bg-neutral-100 transition-all duration-200 cursor-pointer'
                 >
                   <div className='flex items-center gap-2'>
                     <div className='flex-shrink-0'>
@@ -1200,7 +1200,7 @@ export default function DashboardDemo() {
                       <div className='text-black font-medium text-sm mb-1'>
                         {connection.name}
                       </div>
-                      <div className='text-sm text-slate-500 mb-1'>
+                      <div className='text-sm text-neutral-500 mb-1'>
                         {connection.role}
                       </div>
                     </div>
@@ -1222,7 +1222,7 @@ export default function DashboardDemo() {
                 return (
                   <div
                     key={user.id}
-                    className='rounded-xl border px-3 py-3 bg-white border-slate-200 hover:bg-slate-100 transition-all duration-200 cursor-pointer'
+                    className='rounded-xl border px-3 py-3 bg-white border-neutral-200 hover:bg-neutral-100 transition-all duration-200 cursor-pointer'
                   >
                     <div className='flex items-center gap-2'>
                       <div className='flex-shrink-0'>
@@ -1246,7 +1246,7 @@ export default function DashboardDemo() {
                         <div className='text-black font-medium text-sm mb-1'>
                           {user.name}
                         </div>
-                        <div className='text-sm text-slate-500 mb-2'>
+                        <div className='text-sm text-neutral-500 mb-2'>
                           {user.role}
                         </div>
                       </div>
@@ -1254,10 +1254,10 @@ export default function DashboardDemo() {
                       <div className='flex-shrink-0 flex items-center gap-2'>
                         <button
                           onClick={() => handleToggleSave(user.id)}
-                          className='p-1.5 text-slate-500 hover:text-brand-600 hover:bg-slate-50 rounded-lg transition-colors'
+                          className='p-1.5 text-neutral-500 hover:text-brand-600 hover:bg-neutral-50 rounded-lg transition-colors'
                           title='Remove from saved'
                         >
-                          <Bookmark className='w-4 h-4 fill-slate-400' />
+                          <Bookmark className='w-4 h-4 fill-neutral-400' />
                         </button>
                         <button className='px-3 py-2 bg-brand-500 text-white text-base font-medium rounded-lg hover:bg-brand-600 transition-colors'>
                           Connect
@@ -1275,7 +1275,7 @@ export default function DashboardDemo() {
               {dummyNotifications.map(notification => (
                 <div
                   key={notification.id}
-                  className={`px-3 py-3 rounded-xl border transition-all duration-200 cursor-pointer ${notification.isRead ? 'bg-white border-slate-200' : 'bg-brand-50 border-brand-200'}`}
+                  className={`px-3 py-3 rounded-xl border transition-all duration-200 cursor-pointer ${notification.isRead ? 'bg-white border-neutral-200' : 'bg-brand-50 border-brand-200'}`}
                 >
                   <div className='flex items-center gap-2'>
                     <div className='flex-shrink-0'>
@@ -1301,7 +1301,7 @@ export default function DashboardDemo() {
                         </span>{' '}
                         {notification.content}
                       </div>
-                      <div className='text-sm text-slate-500'>
+                      <div className='text-sm text-neutral-500'>
                         {notification.timestamp}
                       </div>
                     </div>
@@ -1311,7 +1311,7 @@ export default function DashboardDemo() {
                         <button className='px-2 py-1.5 bg-brand-500 text-white text-sm font-medium rounded-lg hover:bg-brand-600 transition-colors'>
                           Accept
                         </button>
-                        <button className='px-2 py-1.5 bg-slate-100 text-slate-600 text-sm font-medium rounded-lg hover:bg-slate-200 transition-colors'>
+                        <button className='px-2 py-1.5 bg-neutral-100 text-neutral-600 text-sm font-medium rounded-lg hover:bg-neutral-200 transition-colors'>
                           Decline
                         </button>
                       </div>
@@ -1326,15 +1326,15 @@ export default function DashboardDemo() {
             <div className='space-y-3'>
               {searchResults.length === 0 ? (
                 <div className='text-center py-8'>
-                  <div className='w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-full flex items-center justify-center'>
-                    <Search className='w-8 h-8 text-slate-500' />
+                  <div className='w-16 h-16 mx-auto mb-4 bg-neutral-100 rounded-full flex items-center justify-center'>
+                    <Search className='w-8 h-8 text-neutral-500' />
                   </div>
                   <h3 className='text-lg font-medium text-black mb-2'>
                     {searchQuery
                       ? 'No results found'
                       : 'Search for professionals'}
                   </h3>
-                  <p className='text-slate-500'>
+                  <p className='text-neutral-500'>
                     {searchQuery
                       ? 'Try searching for something else'
                       : 'Enter a name, role, or skill to get started'}
@@ -1344,7 +1344,7 @@ export default function DashboardDemo() {
                 searchResults.map(user => (
                   <div
                     key={user.id}
-                    className='rounded-xl border px-3 py-3 bg-white border-slate-200 hover:bg-slate-100 transition-all duration-200 cursor-pointer'
+                    className='rounded-xl border px-3 py-3 bg-white border-neutral-200 hover:bg-neutral-100 transition-all duration-200 cursor-pointer'
                   >
                     <div className='flex items-center gap-2'>
                       <div className='flex-shrink-0'>
@@ -1368,7 +1368,7 @@ export default function DashboardDemo() {
                         <div className='text-black font-medium text-sm mb-1'>
                           {user.name}
                         </div>
-                        <div className='text-sm text-slate-500 mb-2'>
+                        <div className='text-sm text-neutral-500 mb-2'>
                           {user.role}
                         </div>
                       </div>

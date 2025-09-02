@@ -135,9 +135,9 @@ export default function DashboardSidebar({
     <>
       {/* Desktop Sidebar */}
       <div className='hidden lg:block w-56 flex-shrink-0'>
-        <div className='bg-white rounded-2xl h-full flex flex-col border border-slate-200'>
+        <div className='bg-white rounded-2xl h-full flex flex-col border border-neutral-200'>
           {/* Logo at top */}
-          <div className='px-3 py-3 border-b border-slate-100'>
+          <div className='px-3 py-3 border-b border-neutral-100'>
             <div className='flex items-center justify-between'>
               <Link
                 href='/?stay=true'
@@ -154,7 +154,7 @@ export default function DashboardSidebar({
                   <h1 className='text-[26px] font-bold text-brand-600'>
                     Loopn
                   </h1>
-                  <span className='px-1 py-0.5 text-[9px] font-bold text-slate-500 bg-slate-50 rounded border border-slate-300'>
+                  <span className='px-1 py-0.5 text-[9px] font-bold text-neutral-500 bg-neutral-50 rounded border border-neutral-300'>
                     PREVIEW
                   </span>
                 </div>
@@ -172,7 +172,7 @@ export default function DashboardSidebar({
                   className={`relative w-full flex items-center gap-3 px-2 py-2 rounded-lg text-left group transition-colors ${
                     activeSection === id
                       ? 'text-brand-600 bg-brand-50 font-medium'
-                      : 'text-black hover:bg-slate-50 font-medium'
+                      : 'text-black hover:bg-neutral-50 font-medium'
                   }`}
                 >
                   <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -216,11 +216,11 @@ export default function DashboardSidebar({
           </nav>
 
           {/* Account and utility buttons at bottom */}
-          <div className='border-t border-slate-100 px-3 py-2 space-y-2'>
+          <div className='border-t border-neutral-100 px-3 py-2 space-y-2'>
             {/* Bug Report Button */}
             <button
               onClick={() => setIsBugReportOpen(true)}
-              className='relative w-full flex items-center gap-3 px-2 py-2 rounded-lg text-left group transition-colors text-black hover:bg-slate-50 font-medium'
+              className='relative w-full flex items-center gap-3 px-2 py-2 rounded-lg text-left group transition-colors text-black hover:bg-neutral-50 font-medium'
             >
               <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
                 <Bug className='w-4 h-4' />
@@ -234,7 +234,7 @@ export default function DashboardSidebar({
               className={`relative w-full flex items-center gap-3 px-2 py-2 rounded-lg text-left group transition-colors ${
                 activeSection === accountItem.id
                   ? 'text-brand-600 bg-brand-50 font-medium'
-                  : 'text-black hover:bg-slate-50 font-medium'
+                  : 'text-black hover:bg-neutral-50 font-medium'
               }`}
             >
               <div className='flex-shrink-0 flex items-center justify-center'>
@@ -257,7 +257,7 @@ export default function DashboardSidebar({
                 <div className={`text-black text-sm font-medium truncate`}>
                   {accountItem.label}
                 </div>
-                <div className='text-sm text-slate-500'>Account</div>
+                <div className='text-sm text-neutral-500'>Account</div>
               </div>
             </button>
           </div>
@@ -265,7 +265,7 @@ export default function DashboardSidebar({
       </div>
 
       {/* Mobile Bottom Bar */}
-      <div className='lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-slate-100 border-t border-slate-200'>
+      <div className='lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-neutral-100 border-t border-neutral-200'>
         <nav className='flex items-stretch px-2 py-1'>
           <div className='flex w-full'>
             {[

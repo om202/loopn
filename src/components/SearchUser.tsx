@@ -166,7 +166,7 @@ export default function SearchUser({
       <div className='flex items-center gap-3 sm:block'>
         {/* Logo - only visible on mobile */}
         <div className='flex-shrink-0 sm:hidden'>
-          <div className='w-12 h-12 bg-white rounded-lg border border-slate-200 flex items-center justify-center'>
+          <div className='w-12 h-12 bg-white rounded-lg border border-neutral-200 flex items-center justify-center'>
             <Image
               src='/loopn.svg'
               alt='Loopn'
@@ -240,7 +240,7 @@ export default function SearchUser({
                   WebkitAppearance: 'none',
                   MozAppearance: 'textfield',
                 }}
-                className={`w-full pl-4 py-3 rounded-l-xl border border-r-0 border-slate-200 focus:outline-none focus:border-brand-300 text-black hover:bg-white transition-all duration-200 placeholder-slate-500 ${isFocused ? 'bg-white shadow-sm' : 'bg-slate-50'} ${query.trim() ? 'pr-10' : 'pr-4'}`}
+                className={`w-full pl-4 py-3 rounded-l-xl border border-r-0 border-neutral-200 focus:outline-none focus:border-brand-300 text-black hover:bg-white transition-all duration-200 placeholder-neutral-500 ${isFocused ? 'bg-white shadow-sm' : 'bg-neutral-50'} ${query.trim() ? 'pr-10' : 'pr-4'}`}
               />
 
               {/* Clear button - only show when there's text */}
@@ -277,28 +277,28 @@ export default function SearchUser({
         {showHistory && searchHistory.length > 0 && (
           <div
             ref={dropdownRef}
-            className='absolute top-full left-0 right-0 bg-slate-50 border border-slate-200 rounded-2xl shadow-sm z-50 max-h-64 overflow-y-auto mt-2'
+            className='absolute top-full left-0 right-0 bg-neutral-50 border border-neutral-200 rounded-2xl shadow-sm z-50 max-h-64 overflow-y-auto mt-2'
           >
             <div className='py-2'>
-              <div className='px-4 py-2 text-sm font-medium text-slate-500 border-b border-slate-200'>
+              <div className='px-4 py-2 text-sm font-medium text-neutral-500 border-b border-neutral-200'>
                 Recent searches
               </div>
               {searchHistory.map(item => (
                 <div
                   key={item.id}
-                  className='flex items-center justify-between px-4 py-3 hover:bg-slate-100 cursor-pointer group'
+                  className='flex items-center justify-between px-4 py-3 hover:bg-neutral-100 cursor-pointer group'
                   onClick={() => handleHistoryItemClick(item.query)}
                 >
                   <div className='flex items-center gap-3 flex-1 min-w-0'>
-                    <Clock className='w-4 h-4 text-slate-500 flex-shrink-0' />
-                    <span className='text-sm text-slate-500 truncate'>
+                    <Clock className='w-4 h-4 text-neutral-500 flex-shrink-0' />
+                    <span className='text-sm text-neutral-500 truncate'>
                       {item.query}
                     </span>
                   </div>
                   <button
                     type='button'
                     onClick={e => handleDeleteHistoryItem(e, item.id)}
-                    className='flex-shrink-0 p-1 text-slate-500 hover:text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity'
+                    className='flex-shrink-0 p-1 text-neutral-500 hover:text-neutral-500 opacity-0 group-hover:opacity-100 transition-opacity'
                     aria-label={`Remove "${item.query}" from search history`}
                   >
                     <X className='w-4 h-4' />

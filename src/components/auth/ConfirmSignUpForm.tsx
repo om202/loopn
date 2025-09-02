@@ -63,20 +63,20 @@ export default function ConfirmSignUpForm({
           </label>
           <div className='relative'>
             <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-              <Shield className='h-5 w-5 text-slate-500' />
+              <Shield className='h-5 w-5 text-neutral-500' />
             </div>
             <input
               id='confirmationCode'
               type='text'
               value={confirmationCode}
               onChange={e => setConfirmationCode(e.target.value)}
-              className='w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white text-center text-lg tracking-widest'
+              className='w-full pl-10 pr-4 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white text-center text-lg tracking-widest'
               placeholder='000000'
               maxLength={6}
               required
             />
           </div>
-          <p className='text-sm text-slate-500 mt-2 text-center'>
+          <p className='text-sm text-neutral-500 mt-2 text-center'>
             Enter the 6-digit code from your email
           </p>
         </div>
@@ -103,7 +103,7 @@ export default function ConfirmSignUpForm({
           </button>
         </div>
 
-        <div className='text-center pt-2 border-t border-slate-200'>
+        <div className='text-center pt-2 border-t border-neutral-200'>
           <button
             type='button'
             onClick={onSwitchToSignIn}

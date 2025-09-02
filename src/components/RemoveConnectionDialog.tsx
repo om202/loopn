@@ -34,14 +34,14 @@ export default function RemoveConnectionDialog({
           <button
             onClick={onClose}
             disabled={isLoading}
-            className='flex-1 px-3 py-2 text-base font-medium text-black bg-slate-100 rounded-lg hover:bg-slate-200 focus:outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
+            className='flex-1 px-3 py-2 text-base font-medium text-black bg-neutral-100 rounded-lg hover:bg-neutral-200 focus:outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
           >
             Cancel
           </button>
           <button
             onClick={onConfirm}
             disabled={isLoading}
-            className='flex-1 px-3 py-2 text-base font-medium text-b_red-600 bg-slate-100 rounded-lg hover:bg-slate-200 focus:outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
+            className='flex-1 px-3 py-2 text-base font-medium text-b_red-600 bg-neutral-100 rounded-lg hover:bg-neutral-200 focus:outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
           >
             {isLoading ? 'Removing...' : 'Remove'}
           </button>

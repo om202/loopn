@@ -34,8 +34,8 @@ export default function SignInForm({
   return (
     <div className='w-full'>
       {/* Sign up prompt at the top */}
-      <div className='text-center mb-6 p-4 bg-slate-100 rounded-xl border border-slate-200'>
-        <span className='text-base text-slate-500 mr-3 font-medium'>
+      <div className='text-center mb-6 p-4 bg-neutral-100 rounded-xl border border-neutral-200'>
+        <span className='text-base text-neutral-500 mr-3 font-medium'>
           New to Loopn?
         </span>
         <button
@@ -62,14 +62,14 @@ export default function SignInForm({
           </label>
           <div className='relative'>
             <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-              <Mail className='h-5 w-5 text-slate-500' />
+              <Mail className='h-5 w-5 text-neutral-500' />
             </div>
             <input
               id='email'
               type='email'
               value={email}
               onChange={e => setEmail(e.target.value)}
-              className='w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white'
+              className='w-full pl-10 pr-4 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white'
               placeholder='Enter your email'
               required
             />
@@ -85,21 +85,21 @@ export default function SignInForm({
           </label>
           <div className='relative'>
             <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-              <Lock className='h-5 w-5 text-slate-500' />
+              <Lock className='h-5 w-5 text-neutral-500' />
             </div>
             <input
               id='password'
               type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={e => setPassword(e.target.value)}
-              className='w-full pl-10 pr-12 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white'
+              className='w-full pl-10 pr-12 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors bg-white'
               placeholder='Enter your password'
               required
             />
             <button
               type='button'
               onClick={() => setShowPassword(!showPassword)}
-              className='absolute inset-y-0 right-0 pr-3 flex items-center text-slate-500 hover:text-slate-500 transition-colors'
+              className='absolute inset-y-0 right-0 pr-3 flex items-center text-neutral-500 hover:text-neutral-500 transition-colors'
             >
               {showPassword ? (
                 <EyeOff className='h-5 w-5' />

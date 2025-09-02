@@ -7,16 +7,16 @@ export default function TermsOfServicePage() {
   return (
     <main className='min-h-screen bg-white'>
       {/* Header */}
-      <header className='bg-white shadow-sm border-b border-gray-200'>
+      <header className='bg-white shadow-sm border-b border-neutral-200'>
         <div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4'>
           <div className='flex items-center justify-between'>
             <Link href='/home' className='flex items-center space-x-3'>
               <Image src='/loopn.svg' alt='Loopn' width={32} height={32} />
-              <span className='text-xl font-medium text-gray-900'>Loopn</span>
+              <span className='text-xl font-medium text-neutral-900'>Loopn</span>
             </Link>
             <Link
               href='/home'
-              className='text-gray-600 hover:text-gray-900 font-medium'
+              className='text-neutral-600 hover:text-neutral-900 font-medium'
             >
               ← Back to Home
             </Link>
@@ -27,10 +27,10 @@ export default function TermsOfServicePage() {
       {/* Terms of Service Content */}
       <div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
         <div className='prose prose-gray max-w-none'>
-          <h1 className='text-3xl font-semibold text-gray-900 mb-2'>
+          <h1 className='text-3xl font-semibold text-neutral-900 mb-2'>
             Terms of Service
           </h1>
-          <p className='text-gray-600 mb-8'>Last updated: September 1, 2025</p>
+          <p className='text-neutral-600 mb-8'>Last updated: September 1, 2025</p>
 
           <div className='bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8'>
             <p className='text-blue-800 font-medium'>
@@ -43,10 +43,10 @@ export default function TermsOfServicePage() {
             </p>
           </div>
 
-          <h2 className='text-2xl font-semibold text-gray-900 mt-8 mb-4'>
+          <h2 className='text-2xl font-semibold text-neutral-900 mt-8 mb-4'>
             1. Acceptance of Terms
           </h2>
-          <p className='text-gray-700 mb-6'>
+          <p className='text-neutral-700 mb-6'>
             By accessing or using Loopn (&quot;the Service&quot;), you agree to
             be bound by these Terms of Service (&quot;Terms&quot;). If you do
             not agree to these Terms, please do not use the Service. These Terms
@@ -54,13 +54,13 @@ export default function TermsOfServicePage() {
             else who accesses or uses the Service.
           </p>
 
-          <h2 className='text-2xl font-semibold text-gray-900 mt-8 mb-4'>
+          <h2 className='text-2xl font-semibold text-neutral-900 mt-8 mb-4'>
             2. Description of Service
           </h2>
-          <p className='text-gray-700 mb-4'>
+          <p className='text-neutral-700 mb-4'>
             Loopn is a professional networking platform that:
           </p>
-          <ul className='list-disc pl-6 text-gray-700 mb-6 space-y-2'>
+          <ul className='list-disc pl-6 text-neutral-700 mb-6 space-y-2'>
             <li>
               Uses AI to help match professionals based on skills, interests,
               and career goals
@@ -81,14 +81,14 @@ export default function TermsOfServicePage() {
             </li>
           </ul>
 
-          <h2 className='text-2xl font-semibold text-gray-900 mt-8 mb-4'>
+          <h2 className='text-2xl font-semibold text-neutral-900 mt-8 mb-4'>
             3. User Accounts and Registration
           </h2>
 
-          <h3 className='text-xl font-medium text-gray-900 mt-6 mb-3'>
+          <h3 className='text-xl font-medium text-neutral-900 mt-6 mb-3'>
             Account Requirements
           </h3>
-          <ul className='list-disc pl-6 text-gray-700 mb-4 space-y-2'>
+          <ul className='list-disc pl-6 text-neutral-700 mb-4 space-y-2'>
             <li>You must be at least 18 years old to use the Service</li>
             <li>You must provide accurate and complete information</li>
             <li>You are responsible for maintaining account security</li>
@@ -98,10 +98,10 @@ export default function TermsOfServicePage() {
             </li>
           </ul>
 
-          <h3 className='text-xl font-medium text-gray-900 mt-6 mb-3'>
+          <h3 className='text-xl font-medium text-neutral-900 mt-6 mb-3'>
             Account Responsibilities
           </h3>
-          <ul className='list-disc pl-6 text-gray-700 mb-6 space-y-2'>
+          <ul className='list-disc pl-6 text-neutral-700 mb-6 space-y-2'>
             <li>
               Keep your login credentials secure and do not share them with
               others
@@ -113,17 +113,17 @@ export default function TermsOfServicePage() {
             <li>Maintain accurate and up-to-date profile information</li>
           </ul>
 
-          <h2 className='text-2xl font-semibold text-gray-900 mt-8 mb-4'>
+          <h2 className='text-2xl font-semibold text-neutral-900 mt-8 mb-4'>
             4. Acceptable Use
           </h2>
 
-          <h3 className='text-xl font-medium text-gray-900 mt-6 mb-3'>
+          <h3 className='text-xl font-medium text-neutral-900 mt-6 mb-3'>
             Professional Standards
           </h3>
-          <p className='text-gray-700 mb-4'>
+          <p className='text-neutral-700 mb-4'>
             Loopn is designed for professional networking. You agree to:
           </p>
-          <ul className='list-disc pl-6 text-gray-700 mb-4 space-y-2'>
+          <ul className='list-disc pl-6 text-neutral-700 mb-4 space-y-2'>
             <li>
               Use the platform for legitimate professional networking purposes
             </li>
@@ -135,11 +135,11 @@ export default function TermsOfServicePage() {
             <li>Use appropriate language and conduct in all interactions</li>
           </ul>
 
-          <h3 className='text-xl font-medium text-gray-900 mt-6 mb-3'>
+          <h3 className='text-xl font-medium text-neutral-900 mt-6 mb-3'>
             Prohibited Activities
           </h3>
-          <p className='text-gray-700 mb-4'>You may NOT:</p>
-          <ul className='list-disc pl-6 text-gray-700 mb-6 space-y-2'>
+          <p className='text-neutral-700 mb-4'>You may NOT:</p>
+          <ul className='list-disc pl-6 text-neutral-700 mb-6 space-y-2'>
             <li>
               <strong>Harassment:</strong> Harass, abuse, threaten, or
               intimidate other users
@@ -174,18 +174,18 @@ export default function TermsOfServicePage() {
             </li>
           </ul>
 
-          <h2 className='text-2xl font-semibold text-gray-900 mt-8 mb-4'>
+          <h2 className='text-2xl font-semibold text-neutral-900 mt-8 mb-4'>
             5. Content and Communications
           </h2>
 
-          <h3 className='text-xl font-medium text-gray-900 mt-6 mb-3'>
+          <h3 className='text-xl font-medium text-neutral-900 mt-6 mb-3'>
             User-Generated Content
           </h3>
-          <p className='text-gray-700 mb-4'>
+          <p className='text-neutral-700 mb-4'>
             You retain ownership of content you create, but grant us certain
             rights:
           </p>
-          <ul className='list-disc pl-6 text-gray-700 mb-4 space-y-2'>
+          <ul className='list-disc pl-6 text-neutral-700 mb-4 space-y-2'>
             <li>
               Right to store, display, and transmit your content through the
               Service
@@ -200,24 +200,24 @@ export default function TermsOfServicePage() {
             </li>
           </ul>
 
-          <h3 className='text-xl font-medium text-gray-900 mt-6 mb-3'>
+          <h3 className='text-xl font-medium text-neutral-900 mt-6 mb-3'>
             Permanent Conversations
           </h3>
-          <p className='text-gray-700 mb-6'>
+          <p className='text-neutral-700 mb-6'>
             <strong>Important:</strong> All conversations on Loopn are
             permanent. Once you accept a chat request, the conversation history
             is preserved indefinitely. Consider this before sharing sensitive
             information.
           </p>
 
-          <h2 className='text-2xl font-semibold text-gray-900 mt-8 mb-4'>
+          <h2 className='text-2xl font-semibold text-neutral-900 mt-8 mb-4'>
             6. AI and Automated Processing
           </h2>
 
-          <p className='text-gray-700 mb-4'>
+          <p className='text-neutral-700 mb-4'>
             By using our Service, you consent to:
           </p>
-          <ul className='list-disc pl-6 text-gray-700 mb-6 space-y-2'>
+          <ul className='list-disc pl-6 text-neutral-700 mb-6 space-y-2'>
             <li>
               AI processing of your resume and profile information for matching
               purposes
@@ -232,11 +232,11 @@ export default function TermsOfServicePage() {
             <li>Use of your data to improve our AI algorithms (anonymized)</li>
           </ul>
 
-          <h2 className='text-2xl font-semibold text-gray-900 mt-8 mb-4'>
+          <h2 className='text-2xl font-semibold text-neutral-900 mt-8 mb-4'>
             7. Privacy and Data Protection
           </h2>
 
-          <p className='text-gray-700 mb-6'>
+          <p className='text-neutral-700 mb-6'>
             Your privacy is important to us. Please review our{' '}
             <Link href='/privacy' className='text-blue-600 hover:underline'>
               Privacy Policy
@@ -246,15 +246,15 @@ export default function TermsOfServicePage() {
             information as described in the Privacy Policy.
           </p>
 
-          <h2 className='text-2xl font-semibold text-gray-900 mt-8 mb-4'>
+          <h2 className='text-2xl font-semibold text-neutral-900 mt-8 mb-4'>
             8. Intellectual Property
           </h2>
 
-          <p className='text-gray-700 mb-4'>
+          <p className='text-neutral-700 mb-4'>
             The Loopn platform, including its design, functionality, and
             content, is protected by intellectual property laws. You agree that:
           </p>
-          <ul className='list-disc pl-6 text-gray-700 mb-6 space-y-2'>
+          <ul className='list-disc pl-6 text-neutral-700 mb-6 space-y-2'>
             <li>
               Loopn and its content are owned by us and protected by copyright,
               trademark, and other laws
@@ -272,12 +272,12 @@ export default function TermsOfServicePage() {
             </li>
           </ul>
 
-          <h2 className='text-2xl font-semibold text-gray-900 mt-8 mb-4'>
+          <h2 className='text-2xl font-semibold text-neutral-900 mt-8 mb-4'>
             9. Service Availability and Modifications
           </h2>
 
-          <p className='text-gray-700 mb-4'>We reserve the right to:</p>
-          <ul className='list-disc pl-6 text-gray-700 mb-6 space-y-2'>
+          <p className='text-neutral-700 mb-4'>We reserve the right to:</p>
+          <ul className='list-disc pl-6 text-neutral-700 mb-6 space-y-2'>
             <li>
               Modify, suspend, or discontinue the Service at any time with or
               without notice
@@ -290,17 +290,17 @@ export default function TermsOfServicePage() {
             </li>
           </ul>
 
-          <h2 className='text-2xl font-semibold text-gray-900 mt-8 mb-4'>
+          <h2 className='text-2xl font-semibold text-neutral-900 mt-8 mb-4'>
             10. Account Suspension and Termination
           </h2>
 
-          <h3 className='text-xl font-medium text-gray-900 mt-6 mb-3'>
+          <h3 className='text-xl font-medium text-neutral-900 mt-6 mb-3'>
             Our Rights
           </h3>
-          <p className='text-gray-700 mb-4'>
+          <p className='text-neutral-700 mb-4'>
             We may suspend or terminate your account if you:
           </p>
-          <ul className='list-disc pl-6 text-gray-700 mb-4 space-y-2'>
+          <ul className='list-disc pl-6 text-neutral-700 mb-4 space-y-2'>
             <li>Violate these Terms or our community standards</li>
             <li>Engage in fraudulent or illegal activities</li>
             <li>Harass or abuse other users</li>
@@ -310,28 +310,28 @@ export default function TermsOfServicePage() {
             </li>
           </ul>
 
-          <h3 className='text-xl font-medium text-gray-900 mt-6 mb-3'>
+          <h3 className='text-xl font-medium text-neutral-900 mt-6 mb-3'>
             Your Rights
           </h3>
-          <p className='text-gray-700 mb-6'>
+          <p className='text-neutral-700 mb-6'>
             You may delete your account at any time through your account
             settings. Upon deletion, your profile will be removed, but
             conversation history with other users may be retained as described
             in our Privacy Policy.
           </p>
 
-          <h2 className='text-2xl font-semibold text-gray-900 mt-8 mb-4'>
+          <h2 className='text-2xl font-semibold text-neutral-900 mt-8 mb-4'>
             11. Disclaimers and Limitation of Liability
           </h2>
 
-          <h3 className='text-xl font-medium text-gray-900 mt-6 mb-3'>
+          <h3 className='text-xl font-medium text-neutral-900 mt-6 mb-3'>
             Service Disclaimers
           </h3>
-          <p className='text-gray-700 mb-4'>
+          <p className='text-neutral-700 mb-4'>
             THE SERVICE IS PROVIDED &quot;AS IS&quot; WITHOUT WARRANTIES OF ANY
             KIND. WE DO NOT GUARANTEE:
           </p>
-          <ul className='list-disc pl-6 text-gray-700 mb-4 space-y-2'>
+          <ul className='list-disc pl-6 text-neutral-700 mb-4 space-y-2'>
             <li>Uninterrupted or error-free operation</li>
             <li>The accuracy of AI matching or recommendations</li>
             <li>The behavior or identity of other users</li>
@@ -344,10 +344,10 @@ export default function TermsOfServicePage() {
             </li>
           </ul>
 
-          <h3 className='text-xl font-medium text-gray-900 mt-6 mb-3'>
+          <h3 className='text-xl font-medium text-neutral-900 mt-6 mb-3'>
             Limitation of Liability
           </h3>
-          <p className='text-gray-700 mb-6'>
+          <p className='text-neutral-700 mb-6'>
             TO THE MAXIMUM EXTENT PERMITTED BY LAW, WE SHALL NOT BE LIABLE FOR
             ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE
             DAMAGES, OR ANY LOSS OF PROFITS OR REVENUES, WHETHER INCURRED
@@ -355,11 +355,11 @@ export default function TermsOfServicePage() {
             INTANGIBLE LOSSES RESULTING FROM YOUR USE OF THE SERVICE.
           </p>
 
-          <h2 className='text-2xl font-semibold text-gray-900 mt-8 mb-4'>
+          <h2 className='text-2xl font-semibold text-neutral-900 mt-8 mb-4'>
             12. Indemnification
           </h2>
 
-          <p className='text-gray-700 mb-6'>
+          <p className='text-neutral-700 mb-6'>
             You agree to defend, indemnify, and hold harmless Loopn and its
             officers, directors, employees, and agents from and against any
             claims, liabilities, damages, losses, and expenses arising out of or
@@ -367,23 +367,23 @@ export default function TermsOfServicePage() {
             these Terms.
           </p>
 
-          <h2 className='text-2xl font-semibold text-gray-900 mt-8 mb-4'>
+          <h2 className='text-2xl font-semibold text-neutral-900 mt-8 mb-4'>
             13. Dispute Resolution
           </h2>
 
-          <h3 className='text-xl font-medium text-gray-900 mt-6 mb-3'>
+          <h3 className='text-xl font-medium text-neutral-900 mt-6 mb-3'>
             Governing Law
           </h3>
-          <p className='text-gray-700 mb-4'>
+          <p className='text-neutral-700 mb-4'>
             These Terms shall be governed by and construed in accordance with
             the laws of the United States, without regard to conflict of law
             principles.
           </p>
 
-          <h3 className='text-xl font-medium text-gray-900 mt-6 mb-3'>
+          <h3 className='text-xl font-medium text-neutral-900 mt-6 mb-3'>
             Dispute Resolution Process
           </h3>
-          <p className='text-gray-700 mb-6'>
+          <p className='text-neutral-700 mb-6'>
             If you have a dispute with us, please first contact us at{' '}
             <a
               href='mailto:exonary.build@gmail.com'
@@ -395,11 +395,11 @@ export default function TermsOfServicePage() {
             working with our users to address concerns.
           </p>
 
-          <h2 className='text-2xl font-semibold text-gray-900 mt-8 mb-4'>
+          <h2 className='text-2xl font-semibold text-neutral-900 mt-8 mb-4'>
             14. Changes to Terms
           </h2>
 
-          <p className='text-gray-700 mb-6'>
+          <p className='text-neutral-700 mb-6'>
             We may update these Terms from time to time to reflect changes in
             our Service or legal requirements. We will provide notice of
             material changes by posting the updated Terms on this page and
@@ -408,28 +408,28 @@ export default function TermsOfServicePage() {
             Terms.
           </p>
 
-          <h2 className='text-2xl font-semibold text-gray-900 mt-8 mb-4'>
+          <h2 className='text-2xl font-semibold text-neutral-900 mt-8 mb-4'>
             15. Severability
           </h2>
 
-          <p className='text-gray-700 mb-6'>
+          <p className='text-neutral-700 mb-6'>
             If any provision of these Terms is held to be invalid or
             unenforceable, the remaining provisions will continue to be valid
             and enforceable to the fullest extent permitted by law.
           </p>
 
-          <h2 className='text-2xl font-semibold text-gray-900 mt-8 mb-4'>
+          <h2 className='text-2xl font-semibold text-neutral-900 mt-8 mb-4'>
             16. Contact Information
           </h2>
 
-          <p className='text-gray-700 mb-4'>
+          <p className='text-neutral-700 mb-4'>
             If you have questions about these Terms, please contact us:
           </p>
-          <div className='bg-gray-50 border border-gray-200 rounded-lg p-6 mb-8'>
-            <p className='text-gray-700 mb-2'>
+          <div className='bg-neutral-50 border border-neutral-200 rounded-lg p-6 mb-8'>
+            <p className='text-neutral-700 mb-2'>
               <strong>Email:</strong> exonary.build@gmail.com
             </p>
-            <p className='text-gray-700'>
+            <p className='text-neutral-700'>
               <strong>Subject Line:</strong> Terms of Service Question
             </p>
           </div>
@@ -449,37 +449,37 @@ export default function TermsOfServicePage() {
       </div>
 
       {/* Footer */}
-      <footer className='bg-slate-50 py-8 border-t border-gray-200'>
+      <footer className='bg-neutral-50 py-8 border-t border-neutral-200'>
         <div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='text-center'>
             <div className='flex items-center justify-center space-x-3 mb-4'>
               <Image src='/loopn.svg' alt='Loopn' width={32} height={32} />
-              <span className='text-xl font-medium text-gray-900'>Loopn</span>
+              <span className='text-xl font-medium text-neutral-900'>Loopn</span>
             </div>
-            <p className='text-gray-600 text-sm mb-6'>
+            <p className='text-neutral-600 text-sm mb-6'>
               Professional networking that actually matters
             </p>
             <div className='flex justify-center items-center gap-6 mb-6'>
               <Link
                 href='/privacy'
-                className='text-gray-600 text-sm font-medium hover:underline'
+                className='text-neutral-600 text-sm font-medium hover:underline'
               >
                 Privacy Policy
               </Link>
               <Link
                 href='/terms'
-                className='text-gray-600 text-sm font-medium hover:underline'
+                className='text-neutral-600 text-sm font-medium hover:underline'
               >
                 Terms of Service
               </Link>
               <Link
                 href='/home'
-                className='text-gray-600 text-sm font-medium hover:underline'
+                className='text-neutral-600 text-sm font-medium hover:underline'
               >
                 Home
               </Link>
             </div>
-            <p className='text-gray-600 text-sm'>
+            <p className='text-neutral-600 text-sm'>
               © 2025 Loopn. All rights reserved.
             </p>
           </div>

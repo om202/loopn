@@ -278,10 +278,10 @@ export default function EmbeddingIndexerPage() {
     return (
       <div className='min-h-screen flex items-center justify-center'>
         <div className='text-center'>
-          <h1 className='text-2xl font-bold text-gray-900 mb-4'>
+          <h1 className='text-2xl font-bold text-neutral-900 mb-4'>
             Authentication Required
           </h1>
-          <p className='text-gray-600'>
+          <p className='text-neutral-600'>
             Please sign in to access the embedding indexer.
           </p>
         </div>
@@ -290,23 +290,23 @@ export default function EmbeddingIndexerPage() {
   }
 
   return (
-    <div className='min-h-screen bg-gray-50 py-8'>
+    <div className='min-h-screen bg-neutral-50 py-8'>
       <div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8'>
         {/* Header */}
-        <div className='bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6'>
-          <h1 className='text-3xl font-bold text-gray-900 mb-2'>
+        <div className='bg-white rounded-lg shadow-sm border border-neutral-200 p-6 mb-6'>
+          <h1 className='text-3xl font-bold text-neutral-900 mb-2'>
             Embedding Indexer
           </h1>
-          <p className='text-gray-600'>
+          <p className='text-neutral-600'>
             Admin utility to generate embeddings for existing user profiles and
             enable RAG search functionality.
           </p>
         </div>
 
         {/* Health Check Section */}
-        <div className='bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6'>
+        <div className='bg-white rounded-lg shadow-sm border border-neutral-200 p-6 mb-6'>
           <div className='flex items-center justify-between mb-4'>
-            <h2 className='text-xl font-semibold text-gray-900 flex items-center gap-2'>
+            <h2 className='text-xl font-semibold text-neutral-900 flex items-center gap-2'>
               <Database className='w-5 h-5' />
               Service Health Check
             </h2>
@@ -326,7 +326,7 @@ export default function EmbeddingIndexerPage() {
 
           {healthCheck && (
             <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
-              <div className='bg-gray-50 rounded-lg p-4'>
+              <div className='bg-neutral-50 rounded-lg p-4'>
                 <div className='flex items-center gap-2 mb-2'>
                   {healthCheck.serviceAvailable ? (
                     <CheckCircle className='w-5 h-5 text-green-500' />
@@ -335,27 +335,27 @@ export default function EmbeddingIndexerPage() {
                   )}
                   <span className='font-medium'>Service Status</span>
                 </div>
-                <p className='text-sm text-gray-600'>
+                <p className='text-sm text-neutral-600'>
                   {healthCheck.serviceAvailable ? 'Available' : 'Unavailable'}
                 </p>
               </div>
 
-              <div className='bg-gray-50 rounded-lg p-4'>
+              <div className='bg-neutral-50 rounded-lg p-4'>
                 <div className='flex items-center gap-2 mb-2'>
                   <Users className='w-5 h-5 text-blue-500' />
                   <span className='font-medium'>Total Embeddings</span>
                 </div>
-                <p className='text-2xl font-bold text-gray-900'>
+                <p className='text-2xl font-bold text-neutral-900'>
                   {healthCheck.totalEmbeddings}
                 </p>
               </div>
 
-              <div className='bg-gray-50 rounded-lg p-4'>
+              <div className='bg-neutral-50 rounded-lg p-4'>
                 <div className='flex items-center gap-2 mb-2'>
                   <RefreshCw className='w-5 h-5 text-purple-500' />
                   <span className='font-medium'>Last Updated</span>
                 </div>
-                <p className='text-sm text-gray-600'>
+                <p className='text-sm text-neutral-600'>
                   {healthCheck.lastUpdated
                     ? new Date(healthCheck.lastUpdated).toLocaleString()
                     : 'Never'}
@@ -377,9 +377,9 @@ export default function EmbeddingIndexerPage() {
         </div>
 
         {/* Indexing Control Section */}
-        <div className='bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6'>
+        <div className='bg-white rounded-lg shadow-sm border border-neutral-200 p-6 mb-6'>
           <div className='flex items-center justify-between mb-4'>
-            <h2 className='text-xl font-semibold text-gray-900 flex items-center gap-2'>
+            <h2 className='text-xl font-semibold text-neutral-900 flex items-center gap-2'>
               <Users className='w-5 h-5' />
               User Indexing
             </h2>
@@ -402,7 +402,7 @@ export default function EmbeddingIndexerPage() {
             </button>
           </div>
 
-          <p className='text-gray-600 mb-4'>
+          <p className='text-neutral-600 mb-4'>
             This will process all existing user profiles and generate embeddings
             for RAG search functionality. The process may take several minutes
             depending on the number of users.
@@ -411,7 +411,7 @@ export default function EmbeddingIndexerPage() {
           {/* Progress Bar */}
           {(isIndexing || indexingProgress.total > 0) && (
             <div className='mb-4'>
-              <div className='flex justify-between text-sm text-gray-600 mb-2'>
+              <div className='flex justify-between text-sm text-neutral-600 mb-2'>
                 <span>
                   Progress: {indexingProgress.processed} /{' '}
                   {indexingProgress.total}
@@ -427,7 +427,7 @@ export default function EmbeddingIndexerPage() {
                   %
                 </span>
               </div>
-              <div className='w-full bg-gray-200 rounded-full h-2'>
+              <div className='w-full bg-neutral-200 rounded-full h-2'>
                 <div
                   className='bg-blue-600 h-2 rounded-full transition-all duration-300'
                   style={{
@@ -464,9 +464,9 @@ export default function EmbeddingIndexerPage() {
         </div>
 
         {/* BM25 Hybrid Search Initialization */}
-        <div className='bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6'>
+        <div className='bg-white rounded-lg shadow-sm border border-neutral-200 p-6 mb-6'>
           <div className='flex items-center justify-between mb-4'>
-            <h2 className='text-xl font-semibold text-gray-900 flex items-center gap-2'>
+            <h2 className='text-xl font-semibold text-neutral-900 flex items-center gap-2'>
               <Search className='w-5 h-5' />
               Hybrid Search Setup
             </h2>
@@ -484,7 +484,7 @@ export default function EmbeddingIndexerPage() {
             </button>
           </div>
 
-          <p className='text-gray-600 mb-4'>
+          <p className='text-neutral-600 mb-4'>
             Initialize the hybrid search functionality. This combines vector
             embeddings with text keyword matching for better exact term
             searches.
@@ -538,8 +538,8 @@ export default function EmbeddingIndexerPage() {
 
         {/* Results Section */}
         {indexingResults && (
-          <div className='bg-white rounded-lg shadow-sm border border-gray-200 p-6'>
-            <h2 className='text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2'>
+          <div className='bg-white rounded-lg shadow-sm border border-neutral-200 p-6'>
+            <h2 className='text-xl font-semibold text-neutral-900 mb-4 flex items-center gap-2'>
               <CheckCircle className='w-5 h-5 text-green-500' />
               Indexing Results
             </h2>
