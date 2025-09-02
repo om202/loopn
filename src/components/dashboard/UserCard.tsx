@@ -175,8 +175,8 @@ export default function UserCard({
       onClick={handleCardClick}
       className={`px-3 py-3 group transition-all duration-200 cursor-pointer shadow-xs ${
         isSelected
-          ? 'bg-brand-50 rounded-xl border border-brand-100'
-          : 'bg-white hover:bg-neutral-50 rounded-lg border border-neutral-100 hover:border-brand-200'
+          ? 'bg-brand-50 rounded-xl border border-brand-200'
+          : 'bg-white hover:bg-neutral-50 rounded-lg border border-neutral-200 hover:border-brand-300'
       }`}
     >
       <div className='flex items-center gap-3'>

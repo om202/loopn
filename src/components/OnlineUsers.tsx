@@ -525,6 +525,13 @@ export default function OnlineUsers({
               </h2>
             </div>
           )}
+          {activeSection === 'saved' && (
+            <div>
+              <h2 className='text-xl sm:text-2xl font-bold text-neutral-900'>
+                Saved
+              </h2>
+            </div>
+          )}
           {activeSection === 'search' && (
             <div>
               <h2 className='text-xl sm:text-2xl font-bold text-neutral-900'>

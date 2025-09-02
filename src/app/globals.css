@@ -1,70 +1,70 @@
 @import 'tailwindcss';
 
 @theme {
-  /* Custom brand colors - Playful Saturated Purple */
-  --color-brand-50: oklch(0.97 0.04 258);
-  --color-brand-100: oklch(0.94 0.09 258);
-  --color-brand-200: oklch(0.88 0.13 258);
-  --color-brand-300: oklch(0.8 0.18 258);
-  --color-brand-400: oklch(0.72 0.21 258);
-  --color-brand-500: oklch(0.6474 0.23 258);
-  --color-brand-600: oklch(0.56 0.25 258);
-  --color-brand-700: oklch(0.48 0.23 258);
-  --color-brand-800: oklch(0.4 0.21 258);
-  --color-brand-900: oklch(0.32 0.18 258);
-  --color-brand-950: oklch(0.25 0.16 258);
+  /* Custom brand colors - Dropbox Blue (#0061FE) */
+  --color-brand-50: oklch(0.97 0.04 250);
+  --color-brand-100: oklch(0.94 0.08 250);
+  --color-brand-200: oklch(0.88 0.12 250);
+  --color-brand-300: oklch(0.8 0.16 250);
+  --color-brand-400: oklch(0.72 0.2 250);
+  --color-brand-500: oklch(0.58 0.24 250);
+  --color-brand-600: oklch(0.52 0.26 250);
+  --color-brand-700: oklch(0.45 0.24 250);
+  --color-brand-800: oklch(0.38 0.22 250);
+  --color-brand-900: oklch(0.3 0.18 250);
+  --color-brand-950: oklch(0.23 0.15 250);
 
-  /* Custom red colors - Playful Saturated Red */
-  --color-b_red-50: oklch(0.97 0.04 32);
-  --color-b_red-100: oklch(0.94 0.08 32);
-  --color-b_red-200: oklch(0.88 0.13 32);
-  --color-b_red-300: oklch(0.8 0.18 32);
-  --color-b_red-400: oklch(0.7 0.21 32);
-  --color-b_red-500: oklch(0.6132 0.24 32);
-  --color-b_red-600: oklch(0.55 0.26 32);
-  --color-b_red-700: oklch(0.46 0.24 32);
-  --color-b_red-800: oklch(0.38 0.21 32);
-  --color-b_red-900: oklch(0.32 0.18 32);
-  --color-b_red-950: oklch(0.25 0.16 32);
+  /* Custom red colors - Professional Red */
+  --color-b_red-50: oklch(0.97 0.03 25);
+  --color-b_red-100: oklch(0.94 0.06 25);
+  --color-b_red-200: oklch(0.88 0.1 25);
+  --color-b_red-300: oklch(0.8 0.14 25);
+  --color-b_red-400: oklch(0.7 0.18 25);
+  --color-b_red-500: oklch(0.6132 0.2 25);
+  --color-b_red-600: oklch(0.55 0.22 25);
+  --color-b_red-700: oklch(0.46 0.2 25);
+  --color-b_red-800: oklch(0.38 0.18 25);
+  --color-b_red-900: oklch(0.32 0.15 25);
+  --color-b_red-950: oklch(0.25 0.12 25);
 
-  /* Custom green colors - Playful Saturated Green */
-  --color-b_green-50: oklch(0.97 0.04 140);
-  --color-b_green-100: oklch(0.94 0.08 140);
-  --color-b_green-200: oklch(0.88 0.13 140);
-  --color-b_green-300: oklch(0.8 0.18 140);
-  --color-b_green-400: oklch(0.7 0.21 140);
-  --color-b_green-500: oklch(0.6132 0.24 140);
-  --color-b_green-600: oklch(0.55 0.26 140);
-  --color-b_green-700: oklch(0.46 0.24 140);
-  --color-b_green-800: oklch(0.38 0.21 140);
-  --color-b_green-900: oklch(0.32 0.18 140);
-  --color-b_green-950: oklch(0.25 0.16 140);
+  /* Custom green colors - Professional Green */
+  --color-b_green-50: oklch(0.97 0.03 145);
+  --color-b_green-100: oklch(0.94 0.06 145);
+  --color-b_green-200: oklch(0.88 0.1 145);
+  --color-b_green-300: oklch(0.8 0.14 145);
+  --color-b_green-400: oklch(0.7 0.18 145);
+  --color-b_green-500: oklch(0.6132 0.2 145);
+  --color-b_green-600: oklch(0.55 0.22 145);
+  --color-b_green-700: oklch(0.46 0.2 145);
+  --color-b_green-800: oklch(0.38 0.18 145);
+  --color-b_green-900: oklch(0.32 0.15 145);
+  --color-b_green-950: oklch(0.25 0.12 145);
 
-  /* Custom yellow colors - Playful Saturated Yellow */
-  --color-b_yellow-50: oklch(0.97 0.04 88);
-  --color-b_yellow-100: oklch(0.94 0.08 88);
-  --color-b_yellow-200: oklch(0.88 0.13 88);
-  --color-b_yellow-300: oklch(0.8 0.18 88);
-  --color-b_yellow-400: oklch(0.7 0.21 88);
-  --color-b_yellow-500: oklch(0.6132 0.24 88);
-  --color-b_yellow-600: oklch(0.55 0.26 88);
-  --color-b_yellow-700: oklch(0.46 0.24 88);
-  --color-b_yellow-800: oklch(0.38 0.21 88);
-  --color-b_yellow-900: oklch(0.32 0.18 88);
-  --color-b_yellow-950: oklch(0.25 0.16 88);
+  /* Custom yellow colors - Professional Yellow */
+  --color-b_yellow-50: oklch(0.97 0.03 85);
+  --color-b_yellow-100: oklch(0.94 0.06 85);
+  --color-b_yellow-200: oklch(0.88 0.1 85);
+  --color-b_yellow-300: oklch(0.8 0.14 85);
+  --color-b_yellow-400: oklch(0.7 0.18 85);
+  --color-b_yellow-500: oklch(0.6132 0.2 85);
+  --color-b_yellow-600: oklch(0.55 0.22 85);
+  --color-b_yellow-700: oklch(0.46 0.2 85);
+  --color-b_yellow-800: oklch(0.38 0.18 85);
+  --color-b_yellow-900: oklch(0.32 0.15 85);
+  --color-b_yellow-950: oklch(0.25 0.12 85);
 
-  /* Custom orange colors - Playful Saturated Orange */
-  --color-b_orange-50: oklch(0.97 0.04 58);
-  --color-b_orange-100: oklch(0.94 0.08 58);
-  --color-b_orange-200: oklch(0.88 0.13 58);
-  --color-b_orange-300: oklch(0.8 0.18 58);
-  --color-b_orange-400: oklch(0.7 0.21 58);
-  --color-b_orange-500: oklch(0.6132 0.24 58);
-  --color-b_orange-600: oklch(0.55 0.26 58);
-  --color-b_orange-700: oklch(0.46 0.24 58);
-  --color-b_orange-800: oklch(0.38 0.21 58);
-  --color-b_orange-900: oklch(0.32 0.18 58);
-  --color-b_orange-950: oklch(0.25 0.16 58);
+  /* Custom orange colors - Professional Orange */
+  --color-b_orange-50: oklch(0.97 0.03 55);
+  --color-b_orange-100: oklch(0.94 0.06 55);
+  --color-b_orange-200: oklch(0.88 0.1 55);
+  --color-b_orange-300: oklch(0.8 0.14 55);
+  --color-b_orange-400: oklch(0.7 0.18 55);
+  --color-b_orange-500: oklch(0.6132 0.2 55);
+  --color-b_orange-600: oklch(0.55 0.22 55);
+  --color-b_orange-700: oklch(0.46 0.2 55);
+  --color-b_orange-800: oklch(0.38 0.18 55);
+  --color-b_orange-900: oklch(0.32 0.15 55);
+  --color-b_orange-950: oklch(0.25 0.12 55);
 }
 
 /* Set root font size to 15px instead of default 16px */
