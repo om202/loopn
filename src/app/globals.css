@@ -2,17 +2,17 @@
 
 @theme {
   /* Custom brand colors - Playful Saturated Purple */
-  --color-brand-50: oklch(0.97 0.06 258);
-  --color-brand-100: oklch(0.94 0.11 258);
-  --color-brand-200: oklch(0.88 0.16 258);
-  --color-brand-300: oklch(0.8 0.21 258);
-  --color-brand-400: oklch(0.72 0.24 258);
-  --color-brand-500: oklch(0.6474 0.26 258);
-  --color-brand-600: oklch(0.56 0.28 258);
-  --color-brand-700: oklch(0.48 0.26 258);
-  --color-brand-800: oklch(0.4 0.24 258);
-  --color-brand-900: oklch(0.32 0.21 258);
-  --color-brand-950: oklch(0.25 0.19 258);
+  --color-brand-50: oklch(0.97 0.04 258);
+  --color-brand-100: oklch(0.94 0.09 258);
+  --color-brand-200: oklch(0.88 0.13 258);
+  --color-brand-300: oklch(0.8 0.18 258);
+  --color-brand-400: oklch(0.72 0.21 258);
+  --color-brand-500: oklch(0.6474 0.23 258);
+  --color-brand-600: oklch(0.56 0.25 258);
+  --color-brand-700: oklch(0.48 0.23 258);
+  --color-brand-800: oklch(0.4 0.21 258);
+  --color-brand-900: oklch(0.32 0.18 258);
+  --color-brand-950: oklch(0.25 0.16 258);
 
   /* Custom red colors - Playful Saturated Red */
   --color-b_red-50: oklch(0.97 0.04 32);
