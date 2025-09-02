@@ -611,7 +611,10 @@ export default function HomePage() {
       </section>
 
       {/* How It Works */}
-      <section id='how-it-works' className='py-8 sm:py-12 bg-white relative border-t border-neutral-200'>
+      <section
+        id='how-it-works'
+        className='py-8 sm:py-12 bg-white relative border-t border-neutral-200'
+      >
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-1/3 right-0 w-96 h-96 bg-brand-50/60 rounded-full blur-3xl' />
