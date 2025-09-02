@@ -5,7 +5,6 @@ import { useAuthenticator } from '@aws-amplify/ui-react';
 import {
   MessageSquare,
   ArrowRight,
-  CheckCircle,
   Zap,
   Brain,
   Shield,
@@ -152,25 +151,31 @@ export default function HomePage() {
                 <Image
                   src='/loopn.svg'
                   alt='Loopn'
-                  width={48}
-                  height={48}
+                  width={40}
+                  height={40}
                   priority
                 />
                 <h2 className='text-3xl font-bold text-brand-600'>Loopn</h2>
               </div>
 
-              <h1 className='text-4xl sm:text-5xl font-semibold text-neutral-900 mb-8 sm:mb-14 leading-tight'>
+              <h1 className='text-4xl sm:text-5xl font-semibold text-neutral-900 mt-4 sm:mt-6 mb-4 sm:mb-6 leading-tight'>
                 Professional Networking{' '}
-                <span className='text-brand-600'>That Actually Matters</span>
+                <span className='text-brand-600'>Made Simple</span>
               </h1>
 
-              <div className='mb-6 sm:mb-12 max-w-lg mx-auto lg:mx-0'>
-                <p className='text-lg sm:text-xl text-neutral-600 leading-relaxed font-medium'>
-                  Upload your resume. Get matched instantly. Start connecting
-                  with professionals who complement your skills and career
-                  goals.
-                </p>
-              </div>
+              <h2 className='mb-10 sm:mb-12 max-w-lg mx-auto lg:mx-0'>
+                <div className='text-lg sm:text-xl text-neutral-700 font-semibold flex items-center justify-center lg:justify-start gap-3 flex-wrap'>
+                  <span>Join Loopn</span>
+                  <ArrowRight className='w-5 h-5 text-neutral-700 flex-shrink-0' strokeWidth={3.5} />
+                  <span>Get Matched</span>
+                  <ArrowRight className='w-5 h-5 text-neutral-700 flex-shrink-0' strokeWidth={3.5} />
+                  <span>Start Connecting</span>
+                </div>
+              </h2>
+
+              <p className='text-base sm:text-lg text-neutral-600 mb-6 sm:mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed'>
+                Loopn analyzes your profile and helps you connect with professionals using our personalized matching algorithm
+              </p>
 
               {/* CTA Buttons */}
               <div className='flex flex-row gap-3 sm:gap-6 justify-center lg:justify-start'>
@@ -234,7 +239,7 @@ export default function HomePage() {
                     </div>
 
                     <div className='flex-1 min-w-0'>
-                      <h1 className='text-base font-semibold text-black truncate'>
+                      <h1 className='text-base font-semibold text-neutral-900 truncate'>
                         Sarah Chen
                       </h1>
                       <div className='text-sm text-neutral-500 truncate'>
@@ -422,7 +427,7 @@ export default function HomePage() {
               Professional Networking, Reimagined
             </h2>
             <p className='text-lg text-neutral-600 leading-relaxed font-medium'>
-              Connect with professionals who actually matter to your career.
+              Connect with professionals who actually matter to your career and without a lot of noise
             </p>
           </div>
 
@@ -471,30 +476,30 @@ export default function HomePage() {
               </p>
               <ul className='space-y-4'>
                 <li className='flex items-center gap-3 text-neutral-600'>
-                  <CheckCircle
+                  <ArrowRight
                     className='w-4 h-4 text-brand-600 flex-shrink-0'
                     strokeWidth={2.5}
                   />
                   <span className='font-medium text-base'>
-                    AI analyzes your resume in seconds
+                    Algorithm analyzes resume instantly
                   </span>
                 </li>
                 <li className='flex items-center gap-3 text-neutral-600'>
-                  <CheckCircle
+                  <ArrowRight
                     className='w-4 h-4 text-brand-600 flex-shrink-0'
                     strokeWidth={2.5}
                   />
                   <span className='font-medium text-base'>
-                    Smart compatibility matching
+                    Personalized compatibility matching
                   </span>
                 </li>
                 <li className='flex items-center gap-3 text-neutral-600'>
-                  <CheckCircle
+                  <ArrowRight
                     className='w-4 h-4 text-brand-600 flex-shrink-0'
                     strokeWidth={2.5}
                   />
                   <span className='font-medium text-base'>
-                    Industry-specific results
+                    Personalized industry-specific results
                   </span>
                 </li>
               </ul>
@@ -511,16 +516,16 @@ export default function HomePage() {
               </p>
               <ul className='space-y-4'>
                 <li className='flex items-center gap-3 text-neutral-600'>
-                  <CheckCircle
+                  <ArrowRight
                     className='w-4 h-4 text-brand-600 flex-shrink-0'
                     strokeWidth={2.5}
                   />
                   <span className='font-medium text-base'>
-                    See who's online now
+                    See personalized matches online
                   </span>
                 </li>
                 <li className='flex items-center gap-3 text-neutral-600'>
-                  <CheckCircle
+                  <ArrowRight
                     className='w-4 h-4 text-brand-600 flex-shrink-0'
                     strokeWidth={2.5}
                   />
@@ -529,7 +534,7 @@ export default function HomePage() {
                   </span>
                 </li>
                 <li className='flex items-center gap-3 text-neutral-600'>
-                  <CheckCircle
+                  <ArrowRight
                     className='w-4 h-4 text-brand-600 flex-shrink-0'
                     strokeWidth={2.5}
                   />
@@ -552,7 +557,7 @@ export default function HomePage() {
               </p>
               <ul className='space-y-4'>
                 <li className='flex items-center gap-3 text-neutral-600'>
-                  <CheckCircle
+                  <ArrowRight
                     className='w-4 h-4 text-brand-600 flex-shrink-0'
                     strokeWidth={2.5}
                   />
@@ -561,7 +566,7 @@ export default function HomePage() {
                   </span>
                 </li>
                 <li className='flex items-center gap-3 text-neutral-600'>
-                  <CheckCircle
+                  <ArrowRight
                     className='w-4 h-4 text-brand-600 flex-shrink-0'
                     strokeWidth={2.5}
                   />
@@ -570,7 +575,7 @@ export default function HomePage() {
                   </span>
                 </li>
                 <li className='flex items-center gap-3 text-neutral-600'>
-                  <CheckCircle
+                  <ArrowRight
                     className='w-4 h-4 text-brand-600 flex-shrink-0'
                     strokeWidth={2.5}
                   />
@@ -817,7 +822,7 @@ export default function HomePage() {
       </section>
 
       {/* Final CTA Section */}
-      <section className='py-8 sm:py-12 bg-white text-black relative overflow-hidden'>
+      <section className='py-8 sm:py-12 bg-white text-neutral-900 relative overflow-hidden'>
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl' />

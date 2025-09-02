@@ -221,7 +221,7 @@ export default function NotificationItem({
           >
             {/* Name and Timestamp */}
             <div className='flex items-center gap-2 flex-wrap'>
-              <h4 className='text-base font-medium text-black truncate no-email-detection'>
+              <h4 className='text-base font-medium text-neutral-900 truncate no-email-detection'>
                 {notification.title}
               </h4>
               <span className='text-sm text-neutral-500 font-medium flex-shrink-0'>

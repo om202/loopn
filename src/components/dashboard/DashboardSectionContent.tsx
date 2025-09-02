@@ -318,7 +318,7 @@ export default function DashboardSectionContent({
           <div className='w-16 h-16 mx-auto mb-4 bg-neutral-100 rounded-full flex items-center justify-center'>
             <EmptyIcon className='w-8 h-8 text-neutral-500' />
           </div>
-          <h3 className='text-lg font-medium text-black mb-1'>
+          <h3 className='text-lg font-medium text-neutral-900 mb-1'>
             {emptyMessage}
           </h3>
         </div>

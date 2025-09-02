@@ -58,7 +58,7 @@ export default function ChatHeader({
             {/* Back Button */}
             <button
               onClick={onBack}
-              className='p-1.5 sm:p-2 -ml-1 sm:-ml-2 text-neutral-500 hover:text-black hover:bg-neutral-100 rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2'
+              className='p-1.5 sm:p-2 -ml-1 sm:-ml-2 text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100 rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2'
             >
               <svg
                 className='w-4 h-4 sm:w-5 sm:h-5'
@@ -96,7 +96,7 @@ export default function ChatHeader({
             />
 
             <div className='flex-1 min-w-0'>
-              <h1 className='text-sm sm:text-base font-medium text-black truncate no-email-detection mb-1'>
+              <h1 className='text-sm sm:text-base font-medium text-neutral-900 truncate no-email-detection mb-1'>
                 {getUserDisplayName()}
               </h1>
 

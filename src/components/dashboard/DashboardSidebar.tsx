@@ -172,7 +172,7 @@ export default function DashboardSidebar({
                   className={`relative w-full flex items-center gap-3 px-2 py-2 rounded-lg text-left group transition-colors ${
                     activeSection === id
                       ? 'text-brand-600 bg-brand-50 font-medium'
-                      : 'text-black hover:bg-neutral-50 font-medium'
+                      : 'text-neutral-900 hover:bg-neutral-50 font-medium'
                   }`}
                 >
                   <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -220,7 +220,7 @@ export default function DashboardSidebar({
             {/* Bug Report Button */}
             <button
               onClick={() => setIsBugReportOpen(true)}
-              className='relative w-full flex items-center gap-3 px-2 py-2 rounded-lg text-left group transition-colors text-black hover:bg-neutral-50 font-medium'
+              className='relative w-full flex items-center gap-3 px-2 py-2 rounded-lg text-left group transition-colors text-neutral-900 hover:bg-neutral-50 font-medium'
             >
               <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
                 <Bug className='w-4 h-4' />
@@ -234,7 +234,7 @@ export default function DashboardSidebar({
               className={`relative w-full flex items-center gap-3 px-2 py-2 rounded-lg text-left group transition-colors ${
                 activeSection === accountItem.id
                   ? 'text-brand-600 bg-brand-50 font-medium'
-                  : 'text-black hover:bg-neutral-50 font-medium'
+                  : 'text-neutral-900 hover:bg-neutral-50 font-medium'
               }`}
             >
               <div className='flex-shrink-0 flex items-center justify-center'>
@@ -254,7 +254,7 @@ export default function DashboardSidebar({
                 />
               </div>
               <div className='flex-1 min-w-0'>
-                <div className={`text-black text-sm font-medium truncate`}>
+                <div className={`text-neutral-900 text-sm font-medium truncate`}>
                   {accountItem.label}
                 </div>
                 <div className='text-sm text-neutral-500'>Account</div>
@@ -279,7 +279,7 @@ export default function DashboardSidebar({
                 className={`relative flex-1 flex flex-col items-center justify-center gap-1 px-1 py-2 transition-colors duration-150 ${
                   activeSection === id
                     ? 'text-brand-600'
-                    : 'text-black hover:text-black'
+                    : 'text-neutral-900 hover:text-neutral-900'
                 }`}
                 title={label}
               >

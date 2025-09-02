@@ -347,7 +347,7 @@ export default function DashboardDemo() {
 
                 <div className='flex-1 min-w-0'>
                   <div className='flex items-center gap-2 mb-1'>
-                    <div className='text-black text-base truncate no-email-detection font-medium'>
+                    <div className='text-neutral-900 text-base truncate no-email-detection font-medium'>
                       {user.name}
                     </div>
                   </div>
@@ -414,7 +414,7 @@ export default function DashboardDemo() {
 
               <div className='flex-1 min-w-0'>
                 <div className='flex items-center gap-2 mb-1'>
-                  <div className='text-black truncate no-email-detection font-medium'>
+                  <div className='text-neutral-900 truncate no-email-detection font-medium'>
                     {user.name}
                   </div>
                 </div>
@@ -477,7 +477,7 @@ export default function DashboardDemo() {
               </div>
 
               <div className='flex-1 min-w-0'>
-                <div className='text-black font-medium mb-1'>
+                <div className='text-neutral-900 font-medium mb-1'>
                   {connection.name}
                 </div>
                 <div className='text-sm text-neutral-500 mb-1'>
@@ -526,7 +526,7 @@ export default function DashboardDemo() {
               </div>
 
               <div className='flex-1 min-w-0'>
-                <div className='text-base font-medium text-black mb-1'>
+                <div className='text-base font-medium text-neutral-900 mb-1'>
                   <span className=''>{notification.title}</span>{' '}
                   {notification.content}
                 </div>
@@ -571,7 +571,7 @@ export default function DashboardDemo() {
           />
           <div className='flex items-start justify-between w-full'>
             <div>
-              <h3 className='font-semibold text-black text-lg mb-1'>
+              <h3 className='font-semibold text-neutral-900 text-lg mb-1'>
                 {currentUser.name}
               </h3>
               <p className='text-base text-neutral-500 font-medium'>
@@ -611,7 +611,7 @@ export default function DashboardDemo() {
                 Experience
               </span>
             </div>
-            <p className='text-black'>{currentUser.experience}</p>
+            <p className='text-neutral-900'>{currentUser.experience}</p>
           </div>
 
           <div className='p-4 bg-white border border-neutral-200 rounded-xl'>
@@ -621,7 +621,7 @@ export default function DashboardDemo() {
                 Education
               </span>
             </div>
-            <p className='text-black'>{currentUser.education}</p>
+            <p className='text-neutral-900'>{currentUser.education}</p>
           </div>
 
           <div className='p-4 bg-white border border-neutral-200 rounded-xl'>
@@ -665,7 +665,7 @@ export default function DashboardDemo() {
               <User className='w-4 h-4 text-neutral-500' />
               <span className='text-sm font-medium text-neutral-500'>About</span>
             </div>
-            <p className='text-black leading-relaxed'>{currentUser.about}</p>
+            <p className='text-neutral-900 leading-relaxed'>{currentUser.about}</p>
           </div>
         </div>
       </div>
@@ -682,7 +682,7 @@ export default function DashboardDemo() {
           <div className='w-16 h-16 mx-auto mb-4 bg-neutral-100 rounded-full flex items-center justify-center'>
             <Search className='w-8 h-8 text-neutral-500' />
           </div>
-          <h3 className='text-lg font-medium text-black mb-2'>
+          <h3 className='text-lg font-medium text-neutral-900 mb-2'>
             No results found
           </h3>
           <p className='text-neutral-500'>Try searching for something else</p>
@@ -712,7 +712,7 @@ export default function DashboardDemo() {
                 </div>
 
                 <div className='flex-1 min-w-0'>
-                  <div className='text-black font-medium mb-1'>{user.name}</div>
+                  <div className='text-neutral-900 font-medium mb-1'>{user.name}</div>
                   <div className='text-sm text-neutral-500 mb-2'>{user.role}</div>
                   <div className='flex flex-wrap gap-1'>
                     {user.skills.slice(0, 3).map((skill, idx) => (
@@ -757,7 +757,7 @@ export default function DashboardDemo() {
                   priority
                 />
                 <div className='flex items-center gap-2'>
-                  <h1 className='text-2xl font-bold text-black'>Loopn</h1>
+                  <h1 className='text-2xl font-bold text-neutral-900'>Loopn</h1>
                 </div>
               </div>
             </div>
@@ -773,7 +773,7 @@ export default function DashboardDemo() {
                   className={`relative w-full flex items-center gap-3 px-2 py-2 rounded-lg text-left group transition-colors ${
                     activeSection === id
                       ? 'text-brand-600 bg-brand-50 font-medium'
-                      : 'text-black hover:bg-neutral-50'
+                      : 'text-neutral-900 hover:bg-neutral-50'
                   }`}
                 >
                   <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -808,7 +808,7 @@ export default function DashboardDemo() {
               className={`relative w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-left group border transition-colors duration-150 ${
                 activeSection === 'account'
                   ? 'bg-brand-50 text-brand-600 border-brand-200'
-                  : 'text-black hover:bg-neutral-100 hover:text-black border-transparent'
+                  : 'text-neutral-900 hover:bg-neutral-100 hover:text-neutral-900 border-transparent'
               }`}
             >
               <div className='w-5 h-5 flex-shrink-0 flex items-center justify-center'>
@@ -877,7 +877,7 @@ export default function DashboardDemo() {
           <div className='flex-shrink-0 mb-4 sm:mb-5 lg:mb-6'>
             {activeSection === 'suggested' && (
               <>
-                <h2 className='text-2xl font-bold text-black mb-1'>Discover</h2>
+                <h2 className='text-2xl font-bold text-neutral-900 mb-1'>Discover</h2>
                 <p className='text-base text-neutral-500'>
                   AI-curated professionals based on your interests
                 </p>
@@ -885,7 +885,7 @@ export default function DashboardDemo() {
             )}
             {activeSection === 'connections' && (
               <>
-                <h2 className='text-2xl font-bold text-black mb-1'>
+                <h2 className='text-2xl font-bold text-neutral-900 mb-1'>
                   Connections
                 </h2>
                 <p className='text-base text-neutral-500'>
@@ -895,7 +895,7 @@ export default function DashboardDemo() {
             )}
             {activeSection === 'saved' && (
               <>
-                <h2 className='text-2xl font-bold text-black mb-1'>Saved</h2>
+                <h2 className='text-2xl font-bold text-neutral-900 mb-1'>Saved</h2>
                 <p className='text-base text-neutral-500'>
                   Professionals you've saved for later
                 </p>
@@ -903,7 +903,7 @@ export default function DashboardDemo() {
             )}
             {activeSection === 'notifications' && (
               <>
-                <h2 className='text-2xl font-bold text-black mb-1'>
+                <h2 className='text-2xl font-bold text-neutral-900 mb-1'>
                   Notifications
                 </h2>
                 <p className='text-base text-neutral-500'>
@@ -914,7 +914,7 @@ export default function DashboardDemo() {
 
             {activeSection === 'account' && (
               <>
-                <h2 className='text-xl font-bold text-black mb-1'>
+                <h2 className='text-xl font-bold text-neutral-900 mb-1'>
                   Your Profile
                 </h2>
                 <p className='text-sm text-neutral-500'>
@@ -924,7 +924,7 @@ export default function DashboardDemo() {
             )}
             {activeSection === 'search' && (
               <>
-                <h2 className='text-xl font-bold text-black mb-1'>
+                <h2 className='text-xl font-bold text-neutral-900 mb-1'>
                   Search Results
                 </h2>
                 <p className='text-sm text-neutral-500'>
@@ -957,7 +957,7 @@ export default function DashboardDemo() {
                 useLocal={true}
               />
               <div className='flex-1 min-w-0'>
-                <h3 className='text-sm font-semibold text-black truncate'>
+                <h3 className='text-sm font-semibold text-neutral-900 truncate'>
                   Jordan Blake
                 </h3>
                 <p className='text-sm text-neutral-500 truncate'>
@@ -1066,7 +1066,7 @@ export default function DashboardDemo() {
           <div className='mb-4'>
             {activeSection === 'suggested' && (
               <>
-                <h2 className='text-lg font-bold text-black mb-1'>
+                <h2 className='text-lg font-bold text-neutral-900 mb-1'>
                   Smart Matches for You
                 </h2>
                 <p className='text-sm text-neutral-500'>
@@ -1076,7 +1076,7 @@ export default function DashboardDemo() {
             )}
             {activeSection === 'connections' && (
               <>
-                <h2 className='text-lg font-bold text-black mb-1'>
+                <h2 className='text-lg font-bold text-neutral-900 mb-1'>
                   Your Connections
                 </h2>
                 <p className='text-sm text-neutral-500'>
@@ -1086,7 +1086,7 @@ export default function DashboardDemo() {
             )}
             {activeSection === 'saved' && (
               <>
-                <h2 className='text-lg font-bold text-black mb-1'>
+                <h2 className='text-lg font-bold text-neutral-900 mb-1'>
                   Saved Professionals
                 </h2>
                 <p className='text-sm text-neutral-500'>
@@ -1096,7 +1096,7 @@ export default function DashboardDemo() {
             )}
             {activeSection === 'notifications' && (
               <>
-                <h2 className='text-lg font-bold text-black mb-1'>
+                <h2 className='text-lg font-bold text-neutral-900 mb-1'>
                   Notifications
                 </h2>
                 <p className='text-sm text-neutral-500'>
@@ -1106,7 +1106,7 @@ export default function DashboardDemo() {
             )}
             {activeSection === 'search' && (
               <>
-                <h2 className='text-lg font-bold text-black mb-1'>
+                <h2 className='text-lg font-bold text-neutral-900 mb-1'>
                   Search Results
                 </h2>
                 <p className='text-sm text-neutral-500'>
@@ -1147,7 +1147,7 @@ export default function DashboardDemo() {
 
                     <div className='flex-1 min-w-0'>
                       <div className='flex items-center gap-2 mb-1'>
-                        <div className='text-black truncate no-email-detection font-medium text-sm'>
+                        <div className='text-neutral-900 truncate no-email-detection font-medium text-sm'>
                           {user.name}
                         </div>
                         {user.isOnline && (
@@ -1197,7 +1197,7 @@ export default function DashboardDemo() {
                     </div>
 
                     <div className='flex-1 min-w-0'>
-                      <div className='text-black font-medium text-sm mb-1'>
+                      <div className='text-neutral-900 font-medium text-sm mb-1'>
                         {connection.name}
                       </div>
                       <div className='text-sm text-neutral-500 mb-1'>
@@ -1243,7 +1243,7 @@ export default function DashboardDemo() {
                       </div>
 
                       <div className='flex-1 min-w-0'>
-                        <div className='text-black font-medium text-sm mb-1'>
+                        <div className='text-neutral-900 font-medium text-sm mb-1'>
                           {user.name}
                         </div>
                         <div className='text-sm text-neutral-500 mb-2'>
@@ -1295,7 +1295,7 @@ export default function DashboardDemo() {
                     </div>
 
                     <div className='flex-1 min-w-0'>
-                      <div className='text-sm font-medium text-black mb-1'>
+                      <div className='text-sm font-medium text-neutral-900 mb-1'>
                         <span className='font-semibold'>
                           {notification.title}
                         </span>{' '}
@@ -1329,7 +1329,7 @@ export default function DashboardDemo() {
                   <div className='w-16 h-16 mx-auto mb-4 bg-neutral-100 rounded-full flex items-center justify-center'>
                     <Search className='w-8 h-8 text-neutral-500' />
                   </div>
-                  <h3 className='text-lg font-medium text-black mb-2'>
+                  <h3 className='text-lg font-medium text-neutral-900 mb-2'>
                     {searchQuery
                       ? 'No results found'
                       : 'Search for professionals'}
@@ -1365,7 +1365,7 @@ export default function DashboardDemo() {
                       </div>
 
                       <div className='flex-1 min-w-0'>
-                        <div className='text-black font-medium text-sm mb-1'>
+                        <div className='text-neutral-900 font-medium text-sm mb-1'>
                           {user.name}
                         </div>
                         <div className='text-sm text-neutral-500 mb-2'>

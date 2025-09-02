@@ -348,7 +348,7 @@ export default function ProfileSidebar({
           {onBack && (
             <button
               onClick={onBack}
-              className='flex items-center gap-2 text-neutral-500 hover:text-black transition-colors'
+              className='flex items-center gap-2 text-neutral-500 hover:text-neutral-900 transition-colors'
             >
               <ArrowLeft className='w-4 h-4' />
               <span className='text-base font-medium'>Back</span>
@@ -364,7 +364,7 @@ export default function ProfileSidebar({
               {onClose && (
                 <button
                   onClick={onClose}
-                  className='p-1.5 text-neutral-500 hover:text-black transition-colors rounded-lg hover:bg-neutral-100'
+                  className='p-1.5 text-neutral-500 hover:text-neutral-900 transition-colors rounded-lg hover:bg-neutral-100'
                   title='Collapse sidebar'
                 >
                   <X className='w-[22px] h-[22px]' />
@@ -386,7 +386,7 @@ export default function ProfileSidebar({
               {/* Full Screen Button */}
               <button
                 onClick={() => setShowFullScreenDialog(true)}
-                className='p-1.5 text-neutral-500 hover:text-black transition-colors rounded-lg hover:bg-neutral-100'
+                className='p-1.5 text-neutral-500 hover:text-neutral-900 transition-colors rounded-lg hover:bg-neutral-100'
                 title='Open in full view'
               >
                 <Expand className='w-[18px] h-[18px]' />
@@ -396,7 +396,7 @@ export default function ProfileSidebar({
               {onClose && (
                 <button
                   onClick={onClose}
-                  className='p-1.5 text-neutral-500 hover:text-black transition-colors rounded-lg hover:bg-neutral-100'
+                  className='p-1.5 text-neutral-500 hover:text-neutral-900 transition-colors rounded-lg hover:bg-neutral-100'
                   title='Collapse sidebar'
                 >
                   <X className='w-[22px] h-[22px]' />
@@ -409,7 +409,7 @@ export default function ProfileSidebar({
           {onEndChat && (
             <button
               onClick={() => setShowEndChatDialog(true)}
-              className='text-sm text-neutral-500 hover:text-black transition-colors font-medium flex items-center gap-1.5'
+              className='text-sm text-neutral-500 hover:text-neutral-900 transition-colors font-medium flex items-center gap-1.5'
             >
               <>
                 <UserRoundMinus className='w-3.5 h-3.5' />
@@ -436,7 +436,7 @@ export default function ProfileSidebar({
             status={getUserStatus()}
           />
           <div className='mt-2'>
-            <div className='font-semibold text-black text-lg flex items-center justify-center gap-2'>
+            <div className='font-semibold text-neutral-900 text-lg flex items-center justify-center gap-2'>
               {getUserDisplayName()}
             </div>
             {/* Show trial chat expiration info when in sidebar context (not in chat) */}
@@ -475,7 +475,7 @@ export default function ProfileSidebar({
                   <ClockFading className='w-3.5 h-3.5 text-neutral-400' />
                   <span className='font-medium'>
                     Connection Expires in{' '}
-                    <span className='font-bold text-black text-base'>
+                    <span className='font-bold text-neutral-900 text-base'>
                       {timeLeft}
                     </span>
                   </span>
@@ -611,7 +611,7 @@ export default function ProfileSidebar({
         <div className='p-4'>
           {/* All conversations are now permanent connections */}
           <>
-            <h3 className='text-sm font-medium text-black text-center mb-3'>
+            <h3 className='text-sm font-medium text-neutral-900 text-center mb-3'>
               Remove {getUserDisplayName()} from your connections?
             </h3>
             <p className='text-base text-neutral-500 text-center mb-4'>
@@ -621,7 +621,7 @@ export default function ProfileSidebar({
             <div className='flex gap-2'>
               <button
                 onClick={() => setShowEndChatDialog(false)}
-                className='flex-1 px-3 py-2 text-base font-medium text-black bg-neutral-100 rounded-lg hover:bg-neutral-200 focus:outline-none transition-colors'
+                className='flex-1 px-3 py-2 text-base font-medium text-neutral-900 bg-neutral-100 rounded-lg hover:bg-neutral-200 focus:outline-none transition-colors'
               >
                 Cancel
               </button>
@@ -685,7 +685,7 @@ export default function ProfileSidebar({
                   </button>
                   <button
                     onClick={() => setShowFullScreenDialog(false)}
-                    className='p-2 text-neutral-500 hover:text-black transition-colors rounded-lg hover:bg-neutral-100'
+                    className='p-2 text-neutral-500 hover:text-neutral-900 transition-colors rounded-lg hover:bg-neutral-100'
                     title='Close'
                   >
                     <X className='w-[22px] h-[22px]' />

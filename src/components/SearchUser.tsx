@@ -240,7 +240,7 @@ export default function SearchUser({
                   WebkitAppearance: 'none',
                   MozAppearance: 'textfield',
                 }}
-                className={`w-full pl-4 py-3 rounded-l-xl border border-r-0 border-neutral-200 focus:outline-none focus:border-brand-300 text-black hover:bg-white transition-all duration-200 placeholder-neutral-500 ${isFocused ? 'bg-white shadow-sm' : 'bg-neutral-50'} ${query.trim() ? 'pr-10' : 'pr-4'}`}
+                className={`w-full pl-4 py-3 rounded-l-xl border border-r-0 border-neutral-200 focus:outline-none focus:border-brand-300 text-neutral-900 hover:bg-white transition-all duration-200 placeholder-neutral-500 ${isFocused ? 'bg-white shadow-sm' : 'bg-neutral-50'} ${query.trim() ? 'pr-10' : 'pr-4'}`}
               />
 
               {/* Clear button - only show when there's text */}

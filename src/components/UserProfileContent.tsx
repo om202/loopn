@@ -169,7 +169,7 @@ export default function UserProfileContent({
                 >
                   <div className='mb-1.5'>
                     <div className='flex justify-between items-start mb-1'>
-                      <h5 className='text-base font-semibold text-black flex-1 mr-2'>
+                      <h5 className='text-base font-semibold text-neutral-900 flex-1 mr-2'>
                         {job.position}
                       </h5>
                       <div className='text-sm text-neutral-500 font-medium whitespace-nowrap'>
@@ -203,7 +203,7 @@ export default function UserProfileContent({
             <div className='space-y-1.5'>
               {userProfile.jobRole && (
                 <div>
-                  <span className='text-base font-semibold text-black'>
+                  <span className='text-base font-semibold text-neutral-900'>
                     {userProfile.jobRole}
                   </span>
                   {userProfile.companyName && (
@@ -247,7 +247,7 @@ export default function UserProfileContent({
                   className='pb-1.5 last:pb-0 last:border-b-0 border-b border-neutral-100'
                 >
                   <div className='flex justify-between items-start mb-1'>
-                    <h5 className='text-base font-semibold text-black flex-1 mr-2'>
+                    <h5 className='text-base font-semibold text-neutral-900 flex-1 mr-2'>
                       {edu.degree}
                     </h5>
                     <div className='text-sm text-neutral-500 font-medium whitespace-nowrap'>
@@ -281,7 +281,7 @@ export default function UserProfileContent({
                   key={index}
                   className='pb-1.5 last:pb-0 last:border-b-0 border-b border-neutral-100'
                 >
-                  <h5 className='text-base font-semibold text-black mb-1'>
+                  <h5 className='text-base font-semibold text-neutral-900 mb-1'>
                     {project.title}
                   </h5>
                   {project.description && (
@@ -314,7 +314,7 @@ export default function UserProfileContent({
                   key={index}
                   className='pb-1.5 last:pb-0 last:border-b-0 border-b border-neutral-100'
                 >
-                  <h5 className='text-base font-semibold text-black'>
+                  <h5 className='text-base font-semibold text-neutral-900'>
                     {cert.name}
                   </h5>
                   <p className='text-base text-neutral-700'>{cert.issuer}</p>
@@ -343,7 +343,7 @@ export default function UserProfileContent({
                   key={index}
                   className='pb-1.5 last:pb-0 last:border-b-0 border-b border-neutral-100'
                 >
-                  <h5 className='text-base font-semibold text-black'>
+                  <h5 className='text-base font-semibold text-neutral-900'>
                     {award.title}
                   </h5>
                   <p className='text-base text-neutral-700'>{award.issuer}</p>
@@ -374,7 +374,7 @@ export default function UserProfileContent({
             <div className='grid grid-cols-2 gap-2'>
               {userProfile.languages.map((lang: any, index: number) => (
                 <div key={index} className='flex justify-between items-center'>
-                  <span className='text-base font-medium text-black'>
+                  <span className='text-base font-medium text-neutral-900'>
                     {lang.language}
                   </span>
                   <span className='text-sm text-neutral-500 font-medium whitespace-nowrap'>
@@ -400,7 +400,7 @@ export default function UserProfileContent({
                   key={index}
                   className='pb-1.5 last:pb-0 last:border-b-0 border-b border-neutral-100'
                 >
-                  <h5 className='text-base font-semibold text-black'>
+                  <h5 className='text-base font-semibold text-neutral-900'>
                     {pub.title}
                   </h5>
                   <p className='text-base text-neutral-700 italic'>{pub.venue}</p>

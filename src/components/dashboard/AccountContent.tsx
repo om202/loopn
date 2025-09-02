@@ -103,7 +103,7 @@ export default function AccountContent() {
           />
           <div className='flex items-start justify-between w-full'>
             <div>
-              <h3 className='font-semibold text-black text-lg mb-1'>
+              <h3 className='font-semibold text-neutral-900 text-lg mb-1'>
                 {getUserDisplayName()}
               </h3>
               <p className='text-base text-neutral-500 font-medium'>

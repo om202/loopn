@@ -63,7 +63,7 @@ export default function ResetPasswordForm({
         <div>
           <label
             htmlFor='confirmationCode'
-            className='block text-sm font-medium text-black mb-3'
+            className='block text-sm font-medium text-neutral-900 mb-3'
           >
             Verification code
           </label>
@@ -100,7 +100,7 @@ export default function ResetPasswordForm({
         <div>
           <label
             htmlFor='newPassword'
-            className='block text-sm font-medium text-black mb-3'
+            className='block text-sm font-medium text-neutral-900 mb-3'
           >
             New password
           </label>
@@ -127,7 +127,7 @@ export default function ResetPasswordForm({
         <div>
           <label
             htmlFor='confirmPassword'
-            className='block text-sm font-medium text-black mb-3'
+            className='block text-sm font-medium text-neutral-900 mb-3'
           >
             Confirm new password
           </label>

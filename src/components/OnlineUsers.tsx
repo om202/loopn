@@ -481,7 +481,7 @@ export default function OnlineUsers({
           {activeSection === 'notifications' && (
             <div className='flex items-start justify-between'>
               <div>
-                <h2 className='text-2xl sm:text-2xl font-bold text-black'>
+                <h2 className='text-2xl sm:text-2xl font-bold text-neutral-900'>
                   Recent Activity
                 </h2>
               </div>
@@ -499,7 +499,7 @@ export default function OnlineUsers({
           {activeSection === 'account' && (
             <div className='flex items-start justify-between'>
               <div>
-                <h2 className='text-2xl sm:text-2xl font-bold text-black'>
+                <h2 className='text-2xl sm:text-2xl font-bold text-neutral-900'>
                   Your Profile
                 </h2>
               </div>
@@ -513,21 +513,21 @@ export default function OnlineUsers({
           )}
           {activeSection === 'connections' && (
             <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-black'>
+              <h2 className='text-xl sm:text-2xl font-bold text-neutral-900'>
                 Connections
               </h2>
             </div>
           )}
           {activeSection === 'suggested' && (
             <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-black'>
+              <h2 className='text-xl sm:text-2xl font-bold text-neutral-900'>
                 Professionals
               </h2>
             </div>
           )}
           {activeSection === 'search' && (
             <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-black'>
+              <h2 className='text-xl sm:text-2xl font-bold text-neutral-900'>
                 Search Results
               </h2>
             </div>

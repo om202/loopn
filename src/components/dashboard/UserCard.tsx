@@ -204,7 +204,7 @@ export default function UserCard({
 
         <div className='flex-1 min-w-0'>
           <div className='flex items-center gap-2 mb-1'>
-            <div className='text-black text-base truncate no-email-detection font-medium'>
+            <div className='text-neutral-900 text-base truncate no-email-detection font-medium'>
               {getDisplayName(userPresence, userProfile)}
             </div>
             {/* All connections are now permanent - no trial indicators needed */}
@@ -349,7 +349,7 @@ export default function UserCard({
             </h2>
             <button
               onClick={() => setShowProfileDialog(false)}
-              className='p-2 text-neutral-500 hover:text-black transition-colors rounded-lg hover:bg-neutral-100'
+              className='p-2 text-neutral-500 hover:text-neutral-900 transition-colors rounded-lg hover:bg-neutral-100'
               title='Close'
             >
               <X className='w-5 h-5' />
@@ -425,17 +425,17 @@ export default function UserCard({
         maxWidth='sm'
       >
         <div className='p-4'>
-          <h3 className='text-lg font-medium text-black text-center mb-3'>
+          <h3 className='text-lg font-medium text-neutral-900 text-center mb-3'>
             Cancel Connection Request?
           </h3>
-          <p className='text-base text-black text-center mb-4'>
+          <p className='text-base text-neutral-900 text-center mb-4'>
             This will cancel your pending connection request to{' '}
             {getDisplayName(userPresence, userProfile)}.
           </p>
           <div className='flex gap-2'>
             <button
               onClick={() => setShowCancelDialog(false)}
-              className='flex-1 px-3 py-2 text-base font-medium text-black bg-neutral-100 rounded-lg hover:bg-neutral-100 focus:outline-none transition-colors'
+              className='flex-1 px-3 py-2 text-base font-medium text-neutral-900 bg-neutral-100 rounded-lg hover:bg-neutral-100 focus:outline-none transition-colors'
             >
               Done
             </button>

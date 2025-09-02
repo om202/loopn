@@ -631,7 +631,7 @@ export default function OnboardingPage() {
           {/* Step: Personal & Professional Information */}
           {getCurrentStepInfo().key === 'personal' && (
             <div className='space-y-6'>
-              <h2 className='text-xl font-semibold text-black mb-6'>
+              <h2 className='text-xl font-semibold text-neutral-900 mb-6'>
                 Personal & Professional Info
               </h2>
 
@@ -906,7 +906,7 @@ export default function OnboardingPage() {
           {/* Step: Work Experience */}
           {getCurrentStepInfo().key === 'workExperience' && (
             <div className='space-y-6'>
-              <h2 className='text-xl font-semibold text-black mb-4'>
+              <h2 className='text-xl font-semibold text-neutral-900 mb-4'>
                 Work Experience
               </h2>
               <p className='text-sm text-neutral-500 mb-4'>
@@ -1008,7 +1008,7 @@ export default function OnboardingPage() {
           {/* Step: Education & Projects */}
           {getCurrentStepInfo().key === 'educationProjects' && (
             <div className='space-y-6'>
-              <h2 className='text-xl font-semibold text-black mb-4'>
+              <h2 className='text-xl font-semibold text-neutral-900 mb-4'>
                 Education & Projects
               </h2>
               <p className='text-sm text-neutral-500 mb-4'>
@@ -1189,7 +1189,7 @@ export default function OnboardingPage() {
           {/* Step: Additional Qualifications */}
           {getCurrentStepInfo().key === 'qualifications' && (
             <div className='space-y-6'>
-              <h2 className='text-xl font-semibold text-black mb-4'>
+              <h2 className='text-xl font-semibold text-neutral-900 mb-4'>
                 Additional Qualifications
               </h2>
               <p className='text-sm text-neutral-500 mb-4'>
@@ -1503,7 +1503,7 @@ export default function OnboardingPage() {
           {/* Step: About Section */}
           {getCurrentStepInfo().key === 'about' && (
             <div className='space-y-8'>
-              <h2 className='text-xl font-semibold text-black mb-4'>
+              <h2 className='text-xl font-semibold text-neutral-900 mb-4'>
                 About You
               </h2>
 
@@ -1702,7 +1702,7 @@ export default function OnboardingPage() {
           {/* Step: Interests & Hobbies */}
           {getCurrentStepInfo().key === 'interests' && (
             <div className='space-y-6'>
-              <h2 className='text-xl font-semibold text-black mb-4'>
+              <h2 className='text-xl font-semibold text-neutral-900 mb-4'>
                 Interests & Hobbies
               </h2>
               <p className='text-neutral-500 mb-4'>
@@ -1738,7 +1738,7 @@ export default function OnboardingPage() {
                     key={group.title}
                     className={`${idx !== 0 ? 'pt-6 mt-6 border-t border-neutral-200' : ''}`}
                   >
-                    <div className='font-medium text-black mb-4'>
+                    <div className='font-medium text-neutral-900 mb-4'>
                       {group.title}
                     </div>
                     <div className='grid grid-cols-2 md:grid-cols-3 gap-3'>
@@ -1783,7 +1783,7 @@ export default function OnboardingPage() {
           {/* Step: Profile Picture */}
           {getCurrentStepInfo().key === 'picture' && (
             <div className='space-y-6'>
-              <h2 className='text-xl font-semibold text-black mb-4'>
+              <h2 className='text-xl font-semibold text-neutral-900 mb-4'>
                 Profile Picture
               </h2>
               <p className='text-sm text-neutral-500 mb-6'>
@@ -1812,7 +1812,7 @@ export default function OnboardingPage() {
             <button
               onClick={prevStep}
               disabled={currentStep === 1}
-              className={`px-4 py-3 sm:px-6 rounded-xl font-medium border bg-white text-black border-neutral-200 hover:bg-neutral-100 focus:outline-none focus:ring-2 focus:ring-brand-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm sm:text-base`}
+              className={`px-4 py-3 sm:px-6 rounded-xl font-medium border bg-white text-neutral-900 border-neutral-200 hover:bg-neutral-100 focus:outline-none focus:ring-2 focus:ring-brand-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm sm:text-base`}
             >
               <span className='hidden sm:inline'>Previous</span>
               <span className='sm:hidden'>Prev</span>
@@ -1862,7 +1862,7 @@ export default function OnboardingPage() {
                 <div className='text-xs sm:text-sm text-neutral-500 font-medium'>
                   Step {currentStep} of {totalSteps}
                 </div>
-                <div className='text-xs sm:text-sm font-medium text-black'>
+                <div className='text-xs sm:text-sm font-medium text-neutral-900'>
                   {getCurrentStepInfo().title}
                 </div>
               </div>

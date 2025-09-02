@@ -38,7 +38,7 @@ export default function CustomAuthenticator({
           <h2 className='text-3xl font-bold text-brand-600'>Loopn</h2>
         </div>
       </Link>
-      <p className='text-black text-base'>
+      <p className='text-neutral-900 text-base'>
         {authState.view === 'signIn' && 'Please sign in to continue'}
         {authState.view === 'signUp' && 'Create your account to get started'}
         {authState.view === 'confirmSignUp' && 'Confirm your email address'}

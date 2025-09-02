@@ -145,7 +145,7 @@ export default function Tooltip({
         <div
           ref={tooltipRef}
           style={tooltipStyle}
-          className='bg-white text-black text-sm px-2 py-1 rounded-md shadow-[0_4px_12px_rgba(0,0,0,0.15)] whitespace-nowrap pointer-events-none animate-in fade-in-0 zoom-in-95 duration-200'
+          className='bg-white text-neutral-900 text-sm px-2 py-1 rounded-md shadow-[0_4px_12px_rgba(0,0,0,0.15)] whitespace-nowrap pointer-events-none animate-in fade-in-0 zoom-in-95 duration-200'
         >
           {content}
           <div className={getArrowClasses()} />
