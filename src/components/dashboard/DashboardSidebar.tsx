@@ -254,7 +254,9 @@ export default function DashboardSidebar({
                 />
               </div>
               <div className='flex-1 min-w-0'>
-                <div className={`text-neutral-900 text-sm font-medium truncate`}>
+                <div
+                  className={`text-neutral-900 text-sm font-medium truncate`}
+                >
                   {accountItem.label}
                 </div>
                 <div className='text-sm text-neutral-500'>Account</div>

@@ -55,7 +55,9 @@ export default function ExternalLinkWarningDialog({
             <p className='text-sm font-medium text-neutral-900 mb-1'>
               {linkName}
             </p>
-            <p className='text-sm text-neutral-600 break-all'>{getDomain(url)}</p>
+            <p className='text-sm text-neutral-600 break-all'>
+              {getDomain(url)}
+            </p>
           </div>
           <p className='text-sm text-neutral-500 mt-3'>
             This will open in a new tab.

@@ -354,7 +354,10 @@ export default function DashboardDemo() {
                   <div className='text-sm text-neutral-500 font-medium truncate'>
                     {user.role}
                     {user.company && (
-                      <span className='text-neutral-400'> at {user.company}</span>
+                      <span className='text-neutral-400'>
+                        {' '}
+                        at {user.company}
+                      </span>
                     )}
                   </div>
                 </div>
@@ -627,7 +630,9 @@ export default function DashboardDemo() {
           <div className='p-4 bg-white border border-neutral-200 rounded-xl'>
             <div className='flex items-center gap-2 mb-3'>
               <Award className='w-4 h-4 text-neutral-500' />
-              <span className='text-sm font-medium text-neutral-500'>Skills</span>
+              <span className='text-sm font-medium text-neutral-500'>
+                Skills
+              </span>
             </div>
             <div className='flex flex-wrap gap-2'>
               {currentUser.skills.map((skill, index) => (
@@ -663,9 +668,13 @@ export default function DashboardDemo() {
           <div className='p-4 bg-white border border-neutral-200 rounded-xl'>
             <div className='flex items-center gap-2 mb-3'>
               <User className='w-4 h-4 text-neutral-500' />
-              <span className='text-sm font-medium text-neutral-500'>About</span>
+              <span className='text-sm font-medium text-neutral-500'>
+                About
+              </span>
             </div>
-            <p className='text-neutral-900 leading-relaxed'>{currentUser.about}</p>
+            <p className='text-neutral-900 leading-relaxed'>
+              {currentUser.about}
+            </p>
           </div>
         </div>
       </div>
@@ -712,8 +721,12 @@ export default function DashboardDemo() {
                 </div>
 
                 <div className='flex-1 min-w-0'>
-                  <div className='text-neutral-900 font-medium mb-1'>{user.name}</div>
-                  <div className='text-sm text-neutral-500 mb-2'>{user.role}</div>
+                  <div className='text-neutral-900 font-medium mb-1'>
+                    {user.name}
+                  </div>
+                  <div className='text-sm text-neutral-500 mb-2'>
+                    {user.role}
+                  </div>
                   <div className='flex flex-wrap gap-1'>
                     {user.skills.slice(0, 3).map((skill, idx) => (
                       <span
@@ -877,7 +890,9 @@ export default function DashboardDemo() {
           <div className='flex-shrink-0 mb-4 sm:mb-5 lg:mb-6'>
             {activeSection === 'suggested' && (
               <>
-                <h2 className='text-2xl font-bold text-neutral-900 mb-1'>Discover</h2>
+                <h2 className='text-2xl font-bold text-neutral-900 mb-1'>
+                  Discover
+                </h2>
                 <p className='text-base text-neutral-500'>
                   AI-curated professionals based on your interests
                 </p>
@@ -895,7 +910,9 @@ export default function DashboardDemo() {
             )}
             {activeSection === 'saved' && (
               <>
-                <h2 className='text-2xl font-bold text-neutral-900 mb-1'>Saved</h2>
+                <h2 className='text-2xl font-bold text-neutral-900 mb-1'>
+                  Saved
+                </h2>
                 <p className='text-base text-neutral-500'>
                   Professionals you've saved for later
                 </p>

@@ -242,7 +242,9 @@ export default function NotificationItem({
                   const [, baseContent, count] = moreMatch;
                   return (
                     <>
-                      <p className='text-base text-neutral-500'>{baseContent}</p>
+                      <p className='text-base text-neutral-500'>
+                        {baseContent}
+                      </p>
                       <span className='inline-flex items-center text-sm font-medium text-brand-600'>
                         +{count} more
                       </span>

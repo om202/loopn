@@ -166,15 +166,22 @@ export default function HomePage() {
               <h2 className='mb-10 sm:mb-12 max-w-lg mx-auto lg:mx-0'>
                 <div className='text-lg sm:text-xl text-neutral-700 font-semibold flex items-center justify-center lg:justify-start gap-3 flex-wrap'>
                   <span>Join Loopn</span>
-                  <ArrowRight className='w-5 h-5 text-neutral-700 flex-shrink-0' strokeWidth={3.5} />
+                  <ArrowRight
+                    className='w-5 h-5 text-neutral-700 flex-shrink-0'
+                    strokeWidth={3.5}
+                  />
                   <span>Get Matched</span>
-                  <ArrowRight className='w-5 h-5 text-neutral-700 flex-shrink-0' strokeWidth={3.5} />
+                  <ArrowRight
+                    className='w-5 h-5 text-neutral-700 flex-shrink-0'
+                    strokeWidth={3.5}
+                  />
                   <span>Start Connecting</span>
                 </div>
               </h2>
 
               <p className='text-base sm:text-lg text-neutral-600 mb-6 sm:mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed'>
-                Loopn analyzes your profile and helps you connect with professionals using our personalized matching algorithm
+                Loopn analyzes your profile and helps you connect with
+                professionals using our personalized matching algorithm
               </p>
 
               {/* CTA Buttons */}
@@ -427,7 +434,8 @@ export default function HomePage() {
               Professional Networking, Reimagined
             </h2>
             <p className='text-lg text-neutral-600 leading-relaxed font-medium'>
-              Connect with professionals who actually matter to your career and without a lot of noise
+              Connect with professionals who actually matter to your career and
+              without a lot of noise
             </p>
           </div>
 
@@ -866,7 +874,9 @@ export default function HomePage() {
             <div className='flex items-center justify-center space-x-3 mb-4'>
               <Image src='/loopn.svg' alt='Loopn' width={32} height={32} />
               <div className='flex items-center'>
-                <span className='text-xl font-medium text-neutral-900'>Loopn</span>
+                <span className='text-xl font-medium text-neutral-900'>
+                  Loopn
+                </span>
               </div>
             </div>
             <p className='text-neutral-600 text-sm text-center max-w-md mx-auto mb-6 leading-relaxed font-medium'>

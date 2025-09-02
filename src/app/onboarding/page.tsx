@@ -1610,7 +1610,10 @@ export default function OnboardingPage() {
                       }
                       className='w-4 h-4 text-brand-500 focus:ring-brand-500 focus:ring-2'
                     />
-                    <label htmlFor='looking-for-job' className='text-neutral-700'>
+                    <label
+                      htmlFor='looking-for-job'
+                      className='text-neutral-700'
+                    >
                       I'm actively looking for a job
                     </label>
                   </div>

@@ -12,7 +12,9 @@ export default function TermsOfServicePage() {
           <div className='flex items-center justify-between'>
             <Link href='/home' className='flex items-center space-x-3'>
               <Image src='/loopn.svg' alt='Loopn' width={32} height={32} />
-              <span className='text-xl font-medium text-neutral-900'>Loopn</span>
+              <span className='text-xl font-medium text-neutral-900'>
+                Loopn
+              </span>
             </Link>
             <Link
               href='/home'
@@ -30,7 +32,9 @@ export default function TermsOfServicePage() {
           <h1 className='text-3xl font-semibold text-neutral-900 mb-2'>
             Terms of Service
           </h1>
-          <p className='text-neutral-600 mb-8'>Last updated: September 1, 2025</p>
+          <p className='text-neutral-600 mb-8'>
+            Last updated: September 1, 2025
+          </p>
 
           <div className='bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8'>
             <p className='text-blue-800 font-medium'>
@@ -454,7 +458,9 @@ export default function TermsOfServicePage() {
           <div className='text-center'>
             <div className='flex items-center justify-center space-x-3 mb-4'>
               <Image src='/loopn.svg' alt='Loopn' width={32} height={32} />
-              <span className='text-xl font-medium text-neutral-900'>Loopn</span>
+              <span className='text-xl font-medium text-neutral-900'>
+                Loopn
+              </span>
             </div>
             <p className='text-neutral-600 text-sm mb-6'>
               Professional networking that actually matters

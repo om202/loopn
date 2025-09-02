@@ -315,7 +315,9 @@ export default function TestSearchPage() {
                   </span>
                 </div>
                 <div>
-                  <span className='text-neutral-600'>Similarity Processing:</span>
+                  <span className='text-neutral-600'>
+                    Similarity Processing:
+                  </span>
                   <span className='font-medium ml-2'>
                     {searchResults.metrics.processingTimeMs}ms
                   </span>

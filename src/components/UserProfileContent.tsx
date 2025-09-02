@@ -257,12 +257,16 @@ export default function UserProfileContent({
                   <p className='text-sm font-medium text-neutral-500'>
                     {edu.field}
                   </p>
-                  <p className='text-base text-neutral-700'>{edu.institution}</p>
+                  <p className='text-base text-neutral-700'>
+                    {edu.institution}
+                  </p>
                 </div>
               ))}
             </div>
           ) : (
-            <p className='text-base text-neutral-700'>{userProfile.education}</p>
+            <p className='text-base text-neutral-700'>
+              {userProfile.education}
+            </p>
           )}
         </div>
       ) : null}
@@ -403,7 +407,9 @@ export default function UserProfileContent({
                   <h5 className='text-base font-semibold text-neutral-900'>
                     {pub.title}
                   </h5>
-                  <p className='text-base text-neutral-700 italic'>{pub.venue}</p>
+                  <p className='text-base text-neutral-700 italic'>
+                    {pub.venue}
+                  </p>
                   {pub.date && (
                     <p className='text-sm text-neutral-500 mt-1 whitespace-nowrap'>
                       {pub.date}

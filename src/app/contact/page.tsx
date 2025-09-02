@@ -13,7 +13,9 @@ export default function ContactPage() {
           <div className='flex items-center justify-between'>
             <Link href='/home' className='flex items-center space-x-3'>
               <Image src='/loopn.svg' alt='Loopn' width={32} height={32} />
-              <span className='text-xl font-medium text-neutral-900'>Loopn</span>
+              <span className='text-xl font-medium text-neutral-900'>
+                Loopn
+              </span>
             </Link>
             <Link
               href='/home'
@@ -253,7 +255,9 @@ export default function ContactPage() {
           <div className='text-center'>
             <div className='flex items-center justify-center space-x-3 mb-4'>
               <Image src='/loopn.svg' alt='Loopn' width={32} height={32} />
-              <span className='text-xl font-medium text-neutral-900'>Loopn</span>
+              <span className='text-xl font-medium text-neutral-900'>
+                Loopn
+              </span>
             </div>
             <p className='text-neutral-600 text-sm mb-6'>
               Professional networking that actually matters

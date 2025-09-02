@@ -154,7 +154,9 @@ export default function SearchSectionContent({
             <div className='w-16 h-16 mx-auto mb-4 bg-neutral-100 rounded-full flex items-center justify-center'>
               <Search className='w-8 h-8 text-neutral-500' />
             </div>
-            <h3 className='text-lg font-medium text-neutral-900 mb-1'>Search</h3>
+            <h3 className='text-lg font-medium text-neutral-900 mb-1'>
+              Search
+            </h3>
           </div>
         ) : isSearching ? (
           <div className='transition-opacity duration-200 opacity-100'>
