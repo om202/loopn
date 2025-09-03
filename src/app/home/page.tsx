@@ -131,7 +131,7 @@ export default function HomePage() {
       <style>{customStyles}</style>
 
       {/* Hero Section */}
-      <section className='bg-white py-8 lg:py-12 relative overflow-hidden'>
+      <section className='bg-white py-12 lg:py-16 relative overflow-hidden'>
         {/* Background Elements */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-20 left-10 w-72 h-72 bg-brand-50/30 rounded-full blur-3xl animate-float' />
@@ -156,7 +156,7 @@ export default function HomePage() {
 
               <h1 className='text-4xl sm:text-5xl font-semibold text-neutral-900 mt-6 sm:mt-8 mb-8 sm:mb-10 leading-tight'>
                 Professional Networking{' '}
-                <span className='text-brand-600'>Made Simple</span>
+                <span className='bg-gradient-to-b from-brand-400 to-brand-500 bg-clip-text text-transparent'>Made Simple</span>
               </h1>
 
               <h2 className='mb-8 sm:mb-10 max-w-lg mx-auto lg:mx-0'>
@@ -184,7 +184,7 @@ export default function HomePage() {
               <div className='flex flex-row gap-3 sm:gap-6 justify-center lg:justify-start'>
                 <Link href={isAuthenticated ? authLink : signUpLink}>
                   <button
-                    className='inline-flex items-center gap-3 bg-brand-500 text-white px-6 py-3 sm:px-10 sm:py-4 rounded-xl !font-medium min-h-[50px]'
+                    className='inline-flex items-center gap-3 bg-gradient-to-b from-brand-400 to-brand-500 text-white px-6 py-3 sm:px-10 sm:py-4 rounded-xl !font-medium min-h-[50px]'
                     style={{ fontSize: '18px' }}
                   >
                     {ctaText}
@@ -205,7 +205,7 @@ export default function HomePage() {
             {/* Right column - Demo */}
             <div className='relative mt-8 lg:mt-0'>
               {/* Modern Chat Interface - matching real chat UI design */}
-              <div className='bg-white rounded-2xl border border-neutral-200 w-full max-w-sm lg:max-w-md mx-auto lg:ml-auto lg:mr-0 overflow-hidden'>
+              <div className='bg-white rounded-2xl border border-neutral-200 w-full max-w-sm lg:max-w-md mx-auto lg:ml-auto lg:mr-0 overflow-hidden shadow-lg'>
                 {/* Chat Header */}
                 <div className='flex-shrink-0 bg-white border-b border-neutral-200 px-4 py-3'>
                   <div className='flex items-center gap-3'>
@@ -236,7 +236,7 @@ export default function HomePage() {
                         alt='Sarah Chen'
                         width={40}
                         height={40}
-                        className='w-10 h-10 rounded-full object-cover'
+                        className='w-10 h-10 rounded-full object-cover shadow-sm'
                       />
                       <div className='absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-b_green-400 border-2 border-white rounded-full'></div>
                     </div>
@@ -279,7 +279,7 @@ export default function HomePage() {
                         alt='Sarah'
                         width={32}
                         height={32}
-                        className='w-8 h-8 rounded-full object-cover flex-shrink-0'
+                        className='w-8 h-8 rounded-full object-cover flex-shrink-0 shadow-sm'
                       />
                       <div className='flex-1 max-w-xs'>
                         <div className='bg-neutral-100 text-neutral-900 px-4 py-3 rounded-2xl rounded-tl-md'>
@@ -322,7 +322,7 @@ export default function HomePage() {
                         alt='Sarah'
                         width={32}
                         height={32}
-                        className='w-8 h-8 rounded-full object-cover flex-shrink-0'
+                        className='w-8 h-8 rounded-full object-cover flex-shrink-0 shadow-sm'
                       />
                       <div className='flex-1 max-w-xs'>
                         <div className='bg-neutral-100 text-neutral-900 px-4 py-3 rounded-2xl rounded-tl-md'>
@@ -365,7 +365,7 @@ export default function HomePage() {
                         alt='Sarah'
                         width={32}
                         height={32}
-                        className='w-8 h-8 rounded-full object-cover flex-shrink-0'
+                        className='w-8 h-8 rounded-full object-cover flex-shrink-0 shadow-sm'
                       />
                       <div className='flex-1 max-w-xs'>
                         <div className='bg-neutral-100 text-neutral-900 px-4 py-3 rounded-2xl rounded-tl-md'>
@@ -443,7 +443,7 @@ export default function HomePage() {
                 alt='Loopn Dashboard'
                 width={600}
                 height={800}
-                className='w-full h-auto rounded-2xl border border-neutral-200'
+                className='w-full h-auto rounded-2xl border border-neutral-200 shadow-lg'
                 quality={100}
                 priority
                 unoptimized={true}
@@ -460,7 +460,7 @@ export default function HomePage() {
       </section>
 
       {/* Message in Real Time Section */}
-      <section className='py-8 sm:py-12 bg-neutral-50 relative border-t border-neutral-200'>
+      <section className='py-8 sm:py-12 bg-white relative border-t border-neutral-200'>
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-1/4 left-0 w-72 h-72 bg-neutral-100/80 rounded-full blur-3xl' />
@@ -486,7 +486,7 @@ export default function HomePage() {
                 alt='Loopn Real-Time Messaging'
                 width={600}
                 height={800}
-                className='w-full h-auto rounded-2xl border border-neutral-200'
+                className='w-full h-auto rounded-2xl border border-neutral-200 shadow-lg'
                 quality={100}
                 priority
                 unoptimized={true}
@@ -497,7 +497,7 @@ export default function HomePage() {
       </section>
 
       {/* Full Resume Section */}
-      <section className='py-8 sm:py-12 bg-white relative border-t border-neutral-200'>
+      <section className='py-8 sm:py-12 bg-neutral-50 relative border-t border-neutral-200'>
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-1/3 right-0 w-96 h-96 bg-brand-50/60 rounded-full blur-3xl' />
@@ -523,7 +523,7 @@ export default function HomePage() {
                 alt='Loopn Full Resume'
                 width={600}
                 height={800}
-                className='w-full h-auto rounded-2xl border border-neutral-200'
+                className='w-full h-auto rounded-2xl border border-neutral-200 shadow-lg'
                 quality={100}
                 priority
                 unoptimized={true}
@@ -841,7 +841,7 @@ export default function HomePage() {
               className='w-full sm:w-auto'
             >
               <button
-                className='w-full bg-brand-500 text-white px-6 py-3 sm:px-8 sm:py-4 rounded-lg !font-medium flex items-center justify-center gap-3 border-0 min-h-[50px] touch-manipulation'
+                className='w-full bg-gradient-to-b from-brand-400 to-brand-500 text-white px-6 py-3 sm:px-8 sm:py-4 rounded-lg !font-medium flex items-center justify-center gap-3 border-0 min-h-[50px] touch-manipulation'
                 style={{ fontSize: '18px' }}
               >
                 {ctaText}
