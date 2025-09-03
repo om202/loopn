@@ -6,7 +6,7 @@ import { Mail, Lock, Check, X, Eye, EyeOff } from 'lucide-react';
 
 interface SignUpFormProps {
   onSwitchToSignIn: () => void;
-  onSignUpSuccess: (email: string) => void;
+  onSignUpSuccess: (email: string, password: string) => void;
 }
 
 // Password requirement component
@@ -77,7 +77,7 @@ export default function SignUpForm({
     // If successful and not auto-signed in, go to confirmation
     // (If user was auto-confirmed, handleSignUp will auto-sign them in)
     if (!error && authStatus !== 'authenticated') {
-      onSignUpSuccess(email);
+      onSignUpSuccess(email, password);
     }
     // If user is now authenticated, they were auto-confirmed and signed in
   };

@@ -47,7 +47,8 @@ export interface AuthContextType extends AuthState {
   ) => Promise<void>;
   handleConfirmSignUp: (
     email: string,
-    confirmationCode: string
+    confirmationCode: string,
+    password?: string
   ) => Promise<boolean>;
   handleResendSignUpCode: (email: string) => Promise<void>;
 
@@ -218,7 +219,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
   // Confirm Sign Up
   const handleConfirmSignUp = async (
     email: string,
-    confirmationCode: string
+    confirmationCode: string,
+    password?: string
   ): Promise<boolean> => {
     try {
       setLoading(true);
@@ -229,7 +231,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
         confirmationCode,
       });
 
-      // After confirmation, user can sign in
+      // After successful confirmation, automatically sign in the user
+      if (password) {
+        console.log('Email confirmed - signing in automatically');
+        await handleSignIn(email, password);
+      } else {
+        console.log('Email confirmed successfully');
+      }
+      
       setError(null);
       return true;
     } catch (err) {

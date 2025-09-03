@@ -7,12 +7,14 @@ import { useAnalytics } from '../../hooks/useAnalytics';
 
 interface ConfirmSignUpFormProps {
   email: string;
+  password?: string;
   onConfirmSuccess: () => void;
   onSwitchToSignIn: () => void;
 }
 
 export default function ConfirmSignUpForm({
   email,
+  password,
   onConfirmSuccess,
   onSwitchToSignIn,
 }: ConfirmSignUpFormProps) {
@@ -34,13 +36,21 @@ export default function ConfirmSignUpForm({
       return;
     }
 
-    const success = await handleConfirmSignUp(email, confirmationCode);
+    const success = await handleConfirmSignUp(email, confirmationCode, password);
 
-    // If successful, go to sign in
+    // If successful and password was provided, user will be auto-logged in
+    // If no password or confirmation without auto-login, redirect to sign in
     if (success) {
       // Track signup completion
       analytics.trackSignupCompleted();
-      onConfirmSuccess();
+      
+      // Only call onConfirmSuccess if we don't have password for auto-login
+      // (This handles edge cases where password might not be available)
+      if (!password) {
+        onConfirmSuccess();
+      }
+      // If password was provided, the user is now automatically logged in
+      // and will be redirected by the auth flow
     }
   };
 

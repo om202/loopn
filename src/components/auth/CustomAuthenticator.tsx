@@ -19,6 +19,7 @@ type AuthView =
 interface AuthState {
   view: AuthView;
   email?: string;
+  password?: string;
 }
 
 interface CustomAuthenticatorProps {
@@ -64,8 +65,8 @@ export default function CustomAuthenticator({
         return (
           <SignUpForm
             onSwitchToSignIn={() => setAuthState({ view: 'signIn' })}
-            onSignUpSuccess={email =>
-              setAuthState({ view: 'confirmSignUp', email })
+            onSignUpSuccess={(email, password) =>
+              setAuthState({ view: 'confirmSignUp', email, password })
             }
           />
         );
@@ -74,6 +75,7 @@ export default function CustomAuthenticator({
         return (
           <ConfirmSignUpForm
             email={authState.email || ''}
+            password={authState.password}
             onConfirmSuccess={() => setAuthState({ view: 'signIn' })}
             onSwitchToSignIn={() => setAuthState({ view: 'signIn' })}
           />
