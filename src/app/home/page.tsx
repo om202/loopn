@@ -2,12 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
-import {
-  MessageSquare,
-  ArrowRight,
-  Smile,
-  ChevronDown,
-} from 'lucide-react';
+import { MessageSquare, ArrowRight, Smile, ChevronDown } from 'lucide-react';
 
 // Custom Connect Icon using circles from logo
 const ConnectIcon = ({ className }: { className?: string }) => (
@@ -156,7 +151,9 @@ export default function HomePage() {
 
               <h1 className='text-4xl sm:text-5xl font-semibold text-neutral-900 mt-6 sm:mt-8 mb-8 sm:mb-10 leading-tight'>
                 Professional Networking{' '}
-                <span className='bg-gradient-to-b from-brand-400 to-brand-500 bg-clip-text text-transparent'>Made Simple</span>
+                <span className='bg-gradient-to-b from-brand-400 to-brand-500 bg-clip-text text-transparent'>
+                  Made Simple
+                </span>
               </h1>
 
               <h2 className='mb-8 sm:mb-10 max-w-lg mx-auto lg:mx-0'>
@@ -430,8 +427,8 @@ export default function HomePage() {
               Network with Focus
             </h2>
             <p className='text-lg text-neutral-600 leading-relaxed font-medium'>
-              Connect with professionals who actually matter and
-              without any noise
+              Connect with professionals who actually matter and without any
+              noise
             </p>
           </div>
 
@@ -450,12 +447,6 @@ export default function HomePage() {
               />
             </div>
           </div>
-
-
-
-
-
-
         </div>
       </section>
 
@@ -510,9 +501,10 @@ export default function HomePage() {
             <h2 className='text-2xl sm:text-3xl font-semibold text-neutral-900 mb-3 leading-tight'>
               Detailed Profiles
             </h2>
-                          <p className='text-lg text-neutral-600 leading-relaxed font-medium'>
-                See complete work history and skills of every professional you connect with
-              </p>
+            <p className='text-lg text-neutral-600 leading-relaxed font-medium'>
+              See complete work history and skills of every professional you
+              connect with
+            </p>
           </div>
 
           {/* Resume Image */}
@@ -552,7 +544,8 @@ export default function HomePage() {
               How It Works
             </h2>
             <p className='text-lg text-neutral-600 leading-relaxed font-medium'>
-              Three powerful features that transform how you build professional relationships
+              Three powerful features that transform how you build professional
+              relationships
             </p>
           </div>
 
@@ -567,7 +560,8 @@ export default function HomePage() {
                     Upload Your Resume
                   </h3>
                   <p className='text-neutral-600 mb-6 leading-relaxed text-base font-medium'>
-                    Drop your resume. AI builds your profile and analyzes it instantly for perfect career opportunities.
+                    Drop your resume. AI builds your profile and analyzes it
+                    instantly for perfect career opportunities.
                   </p>
                   <ul className='space-y-3 text-left'>
                     <li className='flex items-center gap-3 text-neutral-600'>
@@ -611,7 +605,8 @@ export default function HomePage() {
                     Discover Live Matches
                   </h3>
                   <p className='text-neutral-600 mb-6 leading-relaxed text-base font-medium'>
-                    See perfect matches online right now. Connect with the right people at the right moment.
+                    See perfect matches online right now. Connect with the right
+                    people at the right moment.
                   </p>
                   <ul className='space-y-3 text-left'>
                     <li className='flex items-center gap-3 text-neutral-600'>
@@ -655,7 +650,8 @@ export default function HomePage() {
                     Build Lasting Relationships
                   </h3>
                   <p className='text-neutral-600 mb-6 leading-relaxed text-base font-medium'>
-                    Quality over quantity. Build career-focused relationships with serious professionals only.
+                    Quality over quantity. Build career-focused relationships
+                    with serious professionals only.
                   </p>
                   <ul className='space-y-3 text-left'>
                     <li className='flex items-center gap-3 text-neutral-600'>

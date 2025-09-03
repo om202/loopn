@@ -238,7 +238,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       } else {
         console.log('Email confirmed successfully');
       }
-      
+
       setError(null);
       return true;
     } catch (err) {
