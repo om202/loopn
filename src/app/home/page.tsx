@@ -154,13 +154,13 @@ export default function HomePage() {
                 <h2 className='text-3xl font-bold text-brand-600'>Loopn</h2>
               </div>
 
-              <h1 className='text-4xl sm:text-5xl font-semibold text-neutral-900 mt-4 sm:mt-6 mb-4 sm:mb-6 leading-tight'>
+              <h1 className='text-4xl sm:text-5xl font-semibold text-neutral-900 mt-6 sm:mt-8 mb-8 sm:mb-10 leading-tight'>
                 Professional Networking{' '}
                 <span className='text-brand-600'>Made Simple</span>
               </h1>
 
-              <h2 className='mb-10 sm:mb-12 max-w-lg mx-auto lg:mx-0'>
-                <div className='text-lg sm:text-xl text-neutral-700 font-semibold flex items-center justify-center lg:justify-start gap-3 flex-wrap'>
+              <h2 className='mb-8 sm:mb-10 max-w-lg mx-auto lg:mx-0'>
+                <div className='text-base sm:text-lg text-neutral-700 font-semibold flex items-center justify-center lg:justify-start gap-3 flex-wrap'>
                   <span>Join Loopn</span>
                   <ArrowRight
                     className='w-5 h-5 text-neutral-700 flex-shrink-0'
@@ -175,7 +175,7 @@ export default function HomePage() {
                 </div>
               </h2>
 
-              <p className='text-base sm:text-lg text-neutral-600 mb-6 sm:mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed'>
+              <p className='text-base sm:text-lg text-neutral-600 mb-8 sm:mb-10 max-w-lg mx-auto lg:mx-0 leading-relaxed'>
                 Loopn analyzes your profile and helps you connect with
                 professionals using our personalized matching algorithm
               </p>
@@ -426,7 +426,7 @@ export default function HomePage() {
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           {/* Section Header */}
           <div className='text-center max-w-3xl mx-auto mb-12'>
-            <h2 className='text-3xl sm:text-4xl font-semibold text-neutral-900 mb-3 leading-tight'>
+            <h2 className='text-2xl sm:text-3xl font-semibold text-neutral-900 mb-3 leading-tight'>
               Network with Focus
             </h2>
             <p className='text-lg text-neutral-600 leading-relaxed font-medium'>
@@ -470,7 +470,7 @@ export default function HomePage() {
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           {/* Section Header */}
           <div className='text-center max-w-3xl mx-auto mb-12'>
-            <h2 className='text-3xl sm:text-4xl font-semibold text-neutral-900 mb-3 leading-tight'>
+            <h2 className='text-2xl sm:text-3xl font-semibold text-neutral-900 mb-3 leading-tight'>
               Full Messaging
             </h2>
             <p className='text-lg text-neutral-600 leading-relaxed font-medium'>
@@ -507,7 +507,7 @@ export default function HomePage() {
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           {/* Section Header */}
           <div className='text-center max-w-3xl mx-auto mb-12'>
-            <h2 className='text-3xl sm:text-4xl font-semibold text-neutral-900 mb-3 leading-tight'>
+            <h2 className='text-2xl sm:text-3xl font-semibold text-neutral-900 mb-3 leading-tight'>
               Detailed Profiles
             </h2>
                           <p className='text-lg text-neutral-600 leading-relaxed font-medium'>
@@ -548,7 +548,7 @@ export default function HomePage() {
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           {/* Section Header */}
           <div className='text-center max-w-3xl mx-auto mb-12'>
-            <h2 className='text-3xl sm:text-4xl font-semibold text-neutral-900 mb-3 leading-tight'>
+            <h2 className='text-2xl sm:text-3xl font-semibold text-neutral-900 mb-3 leading-tight'>
               How It Works
             </h2>
             <p className='text-lg text-neutral-600 leading-relaxed font-medium'>
@@ -703,7 +703,7 @@ export default function HomePage() {
 
         <div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='text-center mb-12'>
-            <h2 className='text-3xl sm:text-4xl font-semibold text-neutral-900 mb-3 leading-tight'>
+            <h2 className='text-2xl sm:text-3xl font-semibold text-neutral-900 mb-3 leading-tight'>
               Frequently Asked Questions
             </h2>
             <p className='text-lg text-neutral-600 max-w-2xl mx-auto leading-relaxed font-medium'>
@@ -827,7 +827,7 @@ export default function HomePage() {
         </div>
 
         <div className='max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center'>
-          <h2 className='text-3xl sm:text-4xl font-semibold text-neutral-900 mb-3 leading-tight'>
+          <h2 className='text-2xl sm:text-3xl font-semibold text-neutral-900 mb-3 leading-tight'>
             Start Connecting Today
           </h2>
           <p className='text-lg text-neutral-600 mb-12 max-w-md mx-auto font-medium'>
