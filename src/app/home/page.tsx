@@ -170,7 +170,7 @@ export default function HomePage() {
                 </div>
               </h2>
 
-              <p className='text-base sm:text-lg text-neutral-600 mb-8 sm:mb-10 max-w-lg mx-auto lg:mx-0 leading-relaxed'>
+              <p className='text-base sm:text-lg text-neutral-700 mb-8 sm:mb-10 max-w-lg mx-auto lg:mx-0 leading-relaxed'>
                 Stop wasting time. Our AI-powered matching algorithm analyzes
                 your profile to connect you with the right professionals,
                 instantly.
@@ -189,7 +189,7 @@ export default function HomePage() {
                 </Link>
                 <Link href={authLink}>
                   <button
-                    className='text-neutral-600 !font-medium flex items-center justify-center px-3 py-3 sm:px-4 sm:py-4 min-h-[50px] hover:underline hover:underline-offset-4 hover:decoration-2 flex-shrink-0'
+                    className='text-neutral-700 !font-medium flex items-center justify-center px-3 py-3 sm:px-4 sm:py-4 min-h-[50px] hover:underline hover:underline-offset-4 hover:decoration-2 flex-shrink-0'
                     style={{ fontSize: '18px' }}
                   >
                     Sign In
@@ -389,7 +389,7 @@ export default function HomePage() {
                       />
                       <button
                         type='button'
-                        className='absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-neutral-400 rounded-full hover:text-neutral-600 cursor-pointer'
+                        className='absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-neutral-400 rounded-full hover:text-neutral-700 cursor-pointer'
                       >
                         <Smile className='w-5 h-5' strokeWidth={2.5} />
                       </button>
@@ -425,7 +425,7 @@ export default function HomePage() {
             <h2 className='text-2xl sm:text-3xl font-semibold text-neutral-900 mb-3 leading-tight'>
               Network with Focus
             </h2>
-            <p className='text-lg text-neutral-600 leading-relaxed font-medium'>
+            <p className='text-lg text-neutral-700 leading-relaxed font-medium'>
               Connect with professionals who truly matter, without the noise and spam of other platforms.
             </p>
           </div>
@@ -462,7 +462,7 @@ export default function HomePage() {
             <h2 className='text-2xl sm:text-3xl font-semibold text-neutral-900 mb-3 leading-tight'>
               Full Messaging
             </h2>
-            <p className='text-lg text-neutral-600 leading-relaxed font-medium'>
+            <p className='text-lg text-neutral-700 leading-relaxed font-medium'>
               Chat directly with your connections through seamless, real-time messaging.
             </p>
           </div>
@@ -499,7 +499,7 @@ export default function HomePage() {
             <h2 className='text-2xl sm:text-3xl font-semibold text-neutral-900 mb-3 leading-tight'>
               Detailed Profiles
             </h2>
-                         <p className='text-lg text-neutral-600 leading-relaxed font-medium'>
+                         <p className='text-lg text-neutral-700 leading-relaxed font-medium'>
                Make informed decisions. View the complete work history and skills of every professional.
              </p>
           </div>
@@ -540,7 +540,7 @@ export default function HomePage() {
             <h2 className='text-2xl sm:text-3xl font-semibold text-neutral-900 mb-3 leading-tight'>
               How It Works
             </h2>
-            <p className='text-lg text-neutral-600 leading-relaxed font-medium'>
+            <p className='text-lg text-neutral-700 leading-relaxed font-medium'>
               Three powerful steps that transform how you build professional relationships.
             </p>
           </div>
@@ -555,11 +555,11 @@ export default function HomePage() {
                   <h3 className='text-xl font-semibold text-neutral-900 mb-3'>
                     Upload Your Resume
                   </h3>
-                                      <p className='text-neutral-600 mb-6 leading-relaxed text-base font-medium'>
+                                      <p className='text-neutral-700 mb-6 leading-relaxed text-base font-medium'>
                      Let our AI build your professional profile in seconds. We instantly analyze your experience to find ideal career opportunities and connections.
                     </p>
                     <ul className='space-y-3 text-left'>
-                    <li className='flex items-center gap-3 text-neutral-600'>
+                    <li className='flex items-center gap-3 text-neutral-700'>
                       <ArrowRight
                         className='w-4 h-4 text-brand-600 flex-shrink-0'
                         strokeWidth={2.5}
@@ -568,7 +568,7 @@ export default function HomePage() {
                         Instant Profile Analysis
                       </span>
                     </li>
-                    <li className='flex items-center gap-3 text-neutral-600'>
+                    <li className='flex items-center gap-3 text-neutral-700'>
                       <ArrowRight
                         className='w-4 h-4 text-brand-600 flex-shrink-0'
                         strokeWidth={2.5}
@@ -577,7 +577,7 @@ export default function HomePage() {
                         Intelligent Compatibility Matching
                       </span>
                     </li>
-                    <li className='flex items-center gap-3 text-neutral-600'>
+                    <li className='flex items-center gap-3 text-neutral-700'>
                       <ArrowRight
                         className='w-4 h-4 text-brand-600 flex-shrink-0'
                         strokeWidth={2.5}
@@ -599,11 +599,11 @@ export default function HomePage() {
                   <h3 className='text-xl font-semibold text-neutral-900 mb-3'>
                     Discover Live Matches
                   </h3>
-                                      <p className='text-neutral-600 mb-6 leading-relaxed text-base font-medium'>
+                                      <p className='text-neutral-700 mb-6 leading-relaxed text-base font-medium'>
                      See a curated list of professionals who are online right now. Connect with the right people at the perfect moment.
                     </p>
                   <ul className='space-y-3 text-left'>
-                    <li className='flex items-center gap-3 text-neutral-600'>
+                    <li className='flex items-center gap-3 text-neutral-700'>
                       <ArrowRight
                         className='w-4 h-4 text-brand-600 flex-shrink-0'
                         strokeWidth={2.5}
@@ -612,7 +612,7 @@ export default function HomePage() {
                         View Your Personalized Live Matches
                       </span>
                     </li>
-                    <li className='flex items-center gap-3 text-neutral-600'>
+                    <li className='flex items-center gap-3 text-neutral-700'>
                       <ArrowRight
                         className='w-4 h-4 text-brand-600 flex-shrink-0'
                         strokeWidth={2.5}
@@ -621,7 +621,7 @@ export default function HomePage() {
                         Send Instant Connection Requests
                       </span>
                     </li>
-                    <li className='flex items-center gap-3 text-neutral-600'>
+                    <li className='flex items-center gap-3 text-neutral-700'>
                       <ArrowRight
                         className='w-4 h-4 text-brand-600 flex-shrink-0'
                         strokeWidth={2.5}
@@ -643,11 +643,11 @@ export default function HomePage() {
                   <h3 className='text-xl font-semibold text-neutral-900 mb-3'>
                     Build Lasting Relationships
                   </h3>
-                                      <p className='text-neutral-600 mb-6 leading-relaxed text-base font-medium'>
+                                      <p className='text-neutral-700 mb-6 leading-relaxed text-base font-medium'>
                      Focus on quality over quantity. We foster a community dedicated to building meaningful, career-focused relationships.
                     </p>
                   <ul className='space-y-3 text-left'>
-                    <li className='flex items-center gap-3 text-neutral-600'>
+                    <li className='flex items-center gap-3 text-neutral-700'>
                       <ArrowRight
                         className='w-4 h-4 text-brand-600 flex-shrink-0'
                         strokeWidth={2.5}
@@ -656,7 +656,7 @@ export default function HomePage() {
                         A Community of Vetted Professionals
                       </span>
                     </li>
-                    <li className='flex items-center gap-3 text-neutral-600'>
+                    <li className='flex items-center gap-3 text-neutral-700'>
                       <ArrowRight
                         className='w-4 h-4 text-brand-600 flex-shrink-0'
                         strokeWidth={2.5}
@@ -665,7 +665,7 @@ export default function HomePage() {
                         Spam-Free, Focused Conversations
                       </span>
                     </li>
-                    <li className='flex items-center gap-3 text-neutral-600'>
+                    <li className='flex items-center gap-3 text-neutral-700'>
                       <ArrowRight
                         className='w-4 h-4 text-brand-600 flex-shrink-0'
                         strokeWidth={2.5}
@@ -695,7 +695,7 @@ export default function HomePage() {
             <h2 className='text-2xl sm:text-3xl font-semibold text-neutral-900 mb-3 leading-tight'>
               Frequently Asked Questions
             </h2>
-            <p className='text-lg text-neutral-600 max-w-2xl mx-auto leading-relaxed font-medium'>
+            <p className='text-lg text-neutral-700 max-w-2xl mx-auto leading-relaxed font-medium'>
               Everything you need to know about building your network on Loopn.
             </p>
           </div>
@@ -716,7 +716,7 @@ export default function HomePage() {
               </button>
               {expandedFAQ === 0 && (
                 <div className='px-4 sm:px-5 pb-4 sm:pb-5 -mt-1'>
-                  <p className='text-neutral-600 leading-relaxed'>
+                  <p className='text-neutral-700 leading-relaxed'>
                     Loopn connects you with professionals based on shared
                     interests and career goals. Simply complete your profile,
                     browse suggested connections, and start meaningful
@@ -741,7 +741,7 @@ export default function HomePage() {
               </button>
               {expandedFAQ === 1 && (
                 <div className='px-4 sm:px-5 pb-4 sm:pb-5 -mt-1'>
-                  <p className='text-neutral-600 leading-relaxed'>
+                  <p className='text-neutral-700 leading-relaxed'>
                     All Loopn users are professionals across various industries.
                     You'll connect with people who share your interests, career
                     goals, or expertise areas - from software engineers and
@@ -766,7 +766,7 @@ export default function HomePage() {
               </button>
               {expandedFAQ === 2 && (
                 <div className='px-4 sm:px-5 pb-4 sm:pb-5 -mt-1'>
-                  <p className='text-neutral-600 leading-relaxed'>
+                  <p className='text-neutral-700 leading-relaxed'>
                     Getting started is simple: sign up, complete your
                     professional profile including your interests and career
                     goals, and we'll suggest relevant connections. You can then
@@ -792,7 +792,7 @@ export default function HomePage() {
               </button>
               {expandedFAQ === 3 && (
                 <div className='px-4 sm:px-5 pb-4 sm:pb-5 -mt-1'>
-                  <p className='text-neutral-600 leading-relaxed'>
+                  <p className='text-neutral-700 leading-relaxed'>
                     Loopn focuses exclusively on meaningful professional
                     conversations. Unlike casual social platforms, every
                     interaction is career-focused, quality-driven, and designed
@@ -818,7 +818,7 @@ export default function HomePage() {
           <h2 className='text-2xl sm:text-3xl font-semibold text-neutral-900 mb-3 leading-tight'>
             Start Building Your Network Today
           </h2>
-          <p className='text-lg text-neutral-600 mb-12 max-w-md mx-auto font-medium'>
+          <p className='text-lg text-neutral-700 mb-12 max-w-md mx-auto font-medium'>
             Join thousands of professionals already making career-changing connections.
           </p>
 
@@ -835,7 +835,7 @@ export default function HomePage() {
                 <ArrowRight className='w-5 h-5' strokeWidth={2.5} />
               </button>
             </Link>
-            <button className='w-full sm:w-auto bg-white text-neutral-600 px-6 py-3 sm:px-8 sm:py-4 rounded-lg text-base !font-medium border border-neutral-300 flex items-center justify-center gap-3 min-h-[52px] touch-manipulation'>
+            <button className='w-full sm:w-auto bg-white text-neutral-700 px-6 py-3 sm:px-8 sm:py-4 rounded-lg text-base !font-medium border border-neutral-300 flex items-center justify-center gap-3 min-h-[52px] touch-manipulation'>
               <MessageSquare className='w-5 h-5' strokeWidth={2.5} />
               Watch a Demo
             </button>
@@ -855,7 +855,7 @@ export default function HomePage() {
                 </span>
               </div>
             </div>
-            <p className='text-neutral-600 text-sm text-center max-w-md mx-auto mb-6 leading-relaxed font-medium'>
+            <p className='text-neutral-700 text-sm text-center max-w-md mx-auto mb-6 leading-relaxed font-medium'>
               AI-powered professional discovery for career-advancing
               relationships
             </p>
@@ -864,20 +864,20 @@ export default function HomePage() {
             <div className='flex flex-col sm:flex-row justify-center items-center gap-6 mb-6'>
               <Link
                 href='/privacy'
-                className='text-neutral-600 text-sm font-medium hover:underline hover:underline-offset-4 hover:decoration-2'
+                className='text-neutral-700 text-sm font-medium hover:underline hover:underline-offset-4 hover:decoration-2'
               >
                 Privacy Policy
               </Link>
               <Link
                 href='/terms'
-                className='text-neutral-600 text-sm font-medium hover:underline hover:underline-offset-4 hover:decoration-2'
+                className='text-neutral-700 text-sm font-medium hover:underline hover:underline-offset-4 hover:decoration-2'
               >
                 Terms of Service
               </Link>
             </div>
 
             <div className='pt-4 border-t border-neutral-200'>
-              <p className='text-neutral-600 text-sm'>
+              <p className='text-neutral-700 text-sm'>
                 © 2025 Loopn. All rights reserved.
               </p>
             </div>
