@@ -150,10 +150,8 @@ export default function HomePage() {
               </div>
 
               <h1 className='text-4xl sm:text-5xl font-semibold text-neutral-900 mt-6 sm:mt-8 mb-8 sm:mb-10 leading-tight'>
-                Professional Networking{' '}
-                <span className='bg-gradient-to-b from-brand-400 to-brand-500 bg-clip-text text-transparent'>
-                  Made Simple
-                </span>
+                Professional Networking,{' '}
+                <span className='text-brand-600'>Simplified.</span>
               </h1>
 
               <h2 className='mb-8 sm:mb-10 max-w-lg mx-auto lg:mx-0'>
@@ -173,15 +171,16 @@ export default function HomePage() {
               </h2>
 
               <p className='text-base sm:text-lg text-neutral-600 mb-8 sm:mb-10 max-w-lg mx-auto lg:mx-0 leading-relaxed'>
-                Loopn analyzes your profile and helps you connect with
-                professionals using our personalized matching algorithm
+                Stop wasting time. Our AI-powered matching algorithm analyzes
+                your profile to connect you with the right professionals,
+                instantly.
               </p>
 
               {/* CTA Buttons */}
               <div className='flex flex-row gap-3 sm:gap-6 justify-center lg:justify-start'>
                 <Link href={isAuthenticated ? authLink : signUpLink}>
                   <button
-                    className='inline-flex items-center gap-3 bg-gradient-to-b from-brand-400 to-brand-500 text-white px-6 py-3 sm:px-10 sm:py-4 rounded-xl !font-medium min-h-[50px]'
+                    className='inline-flex items-center gap-3 bg-brand-500 text-white px-6 py-3 sm:px-10 sm:py-4 rounded-xl !font-medium min-h-[50px]'
                     style={{ fontSize: '18px' }}
                   >
                     {ctaText}
@@ -202,7 +201,7 @@ export default function HomePage() {
             {/* Right column - Demo */}
             <div className='relative mt-8 lg:mt-0'>
               {/* Modern Chat Interface - matching real chat UI design */}
-              <div className='bg-white rounded-2xl border border-neutral-200 w-full max-w-sm lg:max-w-md mx-auto lg:ml-auto lg:mr-0 overflow-hidden shadow-lg'>
+              <div className='bg-white rounded-2xl border border-neutral-200 w-full max-w-sm lg:max-w-md mx-auto lg:ml-auto lg:mr-0 overflow-hidden shadow-md'>
                 {/* Chat Header */}
                 <div className='flex-shrink-0 bg-white border-b border-neutral-200 px-4 py-3'>
                   <div className='flex items-center gap-3'>
@@ -233,7 +232,7 @@ export default function HomePage() {
                         alt='Sarah Chen'
                         width={40}
                         height={40}
-                        className='w-10 h-10 rounded-full object-cover shadow-sm'
+                        className='w-10 h-10 rounded-full object-cover'
                       />
                       <div className='absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-b_green-400 border-2 border-white rounded-full'></div>
                     </div>
@@ -276,7 +275,7 @@ export default function HomePage() {
                         alt='Sarah'
                         width={32}
                         height={32}
-                        className='w-8 h-8 rounded-full object-cover flex-shrink-0 shadow-sm'
+                        className='w-8 h-8 rounded-full object-cover flex-shrink-0'
                       />
                       <div className='flex-1 max-w-xs'>
                         <div className='bg-neutral-100 text-neutral-900 px-4 py-3 rounded-2xl rounded-tl-md'>
@@ -319,7 +318,7 @@ export default function HomePage() {
                         alt='Sarah'
                         width={32}
                         height={32}
-                        className='w-8 h-8 rounded-full object-cover flex-shrink-0 shadow-sm'
+                        className='w-8 h-8 rounded-full object-cover flex-shrink-0'
                       />
                       <div className='flex-1 max-w-xs'>
                         <div className='bg-neutral-100 text-neutral-900 px-4 py-3 rounded-2xl rounded-tl-md'>
@@ -362,7 +361,7 @@ export default function HomePage() {
                         alt='Sarah'
                         width={32}
                         height={32}
-                        className='w-8 h-8 rounded-full object-cover flex-shrink-0 shadow-sm'
+                        className='w-8 h-8 rounded-full object-cover flex-shrink-0'
                       />
                       <div className='flex-1 max-w-xs'>
                         <div className='bg-neutral-100 text-neutral-900 px-4 py-3 rounded-2xl rounded-tl-md'>
@@ -427,8 +426,7 @@ export default function HomePage() {
               Network with Focus
             </h2>
             <p className='text-lg text-neutral-600 leading-relaxed font-medium'>
-              Connect with professionals who actually matter and without any
-              noise
+              Connect with professionals who truly matter, without the noise and spam of other platforms.
             </p>
           </div>
 
@@ -440,7 +438,7 @@ export default function HomePage() {
                 alt='Loopn Dashboard'
                 width={600}
                 height={800}
-                className='w-full h-auto rounded-2xl border border-neutral-200 shadow-lg'
+                className='w-full h-auto rounded-2xl border border-neutral-200 shadow-md'
                 quality={100}
                 priority
                 unoptimized={true}
@@ -465,7 +463,7 @@ export default function HomePage() {
               Full Messaging
             </h2>
             <p className='text-lg text-neutral-600 leading-relaxed font-medium'>
-              Chat with professionals through seamless real-time messaging
+              Chat directly with your connections through seamless, real-time messaging.
             </p>
           </div>
 
@@ -477,7 +475,7 @@ export default function HomePage() {
                 alt='Loopn Real-Time Messaging'
                 width={600}
                 height={800}
-                className='w-full h-auto rounded-2xl border border-neutral-200 shadow-lg'
+                className='w-full h-auto rounded-2xl border border-neutral-200 shadow-md'
                 quality={100}
                 priority
                 unoptimized={true}
@@ -501,10 +499,9 @@ export default function HomePage() {
             <h2 className='text-2xl sm:text-3xl font-semibold text-neutral-900 mb-3 leading-tight'>
               Detailed Profiles
             </h2>
-            <p className='text-lg text-neutral-600 leading-relaxed font-medium'>
-              See complete work history and skills of every professional you
-              connect with
-            </p>
+                         <p className='text-lg text-neutral-600 leading-relaxed font-medium'>
+               Make informed decisions. View the complete work history and skills of every professional.
+             </p>
           </div>
 
           {/* Resume Image */}
@@ -515,7 +512,7 @@ export default function HomePage() {
                 alt='Loopn Full Resume'
                 width={600}
                 height={800}
-                className='w-full h-auto rounded-2xl border border-neutral-200 shadow-lg'
+                className='w-full h-auto rounded-2xl border border-neutral-200 shadow-md'
                 quality={100}
                 priority
                 unoptimized={true}
@@ -544,8 +541,7 @@ export default function HomePage() {
               How It Works
             </h2>
             <p className='text-lg text-neutral-600 leading-relaxed font-medium'>
-              Three powerful features that transform how you build professional
-              relationships
+              Three powerful steps that transform how you build professional relationships.
             </p>
           </div>
 
@@ -559,18 +555,17 @@ export default function HomePage() {
                   <h3 className='text-xl font-semibold text-neutral-900 mb-3'>
                     Upload Your Resume
                   </h3>
-                  <p className='text-neutral-600 mb-6 leading-relaxed text-base font-medium'>
-                    Drop your resume. AI builds your profile and analyzes it
-                    instantly for perfect career opportunities.
-                  </p>
-                  <ul className='space-y-3 text-left'>
+                                      <p className='text-neutral-600 mb-6 leading-relaxed text-base font-medium'>
+                     Let our AI build your professional profile in seconds. We instantly analyze your experience to find ideal career opportunities and connections.
+                    </p>
+                    <ul className='space-y-3 text-left'>
                     <li className='flex items-center gap-3 text-neutral-600'>
                       <ArrowRight
                         className='w-4 h-4 text-brand-600 flex-shrink-0'
                         strokeWidth={2.5}
                       />
-                      <span className='font-medium text-sm'>
-                        Algorithm analyzes resume instantly
+                      <span className='font-medium text-base'>
+                        Instant Profile Analysis
                       </span>
                     </li>
                     <li className='flex items-center gap-3 text-neutral-600'>
@@ -578,8 +573,8 @@ export default function HomePage() {
                         className='w-4 h-4 text-brand-600 flex-shrink-0'
                         strokeWidth={2.5}
                       />
-                      <span className='font-medium text-sm'>
-                        Personalized compatibility matching
+                      <span className='font-medium text-base'>
+                        Intelligent Compatibility Matching
                       </span>
                     </li>
                     <li className='flex items-center gap-3 text-neutral-600'>
@@ -587,8 +582,8 @@ export default function HomePage() {
                         className='w-4 h-4 text-brand-600 flex-shrink-0'
                         strokeWidth={2.5}
                       />
-                      <span className='font-medium text-sm'>
-                        Industry-specific results
+                      <span className='font-medium text-base'>
+                        Relevant Industry Connections
                       </span>
                     </li>
                   </ul>
@@ -604,18 +599,17 @@ export default function HomePage() {
                   <h3 className='text-xl font-semibold text-neutral-900 mb-3'>
                     Discover Live Matches
                   </h3>
-                  <p className='text-neutral-600 mb-6 leading-relaxed text-base font-medium'>
-                    See perfect matches online right now. Connect with the right
-                    people at the right moment.
-                  </p>
+                                      <p className='text-neutral-600 mb-6 leading-relaxed text-base font-medium'>
+                     See a curated list of professionals who are online right now. Connect with the right people at the perfect moment.
+                    </p>
                   <ul className='space-y-3 text-left'>
                     <li className='flex items-center gap-3 text-neutral-600'>
                       <ArrowRight
                         className='w-4 h-4 text-brand-600 flex-shrink-0'
                         strokeWidth={2.5}
                       />
-                      <span className='font-medium text-sm'>
-                        See personalized matches online
+                      <span className='font-medium text-base'>
+                        View Your Personalized Live Matches
                       </span>
                     </li>
                     <li className='flex items-center gap-3 text-neutral-600'>
@@ -623,8 +617,8 @@ export default function HomePage() {
                         className='w-4 h-4 text-brand-600 flex-shrink-0'
                         strokeWidth={2.5}
                       />
-                      <span className='font-medium text-sm'>
-                        Send instant chat requests
+                      <span className='font-medium text-base'>
+                        Send Instant Connection Requests
                       </span>
                     </li>
                     <li className='flex items-center gap-3 text-neutral-600'>
@@ -632,8 +626,8 @@ export default function HomePage() {
                         className='w-4 h-4 text-brand-600 flex-shrink-0'
                         strokeWidth={2.5}
                       />
-                      <span className='font-medium text-sm'>
-                        Connect instantly with professionals
+                      <span className='font-medium text-base'>
+                        Chat with Professionals in Real-Time
                       </span>
                     </li>
                   </ul>
@@ -649,18 +643,17 @@ export default function HomePage() {
                   <h3 className='text-xl font-semibold text-neutral-900 mb-3'>
                     Build Lasting Relationships
                   </h3>
-                  <p className='text-neutral-600 mb-6 leading-relaxed text-base font-medium'>
-                    Quality over quantity. Build career-focused relationships
-                    with serious professionals only.
-                  </p>
+                                      <p className='text-neutral-600 mb-6 leading-relaxed text-base font-medium'>
+                     Focus on quality over quantity. We foster a community dedicated to building meaningful, career-focused relationships.
+                    </p>
                   <ul className='space-y-3 text-left'>
                     <li className='flex items-center gap-3 text-neutral-600'>
                       <ArrowRight
                         className='w-4 h-4 text-brand-600 flex-shrink-0'
                         strokeWidth={2.5}
                       />
-                      <span className='font-medium text-sm'>
-                        Serious professionals only
+                      <span className='font-medium text-base'>
+                        A Community of Vetted Professionals
                       </span>
                     </li>
                     <li className='flex items-center gap-3 text-neutral-600'>
@@ -668,8 +661,8 @@ export default function HomePage() {
                         className='w-4 h-4 text-brand-600 flex-shrink-0'
                         strokeWidth={2.5}
                       />
-                      <span className='font-medium text-sm'>
-                        No spam or casual chat
+                      <span className='font-medium text-base'>
+                        Spam-Free, Focused Conversations
                       </span>
                     </li>
                     <li className='flex items-center gap-3 text-neutral-600'>
@@ -677,8 +670,8 @@ export default function HomePage() {
                         className='w-4 h-4 text-brand-600 flex-shrink-0'
                         strokeWidth={2.5}
                       />
-                      <span className='font-medium text-sm'>
-                        Career-advancing focus
+                      <span className='font-medium text-base'>
+                        Career-Advancing Connections
                       </span>
                     </li>
                   </ul>
@@ -703,8 +696,7 @@ export default function HomePage() {
               Frequently Asked Questions
             </h2>
             <p className='text-lg text-neutral-600 max-w-2xl mx-auto leading-relaxed font-medium'>
-              Everything you need to know about professional networking on
-              Loopn.
+              Everything you need to know about building your network on Loopn.
             </p>
           </div>
 
@@ -824,11 +816,10 @@ export default function HomePage() {
 
         <div className='max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center'>
           <h2 className='text-2xl sm:text-3xl font-semibold text-neutral-900 mb-3 leading-tight'>
-            Start Connecting Today
+            Start Building Your Network Today
           </h2>
           <p className='text-lg text-neutral-600 mb-12 max-w-md mx-auto font-medium'>
-            Join thousands of professionals already building career-changing
-            relationships.
+            Join thousands of professionals already making career-changing connections.
           </p>
 
           <div className='flex flex-col sm:flex-row gap-4 justify-center'>
@@ -837,7 +828,7 @@ export default function HomePage() {
               className='w-full sm:w-auto'
             >
               <button
-                className='w-full bg-gradient-to-b from-brand-400 to-brand-500 text-white px-6 py-3 sm:px-8 sm:py-4 rounded-lg !font-medium flex items-center justify-center gap-3 border-0 min-h-[50px] touch-manipulation'
+                className='w-full bg-brand-500 text-white px-6 py-3 sm:px-8 sm:py-4 rounded-lg !font-medium flex items-center justify-center gap-3 border-0 min-h-[50px] touch-manipulation'
                 style={{ fontSize: '18px' }}
               >
                 {ctaText}
@@ -846,7 +837,7 @@ export default function HomePage() {
             </Link>
             <button className='w-full sm:w-auto bg-white text-neutral-600 px-6 py-3 sm:px-8 sm:py-4 rounded-lg text-base !font-medium border border-neutral-300 flex items-center justify-center gap-3 min-h-[52px] touch-manipulation'>
               <MessageSquare className='w-5 h-5' strokeWidth={2.5} />
-              See It In Action
+              Watch a Demo
             </button>
           </div>
         </div>
