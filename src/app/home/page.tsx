@@ -426,7 +426,8 @@ export default function HomePage() {
               Network with Focus
             </h2>
             <p className='text-lg text-neutral-700 leading-relaxed font-medium'>
-              Connect with professionals who truly matter, without the noise and spam of other platforms.
+              Connect with professionals who truly matter, without the noise and
+              spam of other platforms.
             </p>
           </div>
 
@@ -463,7 +464,8 @@ export default function HomePage() {
               Full Messaging
             </h2>
             <p className='text-lg text-neutral-700 leading-relaxed font-medium'>
-              Chat directly with your connections through seamless, real-time messaging.
+              Chat directly with your connections through seamless, real-time
+              messaging.
             </p>
           </div>
 
@@ -499,9 +501,10 @@ export default function HomePage() {
             <h2 className='text-2xl sm:text-3xl font-semibold text-neutral-900 mb-3 leading-tight'>
               Detailed Profiles
             </h2>
-                         <p className='text-lg text-neutral-700 leading-relaxed font-medium'>
-               Make informed decisions. View the complete work history and skills of every professional.
-             </p>
+            <p className='text-lg text-neutral-700 leading-relaxed font-medium'>
+              Make informed decisions. View the complete work history and skills
+              of every professional.
+            </p>
           </div>
 
           {/* Resume Image */}
@@ -541,7 +544,8 @@ export default function HomePage() {
               How It Works
             </h2>
             <p className='text-lg text-neutral-700 leading-relaxed font-medium'>
-              Three powerful steps that transform how you build professional relationships.
+              Three powerful steps that transform how you build professional
+              relationships.
             </p>
           </div>
 
@@ -555,10 +559,12 @@ export default function HomePage() {
                   <h3 className='text-xl font-semibold text-neutral-900 mb-3'>
                     Upload Your Resume
                   </h3>
-                                      <p className='text-neutral-700 mb-6 leading-relaxed text-base font-medium'>
-                     Let our AI build your professional profile in seconds. We instantly analyze your experience to find ideal career opportunities and connections.
-                    </p>
-                    <ul className='space-y-3 text-left'>
+                  <p className='text-neutral-700 mb-6 leading-relaxed text-base font-medium'>
+                    Let our AI build your professional profile in seconds. We
+                    instantly analyze your experience to find ideal career
+                    opportunities and connections.
+                  </p>
+                  <ul className='space-y-3 text-left'>
                     <li className='flex items-center gap-3 text-neutral-700'>
                       <ArrowRight
                         className='w-4 h-4 text-brand-600 flex-shrink-0'
@@ -599,9 +605,10 @@ export default function HomePage() {
                   <h3 className='text-xl font-semibold text-neutral-900 mb-3'>
                     Discover Live Matches
                   </h3>
-                                      <p className='text-neutral-700 mb-6 leading-relaxed text-base font-medium'>
-                     See a curated list of professionals who are online right now. Connect with the right people at the perfect moment.
-                    </p>
+                  <p className='text-neutral-700 mb-6 leading-relaxed text-base font-medium'>
+                    See a curated list of professionals who are online right
+                    now. Connect with the right people at the perfect moment.
+                  </p>
                   <ul className='space-y-3 text-left'>
                     <li className='flex items-center gap-3 text-neutral-700'>
                       <ArrowRight
@@ -643,9 +650,11 @@ export default function HomePage() {
                   <h3 className='text-xl font-semibold text-neutral-900 mb-3'>
                     Build Lasting Relationships
                   </h3>
-                                      <p className='text-neutral-700 mb-6 leading-relaxed text-base font-medium'>
-                     Focus on quality over quantity. We foster a community dedicated to building meaningful, career-focused relationships.
-                    </p>
+                  <p className='text-neutral-700 mb-6 leading-relaxed text-base font-medium'>
+                    Focus on quality over quantity. We foster a community
+                    dedicated to building meaningful, career-focused
+                    relationships.
+                  </p>
                   <ul className='space-y-3 text-left'>
                     <li className='flex items-center gap-3 text-neutral-700'>
                       <ArrowRight
@@ -819,7 +828,8 @@ export default function HomePage() {
             Start Building Your Network Today
           </h2>
           <p className='text-lg text-neutral-700 mb-12 max-w-md mx-auto font-medium'>
-            Join thousands of professionals already making career-changing connections.
+            Join thousands of professionals already making career-changing
+            connections.
           </p>
 
           <div className='flex flex-col sm:flex-row gap-4 justify-center'>
