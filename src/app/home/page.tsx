@@ -431,11 +431,11 @@ export default function HomePage() {
           {/* Section Header */}
           <div className='text-center max-w-3xl mx-auto mb-12'>
             <h2 className='text-3xl sm:text-4xl font-semibold text-neutral-900 mb-3 leading-tight'>
-              Focused Networking with Clean UI
+              Networking with Focus
             </h2>
             <p className='text-lg text-neutral-600 leading-relaxed font-medium'>
               Connect with professionals who actually matter to your career and
-              without a lot of noise
+              without any noise
             </p>
           </div>
 
