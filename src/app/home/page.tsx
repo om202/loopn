@@ -5,11 +5,7 @@ import { useAuthenticator } from '@aws-amplify/ui-react';
 import {
   MessageSquare,
   ArrowRight,
-  Zap,
-  Brain,
-  Shield,
   Smile,
-  CloudUpload,
   ChevronDown,
 } from 'lucide-react';
 
@@ -431,37 +427,22 @@ export default function HomePage() {
           {/* Section Header */}
           <div className='text-center max-w-3xl mx-auto mb-12'>
             <h2 className='text-3xl sm:text-4xl font-semibold text-neutral-900 mb-3 leading-tight'>
-              Networking with Focus
+              Network with Focus
             </h2>
             <p className='text-lg text-neutral-600 leading-relaxed font-medium'>
-              Connect with professionals who actually matter to your career and
+              Connect with professionals who actually matter and
               without any noise
             </p>
           </div>
 
-          {/* Dashboard Images - Responsive */}
+          {/* Dashboard Image */}
           <div className='flex justify-center'>
-            {/* Desktop Dashboard Image */}
-            <div className='hidden lg:block w-full max-w-5xl'>
+            <div className='w-full max-w-2xl lg:max-w-4xl mx-auto'>
               <Image
-                src='/desktop-dash.webp'
-                alt='Loopn Dashboard - Desktop View'
-                width={1200}
-                height={900}
-                className='w-full h-auto rounded-2xl border border-neutral-200'
-                quality={100}
-                priority
-                unoptimized={true}
-              />
-            </div>
-
-            {/* Mobile Dashboard Image */}
-            <div className='block lg:hidden w-full max-w-sm mx-auto'>
-              <Image
-                src='/mobile-dash.webp'
-                alt='Loopn Dashboard - Mobile View'
-                width={450}
-                height={900}
+                src='/screen1.png'
+                alt='Loopn Dashboard'
+                width={600}
+                height={800}
                 className='w-full h-auto rounded-2xl border border-neutral-200'
                 quality={100}
                 priority
@@ -470,151 +451,53 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Features Grid */}
-          <div className='grid lg:grid-cols-3 gap-8 sm:gap-12 mb-12 mt-12'>
-            {/* Feature 1 - Smart Matching */}
-            <div className=' bg-white rounded-2xl p-8 border border-neutral-200 h-full'>
-              <h3 className='text-xl font-semibold text-neutral-900 mb-3 flex items-center gap-3'>
-                <Brain className='w-6 h-6 text-brand-600' strokeWidth={2.5} />
-                AI Resume Intelligence
-              </h3>
-              <p className='text-neutral-600 mb-8 leading-relaxed text-base font-medium'>
-                Upload once. Get matched to perfect career opportunities
-                instantly.
-              </p>
-              <ul className='space-y-4'>
-                <li className='flex items-center gap-3 text-neutral-600'>
-                  <ArrowRight
-                    className='w-4 h-4 text-brand-600 flex-shrink-0'
-                    strokeWidth={2.5}
-                  />
-                  <span className='font-medium text-base'>
-                    Algorithm analyzes resume instantly
-                  </span>
-                </li>
-                <li className='flex items-center gap-3 text-neutral-600'>
-                  <ArrowRight
-                    className='w-4 h-4 text-brand-600 flex-shrink-0'
-                    strokeWidth={2.5}
-                  />
-                  <span className='font-medium text-base'>
-                    Personalized compatibility matching
-                  </span>
-                </li>
-                <li className='flex items-center gap-3 text-neutral-600'>
-                  <ArrowRight
-                    className='w-4 h-4 text-brand-600 flex-shrink-0'
-                    strokeWidth={2.5}
-                  />
-                  <span className='font-medium text-base'>
-                    Personalized industry-specific results
-                  </span>
-                </li>
-              </ul>
-            </div>
 
-            {/* Feature 2 - Real-time Chat */}
-            <div className=' bg-white rounded-2xl p-8 border border-neutral-200 h-full'>
-              <h3 className='text-xl font-semibold text-neutral-900 mb-3 flex items-center gap-3'>
-                <Zap className='w-6 h-6 text-brand-600' strokeWidth={2.5} />
-                Real-Time Discovery
-              </h3>
-              <p className='text-neutral-600 mb-8 leading-relaxed text-base font-medium'>
-                Connect with the right people at the right moment.
-              </p>
-              <ul className='space-y-4'>
-                <li className='flex items-center gap-3 text-neutral-600'>
-                  <ArrowRight
-                    className='w-4 h-4 text-brand-600 flex-shrink-0'
-                    strokeWidth={2.5}
-                  />
-                  <span className='font-medium text-base'>
-                    See personalized matches online
-                  </span>
-                </li>
-                <li className='flex items-center gap-3 text-neutral-600'>
-                  <ArrowRight
-                    className='w-4 h-4 text-brand-600 flex-shrink-0'
-                    strokeWidth={2.5}
-                  />
-                  <span className='font-medium text-base'>
-                    Send instant chat requests
-                  </span>
-                </li>
-                <li className='flex items-center gap-3 text-neutral-600'>
-                  <ArrowRight
-                    className='w-4 h-4 text-brand-600 flex-shrink-0'
-                    strokeWidth={2.5}
-                  />
-                  <span className='font-medium text-base'>
-                    Build permanent relationships
-                  </span>
-                </li>
-              </ul>
-            </div>
 
-            {/* Feature 3 - Quality Network */}
-            <div className=' bg-white rounded-2xl p-8 border border-neutral-200 h-full'>
-              <h3 className='text-xl font-semibold text-neutral-900 mb-3 flex items-center gap-3'>
-                <Shield className='w-6 h-6 text-brand-600' strokeWidth={2.5} />
-                Professional Focus
-              </h3>
-              <p className='text-neutral-600 mb-8 leading-relaxed text-base font-medium'>
-                Quality over quantity. Every connection is relevant and
-                career-focused.
-              </p>
-              <ul className='space-y-4'>
-                <li className='flex items-center gap-3 text-neutral-600'>
-                  <ArrowRight
-                    className='w-4 h-4 text-brand-600 flex-shrink-0'
-                    strokeWidth={2.5}
-                  />
-                  <span className='font-medium text-base'>
-                    Serious professionals only
-                  </span>
-                </li>
-                <li className='flex items-center gap-3 text-neutral-600'>
-                  <ArrowRight
-                    className='w-4 h-4 text-brand-600 flex-shrink-0'
-                    strokeWidth={2.5}
-                  />
-                  <span className='font-medium text-base'>
-                    No spam or casual chat
-                  </span>
-                </li>
-                <li className='flex items-center gap-3 text-neutral-600'>
-                  <ArrowRight
-                    className='w-4 h-4 text-brand-600 flex-shrink-0'
-                    strokeWidth={2.5}
-                  />
-                  <span className='font-medium text-base'>
-                    Career-advancing focus
-                  </span>
-                </li>
-              </ul>
-            </div>
+
+
+
+        </div>
+      </section>
+
+      {/* Message in Real Time Section */}
+      <section className='py-8 sm:py-12 bg-neutral-50 relative border-t border-neutral-200'>
+        {/* Background decoration */}
+        <div className='absolute inset-0 -z-10'>
+          <div className='absolute top-1/4 left-0 w-72 h-72 bg-neutral-100/80 rounded-full blur-3xl' />
+          <div className='absolute bottom-1/4 right-1/4 w-80 h-80 bg-brand-50/60 rounded-full blur-3xl' />
+        </div>
+
+        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+          {/* Section Header */}
+          <div className='text-center max-w-3xl mx-auto mb-12'>
+            <h2 className='text-3xl sm:text-4xl font-semibold text-neutral-900 mb-3 leading-tight'>
+              Full Messaging
+            </h2>
+            <p className='text-lg text-neutral-600 leading-relaxed font-medium'>
+              Chat with professionals through seamless real-time messaging
+            </p>
           </div>
 
-          {/* Bottom CTA */}
-          <div className='text-center'>
-            <Link href={isAuthenticated ? authLink : signUpLink}>
-              <button
-                className='inline-flex items-center gap-3 bg-brand-500 text-white px-6 py-3 sm:px-10 sm:py-4 rounded-xl !font-medium min-h-[50px]'
-                style={{ fontSize: '18px' }}
-              >
-                {ctaText}
-                <ArrowRight className='w-5 h-5' strokeWidth={2.5} />
-              </button>
-            </Link>
+          {/* Messaging Image */}
+          <div className='flex justify-center'>
+            <div className='w-full max-w-2xl lg:max-w-4xl mx-auto'>
+              <Image
+                src='/screen3.png'
+                alt='Loopn Real-Time Messaging'
+                width={600}
+                height={800}
+                className='w-full h-auto rounded-2xl border border-neutral-200'
+                quality={100}
+                priority
+                unoptimized={true}
+              />
+            </div>
           </div>
         </div>
       </section>
 
-      {/* How It Works */}
-      <section
-        id='how-it-works'
-        className='py-8 sm:py-12 bg-white relative border-t border-neutral-200'
-      >
+      {/* Full Resume Section */}
+      <section className='py-8 sm:py-12 bg-white relative border-t border-neutral-200'>
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-1/3 right-0 w-96 h-96 bg-brand-50/60 rounded-full blur-3xl' />
@@ -625,81 +508,184 @@ export default function HomePage() {
           {/* Section Header */}
           <div className='text-center max-w-3xl mx-auto mb-12'>
             <h2 className='text-3xl sm:text-4xl font-semibold text-neutral-900 mb-3 leading-tight'>
+              Detailed Profiles
+            </h2>
+                          <p className='text-lg text-neutral-600 leading-relaxed font-medium'>
+                See complete work history and skills of every professional you connect with
+              </p>
+          </div>
+
+          {/* Resume Image */}
+          <div className='flex justify-center'>
+            <div className='w-full max-w-lg lg:max-w-2xl mx-auto'>
+              <Image
+                src='/screen2.png'
+                alt='Loopn Full Resume'
+                width={600}
+                height={800}
+                className='w-full h-auto rounded-2xl border border-neutral-200'
+                quality={100}
+                priority
+                unoptimized={true}
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Why Professionals Choose Loopn & How It Works */}
+      <section
+        id='how-it-works'
+        className='py-8 sm:py-12 bg-white relative border-t border-neutral-200'
+      >
+        {/* Background decoration */}
+        <div className='absolute inset-0 -z-10'>
+          <div className='absolute top-1/6 left-0 w-96 h-96 bg-brand-50/60 rounded-full blur-3xl' />
+          <div className='absolute bottom-1/6 right-0 w-80 h-80 bg-neutral-100/80 rounded-full blur-3xl' />
+          <div className='absolute top-2/3 right-1/4 w-72 h-72 bg-brand-50/40 rounded-full blur-3xl' />
+        </div>
+
+        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+          {/* Section Header */}
+          <div className='text-center max-w-3xl mx-auto mb-12'>
+            <h2 className='text-3xl sm:text-4xl font-semibold text-neutral-900 mb-3 leading-tight'>
               How It Works
             </h2>
             <p className='text-lg text-neutral-600 leading-relaxed font-medium'>
-              Getting started with Loopn is quick and effortless.
+              Three powerful features that transform how you build professional relationships
             </p>
           </div>
 
-          {/* Steps */}
+          {/* Combined Steps */}
           <div className='grid lg:grid-cols-3 gap-8 sm:gap-12 relative'>
-            {/* Step 1 */}
+            {/* Step 1 - AI Resume Intelligence + Upload */}
             <div className='relative group'>
               <div className='bg-white rounded-2xl p-8 border border-neutral-200 relative h-full'>
-                {/* Step number */}
-                <div className='absolute top-4 left-1/2 -translate-x-1/2 w-8 h-8 bg-neutral-100 rounded-full flex items-center justify-center text-brand-600 font-bold text-sm mb-4'>
-                  1
-                </div>
                 {/* Content */}
-                <div className='text-center mt-6'>
-                  <h3 className='text-xl font-semibold text-neutral-900 mb-3 flex items-center justify-center gap-3'>
-                    <CloudUpload
-                      className='w-6 h-6 text-brand-600'
-                      strokeWidth={2.5}
-                    />
+                <div>
+                  <h3 className='text-xl font-semibold text-neutral-900 mb-3'>
                     Upload Your Resume
                   </h3>
-                  <p className='text-neutral-600 leading-relaxed text-base font-medium'>
-                    Drop your resume. AI builds your profile in seconds.
+                  <p className='text-neutral-600 mb-6 leading-relaxed text-base font-medium'>
+                    Drop your resume. AI builds your profile and analyzes it instantly for perfect career opportunities.
                   </p>
+                  <ul className='space-y-3 text-left'>
+                    <li className='flex items-center gap-3 text-neutral-600'>
+                      <ArrowRight
+                        className='w-4 h-4 text-brand-600 flex-shrink-0'
+                        strokeWidth={2.5}
+                      />
+                      <span className='font-medium text-sm'>
+                        Algorithm analyzes resume instantly
+                      </span>
+                    </li>
+                    <li className='flex items-center gap-3 text-neutral-600'>
+                      <ArrowRight
+                        className='w-4 h-4 text-brand-600 flex-shrink-0'
+                        strokeWidth={2.5}
+                      />
+                      <span className='font-medium text-sm'>
+                        Personalized compatibility matching
+                      </span>
+                    </li>
+                    <li className='flex items-center gap-3 text-neutral-600'>
+                      <ArrowRight
+                        className='w-4 h-4 text-brand-600 flex-shrink-0'
+                        strokeWidth={2.5}
+                      />
+                      <span className='font-medium text-sm'>
+                        Industry-specific results
+                      </span>
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>
 
-            {/* Step 2 */}
+            {/* Step 2 - Real-Time Discovery + Live Matches */}
             <div className='relative group'>
               <div className='bg-white rounded-2xl p-8 border border-neutral-200 relative h-full'>
-                {/* Step number */}
-                <div className='absolute top-4 left-1/2 -translate-x-1/2 w-8 h-8 bg-neutral-100 rounded-full flex items-center justify-center text-brand-600 font-bold text-sm mb-4'>
-                  2
-                </div>
                 {/* Content */}
-                <div className='text-center mt-6'>
-                  <h3 className='text-xl font-semibold text-neutral-900 mb-3 flex items-center justify-center gap-3'>
-                    <Brain
-                      className='w-6 h-6 text-brand-600'
-                      strokeWidth={2.5}
-                    />
+                <div>
+                  <h3 className='text-xl font-semibold text-neutral-900 mb-3'>
                     Discover Live Matches
                   </h3>
-                  <p className='text-neutral-600 leading-relaxed text-base font-medium'>
-                    See perfect matches online right now. Connect instantly.
+                  <p className='text-neutral-600 mb-6 leading-relaxed text-base font-medium'>
+                    See perfect matches online right now. Connect with the right people at the right moment.
                   </p>
+                  <ul className='space-y-3 text-left'>
+                    <li className='flex items-center gap-3 text-neutral-600'>
+                      <ArrowRight
+                        className='w-4 h-4 text-brand-600 flex-shrink-0'
+                        strokeWidth={2.5}
+                      />
+                      <span className='font-medium text-sm'>
+                        See personalized matches online
+                      </span>
+                    </li>
+                    <li className='flex items-center gap-3 text-neutral-600'>
+                      <ArrowRight
+                        className='w-4 h-4 text-brand-600 flex-shrink-0'
+                        strokeWidth={2.5}
+                      />
+                      <span className='font-medium text-sm'>
+                        Send instant chat requests
+                      </span>
+                    </li>
+                    <li className='flex items-center gap-3 text-neutral-600'>
+                      <ArrowRight
+                        className='w-4 h-4 text-brand-600 flex-shrink-0'
+                        strokeWidth={2.5}
+                      />
+                      <span className='font-medium text-sm'>
+                        Connect instantly with professionals
+                      </span>
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>
 
-            {/* Step 3 */}
+            {/* Step 3 - Professional Focus + Build Relationships */}
             <div className='relative group'>
               <div className='bg-white rounded-2xl p-8 border border-neutral-200 relative h-full'>
-                {/* Step number */}
-                <div className='absolute top-4 left-1/2 -translate-x-1/2 w-8 h-8 bg-neutral-100 rounded-full flex items-center justify-center text-brand-600 font-bold text-sm mb-4'>
-                  3
-                </div>
                 {/* Content */}
-                <div className='text-center mt-6'>
-                  <h3 className='text-xl font-semibold text-neutral-900 mb-3 flex items-center justify-center gap-3'>
-                    <MessageSquare
-                      className='w-6 h-6 text-brand-600'
-                      strokeWidth={2.5}
-                    />
+                <div>
+                  <h3 className='text-xl font-semibold text-neutral-900 mb-3'>
                     Build Lasting Relationships
                   </h3>
-                  <p className='text-neutral-600 leading-relaxed text-base font-medium'>
-                    Send requests. Start conversations. Build lasting
-                    professional relationships.
+                  <p className='text-neutral-600 mb-6 leading-relaxed text-base font-medium'>
+                    Quality over quantity. Build career-focused relationships with serious professionals only.
                   </p>
+                  <ul className='space-y-3 text-left'>
+                    <li className='flex items-center gap-3 text-neutral-600'>
+                      <ArrowRight
+                        className='w-4 h-4 text-brand-600 flex-shrink-0'
+                        strokeWidth={2.5}
+                      />
+                      <span className='font-medium text-sm'>
+                        Serious professionals only
+                      </span>
+                    </li>
+                    <li className='flex items-center gap-3 text-neutral-600'>
+                      <ArrowRight
+                        className='w-4 h-4 text-brand-600 flex-shrink-0'
+                        strokeWidth={2.5}
+                      />
+                      <span className='font-medium text-sm'>
+                        No spam or casual chat
+                      </span>
+                    </li>
+                    <li className='flex items-center gap-3 text-neutral-600'>
+                      <ArrowRight
+                        className='w-4 h-4 text-brand-600 flex-shrink-0'
+                        strokeWidth={2.5}
+                      />
+                      <span className='font-medium text-sm'>
+                        Career-advancing focus
+                      </span>
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>
