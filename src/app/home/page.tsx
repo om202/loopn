@@ -408,6 +408,19 @@ export default function HomePage() {
               </div>
             </div>
           </div>
+
+          {/* Product Hunt Badge - Right Side Centered */}
+          <div className='flex justify-end mt-8 mb-4'>
+            <a href="https://www.producthunt.com/products/loopn?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-loopn" target="_blank" className='transition-transform hover:scale-105'>
+              <img 
+                src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1012678&theme=light&t=1756962211316" 
+                alt="Loopn - Professional&#0032;Networking&#0032;Made&#0032;Simple | Product Hunt" 
+                className='w-[200px] h-[43px] sm:w-[250px] sm:h-[54px]'
+                width="250" 
+                height="54" 
+              />
+            </a>
+          </div>
         </div>
       </section>
 
