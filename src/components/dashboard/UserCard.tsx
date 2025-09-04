@@ -213,7 +213,7 @@ export default function UserCard({
 
         <div className='flex-1 min-w-0'>
           <div className='flex items-center gap-2 mb-1'>
-            <div className='text-neutral-900 text-base truncate no-email-detection font-medium'>
+            <div className='text-neutral-900 text-[17px] truncate no-email-detection font-medium'>
               {getDisplayName(userPresence, userProfile)}
             </div>
             {/* All connections are now permanent - no trial indicators needed */}
@@ -221,7 +221,7 @@ export default function UserCard({
 
           {/* Profession */}
           {(finalFullProfile?.jobRole || finalFullProfile?.companyName) && (
-            <div className='text-sm text-neutral-500 font-medium truncate'>
+            <div className='text-[15px] text-neutral-500 font-medium truncate'>
               {finalFullProfile?.jobRole && finalFullProfile?.companyName
                 ? `${finalFullProfile.jobRole} at ${finalFullProfile.companyName}`
                 : finalFullProfile?.jobRole || finalFullProfile?.companyName}
