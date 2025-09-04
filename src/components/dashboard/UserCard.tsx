@@ -29,6 +29,15 @@ import { useSavedUsersStore } from '../../stores/saved-users-store';
 type UserPresence = Schema['UserPresence']['type'];
 type Conversation = Schema['Conversation']['type'];
 
+// Helper function to capitalize first letter of each word
+const capitalizeWords = (str: string): string => {
+  return str
+    .toLowerCase()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
+
 interface UserCardProps {
   userPresence: UserPresence;
   onlineUsers: UserPresence[];
@@ -68,7 +77,7 @@ const getDisplayName = (
 ) => {
   // Try to get full name from profile first
   if (userProfile?.fullName) {
-    return userProfile.fullName;
+    return capitalizeWords(userProfile.fullName);
   }
   // Fall back to email if available
   if (userProfile?.email) {
@@ -121,14 +130,14 @@ export default function UserCard({
   // Derive user profile data from either searchProfile or fetched profile
   const userProfile = searchProfile
     ? {
-        fullName: searchProfile.fullName,
+        fullName: searchProfile.fullName ? capitalizeWords(searchProfile.fullName) : undefined,
         email: searchProfile.email,
         profilePictureUrl: searchProfile.profilePictureUrl,
         hasProfilePicture: !!searchProfile.profilePictureUrl,
       }
     : fullProfile
       ? {
-          fullName: fullProfile.fullName || undefined,
+          fullName: fullProfile.fullName ? capitalizeWords(fullProfile.fullName) : undefined,
           email: fullProfile.email || undefined,
           profilePictureUrl: fullProfile.profilePictureUrl || undefined,
           hasProfilePicture: fullProfile.hasProfilePicture || false,
@@ -144,7 +153,7 @@ export default function UserCard({
   const finalFullProfile = searchProfile
     ? ({
         userId: searchProfile.userId,
-        fullName: searchProfile.fullName || null,
+        fullName: searchProfile.fullName ? capitalizeWords(searchProfile.fullName) : null,
         email: searchProfile.email || null,
         jobRole: searchProfile.jobRole || null,
         companyName: searchProfile.companyName || null,

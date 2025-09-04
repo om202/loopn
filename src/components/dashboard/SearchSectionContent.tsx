@@ -200,7 +200,7 @@ export default function SearchSectionContent({
             )}
 
             {/* Results List */}
-            <div className='space-y-2'>
+            <div className='space-y-3'>
               {searchResults.map(result => {
                 // Convert search result to UserPresence format for UserCard
                 const userPresence: UserPresence = {

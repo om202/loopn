@@ -310,7 +310,7 @@ export default function DashboardSectionContent({
   }
 
   return (
-    <div className='space-y-2 sm:space-y-3 w-full'>
+    <div className='space-y-3 sm:space-y-4 w-full'>
       {usersToShow.length > 0 ? (
         usersToShow.map(renderUserCard)
       ) : (
