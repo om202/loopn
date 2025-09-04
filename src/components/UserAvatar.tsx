@@ -200,10 +200,10 @@ export default function UserAvatar({
           )}
 
           {(!hasProfilePicture || imageError) && (
-            <div className='bg-gradient-to-br from-neutral-50 to-neutral-150 w-full h-full flex items-center justify-center absolute inset-0 shadow-inner'>
+            <div className='bg-neutral-300 w-full h-full flex items-center justify-center absolute inset-0'>
               <User
-                className='w-3/5 h-3/5 text-neutral-500 drop-shadow-sm'
-                strokeWidth={1.5}
+                className='w-3/5 h-3/5 text-neutral-600'
+                strokeWidth={1.8}
               />
             </div>
           )}
