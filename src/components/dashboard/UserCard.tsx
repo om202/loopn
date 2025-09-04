@@ -130,14 +130,18 @@ export default function UserCard({
   // Derive user profile data from either searchProfile or fetched profile
   const userProfile = searchProfile
     ? {
-        fullName: searchProfile.fullName ? capitalizeWords(searchProfile.fullName) : undefined,
+        fullName: searchProfile.fullName
+          ? capitalizeWords(searchProfile.fullName)
+          : undefined,
         email: searchProfile.email,
         profilePictureUrl: searchProfile.profilePictureUrl,
         hasProfilePicture: !!searchProfile.profilePictureUrl,
       }
     : fullProfile
       ? {
-          fullName: fullProfile.fullName ? capitalizeWords(fullProfile.fullName) : undefined,
+          fullName: fullProfile.fullName
+            ? capitalizeWords(fullProfile.fullName)
+            : undefined,
           email: fullProfile.email || undefined,
           profilePictureUrl: fullProfile.profilePictureUrl || undefined,
           hasProfilePicture: fullProfile.hasProfilePicture || false,
@@ -153,7 +157,9 @@ export default function UserCard({
   const finalFullProfile = searchProfile
     ? ({
         userId: searchProfile.userId,
-        fullName: searchProfile.fullName ? capitalizeWords(searchProfile.fullName) : null,
+        fullName: searchProfile.fullName
+          ? capitalizeWords(searchProfile.fullName)
+          : null,
         email: searchProfile.email || null,
         jobRole: searchProfile.jobRole || null,
         companyName: searchProfile.companyName || null,
