@@ -171,7 +171,7 @@ export default function HomePage() {
               </h2>
 
               <p className='text-base sm:text-lg text-neutral-700 mb-8 sm:mb-10 max-w-lg mx-auto lg:mx-0 leading-relaxed'>
-                Stop wasting time. Our AI-powered matching algorithm analyzes
+                Our AI-powered matching algorithm analyzes
                 your profile to connect you with the right professionals,
                 instantly.
               </p>
