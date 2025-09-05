@@ -60,7 +60,7 @@ export default function LoadingContainer({
 
   return (
     <div
-      className={`flex items-start justify-center w-full h-full pt-20 ${className}`}
+      className={`flex items-start justify-center w-full h-full pt-16 ${className}`}
     >
       {renderSpinner()}
     </div>

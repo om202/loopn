@@ -259,7 +259,7 @@ export default function SearchUser({
             <button
               type='submit'
               onMouseDown={e => e.preventDefault()}
-              className='text-brand-600 bg-brand-50 hover:bg-brand-100 rounded-r-xl flex items-center justify-center transition-all duration-300 ease-out px-4 py-3 flex-shrink-0 font-medium'
+              className='text-brand-600 bg-brand-50 hover:bg-brand-100 rounded-r-xl flex items-center justify-center transition-colors px-4 py-3 flex-shrink-0 font-medium'
             >
               {isProcessing ? (
                 <div className='w-5 h-5 border-2 border-brand-600 border-t-transparent rounded-full animate-spin flex-shrink-0' />
@@ -277,7 +277,7 @@ export default function SearchUser({
         {showHistory && searchHistory.length > 0 && (
           <div
             ref={dropdownRef}
-            className='absolute top-full left-0 right-0 bg-neutral-50 border border-neutral-200 rounded-2xl shadow-sm z-50 max-h-64 overflow-y-auto mt-2'
+            className='absolute top-full left-0 right-0 bg-white border border-neutral-200 rounded-xl shadow-lg z-50 max-h-64 overflow-y-auto mt-2'
           >
             <div className='py-2'>
               <div className='px-4 py-2 text-sm font-medium text-neutral-500 border-b border-neutral-200'>

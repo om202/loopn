@@ -188,7 +188,7 @@ export default function UserCard({
     <div
       key={userPresence.userId}
       onClick={handleCardClick}
-      className={`px-3 py-3 group transition-all duration-200 cursor-pointer shadow-xs ${
+      className={`px-3 py-3 group transition-colors cursor-pointer shadow-xs ${
         isSelected
           ? 'bg-brand-50 rounded-xl border border-brand-200'
           : 'bg-white hover:bg-neutral-50 rounded-lg border border-neutral-200 hover:border-brand-300'
@@ -235,7 +235,7 @@ export default function UserCard({
           )}
         </div>
 
-        <div className='flex-shrink-0 flex items-center gap-1 sm:gap-2'>
+        <div className='flex-shrink-0 flex items-center gap-2'>
           {/* Profile Button - only show on mobile */}
           <button
             onClick={() => setShowProfileDialog(true)}
@@ -280,7 +280,7 @@ export default function UserCard({
                 <button
                   onClick={() => setShowCancelDialog(true)}
                   disabled={isOptimisticRequest}
-                  className='flex items-center justify-center gap-2 px-2 py-2 text-base font-medium text-neutral-500 bg-neutral-100 hover:bg-neutral-200 rounded-lg transition-colors disabled:cursor-not-allowed disabled:hover:bg-neutral-100 border border-neutral-200'
+                  className='flex items-center justify-center gap-2 px-3 py-2 font-medium text-neutral-500 bg-neutral-100 hover:bg-neutral-200 rounded-lg transition-colors disabled:cursor-not-allowed disabled:hover:bg-neutral-100 border border-neutral-200'
                   title={
                     isOptimisticRequest
                       ? 'Request being sent...'
@@ -288,7 +288,7 @@ export default function UserCard({
                   }
                 >
                   <UserCheck className='w-5 h-5 text-neutral-500' />
-                  <span className='text-base font-medium text-neutral-500'>
+                  <span className='font-medium text-neutral-500'>
                     Pending
                   </span>
                 </button>
@@ -304,7 +304,7 @@ export default function UserCard({
                     onChatAction(userPresence.userId);
                   }
                 }}
-                className={`px-2 py-2 rounded-lg text-base font-medium transition-colors flex items-center justify-center gap-2 flex-shrink-0 ${
+                className={`px-3 py-2 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 flex-shrink-0 ${
                   incomingRequestSenderIds.has(userPresence.userId)
                     ? 'bg-white text-brand-600 border border-brand-500 hover:bg-brand-50'
                     : existingConversations.has(userPresence.userId)
@@ -323,21 +323,21 @@ export default function UserCard({
                   // Prioritize incoming requests over existing conversations
                   <>
                     <ConnectIcon className='w-5 h-5 text-brand-600' />
-                    <span className='text-base font-medium text-brand-600'>
+                    <span className='font-medium text-brand-600'>
                       Accept
                     </span>
                   </>
                 ) : existingConversations.has(userPresence.userId) ? (
                   <>
                     <MessageSquare className='w-5 h-5 text-brand-600' />
-                    <span className='text-base font-medium text-brand-600'>
+                    <span className='font-medium text-brand-600'>
                       Message
                     </span>
                   </>
                 ) : (
                   <>
                     <ConnectIcon className='w-5 h-5 text-white' />
-                    <span className='text-base font-medium text-white'>
+                    <span className='font-medium text-white'>
                       Connect
                     </span>
                   </>
@@ -450,7 +450,7 @@ export default function UserCard({
           <div className='flex gap-2'>
             <button
               onClick={() => setShowCancelDialog(false)}
-              className='flex-1 px-3 py-2 text-base font-medium text-neutral-900 bg-neutral-100 rounded-lg hover:bg-neutral-100 focus:outline-none transition-colors'
+              className='flex-1 px-3 py-2 font-medium text-neutral-900 bg-neutral-100 rounded-lg hover:bg-neutral-100 focus:outline-none transition-colors'
             >
               Done
             </button>
@@ -459,7 +459,7 @@ export default function UserCard({
                 onCancelChatRequest(userPresence.userId);
                 setShowCancelDialog(false);
               }}
-              className='flex-1 px-3 py-2 text-base font-medium text-b_red-600 bg-neutral-100 rounded-lg hover:bg-neutral-200 focus:outline-none transition-colors'
+              className='flex-1 px-3 py-2 font-medium text-red-600 bg-neutral-100 rounded-lg hover:bg-neutral-200 focus:outline-none transition-colors'
             >
               Cancel Request
             </button>

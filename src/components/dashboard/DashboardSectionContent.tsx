@@ -310,13 +310,13 @@ export default function DashboardSectionContent({
   }
 
   return (
-    <div className='space-y-3 sm:space-y-4 w-full'>
+    <div className='space-y-4 w-full'>
       {usersToShow.length > 0 ? (
         usersToShow.map(renderUserCard)
       ) : (
-        <div className='flex flex-col items-center justify-center py-12 text-center'>
-          <div className='w-16 h-16 mx-auto mb-4 bg-neutral-100 rounded-full flex items-center justify-center'>
-            <EmptyIcon className='w-8 h-8 text-neutral-500' />
+        <div className='flex flex-col items-center justify-center py-8 text-center'>
+          <div className='w-12 h-12 mx-auto mb-3 bg-neutral-100 rounded-full flex items-center justify-center'>
+            <EmptyIcon className='w-6 h-6 text-neutral-500' />
           </div>
           <h3 className='text-lg font-medium text-neutral-900 mb-1'>
             {emptyMessage}

@@ -419,7 +419,7 @@ export default function NotificationsContent() {
       {/* Content */}
       <div className='flex-1 w-full'>
         {error && (
-          <div className='p-4 text-b_red-700 bg-b_red-100 mb-4 rounded-2xl'>
+          <div className='p-4 text-red-700 bg-red-50 mb-4 rounded-xl'>
             {error}
           </div>
         )}
@@ -427,16 +427,16 @@ export default function NotificationsContent() {
         {isLoading ? (
           <LoadingContainer size='lg' variant='spin' />
         ) : getFilteredNotifications().length === 0 ? (
-          <div className='flex flex-col items-center justify-center min-h-full text-center'>
-            <div className='w-16 h-16 mx-auto mb-4 bg-neutral-100 rounded-full flex items-center justify-center'>
-              <Bell className='w-8 h-8 text-neutral-500' />
+          <div className='flex flex-col items-center justify-center py-8 text-center'>
+            <div className='w-12 h-12 mx-auto mb-3 bg-neutral-100 rounded-full flex items-center justify-center'>
+              <Bell className='w-6 h-6 text-neutral-500' />
             </div>
             <h3 className='text-lg font-medium text-neutral-900 mb-1'>
               You&apos;re all caught up
             </h3>
           </div>
         ) : (
-          <div className='space-y-3 sm:space-y-4'>
+          <div className='space-y-4'>
             {getFilteredNotifications().map(notification => (
               <NotificationItem
                 key={notification.id}

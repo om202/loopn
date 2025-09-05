@@ -86,7 +86,7 @@ export default function AccountContent() {
 
       {/* Profile Section */}
       <div className='mx-auto w-full'>
-        <div className='flex flex-col items-start mb-8'>
+        <div className='flex flex-col items-start mb-6'>
           <UserAvatar
             email={getUserEmail()}
             userId={user?.userId}
@@ -99,7 +99,7 @@ export default function AccountContent() {
               !!onboardingStatus?.onboardingData?.profilePictureUrl
             }
             size='xl'
-            className='mb-5'
+            className='mb-4'
           />
           <div className='flex items-start justify-between w-full'>
             <div>
@@ -115,7 +115,7 @@ export default function AccountContent() {
               <button
                 onClick={handleDownloadResume}
                 disabled={downloadingResume || !userProfile}
-                className='flex items-center gap-2 px-3 py-2 text-neutral-500 hover:text-brand-600 transition-colors rounded-lg hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50 text-sm font-medium'
+                className='flex items-center gap-2 px-3 py-2 text-neutral-500 hover:text-brand-600 transition-colors rounded-lg hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50 font-medium'
                 title='Download Your Profile as PDF'
               >
                 <FileDown className='w-4 h-4' />
@@ -126,7 +126,7 @@ export default function AccountContent() {
         </div>
 
         {/* Profile Details */}
-        <div className='mt-5'>
+        <div className='mt-4'>
           <UserProfileContent
             userProfile={userProfile}
             loading={loadingProfile}
@@ -136,7 +136,7 @@ export default function AccountContent() {
       </div>
 
       {/* Bottom spacing */}
-      <div className='pb-8'></div>
+      <div className='pb-6'></div>
     </div>
   );
 }

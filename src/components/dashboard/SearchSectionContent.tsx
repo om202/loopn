@@ -150,9 +150,9 @@ export default function SearchSectionContent({
       {/* Search Results */}
       <div className='flex-1 overflow-y-auto w-full'>
         {!hasSearched ? (
-          <div className='flex flex-col items-center justify-center h-full text-center p-8 transition-opacity duration-200 opacity-100'>
-            <div className='w-16 h-16 mx-auto mb-4 bg-neutral-100 rounded-full flex items-center justify-center'>
-              <Search className='w-8 h-8 text-neutral-500' />
+          <div className='flex flex-col items-center justify-center h-full text-center p-6 transition-opacity duration-200 opacity-100'>
+            <div className='w-12 h-12 mx-auto mb-3 bg-neutral-100 rounded-full flex items-center justify-center'>
+              <Search className='w-6 h-6 text-neutral-500' />
             </div>
             <h3 className='text-lg font-medium text-neutral-900 mb-1'>
               Search
@@ -163,9 +163,9 @@ export default function SearchSectionContent({
             <LoadingContainer size='lg' />
           </div>
         ) : error || searchResults.length === 0 ? (
-          <div className='flex flex-col items-center justify-center h-full text-center p-8 transition-opacity duration-200 opacity-100'>
-            <div className='w-16 h-16 mx-auto mb-4 bg-neutral-100 rounded-full flex items-center justify-center'>
-              <Search className='w-8 h-8 text-neutral-500' />
+          <div className='flex flex-col items-center justify-center h-full text-center p-6 transition-opacity duration-200 opacity-100'>
+            <div className='w-12 h-12 mx-auto mb-3 bg-neutral-100 rounded-full flex items-center justify-center'>
+              <Search className='w-6 h-6 text-neutral-500' />
             </div>
             <h3 className='text-lg font-medium text-neutral-900 mb-2'>
               No Matches Found
@@ -200,7 +200,7 @@ export default function SearchSectionContent({
             )}
 
             {/* Results List */}
-            <div className='space-y-3'>
+            <div className='space-y-4'>
               {searchResults.map(result => {
                 // Convert search result to UserPresence format for UserCard
                 const userPresence: UserPresence = {

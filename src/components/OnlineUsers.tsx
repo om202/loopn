@@ -440,7 +440,7 @@ export default function OnlineUsers({
 
   if (error || onlineUsersError || chatActions.error) {
     return (
-      <div className='p-4 sm:p-6 text-b_red-500 bg-b_red-100 rounded-2xl border border-b_red-200 text-center'>
+      <div className='p-6 text-red-600 bg-red-50 rounded-xl border border-red-200 text-center'>
         <div className='text-sm sm:text-sm font-medium mb-1'>Error</div>
         <div className='text-sm sm:text-sm'>
           {error || onlineUsersError || chatActions.error}
@@ -458,7 +458,7 @@ export default function OnlineUsers({
   }
 
   return (
-    <div className='flex lg:gap-3 h-full pb-16 lg:pb-0'>
+    <div className='flex lg:gap-4 h-full pb-16 lg:pb-0'>
       <DashboardSidebar
         activeSection={activeSection}
         onSectionChange={setActiveSection}
@@ -466,9 +466,9 @@ export default function OnlineUsers({
         suggestedUsersCount={suggestedUsers.length}
       />
 
-      <div className='flex-1 bg-white sm:rounded-2xl border border-neutral-200 p-2 sm:p-4 ultra-compact overflow-hidden flex flex-col min-h-0'>
+      <div className='flex-1 bg-white sm:rounded-xl border border-neutral-200 p-4 ultra-compact overflow-hidden flex flex-col min-h-0'>
         {/* Search User - Always visible at top */}
-        <div className='flex-shrink-0 mb-4 sm:mb-6 w-full max-w-5xl mx-auto px-1 sm:px-2'>
+        <div className='flex-shrink-0 mb-4 w-full max-w-5xl mx-auto'>
           <SearchUser
             onProfessionalRequest={handleProfessionalRequest}
             onSearchResults={handleSearchResults}
@@ -477,11 +477,11 @@ export default function OnlineUsers({
         </div>
 
         {/* Section Header - Fixed at top */}
-        <div className='flex-shrink-0 mb-3 sm:mb-4 lg:mb-6 w-full max-w-5xl mx-auto px-1 sm:px-2'>
+        <div className='flex-shrink-0 mb-4 w-full max-w-5xl mx-auto'>
           {activeSection === 'notifications' && (
             <div className='flex items-start justify-between'>
               <div>
-                <h2 className='text-2xl sm:text-2xl font-bold text-neutral-900'>
+                <h2 className='text-2xl font-semibold text-neutral-900'>
                   Recent Activity
                 </h2>
               </div>
@@ -499,7 +499,7 @@ export default function OnlineUsers({
           {activeSection === 'account' && (
             <div className='flex items-start justify-between'>
               <div>
-                <h2 className='text-2xl sm:text-2xl font-bold text-neutral-900'>
+                <h2 className='text-2xl font-semibold text-neutral-900'>
                   Your Profile
                 </h2>
               </div>
@@ -513,28 +513,28 @@ export default function OnlineUsers({
           )}
           {activeSection === 'connections' && (
             <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-neutral-900'>
+              <h2 className='text-2xl font-semibold text-neutral-900'>
                 Connections
               </h2>
             </div>
           )}
           {activeSection === 'suggested' && (
             <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-neutral-900'>
+              <h2 className='text-2xl font-semibold text-neutral-900'>
                 Professionals
               </h2>
             </div>
           )}
           {activeSection === 'saved' && (
             <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-neutral-900'>
+              <h2 className='text-2xl font-semibold text-neutral-900'>
                 Saved
               </h2>
             </div>
           )}
           {activeSection === 'search' && (
             <div>
-              <h2 className='text-xl sm:text-2xl font-bold text-neutral-900'>
+              <h2 className='text-2xl font-semibold text-neutral-900'>
                 Search Results
               </h2>
             </div>
@@ -549,7 +549,7 @@ export default function OnlineUsers({
           <div className='absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-4xl h-px bg-neutral-200 opacity-0 transition-opacity duration-200 z-10 scroll-bottom-border'></div>
 
           <div
-            className='overflow-y-auto flex-1 h-full max-w-5xl mx-auto w-full px-1 sm:px-2'
+            className='overflow-y-auto flex-1 h-full max-w-5xl mx-auto w-full'
             onScroll={e => {
               const target = e.target as HTMLDivElement;
               const { scrollTop, scrollHeight, clientHeight } = target;

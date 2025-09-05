@@ -135,7 +135,7 @@ export default function DashboardSidebar({
     <>
       {/* Desktop Sidebar */}
       <div className='hidden lg:block w-56 flex-shrink-0'>
-        <div className='bg-white rounded-2xl h-full flex flex-col border border-neutral-200'>
+        <div className='bg-white rounded-xl h-full flex flex-col border border-neutral-200'>
           {/* Logo at top */}
           <div className='px-3 py-3 border-b border-neutral-100'>
             <div className='flex items-center justify-between'>
@@ -216,7 +216,7 @@ export default function DashboardSidebar({
           </nav>
 
           {/* Account and utility buttons at bottom */}
-          <div className='border-t border-neutral-100 px-3 py-2 space-y-2'>
+          <div className='border-t border-neutral-100 px-3 py-3 space-y-2'>
             {/* Bug Report Button */}
             <button
               onClick={() => setIsBugReportOpen(true)}
