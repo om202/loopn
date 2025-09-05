@@ -126,15 +126,15 @@ export default function HomePage() {
       <style>{customStyles}</style>
 
       {/* Hero Section */}
-      <section className='bg-white py-12 lg:py-16 relative overflow-hidden'>
+      <section className='bg-white py-16 relative overflow-hidden'>
         {/* Background Elements */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-20 left-10 w-72 h-72 bg-brand-50/30 rounded-full blur-3xl animate-float' />
           <div className='absolute bottom-20 right-10 w-80 h-80 bg-brand-50/50 rounded-full blur-3xl animate-float-delayed' />
         </div>
 
-        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='grid lg:grid-cols-2 gap-8 lg:gap-12 items-center'>
+        <div className='max-w-7xl mx-auto px-6 lg:px-8'>
+          <div className='grid lg:grid-cols-2 gap-12 items-center'>
             {/* Left column - Content */}
             <div className='text-center lg:text-left'>
               {/* Logo */}
@@ -149,13 +149,13 @@ export default function HomePage() {
                 <h2 className='text-3xl font-bold text-brand-600'>Loopn</h2>
               </div>
 
-              <h1 className='text-4xl sm:text-5xl font-semibold text-neutral-900 mt-6 sm:mt-8 mb-8 sm:mb-10 leading-tight'>
+              <h1 className='text-4xl sm:text-5xl font-semibold text-neutral-900 mb-8 leading-tight'>
                 Professional Networking,{' '}
                 <span className='text-brand-600'>Simplified.</span>
               </h1>
 
-              <h2 className='mb-8 sm:mb-10 max-w-lg mx-auto lg:mx-0'>
-                <div className='text-base sm:text-lg text-neutral-700 font-semibold flex items-center justify-center lg:justify-start gap-3 flex-wrap'>
+              <h2 className='mb-8 max-w-lg mx-auto lg:mx-0'>
+                <div className='text-base sm:text-lg text-neutral-700 font-medium flex items-center justify-center lg:justify-start gap-3 flex-wrap'>
                   <span>Join Loopn</span>
                   <ArrowRight
                     className='w-5 h-5 text-neutral-700 flex-shrink-0'
@@ -170,18 +170,18 @@ export default function HomePage() {
                 </div>
               </h2>
 
-              <p className='text-base sm:text-lg text-neutral-700 mb-8 sm:mb-10 max-w-lg mx-auto lg:mx-0 leading-relaxed'>
-                Our AI-powered matching algorithm analyzes
-                your profile to connect you with the right professionals,
-                instantly.
+              <p className='text-base sm:text-lg text-neutral-700 mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed'>
+                Our AI analyzes your profile and instantly connects you 
+                with the right professionals who match your experience, 
+                interests, and career goals.
               </p>
+
 
               {/* CTA Buttons */}
               <div className='flex flex-row gap-3 sm:gap-6 justify-center lg:justify-start'>
                 <Link href={isAuthenticated ? authLink : signUpLink}>
                   <button
-                    className='inline-flex items-center gap-3 bg-brand-500 text-white px-6 py-3 sm:px-10 sm:py-4 rounded-xl !font-medium min-h-[50px]'
-                    style={{ fontSize: '18px' }}
+                    className='inline-flex items-center gap-3 bg-brand-500 hover:bg-brand-600 text-white px-6 py-3 sm:px-10 sm:py-4 rounded-lg font-medium text-lg min-h-[50px] transition-colors'
                   >
                     {ctaText}
                     <ArrowRight className='w-5 h-5' strokeWidth={2.5} />
@@ -189,8 +189,7 @@ export default function HomePage() {
                 </Link>
                 <Link href={authLink}>
                   <button
-                    className='text-neutral-700 !font-medium flex items-center justify-center px-3 py-3 sm:px-4 sm:py-4 min-h-[50px] hover:underline hover:underline-offset-4 hover:decoration-2 flex-shrink-0'
-                    style={{ fontSize: '18px' }}
+                    className='text-neutral-700 hover:text-neutral-900 font-medium flex items-center justify-center px-3 py-3 sm:px-4 sm:py-4 min-h-[50px] text-lg border border-neutral-300 hover:border-neutral-400 rounded-lg transition-colors flex-shrink-0'
                   >
                     Sign In
                   </button>
@@ -201,7 +200,7 @@ export default function HomePage() {
             {/* Right column - Demo */}
             <div className='relative mt-8 lg:mt-0'>
               {/* Modern Chat Interface - matching real chat UI design */}
-              <div className='bg-white rounded-2xl border border-neutral-200 w-full max-w-sm lg:max-w-md mx-auto lg:ml-auto lg:mr-0 overflow-hidden shadow-md'>
+              <div className='bg-white rounded-xl border border-neutral-200 w-full max-w-sm lg:max-w-md mx-auto lg:ml-auto lg:mr-0 overflow-hidden shadow-md'>
                 {/* Chat Header */}
                 <div className='flex-shrink-0 bg-white border-b border-neutral-200 px-4 py-3'>
                   <div className='flex items-center gap-3'>
@@ -234,7 +233,7 @@ export default function HomePage() {
                         height={40}
                         className='w-10 h-10 rounded-full object-cover'
                       />
-                      <div className='absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-b_green-400 border-2 border-white rounded-full'></div>
+                      <div className='absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-400 border-2 border-white rounded-full'></div>
                     </div>
 
                     <div className='flex-1 min-w-0'>
@@ -247,9 +246,9 @@ export default function HomePage() {
                     </div>
 
                     {/* Connect Button */}
-                    <button className='px-2 py-2 rounded-lg text-base font-medium flex items-center justify-center gap-2 flex-shrink-0 bg-brand-500 text-white'>
+                    <button className='px-3 py-2 rounded-lg font-medium flex items-center justify-center gap-2 flex-shrink-0 bg-brand-500 hover:bg-brand-600 text-white transition-colors'>
                       <ConnectIcon className='w-5 h-5 text-white' />
-                      <span className='text-base font-medium text-white'>
+                      <span className='font-medium text-white'>
                         Connect
                       </span>
                     </button>
@@ -278,7 +277,7 @@ export default function HomePage() {
                         className='w-8 h-8 rounded-full object-cover flex-shrink-0'
                       />
                       <div className='flex-1 max-w-xs'>
-                        <div className='bg-neutral-100 text-neutral-900 px-4 py-3 rounded-2xl rounded-tl-md'>
+                        <div className='bg-neutral-100 text-neutral-900 px-4 py-3 rounded-xl rounded-tl-md'>
                           <p className='text-base leading-relaxed'>
                             Hi! I saw you're also in UX design. Working on any
                             fintech projects?
@@ -292,7 +291,7 @@ export default function HomePage() {
                   {visibleMessages >= 2 && (
                     <div className='flex justify-end animate-fadeInUp'>
                       <div className='max-w-xs'>
-                        <div className='bg-brand-500 text-white px-4 py-3 rounded-2xl rounded-tr-md relative'>
+                        <div className='bg-brand-500 text-white px-4 py-3 rounded-xl rounded-tr-md relative'>
                           <p className='text-base leading-relaxed pr-6'>
                             Yes! Just finished a banking app redesign. You?
                           </p>
@@ -321,7 +320,7 @@ export default function HomePage() {
                         className='w-8 h-8 rounded-full object-cover flex-shrink-0'
                       />
                       <div className='flex-1 max-w-xs'>
-                        <div className='bg-neutral-100 text-neutral-900 px-4 py-3 rounded-2xl rounded-tl-md'>
+                        <div className='bg-neutral-100 text-neutral-900 px-4 py-3 rounded-xl rounded-tl-md'>
                           <p className='text-base leading-relaxed'>
                             Perfect! I'm designing a crypto wallet. Mind if I
                             pick your brain sometime?
@@ -335,7 +334,7 @@ export default function HomePage() {
                   {visibleMessages >= 4 && (
                     <div className='flex justify-end animate-fadeInUp'>
                       <div className='max-w-xs'>
-                        <div className='bg-brand-500 text-white px-4 py-3 rounded-2xl rounded-tr-md relative'>
+                        <div className='bg-brand-500 text-white px-4 py-3 rounded-xl rounded-tr-md relative'>
                           <p className='text-base leading-relaxed pr-6'>
                             Absolutely! I love discussing design challenges
                           </p>
@@ -364,7 +363,7 @@ export default function HomePage() {
                         className='w-8 h-8 rounded-full object-cover flex-shrink-0'
                       />
                       <div className='flex-1 max-w-xs'>
-                        <div className='bg-neutral-100 text-neutral-900 px-4 py-3 rounded-2xl rounded-tl-md'>
+                        <div className='bg-neutral-100 text-neutral-900 px-4 py-3 rounded-xl rounded-tl-md'>
                           <p className='text-base leading-relaxed'>
                             Awesome! I'll message you more about it tomorrow 🚀
                           </p>
@@ -394,7 +393,7 @@ export default function HomePage() {
                         <Smile className='w-5 h-5' strokeWidth={2.5} />
                       </button>
                     </div>
-                    <button className='flex-shrink-0 w-12 h-12 bg-brand-500 text-white rounded-full flex items-center justify-center hover:bg-brand-600 cursor-pointer'>
+                    <button className='flex-shrink-0 w-12 h-12 bg-brand-500 text-white rounded-full flex items-center justify-center hover:bg-brand-600 transition-colors cursor-pointer'>
                       <Image
                         src='/send_icon.svg'
                         alt='Send'
@@ -409,8 +408,20 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Product Hunt Badge - Right Side Centered */}
-          <div className='flex justify-end mt-8 mb-4'>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className='py-16 bg-neutral-50 relative border-t border-neutral-200'>
+        {/* Background decoration */}
+        <div className='absolute inset-0 -z-10'>
+          <div className='absolute top-1/4 left-0 w-72 h-72 bg-neutral-100/80 rounded-full blur-3xl' />
+          <div className='absolute bottom-1/4 right-1/4 w-80 h-80 bg-brand-50/60 rounded-full blur-3xl' />
+        </div>
+
+        <div className='max-w-7xl mx-auto px-6 lg:px-8'>
+          {/* Product Hunt Badge */}
+          <div className='flex justify-center mb-12'>
             <a
               href='https://www.producthunt.com/products/loopn?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-loopn'
               target='_blank'
@@ -425,38 +436,27 @@ export default function HomePage() {
               />
             </a>
           </div>
-        </div>
-      </section>
 
-      {/* Features Section */}
-      <section className='py-8 sm:py-12 bg-neutral-50 relative border-t border-neutral-200'>
-        {/* Background decoration */}
-        <div className='absolute inset-0 -z-10'>
-          <div className='absolute top-1/4 left-0 w-72 h-72 bg-neutral-100/80 rounded-full blur-3xl' />
-          <div className='absolute bottom-1/4 right-1/4 w-80 h-80 bg-brand-50/60 rounded-full blur-3xl' />
-        </div>
-
-        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           {/* Section Header */}
           <div className='text-center max-w-3xl mx-auto mb-12'>
-            <h2 className='text-2xl sm:text-3xl font-semibold text-neutral-900 mb-3 leading-tight'>
+            <h2 className='text-2xl sm:text-3xl font-semibold text-neutral-900 mb-6 leading-tight'>
               Network with Focus
             </h2>
-            <p className='text-lg text-neutral-700 leading-relaxed font-medium'>
-              Connect with professionals who truly matter, without the noise and
-              spam of other platforms.
+            <p className='text-lg text-neutral-700 leading-relaxed'>
+              Every connection is carefully matched to your experience and ambitions.
+              Build meaningful relationships that actually advance your career.
             </p>
           </div>
 
           {/* Dashboard Image */}
           <div className='flex justify-center'>
-            <div className='w-full max-w-2xl lg:max-w-4xl mx-auto'>
+            <div className='w-full max-w-xl lg:max-w-3xl mx-auto'>
               <Image
                 src='/screen1.png'
                 alt='Loopn Dashboard'
                 width={600}
                 height={800}
-                className='w-full h-auto rounded-2xl border border-neutral-200 shadow-md'
+                className='w-full h-auto rounded-xl border border-neutral-200 shadow-md'
                 quality={100}
                 priority
                 unoptimized={true}
@@ -467,34 +467,34 @@ export default function HomePage() {
       </section>
 
       {/* Message in Real Time Section */}
-      <section className='py-8 sm:py-12 bg-white relative border-t border-neutral-200'>
+      <section className='py-16 bg-white relative border-t border-neutral-200'>
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-1/4 left-0 w-72 h-72 bg-neutral-100/80 rounded-full blur-3xl' />
           <div className='absolute bottom-1/4 right-1/4 w-80 h-80 bg-brand-50/60 rounded-full blur-3xl' />
         </div>
 
-        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+        <div className='max-w-7xl mx-auto px-6 lg:px-8'>
           {/* Section Header */}
           <div className='text-center max-w-3xl mx-auto mb-12'>
-            <h2 className='text-2xl sm:text-3xl font-semibold text-neutral-900 mb-3 leading-tight'>
-              Full Messaging
+            <h2 className='text-2xl sm:text-3xl font-semibold text-neutral-900 mb-6 leading-tight'>
+              Real-Time Conversations
             </h2>
-            <p className='text-lg text-neutral-700 leading-relaxed font-medium'>
-              Chat directly with your connections through seamless, real-time
-              messaging.
+            <p className='text-lg text-neutral-700 leading-relaxed'>
+              Turn professional connections into genuine conversations.
+              Message in real-time and build relationships naturally.
             </p>
           </div>
 
           {/* Messaging Image */}
           <div className='flex justify-center'>
-            <div className='w-full max-w-2xl lg:max-w-4xl mx-auto'>
+            <div className='w-full max-w-xl lg:max-w-3xl mx-auto'>
               <Image
                 src='/screen3.png'
                 alt='Loopn Real-Time Messaging'
                 width={600}
                 height={800}
-                className='w-full h-auto rounded-2xl border border-neutral-200 shadow-md'
+                className='w-full h-auto rounded-xl border border-neutral-200 shadow-md'
                 quality={100}
                 priority
                 unoptimized={true}
@@ -505,34 +505,34 @@ export default function HomePage() {
       </section>
 
       {/* Full Resume Section */}
-      <section className='py-8 sm:py-12 bg-neutral-50 relative border-t border-neutral-200'>
+      <section className='py-16 bg-neutral-50 relative border-t border-neutral-200'>
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-1/3 right-0 w-96 h-96 bg-brand-50/60 rounded-full blur-3xl' />
           <div className='absolute bottom-1/3 left-0 w-80 h-80 bg-neutral-100/80 rounded-full blur-3xl' />
         </div>
 
-        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+        <div className='max-w-7xl mx-auto px-6 lg:px-8'>
           {/* Section Header */}
           <div className='text-center max-w-3xl mx-auto mb-12'>
-            <h2 className='text-2xl sm:text-3xl font-semibold text-neutral-900 mb-3 leading-tight'>
-              Detailed Profiles
+            <h2 className='text-2xl sm:text-3xl font-semibold text-neutral-900 mb-6 leading-tight'>
+              Complete Work Histories
             </h2>
-            <p className='text-lg text-neutral-700 leading-relaxed font-medium'>
-              Make informed decisions. View the complete work history and skills
-              of every professional.
+            <p className='text-lg text-neutral-700 leading-relaxed'>
+              Know who you're connecting with before you reach out.
+              See the full professional story behind every person you meet.
             </p>
           </div>
 
           {/* Resume Image */}
           <div className='flex justify-center'>
-            <div className='w-full max-w-lg lg:max-w-2xl mx-auto'>
+            <div className='w-full max-w-md lg:max-w-xl mx-auto'>
               <Image
                 src='/screen2.png'
                 alt='Loopn Full Resume'
                 width={600}
                 height={800}
-                className='w-full h-auto rounded-2xl border border-neutral-200 shadow-md'
+                className='w-full h-auto rounded-xl border border-neutral-200 shadow-md'
                 quality={100}
                 priority
                 unoptimized={true}
@@ -545,7 +545,7 @@ export default function HomePage() {
       {/* Why Professionals Choose Loopn & How It Works */}
       <section
         id='how-it-works'
-        className='py-8 sm:py-12 bg-white relative border-t border-neutral-200'
+        className='py-16 bg-white relative border-t border-neutral-200'
       >
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
@@ -554,15 +554,15 @@ export default function HomePage() {
           <div className='absolute top-2/3 right-1/4 w-72 h-72 bg-brand-50/40 rounded-full blur-3xl' />
         </div>
 
-        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+        <div className='max-w-7xl mx-auto px-6 lg:px-8'>
           {/* Section Header */}
           <div className='text-center max-w-3xl mx-auto mb-12'>
-            <h2 className='text-2xl sm:text-3xl font-semibold text-neutral-900 mb-3 leading-tight'>
+            <h2 className='text-2xl sm:text-3xl font-semibold text-neutral-900 mb-6 leading-tight'>
               How It Works
             </h2>
-            <p className='text-lg text-neutral-700 leading-relaxed font-medium'>
-              Three powerful steps that transform how you build professional
-              relationships.
+            <p className='text-lg text-neutral-700 leading-relaxed'>
+              Three simple steps that transform how you build meaningful
+              business relationships.
             </p>
           </div>
 
@@ -570,16 +570,15 @@ export default function HomePage() {
           <div className='grid lg:grid-cols-3 gap-8 sm:gap-12 relative'>
             {/* Step 1 - AI Resume Intelligence + Upload */}
             <div className='relative group'>
-              <div className='bg-white rounded-2xl p-8 border border-neutral-200 relative h-full'>
+              <div className='bg-white rounded-xl p-8 border border-neutral-200 relative h-full'>
                 {/* Content */}
                 <div>
                   <h3 className='text-xl font-semibold text-neutral-900 mb-3'>
                     Upload Your Resume
                   </h3>
                   <p className='text-neutral-700 mb-6 leading-relaxed text-base font-medium'>
-                    Let our AI build your professional profile in seconds. We
-                    instantly analyze your experience to find ideal career
-                    opportunities and connections.
+                    Let our AI build your profile in seconds. We analyze your
+                    background to identify ideal career opportunities and industry matches.
                   </p>
                   <ul className='space-y-3 text-left'>
                     <li className='flex items-center gap-3 text-neutral-700'>
@@ -616,14 +615,14 @@ export default function HomePage() {
 
             {/* Step 2 - Real-Time Discovery + Live Matches */}
             <div className='relative group'>
-              <div className='bg-white rounded-2xl p-8 border border-neutral-200 relative h-full'>
+              <div className='bg-white rounded-xl p-8 border border-neutral-200 relative h-full'>
                 {/* Content */}
                 <div>
                   <h3 className='text-xl font-semibold text-neutral-900 mb-3'>
                     Discover Live Matches
                   </h3>
                   <p className='text-neutral-700 mb-6 leading-relaxed text-base font-medium'>
-                    See a curated list of professionals who are online right
+                    See a curated list of industry experts who are online right
                     now. Connect with the right people at the perfect moment.
                   </p>
                   <ul className='space-y-3 text-left'>
@@ -633,7 +632,7 @@ export default function HomePage() {
                         strokeWidth={2.5}
                       />
                       <span className='font-medium text-base'>
-                        View Your Personalized Live Matches
+                        Browse Your Live Expert Matches
                       </span>
                     </li>
                     <li className='flex items-center gap-3 text-neutral-700'>
@@ -642,7 +641,7 @@ export default function HomePage() {
                         strokeWidth={2.5}
                       />
                       <span className='font-medium text-base'>
-                        Send Instant Connection Requests
+                        Send Instant Contact Requests
                       </span>
                     </li>
                     <li className='flex items-center gap-3 text-neutral-700'>
@@ -651,7 +650,7 @@ export default function HomePage() {
                         strokeWidth={2.5}
                       />
                       <span className='font-medium text-base'>
-                        Chat with Professionals in Real-Time
+                        Start Real-Time Conversations
                       </span>
                     </li>
                   </ul>
@@ -661,15 +660,15 @@ export default function HomePage() {
 
             {/* Step 3 - Professional Focus + Build Relationships */}
             <div className='relative group'>
-              <div className='bg-white rounded-2xl p-8 border border-neutral-200 relative h-full'>
+              <div className='bg-white rounded-xl p-8 border border-neutral-200 relative h-full'>
                 {/* Content */}
                 <div>
                   <h3 className='text-xl font-semibold text-neutral-900 mb-3'>
                     Build Lasting Relationships
                   </h3>
                   <p className='text-neutral-700 mb-6 leading-relaxed text-base font-medium'>
-                    Focus on quality over quantity. We foster a community
-                    dedicated to building meaningful, career-focused
+                    Focus on quality over quantity. We foster a vetted community
+                    dedicated to building meaningful, growth-focused
                     relationships.
                   </p>
                   <ul className='space-y-3 text-left'>
@@ -679,7 +678,7 @@ export default function HomePage() {
                         strokeWidth={2.5}
                       />
                       <span className='font-medium text-base'>
-                        A Community of Vetted Professionals
+                        Vetted Community of Industry Experts
                       </span>
                     </li>
                     <li className='flex items-center gap-3 text-neutral-700'>
@@ -697,7 +696,7 @@ export default function HomePage() {
                         strokeWidth={2.5}
                       />
                       <span className='font-medium text-base'>
-                        Career-Advancing Connections
+                        Growth-Focused Relationships
                       </span>
                     </li>
                   </ul>
@@ -709,16 +708,16 @@ export default function HomePage() {
       </section>
 
       {/* FAQ Section */}
-      <section className='py-8 sm:py-12 bg-neutral-50 relative border-t border-neutral-200'>
+      <section className='py-16 bg-neutral-50 relative border-t border-neutral-200'>
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-1/4 right-0 w-96 h-96 bg-brand-50/40 rounded-full blur-3xl' />
           <div className='absolute bottom-1/4 left-0 w-80 h-80 bg-neutral-100/80 rounded-full blur-3xl' />
         </div>
 
-        <div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8'>
+        <div className='max-w-4xl mx-auto px-6 lg:px-8'>
           <div className='text-center mb-12'>
-            <h2 className='text-2xl sm:text-3xl font-semibold text-neutral-900 mb-3 leading-tight'>
+            <h2 className='text-2xl sm:text-3xl font-semibold text-neutral-900 mb-6 leading-tight'>
               Frequently Asked Questions
             </h2>
             <p className='text-lg text-neutral-700 max-w-2xl mx-auto leading-relaxed font-medium'>
@@ -728,9 +727,9 @@ export default function HomePage() {
 
           <div className='space-y-4'>
             {/* FAQ Item 1 */}
-            <div className='bg-white border border-neutral-200 rounded-2xl'>
+            <div className='bg-white border border-neutral-200 rounded-xl'>
               <button
-                className='w-full text-left p-4 sm:p-5 flex items-center justify-between hover:bg-neutral-50/50 transition-colors rounded-2xl'
+                className='w-full text-left p-4 sm:p-5 flex items-center justify-between hover:bg-neutral-50/50 transition-colors rounded-xl'
                 onClick={() => toggleFAQ(0)}
               >
                 <h3 className='text-lg font-semibold text-neutral-900 pr-4'>
@@ -743,19 +742,18 @@ export default function HomePage() {
               {expandedFAQ === 0 && (
                 <div className='px-4 sm:px-5 pb-4 sm:pb-5 -mt-1'>
                   <p className='text-neutral-700 leading-relaxed'>
-                    Loopn connects you with professionals based on shared
-                    interests and career goals. Simply complete your profile,
-                    browse suggested connections, and start meaningful
-                    conversations that can advance your career.
+                    Loopn uses AI to match you with industry experts based on your
+                    experience, interests, and career goals. Our algorithm analyzes your
+                    background to suggest the most relevant connections.
                   </p>
                 </div>
               )}
             </div>
 
             {/* FAQ Item 2 */}
-            <div className='bg-white border border-neutral-200 rounded-2xl'>
+            <div className='bg-white border border-neutral-200 rounded-xl'>
               <button
-                className='w-full text-left p-4 sm:p-5 flex items-center justify-between hover:bg-neutral-50/50 transition-colors rounded-2xl'
+                className='w-full text-left p-4 sm:p-5 flex items-center justify-between hover:bg-neutral-50/50 transition-colors rounded-xl'
                 onClick={() => toggleFAQ(1)}
               >
                 <h3 className='text-lg font-semibold text-neutral-900 pr-4'>
@@ -768,23 +766,22 @@ export default function HomePage() {
               {expandedFAQ === 1 && (
                 <div className='px-4 sm:px-5 pb-4 sm:pb-5 -mt-1'>
                   <p className='text-neutral-700 leading-relaxed'>
-                    All Loopn users are professionals across various industries.
-                    You'll connect with people who share your interests, career
-                    goals, or expertise areas - from software engineers and
-                    designers to consultants and entrepreneurs.
+                    All Loopn users are verified industry experts across technology,
+                    finance, design, consulting, and entrepreneurship. Connect with
+                    senior professionals, founders, and thought leaders in your field.
                   </p>
                 </div>
               )}
             </div>
 
             {/* FAQ Item 3 */}
-            <div className='bg-white border border-neutral-200 rounded-2xl'>
+            <div className='bg-white border border-neutral-200 rounded-xl'>
               <button
-                className='w-full text-left p-4 sm:p-5 flex items-center justify-between hover:bg-neutral-50/50 transition-colors rounded-2xl'
+                className='w-full text-left p-4 sm:p-5 flex items-center justify-between hover:bg-neutral-50/50 transition-colors rounded-xl'
                 onClick={() => toggleFAQ(2)}
               >
                 <h3 className='text-lg font-semibold text-neutral-900 pr-4'>
-                  How do I get started?
+                  Is Loopn free to use?
                 </h3>
                 <ChevronDown
                   className={`w-5 h-5 text-neutral-500 flex-shrink-0 transition-transform ${expandedFAQ === 2 ? 'rotate-180' : ''}`}
@@ -793,20 +790,18 @@ export default function HomePage() {
               {expandedFAQ === 2 && (
                 <div className='px-4 sm:px-5 pb-4 sm:pb-5 -mt-1'>
                   <p className='text-neutral-700 leading-relaxed'>
-                    Getting started is simple: sign up, complete your
-                    professional profile including your interests and career
-                    goals, and we'll suggest relevant connections. You can then
-                    browse profiles and send chat requests to professionals
-                    you'd like to connect with.
+                    Yes, Loopn is free to join and use. Create your profile,
+                    browse connections, and start conversations at no cost.
+                    Premium features for advanced matching will be available soon.
                   </p>
                 </div>
               )}
             </div>
 
             {/* FAQ Item 4 */}
-            <div className='bg-white border border-neutral-200 rounded-2xl'>
+            <div className='bg-white border border-neutral-200 rounded-xl'>
               <button
-                className='w-full text-left p-4 sm:p-5 flex items-center justify-between hover:bg-neutral-50/50 transition-colors rounded-2xl'
+                className='w-full text-left p-4 sm:p-5 flex items-center justify-between hover:bg-neutral-50/50 transition-colors rounded-xl'
                 onClick={() => toggleFAQ(3)}
               >
                 <h3 className='text-lg font-semibold text-neutral-900 pr-4'>
@@ -819,11 +814,10 @@ export default function HomePage() {
               {expandedFAQ === 3 && (
                 <div className='px-4 sm:px-5 pb-4 sm:pb-5 -mt-1'>
                   <p className='text-neutral-700 leading-relaxed'>
-                    Loopn focuses exclusively on meaningful professional
-                    conversations. Unlike casual social platforms, every
-                    interaction is career-focused, quality-driven, and designed
-                    to help you build genuine professional relationships that
-                    advance your career.
+                    Loopn focuses exclusively on quality over quantity. Unlike
+                    LinkedIn's broad network, we match you with highly relevant
+                    industry experts. No spam, no cold pitches – just meaningful
+                    conversations with people who can genuinely help your career.
                   </p>
                 </div>
               )}
@@ -833,20 +827,20 @@ export default function HomePage() {
       </section>
 
       {/* Final CTA Section */}
-      <section className='py-8 sm:py-12 bg-white text-neutral-900 relative overflow-hidden border-t border-neutral-200'>
+      <section className='py-16 bg-white text-neutral-900 relative overflow-hidden border-t border-neutral-200'>
         {/* Background decoration */}
         <div className='absolute inset-0 -z-10'>
           <div className='absolute top-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl' />
           <div className='absolute bottom-0 right-0 w-80 h-80 bg-white/5 rounded-full blur-3xl' />
         </div>
 
-        <div className='max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center'>
-          <h2 className='text-2xl sm:text-3xl font-semibold text-neutral-900 mb-3 leading-tight'>
+        <div className='max-w-3xl mx-auto px-6 lg:px-8 text-center'>
+          <h2 className='text-2xl sm:text-3xl font-semibold text-neutral-900 mb-6 leading-tight'>
             Start Building Your Network Today
           </h2>
           <p className='text-lg text-neutral-700 mb-12 max-w-md mx-auto font-medium'>
-            Join thousands of professionals already making career-changing
-            connections.
+            Join industry experts from top companies who are already advancing
+            their careers through quality connections.
           </p>
 
           <div className='flex flex-col sm:flex-row gap-4 justify-center'>
@@ -855,24 +849,23 @@ export default function HomePage() {
               className='w-full sm:w-auto'
             >
               <button
-                className='w-full bg-brand-500 text-white px-6 py-3 sm:px-8 sm:py-4 rounded-lg !font-medium flex items-center justify-center gap-3 border-0 min-h-[50px] touch-manipulation'
-                style={{ fontSize: '18px' }}
+                className='w-full bg-brand-500 hover:bg-brand-600 text-white px-6 py-3 sm:px-8 sm:py-4 rounded-lg font-medium text-lg flex items-center justify-center gap-3 border-0 min-h-[50px] touch-manipulation transition-colors'
               >
                 {ctaText}
                 <ArrowRight className='w-5 h-5' strokeWidth={2.5} />
               </button>
             </Link>
-            <button className='w-full sm:w-auto bg-white text-neutral-700 px-6 py-3 sm:px-8 sm:py-4 rounded-lg text-base !font-medium border border-neutral-300 flex items-center justify-center gap-3 min-h-[52px] touch-manipulation'>
+            <button className='w-full sm:w-auto bg-white text-neutral-700 hover:text-neutral-900 px-6 py-3 sm:px-8 sm:py-4 rounded-lg font-medium text-lg border border-neutral-300 hover:border-neutral-400 flex items-center justify-center gap-3 min-h-[52px] touch-manipulation transition-colors'>
               <MessageSquare className='w-5 h-5' strokeWidth={2.5} />
-              Watch a Demo
+              Learn More
             </button>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className='bg-neutral-50 py-8 border-t border-neutral-200'>
-        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+      <footer className='bg-neutral-50 py-16 border-t border-neutral-200'>
+        <div className='max-w-7xl mx-auto px-6 lg:px-8'>
           <div className='text-center'>
             <div className='flex items-center justify-center space-x-3 mb-4'>
               <Image src='/loopn.svg' alt='Loopn' width={32} height={32} />
@@ -883,8 +876,8 @@ export default function HomePage() {
               </div>
             </div>
             <p className='text-neutral-700 text-sm text-center max-w-md mx-auto mb-6 leading-relaxed font-medium'>
-              AI-powered professional discovery for career-advancing
-              relationships
+              AI-powered networking that connects you with the right industry experts
+              at the right time
             </p>
 
             {/* Footer Links */}
