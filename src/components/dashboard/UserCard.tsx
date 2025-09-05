@@ -288,9 +288,7 @@ export default function UserCard({
                   }
                 >
                   <UserCheck className='w-5 h-5 text-neutral-500' />
-                  <span className='font-medium text-neutral-500'>
-                    Pending
-                  </span>
+                  <span className='font-medium text-neutral-500'>Pending</span>
                 </button>
               );
             }
@@ -323,23 +321,17 @@ export default function UserCard({
                   // Prioritize incoming requests over existing conversations
                   <>
                     <ConnectIcon className='w-5 h-5 text-brand-600' />
-                    <span className='font-medium text-brand-600'>
-                      Accept
-                    </span>
+                    <span className='font-medium text-brand-600'>Accept</span>
                   </>
                 ) : existingConversations.has(userPresence.userId) ? (
                   <>
                     <MessageSquare className='w-5 h-5 text-brand-600' />
-                    <span className='font-medium text-brand-600'>
-                      Message
-                    </span>
+                    <span className='font-medium text-brand-600'>Message</span>
                   </>
                 ) : (
                   <>
                     <ConnectIcon className='w-5 h-5 text-white' />
-                    <span className='font-medium text-white'>
-                      Connect
-                    </span>
+                    <span className='font-medium text-white'>Connect</span>
                   </>
                 )}
               </button>

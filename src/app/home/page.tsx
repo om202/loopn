@@ -171,26 +171,21 @@ export default function HomePage() {
               </h2>
 
               <p className='text-base sm:text-lg text-neutral-700 mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed'>
-                Our AI analyzes your profile and instantly connects you 
-                with the right professionals who match your experience, 
-                interests, and career goals.
+                Our AI analyzes your profile and instantly connects you with the
+                right professionals who match your experience, interests, and
+                career goals.
               </p>
-
 
               {/* CTA Buttons */}
               <div className='flex flex-row gap-3 sm:gap-6 justify-center lg:justify-start'>
                 <Link href={isAuthenticated ? authLink : signUpLink}>
-                  <button
-                    className='inline-flex items-center gap-3 bg-brand-500 hover:bg-brand-600 text-white px-6 py-3 sm:px-10 sm:py-4 rounded-lg font-medium text-lg min-h-[50px] transition-colors'
-                  >
+                  <button className='inline-flex items-center gap-3 bg-brand-500 hover:bg-brand-600 text-white px-6 py-3 sm:px-10 sm:py-4 rounded-lg font-medium text-lg min-h-[50px] transition-colors'>
                     {ctaText}
                     <ArrowRight className='w-5 h-5' strokeWidth={2.5} />
                   </button>
                 </Link>
                 <Link href={authLink}>
-                  <button
-                    className='text-neutral-700 hover:text-neutral-900 font-medium flex items-center justify-center px-3 py-3 sm:px-4 sm:py-4 min-h-[50px] text-lg border border-neutral-300 hover:border-neutral-400 rounded-lg transition-colors flex-shrink-0'
-                  >
+                  <button className='text-neutral-700 hover:text-neutral-900 font-medium flex items-center justify-center px-3 py-3 sm:px-4 sm:py-4 min-h-[50px] text-lg border border-neutral-300 hover:border-neutral-400 rounded-lg transition-colors flex-shrink-0'>
                     Sign In
                   </button>
                 </Link>
@@ -248,9 +243,7 @@ export default function HomePage() {
                     {/* Connect Button */}
                     <button className='px-3 py-2 rounded-lg font-medium flex items-center justify-center gap-2 flex-shrink-0 bg-brand-500 hover:bg-brand-600 text-white transition-colors'>
                       <ConnectIcon className='w-5 h-5 text-white' />
-                      <span className='font-medium text-white'>
-                        Connect
-                      </span>
+                      <span className='font-medium text-white'>Connect</span>
                     </button>
                   </div>
                 </div>
@@ -407,7 +400,6 @@ export default function HomePage() {
               </div>
             </div>
           </div>
-
         </div>
       </section>
 
@@ -443,8 +435,9 @@ export default function HomePage() {
               Network with Focus
             </h2>
             <p className='text-lg text-neutral-700 leading-relaxed'>
-              Every connection is carefully matched to your experience and ambitions.
-              Build meaningful relationships that actually advance your career.
+              Every connection is carefully matched to your experience and
+              ambitions. Build meaningful relationships that actually advance
+              your career.
             </p>
           </div>
 
@@ -481,8 +474,8 @@ export default function HomePage() {
               Real-Time Conversations
             </h2>
             <p className='text-lg text-neutral-700 leading-relaxed'>
-              Turn professional connections into genuine conversations.
-              Message in real-time and build relationships naturally.
+              Turn professional connections into genuine conversations. Message
+              in real-time and build relationships naturally.
             </p>
           </div>
 
@@ -519,8 +512,8 @@ export default function HomePage() {
               Complete Work Histories
             </h2>
             <p className='text-lg text-neutral-700 leading-relaxed'>
-              Know who you're connecting with before you reach out.
-              See the full professional story behind every person you meet.
+              Know who you're connecting with before you reach out. See the full
+              professional story behind every person you meet.
             </p>
           </div>
 
@@ -578,7 +571,8 @@ export default function HomePage() {
                   </h3>
                   <p className='text-neutral-700 mb-6 leading-relaxed text-base font-medium'>
                     Let our AI build your profile in seconds. We analyze your
-                    background to identify ideal career opportunities and industry matches.
+                    background to identify ideal career opportunities and
+                    industry matches.
                   </p>
                   <ul className='space-y-3 text-left'>
                     <li className='flex items-center gap-3 text-neutral-700'>
@@ -742,9 +736,10 @@ export default function HomePage() {
               {expandedFAQ === 0 && (
                 <div className='px-4 sm:px-5 pb-4 sm:pb-5 -mt-1'>
                   <p className='text-neutral-700 leading-relaxed'>
-                    Loopn uses AI to match you with industry experts based on your
-                    experience, interests, and career goals. Our algorithm analyzes your
-                    background to suggest the most relevant connections.
+                    Loopn uses AI to match you with industry experts based on
+                    your experience, interests, and career goals. Our algorithm
+                    analyzes your background to suggest the most relevant
+                    connections.
                   </p>
                 </div>
               )}
@@ -766,9 +761,10 @@ export default function HomePage() {
               {expandedFAQ === 1 && (
                 <div className='px-4 sm:px-5 pb-4 sm:pb-5 -mt-1'>
                   <p className='text-neutral-700 leading-relaxed'>
-                    All Loopn users are verified industry experts across technology,
-                    finance, design, consulting, and entrepreneurship. Connect with
-                    senior professionals, founders, and thought leaders in your field.
+                    All Loopn users are verified industry experts across
+                    technology, finance, design, consulting, and
+                    entrepreneurship. Connect with senior professionals,
+                    founders, and thought leaders in your field.
                   </p>
                 </div>
               )}
@@ -792,7 +788,8 @@ export default function HomePage() {
                   <p className='text-neutral-700 leading-relaxed'>
                     Yes, Loopn is free to join and use. Create your profile,
                     browse connections, and start conversations at no cost.
-                    Premium features for advanced matching will be available soon.
+                    Premium features for advanced matching will be available
+                    soon.
                   </p>
                 </div>
               )}
@@ -817,7 +814,8 @@ export default function HomePage() {
                     Loopn focuses exclusively on quality over quantity. Unlike
                     LinkedIn's broad network, we match you with highly relevant
                     industry experts. No spam, no cold pitches – just meaningful
-                    conversations with people who can genuinely help your career.
+                    conversations with people who can genuinely help your
+                    career.
                   </p>
                 </div>
               )}
@@ -848,9 +846,7 @@ export default function HomePage() {
               href={isAuthenticated ? authLink : signUpLink}
               className='w-full sm:w-auto'
             >
-              <button
-                className='w-full bg-brand-500 hover:bg-brand-600 text-white px-6 py-3 sm:px-8 sm:py-4 rounded-lg font-medium text-lg flex items-center justify-center gap-3 border-0 min-h-[50px] touch-manipulation transition-colors'
-              >
+              <button className='w-full bg-brand-500 hover:bg-brand-600 text-white px-6 py-3 sm:px-8 sm:py-4 rounded-lg font-medium text-lg flex items-center justify-center gap-3 border-0 min-h-[50px] touch-manipulation transition-colors'>
                 {ctaText}
                 <ArrowRight className='w-5 h-5' strokeWidth={2.5} />
               </button>
@@ -876,8 +872,8 @@ export default function HomePage() {
               </div>
             </div>
             <p className='text-neutral-700 text-sm text-center max-w-md mx-auto mb-6 leading-relaxed font-medium'>
-              AI-powered networking that connects you with the right industry experts
-              at the right time
+              AI-powered networking that connects you with the right industry
+              experts at the right time
             </p>
 
             {/* Footer Links */}

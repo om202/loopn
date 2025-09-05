@@ -527,9 +527,7 @@ export default function OnlineUsers({
           )}
           {activeSection === 'saved' && (
             <div>
-              <h2 className='text-2xl font-semibold text-neutral-900'>
-                Saved
-              </h2>
+              <h2 className='text-2xl font-semibold text-neutral-900'>Saved</h2>
             </div>
           )}
           {activeSection === 'search' && (
