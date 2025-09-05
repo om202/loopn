@@ -327,7 +327,7 @@ export default function ProfileSidebar({
 
   return (
     <div
-      className={`bg-white rounded-2xl w-full h-full flex flex-col relative border border-neutral-200 p-2 sm:p-4 ${
+      className={`bg-white sm:rounded-2xl w-full h-full flex flex-col relative border-0 sm:border border-neutral-200 p-0 sm:p-4 ${
         isInChatContext ? 'w-[330px] xl:w-[360px]' : ''
       }`}
     >
@@ -342,7 +342,7 @@ export default function ProfileSidebar({
       )}
 
       {/* Header with buttons */}
-      <div className='pb-2 flex items-center justify-between'>
+      <div className='pb-2 px-4 sm:px-0 flex items-center justify-between'>
         <div className='flex items-center gap-2'>
           {/* Back Button - Only shows when onBack is provided */}
           {onBack && (
@@ -421,10 +421,10 @@ export default function ProfileSidebar({
       </div>
 
       {/* Line Separator */}
-      <div className='w-full h-px bg-neutral-200 mb-4 sm:mb-6'></div>
+      <div className='w-full h-px bg-neutral-200 mb-4 sm:mb-6 mx-4 sm:mx-0'></div>
 
       {/* User Profile Header */}
-      <div className='pb-1 flex justify-center'>
+      <div className='pb-1 px-4 sm:px-0 flex justify-center'>
         <div className='flex flex-col items-center text-center'>
           <UserAvatar
             email={userProfile?.email}
@@ -454,7 +454,7 @@ export default function ProfileSidebar({
 
       {/* Chat Header Section - when in chat context */}
       {conversation && (
-        <div className='px-4 pb-3'>
+        <div className='px-4 sm:px-0 pb-3'>
           {/* Connection Status - All conversations are now permanent connections */}
           <div className='flex items-center justify-center text-base text-neutral-500 mb-2'>
             <button
@@ -533,7 +533,7 @@ export default function ProfileSidebar({
 
       {/* Action buttons section */}
       {showActionButtons && (
-        <div className='px-4 pb-4 pt-1'>
+        <div className='px-4 sm:px-0 pb-4 pt-1'>
           <div className='w-full flex justify-center'>
             {renderActionButtons()}
           </div>
@@ -542,7 +542,7 @@ export default function ProfileSidebar({
 
       {/* Professional Details */}
       <div className='flex-1 overflow-y-auto'>
-        <div className='p-4 pb-6 pt-2'>
+        <div className='p-4 sm:p-0 pb-6 pt-2'>
           {profileLoading ? (
             <ShimmerProvider>
               <ProfileDetails_Shimmer />
