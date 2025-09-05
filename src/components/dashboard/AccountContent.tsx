@@ -73,7 +73,7 @@ export default function AccountContent() {
   };
 
   return (
-    <div className='h-full flex flex-col'>
+    <div className='h-full flex flex-col px-4 sm:px-0'>
       {/* PDF Generation Overlay */}
       {downloadingResume && (
         <div className='fixed inset-0 bg-white flex items-center justify-center z-[9999]'>
@@ -85,7 +85,7 @@ export default function AccountContent() {
       )}
 
       {/* Profile Section */}
-      <div className='mx-auto w-full'>
+      <div className='w-full'>
         <div className='flex flex-col items-start mb-6'>
           <UserAvatar
             email={getUserEmail()}
@@ -119,7 +119,7 @@ export default function AccountContent() {
                 title='Download Your Profile as PDF'
               >
                 <FileDown className='w-4 h-4' />
-                <span>Download Your Profile</span>
+                <span>Profile</span>
               </button>
             </div>
           </div>
